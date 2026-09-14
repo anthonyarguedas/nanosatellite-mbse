@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "protocol-extraction.schema.json",
-  "title": "SLR1 extraction schema v5",
-  "description": "Machine-readable schema for protocol-extraction.md. Version 5 adds dedicated scenario and test-case records, explicit safety semantics, and scenario links across report and reuse evidence.",
+  "title": "SLR1 extraction schema v6",
+  "description": "Machine-readable schema for protocol-extraction.md. Version 6 adds linked workflow lifecycle phases, controlled phase normalization, and scoped workflow execution status.",
   "$ref": "#/$defs/reportExtraction",
   "$defs": {
     "stableId": {
@@ -1911,6 +1911,229 @@
         }
       ]
     },
+    "workflowPhaseTypeCode": {
+      "type": "string",
+      "enum": [
+        "lifecycle_group",
+        "phase",
+        "stage",
+        "iteration",
+        "increment",
+        "other",
+        "unclear"
+      ]
+    },
+    "workflowPhaseLifecycleStages": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/lifecycleStageCodes"
+        },
+        {
+          "$ref": "#/$defs/rowFieldStatus"
+        }
+      ]
+    },
+    "workflowPhase": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/codedRowMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "workflow_phase_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "source_phase_name_or_label": {
+              "$ref": "#/$defs/rowString"
+            },
+            "source_phase_description": {
+              "$ref": "#/$defs/rowString"
+            },
+            "phase_type": {
+              "$ref": "#/$defs/workflowPhaseTypeCode"
+            },
+            "normalized_lifecycle_stages": {
+              "$ref": "#/$defs/workflowPhaseLifecycleStages"
+            },
+            "parent_workflow_phase_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "predecessor_workflow_phase_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_workflow_activity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "timing_quantity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "input_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "output_refs": {
+              "$ref": "#/$defs/rowRecordReferences"
+            },
+            "entry_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "exit_rule_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "review_or_gate_check_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_decision_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "control_flow_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "handoff_relationship_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            }
+          },
+          "required": [
+            "workflow_phase_id",
+            "source_phase_name_or_label",
+            "source_phase_description",
+            "phase_type",
+            "normalized_lifecycle_stages",
+            "parent_workflow_phase_ids",
+            "predecessor_workflow_phase_ids",
+            "linked_workflow_activity_ids",
+            "timing_quantity_ids",
+            "input_refs",
+            "output_refs",
+            "entry_rule_ids",
+            "exit_rule_ids",
+            "review_or_gate_check_ids",
+            "linked_decision_ids",
+            "control_flow_relationship_ids",
+            "handoff_relationship_ids"
+          ]
+        },
+        {
+          "anyOf": [
+            {
+              "properties": {
+                "source_phase_name_or_label": {
+                  "$ref": "#/$defs/sourceTextItem"
+                }
+              },
+              "required": [
+                "source_phase_name_or_label"
+              ]
+            },
+            {
+              "properties": {
+                "source_phase_description": {
+                  "$ref": "#/$defs/sourceTextItem"
+                }
+              },
+              "required": [
+                "source_phase_description"
+              ]
+            }
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "phase_type": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "phase_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "normalized_lifecycle_stages": {
+                "type": "array",
+                "contains": {
+                  "const": "other"
+                }
+              }
+            },
+            "required": [
+              "normalized_lifecycle_stages"
+            ]
+          },
+          "then": {
+            "required": [
+              "notes"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "workflowPhases": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/workflowPhase"
+          },
+          "minItems": 1
+        },
+        {
+          "$ref": "#/$defs/repeatableFieldStatus"
+        }
+      ]
+    },
+    "workflowExecutionStatusCode": {
+      "type": "string",
+      "enum": [
+        "defined_only",
+        "planned",
+        "prepared",
+        "executed_partial",
+        "executed_complete",
+        "attempted_failed",
+        "unclear"
+      ]
+    },
+    "workflowExecutionStatusValue": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/evidencedValueMetadata"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/workflowExecutionStatusCode"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "workflowExecutionStatus": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/workflowExecutionStatusValue"
+        },
+        {
+          "$ref": "#/$defs/evidenceStatusValue"
+        }
+      ]
+    },
     "workflowActivity": {
       "type": "object",
       "allOf": [
@@ -2075,6 +2298,9 @@
             "entry_conditions": {
               "$ref": "#/$defs/evidencedString"
             },
+            "workflow_phases": {
+              "$ref": "#/$defs/workflowPhases"
+            },
             "workflow_activities": {
               "$ref": "#/$defs/workflowActivities"
             },
@@ -2151,6 +2377,7 @@
             "linked_model_generation_method_ids",
             "linked_model_artifact_ids",
             "entry_conditions",
+            "workflow_phases",
             "workflow_activities",
             "branching_and_iteration",
             "exit_conditions",
@@ -5119,11 +5346,20 @@
             "linked_workflow_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
+            "linked_workflow_phase_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
+            "linked_workflow_activity_ids": {
+              "$ref": "#/$defs/rowIdArray"
+            },
             "linked_tool_ids": {
               "$ref": "#/$defs/rowIdArray"
             },
             "workflow_execution_and_deviations": {
               "$ref": "#/$defs/evidencedString"
+            },
+            "workflow_execution_status": {
+              "$ref": "#/$defs/workflowExecutionStatus"
             },
             "automation": {
               "$ref": "#/$defs/evidencedString"
@@ -5235,8 +5471,11 @@
             "skills_and_training",
             "staffing_and_number_of_people",
             "linked_workflow_ids",
+            "linked_workflow_phase_ids",
+            "linked_workflow_activity_ids",
             "linked_tool_ids",
             "workflow_execution_and_deviations",
+            "workflow_execution_status",
             "automation",
             "tools_licences_and_infrastructure",
             "model_preparation",
@@ -5272,6 +5511,32 @@
             "linked_rq2_finding_ids",
             "automation_levels"
           ]
+        },
+        {
+          "if": {
+            "properties": {
+              "workflow_execution_status": {
+                "type": "object",
+                "required": [
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "workflow_execution_status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "linked_workflow_ids": {
+                "type": "array",
+                "minItems": 1
+              },
+              "workflow_execution_and_deviations": {
+                "$ref": "#/$defs/evidencedStringValue"
+              }
+            }
+          }
         }
       ],
       "unevaluatedProperties": false
@@ -6834,6 +7099,7 @@
         "artifact_content",
         "scenario",
         "method_step",
+        "workflow_phase",
         "workflow_activity",
         "other",
         "unclear"
@@ -6992,6 +7258,10 @@
         "remove_method_step",
         "reorder_method_steps",
         "substitute_method_step",
+        "add_workflow_phase",
+        "remove_workflow_phase",
+        "reorder_workflow_phases",
+        "substitute_workflow_phase",
         "add_workflow_activity",
         "remove_workflow_activity",
         "reorder_workflow_activities",
@@ -8019,10 +8289,10 @@
         "base_artifact_method_or_workflow_and_version": {
           "$ref": "#/$defs/evidencedString"
         },
-        "retained_artifact_core_method_steps_or_workflow_activities": {
+        "retained_artifact_core_method_steps_or_workflow_phases_or_activities": {
           "$ref": "#/$defs/evidencedString"
         },
-        "configured_or_changed_artifact_content_method_steps_or_workflow_activities": {
+        "configured_or_changed_artifact_content_method_steps_or_workflow_phases_or_activities": {
           "$ref": "#/$defs/evidencedString"
         },
         "linked_variation_point_ids": {
@@ -8075,8 +8345,8 @@
       },
       "required": [
         "base_artifact_method_or_workflow_and_version",
-        "retained_artifact_core_method_steps_or_workflow_activities",
-        "configured_or_changed_artifact_content_method_steps_or_workflow_activities",
+        "retained_artifact_core_method_steps_or_workflow_phases_or_activities",
+        "configured_or_changed_artifact_content_method_steps_or_workflow_phases_or_activities",
         "linked_variation_point_ids",
         "linked_tailoring_rule_ids",
         "linked_tailoring_step_ids",
@@ -10689,7 +10959,7 @@
       "type": "object",
       "properties": {
         "schema_version": {
-          "const": "slr1-extraction/v5"
+          "const": "slr1-extraction/v6"
         },
         "identity": {
           "$ref": "#/$defs/reportIdentity"
@@ -10900,7 +11170,7 @@
     },
     "recordReference": {
       "type": "string",
-      "pattern": "^(report|family|lineage|citation|entity|quantity|decision|relationship|rule|check|resource|issue|tool|model_artifact|model_generation_method|construction_source|method_step|workflow|workflow_activity|eps_case|eps_element|eps_requirement|eps_exchange|eps_dependency|model_representation|model_representation_relationship|behavior_occurrence|eps_model_bridge|scenario|test_step|coverage_item|implementation_record|input_group|input_item|result_set|evaluation_unit|result_output|statistical_evaluation|result_criterion|comparator|rival_explanation|reviewer_derived_value|rq1_claim|rq2_finding|direction_component|rq3_activity|report_reuse_record|artifact_relationship|artifact_generality_scope|variation_point|tailoring_rule|tailoring_step|report_application|application_operation|tailoring_application):[^:]+$"
+      "pattern": "^(report|family|lineage|citation|entity|quantity|decision|relationship|rule|check|resource|issue|tool|model_artifact|model_generation_method|construction_source|method_step|workflow|workflow_phase|workflow_activity|eps_case|eps_element|eps_requirement|eps_exchange|eps_dependency|model_representation|model_representation_relationship|behavior_occurrence|eps_model_bridge|scenario|test_step|coverage_item|implementation_record|input_group|input_item|result_set|evaluation_unit|result_output|statistical_evaluation|result_criterion|comparator|rival_explanation|reviewer_derived_value|rq1_claim|rq2_finding|direction_component|rq3_activity|report_reuse_record|artifact_relationship|artifact_generality_scope|variation_point|tailoring_rule|tailoring_step|report_application|application_operation|tailoring_application):[^:]+$"
     },
     "recordReferences": {
       "type": "array",

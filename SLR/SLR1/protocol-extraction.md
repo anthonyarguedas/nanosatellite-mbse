@@ -57,7 +57,9 @@ Discovery events, search ranks, raw-file provenance, and screening history remai
 
 ### Linked normalization records
 
-Report records use `schema_version = slr1-extraction/v5`. Lineage and consolidated application records use their corresponding version 4 constants. A record without its applicable current marker is a legacy record. Migrate it through source review before synthesis. Do not infer normalized links or typed values automatically from legacy prose.
+Report records use `schema_version = slr1-extraction/v6`. Lineage and consolidated application records use their corresponding version 5 constants. A record without its applicable current marker is a legacy record. Migrate it through source review before synthesis. Do not infer normalized links or typed values automatically from legacy prose.
+
+Version 6 adds linked workflow phase records for source lifecycle groups, phases, stages, iterations, and increments. Each row preserves source wording and supplies controlled phase type and lifecycle-stage codes. Parent, predecessor, activity, rule, check, decision, output, control-flow, and handoff links represent lifecycle structure without copying linked content. Implementation records now link the exact workflow phases or activities in scope and pair the source execution account with a controlled workflow execution status. Lineage and consolidated application version 5 records can target workflow phases in variation points and tailoring operations. Revisit the source before migrating workflow, implementation, lineage, or consolidated application records.
 
 Version 5 adds dedicated scenario and test-step records. It links scenarios directly across model representations, behavior occurrences, inputs, evaluations, RQ3 activities, coverage, artifact lineages, and tailoring applications. It replaces the element code `hazard_or_risk_control` with separate hazard, feared-event, fault-or-failure, and risk-control codes. It also replaces the composite view codes `capability_or_use_case`, `risk_or_hazard`, and `vv_or_test`, the target codes `eps_mode_or_scenario` and `eps_hazard_or_risk_control`, the assessment code `scenario_or_mode_coverage`, and the evaluation-unit code `test` with explicit codes. Revisit the source before migrating these values.
 
@@ -70,9 +72,9 @@ Create each normalized fact once in `reference_catalog`, then link every use to 
 - `entities` for missions, platforms, organizations, teams, people, roles, skills, modeling languages, concerns, problems, purposes, orbits, environment conditions, modes, scenarios, hazards, faults or failures, risk controls, configurations, data sources, constructs, exchanged items, interfaces, procedure actions, methods, physical or operational items, artifact content, and study groups or arms. Each entity has a stable ID, controlled type, source name, review-wide canonical key, version when applicable, and parent IDs. A scenario entity supplies identity and source name. Its dedicated scenario record supplies scenario semantics.
 - `quantities` for physical values, mass, dimensions, orbit parameters, environment values, inputs, outputs, thresholds, probability or likelihood, severity, risk, counts, effort, duration, schedule, cost, statistics, sample size, uncertainty, margin, sensitivity, and degradation. Store the raw source value, typed numeric value or bounds, canonical unit, value basis, time basis, denominator, currency, and price year separately.
 - `decisions` with a stable ID, decision type, lifecycle stages, status, alternatives, selected objects, and rationale.
-- `relationships` with typed source and target references. Use them for tool and data flows, concern relationships, boundaries, procedure control flow, derivation traces, physical links, differences, mechanisms, and before-and-after traces.
+- `relationships` with typed source and target references. Use them for tool and data flows, concern relationships, boundaries, phase and activity control flow, derivation traces, physical links, differences, mechanisms, and before-and-after traces.
 - `rules` for entry, completion, decision, selection, inclusion, exclusion, normalization, abstraction, constraints, branching, iteration, unchanged use, tailoring, acceptance, quality, and missing-data handling.
-- `checks` for quality, completeness, correctness, completion, acceptance, verification, validation, assurance, genericity, and model-to-test closure. Link each check to its target, criterion, and result. Use the RQ3 model assessment dimensions for comparable model and digital twin assurance classifications.
+- `checks` for quality, completeness, correctness, completion, acceptance, verification, validation, assurance, genericity, and model-to-test closure. Represent lifecycle reviews and gates with check, rule, and decision records, then link them from their workflow phases. Link each check to its target, criterion, and result. Use the RQ3 model assessment dimensions for comparable model and digital twin assurance classifications.
 - `resources` for repositories, model files, datasets, standards, publications, scripts, procedures, documentation, infrastructure, and licences. Store location and availability once.
 - `issues` for missing data, failures, exclusions, uncertainty, sensitivity, discrepancies, conflicts, limitations, future work, rival explanations, rework, and missing information. Link each issue to the affected records and its handling or resolution.
 
@@ -161,7 +163,7 @@ Use these lifecycle-stage codes:
 - **`other`:** another identified lifecycle stage.
 - **`unclear`:** the lifecycle stage cannot be classified.
 
-Record every applicable lifecycle stage in the array. Represent continuity across stages through workflow scope, relationship, purpose, and lifecycle links rather than a composite stage code.
+Record every applicable lifecycle stage in the array. Represent continuity across stages through workflow scope, relationship, purpose, and lifecycle links rather than a composite stage code. Report-context arrays summarize demonstrated and claimed or planned coverage. Within a workflow, store controlled stage codes on the most specific applicable workflow phase rows and link those rows to activities. Derive parent phase and whole workflow coverage through the links. Do not repeat the same stage classification on parent phases, the workflow, and its activities. A defined phase establishes workflow coverage. It does not establish execution. When workflow evidence is available, use linked implementation records and their execution status to support the demonstrated versus claimed or planned context arrays.
 
 Use project maturity as follows:
 
@@ -301,12 +303,39 @@ Create one workflow row for each materially distinct workflow. Record:
 - purpose and boundary.
 - linked model-generation-method and model-artifact IDs.
 - entry conditions.
+- `workflow_phases` as the linked lifecycle structure described below.
 - `workflow_activities` as nested rows containing `workflow_activity_id`, sequence label, predecessor activity IDs, action, inputs, outputs, linked method, artifact, and tool IDs, responsible roles, tool settings, automation, decision rules, quality or exit checks, and branching, iteration, or rework.
 - overall branching and iteration, exit conditions, handoffs and data flow, roles and responsibilities, linked tool IDs, automation, and governance and configuration control.
 - supporting-material location and availability.
 - `procedure_reporting` using the common procedural-detail fields below.
 
-Apply the method-step linking rules to every workflow activity. At workflow level, use `workflow_entity_ids`, `purpose_entity_ids`, `scope_refs`, entry and exit rule IDs, control-flow and handoff relationship IDs, responsible role entity IDs, `automation_levels`, governance rule IDs, and supporting resource IDs. Derive the workflow automation-level array from its activity records when activity-level coding is available. Derive workflow-level branching and handoff summaries from activity links.
+A workflow phase is a source-identifiable lifecycle grouping, phase, stage, iteration, or increment that organizes workflow activities. Create one phase row for each source-defined node needed to preserve lifecycle hierarchy or order. Do not create a phase from common domain knowledge alone. Record:
+
+- `workflow_phase_id`.
+- exact `source_phase_name_or_label` and `source_phase_description` wording.
+- controlled `phase_type` and `normalized_lifecycle_stages`.
+- parent phase IDs for source-supported hierarchy and predecessor phase IDs for source-supported order.
+- linked workflow-activity IDs.
+- linked timing or duration quantities.
+- typed input and output references.
+- linked entry and exit rules, review or gate checks, and decisions.
+- linked control-flow and handoff relationships.
+
+Use `phase_type` as follows:
+
+- **`lifecycle_group`:** the row groups child phases or stages, such as formulation or implementation.
+- **`phase`:** the row is a source-defined lifecycle phase.
+- **`stage`:** the row is a source-defined lifecycle stage.
+- **`iteration`:** the row is a source-defined repeated iteration, sprint, or cycle.
+- **`increment`:** the row is a source-defined build, release, or increment.
+- **`other`:** another source-defined lifecycle node applies.
+- **`unclear`:** relevant evidence does not resolve the node type.
+
+Preserve agency, standard, and author labels such as *Phase A*, *formal design*, or *production and integration* in the source fields. Apply every supported shared lifecycle-stage code to the most specific phase row. Link each activity from its most specific phase or phases. Derive membership in parent groups through `parent_workflow_phase_ids`. A parent grouping normally does not repeat its descendants' activity IDs or normalized stages. Use `none` for established absence and `not_applicable` with a reason when the parent value is intentionally derived from child rows.
+
+Use predecessor IDs and control-flow relationships for phase order. Use parent IDs only for containment. A phase label, lettering convention, horizontal position, or list order does not establish sequence by itself. Link source-attributed phase timing to typed quantities. Link source-attributed phase inputs and outputs to existing artifacts, resources, requirements, quantities, or other records. Derive phase aggregates from linked activities when the source does not state them at phase level. Represent reviews and gates once as checks, rules, or decisions. Link their IDs from the phase instead of copying their wording, criteria, or outcomes.
+
+Apply the method-step linking rules to every workflow activity. At workflow level, use `workflow_entity_ids`, `purpose_entity_ids`, `scope_refs`, entry and exit rule IDs, control-flow and handoff relationship IDs, responsible role entity IDs, `automation_levels`, governance rule IDs, and supporting resource IDs. Derive the workflow automation-level array from its activity records when activity-level coding is available. Derive workflow-level lifecycle coverage, branching, and handoff summaries from phase and activity links.
 
 Use workflow scope types as follows:
 
@@ -318,7 +347,7 @@ Use workflow scope types as follows:
 - **`other`:** another identified workflow scope applies.
 - **`unclear`:** workflow scope cannot be classified.
 
-Code every supported scope for a workflow that the source calls end-to-end. Preserve that phrase in the source workflow name, purpose, or boundary. Use activity order and handoff relationships to establish integration among the scopes.
+Code every supported scope for a workflow that the source calls end-to-end. Preserve that phrase in the source workflow name, purpose, or boundary. Use phase and activity order plus handoff relationships to establish integration among the scopes.
 
 #### Procedural reporting detail
 
@@ -343,7 +372,7 @@ Assign `procedure_detail_level` as follows and give a concise reason:
 - **`reproduction_ready`:** the actionable procedure also identifies all material settings and accessible supporting materials needed to reproduce it without material reconstruction. This code assesses reported readiness. It does not establish independent reproduction.
 - **`unclear`:** relevant procedural information exists, but its detail cannot be classified.
 
-Do not infer an actionable procedure from a flowchart title, a named method, a tool script, or a successful result. Record missing components explicitly. Derive the level from component statuses and their basis references. Keep `detail_level_reason` concise and link it to the records that establish the level. The common evidence fields apply to every method, source, step, workflow, activity, reporting-detail field, and model-artifact row.
+Do not infer an actionable procedure from a flowchart title, a named method, a tool script, or a successful result. Record missing components explicitly. Derive the level from component statuses and their basis references. Keep `detail_level_reason` concise and link it to the records that establish the level. The common evidence fields apply to every method, source, step, workflow, workflow phase, activity, reporting-detail field, and model-artifact row.
 
 ### EPS representation
 
@@ -592,8 +621,9 @@ For each implementation record, record:
 - roles and affected teams.
 - skills and training.
 - staffing and number of people.
-- linked `workflow_id` and `tool_id` values.
-- workflow execution and deviations from the defined workflow.
+- linked `workflow_id`, `workflow_phase_id`, `workflow_activity_id`, and `tool_id` values.
+- workflow execution and deviations from the defined workflow in source wording.
+- controlled `workflow_execution_status` for the exact linked scope.
 - automation.
 - tool licences, settings, and infrastructure details that are not represented by the linked tool records.
 - model preparation.
@@ -623,6 +653,18 @@ Use effort basis as follows:
 - **`author_estimated`:** the source provides a quantified estimate without direct tracking.
 - **`asserted`:** the source characterizes effort without a reported measurement or estimation method.
 
+Use workflow execution status as follows:
+
+- **`defined_only`:** the source explicitly presents the linked workflow scope as a definition or reference without planned, prepared, or executed use.
+- **`planned`:** the linked workflow scope is intended for future execution.
+- **`prepared`:** inputs, artifacts, tools, or configurations are prepared, but execution is not reported.
+- **`executed_partial`:** execution covers only part of the linked workflow or stops before completion.
+- **`executed_complete`:** the source reports completion of the full linked workflow scope.
+- **`attempted_failed`:** execution was attempted and failed before completing the linked scope.
+- **`unclear`:** relevant execution evidence exists, but its status cannot be classified.
+
+Keep workflow definition and workflow execution separate. Use `workflow_execution_and_deviations` for source wording. Link the implementation record to the most specific workflow phases or activities that bound the status. Link the parent workflow as well. Use phase links for phase-level execution evidence and activity links for activity-level evidence. Derive phase membership from the phase and activity structure instead of repeating ancestor and descendant links. Create separate implementation records when a full workflow and one of its phases require different execution-status codes. Use `not_reported` when execution is not described. Do not infer `defined_only` from silence.
+
 Use burden phases as follows:
 
 - **`adoption`:** the burden occurs during initial introduction, setup, migration, or training.
@@ -631,7 +673,7 @@ Use burden phases as follows:
 
 The burden-category codes identify labor, elapsed time, money, people, competence, tools, infrastructure, preparation, computing, integration, governance, maintenance, or rework burdens according to their labels. Record both `adoption` and `ongoing_use` when a burden occurs in both phases.
 
-Keep measured values, author estimates, and unsupported characterizations distinct. Each implementation record supplies `scope_refs`, team, role, and skill entity IDs, quantity, resource, relationship, rule, issue, and decision IDs, linked RQ2 finding IDs, and controlled `automation_levels`. Use `manual`, `tool_assisted`, `partially_automated`, `fully_automated`, or `unclear`. Keep one `automation_level` on each atomic method step, workflow activity, tailoring step, and application operation. Derive workflow-level automation arrays from their activities and code their provenance as `reviewer_derived`. Record every additional implementation-level automation classification supported by work outside those linked workflows. Link each implementation source text item to these normalized records. Use team, role, and skill entities for people and competence. Use quantities for staffing, effort, duration, schedule, cost, computing, review, rework, and maintenance. Use resources for tools, licences, and infrastructure. Use relationships for workflow execution, deviations, integration, migration, and interoperability. Use rules for governance and configuration control. Use issues for burdens and rework, and decisions for mitigations and trade-offs. Link each implementation record to every applicable workflow. Link RQ2 burden findings and reuse or tailoring applications to the implementation record instead of copying its details.
+Keep measured values, author estimates, and unsupported characterizations distinct. Each implementation record supplies linked workflow IDs and the applicable phase or activity IDs, `scope_refs`, team, role, and skill entity IDs, quantity, resource, relationship, rule, issue, and decision IDs, linked RQ2 finding IDs, controlled workflow execution status, and controlled `automation_levels`. Use `manual`, `tool_assisted`, `partially_automated`, `fully_automated`, or `unclear`. Keep one `automation_level` on each atomic method step, workflow activity, tailoring step, and application operation. Derive workflow-level automation arrays from their activities and code their provenance as `reviewer_derived`. Record every additional implementation-level automation classification supported by work outside those linked workflows. Link each implementation source text item to these normalized records. Use team, role, and skill entities for people and competence. Use quantities for staffing, effort, duration, schedule, cost, computing, review, rework, and maintenance. Use resources for tools, licences, and infrastructure. Use relationships for workflow execution, deviations, integration, migration, and interoperability. Use rules for governance and configuration control. Use issues for burdens and rework, and decisions for mitigations and trade-offs. Link each implementation record to every applicable workflow and to the most specific phases or activities in its scope. Derive phase and workflow execution coverage from these links. Link RQ2 burden findings and reuse or tailoring applications to the implementation record instead of copying its details.
 
 ### Input and assumption groups
 
@@ -1192,8 +1234,8 @@ Each limit rule identifies its dimension, condition, operator, and linked quanti
 
 Record the reuse design:
 
-- reusable-core source wording and `core_member_refs` to artifact content, method steps, workflow activities, rules, relationships, and checks.
-- `variation_points` as nested rows containing `variation_point_id`, source name or target, controlled `target_types`, exact `target_refs`, linked artifact, scenario, method, and workflow IDs, source option wording, typed option quantity IDs, dependency relationship IDs, selection rule IDs, and controlled unchanged-use status. Record every applicable target type from `artifact_content`, `scenario`, `method_step`, `workflow_activity`, `other`, or `unclear`. Use `scenario` when the reusable core selects, specializes, adds, removes, or changes a scenario or test case.
+- reusable-core source wording and `core_member_refs` to artifact content, method steps, workflow phases, workflow activities, rules, relationships, and checks.
+- `variation_points` as nested rows containing `variation_point_id`, source name or target, controlled `target_types`, exact `target_refs`, linked artifact, scenario, method, and workflow IDs, source option wording, typed option quantity IDs, dependency relationship IDs, selection rule IDs, and controlled unchanged-use status. Record every applicable target type from `artifact_content`, `scenario`, `method_step`, `workflow_phase`, `workflow_activity`, `other`, or `unclear`. Use `scenario` when the reusable core selects, specializes, adds, removes, or changes a scenario or test case.
 - overall unchanged-use source wording linked to rule IDs.
 - overall dependency source wording plus `dependency_relationship_ids`.
 - `tailoring_rules` as nested rows containing `tailoring_rule_id`, linked variation-point and tool IDs, source trigger wording and trigger rule IDs, operation types, source required inputs and typed input references, source responsible roles and role entity IDs, tool configuration IDs, source resulting output and output references, constraint rule IDs, acceptance check IDs, and rationale.
@@ -1222,6 +1264,10 @@ Use one or more tailoring-operation types for each rule or executed application 
 - **`remove_method_step`:** remove a step from the reused method.
 - **`reorder_method_steps`:** change method-step order or dependencies.
 - **`substitute_method_step`:** replace a method step.
+- **`add_workflow_phase`:** add a lifecycle phase or grouping to the reused workflow.
+- **`remove_workflow_phase`:** remove a lifecycle phase or grouping from the reused workflow.
+- **`reorder_workflow_phases`:** change workflow phase order or dependencies.
+- **`substitute_workflow_phase`:** replace a workflow phase or grouping.
 - **`add_workflow_activity`:** add an activity to the reused workflow.
 - **`remove_workflow_activity`:** remove an activity from the reused workflow.
 - **`reorder_workflow_activities`:** change workflow-activity order or dependencies.
@@ -1252,11 +1298,11 @@ Derive artifact demonstrated settings, coverage, failed applications, and applic
 
 Assign all reuse levels from evidence contained in this report only. A single report can support R3 or R4, M3 or M4, and W3 or W4. Assign a level of 3 or 4 only when the corresponding application below is complete, identifies what stayed the same and what changed, reports a relevant post-application check and result, and meets the required adopter condition. A companion report is not required for any report-bounded level.
 
-A **reusable core** is the content that the source states or clearly shows remains across uses. For an artifact, it can include model elements, relationships, constraints, interfaces, meanings, or packaged assets. For a method, it can include stable steps, decision rules, roles, inputs, outputs, or assurance activities. For a workflow, it can include stable activities, order or dependencies, handoffs, roles, artifacts, decision gates, and checks.
+A **reusable core** is the content that the source states or clearly shows remains across uses. For an artifact, it can include model elements, relationships, constraints, interfaces, meanings, or packaged assets. For a method, it can include stable steps, decision rules, roles, inputs, outputs, or assurance activities. For a workflow, it can include stable phases, phase hierarchy, activities, order or dependencies, handoffs, roles, artifacts, decision gates, and checks.
 
-A **variation point** is a source-described place, option, range, rule, dependency, method step, or workflow activity through which that core can vary.
+A **variation point** is a source-described place, option, range, rule, dependency, method step, workflow phase, or workflow activity through which that core can vary.
 
-**Tailoring or adaptation** means using a source-described process to create or select a target-specific artifact instance or to adapt a method or workflow to a target setting. It can involve configuration, parameterization, selection, specialization, extension, deletion or substitution, interface mapping, transformation or generation, changing method steps or workflow activities, tool or format migration, or a clearly justified decision to use the artifact, method, or workflow unchanged.
+**Tailoring or adaptation** means using a source-described process to create or select a target-specific artifact instance or to adapt a method or workflow to a target setting. It can involve configuration, parameterization, selection, specialization, extension, deletion or substitution, interface mapping, transformation or generation, changing method steps, workflow phases, or workflow activities, tool or format migration, or a clearly justified decision to use the artifact, method, or workflow unchanged.
 
 A parameter sweep or scenario run in one unchanged mission model is analysis, not tailoring across settings. Rebuilding a model without retained structure may show reuse of a method or workflow. It shows reuse of an artifact only when the source establishes the artifact lineage and retained core.
 
@@ -1350,8 +1396,8 @@ Use relationship to the DAE as follows:
 Record tailoring or adaptation performed:
 
 - base artifact, method, or workflow source wording plus `base_refs` to exact versions or procedure records.
-- retained source wording plus `retained_refs` to core members, method steps, rules, workflow activities, and handoffs.
-- configured or changed source wording plus `changed_refs`.
+- retained source wording plus `retained_refs` to core members, method steps, rules, workflow phases, workflow activities, and handoffs.
+- configured or changed source wording plus `changed_refs` to the exact artifact content, method steps, workflow phases, workflow activities, rules, or relationships.
 - linked variation-point, tailoring-rule, and tailoring-procedure-step IDs.
 - `executed_operations` as nested rows containing `application_operation_id`, sequence label, predecessor IDs, variation-point, rule, procedure-step, and tool IDs, operation types, exact target references, before state and after state references, reason rule IDs, input references, role entity IDs, tool configuration IDs, check IDs, and controlled operation result. Preserve source wording in the corresponding fields.
 - an overall before-and-after source trace plus `before_after_relationship_ids`.
@@ -1543,7 +1589,7 @@ Record comparator adequacy only for comparative or causal claims. Record relatio
 Before full extraction:
 
 1. [ ] Test report-level eligibility and Route A or Route B coding on clear and borderline examples.
-2. [ ] Test the complete report form on a varied sample containing Route A and Route B reports, reference catalog entities, typed quantities, decisions, relationships, rules, checks, resources, issues, typed tools and equipment, per artifact identity, model roles and availability, model generation methods, workflow-scope arrays, construction sources, ordered method steps and workflow activities, atomic and aggregate automation levels, generic-model derivation, linked procedural-detail assessments, typed EPS elements and requirements, linked exchange-type and dependency-type arrays and bridges, dedicated use-case and operational-scenario records, one feared-event or fault-propagation case, one V&V test case with ordered test steps, nominal and off-nominal classifications, direct scenario links, several structured model representations, relationships among views, sequence or activity behavior occurrences, scenario coverage items, boundary roles, coverage assessments, disciplinary viewpoints, representation-level abstraction, decomposition visibility and fidelity, item level inputs, evaluation-design components, methods integration, typed outputs and statistics, normalized RQ1 claims, RQ2 role, direction-component and lifecycle-stage arrays, ordered RQ3 activities, model and digital twin assessment aspects and methods, verification levels, test phases, virtual and physical execution, exact model configurations, figures or tables, structured variation points with target-type arrays, tailoring rules and procedure steps, executed tailoring operations, artifact-type arrays, scoped artifact generality, application-object arrays, procedural-evidence flags, complete reusable-artifact and report-level application fields, `lineage_mentioned`, and report-bounded artifact, method, and workflow reuse levels. Include a report that can reach R3 or R4, M3 or M4, or W3 or W4 by itself when available.
+2. [ ] Test the complete report form on a varied sample containing Route A and Route B reports, reference catalog entities, typed quantities, decisions, relationships, rules, checks, resources, issues, typed tools and equipment, per artifact identity, model roles and availability, model generation methods, workflow-scope arrays, construction sources, ordered method steps, source and normalized workflow phases, phase hierarchy and order, phase links to activities and gates, workflow activities, scoped workflow execution status, atomic and aggregate automation levels, generic-model derivation, linked procedural-detail assessments, typed EPS elements and requirements, linked exchange-type and dependency-type arrays and bridges, dedicated use-case and operational-scenario records, one feared-event or fault-propagation case, one V&V test case with ordered test steps, nominal and off-nominal classifications, direct scenario links, several structured model representations, relationships among views, sequence or activity behavior occurrences, scenario coverage items, boundary roles, coverage assessments, disciplinary viewpoints, representation-level abstraction, decomposition visibility and fidelity, item level inputs, evaluation-design components, methods integration, typed outputs and statistics, normalized RQ1 claims, RQ2 role, direction-component and lifecycle-stage arrays, ordered RQ3 activities, model and digital twin assessment aspects and methods, verification levels, test phases, virtual and physical execution, exact model configurations, figures or tables, structured variation points with target-type arrays, tailoring rules and procedure steps, executed tailoring operations, artifact-type arrays, scoped artifact generality, application-object arrays, procedural-evidence flags, complete reusable-artifact and report-level application fields, `lineage_mentioned`, and report-bounded artifact, method, and workflow reuse levels. Include a report that can reach R3 or R4, M3 or M4, or W3 or W4 by itself when available.
 3. [ ] Test cross-report family and lineage-identity resolution, shared-scenario linking, lineage scenario envelopes and variation points, consolidated-application scenario scope, immutable report-level records, separate lineage-level extraction, and separate consolidated application, effort, assurance, independence, and reuse-level fields on at least one multi-report example.
 4. [ ] Calibrate `named_only`, `narrative_outline`, `actionable_procedure`, `reproduction_ready`, and `unclear` on model generation, workflow, and tailoring examples. Confirm that procedural detail remains separate from reuse level.
 5. [ ] Calibrate the difference between assertion, worked example, execution, comparison, physical or operational checking, and independent transfer.
@@ -1557,8 +1603,8 @@ One LLM reviewer performs the primary extraction, cross-report extraction, testâ
 Apply this sequence:
 
 1. **Primary extraction.** The LLM reviewer extracts the complete report into the frozen report-level form.
-2. **Focused audit.** For every included report, the human auditor checks eligibility and route, canonical entities, typed quantities, decisions, relationships, rules, checks, resources, issues, typed record references, typed tool records, per artifact metadata and model roles, artifact-type arrays and scoped generality, dedicated scenario identity and classification, use cases, feared events, faults or failures, risk controls, ordered test steps, direct scenario links, scenario coverage, item level inputs, evaluation-design components, methods integration, typed outputs and statistics, EPS elements and requirements, exchange-type and dependency-type arrays, model representations, representation-level abstraction, decomposition visibility and fidelity, relationships among views, dynamic behavior occurrences, boundary roles, Route B anchors and bridges, coverage coding, omitted or duplicated groups, method steps, workflow activities, workflow-scope and aggregate automation arrays, generic-model derivation, procedural-detail levels, normalized RQ1 claims, direct RQ2 attribution, RQ2 role, direction-component and lifecycle-stage arrays, direct RQ3 linkage, RQ3 activity order, exact artifact, configuration, and scenario links, verification levels, test phases, model and digital twin assessment coding, virtual and physical execution, model-to-test closure, `lineage_mentioned`, complete report-level reuse and application-object coding, variation-point target arrays, structured tailoring evidence, every report-level R3/R4, M3/M4, or W3/W4 assignment, procedural-evidence flags, citations, source-versus-inference distinctions, and reviewer-derived values. The auditor may see the extraction because the audit's purpose is error detection.
-3. **Deterministic validation.** Validate schema versions, controlled values, canonical keys, IDs, typed record references, required fields, links, scenario-entity typing, report-local scenario links, V&V test-case role and type agreement, test-step predecessors, safety-element and risk-quantity types, application-assurance scenario links, procedure-level prerequisites, reuse-level prerequisites, procedural-evidence flags, quantity forms, units, currencies, sample sizes, and reproducible calculations. Confirm each citation's report and page range. For citations without `graphic` or `graphic_quote_description`, confirm the verbatim quotation against the stored source using the frozen page-text extraction and normalization rule. Preserve source values and reviewer-derived values separately.
+2. **Focused audit.** For every included report, the human auditor checks eligibility and route, canonical entities, typed quantities, decisions, relationships, rules, checks, resources, issues, typed record references, typed tool records, per artifact metadata and model roles, artifact-type arrays and scoped generality, dedicated scenario identity and classification, use cases, feared events, faults or failures, risk controls, ordered test steps, direct scenario links, scenario coverage, item level inputs, evaluation-design components, methods integration, typed outputs and statistics, EPS elements and requirements, exchange-type and dependency-type arrays, model representations, representation-level abstraction, decomposition visibility and fidelity, relationships among views, dynamic behavior occurrences, boundary roles, Route B anchors and bridges, coverage coding, omitted or duplicated groups, method steps, source and normalized workflow phases, phase hierarchy and order, phase links to activities and gates, workflow activities, scoped workflow execution status, workflow-scope and aggregate automation arrays, generic-model derivation, procedural-detail levels, normalized RQ1 claims, direct RQ2 attribution, RQ2 role, direction-component and lifecycle-stage arrays, direct RQ3 linkage, RQ3 activity order, exact artifact, configuration, and scenario links, verification levels, test phases, model and digital twin assessment coding, virtual and physical execution, model-to-test closure, `lineage_mentioned`, complete report-level reuse and application-object coding, variation-point target arrays, structured tailoring evidence, every report-level R3/R4, M3/M4, or W3/W4 assignment, procedural-evidence flags, citations, source-versus-inference distinctions, and reviewer-derived values. The auditor may see the extraction because the audit's purpose is error detection.
+3. **Deterministic validation.** Validate schema versions, controlled values, canonical keys, IDs, typed record references, required fields, workflow phase hierarchy, phase order, same workflow phase and activity links, scoped execution links, scenario-entity typing, report-local scenario links, V&V test-case role and type agreement, test-step predecessors, safety-element and risk-quantity types, application-assurance scenario links, procedure-level prerequisites, reuse-level prerequisites, procedural-evidence flags, quantity forms, units, currencies, sample sizes, and reproducible calculations. Confirm each citation's report and page range. For citations without `graphic` or `graphic_quote_description`, confirm the verbatim quotation against the stored source using the frozen page-text extraction and normalization rule. Preserve source values and reviewer-derived values separately.
 4. **Adjudication.** The LLM reviewer resolves every audit or deterministic issue against the full source and gives the final review judgment. The human auditor records the disposition in the relevant Git commit and applies accepted changes. No automated process writes directly to the canonical extraction.
 5. **Cross-report pass.** After report extraction, the LLM reviewer resolves report families and artifact-lineage identity, updates only report-level `lineage_id` values, and creates separate lineage-level and consolidated tailoring-application records. The human auditor performs one focused cross-report audit for every uncertain merge or split and every lineage-level R3 or R4 assignment.
 

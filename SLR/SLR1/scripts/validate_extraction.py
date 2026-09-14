@@ -112,10 +112,13 @@ DIRECT_REFERENCE_FIELDS = {
     "sensitivity_quantity_ids": "quantity",
     "option_quantity_ids": "quantity",
     "threshold_quantity_ids": "quantity",
+    "timing_quantity_ids": "quantity",
     "time_basis_quantity_id": "quantity",
     "denominator_quantity_id": "quantity",
     "p_value_quantity_id": "quantity",
     "linked_decision_ids": "decision",
+    "control_flow_relationship_ids": "relationship",
+    "handoff_relationship_ids": "relationship",
     "linked_physical_or_operational_relationship_ids": "relationship",
     "material_difference_relationship_ids": "relationship",
     "dependency_relationship_ids": "relationship",
@@ -131,6 +134,8 @@ DIRECT_REFERENCE_FIELDS = {
     "trigger_rule_ids": "rule",
     "precondition_rule_ids": "rule",
     "postcondition_rule_ids": "rule",
+    "entry_rule_ids": "rule",
+    "exit_rule_ids": "rule",
     "constraint_rule_ids": "rule",
     "governance_rule_ids": "rule",
     "reason_rule_ids": "rule",
@@ -143,6 +148,7 @@ DIRECT_REFERENCE_FIELDS = {
     "check_ids": "check",
     "assurance_check_ids": "check",
     "closure_check_ids": "check",
+    "review_or_gate_check_ids": "check",
     "linked_resource_ids": "resource",
     "source_resource_ids": "resource",
     "data_source_resource_ids": "resource",
@@ -159,6 +165,9 @@ DIRECT_REFERENCE_FIELDS = {
     "linked_output_model_artifact_ids": "model_artifact",
     "linked_model_generation_method_ids": "model_generation_method",
     "linked_workflow_ids": "workflow",
+    "linked_workflow_phase_ids": "workflow_phase",
+    "parent_workflow_phase_ids": "workflow_phase",
+    "predecessor_workflow_phase_ids": "workflow_phase",
     "linked_workflow_activity_ids": "workflow_activity",
     "eps_case_ids": "eps_case",
     "linked_eps_case_ids": "eps_case",
@@ -244,6 +253,7 @@ RECORD_REFERENCE_KINDS = {
     "construction_source": "construction_source",
     "method_step": "method_step",
     "workflow": "workflow",
+    "workflow_phase": "workflow_phase",
     "workflow_activity": "workflow_activity",
     "eps_case": "eps_case",
     "eps_element": "eps_element",
@@ -725,6 +735,17 @@ def index_report(
                 row,
                 issues,
             )
+            for phase_index, phase in enumerate(rows(row.get("workflow_phases"))):
+                register(
+                    indexes,
+                    "workflow_phase",
+                    phase.get("workflow_phase_id"),
+                    document,
+                    f"{workflow_pointer}/workflow_phases/{phase_index}/"
+                    "workflow_phase_id",
+                    phase,
+                    issues,
+                )
             for activity_index, activity in enumerate(
                 rows(row.get("workflow_activities"))
             ):
@@ -1086,6 +1107,7 @@ def build_indexes(
         "construction_source",
         "method_step",
         "workflow",
+        "workflow_phase",
         "workflow_activity",
         "model_artifact",
         "eps_case",
@@ -1645,6 +1667,7 @@ def report_reference_issues(
         for scenario in scenario_rows
         if isinstance(scenario.get("scenario_id"), str)
     }
+    workflow_phase_parent_ids: dict[str, str] = {}
     workflow_activity_parent_ids: dict[str, str] = {}
     mbse = data.get("mbse_approach", {})
     if isinstance(mbse, Mapping):
@@ -1727,11 +1750,61 @@ def report_reference_issues(
                 for activity in activities
                 if isinstance(activity.get("workflow_activity_id"), str)
             }
-            workflow_id = row.get("workflow_id")
+            phases = rows(workflow.get("workflow_phases"))
+            local_phase_ids = {
+                phase.get("workflow_phase_id")
+                for phase in phases
+                if isinstance(phase.get("workflow_phase_id"), str)
+            }
+            workflow_id = workflow.get("workflow_id")
+            for phase_index, phase in enumerate(phases):
+                phase_base = f"{workflow_base}/workflow_phases/{phase_index}"
+                workflow_phase_id = phase.get("workflow_phase_id")
+                if isinstance(workflow_id, str) and isinstance(workflow_phase_id, str):
+                    workflow_phase_parent_ids[workflow_phase_id] = workflow_id
+                for field_name in (
+                    "parent_workflow_phase_ids",
+                    "predecessor_workflow_phase_ids",
+                ):
+                    identifiers = phase.get(field_name)
+                    if not isinstance(identifiers, list):
+                        continue
+                    for identifier_index, identifier in enumerate(identifiers):
+                        if identifier not in local_phase_ids:
+                            issues.append(
+                                Issue(
+                                    str(document.path),
+                                    f"{phase_base}/{field_name}/{identifier_index}",
+                                    f"workflow phase ID {identifier!r} is not in the "
+                                    "same workflow",
+                                )
+                            )
+                        elif identifier == workflow_phase_id:
+                            issues.append(
+                                Issue(
+                                    str(document.path),
+                                    f"{phase_base}/{field_name}/{identifier_index}",
+                                    "workflow phase cannot link itself as a parent or "
+                                    "predecessor",
+                                )
+                            )
+                linked_activity_ids = phase.get("linked_workflow_activity_ids")
+                if isinstance(linked_activity_ids, list):
+                    for activity_link_index, identifier in enumerate(
+                        linked_activity_ids
+                    ):
+                        if identifier not in local_activity_ids:
+                            issues.append(
+                                Issue(
+                                    str(document.path),
+                                    f"{phase_base}/linked_workflow_activity_ids/"
+                                    f"{activity_link_index}",
+                                    f"workflow activity ID {identifier!r} is not in "
+                                    "the same workflow",
+                                )
+                            )
             for activity_index, activity in enumerate(activities):
-                activity_base = (
-                    f"{workflow_base}/workflow_activities/{activity_index}"
-                )
+                activity_base = f"{workflow_base}/workflow_activities/{activity_index}"
                 workflow_activity_id = activity.get("workflow_activity_id")
                 if isinstance(workflow_id, str) and isinstance(
                     workflow_activity_id, str
@@ -1985,6 +2058,8 @@ def report_reference_issues(
     common_specs = {
         "implementation_records": (
             ("linked_workflow_ids", "workflow"),
+            ("linked_workflow_phase_ids", "workflow_phase"),
+            ("linked_workflow_activity_ids", "workflow_activity"),
         ),
         "input_groups": (
             ("eps_case_id", "eps_case"),
@@ -2044,6 +2119,41 @@ def report_reference_issues(
                 indexes,
                 issues,
             )
+
+    for implementation_index, implementation in enumerate(
+        rows(data.get("implementation_records"))
+    ):
+        linked_workflow_ids = implementation.get("linked_workflow_ids")
+        linked_workflow_id_set = (
+            set(linked_workflow_ids) if isinstance(linked_workflow_ids, list) else set()
+        )
+        for field_name, parent_ids, item_name in (
+            (
+                "linked_workflow_phase_ids",
+                workflow_phase_parent_ids,
+                "workflow phase",
+            ),
+            (
+                "linked_workflow_activity_ids",
+                workflow_activity_parent_ids,
+                "workflow activity",
+            ),
+        ):
+            identifiers = implementation.get(field_name)
+            if not isinstance(identifiers, list):
+                continue
+            for identifier_index, identifier in enumerate(identifiers):
+                parent_id = parent_ids.get(identifier)
+                if parent_id is not None and parent_id not in linked_workflow_id_set:
+                    issues.append(
+                        Issue(
+                            str(document.path),
+                            f"/implementation_records/{implementation_index}/"
+                            f"{field_name}/{identifier_index}",
+                            f"implementation {item_name} does not belong to a linked "
+                            "workflow",
+                        )
+                    )
 
     rq3_rows = rows(data.get("rq3_activities"))
     local_rq3_ids = {
@@ -2486,6 +2596,8 @@ SOURCE_ONLY_FIELDS = {
     "source_scenario_type",
     "source_operating_condition",
     "source_step_type",
+    "source_phase_name_or_label",
+    "source_phase_description",
     "sequence_label",
     "source_relationship_term",
     "parent_artifact_name",
@@ -4174,14 +4286,14 @@ def application_deficiencies(
         deficiencies.append("linked material setting differences")
     if not has_ordinary_value(
         tailoring.get(
-            "retained_artifact_core_method_steps_or_workflow_activities"
+            "retained_artifact_core_method_steps_or_workflow_phases_or_activities"
         )
     ):
         deficiencies.append("retained core, method steps, or workflow activities")
     elif not has_resolved_links(tailoring.get("retained_refs")):
         deficiencies.append("linked retained core or procedure members")
     changed = tailoring.get(
-        "configured_or_changed_artifact_content_method_steps_or_workflow_activities"
+        "configured_or_changed_artifact_content_method_steps_or_workflow_phases_or_activities"
     )
     unchanged_reason = tailoring.get("reasons_for_changes_or_unchanged_use")
     if not has_ordinary_value(changed) and not has_ordinary_value(unchanged_reason):

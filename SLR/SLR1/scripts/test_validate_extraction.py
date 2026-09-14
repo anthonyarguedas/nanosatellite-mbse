@@ -182,6 +182,99 @@ class TemplateTests(unittest.TestCase):
             for occurrence in representation["behavior_occurrences"]:
                 self.assertIn("linked_scenario_ids", occurrence)
 
+    def test_workflow_phases_preserve_source_wording_and_normalized_links(self) -> None:
+        template = load_object(
+            SCHEMA_PATHS["report"].with_name("protocol-extraction.template.json")
+        )
+        workflow = template["mbse_approach"]["workflows"][0]
+        phases = workflow["workflow_phases"]
+        self.assertEqual(phases[0]["phase_type"], "lifecycle_group")
+        self.assertIn("source_phase_name_or_label", phases[1])
+        self.assertEqual(
+            phases[1]["normalized_lifecycle_stages"],
+            ["requirements", "architecture_and_design"],
+        )
+        self.assertEqual(
+            phases[1]["parent_workflow_phase_ids"],
+            [phases[0]["workflow_phase_id"]],
+        )
+        self.assertEqual(
+            phases[1]["linked_workflow_activity_ids"],
+            [workflow["workflow_activities"][0]["workflow_activity_id"]],
+        )
+        self.assertNotIn("lifecycle_stages", workflow["workflow_activities"][0])
+        implementation = template["implementation_records"][0]
+        self.assertEqual(
+            implementation["workflow_execution_status"]["value"],
+            "executed_partial",
+        )
+        self.assertEqual(
+            implementation["linked_workflow_phase_ids"],
+            [phases[1]["workflow_phase_id"]],
+        )
+        definitions = load_object(SCHEMA_PATHS["report"])["$defs"]
+        self.assertIn(
+            "workflow_phase", definitions["variationPointTargetCode"]["enum"]
+        )
+        self.assertTrue(
+            {
+                "add_workflow_phase",
+                "remove_workflow_phase",
+                "reorder_workflow_phases",
+                "substitute_workflow_phase",
+            }
+            <= set(definitions["tailoringOperationTypeCode"]["enum"])
+        )
+
+    def test_workflow_phase_rejects_an_uncontrolled_lifecycle_stage(self) -> None:
+        schemas, registry = load_schemas()
+        template_path = SCHEMA_PATHS["report"].with_name(
+            "protocol-extraction.template.json"
+        )
+        template = load_object(template_path)
+        template["mbse_approach"]["workflows"][0]["workflow_phases"][1][
+            "normalized_lifecycle_stages"
+        ] = ["formal_design"]
+        issues = schema_issues(
+            [Document("report", template_path, template)], schemas, registry
+        )
+        self.assertTrue(issues)
+
+    def test_workflow_phase_requires_source_wording(self) -> None:
+        schemas, registry = load_schemas()
+        template_path = SCHEMA_PATHS["report"].with_name(
+            "protocol-extraction.template.json"
+        )
+        template = load_object(template_path)
+        phase = template["mbse_approach"]["workflows"][0]["workflow_phases"][1]
+        phase["source_phase_name_or_label"] = {
+            "status": "not_reported",
+            "reason": "No phase label reported.",
+        }
+        phase["source_phase_description"] = {
+            "status": "not_reported",
+            "reason": "No phase description reported.",
+        }
+        issues = schema_issues(
+            [Document("report", template_path, template)], schemas, registry
+        )
+        self.assertTrue(issues)
+
+    def test_workflow_execution_status_requires_source_wording(self) -> None:
+        schemas, registry = load_schemas()
+        template_path = SCHEMA_PATHS["report"].with_name(
+            "protocol-extraction.template.json"
+        )
+        template = load_object(template_path)
+        template["implementation_records"][0]["workflow_execution_and_deviations"] = {
+            "status": "not_reported",
+            "reason": "No execution account reported.",
+        }
+        issues = schema_issues(
+            [Document("report", template_path, template)], schemas, registry
+        )
+        self.assertTrue(issues)
+
     def test_rq3_requires_a_direct_scenario_link_field(self) -> None:
         schemas, registry = load_schemas()
         template_path = SCHEMA_PATHS["report"].with_name(
@@ -250,7 +343,7 @@ class NormalizationTests(unittest.TestCase):
         )
         self.assertTrue(normalization_issues(report))
 
-    def test_plain_analytic_row_text_fails_the_v5_schema(self) -> None:
+    def test_plain_analytic_row_text_fails_the_v6_schema(self) -> None:
         schemas, registry = load_schemas()
         template_path = SCHEMA_PATHS["report"].with_name(
             "protocol-extraction.template.json"
@@ -305,6 +398,71 @@ class NormalizationTests(unittest.TestCase):
         issues.extend(report_reference_issues(document, indexes))
         self.assertTrue(
             any("is not in the same test case" in issue.message for issue in issues)
+        )
+
+    def test_workflow_phase_and_execution_links_stay_with_their_workflow(self) -> None:
+        report = Document(
+            "report",
+            Path("report.json"),
+            {
+                "mbse_approach": {
+                    "workflows": [
+                        {
+                            "workflow_id": "workflow-1",
+                            "workflow_phases": [
+                                {
+                                    "workflow_phase_id": "phase-1",
+                                    "parent_workflow_phase_ids": {"status": "none"},
+                                    "predecessor_workflow_phase_ids": {
+                                        "status": "none"
+                                    },
+                                    "linked_workflow_activity_ids": ["activity-2"],
+                                }
+                            ],
+                            "workflow_activities": [
+                                {"workflow_activity_id": "activity-1"}
+                            ],
+                        },
+                        {
+                            "workflow_id": "workflow-2",
+                            "workflow_phases": [
+                                {
+                                    "workflow_phase_id": "phase-2",
+                                    "parent_workflow_phase_ids": {"status": "none"},
+                                    "predecessor_workflow_phase_ids": {
+                                        "status": "none"
+                                    },
+                                    "linked_workflow_activity_ids": ["activity-2"],
+                                }
+                            ],
+                            "workflow_activities": [
+                                {"workflow_activity_id": "activity-2"}
+                            ],
+                        },
+                    ]
+                },
+                "implementation_records": [
+                    {
+                        "linked_workflow_ids": ["workflow-2"],
+                        "linked_workflow_phase_ids": ["phase-1"],
+                        "linked_workflow_activity_ids": ["activity-2"],
+                    }
+                ],
+            },
+        )
+        indexes, issues = build_indexes([report])
+        issues.extend(report_reference_issues(report, indexes))
+        self.assertTrue(
+            any(
+                "activity ID 'activity-2' is not in the same workflow" in issue.message
+                for issue in issues
+            )
+        )
+        self.assertTrue(
+            any(
+                "workflow phase does not belong to a linked workflow" in issue.message
+                for issue in issues
+            )
         )
 
     def test_application_assurance_links_its_scenario(self) -> None:
@@ -442,11 +600,11 @@ class ReuseTests(unittest.TestCase):
                 "relationship_to_originator": value("outside_originating_organization"),
             },
             "tailoring_or_adaptation": {
-                "retained_artifact_core_method_steps_or_workflow_activities": value(
+                "retained_artifact_core_method_steps_or_workflow_phases_or_activities": value(
                     "core"
                 ),
                 "retained_refs": ["model_artifact:artifact-1"],
-                "configured_or_changed_artifact_content_method_steps_or_workflow_activities": value(
+                "configured_or_changed_artifact_content_method_steps_or_workflow_phases_or_activities": value(
                     "loads"
                 ),
                 "changed_refs": ["quantity:load-1"],

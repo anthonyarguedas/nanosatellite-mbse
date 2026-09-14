@@ -152,7 +152,7 @@ Keep the full citation, DOI, other stable identifiers, report version, discovery
 - whether space systems, SmallSats, CubeSats, nanosatellites, and EPS are included and whether their findings are separable;
 - MBSE, structured model, modeling language, tool, artifact, and lifecycle scope;
 - model generation methods, including origins, construction sources, steps, inputs, outputs, decisions, checks, and generic model derivation;
-- engineering workflows, including boundaries, activities, handoffs, linked methods and artifacts, roles, tools, governance, and checks;
+- engineering workflows, including source and normalized lifecycle phases, phase hierarchy and order, activities, handoffs, linked methods and artifacts, roles, tools, governance, checks, and scoped execution status;
 - procedural reporting detail and supporting materials for model construction, workflows, and tailoring;
 - whether generic or reference models are linked to actionable construction or tailoring procedures, worked tailoring examples, and post-tailoring assurance;
 - artifact reuse and tailoring, method reuse and adaptation, and workflow reuse and adaptation, including applicability, stable cores, variation points, rules or steps, applications, assurance, independence, and reported levels;

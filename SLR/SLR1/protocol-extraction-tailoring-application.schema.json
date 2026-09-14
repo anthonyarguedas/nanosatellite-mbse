@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "protocol-extraction-tailoring-application.schema.json",
-  "title": "SLR1 consolidated tailoring application schema v4",
+  "title": "SLR1 consolidated tailoring application schema v5",
+  "description": "Version 5 permits linked workflow phases as tailoring operation targets and preserves phase changes in source wording.",
   "$ref": "#/$defs/consolidatedTailoringApplication",
   "$defs": {
     "crossConsolidatedApplicationObjectsValue": {
@@ -378,10 +379,10 @@
         "base_artifact_method_or_workflow_and_version": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
         },
-        "retained_artifact_core_method_steps_or_workflow_activities": {
+        "retained_artifact_core_method_steps_or_workflow_phases_or_activities": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
         },
-        "configured_or_changed_artifact_content_method_steps_or_workflow_activities": {
+        "configured_or_changed_artifact_content_method_steps_or_workflow_phases_or_activities": {
           "$ref": "protocol-extraction.schema.json#/$defs/crossEvidencedString"
         },
         "linked_variation_point_ids": {
@@ -434,8 +435,8 @@
       },
       "required": [
         "base_artifact_method_or_workflow_and_version",
-        "retained_artifact_core_method_steps_or_workflow_activities",
-        "configured_or_changed_artifact_content_method_steps_or_workflow_activities",
+        "retained_artifact_core_method_steps_or_workflow_phases_or_activities",
+        "configured_or_changed_artifact_content_method_steps_or_workflow_phases_or_activities",
         "linked_variation_point_ids",
         "linked_tailoring_rule_ids",
         "linked_tailoring_step_ids",
@@ -603,7 +604,7 @@
           "type": "object",
           "properties": {
             "schema_version": {
-              "const": "slr1-extraction-tailoring-application/v4"
+              "const": "slr1-extraction-tailoring-application/v5"
             },
             "tailoring_application_id": {
               "$ref": "protocol-extraction.schema.json#/$defs/stableId"

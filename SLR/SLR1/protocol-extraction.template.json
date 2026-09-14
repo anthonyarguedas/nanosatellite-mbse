@@ -1,5 +1,5 @@
 {
-  "schema_version": "slr1-extraction/v5",
+  "schema_version": "slr1-extraction/v6",
   "identity": {
     "report_id": "<report-id>",
     "screening_record_id": "<screening-record-id>",
@@ -1037,6 +1037,124 @@
             "rule:<rule-id>"
           ]
         },
+        "workflow_phases": [
+          {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "workflow_phase_id": "<workflow-phase-group-id>",
+            "source_phase_name_or_label": {
+              "source_text": "<source lifecycle group name or label>",
+              "normalization_status": "not_for_synthesis"
+            },
+            "source_phase_description": {
+              "source_text": "<source lifecycle group description>",
+              "normalization_status": "not_for_synthesis"
+            },
+            "phase_type": "lifecycle_group",
+            "normalized_lifecycle_stages": {
+              "status": "not_applicable",
+              "reason": "Lifecycle stages are coded on the child phase rows."
+            },
+            "parent_workflow_phase_ids": {
+              "status": "none"
+            },
+            "predecessor_workflow_phase_ids": {
+              "status": "none"
+            },
+            "linked_workflow_activity_ids": {
+              "status": "none"
+            },
+            "timing_quantity_ids": {
+              "status": "not_applicable",
+              "reason": "Timing is coded on child phase rows."
+            },
+            "input_refs": {
+              "status": "none"
+            },
+            "output_refs": {
+              "status": "none"
+            },
+            "entry_rule_ids": {
+              "status": "none"
+            },
+            "exit_rule_ids": {
+              "status": "none"
+            },
+            "review_or_gate_check_ids": {
+              "status": "none"
+            },
+            "linked_decision_ids": {
+              "status": "none"
+            },
+            "control_flow_relationship_ids": {
+              "status": "none"
+            },
+            "handoff_relationship_ids": {
+              "status": "none"
+            }
+          },
+          {
+            "coding_confidence": "high",
+            "provenance": "source_reported",
+            "citation_ids": [
+              "<citation-id>"
+            ],
+            "workflow_phase_id": "<workflow-phase-id>",
+            "source_phase_name_or_label": {
+              "source_text": "<source phase or stage name or label>",
+              "normalization_status": "not_for_synthesis"
+            },
+            "source_phase_description": {
+              "source_text": "<source phase or stage description>",
+              "normalization_status": "not_for_synthesis"
+            },
+            "phase_type": "phase",
+            "normalized_lifecycle_stages": [
+              "requirements",
+              "architecture_and_design"
+            ],
+            "parent_workflow_phase_ids": [
+              "<workflow-phase-group-id>"
+            ],
+            "predecessor_workflow_phase_ids": {
+              "status": "none"
+            },
+            "linked_workflow_activity_ids": [
+              "<workflow-activity-id>"
+            ],
+            "timing_quantity_ids": {
+              "status": "not_reported",
+              "reason": "No timing value is supplied in the illustrative phase."
+            },
+            "input_refs": [
+              "input_item:<input-item-id>"
+            ],
+            "output_refs": [
+              "model_artifact:<model-artifact-id>"
+            ],
+            "entry_rule_ids": [
+              "<rule-id>"
+            ],
+            "exit_rule_ids": [
+              "<rule-id>"
+            ],
+            "review_or_gate_check_ids": [
+              "<check-id>"
+            ],
+            "linked_decision_ids": [
+              "<decision-id>"
+            ],
+            "control_flow_relationship_ids": [
+              "<relationship-id>"
+            ],
+            "handoff_relationship_ids": [
+              "<relationship-id>"
+            ]
+          }
+        ],
         "workflow_activities": [
           {
             "coding_confidence": "high",
@@ -3003,6 +3121,13 @@
       "linked_workflow_ids": [
         "<workflow-id>"
       ],
+      "linked_workflow_phase_ids": [
+        "<workflow-phase-id>"
+      ],
+      "linked_workflow_activity_ids": {
+        "status": "not_applicable",
+        "reason": "The illustrative execution status is scoped at phase level."
+      },
       "linked_tool_ids": [
         "<tool-id>"
       ],
@@ -3016,6 +3141,14 @@
         "linked_record_refs": [
           "relationship:<relationship-id>"
         ]
+      },
+      "workflow_execution_status": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "<citation-id>"
+        ],
+        "value": "executed_partial"
       },
       "automation": {
         "coding_confidence": "high",
@@ -5041,6 +5174,7 @@
                   "artifact_content",
                   "scenario",
                   "method_step",
+                  "workflow_phase",
                   "workflow_activity"
                 ]
               },
@@ -5086,7 +5220,8 @@
               },
               "target_refs": [
                 "model_artifact:<model-artifact-id>",
-                "scenario:<scenario-id>"
+                "scenario:<scenario-id>",
+                "workflow_phase:<workflow-phase-id>"
               ],
               "option_quantity_ids": [
                 "<quantity-id>"
@@ -5804,24 +5939,24 @@
               "relationship:<relationship-id>"
             ]
           },
-          "retained_artifact_core_method_steps_or_workflow_activities": {
+          "retained_artifact_core_method_steps_or_workflow_phases_or_activities": {
             "coding_confidence": "high",
             "provenance": "source_reported",
             "citation_ids": [
               "<citation-id>"
             ],
-            "value": "<retained artifact core method steps or workflow activities>",
+            "value": "<retained artifact core method steps or workflow phases or activities>",
             "linked_record_refs": [
               "relationship:<relationship-id>"
             ]
           },
-          "configured_or_changed_artifact_content_method_steps_or_workflow_activities": {
+          "configured_or_changed_artifact_content_method_steps_or_workflow_phases_or_activities": {
             "coding_confidence": "high",
             "provenance": "source_reported",
             "citation_ids": [
               "<citation-id>"
             ],
-            "value": "<configured or changed artifact content method steps or workflow activities>",
+            "value": "<configured or changed artifact content method steps or workflow phases or activities>",
             "linked_record_refs": [
               "relationship:<relationship-id>"
             ]
@@ -5927,7 +6062,8 @@
                 ]
               },
               "target_refs": [
-                "model_artifact:<model-artifact-id>"
+                "model_artifact:<model-artifact-id>",
+                "workflow_phase:<workflow-phase-id>"
               ],
               "before_state_refs": [
                 "model_artifact:<model-artifact-id>"
