@@ -1,5 +1,5 @@
 ---
-source: "/Users/antho/nanosatellite-mbse/SLR/SLR1/pdfs/citation-chasing-candidates/citation-candidate-3814.pdf"
+source: "SLR/SLR1/pdfs/citation-reports/citation-report-3814.pdf"
 title: "citation-candidate-3814"
 page_count: 29
 converted_at: "2026-09-15T03:47:57Z"

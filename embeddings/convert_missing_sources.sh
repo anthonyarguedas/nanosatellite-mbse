@@ -15,7 +15,7 @@ esac
 
 convert_3814() {
   UV_CACHE_DIR="$SCRIPT_DIR/.cache/uv" uv run "$SKILL_SCRIPT" \
-    --input "$REPO_ROOT/SLR/SLR1/pdfs/citation-chasing-candidates/citation-candidate-3814.pdf" \
+    --input "$REPO_ROOT/SLR/SLR1/pdfs/citation-reports/citation-report-3814.pdf" \
     --output-path "$OUTPUT_DIR/citation-candidate-3814.md" \
     --verbose 2>&1 | tee "$SCRIPT_DIR/logs/pdf-conversion-3814.log"
 }

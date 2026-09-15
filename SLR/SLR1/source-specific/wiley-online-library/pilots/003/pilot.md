@@ -35,7 +35,7 @@ The 2,700-character cell ceiling is below Pilot 001's accepted 2,770-character l
 - [Ordered ledgers, cell-event duplicate manifests, and source-month/client-day reconciliation](searches/source-id-unions.json)
 - [Compact schedule assessment](searches/schedule-assessment.json)
 - [Metadata and local exact-pair audit](searches/metadata-audit.json)
-- [Identifier collector](../../../../scripts/wiley_online_library_pilot003/collect_source_ids.py) and [detail metadata collector](../../../../scripts/wiley_online_library_pilot003/collect_detail_metadata.py)
+- [Identifier collector](../../scripts/wiley_online_library_pilot003/collect_source_ids.py) and [detail metadata collector](../../scripts/wiley_online_library_pilot003/collect_detail_metadata.py)
 
 ## Unions and high-volume work
 

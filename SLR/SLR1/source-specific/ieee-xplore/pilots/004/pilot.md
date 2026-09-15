@@ -1,6 +1,6 @@
 # Pilot 004: literal schedule and native-year control
 
-Export method: the fixed read-only `search_ieee_xplore.py` adapter, exercised through the local shared browser. Pilot-local runners under [`../../../../scripts/ieee_xplore_pilot004/`](../../../../scripts/ieee_xplore_pilot004/) only preserve adapter-generated normal rendered URLs with percent-encoded components when IEEE rejected the equivalent form-style route. They do not change a query, field, pair, Boolean relation, filter, or use an API.
+Export method: the fixed read-only `search_ieee_xplore.py` adapter, exercised through the local shared browser. Pilot-local runners under [`../../scripts/ieee_xplore_pilot004/`](../../scripts/ieee_xplore_pilot004/) only preserve adapter-generated normal rendered URLs with percent-encoded components when IEEE rejected the equivalent form-style route. They do not change a query, field, pair, Boolean relation, filter, or use an API.
 
 ## Objective
 
@@ -53,7 +53,7 @@ The two-pass pass artifacts are retained in `searches/two-pass-*`. Each successf
 Run from the repository root:
 
 ```bash
-python3 scripts/ieee_xplore_pilot004/build_schedule.py --validate
-python3 scripts/ieee_xplore_pilot004/build_receipts.py --write
-python3 scripts/ieee_xplore_pilot004/validate_pilot.py
+python3 source-specific/ieee-xplore/scripts/ieee_xplore_pilot004/build_schedule.py --validate
+python3 source-specific/ieee-xplore/scripts/ieee_xplore_pilot004/build_receipts.py --write
+python3 source-specific/ieee-xplore/scripts/ieee_xplore_pilot004/validate_pilot.py
 ```

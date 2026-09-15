@@ -80,9 +80,9 @@ The paired adapter route is ready for a separate final search. The final search 
 Run from the repository root. The builder and validator read the immutable paired artifacts and make no source request.
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/inspec_pilot004 \
-python3 SLR/SLR1/scripts/inspec_pilot004/build_linked_assessment.py
+PYTHONPATH=SLR/SLR1/source-specific/inspec/scripts/inspec_pilot004 \
+python3 SLR/SLR1/source-specific/inspec/scripts/inspec_pilot004/build_linked_assessment.py
 
-PYTHONPATH=SLR/SLR1/scripts/inspec_pilot004 \
-python3 SLR/SLR1/scripts/inspec_pilot004/validate_pilot.py
+PYTHONPATH=SLR/SLR1/source-specific/inspec/scripts/inspec_pilot004 \
+python3 SLR/SLR1/source-specific/inspec/scripts/inspec_pilot004/validate_pilot.py
 ```

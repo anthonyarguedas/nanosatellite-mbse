@@ -77,16 +77,16 @@ Thirteen null preview or count attempts remain as `NON_MERGEABLE_FAILURE` artifa
 
 ## Reproduction
 
-Review-specific scripts are under [`SLR/SLR1/scripts/aiaa_arc_pilot005`](../../../../scripts/aiaa_arc_pilot005). The offline build and validation commands are:
+Review-specific scripts are under [`SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot005`](../../scripts/aiaa_arc_pilot005). The offline build and validation commands are:
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/aiaa_arc_pilot005 \
-python3 SLR/SLR1/scripts/aiaa_arc_pilot005/build_assessment.py \
+PYTHONPATH=SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot005 \
+python3 SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot005/build_assessment.py \
   --pilot-root SLR/SLR1/source-specific/aiaa-arc/pilots/005 \
   --output SLR/SLR1/source-specific/aiaa-arc/pilots/005/searches/assessment.json
 
-PYTHONPATH=SLR/SLR1/scripts/aiaa_arc_pilot005 \
-python3 SLR/SLR1/scripts/aiaa_arc_pilot005/validate_pilot.py \
+PYTHONPATH=SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot005 \
+python3 SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot005/validate_pilot.py \
   --pilot-root SLR/SLR1/source-specific/aiaa-arc/pilots/005 \
   --guideline SLR/SLR1/source-specific/aiaa-arc/source-specific-guidelines.md \
   --pilot-document SLR/SLR1/source-specific/aiaa-arc/pilots/005/pilot.md \

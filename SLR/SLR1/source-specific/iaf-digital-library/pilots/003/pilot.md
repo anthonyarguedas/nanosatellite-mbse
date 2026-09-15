@@ -21,7 +21,7 @@ Run every direct-schedule partition as deterministic, lossless IAF cells below t
 - [Complete partition unions and source-event reconciliation](searches/assessment.json)
 - [Local title/abstract exact-pair checks, including uncertainty](searches/local-pair-checks.json)
 - [Threshold investigations](searches/union-investigations.json) (empty because no deduplicated raw or diagnostic union exceeded 100)
-- [Plan, collection, reconciliation, and validation helpers](../../../../scripts/iaf_digital_library_pilot003/)
+- [Plan, collection, reconciliation, and validation helpers](../../scripts/iaf_digital_library_pilot003/)
 
 ## Result
 

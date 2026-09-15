@@ -51,6 +51,6 @@ Pilot 005's broader 128-family map remains rejected. Pilot 006 does not authoriz
 Offline checks are reproducible with:
 
 ```text
-python3 SLR/SLR1/scripts/wos_pilot006/test_queries.py
-python3 SLR/SLR1/scripts/wos_pilot006/validate_pilot.py
+python3 SLR/SLR1/source-specific/web-of-science-core-collection/scripts/wos_pilot006/test_queries.py
+python3 SLR/SLR1/source-specific/web-of-science-core-collection/scripts/wos_pilot006/validate_pilot.py
 ```

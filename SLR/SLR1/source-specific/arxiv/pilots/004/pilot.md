@@ -102,30 +102,30 @@ The Atom route remains historical pilot evidence. It is not the prospective fina
 
 The [non-mergeable marking receipt](searches/nonmergeable-marking.json) covers all 12 successful source artifacts. The [assessment](searches/assessment.json) reconciles records, screenshots, partition unions, and the bounded Atom comparison. The [validation report](searches/validation-report.json) checks the canonical term plan, source completion, all 24 PNG receipts, union arithmetic, and guideline synchronization.
 
-Review-specific scripts are under [`SLR/SLR1/scripts/arxiv_pilot004`](../../../../scripts/arxiv_pilot004). The core commands are:
+Review-specific scripts are under [`SLR/SLR1/source-specific/arxiv/scripts/arxiv_pilot004`](../../scripts/arxiv_pilot004). The core commands are:
 
 ```bash
-python3 SLR/SLR1/scripts/arxiv_pilot004/build_plan.py \
+python3 SLR/SLR1/source-specific/arxiv/scripts/arxiv_pilot004/build_plan.py \
   --output SLR/SLR1/source-specific/arxiv/pilots/004/searches/event-plan.json
 
-python3 SLR/SLR1/scripts/arxiv_pilot004/run_pilot.py \
+python3 SLR/SLR1/source-specific/arxiv/scripts/arxiv_pilot004/run_pilot.py \
   --event-plan SLR/SLR1/source-specific/arxiv/pilots/004/searches/event-plan.json \
   --pilot-root SLR/SLR1/source-specific/arxiv/pilots/004 \
   --receipt SLR/SLR1/source-specific/arxiv/pilots/004/searches/run-receipt.json \
   --resume
 
-python3 SLR/SLR1/scripts/arxiv_pilot004/mark_source_artifacts_nonmergeable.py \
+python3 SLR/SLR1/source-specific/arxiv/scripts/arxiv_pilot004/mark_source_artifacts_nonmergeable.py \
   --pilot-root SLR/SLR1/source-specific/arxiv/pilots/004 \
   --receipt SLR/SLR1/source-specific/arxiv/pilots/004/searches/nonmergeable-marking.json
 
-python3 SLR/SLR1/scripts/arxiv_pilot004/build_assessment.py \
+python3 SLR/SLR1/source-specific/arxiv/scripts/arxiv_pilot004/build_assessment.py \
   --pilot-root SLR/SLR1/source-specific/arxiv/pilots/004 \
   --event-plan SLR/SLR1/source-specific/arxiv/pilots/004/searches/event-plan.json \
   --atom-union SLR/SLR1/source-specific/arxiv/pilots/003/searches/partition-unions.json \
   --union-output SLR/SLR1/source-specific/arxiv/pilots/004/searches/partition-unions.json \
   --assessment-output SLR/SLR1/source-specific/arxiv/pilots/004/searches/assessment.json
 
-python3 SLR/SLR1/scripts/arxiv_pilot004/validate_pilot.py \
+python3 SLR/SLR1/source-specific/arxiv/scripts/arxiv_pilot004/validate_pilot.py \
   --pilot-root SLR/SLR1/source-specific/arxiv/pilots/004 \
   --guideline SLR/SLR1/source-specific/arxiv/source-specific-guidelines.md \
   --output SLR/SLR1/source-specific/arxiv/pilots/004/searches/validation-report.json

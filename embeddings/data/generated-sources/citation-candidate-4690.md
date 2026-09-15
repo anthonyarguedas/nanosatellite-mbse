@@ -1,5 +1,5 @@
 ---
-source: "/Users/antho/nanosatellite-mbse/SLR/SLR1/pdfs/citation-chasing-candidates/citation-candidate-4690.pdf"
+source: "SLR/SLR1/pdfs/citation-reports/citation-report-4690.pdf"
 title: "citation-candidate-4690"
 page_count: 121
 converted_at: "page-preserving merge after GLM-OCR conversion of nonblank pages"

@@ -121,10 +121,10 @@ The [validation report](searches/validation-report.json) checks every active dec
 
 ## Reproduction
 
-Review-specific scripts are under [`SLR/SLR1/scripts/atai_pilot006`](../../../../scripts/atai_pilot006). Run live scripts through the shared browser launcher. The offline decision and validation commands are:
+Review-specific scripts are under [`SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot006`](../../scripts/atai_pilot006). Run live scripts through the shared browser launcher. The offline decision and validation commands are:
 
 ```bash
-python3 SLR/SLR1/scripts/atai_pilot006/build_assessment.py \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot006/build_assessment.py \
   --pilot-root SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/006 \
   --if-reconciliation SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/006/searches/if-stable-id-reconciliation.json \
   --detail-harvest SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/006/searches/candidate-detail-harvest.json \
@@ -132,7 +132,7 @@ python3 SLR/SLR1/scripts/atai_pilot006/build_assessment.py \
   --final-language-exclusions SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/006/searches/final-language-exclusion-id-reconciliation.json \
   --output SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/006/searches/assessment.json
 
-python3 SLR/SLR1/scripts/atai_pilot006/validate_pilot.py \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot006/validate_pilot.py \
   --pilot-root SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/006 \
   --guideline SLR/SLR1/source-specific/advanced-technologies-aerospace-index/source-specific-guidelines.md \
   --output SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/006/searches/validation-report.json

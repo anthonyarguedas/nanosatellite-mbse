@@ -577,6 +577,13 @@ def build_chunks(
     return chunks
 
 
+def source_markdown_path(
+    root: Path, prefix: str, suffix: str, nested: bool
+) -> Path:
+    name = f"{prefix}{suffix}"
+    return root / name / f"{name}.md" if nested else root / f"{name}.md"
+
+
 def expected_sources() -> Iterator[tuple[dict, Path | None, str]]:
     configurations = [
         {
@@ -585,17 +592,21 @@ def expected_sources() -> Iterator[tuple[dict, Path | None, str]]:
             "id_prefix": "review-candidate-",
             "preferred": REPO_ROOT / "SLR/SLR1/pdfs/review-reports",
             "preferred_prefix": "review-report-",
+            "preferred_nested": True,
             "fallback": REPO_ROOT / "SLR/SLR1/pdfs/review-candidates",
             "fallback_prefix": "review-candidate-",
+            "fallback_nested": True,
         },
         {
             "namespace": "citation",
             "json_path": REPO_ROOT / "SLR/SLR1/citation-candidates.json",
             "id_prefix": "citation-candidate-",
-            "preferred": REPO_ROOT / "SLR/SLR1/pdfs/citation-chasing-candidates",
-            "preferred_prefix": "citation-candidate-",
+            "preferred": REPO_ROOT / "SLR/SLR1/pdfs/citation-reports",
+            "preferred_prefix": "citation-report-",
+            "preferred_nested": True,
             "fallback": DATA_DIR / "generated-sources",
             "fallback_prefix": "citation-candidate-",
+            "fallback_nested": False,
         },
     ]
     for config in configurations:
@@ -605,8 +616,18 @@ def expected_sources() -> Iterator[tuple[dict, Path | None, str]]:
             if not decision.startswith("include_"):
                 continue
             suffix = candidate["candidate_id"].removeprefix(config["id_prefix"])
-            preferred = config["preferred"] / f"{config['preferred_prefix']}{suffix}.md"
-            fallback = config["fallback"] / f"{config['fallback_prefix']}{suffix}.md"
+            preferred = source_markdown_path(
+                config["preferred"],
+                config["preferred_prefix"],
+                suffix,
+                config["preferred_nested"],
+            )
+            fallback = source_markdown_path(
+                config["fallback"],
+                config["fallback_prefix"],
+                suffix,
+                config["fallback_nested"],
+            )
             if preferred.exists():
                 path, source_kind = preferred, "preferred_markdown"
             elif fallback.exists():

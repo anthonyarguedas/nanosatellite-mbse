@@ -42,4 +42,4 @@ The 10,000-result boundary remains hard. A later strict failure must retain a nu
 
 - [Source documentation verification](searches/source-documentation-verification.json)
 - [JSON, standard-plan, exact-membership, controls, union, and diff validation](searches/validation-report.json)
-- Reproducible runners: [schedule](../../../../scripts/pqdt_pilot003/run_schedule.py), [assessment](../../../../scripts/pqdt_pilot003/build_assessment.py), and [validator](../../../../scripts/pqdt_pilot003/validate_pilot.py)
+- Reproducible runners: [schedule](../../scripts/pqdt_pilot003/run_schedule.py), [assessment](../../scripts/pqdt_pilot003/build_assessment.py), and [validator](../../scripts/pqdt_pilot003/validate_pilot.py)

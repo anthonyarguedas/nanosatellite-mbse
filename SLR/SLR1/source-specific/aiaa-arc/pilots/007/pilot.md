@@ -79,17 +79,17 @@ Three source failures remain as `NON_MERGEABLE_FAILURE` artifacts. Exact retries
 
 ## Reproduction
 
-Review scripts are under [`SLR/SLR1/scripts/aiaa_arc_pilot007`](../../../../scripts/aiaa_arc_pilot007). The offline assessment and validation commands are:
+Review scripts are under [`SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot007`](../../scripts/aiaa_arc_pilot007). The offline assessment and validation commands are:
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/aiaa_arc_pilot007 \
-python3 SLR/SLR1/scripts/aiaa_arc_pilot007/build_assessment.py \
+PYTHONPATH=SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot007 \
+python3 SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot007/build_assessment.py \
   --pilot-root SLR/SLR1/source-specific/aiaa-arc/pilots/007 \
   --pilot006-root SLR/SLR1/source-specific/aiaa-arc/pilots/006 \
   --output SLR/SLR1/source-specific/aiaa-arc/pilots/007/searches/assessment.json
 
-PYTHONPATH=SLR/SLR1/scripts/aiaa_arc_pilot007 \
-python3 SLR/SLR1/scripts/aiaa_arc_pilot007/validate_pilot.py \
+PYTHONPATH=SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot007 \
+python3 SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot007/validate_pilot.py \
   --pilot-root SLR/SLR1/source-specific/aiaa-arc/pilots/007 \
   --pilot006-root SLR/SLR1/source-specific/aiaa-arc/pilots/006 \
   --guideline SLR/SLR1/source-specific/aiaa-arc/source-specific-guidelines.md \

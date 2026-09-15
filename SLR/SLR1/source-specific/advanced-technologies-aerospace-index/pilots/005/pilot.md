@@ -58,7 +58,7 @@ Result: 22 tests passed.
 The live checks used the normal adapter through `run_with_browser.py`. The non-mergeable artifacts and abstract audit were built with:
 
 ```bash
-python3 SLR/SLR1/scripts/atai_pilot005/build_repair_validation.py \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot005/build_repair_validation.py \
   --a3 /tmp/atai-v4-a3.json \
   --b1 /tmp/atai-v4-b1.json \
   --a3-before /tmp/atai-v4-a3-before.json \
@@ -71,7 +71,7 @@ python3 SLR/SLR1/scripts/atai_pilot005/build_repair_validation.py \
   --historical-b1-pass2 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/003/searches/B1-stable-id-pass2.json \
   --output-dir SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/005/searches
 
-python3 SLR/SLR1/scripts/atai_pilot005/validate_pilot.py \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot005/validate_pilot.py \
   --pilot-root SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/005 \
   --guideline SLR/SLR1/source-specific/advanced-technologies-aerospace-index/source-specific-guidelines.md \
   --output SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/005/searches/validation-report.json

@@ -77,19 +77,19 @@ This pilot establishes complete rendered DOI equivalence and screenshot behavior
 
 ## Reproduction
 
-Review-specific scripts are under [`SLR/SLR1/scripts/wiley_online_library_pilot004`](../../../../scripts/wiley_online_library_pilot004).
+Review-specific scripts are under [`SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot004`](../../scripts/wiley_online_library_pilot004).
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/wiley_online_library_pilot004 \
-python3 SLR/SLR1/scripts/wiley_online_library_pilot004/build_plan.py
+PYTHONPATH=SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot004 \
+python3 SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot004/build_plan.py
 
 WILEY_AUTHORIZED_TARGET_ID=<caller-authorized-target> \
-PYTHONPATH=SLR/SLR1/scripts/wiley_online_library_pilot004 \
-uv run SLR/SLR1/scripts/wiley_online_library_pilot004/run_pilot.py
+PYTHONPATH=SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot004 \
+uv run SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot004/run_pilot.py
 
-PYTHONPATH=SLR/SLR1/scripts/wiley_online_library_pilot004 \
-python3 SLR/SLR1/scripts/wiley_online_library_pilot004/build_assessment.py
+PYTHONPATH=SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot004 \
+python3 SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot004/build_assessment.py
 
-PYTHONPATH=SLR/SLR1/scripts/wiley_online_library_pilot004 \
-python3 SLR/SLR1/scripts/wiley_online_library_pilot004/validate_pilot.py
+PYTHONPATH=SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot004 \
+python3 SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot004/validate_pilot.py
 ```

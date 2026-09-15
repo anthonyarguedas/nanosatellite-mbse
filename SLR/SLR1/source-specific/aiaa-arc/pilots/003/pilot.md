@@ -21,9 +21,9 @@ No wildcard was used: Pilot 002 did not prove stable-ID equality or a superset f
 - [All required cells, controls, totals, sums, replacements, failures, and statuses](searches/schedule-assessment.json)
 - [A2 DOI-first sampled-prefix audit](searches/A2-sampled-prefix-doi-dedup-audit.json) and [visible metadata recheck](searches/A2-sampled-prefix-page-metadata-recheck2.json)
 - [BT2 DOI-first sampled-prefix audit](searches/BT2-sampled-prefix-doi-dedup-audit.json) and [visible metadata recheck](searches/BT2-sampled-prefix-page-metadata-recheck.json)
-- [Pilot query construction and membership/pair declarations](../../../../scripts/aiaa_arc_pilot003/queries.py)
+- [Pilot query construction and membership/pair declarations](../../scripts/aiaa_arc_pilot003/queries.py)
 
-The current CLI's field-row-only count-only writer has an empty raw-query alias conflict after the live source result. The [pilot runner](../../../../scripts/aiaa_arc_pilot003/run_fielded_count.py) therefore invokes the same ARC adapter function through the shared browser wrapper and saves an exact field-row/control projection. This is an output-serialization limitation, not a source zero or false match.
+The current CLI's field-row-only count-only writer has an empty raw-query alias conflict after the live source result. The [pilot runner](../../scripts/aiaa_arc_pilot003/run_fielded_count.py) therefore invokes the same ARC adapter function through the shared browser wrapper and saves an exact field-row/control projection. This is an output-serialization limitation, not a source zero or false match.
 
 ## Result
 

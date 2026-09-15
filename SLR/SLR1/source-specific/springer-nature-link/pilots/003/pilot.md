@@ -48,7 +48,7 @@ This is a no-loss dual-lane refinement: those low-noise metadata subsets are lin
 
 ## Runs and checks
 
-- [Query construction and membership tests](../../../../scripts/springer_pilot003/queries.py) and [tests](../../../../scripts/springer_pilot003/test_queries.py)
+- [Query construction and membership tests](../../scripts/springer_pilot003/queries.py) and [tests](../../scripts/springer_pilot003/test_queries.py)
 - [Canonical union receipt](searches/canonical-unions.json)
 - [Noise investigation](searches/noise-investigation.json)
 - [All adapter artifacts](searches/)

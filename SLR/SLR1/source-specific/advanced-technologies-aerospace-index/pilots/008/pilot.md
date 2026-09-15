@@ -31,7 +31,7 @@ The candidate uses the smallest ProQuest `[*n]` suffix bound that covers each de
 
 Multiword entries remain ordered quoted phrases, such as `NOFT("power system[*1]")` and `NOFT("state[*1] of charge")`. The map includes regular number forms and bounded inflection groups such as `nanosat[*7]`, `tailor[*3]`, and `instantiat[*3]`. Singleton terms and variants without one safe common stem stay literal.
 
-The [query module](../../../../scripts/atai_pilot008/queries.py) declares 128 wildcard families covering 292 explicit term occurrences across the ordinary blocks. Exact `IF.EXACT` terms remain literal because Pilot 006 proved that `IF` adds records outside `NOFT`. The candidate does not assume wildcard behavior inside the exact indexed term operator.
+The [query module](../../scripts/atai_pilot008/queries.py) declares 128 wildcard families covering 292 explicit term occurrences across the ordinary blocks. Exact `IF.EXACT` terms remain literal because Pilot 006 proved that `IF` adds records outside `NOFT`. The candidate does not assume wildcard behavior inside the exact indexed term operator.
 
 All complete expressions preserve the current compound definitions:
 
@@ -90,26 +90,26 @@ The [validation report](searches/validation-report.json) checks protocol members
 Run from the repository root:
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/atai_pilot008 \
-python3 SLR/SLR1/scripts/atai_pilot008/build_plan.py
+PYTHONPATH=SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot008 \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot008/build_plan.py
 
 caffeinate -dims uv run \
   "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
-  python3 SLR/SLR1/scripts/atai_pilot008/run_pilot.py \
+  python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot008/run_pilot.py \
   --event-plan SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/008/searches/event-plan.json \
   --pilot-root SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/008 \
   --receipt SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/008/searches/run-receipt.json
 
-PYTHONPATH=SLR/SLR1/scripts/atai_pilot008 \
-python3 SLR/SLR1/scripts/atai_pilot008/mark_source_artifacts_nonmergeable.py \
+PYTHONPATH=SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot008 \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot008/mark_source_artifacts_nonmergeable.py \
   --pilot-root SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/008 \
   --receipt SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/008/searches/nonmergeable-marking.json
 
-PYTHONPATH=SLR/SLR1/scripts/atai_pilot008 \
-python3 SLR/SLR1/scripts/atai_pilot008/build_assessment.py \
+PYTHONPATH=SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot008 \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot008/build_assessment.py \
   --pilot-root SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/008 \
   --output SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/008/searches/assessment.json
 
-PYTHONPATH=SLR/SLR1/scripts/atai_pilot008 \
-python3 SLR/SLR1/scripts/atai_pilot008/validate_pilot.py
+PYTHONPATH=SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot008 \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot008/validate_pilot.py
 ```

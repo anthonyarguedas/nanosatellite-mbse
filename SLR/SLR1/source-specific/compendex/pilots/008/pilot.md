@@ -77,14 +77,14 @@ The current Compendex translation and adapter route are ready for a separate fin
 Run from the repository root with a fresh pilot output root. The checked-in Pilot 008 paths are create-only and refuse overwrite.
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/compendex_pilot008 \
+PYTHONPATH=SLR/SLR1/source-specific/compendex/scripts/compendex_pilot008 \
 python3 -m unittest -v \
-  SLR/SLR1/scripts/compendex_pilot008/test_queries.py
+  SLR/SLR1/source-specific/compendex/scripts/compendex_pilot008/test_queries.py
 
-PYTHONPATH=SLR/SLR1/scripts/compendex_pilot008 \
+PYTHONPATH=SLR/SLR1/source-specific/compendex/scripts/compendex_pilot008 \
 caffeinate -dims uv run \
   "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
-  uv run SLR/SLR1/scripts/compendex_pilot008/run_pilot.py \
+  uv run SLR/SLR1/source-specific/compendex/scripts/compendex_pilot008/run_pilot.py \
   --event-plan SLR/SLR1/source-specific/compendex/pilots/008/searches/event-plan.json \
   --pilot-root SLR/SLR1/source-specific/compendex/pilots/008 \
   --receipt SLR/SLR1/source-specific/compendex/pilots/008/searches/run-receipt.json

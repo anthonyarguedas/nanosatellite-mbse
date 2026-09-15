@@ -85,17 +85,17 @@ The initial formatted-citation preview encountered records without a usable bulk
 
 ## Reproduction
 
-Review scripts are under [`SLR/SLR1/scripts/aiaa_arc_pilot006`](../../../../scripts/aiaa_arc_pilot006). The offline assessment and validation commands are:
+Review scripts are under [`SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot006`](../../scripts/aiaa_arc_pilot006). The offline assessment and validation commands are:
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/aiaa_arc_pilot006 \
-python3 SLR/SLR1/scripts/aiaa_arc_pilot006/build_assessment.py \
+PYTHONPATH=SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot006 \
+python3 SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot006/build_assessment.py \
   --pilot-root SLR/SLR1/source-specific/aiaa-arc/pilots/006 \
   --pilot005-root SLR/SLR1/source-specific/aiaa-arc/pilots/005 \
   --output SLR/SLR1/source-specific/aiaa-arc/pilots/006/searches/assessment.json
 
-PYTHONPATH=SLR/SLR1/scripts/aiaa_arc_pilot006 \
-python3 SLR/SLR1/scripts/aiaa_arc_pilot006/validate_pilot.py \
+PYTHONPATH=SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot006 \
+python3 SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot006/validate_pilot.py \
   --pilot-root SLR/SLR1/source-specific/aiaa-arc/pilots/006 \
   --pilot005-root SLR/SLR1/source-specific/aiaa-arc/pilots/005 \
   --guideline SLR/SLR1/source-specific/aiaa-arc/source-specific-guidelines.md \

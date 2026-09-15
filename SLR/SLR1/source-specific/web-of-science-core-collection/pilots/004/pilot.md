@@ -58,7 +58,7 @@ This diagnostic does not authorize a final search. `PY` remains year-level. Fina
 Offline checks are reproducible with:
 
 ```text
-python3 SLR/SLR1/scripts/wos_pilot004/test_queries.py
-python3 SLR/SLR1/scripts/wos_pilot004/build_plan.py --check
-python3 SLR/SLR1/scripts/wos_pilot004/validate_pilot.py
+python3 SLR/SLR1/source-specific/web-of-science-core-collection/scripts/wos_pilot004/test_queries.py
+python3 SLR/SLR1/source-specific/web-of-science-core-collection/scripts/wos_pilot004/build_plan.py --check
+python3 SLR/SLR1/source-specific/web-of-science-core-collection/scripts/wos_pilot004/validate_pilot.py
 ```

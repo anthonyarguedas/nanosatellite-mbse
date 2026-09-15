@@ -112,17 +112,7 @@ Start backward and forward citation searching from every included full-text repo
 - add each newly included report as a seed in the next numbered cycle; and
 - stop only after one complete cycle of backward searching and both forward searches finds no new eligible report.
 
-Deduplicate OCR extracted backward references and add them to the citation candidate set before metadata enrichment. Apply an initial title-only screening pass to these candidates. Enrich the metadata only for candidates retained by that pass and candidates whose OCR title is missing or insufficient for a decision.
-
-Track seed progress separately with `forward_search_attempted`, `backward_references_extracted`, `backward_metadata_resolved`, and `backward_candidates_merged`. Candidate merging can precede metadata resolution because OCR records enter immediately.
-
-For every citation event, record the seed, platform, direction, cycle, source and retrieved totals, candidates, duplicates, decisions, failures, and stopping result. Use `discovery_route=citation_chasing`; citation provenance never bypasses screening.
-
 Final searches are saved to `source-specific/*/final-searches/`, both for discovery and citation chasing (for Scopus and WoS only).
-
-## Data management and audit trail
-
-Make deduplication reproducible via a single `SLR/SLR1/deduplication.py`, with a toggle for PSR, citation chasing, and review searches. Citation chasing combines Scopus and WoS forward search artifacts with OCR extracted backward references. Use mode-qualified screening IDs with the prefixes `psr-candidate-`, `review-candidate-`, and `citation-candidate-`.
 
 ### Bibliographic, publication, and degree metadata
 

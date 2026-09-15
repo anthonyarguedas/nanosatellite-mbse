@@ -64,16 +64,16 @@ Future final searches still require fresh final events and the common final cuto
 ## Reproduction
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/wiley_online_library_pilot005 \
-python3 SLR/SLR1/scripts/wiley_online_library_pilot005/build_plan.py --check
+PYTHONPATH=SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot005 \
+python3 SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot005/build_plan.py --check
 
 WILEY_AUTHORIZED_TARGET_ID=<caller-authorized-target> \
-PYTHONPATH=SLR/SLR1/scripts/wiley_online_library_pilot005 \
-uv run SLR/SLR1/scripts/wiley_online_library_pilot005/run_pilot.py
+PYTHONPATH=SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot005 \
+uv run SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot005/run_pilot.py
 
-PYTHONPATH=SLR/SLR1/scripts/wiley_online_library_pilot005 \
-python3 SLR/SLR1/scripts/wiley_online_library_pilot005/build_assessment.py
+PYTHONPATH=SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot005 \
+python3 SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot005/build_assessment.py
 
-PYTHONPATH=SLR/SLR1/scripts/wiley_online_library_pilot005 \
-python3 SLR/SLR1/scripts/wiley_online_library_pilot005/validate_pilot.py
+PYTHONPATH=SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot005 \
+python3 SLR/SLR1/source-specific/wiley-online-library/scripts/wiley_online_library_pilot005/validate_pilot.py
 ```

@@ -73,15 +73,15 @@ Pilot 006 does not authorize a final search. It uses year precision and leaves t
 ## Reproduction
 
 ```bash
-python3 SLR/SLR1/scripts/ieee_xplore_pilot006/build_plan.py \
+python3 SLR/SLR1/source-specific/ieee-xplore/scripts/ieee_xplore_pilot006/build_plan.py \
   --output SLR/SLR1/source-specific/ieee-xplore/pilots/006/searches/event-plan.json
 
-python3 SLR/SLR1/scripts/ieee_xplore_pilot006/run_pilot.py \
+python3 SLR/SLR1/source-specific/ieee-xplore/scripts/ieee_xplore_pilot006/run_pilot.py \
   --event-plan SLR/SLR1/source-specific/ieee-xplore/pilots/006/searches/event-plan.json \
   --pilot-root SLR/SLR1/source-specific/ieee-xplore/pilots/006 \
   --receipt SLR/SLR1/source-specific/ieee-xplore/pilots/006/searches/run-receipt.json
 
-python3 SLR/SLR1/scripts/ieee_xplore_pilot006/build_assessment.py \
+python3 SLR/SLR1/source-specific/ieee-xplore/scripts/ieee_xplore_pilot006/build_assessment.py \
   --pilot-root SLR/SLR1/source-specific/ieee-xplore/pilots/006 \
   --raw-run-receipt SLR/SLR1/source-specific/ieee-xplore/pilots/006/searches/run-receipt-raw.json \
   --run-receipt-output SLR/SLR1/source-specific/ieee-xplore/pilots/006/searches/run-receipt.json \

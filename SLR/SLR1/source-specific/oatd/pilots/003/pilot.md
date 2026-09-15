@@ -2,7 +2,7 @@
 
 Required changes are contained in this Pilot 003 commit.
 
-Export method: `~/agent-tools/internet/skills/browser/scripts/search_oatd.py`, invoked only through the shared local-browser wrapper by the [Pilot 003 runner](../../../../scripts/oatd_pilot003/run_pilot.py).
+Export method: `~/agent-tools/internet/skills/browser/scripts/search_oatd.py`, invoked only through the shared local-browser wrapper by the [Pilot 003 runner](../../scripts/oatd_pilot003/run_pilot.py).
 
 ## Objective
 

@@ -4,7 +4,7 @@ Required changes were applied in commit: ea207806e8398cac3befd50340c57c608b108e3
 
 This is a diagnostic pilot. It creates no final-search union. The source events use the same 2011 through 2026 window and 2026-08-29 diagnostic cutoff as Pilot 004. PQDT applies year precision, so later screening must check records from 2026 against the exact cutoff.
 
-Export method: adapter version 5 at `~/agent-tools/internet/skills/browser/scripts/search_pqdt.py`, with the bounded [pilot union bridge](../../../../scripts/pqdt_pilot005/pqdt_union_bridge.py) described below.
+Export method: adapter version 5 at `~/agent-tools/internet/skills/browser/scripts/search_pqdt.py`, with the bounded [pilot union bridge](../../scripts/pqdt_pilot005/pqdt_union_bridge.py) described below.
 
 ## Objective
 
@@ -84,39 +84,39 @@ Retain the accepted bounded-wildcard `NOFT` schedule without `PSUB.EXACT` or `IF
 Run from the repository root.
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/pqdt_pilot005 \
-python3 SLR/SLR1/scripts/pqdt_pilot005/build_preflight.py --check
+PYTHONPATH=SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005 \
+python3 SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005/build_preflight.py --check
 
 caffeinate -dims uv run \
   "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
-  uv run SLR/SLR1/scripts/pqdt_pilot005/harvest_assigned_terms.py
+  uv run SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005/harvest_assigned_terms.py
 
-PYTHONPATH=SLR/SLR1/scripts/pqdt_pilot005 \
-python3 SLR/SLR1/scripts/pqdt_pilot005/build_candidate_map.py --check
-
-caffeinate -dims uv run \
-  "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
-  uv run SLR/SLR1/scripts/pqdt_pilot005/validate_candidates.py
-
-PYTHONPATH=SLR/SLR1/scripts/pqdt_pilot005 \
-python3 SLR/SLR1/scripts/pqdt_pilot005/build_validated_map.py --check
-
-PYTHONPATH=SLR/SLR1/scripts/pqdt_pilot005 \
-python3 SLR/SLR1/scripts/pqdt_pilot005/build_event_plan.py --check
+PYTHONPATH=SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005 \
+python3 SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005/build_candidate_map.py --check
 
 caffeinate -dims uv run \
   "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
-  uv run SLR/SLR1/scripts/pqdt_pilot005/run_pilot.py --resume
+  uv run SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005/validate_candidates.py
 
-PYTHONPATH=SLR/SLR1/scripts/pqdt_pilot005 \
-python3 SLR/SLR1/scripts/pqdt_pilot005/build_comparison.py --check
+PYTHONPATH=SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005 \
+python3 SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005/build_validated_map.py --check
 
-PYTHONPATH=SLR/SLR1/scripts/pqdt_pilot005 \
-python3 SLR/SLR1/scripts/pqdt_pilot005/build_descriptor_review.py --check
+PYTHONPATH=SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005 \
+python3 SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005/build_event_plan.py --check
 
-PYTHONPATH=SLR/SLR1/scripts/pqdt_pilot005 \
-python3 SLR/SLR1/scripts/pqdt_pilot005/build_assessment.py --check
+caffeinate -dims uv run \
+  "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
+  uv run SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005/run_pilot.py --resume
 
-PYTHONPATH=SLR/SLR1/scripts/pqdt_pilot005 \
-python3 SLR/SLR1/scripts/pqdt_pilot005/validate_pilot.py
+PYTHONPATH=SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005 \
+python3 SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005/build_comparison.py --check
+
+PYTHONPATH=SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005 \
+python3 SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005/build_descriptor_review.py --check
+
+PYTHONPATH=SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005 \
+python3 SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005/build_assessment.py --check
+
+PYTHONPATH=SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005 \
+python3 SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot005/validate_pilot.py
 ```

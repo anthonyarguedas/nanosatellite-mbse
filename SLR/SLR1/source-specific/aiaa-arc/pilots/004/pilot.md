@@ -50,15 +50,15 @@ The [exact visible-title audit](searches/visible-title-term-audit.json) applies 
 
 ## Reproduction and validation
 
-Pilot 004 extends Pilot 003's query construction in [`scripts/aiaa_arc_pilot004`](../../../../scripts/aiaa_arc_pilot004). It uses the repaired read-only adapter and the canonical shared local Chrome runner:
+Pilot 004 extends Pilot 003's query construction in [`source-specific/aiaa-arc/scripts/aiaa_arc_pilot004`](../../scripts/aiaa_arc_pilot004). It uses the repaired read-only adapter and the canonical shared local Chrome runner:
 
 ```bash
 AIAA_ARC_ADAPTER="$HOME/agent-tools/internet/skills/browser/scripts/search_aiaa_arc.py" \
   caffeinate -dims uv run "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
-  python3 SLR/SLR1/scripts/aiaa_arc_pilot004/run_pilot.py --phase all
+  python3 SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot004/run_pilot.py --phase all
 
-python3 SLR/SLR1/scripts/aiaa_arc_pilot004/build_assessment.py
-python3 SLR/SLR1/scripts/aiaa_arc_pilot004/validate_pilot.py
+python3 SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot004/build_assessment.py
+python3 SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_pilot004/validate_pilot.py
 ```
 
 The ignored PDF cache is not committed. Recreate the source-located sentinel register with `build_known_item_evidence.py --pdf SLR/SLR1/pdfs/paper-0022_2015_cubesat-model-based-system-engineering-mbse-reference-model-application-in-the-concept-lif.pdf` when the project cache is available.

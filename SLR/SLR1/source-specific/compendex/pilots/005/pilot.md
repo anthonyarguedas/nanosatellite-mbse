@@ -94,24 +94,24 @@ Adapter v16 exposes no screenshot opt-out. Strict execution captures both images
 Run from the repository root. The source runner refuses to overwrite an existing event and stops after the first failure.
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/compendex_pilot005 \
-python3 SLR/SLR1/scripts/compendex_pilot005/build_plan.py \
+PYTHONPATH=SLR/SLR1/source-specific/compendex/scripts/compendex_pilot005 \
+python3 SLR/SLR1/source-specific/compendex/scripts/compendex_pilot005/build_plan.py \
   --output SLR/SLR1/source-specific/compendex/pilots/005/searches/event-plan.json
 
 caffeinate -dims uv run \
   "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
-  uv run SLR/SLR1/scripts/compendex_pilot005/run_pilot.py \
+  uv run SLR/SLR1/source-specific/compendex/scripts/compendex_pilot005/run_pilot.py \
   --event-plan SLR/SLR1/source-specific/compendex/pilots/005/searches/event-plan.json \
   --pilot-root SLR/SLR1/source-specific/compendex/pilots/005 \
   --receipt SLR/SLR1/source-specific/compendex/pilots/005/searches/run-receipt.json
 
-PYTHONPATH=SLR/SLR1/scripts/compendex_pilot005 \
-python3 SLR/SLR1/scripts/compendex_pilot005/build_assessment.py \
+PYTHONPATH=SLR/SLR1/source-specific/compendex/scripts/compendex_pilot005 \
+python3 SLR/SLR1/source-specific/compendex/scripts/compendex_pilot005/build_assessment.py \
   --pilot-root SLR/SLR1/source-specific/compendex/pilots/005 \
   --plan SLR/SLR1/source-specific/compendex/pilots/005/searches/event-plan.json \
   --run-receipt SLR/SLR1/source-specific/compendex/pilots/005/searches/run-receipt.json \
   --output SLR/SLR1/source-specific/compendex/pilots/005/searches/assessment.json
 
-PYTHONPATH=SLR/SLR1/scripts/compendex_pilot005 \
-python3 SLR/SLR1/scripts/compendex_pilot005/validate_pilot.py
+PYTHONPATH=SLR/SLR1/source-specific/compendex/scripts/compendex_pilot005 \
+python3 SLR/SLR1/source-specific/compendex/scripts/compendex_pilot005/validate_pilot.py
 ```

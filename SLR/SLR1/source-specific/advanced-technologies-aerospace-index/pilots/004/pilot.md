@@ -78,31 +78,31 @@ Retain the literal `NOFT` schedule with no Technology Thesaurus supplement. This
 
 ```bash
 caffeinate -dims python3 "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
-  uv run SLR/SLR1/scripts/atai_pilot004/harvest_assigned_terms.py \
+  uv run SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot004/harvest_assigned_terms.py \
   --output SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004/searches/assigned-indexing-terms-retry2.json \
   --failure-output SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004/searches/assigned-indexing-terms-retry2.NON_MERGEABLE_FAILURE.json
 
 caffeinate -dims python3 "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
-  uv run SLR/SLR1/scripts/atai_pilot004/validate_thesaurus_candidates.py \
+  uv run SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot004/validate_thesaurus_candidates.py \
   --harvest SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004/searches/assigned-indexing-terms-retry2.json \
   --output SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004/searches/technology-thesaurus-candidates.json \
   --failure-output SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004/searches/technology-thesaurus-candidates.NON_MERGEABLE_FAILURE.json
 
 caffeinate -dims python3 "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
-  uv run SLR/SLR1/scripts/atai_pilot004/run_set_comparisons.py \
+  uv run SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot004/run_set_comparisons.py \
   --event-plan SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/003/searches/event-plan.json \
   --candidate-receipt SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004/searches/technology-thesaurus-candidates.json \
   --output-dir SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004/searches/set-passes-retry1 \
   --reconciliation SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004/searches/set-comparison-retry1.json \
   --failure-output SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004/searches/set-comparison-retry1.NON_MERGEABLE_FAILURE.json
 
-python3 SLR/SLR1/scripts/atai_pilot004/build_assessment.py \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot004/build_assessment.py \
   --harvest SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004/searches/assigned-indexing-terms-retry2.json \
   --candidates SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004/searches/technology-thesaurus-candidates.json \
   --comparison SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004/searches/set-comparison-retry1.json \
   --output SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004/searches/inclusion-assessment.json
 
-python3 SLR/SLR1/scripts/atai_pilot004/validate_pilot.py \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot004/validate_pilot.py \
   --pilot-root SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/004 \
   --guideline SLR/SLR1/source-specific/advanced-technologies-aerospace-index/source-specific-guidelines.md \
   --reading-aid SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/003/controlled-vocabulary-seed-candidates.md \

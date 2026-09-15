@@ -53,6 +53,6 @@ Accept the exact Link 10.1038 to Nature article canonical metadata mapping. The 
 ## Reproduction
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/springer_nature_link_pilot005 \
-uv run SLR/SLR1/scripts/springer_nature_link_pilot005/validate_mapping.py
+PYTHONPATH=SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot005 \
+uv run SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot005/validate_mapping.py
 ```

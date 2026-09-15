@@ -56,12 +56,12 @@ Springer has no pending source pilot. It is ready for final rendered searches wi
 ## Reproduction
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/springer_nature_link_pilot006 \
-uv run SLR/SLR1/scripts/springer_nature_link_pilot006/run_pilot.py
+PYTHONPATH=SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot006 \
+uv run SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot006/run_pilot.py
 
-PYTHONPATH=SLR/SLR1/scripts/springer_nature_link_pilot006 \
-python3 SLR/SLR1/scripts/springer_nature_link_pilot006/build_assessment.py
+PYTHONPATH=SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot006 \
+python3 SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot006/build_assessment.py
 
-PYTHONPATH=SLR/SLR1/scripts/springer_nature_link_pilot006 \
-python3 SLR/SLR1/scripts/springer_nature_link_pilot006/validate_pilot.py
+PYTHONPATH=SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot006 \
+python3 SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot006/validate_pilot.py
 ```

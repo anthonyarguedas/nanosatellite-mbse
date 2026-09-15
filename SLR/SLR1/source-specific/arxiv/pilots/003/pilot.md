@@ -8,7 +8,7 @@ Test a practical source-native route for all nine direct partitions without chan
 
 ## Route and validation
 
-The rendered Advanced Search Cartesian plan would require many cells. Pilot 003 instead tested the documented Atom API with [`atom_pilot.py`](../../../../scripts/arxiv_pilot003/atom_pilot.py). It used parenthesized `all:` expressions, `submittedDate:[201101010000 TO 202608292359]`, and ascending `submittedDate` order. The API User's Manual and live controls were separately checked for fields, grouping, phrases, dates, ordering, pagination, stable IDs, and the broader pair fallback:
+The rendered Advanced Search Cartesian plan would require many cells. Pilot 003 instead tested the documented Atom API with [`atom_pilot.py`](../../scripts/arxiv_pilot003/atom_pilot.py). It used parenthesized `all:` expressions, `submittedDate:[201101010000 TO 202608292359]`, and ascending `submittedDate` order. The API User's Manual and live controls were separately checked for fields, grouping, phrases, dates, ordering, pagination, stable IDs, and the broader pair fallback:
 
 - [`transport-validation.json`](searches/transport-validation.json): all seven controls passed. Its Atom Boolean observation is explicitly separate from browser Advanced Search semantics.
 - [`pagination-capture.json`](searches/pagination-capture.json): two 25-record-page traversals of the bounded 2024 `CubeSat` control reconciled 72 source records, total, order, bare IDs, and versioned IDs.

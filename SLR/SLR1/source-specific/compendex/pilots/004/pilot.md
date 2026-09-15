@@ -104,35 +104,35 @@ Retain the complete post-proximity literal `ALL` schedule with no Ei Thesaurus s
 Run from the repository root. `$EV_P003_B1_RIS` names the owner-only Pilot 003 B1 native directory and is never written to a public artifact.
 
 ```bash
-python3 SLR/SLR1/scripts/compendex_pilot004/build_preflight.py \
+python3 SLR/SLR1/source-specific/compendex/scripts/compendex_pilot004/build_preflight.py \
   --output SLR/SLR1/source-specific/compendex/pilots/004/searches/preflight.json
 
-python3 SLR/SLR1/scripts/compendex_pilot004/harvest_assigned_terms.py \
+python3 SLR/SLR1/source-specific/compendex/scripts/compendex_pilot004/harvest_assigned_terms.py \
   --pass-1-dir "$EV_P003_B1_RIS/pass-1" \
   --pass-2-dir "$EV_P003_B1_RIS/pass-2" \
   --public-b1 SLR/SLR1/source-specific/compendex/pilots/003/searches/B1.json \
   --output SLR/SLR1/source-specific/compendex/pilots/004/searches/assigned-controlled-terms.json
 
 caffeinate -dims python3 "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
-  uv run SLR/SLR1/scripts/compendex_pilot004/validate_thesaurus_candidates.py \
+  uv run SLR/SLR1/source-specific/compendex/scripts/compendex_pilot004/validate_thesaurus_candidates.py \
   --assignments SLR/SLR1/source-specific/compendex/pilots/004/searches/assigned-controlled-terms.json \
   --output SLR/SLR1/source-specific/compendex/pilots/004/searches/ei-thesaurus-candidates.json \
   --failure-output SLR/SLR1/source-specific/compendex/pilots/004/searches/ei-thesaurus-candidates.NON_MERGEABLE_FAILURE.json
 
 caffeinate -dims python3 "$HOME/agent-tools/internet/skills/browser/scripts/run_with_browser.py" -- \
-  uv run SLR/SLR1/scripts/compendex_pilot004/run_value_comparison.py \
+  uv run SLR/SLR1/source-specific/compendex/scripts/compendex_pilot004/run_value_comparison.py \
   --assignments SLR/SLR1/source-specific/compendex/pilots/004/searches/assigned-controlled-terms.json \
   --candidates SLR/SLR1/source-specific/compendex/pilots/004/searches/ei-thesaurus-candidates.json \
   --output-dir SLR/SLR1/source-specific/compendex/pilots/004/searches/cells \
   --reconciliation SLR/SLR1/source-specific/compendex/pilots/004/searches/value-comparison.json \
   --failure-output SLR/SLR1/source-specific/compendex/pilots/004/searches/value-comparison.NON_MERGEABLE_FAILURE.json
 
-python3 SLR/SLR1/scripts/compendex_pilot004/build_assessment.py \
+python3 SLR/SLR1/source-specific/compendex/scripts/compendex_pilot004/build_assessment.py \
   --preflight SLR/SLR1/source-specific/compendex/pilots/004/searches/preflight.json \
   --assignments SLR/SLR1/source-specific/compendex/pilots/004/searches/assigned-controlled-terms.json \
   --candidates SLR/SLR1/source-specific/compendex/pilots/004/searches/ei-thesaurus-candidates.json \
   --comparison SLR/SLR1/source-specific/compendex/pilots/004/searches/value-comparison.json \
   --output SLR/SLR1/source-specific/compendex/pilots/004/searches/inclusion-assessment.json
 
-python3 SLR/SLR1/scripts/compendex_pilot004/validate_pilot.py
+python3 SLR/SLR1/source-specific/compendex/scripts/compendex_pilot004/validate_pilot.py
 ```

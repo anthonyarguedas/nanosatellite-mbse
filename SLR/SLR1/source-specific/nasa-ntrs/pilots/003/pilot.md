@@ -46,11 +46,11 @@ The retained-field pair check found four `BG2` snippet hits: both `product-line/
 
 ## Checks
 
-Run the shared query tests and the [Pilot 003 validator](../../../../scripts/ntrs_pilot003/validate_pilot.py):
+Run the shared query tests and the [Pilot 003 validator](../../scripts/ntrs_pilot003/validate_pilot.py):
 
 ```bash
 python3 SLR/SLR1/scripts/pilot_schedule/test_queries.py
-python3 SLR/SLR1/scripts/ntrs_pilot003/validate_pilot.py
+python3 SLR/SLR1/source-specific/nasa-ntrs/scripts/ntrs_pilot003/validate_pilot.py
 ```
 
 The validator parses all JSON, validates exact dates/controls/query construction, verifies the NTRS commit markers and hashes, confirms null failure totals, confirms complete terminal ID sets and cell unions, checks all 224 `BT2` pair positions, and replays the retained-field pair check.

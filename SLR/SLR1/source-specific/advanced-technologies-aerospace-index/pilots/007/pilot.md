@@ -100,29 +100,29 @@ No query split, source limitation, wildcard, controlled-vocabulary supplement, o
 
 The [non-mergeable marking receipt](searches/nonmergeable-marking.json) covers 22 successful source artifacts and the retained restoration failure. The [validation report](searches/validation-report.json) checks query membership, source readback, controls, all 44 screenshot files and receipts, repeated totals, strict captures, stable IDs, documentation links, and guideline synchronization.
 
-Review-specific scripts are under [`SLR/SLR1/scripts/atai_pilot007`](../../../../scripts/atai_pilot007). The core commands are:
+Review-specific scripts are under [`SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot007`](../../scripts/atai_pilot007). The core commands are:
 
 ```bash
-python3 SLR/SLR1/scripts/atai_pilot007/build_plan.py \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot007/build_plan.py \
   --output SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/007/searches/event-plan.json
 
 uv run ~/agent-tools/internet/skills/browser/scripts/run_with_browser.py -- \
-  python3 SLR/SLR1/scripts/atai_pilot007/run_pilot.py \
+  python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot007/run_pilot.py \
   --event-plan SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/007/searches/event-plan.json \
   --pilot-root SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/007 \
   --receipt SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/007/searches/run-receipt.json
 
-python3 SLR/SLR1/scripts/atai_pilot007/mark_source_artifacts_nonmergeable.py \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot007/mark_source_artifacts_nonmergeable.py \
   --pilot-root SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/007 \
   --receipt SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/007/searches/nonmergeable-marking.json
 
-python3 SLR/SLR1/scripts/atai_pilot007/build_assessment.py \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot007/build_assessment.py \
   --pilot-root SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/007 \
   --pilot003-root SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/003 \
   --pilot006-root SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/006 \
   --output SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/007/searches/assessment.json
 
-python3 SLR/SLR1/scripts/atai_pilot007/validate_pilot.py \
+python3 SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot007/validate_pilot.py \
   --pilot-root SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/007 \
   --guideline SLR/SLR1/source-specific/advanced-technologies-aerospace-index/source-specific-guidelines.md \
   --output SLR/SLR1/source-specific/advanced-technologies-aerospace-index/pilots/007/searches/validation-report.json

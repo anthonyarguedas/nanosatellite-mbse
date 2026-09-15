@@ -65,20 +65,20 @@ The Pilot 008 artifacts remain immutable failure evidence. Their direct-A2 sourc
 The [assessment](searches/assessment.json) hashes both failures and verifies the Pilot 005 query identity. The [validation report](searches/validation-report.json) checks the predeclared plan, query bytes, controls, failure signatures, null totals, and source guideline.
 
 ```bash
-python3 SLR/SLR1/scripts/ieee_xplore_pilot008/build_plan.py \
+python3 SLR/SLR1/source-specific/ieee-xplore/scripts/ieee_xplore_pilot008/build_plan.py \
   --output SLR/SLR1/source-specific/ieee-xplore/pilots/008/searches/event-plan.json
 
-python3 SLR/SLR1/scripts/ieee_xplore_pilot008/run_pilot.py \
+python3 SLR/SLR1/source-specific/ieee-xplore/scripts/ieee_xplore_pilot008/run_pilot.py \
   --event-plan SLR/SLR1/source-specific/ieee-xplore/pilots/008/searches/event-plan.json \
   --pilot-root SLR/SLR1/source-specific/ieee-xplore/pilots/008 \
   --receipt SLR/SLR1/source-specific/ieee-xplore/pilots/008/searches/run-receipt.json
 
-python3 SLR/SLR1/scripts/ieee_xplore_pilot008/build_assessment.py \
+python3 SLR/SLR1/source-specific/ieee-xplore/scripts/ieee_xplore_pilot008/build_assessment.py \
   --pilot-root SLR/SLR1/source-specific/ieee-xplore/pilots/008 \
   --pilot005-root SLR/SLR1/source-specific/ieee-xplore/pilots/005 \
   --output SLR/SLR1/source-specific/ieee-xplore/pilots/008/searches/assessment.json
 
-python3 SLR/SLR1/scripts/ieee_xplore_pilot008/validate_pilot.py \
+python3 SLR/SLR1/source-specific/ieee-xplore/scripts/ieee_xplore_pilot008/validate_pilot.py \
   --pilot-root SLR/SLR1/source-specific/ieee-xplore/pilots/008 \
   --pilot005-root SLR/SLR1/source-specific/ieee-xplore/pilots/005 \
   --guideline SLR/SLR1/source-specific/ieee-xplore/source-specific-guidelines.md \

@@ -98,25 +98,25 @@ Eighteen null artifacts remain under [`searches/failures/`](searches/failures/).
 
 ## Reproduction
 
-Review-specific scripts are under [`SLR/SLR1/scripts/springer_nature_link_pilot004`](../../../../scripts/springer_nature_link_pilot004).
+Review-specific scripts are under [`SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot004`](../../scripts/springer_nature_link_pilot004).
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/springer_nature_link_pilot004 \
-python3 SLR/SLR1/scripts/springer_nature_link_pilot004/build_plan.py \
+PYTHONPATH=SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot004 \
+python3 SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot004/build_plan.py \
   --year-partitioned-b2 \
   --output SLR/SLR1/source-specific/springer-nature-link/pilots/004/searches/event-plan-v4.json
 
-PYTHONPATH=SLR/SLR1/scripts/springer_nature_link_pilot004 \
-uv run SLR/SLR1/scripts/springer_nature_link_pilot004/run_pilot.py \
+PYTHONPATH=SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot004 \
+uv run SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot004/run_pilot.py \
   --event-plan SLR/SLR1/source-specific/springer-nature-link/pilots/004/searches/event-plan-v4.json \
   --resume
 
-PYTHONPATH=SLR/SLR1/scripts/springer_nature_link_pilot004 \
-uv run SLR/SLR1/scripts/springer_nature_link_pilot004/inspect_wildcard_only.py
+PYTHONPATH=SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot004 \
+uv run SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot004/inspect_wildcard_only.py
 
-PYTHONPATH=SLR/SLR1/scripts/springer_nature_link_pilot004 \
-python3 SLR/SLR1/scripts/springer_nature_link_pilot004/build_assessment.py
+PYTHONPATH=SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot004 \
+python3 SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot004/build_assessment.py
 
-PYTHONPATH=SLR/SLR1/scripts/springer_nature_link_pilot004 \
-python3 SLR/SLR1/scripts/springer_nature_link_pilot004/validate_pilot.py
+PYTHONPATH=SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot004 \
+python3 SLR/SLR1/source-specific/springer-nature-link/scripts/springer_nature_link_pilot004/validate_pilot.py
 ```

@@ -60,20 +60,20 @@ IEEE Xplore still lacks final-search authorization. Pilot 007 used year precisio
 The [validation report](searches/validation-report.json) checks all Pilot 006 and 007 artifacts, source totals, contained intervals, strict receipts, native pages, stable-ID hashes, terminal markers, documentation, and adapter test evidence.
 
 ```bash
-python3 SLR/SLR1/scripts/ieee_xplore_pilot007/build_plan.py \
+python3 SLR/SLR1/source-specific/ieee-xplore/scripts/ieee_xplore_pilot007/build_plan.py \
   --output SLR/SLR1/source-specific/ieee-xplore/pilots/007/searches/event-plan.json
 
-python3 SLR/SLR1/scripts/ieee_xplore_pilot007/run_pilot.py \
+python3 SLR/SLR1/source-specific/ieee-xplore/scripts/ieee_xplore_pilot007/run_pilot.py \
   --event-plan SLR/SLR1/source-specific/ieee-xplore/pilots/007/searches/event-plan.json \
   --pilot-root SLR/SLR1/source-specific/ieee-xplore/pilots/007 \
   --receipt SLR/SLR1/source-specific/ieee-xplore/pilots/007/searches/run-receipt.json
 
-python3 SLR/SLR1/scripts/ieee_xplore_pilot007/build_assessment.py \
+python3 SLR/SLR1/source-specific/ieee-xplore/scripts/ieee_xplore_pilot007/build_assessment.py \
   --pilot-root SLR/SLR1/source-specific/ieee-xplore/pilots/007 \
   --pilot006-root SLR/SLR1/source-specific/ieee-xplore/pilots/006 \
   --output SLR/SLR1/source-specific/ieee-xplore/pilots/007/searches/assessment.json
 
-python3 SLR/SLR1/scripts/ieee_xplore_pilot007/validate_pilot.py \
+python3 SLR/SLR1/source-specific/ieee-xplore/scripts/ieee_xplore_pilot007/validate_pilot.py \
   --pilot006-root SLR/SLR1/source-specific/ieee-xplore/pilots/006 \
   --pilot007-root SLR/SLR1/source-specific/ieee-xplore/pilots/007 \
   --guideline SLR/SLR1/source-specific/ieee-xplore/source-specific-guidelines.md \

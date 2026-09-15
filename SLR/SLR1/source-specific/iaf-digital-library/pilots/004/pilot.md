@@ -63,25 +63,25 @@ Keep all existing filter decisions. The current complete schedule uses 551 cells
 
 ## Validation and reproduction
 
-Review-specific scripts are under [`SLR/SLR1/scripts/iaf_digital_library_pilot004`](../../../../scripts/iaf_digital_library_pilot004). The main commands are:
+Review-specific scripts are under [`SLR/SLR1/source-specific/iaf-digital-library/scripts/iaf_digital_library_pilot004`](../../scripts/iaf_digital_library_pilot004). The main commands are:
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/iaf_digital_library_pilot004 \
-python3 SLR/SLR1/scripts/iaf_digital_library_pilot004/plan.py \
+PYTHONPATH=SLR/SLR1/source-specific/iaf-digital-library/scripts/iaf_digital_library_pilot004 \
+python3 SLR/SLR1/source-specific/iaf-digital-library/scripts/iaf_digital_library_pilot004/plan.py \
   --output-path SLR/SLR1/source-specific/iaf-digital-library/pilots/004/searches/cell-plan.json
 
 uv run ~/agent-tools/internet/skills/browser/scripts/run_with_browser.py -- \
-  python3 SLR/SLR1/scripts/iaf_digital_library_pilot004/run_cells.py
+  python3 SLR/SLR1/source-specific/iaf-digital-library/scripts/iaf_digital_library_pilot004/run_cells.py
 
-PYTHONPATH=SLR/SLR1/scripts/iaf_digital_library_pilot004 \
-python3 SLR/SLR1/scripts/iaf_digital_library_pilot004/assess.py \
+PYTHONPATH=SLR/SLR1/source-specific/iaf-digital-library/scripts/iaf_digital_library_pilot004 \
+python3 SLR/SLR1/source-specific/iaf-digital-library/scripts/iaf_digital_library_pilot004/assess.py \
   --pilot-root SLR/SLR1/source-specific/iaf-digital-library/pilots/004 \
   --plan SLR/SLR1/source-specific/iaf-digital-library/pilots/004/searches/cell-plan.json \
   --output SLR/SLR1/source-specific/iaf-digital-library/pilots/004/searches/assessment.json \
   --threshold-output SLR/SLR1/source-specific/iaf-digital-library/pilots/004/searches/threshold-investigations.json
 
-PYTHONPATH=SLR/SLR1/scripts/iaf_digital_library_pilot004 \
-python3 SLR/SLR1/scripts/iaf_digital_library_pilot004/validate_pilot.py \
+PYTHONPATH=SLR/SLR1/source-specific/iaf-digital-library/scripts/iaf_digital_library_pilot004 \
+python3 SLR/SLR1/source-specific/iaf-digital-library/scripts/iaf_digital_library_pilot004/validate_pilot.py \
   --pilot-root SLR/SLR1/source-specific/iaf-digital-library/pilots/004 \
   --guideline SLR/SLR1/source-specific/iaf-digital-library/source-specific-guidelines.md \
   --output SLR/SLR1/source-specific/iaf-digital-library/pilots/004/searches/validation-report.json

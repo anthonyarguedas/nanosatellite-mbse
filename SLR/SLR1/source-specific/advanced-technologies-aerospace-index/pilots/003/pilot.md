@@ -42,4 +42,4 @@ These artifacts are non-mergeable pilots. They do not finalize a translation, co
 
 - [Shared query membership, source controls, JSON, receipt, stable-ID union, and threshold checks](searches/validation-report.json)
 - [Offline ATAI source-documentation verification](searches/source-documentation-verification.json)
-- Reproducible runners: [strict schedule](../../../../scripts/atai_pilot003/run_schedule.py), [A3 repair](../../../../scripts/atai_pilot003/repair_a3_stable_ids.py), and [stable-ID pair route](../../../../scripts/atai_pilot003/run_stable_id_pair.py)
+- Reproducible runners: [strict schedule](../../scripts/atai_pilot003/run_schedule.py), [A3 repair](../../scripts/atai_pilot003/repair_a3_stable_ids.py), and [stable-ID pair route](../../scripts/atai_pilot003/run_stable_id_pair.py)

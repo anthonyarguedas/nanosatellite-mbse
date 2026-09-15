@@ -47,8 +47,8 @@ The enrichment join requires the same normalized title and the entire available 
 Five focused tests passed:
 
 ```text
-uv run --with playwright -m unittest discover -s SLR/SLR1/scripts/oatd_final -p 'test_run.py' -v
-uv run --with playwright -m unittest discover -s SLR/SLR1/scripts/oatd_final -p 'test_enrich_abstracts.py' -v
+uv run --with playwright -m unittest discover -s SLR/SLR1/source-specific/oatd/scripts/oatd_final -p 'test_run.py' -v
+uv run --with playwright -m unittest discover -s SLR/SLR1/source-specific/oatd/scripts/oatd_final -p 'test_enrich_abstracts.py' -v
 ```
 
 They cover unchanged query semantics, native form parameters, checkpoint metadata, honest source truncation flags, three-pass gate publication, terminal union verification, and full-abstract enrichment without changing IDs or creating another discovery event. Historical records are used only as offline fixtures in temporary directories.

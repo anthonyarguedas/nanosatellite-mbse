@@ -86,19 +86,19 @@ This pilot establishes complete document-ID equivalence and mandatory screenshot
 
 ## Reproduction
 
-Review-specific scripts are under [`SLR/SLR1/scripts/pqdt_pilot004`](../../../../scripts/pqdt_pilot004).
+Review-specific scripts are under [`SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot004`](../../scripts/pqdt_pilot004).
 
 ```bash
-PYTHONPATH=SLR/SLR1/scripts/pqdt_pilot004 \
-python3 SLR/SLR1/scripts/pqdt_pilot004/build_plan.py --check
+PYTHONPATH=SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot004 \
+python3 SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot004/build_plan.py --check
 
 caffeinate -dims uv run \
   ~/agent-tools/internet/skills/browser/scripts/run_with_browser.py -- \
-  python3 SLR/SLR1/scripts/pqdt_pilot004/run_pilot.py --resume
+  python3 SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot004/run_pilot.py --resume
 
-PYTHONPATH=SLR/SLR1/scripts/pqdt_pilot004 \
-python3 SLR/SLR1/scripts/pqdt_pilot004/build_assessment.py --inspect
+PYTHONPATH=SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot004 \
+python3 SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot004/build_assessment.py --inspect
 
-PYTHONPATH=SLR/SLR1/scripts/pqdt_pilot004 \
-python3 SLR/SLR1/scripts/pqdt_pilot004/validate_pilot.py
+PYTHONPATH=SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot004 \
+python3 SLR/SLR1/source-specific/pqdt-global/scripts/pqdt_pilot004/validate_pilot.py
 ```
