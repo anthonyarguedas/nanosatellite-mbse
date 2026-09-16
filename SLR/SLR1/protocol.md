@@ -44,6 +44,7 @@ Outcome:
 - what the EPS models are used for;
 - EPS model generation/reuse/tailoring methods, modeling language/ontology/metamodel, modeling/reuse/tailoring tools;
 - model and method inputs and assumptions, applicability, reusable core, variation points, tailoring or adaptation rules and steps, tools, demonstrated uses and post hoc checks, distinguishing which of these elements are novel/tailored and which are reused from another method (i.e. ARCADIA, OOSEM);
+- if a method has a structured representation, the structured representation and its modeled elements;
 - if the model or method is called generic, why;
 - model or method lineage, if reported
 
@@ -53,14 +54,15 @@ Intervention: EPS-specific or system-wide but EPS-linked model-based V&V
 Comparison: When reported: separate or document-based V&V, manual checking, another method, or another explicit comparator
 Outcome:
 - structured representations (models) of V&V requirements, objectives, pass/fail criteria, scenarios/test cases, sequences, states or modes, structure or architecture, interfaces, data-/resource-flows that are modeled separately from the EPS, noting coverage of engineering viewpoints (electronics, electrical, software, mechanical), and level of abstraction;
-- modeled V&V functions/behaviors, data/resource flows and exchanges, external actors and systems/subsystems, interfaces, ports, logical and physical components, states or modes, state or mode transitions, scenarios, use cases, feared events, faults or failures, requirements, objectives, pass/fail criteria that are modeled separately from the EPS, noting executable properties (mathematical expressions, numeric values, algorithms, simulators, physical executability) assigned to the modeled elements;
+- modeled V&V functions/behaviors, data/resource flows and exchanges, external actors and systems/subsystems, interfaces, ports, logical and physical components, connections/links between logical and physical components, states or modes, state or mode transitions, scenarios, use cases, feared events, faults or failures, requirements, objectives, pass/fail criteria that are modeled separately from the EPS, noting executable properties (mathematical expressions, numeric values, algorithms, simulators, physical executability) assigned to the modeled elements;
 - definitions of setup and equipment, requirements, objectives, and pass/fail criteria for V&V test cases/scenarios that are not modeled;
 - links between V&V models, modeled elements or definitions; and EPS models or modeled elements;
 - V&V model or V&V test case/scenario definition generation/reuse/tailoring methods, noting specifically if an EPS model or modeled element is an input to the method;
 - methods for EPS or V&V model/definition update from test results;
 - methods for V&V test case/scenario execution from V&V or EPS model and its type (check/computation, simulation, SIL, HIL, physical execution);
-- if the V&V model or method is called generic, why;
 - model and method method inputs and assumptions, applicability, reusable core, variation points, tailoring or adaptation rules and steps, tools, demonstrated uses and post hoc checks, distinguishing which of these elements are novel/tailored and which are reused from another method (i.e. ARCADIA, OOSEM, V-Model);
+- if a method has a structured representation, the structured representation and its modeled elements;
+- if the V&V model or method is called generic, why;
 - model or method lineage, if reported
 
 ## Research questions
