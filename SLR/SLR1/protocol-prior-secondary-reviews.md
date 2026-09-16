@@ -253,8 +253,6 @@ The focused audit must check:
 - full-text inclusion.
 - each DARE answer.
 - nanosatellite and EPS separability.
-- every RQ1 element assessment and overall RQ1 coverage.
-- RQ2 and RQ3 coverage.
 - the recorded schema version.
 - the unsearched interval to the main cutoff.
 - the final supporting-search disposition.

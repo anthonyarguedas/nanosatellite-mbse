@@ -2,19 +2,10 @@
 
 - **Working branch:** `slr1-1.1-restart`
 - **Common evidence cutoff:** 2026-08-24
-- **Final searches merged and deduplicated in commit:** NA
-- **Citation chasing finished in commit:** NA
-- **Full-text screening completed in commit**: NA
 
 ## Review type and terminology
 
-This work is a **systematic review with an evidence-map synthesis**. Throughout the protocol, *systematic review* names the overall method of identifying, selecting, appraising, and synthesizing evidence; *evidence map* names the structured descriptive output. Do not call the work a *systematic mapping study*: Kitchenham and Charters use that term for broad, high-level classification with deliberately limited extraction, whereas this review performs in-depth extraction and appraisal of linked evidence units.
-
-## Review status and restart policy
-
-This protocol defines a **new systematic review run** on model-based systems engineering (MBSE) for nanosatellite electrical power systems (EPSs). The work is on branch `slr1-1.1-restart`. It is not an amendment to or update of the earlier whole-nanosatellite/EPS review on the `main` branch.
-
-Treat all material from the earlier review as legacy or pilot material. This includes searches, screening decisions, the report set, extractions, the codebook, the synthesis, and the manuscript.
+This work is a systematic review with an evidence-map synthesis. Throughout the protocol, systematic review names the overall method of identifying, selecting, appraising, and synthesizing evidence. Evidence map names the structured descriptive output. Do not call the work a systematic mapping study, as Kitchenham and Charters use that term for broad, high-level classification with deliberately limited extraction, whereas this review performs in-depth extraction and appraisal of linked evidence units.
 
 ## Reporting framework
 
@@ -25,41 +16,60 @@ Use the following guidance:
 - Kitchenham and Charters (2007), *Guidelines for performing Systematic Literature Reviews in Software Engineering*, as complementary engineering conduct guidance for PICOC framing, heterogeneous evidence, protocol and form piloting, selection and extraction consistency, duplicate-report handling, and descriptive or narrative synthesis; and
 - the [PRISMA 2020 statement](https://www.prisma-statement.org/prisma-2020-statement), [checklist](https://www.prisma-statement.org/prisma-2020-checklist), [abstract guidance](https://www.prisma-statement.org/abstracts), and [flow templates](https://www.prisma-statement.org/prisma-2020-flow-diagram) for the completed review.
 
-PRISMA supplies reporting guidance; Kitchenham and Charters supply complementary engineering-review conduct guidance. Neither proves that evidence is valid. This systematic review produces an engineering evidence map, so do not invent clinical effect measures, clinical risk-of-bias tools, or GRADE ratings.
+PRISMA supplies reporting guidance, while Kitchenham and Charters supply complementary engineering-review conduct guidance.
 
 Use the PRISMA 2020 flow diagram for a new systematic review that uses databases and other sources.
-
- [ ] Registration and contact details, contributor and guarantor details, and declarations about funding, sponsors, and competing interests will be completed later. State clearly when any of these details are still absent. Do not claim that this protocol is administratively complete under PRISMA-P until the above are reported.
 
 ## Need for this review
 
 Before the first final primary-evidence search, conduct the bounded [prior-secondary-review search and CRD/DARE assessment](protocol-prior-secondary-reviews.md). This supporting process uses only Scopus and Web of Science Core Collection, has separate records and counts, and is not a tertiary review. It will determine whether an existing review already covers the nanosatellite-EPS population, direct MBSE relationship, and RQ1–RQ3; identify scope, currency, or methodological gaps; and provide the justification for proceeding.
 
-## Review objective
+## PICO
 
-The review will map how MBSE represents and supports nanosatellite EPS work, including typed EPS elements and requirements, dedicated use-case, operational, feared-event, failure, recovery, and V&V test-case records, ordered modeled behavior and test steps, structured model representations and relationships among views, exchanges, dependencies, boundaries, scenario and model coverage, viewpoints and abstraction, tools and equipment, model generation methods, engineering workflows with linked lifecycle phases and activities, procedural reporting detail, inputs and assumptions, implementation, artifact, method, and workflow reuse or tailoring, reported outcomes and burdens, and links to V&V before physical integration or testing.
+Population: EPSs for orbital CubeSat or nanosatellite-class missions
 
-## PICOC
+### RQ1
 
-| Population | Intervention | Comparison | Outcome | Context | Related RQ(s) |
-|---|---|---|---|---|---|
-| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-primary MBSE or a clear embedded EPS model thread | Not required | EPS functions, behaviors, external actors and systems/subsystems, logical and physical components, interfaces, states or modes, scenarios, use cases, feared events, faults or failures, and requirements; scenario and V&V test-case definitions and records; structured representations of organizational or mission context, requirements, use-cases, scenarios, sequences, states or modes, structure or architecture, interfaces, data-/resource-flows, V&V activities or test cases; dependencies, coverage, viewpoints, boundaries, abstraction; model generation/reuse/tailoring method, modeling language, and modeling tools; why the model is used; method and model inputs and assumptions; artifact identity and lineage; artifact, method, and workflow applicability, reusable core, variation points, tailoring or adaptation rules and steps, demonstrated uses and checks, reuse levels, and required roles and resources | Nanosatellite systems engineering throughout the lifecycle | RQ1 |
-| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-linked MBSE artifacts, analyses, and model-enabled work | When reported: document-based practice, manual analysis, another toolchain, an earlier mission or model, or another clear comparator | Beneficial, null, mixed, or adverse EPS-linked technical and process outcomes, plus implementation burdens. Priority topics are reliability and mission assurance, reproducibility and reuse, and integration and interoperability | Nanosatellite development and decision-making | RQ2 |
-| EPSs for orbital CubeSat or nanosatellite-class missions | EPS-specific or system-wide but EPS-linked model-based V&V before physical integration or test | When reported: separate or document-based V&V, manual checking, another method, or no comparator | V&V scope and object, links to V&V artifacts, executable checks, results, virtual integration, and continuity from model to test | Analysis and V&V before physical work, with later physical links recorded separately | RQ3 |
+Intervention: EPS-linked MBSE artifacts, analyses, and model-enabled work
+Comparison: When reported: document-based practice, manual analysis, another toolchain, an earlier mission or model, or another explicit comparator
+Outcome: Beneficial, null, mixed, or adverse EPS-linked technical and process outcomes, plus implementation burdens. Priority topics are reliability and mission assurance, reproducibility and reuse, and integration and interoperability
+
+### RQ2
+
+Intervention: EPS-primary MBSE or a clear embedded EPS model thread
+Comparison: Not required
+Outcome:
+- structured representations (models) of organizational or mission context, requirements, scenarios, sequences, states or modes, structure or architecture, interfaces, data-/resource-flows, noting coverage of engineering viewpoints (electronics, electrical, software, mechanical), and level of abstraction;
+- modeled EPS functions/behaviors, data/resource flows and exchanges, interfaces, ports, logical and physical components, connections/links between logical and physical components, states or modes, state or mode transitions, scenarios, use cases, feared events/faults/failures, and requirements, noting which ones belong to the EPS and which to external actors and systems/subsystems, where external actors and systems/subsystems can also be a standalone model element, and noting executable properties (mathematical expressions, numeric values, algorithms, simulators, physical executability) assigned to the modeled elements;
+- what the EPS models are used for;
+- EPS model generation/reuse/tailoring methods, modeling language/ontology/metamodel, modeling/reuse/tailoring tools;
+- model and method inputs and assumptions, applicability, reusable core, variation points, tailoring or adaptation rules and steps, tools, demonstrated uses and post hoc checks, distinguishing which of these elements are novel/tailored and which are reused from another method (i.e. ARCADIA, OOSEM);
+- if the model or method is called generic, why;
+- model or method lineage, if reported
+
+### RQ3
+
+Intervention: EPS-specific or system-wide but EPS-linked model-based V&V
+Comparison: When reported: separate or document-based V&V, manual checking, another method, or another explicit comparator
+Outcome:
+- structured representations (models) of V&V requirements, objectives, pass/fail criteria, scenarios/test cases, sequences, states or modes, structure or architecture, interfaces, data-/resource-flows that are modeled separately from the EPS, noting coverage of engineering viewpoints (electronics, electrical, software, mechanical), and level of abstraction;
+- modeled V&V functions/behaviors, data/resource flows and exchanges, external actors and systems/subsystems, interfaces, ports, logical and physical components, states or modes, state or mode transitions, scenarios, use cases, feared events, faults or failures, requirements, objectives, pass/fail criteria that are modeled separately from the EPS, noting executable properties (mathematical expressions, numeric values, algorithms, simulators, physical executability) assigned to the modeled elements;
+- definitions of setup and equipment, requirements, objectives, and pass/fail criteria for V&V test cases/scenarios that are not modeled;
+- links between V&V models, modeled elements or definitions; and EPS models or modeled elements;
+- V&V model or V&V test case/scenario definition generation/reuse/tailoring methods, noting specifically if an EPS model or modeled element is an input to the method;
+- methods for EPS or V&V model/definition update from test results;
+- methods for V&V test case/scenario execution from V&V or EPS model and its type (check/computation, simulation, SIL, HIL, physical execution);
+- if the V&V model or method is called generic, why;
+- model and method method inputs and assumptions, applicability, reusable core, variation points, tailoring or adaptation rules and steps, tools, demonstrated uses and post hoc checks, distinguishing which of these elements are novel/tailored and which are reused from another method (i.e. ARCADIA, OOSEM, V-Model);
+- model or method lineage, if reported
 
 ## Research questions
 
-1. **RQ1** How are nanosatellite EPSs represented and used in MBSE approaches, how are generic or reference models constructed, and what model generation methods, engineering workflows, inputs, assumptions, implementation needs and footprint, and bounded artifact, method, or workflow reuse and tailoring practices are reported? What evidence supports these characterizations?
+**RQ1** What technical or process outcomes and implementation burdens do sources attribute to EPS-linked MBSE? For each attribution, how does the source say the MBSE artifact or activity led to the outcome or burden, and what evidence supports that claimed link?
 
-2. **RQ2** What technical or process outcomes and implementation burdens do sources attribute to EPS-linked MBSE? For each attribution, how does the source say the MBSE artifact or activity led to the outcome or burden, and what evidence supports that claimed link?
+**RQ2** How are nanosatellite EPSs represented and used in MBSE approaches? How are EPS MBSE models generated, reused, tailored, verified, or validated? What evidence supports these characterizations?
 
-3. **RQ3** How is EPS-linked MBSE connected to V&V before physical integration or testing, and what evidence is reported for its pass/fail criteria, execution, results, and model-to-test continuity?
-
-### Report eligibility versus question contribution
-
-An outcome, burden, V&V activity, reuse claim, reuse or tailoring application, evidence-basis code, or support judgment is never an additional report-level inclusion test. Every eligible report contributes to RQ1 through its report-level extraction. Create direct RQ2 findings and RQ3 activities only when their respective definitions are met. A question-contribution or support code cannot make an otherwise ineligible report eligible.
-
-Within RQ2, reliability and mission assurance, reproducibility and reuse, and integration and interoperability are priority categories for presentation. Code all eligible outcomes and burdens without favoring a direction or hiding other categories after seeing the results.
+**RQ3** How is EPS-linked MBSE connected to V&V before physical integration or testing, and how is model-to-test continuity performed?
 
 ## Operational definitions
 
@@ -110,13 +120,13 @@ External repositories, evolving models, and author-provided artifacts are not in
 
 ## Inclusion and exclusion criteria
 
-| Criterion | Plain-English rule | RQ(s) |
-|---|---|---|
-| Publication date | Include a report only when an eligible version is dated from 2011-01-01 through the common evidence cutoff. | 1–3 |
-| Language | The full report must be in English. English metadata does not prove that the report itself is in English. If the full text cannot be obtained, use `not_retrieved` instead of making a language assumption. | 1–3 |
-| Publication type | Include a full primary-research journal article; conference, proceedings, or workshop paper; workshop presentation (for ESA Indico only); research chapter in an edited scholarly book; institutional technical report; arXiv preprint; master's thesis; or doctoral thesis or dissertation. | 1–3 |
-| Degree completion | Include a thesis or dissertation only when full-text screening establishes `completion_status` as `completed`. Use `exclude_wrong_completion_status` when it is `in_progress_or_incomplete` or `unclear`. | 1–3 |
-| Scientific scope | The work must satisfy the canonical [nanosatellite population](protocol.md#nanosatellite-population), [EPS boundary](protocol.md#eps-boundary), [MBSE qualification](protocol.md#mbse-qualification), and [Route A or Route B](protocol.md#eligible-eps-evidence-routes) rules. | 1–3 |
-| Secondary studies | Exclude secondary studies. | 1–3 |
-| Abstract-only or non-research material | Exclude posters or abstracts without full papers; thesis or dissertation metadata and abstract stubs without the completed substantial report; proposals and prospectuses; undergraduate, bachelor's, or non-degree projects; advertisements; and non-scholarly web material. | 1–3 |
-| Retrieval status | Scientific eligibility does not depend on open access. If the report is not obtained after the required retrieval attempts, including a restricted or embargoed thesis, record `not_retrieved`. Do not silently exclude it for scientific reasons. | 1–3 |
+| Criterion | Plain-English rule |
+|---|---|
+| Publication date | Include a report only when an eligible version is dated from 2011-01-01 through the common evidence cutoff. |
+| Language | The full report must be in English. English metadata does not prove that the report itself is in English. If the full text cannot be obtained, use `not_retrieved` instead of making a language assumption. |
+| Publication type | Include a full primary-research journal article; conference, proceedings, or workshop paper; workshop presentation (for ESA Indico only); research chapter in an edited scholarly book; institutional technical report; arXiv preprint; master's thesis; or doctoral thesis or dissertation. |
+| Degree completion | Include a thesis or dissertation only when full-text screening establishes `completion_status` as `completed`. Use `exclude_wrong_completion_status` when it is `in_progress_or_incomplete` or `unclear`. |
+| Scientific scope | The work must satisfy the canonical [nanosatellite population](protocol.md#nanosatellite-population), [EPS boundary](protocol.md#eps-boundary), [MBSE qualification](protocol.md#mbse-qualification), and [Route A or Route B](protocol.md#eligible-eps-evidence-routes) rules. |
+| Secondary studies | Exclude secondary studies. |
+| Abstract-only or non-research material | Exclude posters or abstracts without full papers; thesis or dissertation metadata and abstract stubs without the completed substantial report; proposals and prospectuses; undergraduate, bachelor's, or non-degree projects; advertisements; and non-scholarly web material. |
+| Retrieval status | Scientific eligibility does not depend on open access. If the report is not obtained after the required retrieval attempts, including a restricted or embargoed thesis, record `not_retrieved`. Do not silently exclude it for scientific reasons. |
