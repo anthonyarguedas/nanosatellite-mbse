@@ -4,4 +4,8 @@ SLR/SLR1/source-specific/compendex/pilots/003/searches/*.csv -text whitespace=-t
 SLR/SLR1/source-specific/compendex/final-searches/**/*.csv -text whitespace=-trailing-space
 SLR/SLR1/source-specific/inspec/final-searches/**/*.csv -text whitespace=-trailing-space
 SLR/SLR1/source-specific/web-of-science-core-collection/psr-searches/corrective-002/*.ris -text whitespace=-trailing-space
+# Embedding manifests hash JSON data byte for byte, so preserve LF on every platform.
+embeddings/data/*.json text eol=lf
+embeddings/data/*.jsonl text eol=lf
+embeddings/artifacts/**/index-manifest.json text eol=lf
 embeddings/artifacts/qwen3-embedding-0.6b/document-embeddings.f32.npy filter=lfs diff=lfs merge=lfs -text
