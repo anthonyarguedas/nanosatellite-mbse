@@ -34,7 +34,7 @@ cd embeddings
 ```
 
 The GUI opens at `http://127.0.0.1:8765`.
-It provides Hybrid, Vector, Visual, BM25, and Regex modes and a result count slider. Image results show the original file, its caption or Luna extraction when available, and a link to the source PDF.
+It provides Hybrid, Vector, Visual, BM25, and Regex modes and a result count slider. The index status panel reports text and visual index freshness, resumable build progress, unindexed figures, changed figures, and missing source files. Image results show the original file, its caption or Luna extraction when available, and a link to the source PDF.
 
 Treat retrieved chunks as evidence candidates. Check important claims in the source Markdown.
 

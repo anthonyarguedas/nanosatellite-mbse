@@ -23,6 +23,7 @@ ARTIFACT_DIR = SCRIPT_DIR / "artifacts/colpali-v1.3-hf"
 VECTORS_PATH = ARTIFACT_DIR / "image-embeddings.f16.npy"
 MANIFEST_PATH = ARTIFACT_DIR / "index-manifest.json"
 CACHE_DIR = ARTIFACT_DIR / ".build-cache"
+BUILD_STATE_PATH = ARTIFACT_DIR / "build-state.json"
 MODEL_ID = "vidore/colpali-v1.3-hf"
 MODEL_REVISION = "133a9eb02947310513f52f8f0d39d622e0eab8dc"
 
@@ -157,6 +158,14 @@ def source_hash(path: Path) -> str | None:
     return file_sha256(path) if path.exists() else None
 
 
+def write_build_state(payload: dict[str, Any]) -> None:
+    temporary = BUILD_STATE_PATH.with_name(BUILD_STATE_PATH.name + ".tmp")
+    temporary.write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    temporary.replace(BUILD_STATE_PATH)
+
+
 def cached_embedding_path(record: dict[str, Any]) -> Path:
     digest = record["source_image_sha256"][:16]
     return CACHE_DIR / f"{record['image_id']}--{digest}.f16.npy"
@@ -196,6 +205,15 @@ def main(args: argparse.Namespace) -> int:
 
     ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
     DATA_DIR.mkdir(parents=True, exist_ok=True)
+    build_started_at = datetime.now(timezone.utc).isoformat()
+    build_state = {
+        "schema_version": "slr1-colpali-build-state/v1",
+        "pid": os.getpid(),
+        "started_at": build_started_at,
+        "images": len(records),
+        "completed": 0,
+    }
+    write_build_state(build_state)
     if args.no_incremental:
         shutil.rmtree(CACHE_DIR, ignore_errors=True)
 
@@ -267,6 +285,9 @@ def main(args: argparse.Namespace) -> int:
         output[row_index] = load_cached_embedding(cache_path)
 
     encoded_this_run = len(cached_rows) - resumed_images
+    completed_before_encoding = len(reusable_rows) + len(cached_rows)
+    build_state["completed"] = completed_before_encoding
+    write_build_state(build_state)
     print(
         f"Reused {len(reusable_rows)} indexed and {resumed_images} cached images. "
         f"Encoding {len(pending_rows)} images.",
@@ -288,6 +309,8 @@ def main(args: argparse.Namespace) -> int:
             save_cached_embedding(cached_embedding_path(records[row_index]), embedding)
         encoded_this_run += len(indices)
         completed = len(reusable_rows) + len(cached_rows) + offset + len(indices)
+        build_state["completed"] = completed
+        write_build_state(build_state)
         print(
             f"[{completed}/{len(records)}] indexed {len(indices)} image(s)", flush=True
         )
@@ -331,6 +354,7 @@ def main(args: argparse.Namespace) -> int:
     vectors_temporary.replace(VECTORS_PATH)
     manifest_temporary.replace(MANIFEST_PATH)
     shutil.rmtree(CACHE_DIR, ignore_errors=True)
+    BUILD_STATE_PATH.unlink(missing_ok=True)
     print(json.dumps(manifest, indent=2))
     return 0
 

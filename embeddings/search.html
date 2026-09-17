@@ -69,6 +69,106 @@
       font-size: 11px;
     }
 
+    .index-health {
+      margin-bottom: 16px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .index-health-head,
+    .index-card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+    }
+
+    .index-health-title,
+    .index-name {
+      color: var(--strong);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .index-refresh {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+
+    .index-refresh:hover,
+    .index-refresh:focus-visible {
+      color: var(--strong);
+    }
+
+    .index-cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .index-card {
+      min-width: 0;
+      padding: 8px;
+      border: 1px solid var(--line);
+      background: var(--background);
+    }
+
+    .index-state {
+      padding: 1px 5px;
+      border: 1px solid currentColor;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .state-ready .index-state {
+      color: var(--strong);
+    }
+
+    .state-stale,
+    .state-error {
+      border-color: #777777;
+    }
+
+    .index-metrics,
+    .index-reasons,
+    .index-samples,
+    .index-loading {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      overflow-wrap: anywhere;
+    }
+
+    .index-reasons {
+      padding-left: 17px;
+    }
+
+    .index-reasons li + li {
+      margin-top: 3px;
+    }
+
+    .index-details {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .index-details summary {
+      cursor: pointer;
+    }
+
     .search-line {
       display: flex;
       gap: 8px;
@@ -366,6 +466,10 @@
         gap: 12px;
       }
 
+      .index-cards {
+        grid-template-columns: 1fr;
+      }
+
       .slider-control {
         width: 100%;
       }
@@ -382,8 +486,17 @@
     <header class="topbar">
       <div class="brand-row">
         <p class="brand">SLR / SEARCH</p>
-        <span class="corpus-count">local retrieval</span>
+        <span id="corpus-count" class="corpus-count">local retrieval</span>
       </div>
+      <section id="index-health" class="index-health" aria-live="polite">
+        <div class="index-health-head">
+          <span class="index-health-title">Index status</span>
+          <button id="index-refresh" class="index-refresh" type="button">Refresh</button>
+        </div>
+        <div id="index-cards" class="index-cards">
+          <p class="index-loading">Checking indexes…</p>
+        </div>
+      </section>
       <form id="search-form" role="search">
         <div class="search-line">
           <input id="query" name="q" type="search" autocomplete="off" autofocus
@@ -426,7 +539,12 @@
     const button = document.querySelector("#search-button");
     const results = document.querySelector("#results");
     const status = document.querySelector("#status");
+    const corpusCount = document.querySelector("#corpus-count");
+    const indexHealth = document.querySelector("#index-health");
+    const indexCards = document.querySelector("#index-cards");
+    const indexRefresh = document.querySelector("#index-refresh");
     let requestNumber = 0;
+    let indexRefreshTimer = null;
 
     function selectedMode() {
       return document.querySelector('input[name="mode"]:checked').value;
@@ -451,6 +569,94 @@
         node.textContent = text;
       }
       return node;
+    }
+
+    function formatNumber(value) {
+      return Number(value || 0).toLocaleString();
+    }
+
+    function indexSamples(index) {
+      return [
+        ...(index.missing_figure_samples || []),
+        ...(index.unindexed_figure_samples || []),
+        ...(index.changed_figure_samples || []),
+      ].filter((value, position, values) => values.indexOf(value) === position);
+    }
+
+    function indexCard(name, index, kind) {
+      const card = element("article", `index-card state-${index.state}`);
+      const head = element("div", "index-card-head");
+      head.append(
+        element("span", "index-name", name),
+        element("span", "index-state", index.state)
+      );
+      card.append(head);
+
+      let metrics;
+      if (kind === "text") {
+        metrics = `${formatNumber(index.chunks_indexed)} / ${formatNumber(index.chunks_expected)} chunks`;
+      } else {
+        const indexed = index.state === "building" || index.state === "partial"
+          ? index.build_completed
+          : index.images_indexed;
+        metrics = `${formatNumber(indexed)} / ${formatNumber(index.images_expected)} figures indexed`;
+        metrics += ` · ${formatNumber(index.missing_figures)} missing`;
+        metrics += ` · ${formatNumber(index.changed_figures)} changed`;
+        if (index.cached_images) {
+          metrics += ` · ${formatNumber(index.cached_images)} cached`;
+        }
+      }
+      card.append(element("p", "index-metrics", metrics));
+
+      if (index.reasons && index.reasons.length) {
+        const reasons = element("ul", "index-reasons");
+        index.reasons.forEach((reason) => reasons.append(element("li", "", reason)));
+        card.append(reasons);
+      }
+
+      const samples = indexSamples(index);
+      if (samples.length) {
+        const details = element("details", "index-details");
+        details.append(element("summary", "", "Affected figures"));
+        details.append(element("p", "index-samples", samples.join("\n")));
+        card.append(details);
+      }
+      return card;
+    }
+
+    function renderIndexStatus(payload) {
+      indexHealth.className = `index-health state-${payload.overall}`;
+      corpusCount.textContent = `${formatNumber(payload.corpus.reports)} reports · ${formatNumber(payload.corpus.figures)} figures`;
+      indexCards.replaceChildren(
+        indexCard("Text", payload.text, "text"),
+        indexCard("Visual", payload.visual, "visual")
+      );
+      if (indexRefreshTimer) {
+        clearTimeout(indexRefreshTimer);
+        indexRefreshTimer = null;
+      }
+      if (payload.visual.build_active) {
+        indexRefreshTimer = setTimeout(() => loadIndexStatus(true), 5000);
+      }
+    }
+
+    async function loadIndexStatus(force = false) {
+      indexRefresh.disabled = true;
+      try {
+        const suffix = force ? "?refresh=1" : "";
+        const response = await fetch(`/api/status${suffix}`);
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || "Index status failed.");
+        }
+        renderIndexStatus(payload);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "Index status failed.";
+        indexHealth.className = "index-health state-error";
+        indexCards.replaceChildren(element("p", "index-loading", message));
+      } finally {
+        indexRefresh.disabled = false;
+      }
     }
 
     function externalLink(label, href) {
@@ -535,6 +741,8 @@
         : "Search the corpus";
     }
 
+    indexRefresh.addEventListener("click", () => loadIndexStatus(true));
+
     topK.addEventListener("input", () => {
       topKValue.value = topK.value;
       topKValue.textContent = topK.value;
@@ -543,6 +751,8 @@
     document.querySelectorAll('input[name="mode"]').forEach((mode) => {
       mode.addEventListener("change", updateModeHint);
     });
+
+    loadIndexStatus();
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();

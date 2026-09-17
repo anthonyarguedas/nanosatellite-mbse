@@ -13,6 +13,7 @@ import re
 import shutil
 import sys
 import threading
+import time
 import webbrowser
 from collections import Counter
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -21,6 +22,8 @@ from typing import Any
 from urllib.parse import parse_qs, urlencode, urlparse
 
 from build_visual_index import (
+    BUILD_STATE_PATH as VISUAL_BUILD_STATE_PATH,
+    CACHE_DIR as VISUAL_CACHE_DIR,
     IMAGES_PATH,
     MANIFEST_PATH as VISUAL_MANIFEST_PATH,
     MODEL_ID as COLPALI_MODEL_ID,
@@ -30,6 +33,7 @@ from build_visual_index import (
     load_colpali,
 )
 from image_corpus import image_search_text
+from index_status import inspect_indexes
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -348,12 +352,42 @@ class SearchService:
         self._visual_device: str | None = None
         self._reranker: Any = None
         self._reranker_device: str | None = None
+        self._status_cache: dict | None = None
+        self._status_cached_at = 0.0
         self._corpus_lock = threading.Lock()
         self._bm25_lock = threading.Lock()
         self._dense_lock = threading.Lock()
         self._visual_lock = threading.Lock()
         self._reranker_lock = threading.Lock()
+        self._status_lock = threading.Lock()
         self._search_lock = threading.Lock()
+
+    def index_status(self, refresh: bool = False) -> dict:
+        """Return a cached, model-free health check for both indexes."""
+        with self._status_lock:
+            now = time.monotonic()
+            if (
+                not refresh
+                and self._status_cache is not None
+                and now - self._status_cached_at < 30
+            ):
+                return self._status_cache
+            self._status_cache = inspect_indexes(
+                repository_root=REPO_ROOT,
+                data_dir=DATA_DIR,
+                text_artifact_dir=ARTIFACT_DIR,
+                text_model_id=MODEL_ID,
+                text_model_revision=MODEL_REVISION,
+                images_path=IMAGES_PATH,
+                visual_vectors_path=VISUAL_VECTORS_PATH,
+                visual_manifest_path=VISUAL_MANIFEST_PATH,
+                visual_cache_dir=VISUAL_CACHE_DIR,
+                visual_build_state_path=VISUAL_BUILD_STATE_PATH,
+                visual_model_id=COLPALI_MODEL_ID,
+                visual_model_revision=COLPALI_MODEL_REVISION,
+            )
+            self._status_cached_at = now
+            return self._status_cache
 
     def _load_corpus(self) -> tuple[list[dict], dict[str, dict]]:
         with self._corpus_lock:
@@ -1145,6 +1179,9 @@ def make_gui_handler(
             if request.path == "/api/search":
                 self.search(request)
                 return
+            if request.path == "/api/status":
+                self.index_status(request)
+                return
             if request.path == "/file":
                 self.source_file(request)
                 return
@@ -1178,6 +1215,19 @@ def make_gui_handler(
                 self.send_json({"error": str(error) or "Search failed."}, 500)
                 return
             self.send_json(result)
+
+        def index_status(self, request) -> None:
+            parameters = parse_qs(request.query, keep_blank_values=True)
+            try:
+                refresh = query_boolean(parameters, "refresh", False)
+                payload = service.index_status(refresh=refresh)
+            except SearchError as error:
+                self.send_json({"error": str(error)}, 400)
+                return
+            except Exception as error:  # pragma: no cover - local file failures
+                self.send_json({"error": str(error) or "Status check failed."}, 500)
+                return
+            self.send_json(payload)
 
         def source_file(self, request) -> None:
             parameters = parse_qs(request.query, keep_blank_values=True)
