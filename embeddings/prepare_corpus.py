@@ -16,6 +16,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from typing import Iterable, Iterator
 
+from diagram_corpus import build_diagram_chunks
+
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
@@ -690,12 +692,32 @@ def build(args: argparse.Namespace) -> dict:
         identifiers = ", ".join(item["screening_record_id"] for item in missing)
         raise RuntimeError(f"Included reports lack Markdown: {identifiers}")
 
+    report_lookup = {report["report_id"]: report for report in reports}
+    diagram_chunks = build_diagram_chunks(
+        report_lookup,
+        target_words=args.target_words,
+        max_words=args.max_words,
+    )
+    diagram_chunk_counts: dict[str, int] = defaultdict(int)
+    diagram_ids: dict[str, set[str]] = defaultdict(set)
+    for chunk in diagram_chunks:
+        report_id = chunk["report_id"]
+        diagram_chunk_counts[report_id] += 1
+        diagram_ids[report_id].add(chunk["diagram_id"])
+    for report in reports:
+        report_id = report["report_id"]
+        report["text_chunk_count"] = report["chunk_count"]
+        report["diagram_count"] = len(diagram_ids[report_id])
+        report["diagram_chunk_count"] = diagram_chunk_counts[report_id]
+        report["chunk_count"] += report["diagram_chunk_count"]
+    all_chunks.extend(diagram_chunks)
+
     exact_duplicates = [ids for ids in content_hashes.values() if len(ids) > 1]
     manifest = {
-        "schema_version": "slr1-embedding-corpus/v1",
+        "schema_version": "slr1-embedding-corpus/v2",
         "selection_rule": "screening_decision starts with include_, case insensitive; already_included is excluded",
         "chunking": {
-            "strategy": "section bounded paragraph groups, grouped atomic table rows, and contextual captions",
+            "strategy": "section bounded paragraph groups, grouped atomic table rows, contextual captions, page context for uncaptioned images, and visually extracted model diagrams",
             "target_words": args.target_words,
             "max_words": args.max_words,
             "overlap_words": args.overlap_words,
@@ -703,11 +725,22 @@ def build(args: argparse.Namespace) -> dict:
             "caption_and_table_neighbor_context_words": 120,
             "references_excluded": True,
         },
+        "diagram_extraction": {
+            "analyses_path": "data/diagram-analyses.jsonl",
+            "candidate_rule": "matching caption evidence, plus uncaptioned images from reports whose title names SysML, Capella, or Arcadia",
+            "acceptance_rule": "status is ok and contains_target_diagram is true",
+            "parts": ["overview", "elements", "relationships", "labels"],
+        },
         "counts": {
             "directly_included_records": len(reports) + len(missing),
             "reports_indexed": len(reports),
             "reports_missing": len(missing),
             "units": len(all_units),
+            "text_chunks": len(all_chunks) - len(diagram_chunks),
+            "diagrams_indexed": len(
+                {chunk["diagram_id"] for chunk in diagram_chunks}
+            ),
+            "diagram_chunks": len(diagram_chunks),
             "chunks": len(all_chunks),
             "chunk_words": sum(chunk["word_count"] for chunk in all_chunks),
         },

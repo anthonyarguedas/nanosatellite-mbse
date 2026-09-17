@@ -4,20 +4,34 @@
     "max_words": 300,
     "overlap_words": 30,
     "references_excluded": true,
-    "strategy": "section bounded paragraph groups, grouped atomic table rows, and contextual captions",
+    "strategy": "section bounded paragraph groups, grouped atomic table rows, contextual captions, page context for uncaptioned images, and visually extracted model diagrams",
     "target_words": 180,
     "title_and_section_prefix": true
   },
   "counts": {
-    "chunk_words": 1708196,
-    "chunks": 14726,
+    "chunk_words": 2191660,
+    "chunks": 18212,
+    "diagram_chunks": 3486,
+    "diagrams_indexed": 528,
     "directly_included_records": 133,
     "reports_indexed": 133,
     "reports_missing": 0,
+    "text_chunks": 14726,
     "units": 42309
+  },
+  "diagram_extraction": {
+    "acceptance_rule": "status is ok and contains_target_diagram is true",
+    "analyses_path": "data/diagram-analyses.jsonl",
+    "candidate_rule": "matching caption evidence, plus uncaptioned images from reports whose title names SysML, Capella, or Arcadia",
+    "parts": [
+      "overview",
+      "elements",
+      "relationships",
+      "labels"
+    ]
   },
   "exact_duplicate_report_groups": [],
   "missing_reports": [],
-  "schema_version": "slr1-embedding-corpus/v1",
+  "schema_version": "slr1-embedding-corpus/v2",
   "selection_rule": "screening_decision starts with include_, case insensitive; already_included is excluded"
 }

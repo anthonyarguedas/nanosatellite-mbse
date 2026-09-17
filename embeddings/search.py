@@ -21,6 +21,7 @@ ARTIFACT_DIR = SCRIPT_DIR / "artifacts/qwen3-embedding-0.6b"
 MODEL_ID = "Qwen/Qwen3-Embedding-0.6B"
 MODEL_REVISION = "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
 TOKEN_RE = re.compile(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)?")
+QUOTED_PHRASE_RE = re.compile(r'"([^"]+)"')
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -107,23 +108,36 @@ def bm25_scores(
     import numpy as np
 
     query_terms = set(tokenize(question))
+    quoted_phrases = [
+        tokenize(match.group(1)) for match in QUOTED_PHRASE_RE.finditer(question)
+    ]
+    quoted_phrases = [phrase for phrase in quoted_phrases if len(phrase) > 1]
     scores = np.zeros(len(tokenized), dtype=np.float32)
     document_count = len(tokenized)
     for index, tokens in enumerate(tokenized):
         frequencies = Counter(tokens)
         length_factor = k1 * (1 - b + b * len(tokens) / average_length)
         score = 0.0
+        inverse_frequencies: dict[str, float] = {}
         for term in query_terms:
             frequency = frequencies.get(term, 0)
-            if not frequency:
-                continue
             count = document_frequency[term]
             inverse_frequency = math.log(
                 1 + (document_count - count + 0.5) / (count + 0.5)
             )
+            inverse_frequencies[term] = inverse_frequency
+            if not frequency:
+                continue
             score += (
                 inverse_frequency * frequency * (k1 + 1) / (frequency + length_factor)
             )
+        if quoted_phrases:
+            document_tokens = f" {' '.join(tokens)} "
+            for phrase in quoted_phrases:
+                if f" {' '.join(phrase)} " in document_tokens:
+                    score += 2 * sum(
+                        inverse_frequencies.get(term, 0.0) for term in set(phrase)
+                    )
         scores[index] = score
     return scores
 
@@ -216,6 +230,15 @@ def main(args: argparse.Namespace) -> int:
                 "chunk_type": chunk["chunk_type"],
                 "text": chunk["text"],
             }
+            for optional_field in (
+                "diagram_id",
+                "diagram_part",
+                "modeling_language",
+                "representation_type",
+                "image_refs",
+            ):
+                if optional_field in chunk:
+                    result[optional_field] = chunk[optional_field]
             if dense_scores is not None:
                 result["dense_score"] = float(dense_scores[int(row_index)])
             if lexical_scores is not None:
@@ -243,9 +266,12 @@ def main(args: argparse.Namespace) -> int:
             if result["page_end"] and result["page_end"] != pages:
                 pages = f"{pages}-{result['page_end']}"
             excerpt = " ".join(result["text"].split())[: args.excerpt_chars]
+            image = ""
+            if result.get("image_refs"):
+                image = f"\n   Image: {result['image_refs'][0]}"
             print(
                 f"\n{result['rank']}. {result['report_id']} | p. {pages} | "
-                f"{result['title']}\n   {result['section']}\n   {excerpt}"
+                f"{result['title']}\n   {result['section']}{image}\n   {excerpt}"
             )
     return 0
 
