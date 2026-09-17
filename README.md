@@ -1,6 +1,10 @@
-# nanosatellite-mbse
-An MBSE-Based Framework for the Design of Nanosatellite Electrical Power Systems
+# An MBSE-Based Framework for the Design of Nanosatellite Electrical Power Systems (and various other related tools and mini-projects)
 
-## Abstract
+## How to use the nanosatellite EPS paper database
 
-Nanosatellites are prone to early failures primarily associated with their electrical power subsystems (EPS). This research proposal aims to develop an end-to-end EPS design framework backed by Model-based Systems Engineering principles, to improve subsystem reproducibility, traceability, integration, and reliability, and to obtain a leaner design process. The framework will be derived from an exhaustive understanding of the needs and desires of core stakeholders. Validation will be carried out via two contrasting case studies: a traditional EPS and an EPS for a high-autonomy mission. Professionals applying this framework will benefit from the introduction of verification procedures into the formal subsystem model, the capability to follow a development flow divided into incremental functional versions, and a robust mapping from requirements up to validation. These advancements, combined, are a push towards more robust and reliable power subsystems for an expanding New Space industry.
+1. Open a terminal window at the root of this repository.
+2. Run the command: `cd embeddings`
+3. Run the command: `winget install --id astral-sh.uv -e`, only when using for the first time on Windows
+4. `$env:UV_CACHE_DIR = ".cache\uv"`, only on Windows
+5. `uv sync`, only when using for the first time
+3. Run the command: `.\.venv\Scripts\python.exe search.py --serve --open` for Windows or `.venv/bin/python search.py --serve --open` for Linux/Mac
