@@ -1,5 +1,24 @@
 # An MBSE-Based Framework for the Design of Nanosatellite Electrical Power Systems (and various other related tools and mini-projects)
 
+## Clone with Git LFS
+
+Install Git LFS before cloning. This prepares the checkout for large retrieval index files.
+
+- Windows: install Git for Windows with Git LFS enabled.
+- macOS: run `brew install git-lfs`.
+- Ubuntu or Debian: run `sudo apt install git-lfs`.
+
+Then clone the repository:
+
+```bash
+git lfs install
+git clone https://github.com/DeltaLabo/nanosatellite-mbse.git
+cd nanosatellite-mbse
+git lfs pull
+```
+
+For an existing clone, run `git lfs install` followed by `git lfs pull`.
+
 ## How to use the nanosatellite EPS paper database
 
 1. Open a terminal window at the root of this repository.
