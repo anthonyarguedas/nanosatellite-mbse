@@ -1,0 +1,165 @@
+{
+  "schema_version": "iaf-digital-library-pilot005-event-plan/v1",
+  "pilot": "005",
+  "source": {
+    "id": "iaf_digital_library",
+    "label": "IAF Digital Library"
+  },
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "objective": "Compare a positive explicit BG1 fixed-branch population search with family-specific and full trailing-wildcard candidates using complete stable-ID sets.",
+  "date_window": {
+    "start": "2011-01-01",
+    "end": "2026-08-29",
+    "inclusive": true,
+    "mode": "local post-filter after complete raw traversal"
+  },
+  "controls": {
+    "database_scope": "full IAF Digital Library",
+    "language": "not applied",
+    "event": "not applied",
+    "publication_type": "no added restriction",
+    "access": "not applied",
+    "source_date": "not applied",
+    "controlled_vocabulary": "not applied",
+    "proximity": false,
+    "pair_expansion": false,
+    "complete_source_total_cap": 5000,
+    "maximum_query_characters": 500
+  },
+  "wildcard_candidate": {
+    "operator": "trailing *",
+    "cube_atoms": [
+      "CubeSat*",
+      "\"cube sat*\"",
+      "cube-sat*"
+    ],
+    "other_atoms": [
+      "nanosat*",
+      "nano-sat*",
+      "\"nano sat*\"",
+      "SmallSat*",
+      "\"small sat*\""
+    ],
+    "full_atoms": [
+      "CubeSat*",
+      "\"cube sat*\"",
+      "cube-sat*",
+      "nanosat*",
+      "nano-sat*",
+      "\"nano sat*\"",
+      "SmallSat*",
+      "\"small sat*\""
+    ],
+    "full_query_characters": 447,
+    "explicit_full_query_characters": 773,
+    "explicit_source_cells": 3,
+    "wildcard_source_cells": 1
+  },
+  "prior_positive_evidence": {
+    "pilot004_plan": "source-specific/iaf-digital-library/pilots/004/searches/cell-plan.json",
+    "pilot004_plan_sha256": "8d10e45b7afb7e0321b1a73eada10a89beb86beca2ad54cc16a6434b57d60513",
+    "partition": "BG1",
+    "branch": "fixed",
+    "source_event_total_sum": 5,
+    "raw_stable_id_union": 4,
+    "diagnostic_window_stable_id_union": 4,
+    "reason_for_selection": "The exact branch was non-zero in Pilot 004 and uses all 26 explicit population terms."
+  },
+  "acceptance_checks": [
+    "Every event receives exact query readback and strict two-pass complete capture.",
+    "Every explicit and wildcard comparison is non-zero.",
+    "The fresh explicit baseline reproduces the Pilot 004 stable-ID union.",
+    "Each family wildcard set contains its corresponding explicit stable-ID union.",
+    "The two full wildcard runs have identical totals, order, and stable IDs.",
+    "The full wildcard set contains the complete explicit stable-ID union.",
+    "Every wildcard-only record is inspected before any source translation decision."
+  ],
+  "events": [
+    {
+      "event_id": "exact-cube",
+      "purpose": "Fresh strict baseline for the eight explicit cube population forms.",
+      "comparison_group": "cube-family",
+      "query": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\") (\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\")",
+      "query_characters": 464,
+      "query_sha256": "4b87402ade93c00d03109b24e8777506de8fa9873df1ef8272240489e14cd348",
+      "mode": "strict_complete",
+      "output": "events/exact-cube.json",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "exact-other-a",
+      "purpose": "Fresh strict baseline cell 1 for the other eighteen explicit population forms.",
+      "comparison_group": "other-family",
+      "query": "(\"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") (\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\")",
+      "query_characters": 494,
+      "query_sha256": "864ecfc5404932c5751d1a1fc1ae76edf27fc48fd6cb2077ae02572a22a771f1",
+      "mode": "strict_complete",
+      "output": "events/exact-other-a.json",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "exact-other-b",
+      "purpose": "Fresh strict baseline cell 2 for the other eighteen explicit population forms.",
+      "comparison_group": "other-family",
+      "query": "(\"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") (\"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\")",
+      "query_characters": 459,
+      "query_sha256": "b20b7a9fb1be637ce36b7a4edb5b06349c2b41d2c94853cd26c8f07a979bf2f0",
+      "mode": "strict_complete",
+      "output": "events/exact-other-b.json",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-cube",
+      "purpose": "Positive wildcard candidate for the eight cube population forms.",
+      "comparison_group": "cube-family",
+      "query": "(CubeSat* OR \"cube sat*\" OR cube-sat*) (\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\")",
+      "query_characters": 378,
+      "query_sha256": "775d358a9260a6cf11833e0a826c789b509a62bfb1a349b0a1e0938c96ccd401",
+      "mode": "strict_complete",
+      "output": "events/wildcard-cube.json",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-other",
+      "purpose": "Positive wildcard candidate for the other eighteen population forms.",
+      "comparison_group": "other-family",
+      "query": "(nanosat* OR nano-sat* OR \"nano sat*\" OR SmallSat* OR \"small sat*\") (\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\")",
+      "query_characters": 407,
+      "query_sha256": "e997e65a1111c3a990617c5b94de93916657c1340d030e0bbbf5ce97755fad49",
+      "mode": "strict_complete",
+      "output": "events/wildcard-other.json",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-full-pass1",
+      "purpose": "First strict pass for the full eight-atom wildcard population candidate.",
+      "comparison_group": "full-population",
+      "query": "(CubeSat* OR \"cube sat*\" OR cube-sat* OR nanosat* OR nano-sat* OR \"nano sat*\" OR SmallSat* OR \"small sat*\") (\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\")",
+      "query_characters": 447,
+      "query_sha256": "c06377df5f450449915883bb3beaf5c5dc6639f7bf6c6d1e3f18756f1ba6e671",
+      "mode": "strict_complete",
+      "output": "events/wildcard-full-pass1.json",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-full-pass2",
+      "purpose": "Independent strict repeat for the full eight-atom wildcard population candidate.",
+      "comparison_group": "full-population",
+      "query": "(CubeSat* OR \"cube sat*\" OR cube-sat* OR nanosat* OR nano-sat* OR \"nano sat*\" OR SmallSat* OR \"small sat*\") (\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\")",
+      "query_characters": 447,
+      "query_sha256": "c06377df5f450449915883bb3beaf5c5dc6639f7bf6c6d1e3f18756f1ba6e671",
+      "mode": "strict_complete",
+      "output": "events/wildcard-full-pass2.json",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    }
+  ]
+}

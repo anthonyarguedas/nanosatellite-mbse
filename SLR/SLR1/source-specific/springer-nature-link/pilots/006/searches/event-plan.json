@@ -1,0 +1,72 @@
+{
+  "schema_version": "springer-nature-link-pilot006-event-plan/v1",
+  "pilot": "006",
+  "source": "Springer Nature Link",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "objective": "Run adapter version 11 end to end in strict complete mode for an included Link-to-Nature record, a retained unresolved exact day, and a proved post-cutoff exclusion.",
+  "adapter_minimum_version": 11,
+  "shared_controls": {
+    "date_start": "2011-01-01",
+    "date_end": "2026-08-29",
+    "language": "En",
+    "sort": "oldestFirst",
+    "passes": 2,
+    "limit": 20,
+    "max_pages": 1,
+    "require_complete": true,
+    "content_type": null,
+    "access": null,
+    "taxonomy": null
+  },
+  "events": [
+    {
+      "event_id": "nature-included",
+      "query": "\"10.1038/s44359-026-00173-2\"",
+      "title": "\"Taking perovskite photovoltaics from promise to product\"",
+      "output": "events/nature-included.json",
+      "expected_source_total": 1,
+      "expected_results_retrieved": 1,
+      "expected_source_card_url": "https://link.springer.com/article/10.1038/s44359-026-00173-2",
+      "expected_resolved_detail_url": "https://link.springer.com/article/10.1038/s44359-026-00173-2",
+      "expected_canonical_link": "https://www.nature.com/articles/s44359-026-00173-2",
+      "expected_date_status": "included",
+      "expected_detail_date": "2026-05-26"
+    },
+    {
+      "event_id": "unresolved-retained",
+      "query": "\"10.1007/978-3-319-23519-6\"",
+      "title": "\"Encyclopedia of GIS\"",
+      "output": "events/unresolved-retained.json",
+      "expected_source_total": 1,
+      "expected_results_retrieved": 1,
+      "expected_source_card_url": "https://link.springer.com/book/10.1007/978-3-319-23519-6",
+      "expected_resolved_detail_url": "https://link.springer.com/referencework/10.1007/978-3-319-23519-6",
+      "expected_canonical_link": "https://link.springer.com/referencework/10.1007/978-3-319-23519-6",
+      "expected_date_status": "unresolved",
+      "expected_detail_date": null
+    },
+    {
+      "event_id": "post-cutoff-excluded",
+      "query": "\"10.1007/s42423-026-00225-6\"",
+      "title": "\"Game-Driven Self-Reconfigurable CubeSat System for On-Orbit Servicing\"",
+      "output": "events/post-cutoff-excluded.json",
+      "expected_source_total": 1,
+      "expected_results_retrieved": 0,
+      "expected_source_card_url": "https://link.springer.com/article/10.1007/s42423-026-00225-6",
+      "expected_resolved_detail_url": "https://link.springer.com/article/10.1007/s42423-026-00225-6",
+      "expected_canonical_link": "https://link.springer.com/article/10.1007/s42423-026-00225-6",
+      "expected_date_status": "excluded",
+      "expected_detail_date": "2026-09-01"
+    }
+  ],
+  "acceptance_checks": [
+    "Each event publishes a strict complete normal JSON and terminal Springer commit marker.",
+    "Each event completes two reconciled card-path passes.",
+    "Each event saves both mandatory sibling screenshots.",
+    "The Nature canonical metadata URL persists through normalized route evidence.",
+    "The unresolved exact day remains retained and counted.",
+    "The proved post-cutoff record remains in route accounting and is absent from normalized results.",
+    "Final response status is not checked and no request is made to the Nature canonical URL."
+  ]
+}

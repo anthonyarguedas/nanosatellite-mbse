@@ -1,177 +1,178 @@
-# Review Protocol
+# Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems
 
-## PICOC
+- **Working branch:** `slr1-1.1-restart`
+- **Common evidence cutoff:** 2026-08-24
 
-| Population | Intervention | Comparison | Outcome | Context | Related Research Question(s) |
-|--|--|--|--|--|--|
-| Nanosatellite missions | MBSE | | Generality | | 1 |
-| Electrical Power System (EPS) for nanosatellite missions | MBSE | | Generality | | 1 |
-| EPS for nanosatellite missions | MBSE | | Reliability, reproducibility and integrability | | 2 |
-| EPS for nanosatellite missions | Verification procedure modeling using MBSE | | | | 3 |
+## Review type and terminology
+
+This work is a systematic review with an evidence-map synthesis. Throughout the protocol, systematic review names the overall method of identifying, selecting, appraising, and synthesizing evidence. Evidence map names the structured descriptive output. Do not call the work a systematic mapping study, as Kitchenham and Charters use that term for broad, high-level classification with deliberately limited extraction, whereas this review performs in-depth extraction and appraisal of linked evidence units.
+
+## Reporting framework
+
+Use the following guidance:
+
+- [PRISMA-P (2015) protocols and checklist](https://www.prisma-statement.org/protocols) for this protocol;
+- [PRISMA-S (2021) search reporting](https://www.prisma-statement.org/prisma-search) and [Rethlefsen et al. (2021)](https://doi.org/10.1186/s13643-020-01542-z) to design the strategy in [Part 2](protocol-discovery-and-screening.md#search-strategy) and to run, save, and report every search in a search log;
+- Kitchenham and Charters (2007), *Guidelines for performing Systematic Literature Reviews in Software Engineering*, as complementary engineering conduct guidance for PICOC framing, heterogeneous evidence, protocol and form piloting, selection and extraction consistency, duplicate-report handling, and descriptive or narrative synthesis; and
+- the [PRISMA 2020 statement](https://www.prisma-statement.org/prisma-2020-statement), [checklist](https://www.prisma-statement.org/prisma-2020-checklist), [abstract guidance](https://www.prisma-statement.org/abstracts), and [flow templates](https://www.prisma-statement.org/prisma-2020-flow-diagram) for the completed review.
+
+PRISMA supplies reporting guidance, while Kitchenham and Charters supply complementary engineering-review conduct guidance.
+
+Use the PRISMA 2020 flow diagram for a new systematic review that uses databases and other sources.
+
+## Need for this review
+
+Before the first final primary-evidence search, conduct the bounded [prior-secondary-review search and CRD/DARE assessment](protocol-prior-secondary-reviews.md). This supporting process uses only Scopus and Web of Science Core Collection, has separate records and counts, and is not a tertiary review. It will determine whether an existing review already covers the nanosatellite-EPS population, direct MBSE relationship, and RQ1–RQ3; identify scope, currency, or methodological gaps; and provide the justification for proceeding.
+
+## PICO
+
+Population: EPSs for orbital CubeSat or nanosatellite-class missions
+
+### RQ1
+
+Intervention: EPS-linked MBSE artifacts, analyses, and model-enabled work
+Comparison: When reported: document-based practice, manual analysis, another toolchain, an earlier mission or model, or another explicit comparator
+Outcome: Beneficial, null, mixed, or adverse EPS-linked technical and process outcomes, plus implementation burdens. Priority topics are reliability and mission assurance, reproducibility and reuse, and integration and interoperability
+
+### RQ2
+
+Intervention: EPS-primary MBSE or a clear embedded EPS model thread
+Comparison: Not required
+Outcome:
+1. Source-reported types for EPS model artifacts (such as MBSE models, digital twins, repositories, packages, or simulation environments), with links to their presented representations when reported;
+1.2. modeling language/ontology/metamodel/theory if stated (could be more than one for different representations);
+1.3. what the EPS model artifacts are used for;
+1.4. if the model artifact is called generic, record any justification with the original wording;
+1.5. if the model artifact is explicitly stated to be part of a lineage, record it with the original wording.
+
+2. Structured model representations (views, diagrams, matrices, tables, or model excerpts presented in the source) of organizational or mission context, requirements, scenarios, sequences, states or modes, structure or architecture, interfaces, and data-/resource-flows, recording:
+2.1. each representation's source-reported name and type; if no name or type is reported, classify it with a type of electrical diagram, informal architectue/structure diagram, simulation/digital twin diagram, sequence diagram, or black box diagram;
+2.2. containing model artifacts when reported;
+2.3. modeling language/ontology/metamodel/theory (only one per representation);
+2.3. coverage of engineering viewpoints (electronics, electrical, software, mechanical, thermal, chemical);
+2.4 source-reported names and types for modeled EPS elements and relationships, plus the endpoints and direction of each relationship when reported, before language-neutral semantic classification;
+2.5 language-neutral semantic classifications of modeled EPS content and relationships, including external actors and systems/subsystems, capabilities, functions/behaviors, activities/actions, data/resource flows and exchanges, exchanged items/signals, interfaces, ports/connectors, blocks/components/parts/instances and any source-reported or evident (i.e. explicitly named hardware or software) logical or physical classification, allocations/mappings and other connections/links, states or modes, state or mode transitions, scenarios, sequences, use cases, hazards/feared events/faults/failures, and requirements, noting whether each element is inside or outside the EPS boundary and identifying the external actor or system/subsystem for outside elements when reported;
+2.6. executable content (equations, constraints, parameters, algorithms, simulators, or explicitly-stated physically-implemented behavior), with links from this content to the corresponding model elements, relationships, and structured representations recorded above;
+2.7. elements labelled as reusable core or variation points of the model (with links to existing model elements).
+
+3. EPS model generation/reuse/tailoring methods (which could be implicitly or explicitly used to generate/reuse/tailor the models already extracted);
+3.1. modeling language/ontology/metamodel/theory if stated;
+3.2. inputs and assumptions;
+3.3. applicability;
+3.4. reusable core and variation points of the model generated/reused/tailored (with links to existing model elements and their containing representations if applicable, and avoiding duplication if this has already been extracted for the model itself),
+3.5. tailoring or adaptation phases, rules and steps, tools, and post hoc checks (only extract as text if not modeled, see 3.6);
+3.6. if the method itself has a structured representation:
+3.6.1. the representation's source-reported name and type;
+3.6.2. each represented method element's source-reported name and native type before semantic classification;
+3.6.3. represented phases, activities or steps, stakeholders or roles, inputs, outputs, assumptions, requirements, applicability conditions, rules, decisions, models, model elements, reusable cores and variation points involved in the steps, tools, checks, and the other element types also used for EPS element representations;
+3.6.4. source-reported name and native type of each represented relationship between method elements, its endpoints and direction when reported, and its condition when conditional;
+3.7. demonstrated reuses of the method, distinguishing if the report generates and reuses its own method or if the report reuses a method introduced elsewhere.
+3.8. demonstrated tailorings of the method (that is, one report tailoring another report's method and explicitly stating it).
+3.9. If the method is called generic, record any justification with the original wording.
+3.10. If the method is explicitly stated to be part of a lineage, record it with the original wording.
+
+### RQ3
+
+Intervention: EPS-specific or system-wide but EPS-linked model-based V&V
+Comparison: When reported: separate or document-based V&V, manual checking, another method, or another explicit comparator
+Outcome:
+1. source-reported types for V&V strategy artifacts (such as MBSE models, repositories, packages, simulation environments, executable scripts, or document-based definitions), with links to their presented representations when reported. An EPS model artifact that does not include any V&V content must not be duplicated as a V&V strategy artifact.
+1.2. modeling language/ontology/metamodel/theory if stated (could be more than one for different representations);
+1.3. whether the strategy artifact is integrated into an EPS model artifact of interest or is separate but linked, or separate and unlinked.
+1.4. If the strategy artifact is called generic, record any justification with the original wording.
+1.5. If the strategy artifact is explicitly stated to be part of a lineage, record it with the original wording.
+
+2. strategy artifact representations (views, diagrams, matrices, tables, model excerpts or text-based definitions presented in the source) of V&V requirements, objectives, pass/fail criteria, scenarios/test cases, sequences, states or modes, structure or architecture, interfaces, and data-/resource-flows, recording each representation's source-reported name and type (including "text-based");
+2.2. modeling language/ontology/metamodel/theory (or text-based, only one per representation);
+2.1. containing strategy artifacts when reported,
+2.3. whether the representation is integrated into a representation of the EPS model artifact of interest or is separate but linked, or separate and unlinked, or unknown.
+2.4. coverage of engineering viewpoints (electronics, electrical, software, mechanical, thermal, chemical);
+2.5. execution type (check/computation, simulation, co-simulation, SIL, HIL, physical execution, or deployed/operational execution);
+2.6 source-reported names and types for modeled V&V elements and relationships, plus the endpoints and direction of each relationship when reported, before language-neutral semantic classification;
+2.7. language-neutral semantic classifications of modeled V&V content and relationships, including external actors and systems/subsystems, functions/behaviors, activities/actions, data/resource flows and exchanges, exchanged items/signals, interfaces, ports/connectors, blocks/components/parts/instances and any source-reported logical or physical classification, test setups/equipment, properties/parameters/constraints, allocations/mappings and other connections/links, states or modes, state or mode transitions, scenarios, sequences, use cases, hazards/feared events/faults/failures, requirements, objectives, and pass/fail criteria;
+2.6. executable content (equations, constraints, parameters, algorithms, simulators, or explicitly-stated physically-implemented behavior), with links from this content to the corresponding model elements, relationships, and structured representations recorded above.
+2.7. elements labelled as reusable core or variation points of the V&V strategy artifact (with links to existing model elements).
+
+3. methods for: V&V strategy artifact generation/reuse/tailoring, and executing V&V test cases/scenarios from a V&V or EPS model, and updating an EPS model or V&V strategy based on test results (which could all be a single method covering these 3 phases and more):
+3.1. modeling language/ontology/metamodel/theory if stated;
+3.2. inputs and assumptions, for generation/reuse/tailoring, noting specifically if an EPS model or modeled element is an input to the method (for the other two it's an obvious yes);
+3.3. applicability (for V&V test cases/scenarios execution methods, note whether it is applicable to check/computation, simulation, co-simulation, SIL, HIL, physical execution, or deployed/operational execution);
+3.4. phases, rules and steps, tools, and post hoc checks (only extract as text if not modeled, see 3.6), noting if the 3 phases from 3 are covered;
+3.5. reusable core and variation points of the V&V strategy artifact generated/reused/tailored (for generation/reuse/tailoring methods only, with links to existing model elements and their containing representations if applicable, and avoiding duplication if this has already been extracted for the V&V strategy artifact itself),
+3.6. if the method itself has a structured representation:
+3.6.1. the representation's source-reported name and type;
+3.6.2. each represented method element's source-reported name and native type before semantic classification;
+3.6.3. represented phases, activities or steps, stakeholders or roles, inputs, outputs, assumptions, requirements, applicability conditions, rules, decisions, models, model elements, reusable cores and variation points involved in the steps, tools, checks, and the other element types also used for EPS element representations;
+3.6.4. source-reported name and native type of each represented relationship between method elements, its endpoints and direction when reported, and its condition when conditional;
+3.7. demonstrated reuses of the method, distinguishing if the report generates and reuses its own method or if the report reuses a method introduced elsewhere.
+3.8. demonstrated tailorings of the method (that is, one report tailoring another report's method and explicitly stating it).
+3.9. If the method is called generic, record any justification with the original wording.
+3.10. If the method is explicitly stated to be part of a lineage, record it with the original wording.
 
 ## Research questions
 
-1. How can nanosatellite missions and EPS be modeled in a general manner with minimal knowledge about their behavior?
+**RQ1** What technical or process outcomes and implementation burdens do sources attribute to EPS-linked MBSE? For each attribution, how does the source say the MBSE artifact or activity led to the outcome or burden, and what evidence supports that claimed link?
 
-2. What are the claimed outcomes related to reliability, reproducibility, and integrability derived from EPS modeling in nanosatellite missions?
+**RQ2** How are nanosatellite EPSs represented and used in MBSE approaches? How are EPS MBSE models generated, reused, tailored, verified, or validated? What evidence supports these characterizations?
 
-3. How have verification procedures been integrated into EPS models prior to physical development?
+**RQ3** How is EPS-linked MBSE connected to V&V before physical integration or testing, and how is model-to-test continuity performed?
 
-## Databases to search
-- Scopus
-- IEEE Xplore
+## Operational definitions
 
-## Inclusion/Exclusion criteria
+### Nanosatellite population
 
-| Criterion | Applicable to Question(s) |
-|--|--|
-| Time range: 2013-2026 | 1-3 |
-| Language: English | 1-3 |
-| Conference and journal papers only | 1-3 |
-| Either open access or available in TEC libraries | 1-3 |
-| Nanosatellite-class missions only, not larger, not smaller (CanSat) | 1-3 |
-| System-level or EPS MBSE model, not other subsystem-level or non-MBSE model | 1 |
-| MBSE models only | 2 |
-| The outcomes must be attributed to MBSE, not to the EPS technology choices | 2 |
-| Must present an integration, verification, and validation (IVV) model using MBSE | 3 |
+An eligible platform is an actual or planned orbital spacecraft that the source calls a CubeSat or nanosatellite. Recognized CubeSat form factors are eligible even if a particular spacecraft is outside the strict 1–10 kg nanosatellite range. A reference, template, or early design model can be eligible without a named or built mission if it clearly targets orbital CubeSat or nanosatellite development.
 
-## Quality checklist
+Exclude:
 
-All questions use the scale:
-- No = 0
-- Insufficiently = 0.5
-- Yes = 1
+- CanSats and other educational demonstrators that are not orbital;
+- studies only about PocketQubes or picosatellites, unless they also report a separate CubeSat or nanosatellite case;
+- generic SmallSat studies, larger small satellites, and conventional spacecraft, unless the source also identifies a CubeSat or nanosatellite-class case and reports its results separately; and
+- mixed-platform evidence when the nanosatellite findings cannot be separated.
 
-Quality scores are used for sensitivity and confidence in synthesis, not as automatic exclusion thresholds.
+### EPS boundary and elements
 
-- Was the research published in a credible venue?
-- Do the researchers discuss limitations, threats to validity, assumptions, or scope boundaries?
-- Is the nanosatellite/CubeSat mission context and lifecycle stage described clearly enough to interpret applicability?
-- Are the MBSE method, language, toolchain, model artifacts, and system boundary described clearly enough to support replication or comparison?
-- Are claimed outcomes explicitly linked to MBSE artifacts, MBSE activities, or model-enabled process changes rather than asserted generically?
-- Is evidence provided for claimed outcomes, such as metrics, baseline comparison, case-study results, executable simulation results, model checks, stakeholder evaluation, reuse evidence, integration/test results, or flight/operational data?
-- Are requirements, verification, validation, design decisions, or lifecycle gates traced to model artifacts when such traceability is central to the paper?
-- Are model availability, open-source assets, reusable packages, data exchange mechanisms, or sufficient implementation details reported to assess reproducibility and toolchain continuity?
+EPS content can include:
 
-## Extraction fields
+- power generation and solar arrays;
+- energy storage and battery management;
+- conversion, conditioning, regulation, and distribution;
+- protection, monitoring, and control;
+- electrical buses and harnesses;
+- power interfaces;
+- operating modes and load or energy profiles;
+- power and energy budgets and margins;
+- degradation;
+- hazards, feared events, faults or failures, fault propagation, risk controls, and recovery; and
+- related requirements.
+- another subsystem only when it is clearly an EPS load, interface, environmental dependency, operating-mode driver, or source of an EPS requirement. Do not synthesize that subsystem's internal design.
 
-### Bibliographic and review-management fields
+### MBSE qualification
 
-- Corpus ID and extraction file path.
-- Tier/status in this review: core, supporting, background, or excluded-after-full-text, with rationale.
-- Citation, title, authors, year, venue, DOI/URL, publisher, and venue type.
-- Source database/query or citation-chasing route.
-- Research question(s) addressed and relevance level for each RQ: none, partial, high.
-- Lineage/overlap notes when the paper belongs to a recurring CubeSat reference-model, mission case, or toolchain family.
+A report does not have to use the term “MBSE.” It must, however, describe a structured system model used for a systems-engineering purpose. The report must show modeled elements and explicit relationships across at least two systems-engineering concerns. Examples of concerns are requirements, function or behavior, architecture, interfaces, parametric analysis, design decisions, and V&V.
 
-### Study context and population
+The relationships must involve the same EPS entity or thread that makes the report eligible. Whole-report MBSE work that is unrelated to isolated EPS content does not qualify that EPS content.
 
-- Mission/platform: CubeSat/nanosatellite class, size/form factor, mission name, mission domain, organization type, and project maturity.
-- Lifecycle stage addressed: concept/pre-Phase A, Phase A/B, PDR, CDR, implementation, integration and test, operations, or not reported.
-- Development context: academic/student, agency, industry/NewSpace, distributed team, agile/concurrent design, rapid prototyping, resource-constrained mission, or not reported.
-- EPS relevance: system-level only, EPS-specific, power-budget/electrical-architecture, EPS-adjacent, or not EPS-relevant.
-- Model maturity: conceptual framework, reference model/template, prototype demonstration, executable model, project-applied model, validated/operational model, or not reported.
+Qualifying approaches may use SysML, Arcadia or Capella, object-oriented system models, reference models, or connected digital-engineering environments. A stand-alone circuit or battery model, SPICE/MATLAB/Simulink simulation, optimization, power-budget spreadsheet, or component-sizing calculation is not MBSE by itself. It qualifies only if the source explicitly binds, traces, transforms, or otherwise connects its inputs or outputs to a structured system model.
 
-### MBSE objective, scope, and artifacts
+### Eligible EPS evidence routes
 
-- Stated objective/pain point for applying MBSE.
-- Modeling scope: mission, system, subsystem, EPS, requirements, architecture, behavior, interfaces, budgets, verification, operations, simulation, manufacturing/test, or other.
-- System boundary and level of abstraction, including what is deliberately modeled minimally or excluded.
-- Required prior behavioral/domain knowledge and how the method handles limited behavioral knowledge.
-- Model artifacts used: requirements diagrams/tables, block definition/internal block diagrams, state/activity/sequence diagrams, parametrics, trade-study models, interface control models, power budgets, FMEA/risk models, test cases/procedures, verification matrices, executable simulations, generated documents, or other.
-- Generality/reuse mechanism: template, reference model, profile, library, pattern, transformation, reusable workflow, open package, method guidance, high-level abstraction, mission-agnostic architecture, interface-focused model, low-dynamics / non-detailed-behavior model, or specific-mission model with reusable method only.
+Assign each full-text report to one of two routes. The routes are mutually exclusive. Use Route A only when the report's objective, modeled viewpoint or boundary, and substantial methods or results focus on the EPS. Otherwise, use Route B if it has a qualifying embedded thread. A report can contain several EPS threads, but its report-level route does not change.
 
-### Implementation pathway and tailoring
+- **Route A — EPS-primary MBSE:** The EPS, electrical-power viewpoint, or a defined EPS function or architecture is the main modeled boundary. The report identifies an EPS model artifact and at least one explicit relationship between that EPS content and another systems-engineering concern.
+- **Route B — embedded EPS model thread:** A wider nanosatellite MBSE report contains at least one EPS thread with an [EPS anchor, model anchor, and EPS-to-model bridge](protocol-extraction.md#eps-representation).
 
-- MBSE implementation steps or phases reported by the paper.
-- Inputs, outputs, actors/roles, prerequisites, completion criteria, and handoffs for each reported step, if available.
-- Mapping of MBSE activities to systems-engineering activities and lifecycle gates such as SRR, PDR, CDR, integration, test, or operations.
-- Approach classification for tailoring, coded when enough information is available:
-  - Pure MBSE: primarily system-model-centered with limited external analysis/tool integration.
-  - Enhanced MBSE: system model plus selected analysis/simulation or document-generation support.
-  - Extended MBSE: model connected across multiple engineering domains, lifecycle stages, or traceability chains.
-  - Integrated MBSE/digital engineering: connected environment spanning modeling, simulation, analysis, verification, and downstream software/hardware/system integration.
-- Tailoring rationale: mission scale, team maturity, cost, schedule, risk tolerance, available tools, open-source preference, or organizational constraints.
-- Adoption guidance for new users: explicit playbook, partial guidance, implied from case study, or absent.
+External repositories, evolving models, and author-provided artifacts are not independently retrieved or inspected.
 
-### Toolchain, interoperability, and lifecycle continuity
+## Inclusion and exclusion criteria
 
-- MBSE language/method/tool: SysML, Capella/Arcadia, MATLAB/Simulink, STK, ModelCenter, Cameo/MagicDraw, OpenMBEE, Python, requirements tools, PLM/ALM tools, custom tools, open-source packages, or other.
-- Toolchain architecture and data flow between tools.
-- Interoperability mechanisms: model transformation, API, plugin, co-simulation, generated code, import/export, XML/XMI, ReqIF, spreadsheets, scripts, manual synchronization, or not reported.
-- Evidence of syntax/semantic continuity across lifecycle stages or downstream engineering activities.
-- Software/hardware/system integration readiness supported by the toolchain.
-- Toolchain limitations: vendor lock-in, manual translation, broken traceability, missing interfaces, scalability issues, licensing/cost, or not reported.
-- Availability/reproducibility of tools, models, data, scripts, or packages.
-
-### EPS and verification-specific extraction
-
-- EPS elements modeled: solar panels, battery, power conditioning/distribution, loads, modes, margins, power budgets, degradation, fault protection, interfaces, or other.
-- EPS requirements represented and how they are linked to architecture, behavior, analysis, or verification artifacts.
-- Integration, verification, and validation (IVV) artifacts: verification matrix, test cases, test procedures, simulation scenarios, acceptance criteria, executable checks, generated test artifacts, SIL/HIL links, or automated tests.
-- Pre-physical-development verification mechanism: requirements-in-the-loop, simulation-in-the-loop, parametric checks, model checking, trade-study verification, virtual integration, or not reported.
-- IVV integration level: none/not reported, separate document only, verification matrix adjacent to model, trace-linked verification artifacts, model-contained verification artifacts, executable/model-based checks, simulation-in-the-loop, software/hardware-in-the-loop, or physical integration/test only.
-- Evidence that verification artifacts are integrated into the EPS/system model rather than documented separately.
-- Integration/test readiness: links to hardware integration, software integration, flat-sat/testbed, environmental test, operational validation, or not reported.
-
-### Claimed outcomes, value mechanisms, and evidence
-
-For every claimed MBSE outcome, extract a separate claim-evidence record:
-
-- Claim text or concise paraphrase.
-- Outcome category: reliability, reproducibility, integrability/interoperability, generality/reuse, traceability, consistency, completeness, defect/error reduction, cost reduction, schedule reduction, effort reduction, automation, decision support, communication/stakeholder alignment, risk reduction, mission assurance, lifecycle continuity, governance/ROI, or other.
-- Reliability subtype, when the outcome category includes reliability or a reliability-adjacent claim: EPS reliability, system/mission reliability, process reliability, model consistency/reliability, mission assurance, defect/error reduction, generic reliability claim, or not applicable.
-- Specificity of claim: EPS-specific, nanosatellite system-level, generic space-system, generic MBSE, or unclear.
-- MBSE mechanism proposed to create the value: artifact traceability, executable simulation, parametric analysis, reference model reuse, automated generation, model transformation, shared repository, requirements linkage, tool integration, lifecycle gate support, or other.
-- Artifact/process linked to the claim.
-- Lifecycle stage where the value is claimed to occur.
-- Evidence type:
-  - Assertion only / no evidence.
-  - Illustrative example or conceptual argument.
-  - Single case-study demonstration.
-  - Executable model or simulation result.
-  - Trade-study or requirements-checking result.
-  - Quantitative metric without baseline.
-  - Quantitative comparison with baseline or counterfactual.
-  - Stakeholder/user/expert evaluation.
-  - Reuse/replication across projects.
-  - Integration/test/operational/flight evidence.
-- Metric or value indicator used, if any: time, effort, defects, requirement coverage, trace links, model reuse, integration failures, test coverage, cost, schedule, power margin, reliability proxy, or other.
-- Baseline/comparator: previous document-centric process, manual analysis, alternative toolchain, previous mission, none, or not reported.
-- Observed effect size or qualitative effect.
-- Evidence source: section/page/figure/table and direct quote where possible.
-- Evidence confidence rating:
-  - Unsupported: claim is asserted without extractable evidence.
-  - Weak: plausible explanation or illustrative/single-case evidence without metrics or baseline.
-  - Moderate: traceable case evidence, simulation/checking result, or metric, but with limited baseline/independent validation.
-  - Strong: quantitative baseline comparison, repeated reuse, independent validation, integration/test evidence, or operational/flight evidence.
-- Threats or alternative explanations for the claim.
-
-### Governance, ROI, and project-decision linkage
-
-- Model governance strategy: ownership, configuration/change control, review process, model quality criteria, naming/versioning conventions, or not reported.
-- Traceability from model artifacts to project deliverables, milestone decisions, design reviews, assurance cases, or management reports.
-- Evaluation criteria used to judge model quality or usefulness.
-- ROI/value-realization evidence: cost of MBSE adoption, training/tooling effort, saved effort, schedule effect, avoided rework, reuse value, decision quality, mission assurance benefit, or not reported.
-- Programmatic gates or critical design events supported by the model.
-- Model-derived performance indicators or management metrics.
-
-### Gap-mapping fields for synthesis
-
-Map each paper to the recent space-MBSE review gaps without treating those gaps as new RQs:
-
-- Does the paper provide a practical implementation pathway for adopters?
-- Does the paper address toolchain fragmentation or interoperability?
-- Does the paper tailor MBSE to lightweight/resource-constrained nanosatellite missions?
-- Does the paper connect MBSE artifacts to governance, project deliverables, or ROI/value evidence?
-- Does the paper align MBSE with NewSpace/agile/distributed/rapid-iteration demands?
-- For each mapped gap: addressed with evidence, addressed conceptually, mentioned only, or not addressed.
-
-### Synthesis and consistency fields
-
-- Key findings relevant to each RQ.
-- Limitations/gaps stated by the authors.
-- Extractor-identified limitations/gaps.
-- Direct evidence quotes supporting classification decisions and claimed outcomes.
-- Notes for consistency with other papers in the same lineage.
-- Extraction confidence: high, medium, or low, with reason.
+| Criterion | Plain-English rule |
+|---|---|
+| Publication date | Include a report only when an eligible version is dated from 2011-01-01 through the common evidence cutoff. |
+| Language | The full report must be in English. English metadata does not prove that the report itself is in English. If the full text cannot be obtained, use `not_retrieved` instead of making a language assumption. |
+| Publication type | Include a full primary-research journal article; conference, proceedings, or workshop paper; workshop presentation (for ESA Indico only); research chapter in an edited scholarly book; institutional technical report; arXiv preprint; master's thesis; or doctoral thesis or dissertation. |
+| Degree completion | Include a thesis or dissertation only when full-text screening establishes `completion_status` as `completed`. Use `exclude_wrong_completion_status` when it is `in_progress_or_incomplete` or `unclear`. |
+| Scientific scope | The work must satisfy the canonical [nanosatellite population](protocol.md#nanosatellite-population), [EPS boundary](protocol.md#eps-boundary), [MBSE qualification](protocol.md#mbse-qualification), and [Route A or Route B](protocol.md#eligible-eps-evidence-routes) rules. |
+| Secondary studies | Exclude secondary studies. |
+| Abstract-only or non-research material | Exclude posters or abstracts without full papers; thesis or dissertation metadata and abstract stubs without the completed substantial report; proposals and prospectuses; undergraduate, bachelor's, or non-degree projects; advertisements; and non-scholarly web material. |
+| Retrieval status | Scientific eligibility does not depend on open access. If the report is not obtained after the required retrieval attempts, including a restricted or embargoed thesis, record `not_retrieved`. Do not silently exclude it for scientific reasons. |

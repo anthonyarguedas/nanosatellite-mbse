@@ -1,0 +1,4528 @@
+{
+  "query": "CubeSat",
+  "total": null,
+  "pages_retrieved": 0,
+  "results_retrieved": 0,
+  "results": [],
+  "output_metadata": {
+    "source": "ESA Indico",
+    "source_endpoint": "https://indico.esa.int/export/categ/0.json?detail=events",
+    "access_method": "normal_rendered_esa_indico_browser_public_export",
+    "search_mode": "bounded_local_harvest",
+    "local_harvest_requested": true,
+    "require_complete": false,
+    "requested_query": "CubeSat",
+    "executed_query": "",
+    "observed_exact_query_echo": false,
+    "source_q_used": false,
+    "result_types": [
+      "events",
+      "contributions",
+      "materials"
+    ],
+    "all_result_groups": [
+      "events",
+      "contributions",
+      "materials",
+      "notes",
+      "categories"
+    ],
+    "uncovered_result_groups": [
+      "notes",
+      "categories"
+    ],
+    "category_taxonomy": {
+      "name": "ESA Indico site Category tree",
+      "kind": "instance_local_hierarchical_container",
+      "validated_at": "2026-08-27",
+      "validation": "validated_live_2026-08-27",
+      "source_release_observed": "3.3.12",
+      "version": null,
+      "versioning": "No public taxonomy version or release manifest; 3.3.12 is the observed Indico software release, not a vocabulary version.",
+      "governance": "Category titles, parent links, order, and protection are site content managed by authorized category administrators/managers. Event and contribution classification values are entered by event managers; the public interface exposes no governance roster.",
+      "update_cadence": "No public cadence is specified; changes are administrative/content changes rather than scheduled vocabulary releases.",
+      "preferred_terms": "None published. Category titles, keywords, labels, tracks, and contribution types have no preferred-term relation.",
+      "synonyms": "None published or exposed by the public endpoints.",
+      "hierarchy": {
+        "root": {
+          "id": 0,
+          "title": "Home",
+          "browse_url": "https://indico.esa.int/",
+          "id_path": [
+            0
+          ]
+        },
+        "browse_endpoint": "GET /category/<category_id>/",
+        "info_endpoint": "GET /category/<category_id>/info",
+        "subcat_info_endpoint": "GET /category/<category_id>/subcat-info",
+        "path_fields": [
+          "id",
+          "title",
+          "parent_path",
+          "path",
+          "supercategories",
+          "subcategories"
+        ],
+        "scope_fields": [
+          "has_events",
+          "has_children",
+          "deep_event_count",
+          "deep_category_count",
+          "is_protected"
+        ],
+        "observed_paths": [
+          {
+            "id": 0,
+            "title": "Home",
+            "path": [
+              0
+            ],
+            "url": "https://indico.esa.int/"
+          },
+          {
+            "id": 6,
+            "title": "Conferences, Workshops and Events",
+            "path": [
+              0,
+              6
+            ],
+            "url": "https://indico.esa.int/category/6/"
+          },
+          {
+            "id": 9,
+            "title": "Tests",
+            "path": [
+              0,
+              6,
+              9
+            ],
+            "url": "https://indico.esa.int/category/9/"
+          },
+          {
+            "id": 7,
+            "title": "Final presentations",
+            "path": [
+              0,
+              7
+            ],
+            "url": "https://indico.esa.int/category/7/"
+          },
+          {
+            "id": 5,
+            "title": "Projects",
+            "path": [
+              0,
+              5
+            ],
+            "url": "https://indico.esa.int/category/5/"
+          }
+        ],
+        "live_notes": "The 2026-08-27 public /category/0/info response listed direct children 6, 7, and 5; 9 was a child of 6. /category/0/ redirected to /."
+      },
+      "identity": {
+        "id_field": "integer Category.id and URL path segment",
+        "stability": "Installation-local record locator only. IDs are not a portable vocabulary key; titles and parent paths can change, and deleted categories are not valid current terms.",
+        "root_exception": "ID 0 is the synthetic/root Home category; its canonical browse URL is /, although /category/0/info is a public hierarchy endpoint."
+      },
+      "field_inventory": {
+        "category": {
+          "source_fields": [
+            "id",
+            "parent_id",
+            "position",
+            "title",
+            "description",
+            "visibility",
+            "protection_mode",
+            "is_deleted"
+          ],
+          "public_hierarchy_fields": [
+            "id",
+            "title",
+            "parent_path",
+            "path",
+            "has_events",
+            "has_children",
+            "deep_event_count",
+            "deep_category_count",
+            "is_protected"
+          ],
+          "scope_notes": "description is free-form category content; there is no separate controlled scope-note field"
+        },
+        "event": {
+          "category_field": "category_id",
+          "hierarchy_field": "category_chain",
+          "public_surfaces": [
+            "event page breadcrumb/category link",
+            "category export categoryId/category path",
+            "search result category_path"
+          ]
+        },
+        "event_keywords": {
+          "attribute": "Event.keywords",
+          "surface": "public event HTML meta keywords and HTTP event/category export keywords",
+          "value_type": "array of strings",
+          "preferred_or_synonym_behavior": "none; optional allowed-keyword configuration is case-insensitively deduplicated but does not create synonyms",
+          "current_allowed_list": "not publicly exposed; state unknown",
+          "subject_search": "not indexed by current unqualified event search"
+        },
+        "event_type": {
+          "attribute": "Event.type",
+          "values": [
+            "lecture",
+            "meeting",
+            "conference"
+          ],
+          "export_alias": "simple_event is the category-export alias for lecture",
+          "source_enum_ids": {
+            "lecture": 1,
+            "meeting": 2,
+            "conference": 3
+          },
+          "ids": "source enum values are format identifiers, not subject IDs; public query syntax uses names",
+          "meaning": "event format/feature type, not a subject taxonomy"
+        },
+        "event_label": {
+          "attribute": "Event.label",
+          "surface": "optional classification label in event management/export",
+          "value_type": "instance-wide label title/color/message; no subject hierarchy",
+          "ids": "not included in the public event export label object",
+          "subject_search": "not a current search target or facet"
+        },
+        "contribution_keywords": {
+          "attribute": "Contribution.keywords",
+          "surface": "HTTP event export contribution keywords when present",
+          "value_type": "array of strings",
+          "preferred_or_synonym_behavior": "none published; optional allowed list state is not public",
+          "subject_search": "not indexed by current contribution search"
+        },
+        "contribution_type": {
+          "attribute": "Contribution.type / ContributionType",
+          "scope": "event-local",
+          "model_fields": [
+            "id",
+            "event_id",
+            "name",
+            "description",
+            "is_private"
+          ],
+          "public_export": "contribution type is a name or null; the numeric ID and private definitions are not exposed by the public export",
+          "preferred_or_synonym_behavior": "none; names are unique case-insensitively within one event only",
+          "subject_search": "not indexed and no global facet exists"
+        },
+        "contribution_track": {
+          "attribute": "Contribution.track / Track",
+          "scope": "event-local",
+          "model_fields": [
+            "id",
+            "event_id",
+            "title",
+            "code",
+            "track_group_id",
+            "position"
+          ],
+          "public_export": "track is a display string; track/group IDs are not included",
+          "preferred_or_synonym_behavior": "none published; tracks are event-program organization",
+          "subject_search": "not indexed and no global facet exists"
+        }
+      },
+      "scope_notes": {
+        "browse_default": "A category page lists direct child categories and direct events. A flat subtree view is configuration-dependent and only applies when enabled; it is not a taxonomy expansion control.",
+        "category_search": "category_id=C scopes event/contribution/material/note searches to C and descendants, but category-result searches to descendants excluding C itself. category_id=0 is treated as the root/global scope by current InternalSearch.",
+        "category_export": "GET /export/categ/C.json includes events whose category chain contains C or a descendant; hyphen-separated category IDs are supported by the official export API. Date, access, and export filters affect returned counts.",
+        "no_expansion_controls": "There is no public explosion, focus, major-topic, preferred-term, or synonym switch."
+      },
+      "browse_vs_search_facet": {
+        "browse": "The category pages and /info endpoint are the hierarchy/browse interface.",
+        "search_result_group": "Categories is one global-search result group; it is not a subject facet.",
+        "search_facet": "No category, keyword, track, contribution-type, or event-label facet is exposed. The live /search/api/options response was {placeholders: [], sort_options: []}.",
+        "scope_syntax": {
+          "global_ui": "GET /search/?q=<URL-encoded raw q>",
+          "category_ui": "GET /category/<category_id>/search?q=<URL-encoded raw q>",
+          "category_api": "GET /search/api/search?q=<raw q>&type=<target>&category_id=<category_id>",
+          "contribution_api": "repeat type=contribution and type=subcontribution",
+          "category_target": "type=category searches category titles; category_id is scope, not a category term",
+          "export": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+        }
+      },
+      "expansion": {
+        "search_event_like_targets": "implicit subtree expansion via Event.category_chain_overlaps; no caller toggle",
+        "search_category_target": "implicit descendants-only expansion via Category.deep_children_query",
+        "export": "implicit subtree expansion via Event.category_chain_overlaps",
+        "focus_or_major_topic": "not_applicable"
+      },
+      "subject_restriction_judgment": {
+        "suitable": false,
+        "judgment": "not suitable for subject restriction",
+        "reason": "The public Category tree is a site navigation/ownership hierarchy, while keywords, labels, tracks, and contribution types are free-form or event-local. There is no published subject scope-note policy, synonym/preferred-term service, version, cadence, public term-ID vocabulary, or search facet. Category IDs are safe only as explicitly validated organizational scope, not as inferred subjects.",
+        "cv_use_status": "organizational_category_scope_supported_not_subject_filter",
+        "typed_scope_interface": {
+          "options": [
+            "--category-id",
+            "--category-path"
+          ],
+          "validation": "category_id is checked by the visible category-search route; category_path, when supplied, must exactly match the visible root-to-leaf ID path",
+          "search_scope": "the category-search route sends category_id to every selected result-group request; event/contribution/material/note results include the selected category and descendants, while category results include descendants only",
+          "export_scope": "the public category exporter includes the selected category and descendants; the rendered adapter records this capability but does not substitute native export data for search results",
+          "subject_boundary": "category IDs and paths are organizational scope only; no keyword, label, contribution-type, or track filter is exposed"
+        }
+      },
+      "known_item_effects": [
+        {
+          "name": "category_scope_expands_events_to_descendants",
+          "query": "Young Professional",
+          "target": "event",
+          "known_item_url": "https://indico.esa.int/event/557/",
+          "known_category_id_path": [
+            0,
+            6,
+            9
+          ],
+          "observations": {
+            "global": "present",
+            "category_id_6": "present (category 9 is a descendant)",
+            "category_id_9": "present (the selected category)",
+            "category_id_5": "absent"
+          },
+          "source_effect": "category_id uses Event.category_chain_overlaps and includes the selected category and its subtree"
+        },
+        {
+          "name": "category_target_scope_is_descendants_only",
+          "query": "Tests",
+          "target": "category",
+          "known_item_url": "https://indico.esa.int/category/9/",
+          "observations": {
+            "global": "present",
+            "category_id_6": "present (child category)",
+            "category_id_9": "explicit empty result (the category itself is excluded)"
+          },
+          "source_effect": "category search uses Category.deep_children_query, which excludes the selected category itself"
+        },
+        {
+          "name": "category_export_scope_expands_to_descendants",
+          "known_item_url": "https://indico.esa.int/event/557/",
+          "observations": {
+            "GET /export/categ/6.json": "event 557 returned with categoryId 9",
+            "GET /export/categ/9.json": "event 557 returned with categoryId 9"
+          },
+          "source_effect": "the HTTP category exporter filters Event.category_chain_overlaps(idlist)"
+        },
+        {
+          "name": "event_keyword_is_not_unqualified_event_search",
+          "query": "LifeExtension",
+          "target": "event",
+          "field_value": "LifeExtension",
+          "known_item_url": "https://indico.esa.int/event/387/",
+          "observations": {
+            "public_event_page_and_export": "keyword present",
+            "GET /search/api/search?q=LifeExtension&type=event": "explicit total 0"
+          },
+          "source_effect": "event search uses Event.title_matches(q), not Event.keywords"
+        },
+        {
+          "name": "event_type_is_an_export_filter_not_a_subject_facet",
+          "known_item_url": "https://indico.esa.int/event/387/",
+          "observations": {
+            "GET /export/categ/6.json?type=lecture": "event 387 returned as simple_event",
+            "GET /export/categ/6.json?type=conference": "event 387 absent"
+          },
+          "source_effect": "type is a category-export filter for lecture/simple_event, meeting, or conference"
+        }
+      ],
+      "unknowns": [
+        "The current instance's optional allowed event/contribution keyword lists are an administrative setting and are not publicly readable.",
+        "Private event-local contribution types, track IDs, and event-label IDs cannot be enumerated from the anonymous public hierarchy/export surfaces.",
+        "The public endpoints provide no taxonomy version, change log, or update timestamp for category/classification terms.",
+        "Export counts must not be treated as category cardinalities: the current public /category/0/info deep count and default /export/categ/0.json count have different access/filter semantics."
+      ],
+      "official_sources": {
+        "category_export_documentation": "https://docs.getindico.io/en/latest/http-api/exporters/categ/",
+        "event_export_documentation": "https://docs.getindico.io/en/latest/http-api/exporters/event/",
+        "search_documentation": "https://docs.getindico.io/en/latest/search-engine/features/",
+        "category_blueprint": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/categories/blueprint.py",
+        "category_controller": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/categories/controllers/display.py",
+        "category_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/categories/models/categories.py",
+        "category_serializer": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/categories/serialize.py",
+        "event_export_source": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/api.py",
+        "event_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/models/events.py",
+        "event_label_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/models/labels.py",
+        "keyword_field": "https://github.com/indico/indico/blob/v3.3.12/indico/web/forms/fields/simple.py",
+        "contribution_type_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/contributions/models/types.py",
+        "track_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/tracks/models/tracks.py",
+        "search_controller": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/search/controllers.py",
+        "internal_search": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/search/internal.py"
+      }
+    },
+    "category_scope": null,
+    "category_scope_control": {
+      "state": "unknown",
+      "requested": {
+        "category_id": 0,
+        "id_path": null
+      },
+      "effective": null,
+      "provenance": "caller"
+    },
+    "local_harvest": {
+      "schema": "esa-indico-local-harvest/v3",
+      "state": "failed",
+      "failure_code": "global_source_universe_inaccessible",
+      "failure_stage": "local_universe",
+      "source_state": "inaccessible",
+      "source_universe_complete": false,
+      "global_source_universe_proof": "inaccessible_or_unestablished",
+      "source_universe": {
+        "schema": "esa-indico-event-universe/v3",
+        "category_id": 0,
+        "event_count": 0,
+        "reported_count": null,
+        "enumerated_count": null,
+        "complete_marker": null,
+        "event_ids_sha256": null,
+        "scope_kind": "global",
+        "global_coverage": "inaccessible_or_unestablished",
+        "state": "not_established"
+      },
+      "covered_result_groups": [
+        "events",
+        "contributions",
+        "materials"
+      ],
+      "uncovered_result_groups": [
+        "notes",
+        "categories"
+      ],
+      "record_states": [
+        {
+          "source_type": "event_universe",
+          "source_id": null,
+          "state": "inaccessible",
+          "reason": "public_export_request_failed_or_timed_out"
+        }
+      ],
+      "attachment_content": {
+        "schema": "esa-indico-attachment-content/v1",
+        "complete": false,
+        "required_for_complete_mode": true,
+        "failure_states": []
+      },
+      "inaccessible_records": [
+        {
+          "source_type": "event_universe",
+          "source_id": null,
+          "state": "inaccessible",
+          "reason": "public_export_request_failed_or_timed_out"
+        }
+      ],
+      "unparseable_records": [],
+      "missing_records": [],
+      "unsupported_records": [],
+      "resume": {
+        "schema": "esa-indico-local-harvest-checkpoint/v3",
+        "state": "restart_universe",
+        "query": "CubeSat",
+        "category_id": 0,
+        "universe_event_ids": [],
+        "universe_complete": false,
+        "universe_scope_kind": null,
+        "universe_global_coverage": null,
+        "universe_snapshot_observed_at_utc": null,
+        "universe_completeness_proof": null,
+        "universe_events": [],
+        "universe_sha256": null,
+        "universe_reported_count": null,
+        "universe_enumerated_count": null,
+        "universe_complete_marker": null,
+        "next_event_index": 0,
+        "completed_event_ids": [],
+        "records": [],
+        "source_states": [
+          {
+            "source_type": "event_universe",
+            "source_id": null,
+            "state": "inaccessible",
+            "reason": "public_export_request_failed_or_timed_out"
+          }
+        ],
+        "attachment_content": {
+          "schema": "esa-indico-attachment-content/v1",
+          "declared_count": 0,
+          "retrieved_count": 0,
+          "searchable_count": 0,
+          "complete": true,
+          "state_counts": {
+            "accessible": 0,
+            "inaccessible": 0,
+            "missing": 0,
+            "unsupported": 0,
+            "unparseable": 0
+          },
+          "states": [],
+          "failure_states": [],
+          "required_for_complete_mode": true,
+          "routes": "one normal public attachment route per declared attachment",
+          "supported_formats": [
+            "text/html and application/xhtml+xml (visible text)",
+            "text/plain, text/csv, text/markdown, application/json, application/rtf (decoded text)",
+            "text/xml and application/xml (visible XML text; DTD/entities rejected)",
+            "application/pdf (text layer only)",
+            "OOXML .docx/.pptx/.xlsx (ZIP/XML text parts; no macro execution)"
+          ],
+          "unsupported_formats": [
+            "images, video, application/zip/zipx, and legacy OLE office binaries",
+            "macro-enabled or encrypted office packages",
+            "corrupt, malformed, protected, missing, or externally redirected material"
+          ]
+        },
+        "raw_response_bodies_persisted": false,
+        "resume_binding": "exact local expression, category scope, and native event-universe ID order"
+      },
+      "raw_response_bodies_persisted": false,
+      "final_source_failure_artifact": true
+    },
+    "local_matching": {
+      "schema": "esa-indico-local-concept-matcher/v1",
+      "expression": "CubeSat",
+      "rules": {
+        "schema": "esa-indico-local-concept-matcher/v1",
+        "fields_are_record_local": true,
+        "normalization": {
+          "unicode": "NFKC_then_casefold",
+          "html": "decoded_and_removed",
+          "word_boundaries": "Unicode lexical tokens; punctuation and hyphen variants are separators",
+          "stemming": "none",
+          "synonyms": "none"
+        },
+        "boolean": {
+          "operators": [
+            "AND",
+            "OR",
+            "NOT"
+          ],
+          "precedence": "NOT, proximity, AND, OR",
+          "adjacent_terms": "AND"
+        },
+        "phrase": {
+          "syntax": "double-quoted ordered lexical phrase",
+          "default_slop": 0,
+          "slop_syntax": "quoted phrase~N",
+          "cross_field": false
+        },
+        "proximity": {
+          "syntax": [
+            "NEAR/N",
+            "PRE/N",
+            "ONEAR/N",
+            "W/N"
+          ],
+          "distance": "maximum intervening lexical tokens in one field",
+          "max_distance": 100,
+          "near_order": "unordered",
+          "pre_order": "left expression before right expression"
+        },
+        "wildcard": {
+          "syntax": "trailing * only",
+          "meaning": "prefix of one lexical token",
+          "internal_or_leading": "rejected"
+        },
+        "acronym_boundary": "unstarred terms match complete lexical tokens only",
+        "source_q_not_reused": true,
+        "protocol_partition": "caller_supplied_exact_local_expression"
+      },
+      "source_q_submitted": false
+    },
+    "group_accounting": {
+      "events": {
+        "requested": true,
+        "coverage": "not_observed",
+        "source_total": null,
+        "source_total_status": "unknown",
+        "source_total_is_exact": false,
+        "universe_record_count": 0,
+        "source_export_record_count": 0,
+        "raw_source_records": 0,
+        "records_retrieved": 0,
+        "matched_count": 0,
+        "local_match_count": null,
+        "records_retained": 0,
+        "normalized_rows_written": 0,
+        "client_side_exclusions": 0,
+        "within_source_duplicates_removed": 0,
+        "malformed_records_dropped": 0,
+        "retrieval_complete": false,
+        "traversal_exhausted": false,
+        "stopped_reason": "final_source_failure",
+        "source_states": [],
+        "attachment_content": null
+      },
+      "contributions": {
+        "requested": true,
+        "coverage": "not_observed",
+        "source_total": null,
+        "source_total_status": "unknown",
+        "source_total_is_exact": false,
+        "universe_record_count": 0,
+        "source_export_record_count": 0,
+        "raw_source_records": 0,
+        "records_retrieved": 0,
+        "matched_count": 0,
+        "local_match_count": null,
+        "records_retained": 0,
+        "normalized_rows_written": 0,
+        "client_side_exclusions": 0,
+        "within_source_duplicates_removed": 0,
+        "malformed_records_dropped": 0,
+        "retrieval_complete": false,
+        "traversal_exhausted": false,
+        "stopped_reason": "final_source_failure",
+        "source_states": [],
+        "attachment_content": null
+      },
+      "materials": {
+        "requested": true,
+        "coverage": "not_observed",
+        "source_total": null,
+        "source_total_status": "unknown",
+        "source_total_is_exact": false,
+        "universe_record_count": 0,
+        "source_export_record_count": 0,
+        "raw_source_records": 0,
+        "records_retrieved": 0,
+        "matched_count": 0,
+        "local_match_count": null,
+        "records_retained": 0,
+        "normalized_rows_written": 0,
+        "client_side_exclusions": 0,
+        "within_source_duplicates_removed": 0,
+        "malformed_records_dropped": 0,
+        "retrieval_complete": false,
+        "traversal_exhausted": false,
+        "stopped_reason": "final_source_failure",
+        "source_states": [],
+        "attachment_content": {
+          "schema": "esa-indico-attachment-content/v1",
+          "complete": false,
+          "required_for_complete_mode": true,
+          "failure_states": []
+        }
+      }
+    },
+    "source_totals": {
+      "events": null,
+      "contributions": null,
+      "materials": null
+    },
+    "source_total_status": "unknown",
+    "source_total_scope": "not_established_due_to_final_source_failure",
+    "global_source_universe": {
+      "state": "inaccessible_or_unestablished",
+      "category_id": 0,
+      "two_snapshot_proof": null,
+      "reported_count": null,
+      "enumerated_count": null,
+      "event_ids_sha256": null
+    },
+    "attachment_content": {
+      "schema": "esa-indico-attachment-content/v1",
+      "complete": false,
+      "required_for_complete_mode": true,
+      "failure_states": []
+    },
+    "source_reported_total": null,
+    "source_reported_total_status": "unknown",
+    "source_reported_total_exact": false,
+    "total_is_exact": false,
+    "source_universe_total": null,
+    "source_export_total": null,
+    "local_match_total": null,
+    "matched_total": null,
+    "source_entries_retrieved": 0,
+    "raw_source_records_received": 0,
+    "raw_source_records": 0,
+    "normalized_rows_written": 0,
+    "client_side_exclusions": 0,
+    "within_source_duplicates_removed": 0,
+    "malformed_records_dropped": 0,
+    "pages_retrieved": 0,
+    "requested_limit": 20,
+    "year_start": null,
+    "year_end": null,
+    "year_filter_mode": "not_applied",
+    "timeout_seconds": 15.0,
+    "page_delay_seconds": 0.0,
+    "max_harvest_events": 500,
+    "max_harvest_seconds": 45.0,
+    "source_traversal_complete": false,
+    "source_capture_complete": false,
+    "retrieval_complete": false,
+    "final_source_failure_artifact": true,
+    "no_partial_import": true,
+    "stopped_reason": "final_source_failure",
+    "status": "error",
+    "error_stage": "local_universe",
+    "error_type": "ESALocalHarvestError",
+    "error": "ESA Indico local harvest failed (ESALocalHarvestError).",
+    "normalized_export": {
+      "schema": "esa-indico-normalized-search-export/v1",
+      "kind": "local_harvest_search_results",
+      "format": "normalized_json_csv",
+      "state": "blocked",
+      "complete": false,
+      "source_results_are_search_results": true,
+      "native_search_export": "not_used",
+      "blockers": [
+        "final_source_failure",
+        "global_source_universe_inaccessible"
+      ],
+      "no_partial_import": true
+    },
+    "started_at_utc": "2026-08-29T20:57:02.970826+00:00",
+    "completed_at_utc": "2026-08-29T20:57:18.547107+00:00",
+    "extracted_at": "2026-08-29T20:57:18.547107+00:00",
+    "search_log_settings": {
+      "request": {
+        "method": "normal_public_category_and_event_exports",
+        "http_method": "GET",
+        "endpoint": "https://indico.esa.int/export/categ/0.json?detail=events",
+        "parameters": {
+          "category_id": 0,
+          "detail": "events"
+        },
+        "scope": "bounded local-harvest source universe",
+        "redirect_policy": "same_origin_expected_export_path_only"
+      },
+      "query": {
+        "requested": "CubeSat",
+        "executed": null,
+        "source_q_submitted": false,
+        "method": "deterministic local Boolean/phrase/proximity matcher"
+      },
+      "pagination": {
+        "resumable": true,
+        "checkpoint": {
+          "schema": "esa-indico-local-harvest-checkpoint/v3",
+          "state": "restart_universe",
+          "query": "CubeSat",
+          "category_id": 0,
+          "universe_event_ids": [],
+          "universe_complete": false,
+          "universe_scope_kind": null,
+          "universe_global_coverage": null,
+          "universe_snapshot_observed_at_utc": null,
+          "universe_completeness_proof": null,
+          "universe_events": [],
+          "universe_sha256": null,
+          "universe_reported_count": null,
+          "universe_enumerated_count": null,
+          "universe_complete_marker": null,
+          "next_event_index": 0,
+          "completed_event_ids": [],
+          "records": [],
+          "source_states": [
+            {
+              "source_type": "event_universe",
+              "source_id": null,
+              "state": "inaccessible",
+              "reason": "public_export_request_failed_or_timed_out"
+            }
+          ],
+          "attachment_content": {
+            "schema": "esa-indico-attachment-content/v1",
+            "declared_count": 0,
+            "retrieved_count": 0,
+            "searchable_count": 0,
+            "complete": true,
+            "state_counts": {
+              "accessible": 0,
+              "inaccessible": 0,
+              "missing": 0,
+              "unsupported": 0,
+              "unparseable": 0
+            },
+            "states": [],
+            "failure_states": [],
+            "required_for_complete_mode": true,
+            "routes": "one normal public attachment route per declared attachment",
+            "supported_formats": [
+              "text/html and application/xhtml+xml (visible text)",
+              "text/plain, text/csv, text/markdown, application/json, application/rtf (decoded text)",
+              "text/xml and application/xml (visible XML text; DTD/entities rejected)",
+              "application/pdf (text layer only)",
+              "OOXML .docx/.pptx/.xlsx (ZIP/XML text parts; no macro execution)"
+            ],
+            "unsupported_formats": [
+              "images, video, application/zip/zipx, and legacy OLE office binaries",
+              "macro-enabled or encrypted office packages",
+              "corrupt, malformed, protected, missing, or externally redirected material"
+            ]
+          },
+          "raw_response_bodies_persisted": false,
+          "resume_binding": "exact local expression, category scope, and native event-universe ID order"
+        }
+      },
+      "record_accounting": {
+        "raw_source_records": 0,
+        "client_side_exclusions": 0,
+        "within_source_duplicates_removed": 0,
+        "malformed_records_dropped": 0,
+        "normalized_rows_written": 0,
+        "local_match_count": null,
+        "coverage_failure_is_not_an_exclusion": true
+      },
+      "failure": {
+        "state": "final_source_failure",
+        "code": "global_source_universe_inaccessible",
+        "source_state": "inaccessible"
+      }
+    },
+    "executed_query_provenance": "not_observed",
+    "merge_contract": "academic-search-merge/v1",
+    "schema_version": "academic-search-result/v1",
+    "merge_eligible": false,
+    "normalized_merge_eligible": false,
+    "completion_status": "error",
+    "record_accounting": {
+      "completion_status": "error",
+      "source_total": null,
+      "source_total_known": false,
+      "source_total_exact": false,
+      "records_retained": 0,
+      "stopped_reason": "final_source_failure",
+      "source_total_status": "not_reported",
+      "local_match_count": null,
+      "matched_total": null,
+      "source_universe_total": null,
+      "source_export_total": null,
+      "raw_source_records": 0,
+      "client_side_exclusions": 0,
+      "within_source_duplicates_removed": 0,
+      "malformed_records_dropped": 0,
+      "normalized_rows_written": 0
+    },
+    "search_log": {
+      "schema_version": "academic-search-search-log/v1",
+      "source_url": "https://indico.esa.int/export/categ/0.json?detail=events",
+      "executed_query": "",
+      "settings": {
+        "request": {
+          "method": "normal_public_category_and_event_exports",
+          "http_method": "GET",
+          "endpoint": "https://indico.esa.int/export/categ/0.json?detail=events",
+          "parameters": {
+            "category_id": 0,
+            "detail": "events"
+          },
+          "scope": "bounded local-harvest source universe",
+          "redirect_policy": "same_origin_expected_export_path_only"
+        },
+        "query": {
+          "requested": "CubeSat",
+          "executed": null,
+          "source_q_submitted": false,
+          "method": "deterministic local Boolean/phrase/proximity matcher"
+        },
+        "pagination": {
+          "resumable": true,
+          "checkpoint": {
+            "schema": "esa-indico-local-harvest-checkpoint/v3",
+            "state": "restart_universe",
+            "query": "CubeSat",
+            "category_id": 0,
+            "universe_event_ids": [],
+            "universe_complete": false,
+            "universe_scope_kind": null,
+            "universe_global_coverage": null,
+            "universe_snapshot_observed_at_utc": null,
+            "universe_completeness_proof": null,
+            "universe_events": [],
+            "universe_sha256": null,
+            "universe_reported_count": null,
+            "universe_enumerated_count": null,
+            "universe_complete_marker": null,
+            "next_event_index": 0,
+            "completed_event_ids": [],
+            "records": [],
+            "source_states": [
+              {
+                "source_type": "event_universe",
+                "source_id": null,
+                "state": "inaccessible",
+                "reason": "public_export_request_failed_or_timed_out"
+              }
+            ],
+            "attachment_content": {
+              "schema": "esa-indico-attachment-content/v1",
+              "declared_count": 0,
+              "retrieved_count": 0,
+              "searchable_count": 0,
+              "complete": true,
+              "state_counts": {
+                "accessible": 0,
+                "inaccessible": 0,
+                "missing": 0,
+                "unsupported": 0,
+                "unparseable": 0
+              },
+              "states": [],
+              "failure_states": [],
+              "required_for_complete_mode": true,
+              "routes": "one normal public attachment route per declared attachment",
+              "supported_formats": [
+                "text/html and application/xhtml+xml (visible text)",
+                "text/plain, text/csv, text/markdown, application/json, application/rtf (decoded text)",
+                "text/xml and application/xml (visible XML text; DTD/entities rejected)",
+                "application/pdf (text layer only)",
+                "OOXML .docx/.pptx/.xlsx (ZIP/XML text parts; no macro execution)"
+              ],
+              "unsupported_formats": [
+                "images, video, application/zip/zipx, and legacy OLE office binaries",
+                "macro-enabled or encrypted office packages",
+                "corrupt, malformed, protected, missing, or externally redirected material"
+              ]
+            },
+            "raw_response_bodies_persisted": false,
+            "resume_binding": "exact local expression, category scope, and native event-universe ID order"
+          }
+        },
+        "record_accounting": {
+          "raw_source_records": 0,
+          "client_side_exclusions": 0,
+          "within_source_duplicates_removed": 0,
+          "malformed_records_dropped": 0,
+          "normalized_rows_written": 0,
+          "local_match_count": null,
+          "coverage_failure_is_not_an_exclusion": true
+        },
+        "failure": {
+          "state": "final_source_failure",
+          "code": "global_source_universe_inaccessible",
+          "source_state": "inaccessible"
+        },
+        "access_method": "normal_rendered_esa_indico_browser_public_export",
+        "search_mode": "bounded_local_harvest",
+        "local_harvest_requested": true,
+        "require_complete": false,
+        "requested_query": "CubeSat",
+        "executed_query": "",
+        "observed_exact_query_echo": false,
+        "source_q_used": false,
+        "result_types": [
+          "events",
+          "contributions",
+          "materials"
+        ],
+        "all_result_groups": [
+          "events",
+          "contributions",
+          "materials",
+          "notes",
+          "categories"
+        ],
+        "uncovered_result_groups": [
+          "notes",
+          "categories"
+        ],
+        "category_taxonomy": {
+          "name": "ESA Indico site Category tree",
+          "kind": "instance_local_hierarchical_container",
+          "validated_at": "2026-08-27",
+          "validation": "validated_live_2026-08-27",
+          "source_release_observed": "3.3.12",
+          "version": null,
+          "versioning": "No public taxonomy version or release manifest; 3.3.12 is the observed Indico software release, not a vocabulary version.",
+          "governance": "Category titles, parent links, order, and protection are site content managed by authorized category administrators/managers. Event and contribution classification values are entered by event managers; the public interface exposes no governance roster.",
+          "update_cadence": "No public cadence is specified; changes are administrative/content changes rather than scheduled vocabulary releases.",
+          "preferred_terms": "None published. Category titles, keywords, labels, tracks, and contribution types have no preferred-term relation.",
+          "synonyms": "None published or exposed by the public endpoints.",
+          "hierarchy": {
+            "root": {
+              "id": 0,
+              "title": "Home",
+              "browse_url": "https://indico.esa.int/",
+              "id_path": [
+                0
+              ]
+            },
+            "browse_endpoint": "GET /category/<category_id>/",
+            "info_endpoint": "GET /category/<category_id>/info",
+            "subcat_info_endpoint": "GET /category/<category_id>/subcat-info",
+            "path_fields": [
+              "id",
+              "title",
+              "parent_path",
+              "path",
+              "supercategories",
+              "subcategories"
+            ],
+            "scope_fields": [
+              "has_events",
+              "has_children",
+              "deep_event_count",
+              "deep_category_count",
+              "is_protected"
+            ],
+            "observed_paths": [
+              {
+                "id": 0,
+                "title": "Home",
+                "path": [
+                  0
+                ],
+                "url": "https://indico.esa.int/"
+              },
+              {
+                "id": 6,
+                "title": "Conferences, Workshops and Events",
+                "path": [
+                  0,
+                  6
+                ],
+                "url": "https://indico.esa.int/category/6/"
+              },
+              {
+                "id": 9,
+                "title": "Tests",
+                "path": [
+                  0,
+                  6,
+                  9
+                ],
+                "url": "https://indico.esa.int/category/9/"
+              },
+              {
+                "id": 7,
+                "title": "Final presentations",
+                "path": [
+                  0,
+                  7
+                ],
+                "url": "https://indico.esa.int/category/7/"
+              },
+              {
+                "id": 5,
+                "title": "Projects",
+                "path": [
+                  0,
+                  5
+                ],
+                "url": "https://indico.esa.int/category/5/"
+              }
+            ],
+            "live_notes": "The 2026-08-27 public /category/0/info response listed direct children 6, 7, and 5; 9 was a child of 6. /category/0/ redirected to /."
+          },
+          "identity": {
+            "id_field": "integer Category.id and URL path segment",
+            "stability": "Installation-local record locator only. IDs are not a portable vocabulary key; titles and parent paths can change, and deleted categories are not valid current terms.",
+            "root_exception": "ID 0 is the synthetic/root Home category; its canonical browse URL is /, although /category/0/info is a public hierarchy endpoint."
+          },
+          "field_inventory": {
+            "category": {
+              "source_fields": [
+                "id",
+                "parent_id",
+                "position",
+                "title",
+                "description",
+                "visibility",
+                "protection_mode",
+                "is_deleted"
+              ],
+              "public_hierarchy_fields": [
+                "id",
+                "title",
+                "parent_path",
+                "path",
+                "has_events",
+                "has_children",
+                "deep_event_count",
+                "deep_category_count",
+                "is_protected"
+              ],
+              "scope_notes": "description is free-form category content; there is no separate controlled scope-note field"
+            },
+            "event": {
+              "category_field": "category_id",
+              "hierarchy_field": "category_chain",
+              "public_surfaces": [
+                "event page breadcrumb/category link",
+                "category export categoryId/category path",
+                "search result category_path"
+              ]
+            },
+            "event_keywords": {
+              "attribute": "Event.keywords",
+              "surface": "public event HTML meta keywords and HTTP event/category export keywords",
+              "value_type": "array of strings",
+              "preferred_or_synonym_behavior": "none; optional allowed-keyword configuration is case-insensitively deduplicated but does not create synonyms",
+              "current_allowed_list": "not publicly exposed; state unknown",
+              "subject_search": "not indexed by current unqualified event search"
+            },
+            "event_type": {
+              "attribute": "Event.type",
+              "values": [
+                "lecture",
+                "meeting",
+                "conference"
+              ],
+              "export_alias": "simple_event is the category-export alias for lecture",
+              "source_enum_ids": {
+                "lecture": 1,
+                "meeting": 2,
+                "conference": 3
+              },
+              "ids": "source enum values are format identifiers, not subject IDs; public query syntax uses names",
+              "meaning": "event format/feature type, not a subject taxonomy"
+            },
+            "event_label": {
+              "attribute": "Event.label",
+              "surface": "optional classification label in event management/export",
+              "value_type": "instance-wide label title/color/message; no subject hierarchy",
+              "ids": "not included in the public event export label object",
+              "subject_search": "not a current search target or facet"
+            },
+            "contribution_keywords": {
+              "attribute": "Contribution.keywords",
+              "surface": "HTTP event export contribution keywords when present",
+              "value_type": "array of strings",
+              "preferred_or_synonym_behavior": "none published; optional allowed list state is not public",
+              "subject_search": "not indexed by current contribution search"
+            },
+            "contribution_type": {
+              "attribute": "Contribution.type / ContributionType",
+              "scope": "event-local",
+              "model_fields": [
+                "id",
+                "event_id",
+                "name",
+                "description",
+                "is_private"
+              ],
+              "public_export": "contribution type is a name or null; the numeric ID and private definitions are not exposed by the public export",
+              "preferred_or_synonym_behavior": "none; names are unique case-insensitively within one event only",
+              "subject_search": "not indexed and no global facet exists"
+            },
+            "contribution_track": {
+              "attribute": "Contribution.track / Track",
+              "scope": "event-local",
+              "model_fields": [
+                "id",
+                "event_id",
+                "title",
+                "code",
+                "track_group_id",
+                "position"
+              ],
+              "public_export": "track is a display string; track/group IDs are not included",
+              "preferred_or_synonym_behavior": "none published; tracks are event-program organization",
+              "subject_search": "not indexed and no global facet exists"
+            }
+          },
+          "scope_notes": {
+            "browse_default": "A category page lists direct child categories and direct events. A flat subtree view is configuration-dependent and only applies when enabled; it is not a taxonomy expansion control.",
+            "category_search": "category_id=C scopes event/contribution/material/note searches to C and descendants, but category-result searches to descendants excluding C itself. category_id=0 is treated as the root/global scope by current InternalSearch.",
+            "category_export": "GET /export/categ/C.json includes events whose category chain contains C or a descendant; hyphen-separated category IDs are supported by the official export API. Date, access, and export filters affect returned counts.",
+            "no_expansion_controls": "There is no public explosion, focus, major-topic, preferred-term, or synonym switch."
+          },
+          "browse_vs_search_facet": {
+            "browse": "The category pages and /info endpoint are the hierarchy/browse interface.",
+            "search_result_group": "Categories is one global-search result group; it is not a subject facet.",
+            "search_facet": "No category, keyword, track, contribution-type, or event-label facet is exposed. The live /search/api/options response was {placeholders: [], sort_options: []}.",
+            "scope_syntax": {
+              "global_ui": "GET /search/?q=<URL-encoded raw q>",
+              "category_ui": "GET /category/<category_id>/search?q=<URL-encoded raw q>",
+              "category_api": "GET /search/api/search?q=<raw q>&type=<target>&category_id=<category_id>",
+              "contribution_api": "repeat type=contribution and type=subcontribution",
+              "category_target": "type=category searches category titles; category_id is scope, not a category term",
+              "export": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+            }
+          },
+          "expansion": {
+            "search_event_like_targets": "implicit subtree expansion via Event.category_chain_overlaps; no caller toggle",
+            "search_category_target": "implicit descendants-only expansion via Category.deep_children_query",
+            "export": "implicit subtree expansion via Event.category_chain_overlaps",
+            "focus_or_major_topic": "not_applicable"
+          },
+          "subject_restriction_judgment": {
+            "suitable": false,
+            "judgment": "not suitable for subject restriction",
+            "reason": "The public Category tree is a site navigation/ownership hierarchy, while keywords, labels, tracks, and contribution types are free-form or event-local. There is no published subject scope-note policy, synonym/preferred-term service, version, cadence, public term-ID vocabulary, or search facet. Category IDs are safe only as explicitly validated organizational scope, not as inferred subjects.",
+            "cv_use_status": "organizational_category_scope_supported_not_subject_filter",
+            "typed_scope_interface": {
+              "options": [
+                "--category-id",
+                "--category-path"
+              ],
+              "validation": "category_id is checked by the visible category-search route; category_path, when supplied, must exactly match the visible root-to-leaf ID path",
+              "search_scope": "the category-search route sends category_id to every selected result-group request; event/contribution/material/note results include the selected category and descendants, while category results include descendants only",
+              "export_scope": "the public category exporter includes the selected category and descendants; the rendered adapter records this capability but does not substitute native export data for search results",
+              "subject_boundary": "category IDs and paths are organizational scope only; no keyword, label, contribution-type, or track filter is exposed"
+            }
+          },
+          "known_item_effects": [
+            {
+              "name": "category_scope_expands_events_to_descendants",
+              "query": "Young Professional",
+              "target": "event",
+              "known_item_url": "https://indico.esa.int/event/557/",
+              "known_category_id_path": [
+                0,
+                6,
+                9
+              ],
+              "observations": {
+                "global": "present",
+                "category_id_6": "present (category 9 is a descendant)",
+                "category_id_9": "present (the selected category)",
+                "category_id_5": "absent"
+              },
+              "source_effect": "category_id uses Event.category_chain_overlaps and includes the selected category and its subtree"
+            },
+            {
+              "name": "category_target_scope_is_descendants_only",
+              "query": "Tests",
+              "target": "category",
+              "known_item_url": "https://indico.esa.int/category/9/",
+              "observations": {
+                "global": "present",
+                "category_id_6": "present (child category)",
+                "category_id_9": "explicit empty result (the category itself is excluded)"
+              },
+              "source_effect": "category search uses Category.deep_children_query, which excludes the selected category itself"
+            },
+            {
+              "name": "category_export_scope_expands_to_descendants",
+              "known_item_url": "https://indico.esa.int/event/557/",
+              "observations": {
+                "GET /export/categ/6.json": "event 557 returned with categoryId 9",
+                "GET /export/categ/9.json": "event 557 returned with categoryId 9"
+              },
+              "source_effect": "the HTTP category exporter filters Event.category_chain_overlaps(idlist)"
+            },
+            {
+              "name": "event_keyword_is_not_unqualified_event_search",
+              "query": "LifeExtension",
+              "target": "event",
+              "field_value": "LifeExtension",
+              "known_item_url": "https://indico.esa.int/event/387/",
+              "observations": {
+                "public_event_page_and_export": "keyword present",
+                "GET /search/api/search?q=LifeExtension&type=event": "explicit total 0"
+              },
+              "source_effect": "event search uses Event.title_matches(q), not Event.keywords"
+            },
+            {
+              "name": "event_type_is_an_export_filter_not_a_subject_facet",
+              "known_item_url": "https://indico.esa.int/event/387/",
+              "observations": {
+                "GET /export/categ/6.json?type=lecture": "event 387 returned as simple_event",
+                "GET /export/categ/6.json?type=conference": "event 387 absent"
+              },
+              "source_effect": "type is a category-export filter for lecture/simple_event, meeting, or conference"
+            }
+          ],
+          "unknowns": [
+            "The current instance's optional allowed event/contribution keyword lists are an administrative setting and are not publicly readable.",
+            "Private event-local contribution types, track IDs, and event-label IDs cannot be enumerated from the anonymous public hierarchy/export surfaces.",
+            "The public endpoints provide no taxonomy version, change log, or update timestamp for category/classification terms.",
+            "Export counts must not be treated as category cardinalities: the current public /category/0/info deep count and default /export/categ/0.json count have different access/filter semantics."
+          ],
+          "official_sources": {
+            "category_export_documentation": "https://docs.getindico.io/en/latest/http-api/exporters/categ/",
+            "event_export_documentation": "https://docs.getindico.io/en/latest/http-api/exporters/event/",
+            "search_documentation": "https://docs.getindico.io/en/latest/search-engine/features/",
+            "category_blueprint": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/categories/blueprint.py",
+            "category_controller": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/categories/controllers/display.py",
+            "category_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/categories/models/categories.py",
+            "category_serializer": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/categories/serialize.py",
+            "event_export_source": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/api.py",
+            "event_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/models/events.py",
+            "event_label_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/models/labels.py",
+            "keyword_field": "https://github.com/indico/indico/blob/v3.3.12/indico/web/forms/fields/simple.py",
+            "contribution_type_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/contributions/models/types.py",
+            "track_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/tracks/models/tracks.py",
+            "search_controller": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/search/controllers.py",
+            "internal_search": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/search/internal.py"
+          }
+        },
+        "category_scope": null,
+        "category_scope_control": {
+          "state": "unknown",
+          "requested": {
+            "category_id": 0,
+            "id_path": null
+          },
+          "effective": null,
+          "provenance": "caller"
+        },
+        "local_harvest": {
+          "schema": "esa-indico-local-harvest/v3",
+          "state": "failed",
+          "failure_code": "global_source_universe_inaccessible",
+          "failure_stage": "local_universe",
+          "source_state": "inaccessible",
+          "source_universe_complete": false,
+          "global_source_universe_proof": "inaccessible_or_unestablished",
+          "source_universe": {
+            "schema": "esa-indico-event-universe/v3",
+            "category_id": 0,
+            "event_count": 0,
+            "reported_count": null,
+            "enumerated_count": null,
+            "complete_marker": null,
+            "event_ids_sha256": null,
+            "scope_kind": "global",
+            "global_coverage": "inaccessible_or_unestablished",
+            "state": "not_established"
+          },
+          "covered_result_groups": [
+            "events",
+            "contributions",
+            "materials"
+          ],
+          "uncovered_result_groups": [
+            "notes",
+            "categories"
+          ],
+          "record_states": [
+            {
+              "source_type": "event_universe",
+              "source_id": null,
+              "state": "inaccessible",
+              "reason": "public_export_request_failed_or_timed_out"
+            }
+          ],
+          "attachment_content": {
+            "schema": "esa-indico-attachment-content/v1",
+            "complete": false,
+            "required_for_complete_mode": true,
+            "failure_states": []
+          },
+          "inaccessible_records": [
+            {
+              "source_type": "event_universe",
+              "source_id": null,
+              "state": "inaccessible",
+              "reason": "public_export_request_failed_or_timed_out"
+            }
+          ],
+          "unparseable_records": [],
+          "missing_records": [],
+          "unsupported_records": [],
+          "resume": {
+            "schema": "esa-indico-local-harvest-checkpoint/v3",
+            "state": "restart_universe",
+            "query": "CubeSat",
+            "category_id": 0,
+            "universe_event_ids": [],
+            "universe_complete": false,
+            "universe_scope_kind": null,
+            "universe_global_coverage": null,
+            "universe_snapshot_observed_at_utc": null,
+            "universe_completeness_proof": null,
+            "universe_events": [],
+            "universe_sha256": null,
+            "universe_reported_count": null,
+            "universe_enumerated_count": null,
+            "universe_complete_marker": null,
+            "next_event_index": 0,
+            "completed_event_ids": [],
+            "records": [],
+            "source_states": [
+              {
+                "source_type": "event_universe",
+                "source_id": null,
+                "state": "inaccessible",
+                "reason": "public_export_request_failed_or_timed_out"
+              }
+            ],
+            "attachment_content": {
+              "schema": "esa-indico-attachment-content/v1",
+              "declared_count": 0,
+              "retrieved_count": 0,
+              "searchable_count": 0,
+              "complete": true,
+              "state_counts": {
+                "accessible": 0,
+                "inaccessible": 0,
+                "missing": 0,
+                "unsupported": 0,
+                "unparseable": 0
+              },
+              "states": [],
+              "failure_states": [],
+              "required_for_complete_mode": true,
+              "routes": "one normal public attachment route per declared attachment",
+              "supported_formats": [
+                "text/html and application/xhtml+xml (visible text)",
+                "text/plain, text/csv, text/markdown, application/json, application/rtf (decoded text)",
+                "text/xml and application/xml (visible XML text; DTD/entities rejected)",
+                "application/pdf (text layer only)",
+                "OOXML .docx/.pptx/.xlsx (ZIP/XML text parts; no macro execution)"
+              ],
+              "unsupported_formats": [
+                "images, video, application/zip/zipx, and legacy OLE office binaries",
+                "macro-enabled or encrypted office packages",
+                "corrupt, malformed, protected, missing, or externally redirected material"
+              ]
+            },
+            "raw_response_bodies_persisted": false,
+            "resume_binding": "exact local expression, category scope, and native event-universe ID order"
+          },
+          "raw_response_bodies_persisted": false,
+          "final_source_failure_artifact": true
+        },
+        "local_matching": {
+          "schema": "esa-indico-local-concept-matcher/v1",
+          "expression": "CubeSat",
+          "rules": {
+            "schema": "esa-indico-local-concept-matcher/v1",
+            "fields_are_record_local": true,
+            "normalization": {
+              "unicode": "NFKC_then_casefold",
+              "html": "decoded_and_removed",
+              "word_boundaries": "Unicode lexical tokens; punctuation and hyphen variants are separators",
+              "stemming": "none",
+              "synonyms": "none"
+            },
+            "boolean": {
+              "operators": [
+                "AND",
+                "OR",
+                "NOT"
+              ],
+              "precedence": "NOT, proximity, AND, OR",
+              "adjacent_terms": "AND"
+            },
+            "phrase": {
+              "syntax": "double-quoted ordered lexical phrase",
+              "default_slop": 0,
+              "slop_syntax": "quoted phrase~N",
+              "cross_field": false
+            },
+            "proximity": {
+              "syntax": [
+                "NEAR/N",
+                "PRE/N",
+                "ONEAR/N",
+                "W/N"
+              ],
+              "distance": "maximum intervening lexical tokens in one field",
+              "max_distance": 100,
+              "near_order": "unordered",
+              "pre_order": "left expression before right expression"
+            },
+            "wildcard": {
+              "syntax": "trailing * only",
+              "meaning": "prefix of one lexical token",
+              "internal_or_leading": "rejected"
+            },
+            "acronym_boundary": "unstarred terms match complete lexical tokens only",
+            "source_q_not_reused": true,
+            "protocol_partition": "caller_supplied_exact_local_expression"
+          },
+          "source_q_submitted": false
+        },
+        "group_accounting": {
+          "events": {
+            "requested": true,
+            "coverage": "not_observed",
+            "source_total": null,
+            "source_total_status": "unknown",
+            "source_total_is_exact": false,
+            "universe_record_count": 0,
+            "source_export_record_count": 0,
+            "raw_source_records": 0,
+            "records_retrieved": 0,
+            "matched_count": 0,
+            "local_match_count": null,
+            "records_retained": 0,
+            "normalized_rows_written": 0,
+            "client_side_exclusions": 0,
+            "within_source_duplicates_removed": 0,
+            "malformed_records_dropped": 0,
+            "retrieval_complete": false,
+            "traversal_exhausted": false,
+            "stopped_reason": "final_source_failure",
+            "source_states": [],
+            "attachment_content": null
+          },
+          "contributions": {
+            "requested": true,
+            "coverage": "not_observed",
+            "source_total": null,
+            "source_total_status": "unknown",
+            "source_total_is_exact": false,
+            "universe_record_count": 0,
+            "source_export_record_count": 0,
+            "raw_source_records": 0,
+            "records_retrieved": 0,
+            "matched_count": 0,
+            "local_match_count": null,
+            "records_retained": 0,
+            "normalized_rows_written": 0,
+            "client_side_exclusions": 0,
+            "within_source_duplicates_removed": 0,
+            "malformed_records_dropped": 0,
+            "retrieval_complete": false,
+            "traversal_exhausted": false,
+            "stopped_reason": "final_source_failure",
+            "source_states": [],
+            "attachment_content": null
+          },
+          "materials": {
+            "requested": true,
+            "coverage": "not_observed",
+            "source_total": null,
+            "source_total_status": "unknown",
+            "source_total_is_exact": false,
+            "universe_record_count": 0,
+            "source_export_record_count": 0,
+            "raw_source_records": 0,
+            "records_retrieved": 0,
+            "matched_count": 0,
+            "local_match_count": null,
+            "records_retained": 0,
+            "normalized_rows_written": 0,
+            "client_side_exclusions": 0,
+            "within_source_duplicates_removed": 0,
+            "malformed_records_dropped": 0,
+            "retrieval_complete": false,
+            "traversal_exhausted": false,
+            "stopped_reason": "final_source_failure",
+            "source_states": [],
+            "attachment_content": {
+              "schema": "esa-indico-attachment-content/v1",
+              "complete": false,
+              "required_for_complete_mode": true,
+              "failure_states": []
+            }
+          }
+        },
+        "source_total_status": "unknown",
+        "source_total_scope": "not_established_due_to_final_source_failure",
+        "global_source_universe": {
+          "state": "inaccessible_or_unestablished",
+          "category_id": 0,
+          "two_snapshot_proof": null,
+          "reported_count": null,
+          "enumerated_count": null,
+          "event_ids_sha256": null
+        },
+        "attachment_content": {
+          "schema": "esa-indico-attachment-content/v1",
+          "complete": false,
+          "required_for_complete_mode": true,
+          "failure_states": []
+        },
+        "source_reported_total": null,
+        "source_reported_total_status": "unknown",
+        "source_reported_total_exact": false,
+        "source_universe_total": null,
+        "source_export_total": null,
+        "local_match_total": null,
+        "matched_total": null,
+        "raw_source_records_received": 0,
+        "raw_source_records": 0,
+        "normalized_rows_written": 0,
+        "client_side_exclusions": 0,
+        "within_source_duplicates_removed": 0,
+        "malformed_records_dropped": 0,
+        "requested_limit": 20,
+        "year_start": null,
+        "year_end": null,
+        "year_filter_mode": "not_applied",
+        "timeout_seconds": 15.0,
+        "page_delay_seconds": 0.0,
+        "max_harvest_events": 500,
+        "max_harvest_seconds": 45.0,
+        "source_traversal_complete": false,
+        "source_capture_complete": false,
+        "final_source_failure_artifact": true,
+        "no_partial_import": true,
+        "error_stage": "local_universe",
+        "normalized_export": {
+          "schema": "esa-indico-normalized-search-export/v1",
+          "kind": "local_harvest_search_results",
+          "format": "normalized_json_csv",
+          "state": "blocked",
+          "complete": false,
+          "source_results_are_search_results": true,
+          "native_search_export": "not_used",
+          "blockers": [
+            "final_source_failure",
+            "global_source_universe_inaccessible"
+          ],
+          "no_partial_import": true
+        },
+        "started_at_utc": "2026-08-29T20:57:02.970826+00:00",
+        "completed_at_utc": "2026-08-29T20:57:18.547107+00:00"
+      },
+      "record_accounting": {
+        "completion_status": "error",
+        "source_total": null,
+        "source_total_known": false,
+        "source_total_exact": false,
+        "records_retained": 0,
+        "stopped_reason": "final_source_failure",
+        "source_total_status": "not_reported",
+        "local_match_count": null,
+        "matched_total": null,
+        "source_universe_total": null,
+        "source_export_total": null,
+        "raw_source_records": 0,
+        "client_side_exclusions": 0,
+        "within_source_duplicates_removed": 0,
+        "malformed_records_dropped": 0,
+        "normalized_rows_written": 0
+      },
+      "execution_ledger": {
+        "schema_version": "academic-search-execution-ledger/v1",
+        "run_id": "af9d278c-a46e-4c03-84c9-05236590345c",
+        "source_id": "esa_indico",
+        "interface": {
+          "endpoint": "https://indico.esa.int/export/categ/0.json",
+          "method": "normal_public_category_and_event_exports",
+          "parameters": {
+            "category_id": 0,
+            "detail": "events"
+          },
+          "submission_endpoint": "https://indico.esa.int/export/categ/0.json",
+          "submission_method": "normal_public_category_and_event_exports",
+          "benign_parameters": {
+            "category_id": 0,
+            "detail": "events"
+          },
+          "controls": {
+            "endpoint": {
+              "name": "interface.endpoint",
+              "state": "applied",
+              "requested_value": "https://indico.esa.int/export/categ/0.json",
+              "effective_value": "https://indico.esa.int/export/categ/0.json",
+              "stage": "source_query",
+              "provenance": "derived"
+            },
+            "method": {
+              "name": "interface.method",
+              "state": "applied",
+              "requested_value": "normal_public_category_and_event_exports",
+              "effective_value": "normal_public_category_and_event_exports",
+              "stage": "source_query",
+              "provenance": "derived"
+            },
+            "parameters": {
+              "name": "interface.parameters",
+              "state": "applied",
+              "requested_value": {
+                "category_id": 0,
+                "detail": "events"
+              },
+              "effective_value": {
+                "category_id": 0,
+                "detail": "events"
+              },
+              "stage": "source_query",
+              "provenance": "derived"
+            }
+          }
+        },
+        "query": {
+          "requested": "CubeSat",
+          "requested_query": "CubeSat",
+          "executed": "",
+          "executed_query": "",
+          "source_native_executed_query": "",
+          "executed_query_provenance": "not_observed",
+          "source_q_used": null,
+          "fields": null,
+          "fields_control": {
+            "name": "query.fields",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "controls": {
+            "requested": {
+              "name": "query.requested",
+              "state": "applied",
+              "requested_value": "CubeSat",
+              "effective_value": "CubeSat",
+              "stage": "source_query",
+              "provenance": "caller"
+            },
+            "executed": {
+              "name": "query.executed",
+              "state": "unknown",
+              "requested_value": null,
+              "effective_value": null,
+              "stage": "source_query",
+              "provenance": "derived"
+            },
+            "fields": {
+              "name": "query.fields",
+              "state": "unknown",
+              "requested_value": null,
+              "effective_value": null,
+              "stage": "source_query",
+              "provenance": "derived"
+            }
+          }
+        },
+        "scope": {
+          "source": {
+            "name": "scope.source",
+            "state": "applied",
+            "requested_value": {
+              "source_id": "esa_indico",
+              "source_label": "ESA Indico"
+            },
+            "effective_value": {
+              "source_id": "esa_indico",
+              "source_label": "ESA Indico"
+            },
+            "stage": "source_query",
+            "provenance": "hard_coded"
+          },
+          "source_scope": {
+            "name": "scope.source_scope",
+            "state": "applied",
+            "requested_value": "bounded local-harvest source universe",
+            "effective_value": "bounded local-harvest source universe",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "database": {
+            "name": "scope.database",
+            "state": "not_applicable",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "hard_coded"
+          },
+          "edition": {
+            "name": "scope.edition",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "tab": {
+            "name": "scope.tab",
+            "state": "applied",
+            "requested_value": [
+              "events",
+              "contributions",
+              "materials"
+            ],
+            "effective_value": [
+              "events",
+              "contributions",
+              "materials"
+            ],
+            "stage": "source_query",
+            "provenance": "derived"
+          }
+        },
+        "filters": {
+          "applied": [],
+          "default": [],
+          "applied_control": {
+            "name": "filters.applied",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "default_control": {
+            "name": "filters.default",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "controls": []
+        },
+        "sort": {
+          "name": "sort",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "query_processing": {
+          "name": "query_processing",
+          "state": "applied",
+          "requested_value": {
+            "searchmode": "bounded_local_harvest",
+            "stemming": "none"
+          },
+          "effective_value": {
+            "searchmode": "bounded_local_harvest",
+            "stemming": "none"
+          },
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "pagination": {
+          "name": "pagination",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived",
+          "requested_limit": {
+            "name": "pagination.requested_limit",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "max_pages": {
+            "name": "pagination.max_pages",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "page_size": {
+            "name": "pagination.page_size",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "caps": [],
+          "controls": [
+            {
+              "name": "pagination.requested_limit",
+              "state": "unknown",
+              "requested_value": null,
+              "effective_value": null,
+              "stage": "source_query",
+              "provenance": "derived"
+            },
+            {
+              "name": "pagination.max_pages",
+              "state": "unknown",
+              "requested_value": null,
+              "effective_value": null,
+              "stage": "source_query",
+              "provenance": "derived"
+            },
+            {
+              "name": "pagination.page_size",
+              "state": "unknown",
+              "requested_value": null,
+              "effective_value": null,
+              "stage": "source_query",
+              "provenance": "derived"
+            }
+          ]
+        },
+        "capture_export": {
+          "name": "capture_export",
+          "state": "applied",
+          "requested_value": {
+            "capture_method": "rendered_source_ui",
+            "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+          },
+          "effective_value": {
+            "capture_method": "rendered_source_ui",
+            "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+          },
+          "stage": "source_query",
+          "provenance": "derived",
+          "capture_method": {
+            "name": "capture_method",
+            "state": "applied",
+            "requested_value": "rendered_source_ui",
+            "effective_value": "rendered_source_ui",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "export_method": {
+            "name": "export_method",
+            "state": "applied",
+            "requested_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+            "effective_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+            "stage": "result_refinement",
+            "provenance": "derived"
+          }
+        },
+        "timestamps": {
+          "started_at_utc": "2026-08-29T20:57:02.969542Z",
+          "completed_at_utc": "2026-08-29T20:57:18.547107Z",
+          "started_at_provenance": "cli_configuration_time",
+          "completed_at_provenance": "adapter_observed"
+        },
+        "run_started_at_utc": "2026-08-29T20:57:02.969542Z",
+        "run_completed_at_utc": "2026-08-29T20:57:18.547107Z",
+        "count_accounting": {
+          "record_accounting_path": "output_metadata.record_accounting",
+          "search_log_record_accounting_path": "output_metadata.search_log.record_accounting",
+          "staged_counts_path": "output_metadata.prisma_search_run.staged_counts",
+          "references": [
+            "output_metadata.record_accounting",
+            "output_metadata.search_log.record_accounting",
+            "output_metadata.prisma_search_run.staged_counts"
+          ],
+          "record_accounting": "output_metadata.record_accounting",
+          "search_log": "output_metadata.search_log.record_accounting",
+          "staged_counts": "output_metadata.prisma_search_run.staged_counts"
+        },
+        "count_accounting_reference": "output_metadata.record_accounting",
+        "count_accounting_ref": "output_metadata.record_accounting",
+        "controls": [
+          {
+            "name": "interface.endpoint",
+            "state": "applied",
+            "requested_value": "https://indico.esa.int/export/categ/0.json",
+            "effective_value": "https://indico.esa.int/export/categ/0.json",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "interface.method",
+            "state": "applied",
+            "requested_value": "normal_public_category_and_event_exports",
+            "effective_value": "normal_public_category_and_event_exports",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "interface.parameters",
+            "state": "applied",
+            "requested_value": {
+              "category_id": 0,
+              "detail": "events"
+            },
+            "effective_value": {
+              "category_id": 0,
+              "detail": "events"
+            },
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "query.requested",
+            "state": "applied",
+            "requested_value": "CubeSat",
+            "effective_value": "CubeSat",
+            "stage": "source_query",
+            "provenance": "caller"
+          },
+          {
+            "name": "query.executed",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "query.fields",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "scope.source",
+            "state": "applied",
+            "requested_value": {
+              "source_id": "esa_indico",
+              "source_label": "ESA Indico"
+            },
+            "effective_value": {
+              "source_id": "esa_indico",
+              "source_label": "ESA Indico"
+            },
+            "stage": "source_query",
+            "provenance": "hard_coded"
+          },
+          {
+            "name": "scope.source_scope",
+            "state": "applied",
+            "requested_value": "bounded local-harvest source universe",
+            "effective_value": "bounded local-harvest source universe",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "scope.database",
+            "state": "not_applicable",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "hard_coded"
+          },
+          {
+            "name": "scope.edition",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "scope.tab",
+            "state": "applied",
+            "requested_value": [
+              "events",
+              "contributions",
+              "materials"
+            ],
+            "effective_value": [
+              "events",
+              "contributions",
+              "materials"
+            ],
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "filters.applied",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "filters.default",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "sort",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "query_processing",
+            "state": "applied",
+            "requested_value": {
+              "searchmode": "bounded_local_harvest",
+              "stemming": "none"
+            },
+            "effective_value": {
+              "searchmode": "bounded_local_harvest",
+              "stemming": "none"
+            },
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "pagination",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "pagination.requested_limit",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "pagination.max_pages",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "pagination.page_size",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "capture_export",
+            "state": "applied",
+            "requested_value": {
+              "capture_method": "rendered_source_ui",
+              "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+            },
+            "effective_value": {
+              "capture_method": "rendered_source_ui",
+              "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+            },
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "capture_method",
+            "state": "applied",
+            "requested_value": "rendered_source_ui",
+            "effective_value": "rendered_source_ui",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "export_method",
+            "state": "applied",
+            "requested_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+            "effective_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+            "stage": "result_refinement",
+            "provenance": "derived"
+          }
+        ]
+      }
+    },
+    "execution_ledger": {
+      "schema_version": "academic-search-execution-ledger/v1",
+      "run_id": "af9d278c-a46e-4c03-84c9-05236590345c",
+      "source_id": "esa_indico",
+      "interface": {
+        "endpoint": "https://indico.esa.int/export/categ/0.json",
+        "method": "normal_public_category_and_event_exports",
+        "parameters": {
+          "category_id": 0,
+          "detail": "events"
+        },
+        "submission_endpoint": "https://indico.esa.int/export/categ/0.json",
+        "submission_method": "normal_public_category_and_event_exports",
+        "benign_parameters": {
+          "category_id": 0,
+          "detail": "events"
+        },
+        "controls": {
+          "endpoint": {
+            "name": "interface.endpoint",
+            "state": "applied",
+            "requested_value": "https://indico.esa.int/export/categ/0.json",
+            "effective_value": "https://indico.esa.int/export/categ/0.json",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "method": {
+            "name": "interface.method",
+            "state": "applied",
+            "requested_value": "normal_public_category_and_event_exports",
+            "effective_value": "normal_public_category_and_event_exports",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "parameters": {
+            "name": "interface.parameters",
+            "state": "applied",
+            "requested_value": {
+              "category_id": 0,
+              "detail": "events"
+            },
+            "effective_value": {
+              "category_id": 0,
+              "detail": "events"
+            },
+            "stage": "source_query",
+            "provenance": "derived"
+          }
+        }
+      },
+      "query": {
+        "requested": "CubeSat",
+        "requested_query": "CubeSat",
+        "executed": "",
+        "executed_query": "",
+        "source_native_executed_query": "",
+        "executed_query_provenance": "not_observed",
+        "source_q_used": null,
+        "fields": null,
+        "fields_control": {
+          "name": "query.fields",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "controls": {
+          "requested": {
+            "name": "query.requested",
+            "state": "applied",
+            "requested_value": "CubeSat",
+            "effective_value": "CubeSat",
+            "stage": "source_query",
+            "provenance": "caller"
+          },
+          "executed": {
+            "name": "query.executed",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "fields": {
+            "name": "query.fields",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          }
+        }
+      },
+      "scope": {
+        "source": {
+          "name": "scope.source",
+          "state": "applied",
+          "requested_value": {
+            "source_id": "esa_indico",
+            "source_label": "ESA Indico"
+          },
+          "effective_value": {
+            "source_id": "esa_indico",
+            "source_label": "ESA Indico"
+          },
+          "stage": "source_query",
+          "provenance": "hard_coded"
+        },
+        "source_scope": {
+          "name": "scope.source_scope",
+          "state": "applied",
+          "requested_value": "bounded local-harvest source universe",
+          "effective_value": "bounded local-harvest source universe",
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "database": {
+          "name": "scope.database",
+          "state": "not_applicable",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "hard_coded"
+        },
+        "edition": {
+          "name": "scope.edition",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "tab": {
+          "name": "scope.tab",
+          "state": "applied",
+          "requested_value": [
+            "events",
+            "contributions",
+            "materials"
+          ],
+          "effective_value": [
+            "events",
+            "contributions",
+            "materials"
+          ],
+          "stage": "source_query",
+          "provenance": "derived"
+        }
+      },
+      "filters": {
+        "applied": [],
+        "default": [],
+        "applied_control": {
+          "name": "filters.applied",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "default_control": {
+          "name": "filters.default",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "controls": []
+      },
+      "sort": {
+        "name": "sort",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      "query_processing": {
+        "name": "query_processing",
+        "state": "applied",
+        "requested_value": {
+          "searchmode": "bounded_local_harvest",
+          "stemming": "none"
+        },
+        "effective_value": {
+          "searchmode": "bounded_local_harvest",
+          "stemming": "none"
+        },
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      "pagination": {
+        "name": "pagination",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived",
+        "requested_limit": {
+          "name": "pagination.requested_limit",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "max_pages": {
+          "name": "pagination.max_pages",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "page_size": {
+          "name": "pagination.page_size",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "caps": [],
+        "controls": [
+          {
+            "name": "pagination.requested_limit",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "pagination.max_pages",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "pagination.page_size",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          }
+        ]
+      },
+      "capture_export": {
+        "name": "capture_export",
+        "state": "applied",
+        "requested_value": {
+          "capture_method": "rendered_source_ui",
+          "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+        },
+        "effective_value": {
+          "capture_method": "rendered_source_ui",
+          "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+        },
+        "stage": "source_query",
+        "provenance": "derived",
+        "capture_method": {
+          "name": "capture_method",
+          "state": "applied",
+          "requested_value": "rendered_source_ui",
+          "effective_value": "rendered_source_ui",
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "export_method": {
+          "name": "export_method",
+          "state": "applied",
+          "requested_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+          "effective_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+          "stage": "result_refinement",
+          "provenance": "derived"
+        }
+      },
+      "timestamps": {
+        "started_at_utc": "2026-08-29T20:57:02.969542Z",
+        "completed_at_utc": "2026-08-29T20:57:18.547107Z",
+        "started_at_provenance": "cli_configuration_time",
+        "completed_at_provenance": "adapter_observed"
+      },
+      "run_started_at_utc": "2026-08-29T20:57:02.969542Z",
+      "run_completed_at_utc": "2026-08-29T20:57:18.547107Z",
+      "count_accounting": {
+        "record_accounting_path": "output_metadata.record_accounting",
+        "search_log_record_accounting_path": "output_metadata.search_log.record_accounting",
+        "staged_counts_path": "output_metadata.prisma_search_run.staged_counts",
+        "references": [
+          "output_metadata.record_accounting",
+          "output_metadata.search_log.record_accounting",
+          "output_metadata.prisma_search_run.staged_counts"
+        ],
+        "record_accounting": "output_metadata.record_accounting",
+        "search_log": "output_metadata.search_log.record_accounting",
+        "staged_counts": "output_metadata.prisma_search_run.staged_counts"
+      },
+      "count_accounting_reference": "output_metadata.record_accounting",
+      "count_accounting_ref": "output_metadata.record_accounting",
+      "controls": [
+        {
+          "name": "interface.endpoint",
+          "state": "applied",
+          "requested_value": "https://indico.esa.int/export/categ/0.json",
+          "effective_value": "https://indico.esa.int/export/categ/0.json",
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "interface.method",
+          "state": "applied",
+          "requested_value": "normal_public_category_and_event_exports",
+          "effective_value": "normal_public_category_and_event_exports",
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "interface.parameters",
+          "state": "applied",
+          "requested_value": {
+            "category_id": 0,
+            "detail": "events"
+          },
+          "effective_value": {
+            "category_id": 0,
+            "detail": "events"
+          },
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "query.requested",
+          "state": "applied",
+          "requested_value": "CubeSat",
+          "effective_value": "CubeSat",
+          "stage": "source_query",
+          "provenance": "caller"
+        },
+        {
+          "name": "query.executed",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "query.fields",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "scope.source",
+          "state": "applied",
+          "requested_value": {
+            "source_id": "esa_indico",
+            "source_label": "ESA Indico"
+          },
+          "effective_value": {
+            "source_id": "esa_indico",
+            "source_label": "ESA Indico"
+          },
+          "stage": "source_query",
+          "provenance": "hard_coded"
+        },
+        {
+          "name": "scope.source_scope",
+          "state": "applied",
+          "requested_value": "bounded local-harvest source universe",
+          "effective_value": "bounded local-harvest source universe",
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "scope.database",
+          "state": "not_applicable",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "hard_coded"
+        },
+        {
+          "name": "scope.edition",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "scope.tab",
+          "state": "applied",
+          "requested_value": [
+            "events",
+            "contributions",
+            "materials"
+          ],
+          "effective_value": [
+            "events",
+            "contributions",
+            "materials"
+          ],
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "filters.applied",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "filters.default",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "sort",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "query_processing",
+          "state": "applied",
+          "requested_value": {
+            "searchmode": "bounded_local_harvest",
+            "stemming": "none"
+          },
+          "effective_value": {
+            "searchmode": "bounded_local_harvest",
+            "stemming": "none"
+          },
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "pagination",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "pagination.requested_limit",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "pagination.max_pages",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "pagination.page_size",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "capture_export",
+          "state": "applied",
+          "requested_value": {
+            "capture_method": "rendered_source_ui",
+            "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+          },
+          "effective_value": {
+            "capture_method": "rendered_source_ui",
+            "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+          },
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "capture_method",
+          "state": "applied",
+          "requested_value": "rendered_source_ui",
+          "effective_value": "rendered_source_ui",
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "export_method",
+          "state": "applied",
+          "requested_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+          "effective_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+          "stage": "result_refinement",
+          "provenance": "derived"
+        }
+      ]
+    },
+    "execution_ledger_ready": true,
+    "execution_ledger_readiness_reasons": [],
+    "source_run_report_ready": false,
+    "source_run_report_readiness_reasons": [
+      "missing_review_id",
+      "missing_strategy_reference",
+      "missing_phase",
+      "missing_coverage_or_partition_declaration",
+      "missing_effective_executed_query",
+      "run_id_not_explicitly_supplied_or_preserved",
+      "source_run_not_complete",
+      "staged_record_accounting_incomplete"
+    ],
+    "prisma_search_run": {
+      "schema_version": "academic-search-prisma-search-run/v1",
+      "run_id": "af9d278c-a46e-4c03-84c9-05236590345c",
+      "run_id_provenance": "generated_uuid4",
+      "review_id": null,
+      "strategy_reference": null,
+      "strategy_version": null,
+      "review": {
+        "review_id": null,
+        "strategy_reference": null,
+        "strategy_version": null
+      },
+      "phase": null,
+      "coverage": {
+        "coverage_scope": "unspecified",
+        "is_full_source_coverage": null,
+        "partition_id": null,
+        "partition_label": null,
+        "partition_description": null,
+        "partition_provenance": "not_supplied"
+      },
+      "started_at_utc": "2026-08-29T20:57:02.969542Z",
+      "completed_at_utc": "2026-08-29T20:57:18.547107Z",
+      "timestamp_provenance": {
+        "started_at_utc": "cli_configuration_time",
+        "completed_at_utc": "adapter_observed"
+      },
+      "timestamps": {
+        "started_at_utc": "2026-08-29T20:57:02.969542Z",
+        "completed_at_utc": "2026-08-29T20:57:18.547107Z",
+        "started_at_provenance": "cli_configuration_time",
+        "completed_at_provenance": "adapter_observed"
+      },
+      "source_descriptor": {
+        "source_id": "esa_indico",
+        "source_label": "ESA Indico",
+        "prisma_category": "conference_proceedings",
+        "resource_name": "ESA Indico",
+        "database_name": null,
+        "platform_name": "ESA Indico",
+        "platform_url": "https://indico.esa.int/",
+        "category": "conference_proceedings",
+        "registry_status": "registered",
+        "descriptor_provenance": "registry_default"
+      },
+      "effective_execution": {
+        "schema_version": "academic-search-effective-execution/v1",
+        "executed_query_provenance": "not_observed",
+        "source_q_used": null,
+        "source_url": "https://indico.esa.int/export/categ/0.json",
+        "source_url_provenance": "source_observed",
+        "settings": {
+          "request": {
+            "method": "normal_public_category_and_event_exports",
+            "http_method": "GET",
+            "endpoint": "https://indico.esa.int/export/categ/0.json",
+            "parameters": {
+              "category_id": 0,
+              "detail": "events"
+            },
+            "scope": "bounded local-harvest source universe",
+            "redirect_policy": "same_origin_expected_export_path_only"
+          },
+          "query": {
+            "requested": "CubeSat",
+            "executed": null,
+            "source_q_submitted": false,
+            "method": "deterministic local Boolean/phrase/proximity matcher"
+          },
+          "pagination": {
+            "resumable": true,
+            "checkpoint": {
+              "schema": "esa-indico-local-harvest-checkpoint/v3",
+              "state": "restart_universe",
+              "query": "CubeSat",
+              "category_id": 0,
+              "universe_event_ids": [],
+              "universe_complete": false,
+              "universe_scope_kind": null,
+              "universe_global_coverage": null,
+              "universe_snapshot_observed_at_utc": null,
+              "universe_completeness_proof": null,
+              "universe_events": [],
+              "universe_sha256": null,
+              "universe_reported_count": null,
+              "universe_enumerated_count": null,
+              "universe_complete_marker": null,
+              "next_event_index": 0,
+              "completed_event_ids": [],
+              "records": [],
+              "source_states": [
+                {
+                  "source_type": "event_universe",
+                  "source_id": null,
+                  "state": "inaccessible",
+                  "reason": "public_export_request_failed_or_timed_out"
+                }
+              ],
+              "attachment_content": {
+                "schema": "esa-indico-attachment-content/v1",
+                "declared_count": 0,
+                "retrieved_count": 0,
+                "searchable_count": 0,
+                "complete": true,
+                "state_counts": {
+                  "accessible": 0,
+                  "inaccessible": 0,
+                  "missing": 0,
+                  "unsupported": 0,
+                  "unparseable": 0
+                },
+                "states": [],
+                "failure_states": [],
+                "required_for_complete_mode": true,
+                "routes": "one normal public attachment route per declared attachment",
+                "supported_formats": [
+                  "text/html and application/xhtml+xml (visible text)",
+                  "text/plain, text/csv, text/markdown, application/json, application/rtf (decoded text)",
+                  "text/xml and application/xml (visible XML text; DTD/entities rejected)",
+                  "application/pdf (text layer only)",
+                  "OOXML .docx/.pptx/.xlsx (ZIP/XML text parts; no macro execution)"
+                ],
+                "unsupported_formats": [
+                  "images, video, application/zip/zipx, and legacy OLE office binaries",
+                  "macro-enabled or encrypted office packages",
+                  "corrupt, malformed, protected, missing, or externally redirected material"
+                ]
+              },
+              "raw_response_bodies_persisted": false,
+              "resume_binding": "exact local expression, category scope, and native event-universe ID order"
+            }
+          },
+          "record_accounting": {
+            "raw_source_records": 0,
+            "client_side_exclusions": 0,
+            "within_source_duplicates_removed": 0,
+            "malformed_records_dropped": 0,
+            "normalized_rows_written": 0,
+            "local_match_count": null,
+            "coverage_failure_is_not_an_exclusion": true
+          },
+          "failure": {
+            "state": "final_source_failure",
+            "code": "global_source_universe_inaccessible",
+            "source_state": "inaccessible"
+          },
+          "access_method": "normal_rendered_esa_indico_browser_public_export",
+          "search_mode": "bounded_local_harvest",
+          "local_harvest_requested": true,
+          "require_complete": false,
+          "requested_query": "CubeSat",
+          "observed_exact_query_echo": false,
+          "source_q_used": false,
+          "result_types": [
+            "events",
+            "contributions",
+            "materials"
+          ],
+          "all_result_groups": [
+            "events",
+            "contributions",
+            "materials",
+            "notes",
+            "categories"
+          ],
+          "uncovered_result_groups": [
+            "notes",
+            "categories"
+          ],
+          "category_taxonomy": {
+            "name": "ESA Indico site Category tree",
+            "kind": "instance_local_hierarchical_container",
+            "validated_at": "2026-08-27",
+            "validation": "validated_live_2026-08-27",
+            "source_release_observed": "3.3.12",
+            "version": null,
+            "versioning": "No public taxonomy version or release manifest; 3.3.12 is the observed Indico software release, not a vocabulary version.",
+            "governance": "Category titles, parent links, order, and protection are site content managed by authorized category administrators/managers. Event and contribution classification values are entered by event managers; the public interface exposes no governance roster.",
+            "update_cadence": "No public cadence is specified; changes are administrative/content changes rather than scheduled vocabulary releases.",
+            "preferred_terms": "None published. Category titles, keywords, labels, tracks, and contribution types have no preferred-term relation.",
+            "synonyms": "None published or exposed by the public endpoints.",
+            "hierarchy": {
+              "root": {
+                "id": 0,
+                "title": "Home",
+                "browse_url": "https://indico.esa.int/",
+                "id_path": [
+                  0
+                ]
+              },
+              "browse_endpoint": "GET /category/<category_id>/",
+              "info_endpoint": "GET /category/<category_id>/info",
+              "subcat_info_endpoint": "GET /category/<category_id>/subcat-info",
+              "path_fields": [
+                "id",
+                "title",
+                "parent_path",
+                "path",
+                "supercategories",
+                "subcategories"
+              ],
+              "scope_fields": [
+                "has_events",
+                "has_children",
+                "deep_event_count",
+                "deep_category_count",
+                "is_protected"
+              ],
+              "observed_paths": [
+                {
+                  "id": 0,
+                  "title": "Home",
+                  "url": "https://indico.esa.int/"
+                },
+                {
+                  "id": 6,
+                  "title": "Conferences, Workshops and Events",
+                  "url": "https://indico.esa.int/category/6/"
+                },
+                {
+                  "id": 9,
+                  "title": "Tests",
+                  "url": "https://indico.esa.int/category/9/"
+                },
+                {
+                  "id": 7,
+                  "title": "Final presentations",
+                  "url": "https://indico.esa.int/category/7/"
+                },
+                {
+                  "id": 5,
+                  "title": "Projects",
+                  "url": "https://indico.esa.int/category/5/"
+                }
+              ],
+              "live_notes": "The 2026-08-27 public /category/0/info response listed direct children 6, 7, and 5; 9 was a child of 6. /category/0/ redirected to /."
+            },
+            "identity": {
+              "id_field": "integer Category.id and URL path segment",
+              "stability": "Installation-local record locator only. IDs are not a portable vocabulary key; titles and parent paths can change, and deleted categories are not valid current terms.",
+              "root_exception": "ID 0 is the synthetic/root Home category; its canonical browse URL is /, although /category/0/info is a public hierarchy endpoint."
+            },
+            "field_inventory": {
+              "category": {
+                "source_fields": [
+                  "id",
+                  "parent_id",
+                  "position",
+                  "title",
+                  "description",
+                  "visibility",
+                  "protection_mode",
+                  "is_deleted"
+                ],
+                "public_hierarchy_fields": [
+                  "id",
+                  "title",
+                  "parent_path",
+                  "path",
+                  "has_events",
+                  "has_children",
+                  "deep_event_count",
+                  "deep_category_count",
+                  "is_protected"
+                ],
+                "scope_notes": "description is free-form category content; there is no separate controlled scope-note field"
+              },
+              "event": {
+                "category_field": "category_id",
+                "hierarchy_field": "category_chain",
+                "public_surfaces": [
+                  "event page breadcrumb/category link",
+                  "category export categoryId/category path",
+                  "search result category_path"
+                ]
+              },
+              "event_keywords": {
+                "attribute": "Event.keywords",
+                "surface": "public event HTML meta keywords and HTTP event/category export keywords",
+                "value_type": "array of strings",
+                "preferred_or_synonym_behavior": "none; optional allowed-keyword configuration is case-insensitively deduplicated but does not create synonyms",
+                "current_allowed_list": "not publicly exposed; state unknown",
+                "subject_search": "not indexed by current unqualified event search"
+              },
+              "event_type": {
+                "attribute": "Event.type",
+                "values": [
+                  "lecture",
+                  "meeting",
+                  "conference"
+                ],
+                "export_alias": "simple_event is the category-export alias for lecture",
+                "source_enum_ids": {
+                  "lecture": 1,
+                  "meeting": 2,
+                  "conference": 3
+                },
+                "ids": "source enum values are format identifiers, not subject IDs; public query syntax uses names",
+                "meaning": "event format/feature type, not a subject taxonomy"
+              },
+              "event_label": {
+                "attribute": "Event.label",
+                "surface": "optional classification label in event management/export",
+                "value_type": "instance-wide label title/color/message; no subject hierarchy",
+                "ids": "not included in the public event export label object",
+                "subject_search": "not a current search target or facet"
+              },
+              "contribution_keywords": {
+                "attribute": "Contribution.keywords",
+                "surface": "HTTP event export contribution keywords when present",
+                "value_type": "array of strings",
+                "preferred_or_synonym_behavior": "none published; optional allowed list state is not public",
+                "subject_search": "not indexed by current contribution search"
+              },
+              "contribution_type": {
+                "attribute": "Contribution.type / ContributionType",
+                "scope": "event-local",
+                "model_fields": [
+                  "id",
+                  "event_id",
+                  "name",
+                  "description",
+                  "is_private"
+                ],
+                "public_export": "contribution type is a name or null; the numeric ID and private definitions are not exposed by the public export",
+                "preferred_or_synonym_behavior": "none; names are unique case-insensitively within one event only",
+                "subject_search": "not indexed and no global facet exists"
+              },
+              "contribution_track": {
+                "attribute": "Contribution.track / Track",
+                "scope": "event-local",
+                "model_fields": [
+                  "id",
+                  "event_id",
+                  "title",
+                  "code",
+                  "track_group_id",
+                  "position"
+                ],
+                "public_export": "track is a display string; track/group IDs are not included",
+                "preferred_or_synonym_behavior": "none published; tracks are event-program organization",
+                "subject_search": "not indexed and no global facet exists"
+              }
+            },
+            "scope_notes": {
+              "browse_default": "A category page lists direct child categories and direct events. A flat subtree view is configuration-dependent and only applies when enabled; it is not a taxonomy expansion control.",
+              "category_search": "category_id=C scopes event/contribution/material/note searches to C and descendants, but category-result searches to descendants excluding C itself. category_id=0 is treated as the root/global scope by current InternalSearch.",
+              "category_export": "GET /export/categ/C.json includes events whose category chain contains C or a descendant; hyphen-separated category IDs are supported by the official export API. Date, access, and export filters affect returned counts.",
+              "no_expansion_controls": "There is no public explosion, focus, major-topic, preferred-term, or synonym switch."
+            },
+            "browse_vs_search_facet": {
+              "browse": "The category pages and /info endpoint are the hierarchy/browse interface.",
+              "search_result_group": "Categories is one global-search result group; it is not a subject facet.",
+              "search_facet": "No category, keyword, track, contribution-type, or event-label facet is exposed. The live /search/api/options response was {placeholders: [], sort_options: []}.",
+              "scope_syntax": {
+                "global_ui": "GET /search/?q=<URL-encoded raw q>",
+                "category_ui": "GET /category/<category_id>/search?q=<URL-encoded raw q>",
+                "category_api": "GET /search/api/search?q=<raw q>&type=<target>&category_id=<category_id>",
+                "contribution_api": "repeat type=contribution and type=subcontribution",
+                "category_target": "type=category searches category titles; category_id is scope, not a category term",
+                "export": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+              }
+            },
+            "expansion": {
+              "search_event_like_targets": "implicit subtree expansion via Event.category_chain_overlaps; no caller toggle",
+              "search_category_target": "implicit descendants-only expansion via Category.deep_children_query",
+              "export": "implicit subtree expansion via Event.category_chain_overlaps",
+              "focus_or_major_topic": "not_applicable"
+            },
+            "subject_restriction_judgment": {
+              "suitable": false,
+              "judgment": "not suitable for subject restriction",
+              "reason": "The public Category tree is a site navigation/ownership hierarchy, while keywords, labels, tracks, and contribution types are free-form or event-local. There is no published subject scope-note policy, synonym/preferred-term service, version, cadence, public term-ID vocabulary, or search facet. Category IDs are safe only as explicitly validated organizational scope, not as inferred subjects.",
+              "cv_use_status": "organizational_category_scope_supported_not_subject_filter",
+              "typed_scope_interface": {
+                "options": [
+                  "--category-id",
+                  "--category-path"
+                ],
+                "validation": "category_id is checked by the visible category-search route; category_path, when supplied, must exactly match the visible root-to-leaf ID path",
+                "search_scope": "the category-search route sends category_id to every selected result-group request; event/contribution/material/note results include the selected category and descendants, while category results include descendants only",
+                "export_scope": "the public category exporter includes the selected category and descendants; the rendered adapter records this capability but does not substitute native export data for search results",
+                "subject_boundary": "category IDs and paths are organizational scope only; no keyword, label, contribution-type, or track filter is exposed"
+              }
+            },
+            "known_item_effects": [
+              {
+                "name": "category_scope_expands_events_to_descendants",
+                "query": "Young Professional",
+                "target": "event",
+                "known_item_url": "https://indico.esa.int/event/557/",
+                "known_category_id_path": [
+                  0,
+                  6,
+                  9
+                ],
+                "observations": {
+                  "global": "present",
+                  "category_id_6": "present (category 9 is a descendant)",
+                  "category_id_9": "present (the selected category)",
+                  "category_id_5": "absent"
+                },
+                "source_effect": "category_id uses Event.category_chain_overlaps and includes the selected category and its subtree"
+              },
+              {
+                "name": "category_target_scope_is_descendants_only",
+                "query": "Tests",
+                "target": "category",
+                "known_item_url": "https://indico.esa.int/category/9/",
+                "observations": {
+                  "global": "present",
+                  "category_id_6": "present (child category)",
+                  "category_id_9": "explicit empty result (the category itself is excluded)"
+                },
+                "source_effect": "category search uses Category.deep_children_query, which excludes the selected category itself"
+              },
+              {
+                "name": "category_export_scope_expands_to_descendants",
+                "known_item_url": "https://indico.esa.int/event/557/",
+                "observations": {
+                  "GET /export/categ/6.json": "event 557 returned with categoryId 9",
+                  "GET /export/categ/9.json": "event 557 returned with categoryId 9"
+                },
+                "source_effect": "the HTTP category exporter filters Event.category_chain_overlaps(idlist)"
+              },
+              {
+                "name": "event_keyword_is_not_unqualified_event_search",
+                "query": "LifeExtension",
+                "target": "event",
+                "field_value": "LifeExtension",
+                "known_item_url": "https://indico.esa.int/event/387/",
+                "observations": {
+                  "public_event_page_and_export": "keyword present",
+                  "GET /search/api/search?q=LifeExtension&type=event": "explicit total 0"
+                },
+                "source_effect": "event search uses Event.title_matches(q), not Event.keywords"
+              },
+              {
+                "name": "event_type_is_an_export_filter_not_a_subject_facet",
+                "known_item_url": "https://indico.esa.int/event/387/",
+                "observations": {
+                  "GET /export/categ/6.json?type=lecture": "event 387 returned as simple_event",
+                  "GET /export/categ/6.json?type=conference": "event 387 absent"
+                },
+                "source_effect": "type is a category-export filter for lecture/simple_event, meeting, or conference"
+              }
+            ],
+            "unknowns": [
+              "The current instance's optional allowed event/contribution keyword lists are an administrative setting and are not publicly readable.",
+              "Private event-local contribution types, track IDs, and event-label IDs cannot be enumerated from the anonymous public hierarchy/export surfaces.",
+              "The public endpoints provide no taxonomy version, change log, or update timestamp for category/classification terms.",
+              "Export counts must not be treated as category cardinalities: the current public /category/0/info deep count and default /export/categ/0.json count have different access/filter semantics."
+            ],
+            "official_sources": {
+              "category_export_documentation": "https://docs.getindico.io/en/latest/http-api/exporters/categ/",
+              "event_export_documentation": "https://docs.getindico.io/en/latest/http-api/exporters/event/",
+              "search_documentation": "https://docs.getindico.io/en/latest/search-engine/features/",
+              "category_blueprint": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/categories/blueprint.py",
+              "category_controller": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/categories/controllers/display.py",
+              "category_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/categories/models/categories.py",
+              "category_serializer": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/categories/serialize.py",
+              "event_export_source": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/api.py",
+              "event_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/models/events.py",
+              "event_label_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/models/labels.py",
+              "keyword_field": "https://github.com/indico/indico/blob/v3.3.12/indico/web/forms/fields/simple.py",
+              "contribution_type_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/contributions/models/types.py",
+              "track_model": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/events/tracks/models/tracks.py",
+              "search_controller": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/search/controllers.py",
+              "internal_search": "https://github.com/indico/indico/blob/v3.3.12/indico/modules/search/internal.py"
+            }
+          },
+          "category_scope": null,
+          "category_scope_control": {
+            "state": "unknown",
+            "requested": {
+              "category_id": 0,
+              "id_path": null
+            },
+            "effective": null,
+            "provenance": "caller"
+          },
+          "local_harvest": {
+            "schema": "esa-indico-local-harvest/v3",
+            "state": "failed",
+            "failure_code": "global_source_universe_inaccessible",
+            "failure_stage": "local_universe",
+            "source_state": "inaccessible",
+            "source_universe_complete": false,
+            "global_source_universe_proof": "inaccessible_or_unestablished",
+            "source_universe": {
+              "schema": "esa-indico-event-universe/v3",
+              "category_id": 0,
+              "event_count": 0,
+              "reported_count": null,
+              "enumerated_count": null,
+              "complete_marker": null,
+              "event_ids_sha256": null,
+              "scope_kind": "global",
+              "global_coverage": "inaccessible_or_unestablished",
+              "state": "not_established"
+            },
+            "covered_result_groups": [
+              "events",
+              "contributions",
+              "materials"
+            ],
+            "uncovered_result_groups": [
+              "notes",
+              "categories"
+            ],
+            "record_states": [
+              {
+                "source_type": "event_universe",
+                "source_id": null,
+                "state": "inaccessible",
+                "reason": "public_export_request_failed_or_timed_out"
+              }
+            ],
+            "attachment_content": {
+              "schema": "esa-indico-attachment-content/v1",
+              "complete": false,
+              "required_for_complete_mode": true,
+              "failure_states": []
+            },
+            "inaccessible_records": [
+              {
+                "source_type": "event_universe",
+                "source_id": null,
+                "state": "inaccessible",
+                "reason": "public_export_request_failed_or_timed_out"
+              }
+            ],
+            "unparseable_records": [],
+            "missing_records": [],
+            "unsupported_records": [],
+            "resume": {
+              "schema": "esa-indico-local-harvest-checkpoint/v3",
+              "state": "restart_universe",
+              "query": "CubeSat",
+              "category_id": 0,
+              "universe_event_ids": [],
+              "universe_complete": false,
+              "universe_scope_kind": null,
+              "universe_global_coverage": null,
+              "universe_snapshot_observed_at_utc": null,
+              "universe_completeness_proof": null,
+              "universe_events": [],
+              "universe_sha256": null,
+              "universe_reported_count": null,
+              "universe_enumerated_count": null,
+              "universe_complete_marker": null,
+              "next_event_index": 0,
+              "completed_event_ids": [],
+              "records": [],
+              "source_states": [
+                {
+                  "source_type": "event_universe",
+                  "source_id": null,
+                  "state": "inaccessible",
+                  "reason": "public_export_request_failed_or_timed_out"
+                }
+              ],
+              "attachment_content": {
+                "schema": "esa-indico-attachment-content/v1",
+                "declared_count": 0,
+                "retrieved_count": 0,
+                "searchable_count": 0,
+                "complete": true,
+                "state_counts": {
+                  "accessible": 0,
+                  "inaccessible": 0,
+                  "missing": 0,
+                  "unsupported": 0,
+                  "unparseable": 0
+                },
+                "states": [],
+                "failure_states": [],
+                "required_for_complete_mode": true,
+                "routes": "one normal public attachment route per declared attachment",
+                "supported_formats": [
+                  "text/html and application/xhtml+xml (visible text)",
+                  "text/plain, text/csv, text/markdown, application/json, application/rtf (decoded text)",
+                  "text/xml and application/xml (visible XML text; DTD/entities rejected)",
+                  "application/pdf (text layer only)",
+                  "OOXML .docx/.pptx/.xlsx (ZIP/XML text parts; no macro execution)"
+                ],
+                "unsupported_formats": [
+                  "images, video, application/zip/zipx, and legacy OLE office binaries",
+                  "macro-enabled or encrypted office packages",
+                  "corrupt, malformed, protected, missing, or externally redirected material"
+                ]
+              },
+              "raw_response_bodies_persisted": false,
+              "resume_binding": "exact local expression, category scope, and native event-universe ID order"
+            },
+            "raw_response_bodies_persisted": false,
+            "final_source_failure_artifact": true
+          },
+          "local_matching": {
+            "schema": "esa-indico-local-concept-matcher/v1",
+            "expression": "CubeSat",
+            "rules": {
+              "schema": "esa-indico-local-concept-matcher/v1",
+              "fields_are_record_local": true,
+              "normalization": {
+                "unicode": "NFKC_then_casefold",
+                "html": "decoded_and_removed",
+                "word_boundaries": "Unicode lexical tokens; punctuation and hyphen variants are separators",
+                "stemming": "none",
+                "synonyms": "none"
+              },
+              "boolean": {
+                "operators": [
+                  "AND",
+                  "OR",
+                  "NOT"
+                ],
+                "precedence": "NOT, proximity, AND, OR",
+                "adjacent_terms": "AND"
+              },
+              "phrase": {
+                "syntax": "double-quoted ordered lexical phrase",
+                "default_slop": 0,
+                "slop_syntax": "quoted phrase~N",
+                "cross_field": false
+              },
+              "proximity": {
+                "syntax": [
+                  "NEAR/N",
+                  "PRE/N",
+                  "ONEAR/N",
+                  "W/N"
+                ],
+                "distance": "maximum intervening lexical tokens in one field",
+                "max_distance": 100,
+                "near_order": "unordered",
+                "pre_order": "left expression before right expression"
+              },
+              "wildcard": {
+                "syntax": "trailing * only",
+                "meaning": "prefix of one lexical token",
+                "internal_or_leading": "rejected"
+              },
+              "acronym_boundary": "unstarred terms match complete lexical tokens only",
+              "source_q_not_reused": true,
+              "protocol_partition": "caller_supplied_exact_local_expression"
+            },
+            "source_q_submitted": false
+          },
+          "group_accounting": {
+            "events": {
+              "requested": true,
+              "coverage": "not_observed",
+              "source_total": null,
+              "source_total_status": "unknown",
+              "source_total_is_exact": false,
+              "universe_record_count": 0,
+              "source_export_record_count": 0,
+              "raw_source_records": 0,
+              "records_retrieved": 0,
+              "matched_count": 0,
+              "local_match_count": null,
+              "records_retained": 0,
+              "normalized_rows_written": 0,
+              "client_side_exclusions": 0,
+              "within_source_duplicates_removed": 0,
+              "malformed_records_dropped": 0,
+              "retrieval_complete": false,
+              "traversal_exhausted": false,
+              "stopped_reason": "final_source_failure",
+              "source_states": [],
+              "attachment_content": null
+            },
+            "contributions": {
+              "requested": true,
+              "coverage": "not_observed",
+              "source_total": null,
+              "source_total_status": "unknown",
+              "source_total_is_exact": false,
+              "universe_record_count": 0,
+              "source_export_record_count": 0,
+              "raw_source_records": 0,
+              "records_retrieved": 0,
+              "matched_count": 0,
+              "local_match_count": null,
+              "records_retained": 0,
+              "normalized_rows_written": 0,
+              "client_side_exclusions": 0,
+              "within_source_duplicates_removed": 0,
+              "malformed_records_dropped": 0,
+              "retrieval_complete": false,
+              "traversal_exhausted": false,
+              "stopped_reason": "final_source_failure",
+              "source_states": [],
+              "attachment_content": null
+            },
+            "materials": {
+              "requested": true,
+              "coverage": "not_observed",
+              "source_total": null,
+              "source_total_status": "unknown",
+              "source_total_is_exact": false,
+              "universe_record_count": 0,
+              "source_export_record_count": 0,
+              "raw_source_records": 0,
+              "records_retrieved": 0,
+              "matched_count": 0,
+              "local_match_count": null,
+              "records_retained": 0,
+              "normalized_rows_written": 0,
+              "client_side_exclusions": 0,
+              "within_source_duplicates_removed": 0,
+              "malformed_records_dropped": 0,
+              "retrieval_complete": false,
+              "traversal_exhausted": false,
+              "stopped_reason": "final_source_failure",
+              "source_states": [],
+              "attachment_content": {
+                "schema": "esa-indico-attachment-content/v1",
+                "complete": false,
+                "required_for_complete_mode": true,
+                "failure_states": []
+              }
+            }
+          },
+          "source_total_status": "unknown",
+          "source_total_scope": "not_established_due_to_final_source_failure",
+          "global_source_universe": {
+            "state": "inaccessible_or_unestablished",
+            "category_id": 0,
+            "two_snapshot_proof": null,
+            "reported_count": null,
+            "enumerated_count": null,
+            "event_ids_sha256": null
+          },
+          "attachment_content": {
+            "schema": "esa-indico-attachment-content/v1",
+            "complete": false,
+            "required_for_complete_mode": true,
+            "failure_states": []
+          },
+          "source_reported_total": null,
+          "source_reported_total_status": "unknown",
+          "source_reported_total_exact": false,
+          "source_universe_total": null,
+          "source_export_total": null,
+          "local_match_total": null,
+          "matched_total": null,
+          "raw_source_records_received": 0,
+          "raw_source_records": 0,
+          "normalized_rows_written": 0,
+          "client_side_exclusions": 0,
+          "within_source_duplicates_removed": 0,
+          "malformed_records_dropped": 0,
+          "requested_limit": 20,
+          "year_start": null,
+          "year_end": null,
+          "year_filter_mode": "not_applied",
+          "timeout_seconds": 15.0,
+          "page_delay_seconds": 0.0,
+          "max_harvest_events": 500,
+          "max_harvest_seconds": 45.0,
+          "source_traversal_complete": false,
+          "source_capture_complete": false,
+          "final_source_failure_artifact": true,
+          "no_partial_import": true,
+          "error_stage": "local_universe",
+          "normalized_export": {
+            "schema": "esa-indico-normalized-search-export/v1",
+            "kind": "local_harvest_search_results",
+            "format": "normalized_json_csv",
+            "state": "blocked",
+            "complete": false,
+            "source_results_are_search_results": true,
+            "native_search_export": "not_used",
+            "blockers": [
+              "final_source_failure",
+              "global_source_universe_inaccessible"
+            ],
+            "no_partial_import": true
+          },
+          "started_at_utc": "2026-08-29T20:57:02.970826+00:00",
+          "completed_at_utc": "2026-08-29T20:57:18.547107+00:00"
+        },
+        "provenance": "search_log"
+      },
+      "staged_counts": {
+        "schema_version": "academic-search-prisma-staged-counts/v1",
+        "source_reported_total": null,
+        "source_reported_total_status": "not_reported",
+        "source_reported_total_exact": false,
+        "source_reported_total_scope": "all five ESA Indico rendered result groups before any client-side year filter",
+        "source_universe_total": null,
+        "source_export_total": null,
+        "local_match_count": null,
+        "matched_total": null,
+        "raw_source_records": 1,
+        "client_side_exclusions": 0,
+        "within_source_duplicates_removed": 0,
+        "malformed_records_dropped": 0,
+        "normalized_rows_written": 0,
+        "prisma_records_before_cross_source_deduplication": 0,
+        "records_before_cross_source_deduplication": 0,
+        "within_source_deduplication": {
+          "records_removed": 0
+        },
+        "count_mapping_complete": false,
+        "count_mapping_status": "incomplete",
+        "count_mapping_missing_fields": [],
+        "count_consistency_errors": [
+          "raw_source_records minus source-local removals does not equal normalized_rows_written"
+        ],
+        "count_mapping_notes": [
+          "legacy_or_source_specific_count_mapping_incomplete"
+        ]
+      },
+      "completion_status": "error",
+      "completion": {
+        "status": "error",
+        "is_complete": false,
+        "source_retrieval_complete": false,
+        "report_ready": false
+      },
+      "adapter": {
+        "adapter_id": "search_esa_indico",
+        "adapter_version": "6",
+        "script_sha256": "d23619754312d1f02ba0830200722a7e9a2c72ca2034757c541a5fecb9743d6e",
+        "script_hash_provenance": "sha256_regular_file",
+        "identity": "search_esa_indico",
+        "version": "6",
+        "hash": "d23619754312d1f02ba0830200722a7e9a2c72ca2034757c541a5fecb9743d6e",
+        "hash_algorithm": "sha256"
+      },
+      "execution_ledger": {
+        "schema_version": "academic-search-execution-ledger/v1",
+        "run_id": "af9d278c-a46e-4c03-84c9-05236590345c",
+        "source_id": "esa_indico",
+        "interface": {
+          "endpoint": "https://indico.esa.int/export/categ/0.json",
+          "method": "normal_public_category_and_event_exports",
+          "parameters": {
+            "category_id": 0,
+            "detail": "events"
+          },
+          "submission_endpoint": "https://indico.esa.int/export/categ/0.json",
+          "submission_method": "normal_public_category_and_event_exports",
+          "benign_parameters": {
+            "category_id": 0,
+            "detail": "events"
+          },
+          "controls": {
+            "endpoint": {
+              "name": "interface.endpoint",
+              "state": "applied",
+              "requested_value": "https://indico.esa.int/export/categ/0.json",
+              "effective_value": "https://indico.esa.int/export/categ/0.json",
+              "stage": "source_query",
+              "provenance": "derived"
+            },
+            "method": {
+              "name": "interface.method",
+              "state": "applied",
+              "requested_value": "normal_public_category_and_event_exports",
+              "effective_value": "normal_public_category_and_event_exports",
+              "stage": "source_query",
+              "provenance": "derived"
+            },
+            "parameters": {
+              "name": "interface.parameters",
+              "state": "applied",
+              "requested_value": {
+                "category_id": 0,
+                "detail": "events"
+              },
+              "effective_value": {
+                "category_id": 0,
+                "detail": "events"
+              },
+              "stage": "source_query",
+              "provenance": "derived"
+            }
+          }
+        },
+        "query": {
+          "requested": "CubeSat",
+          "requested_query": "CubeSat",
+          "executed": "",
+          "executed_query": "",
+          "source_native_executed_query": "",
+          "executed_query_provenance": "not_observed",
+          "source_q_used": null,
+          "fields": null,
+          "fields_control": {
+            "name": "query.fields",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "controls": {
+            "requested": {
+              "name": "query.requested",
+              "state": "applied",
+              "requested_value": "CubeSat",
+              "effective_value": "CubeSat",
+              "stage": "source_query",
+              "provenance": "caller"
+            },
+            "executed": {
+              "name": "query.executed",
+              "state": "unknown",
+              "requested_value": null,
+              "effective_value": null,
+              "stage": "source_query",
+              "provenance": "derived"
+            },
+            "fields": {
+              "name": "query.fields",
+              "state": "unknown",
+              "requested_value": null,
+              "effective_value": null,
+              "stage": "source_query",
+              "provenance": "derived"
+            }
+          }
+        },
+        "scope": {
+          "source": {
+            "name": "scope.source",
+            "state": "applied",
+            "requested_value": {
+              "source_id": "esa_indico",
+              "source_label": "ESA Indico"
+            },
+            "effective_value": {
+              "source_id": "esa_indico",
+              "source_label": "ESA Indico"
+            },
+            "stage": "source_query",
+            "provenance": "hard_coded"
+          },
+          "source_scope": {
+            "name": "scope.source_scope",
+            "state": "applied",
+            "requested_value": "bounded local-harvest source universe",
+            "effective_value": "bounded local-harvest source universe",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "database": {
+            "name": "scope.database",
+            "state": "not_applicable",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "hard_coded"
+          },
+          "edition": {
+            "name": "scope.edition",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "tab": {
+            "name": "scope.tab",
+            "state": "applied",
+            "requested_value": [
+              "events",
+              "contributions",
+              "materials"
+            ],
+            "effective_value": [
+              "events",
+              "contributions",
+              "materials"
+            ],
+            "stage": "source_query",
+            "provenance": "derived"
+          }
+        },
+        "filters": {
+          "applied": [],
+          "default": [],
+          "applied_control": {
+            "name": "filters.applied",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "default_control": {
+            "name": "filters.default",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "controls": []
+        },
+        "sort": {
+          "name": "sort",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "query_processing": {
+          "name": "query_processing",
+          "state": "applied",
+          "requested_value": {
+            "searchmode": "bounded_local_harvest",
+            "stemming": "none"
+          },
+          "effective_value": {
+            "searchmode": "bounded_local_harvest",
+            "stemming": "none"
+          },
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "pagination": {
+          "name": "pagination",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived",
+          "requested_limit": {
+            "name": "pagination.requested_limit",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "max_pages": {
+            "name": "pagination.max_pages",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "page_size": {
+            "name": "pagination.page_size",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "caps": [],
+          "controls": [
+            {
+              "name": "pagination.requested_limit",
+              "state": "unknown",
+              "requested_value": null,
+              "effective_value": null,
+              "stage": "source_query",
+              "provenance": "derived"
+            },
+            {
+              "name": "pagination.max_pages",
+              "state": "unknown",
+              "requested_value": null,
+              "effective_value": null,
+              "stage": "source_query",
+              "provenance": "derived"
+            },
+            {
+              "name": "pagination.page_size",
+              "state": "unknown",
+              "requested_value": null,
+              "effective_value": null,
+              "stage": "source_query",
+              "provenance": "derived"
+            }
+          ]
+        },
+        "capture_export": {
+          "name": "capture_export",
+          "state": "applied",
+          "requested_value": {
+            "capture_method": "rendered_source_ui",
+            "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+          },
+          "effective_value": {
+            "capture_method": "rendered_source_ui",
+            "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+          },
+          "stage": "source_query",
+          "provenance": "derived",
+          "capture_method": {
+            "name": "capture_method",
+            "state": "applied",
+            "requested_value": "rendered_source_ui",
+            "effective_value": "rendered_source_ui",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          "export_method": {
+            "name": "export_method",
+            "state": "applied",
+            "requested_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+            "effective_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+            "stage": "result_refinement",
+            "provenance": "derived"
+          }
+        },
+        "timestamps": {
+          "started_at_utc": "2026-08-29T20:57:02.969542Z",
+          "completed_at_utc": "2026-08-29T20:57:18.547107Z",
+          "started_at_provenance": "cli_configuration_time",
+          "completed_at_provenance": "adapter_observed"
+        },
+        "run_started_at_utc": "2026-08-29T20:57:02.969542Z",
+        "run_completed_at_utc": "2026-08-29T20:57:18.547107Z",
+        "count_accounting": {
+          "record_accounting_path": "output_metadata.record_accounting",
+          "search_log_record_accounting_path": "output_metadata.search_log.record_accounting",
+          "staged_counts_path": "output_metadata.prisma_search_run.staged_counts",
+          "references": [
+            "output_metadata.record_accounting",
+            "output_metadata.search_log.record_accounting",
+            "output_metadata.prisma_search_run.staged_counts"
+          ],
+          "record_accounting": "output_metadata.record_accounting",
+          "search_log": "output_metadata.search_log.record_accounting",
+          "staged_counts": "output_metadata.prisma_search_run.staged_counts"
+        },
+        "count_accounting_reference": "output_metadata.record_accounting",
+        "count_accounting_ref": "output_metadata.record_accounting",
+        "controls": [
+          {
+            "name": "interface.endpoint",
+            "state": "applied",
+            "requested_value": "https://indico.esa.int/export/categ/0.json",
+            "effective_value": "https://indico.esa.int/export/categ/0.json",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "interface.method",
+            "state": "applied",
+            "requested_value": "normal_public_category_and_event_exports",
+            "effective_value": "normal_public_category_and_event_exports",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "interface.parameters",
+            "state": "applied",
+            "requested_value": {
+              "category_id": 0,
+              "detail": "events"
+            },
+            "effective_value": {
+              "category_id": 0,
+              "detail": "events"
+            },
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "query.requested",
+            "state": "applied",
+            "requested_value": "CubeSat",
+            "effective_value": "CubeSat",
+            "stage": "source_query",
+            "provenance": "caller"
+          },
+          {
+            "name": "query.executed",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "query.fields",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "scope.source",
+            "state": "applied",
+            "requested_value": {
+              "source_id": "esa_indico",
+              "source_label": "ESA Indico"
+            },
+            "effective_value": {
+              "source_id": "esa_indico",
+              "source_label": "ESA Indico"
+            },
+            "stage": "source_query",
+            "provenance": "hard_coded"
+          },
+          {
+            "name": "scope.source_scope",
+            "state": "applied",
+            "requested_value": "bounded local-harvest source universe",
+            "effective_value": "bounded local-harvest source universe",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "scope.database",
+            "state": "not_applicable",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "hard_coded"
+          },
+          {
+            "name": "scope.edition",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "scope.tab",
+            "state": "applied",
+            "requested_value": [
+              "events",
+              "contributions",
+              "materials"
+            ],
+            "effective_value": [
+              "events",
+              "contributions",
+              "materials"
+            ],
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "filters.applied",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "filters.default",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "sort",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "query_processing",
+            "state": "applied",
+            "requested_value": {
+              "searchmode": "bounded_local_harvest",
+              "stemming": "none"
+            },
+            "effective_value": {
+              "searchmode": "bounded_local_harvest",
+              "stemming": "none"
+            },
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "pagination",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "pagination.requested_limit",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "pagination.max_pages",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "pagination.page_size",
+            "state": "unknown",
+            "requested_value": null,
+            "effective_value": null,
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "capture_export",
+            "state": "applied",
+            "requested_value": {
+              "capture_method": "rendered_source_ui",
+              "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+            },
+            "effective_value": {
+              "capture_method": "rendered_source_ui",
+              "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+            },
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "capture_method",
+            "state": "applied",
+            "requested_value": "rendered_source_ui",
+            "effective_value": "rendered_source_ui",
+            "stage": "source_query",
+            "provenance": "derived"
+          },
+          {
+            "name": "export_method",
+            "state": "applied",
+            "requested_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+            "effective_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+            "stage": "result_refinement",
+            "provenance": "derived"
+          }
+        ]
+      },
+      "execution_ledger_ready": true,
+      "execution_ledger_readiness_reasons": [],
+      "source_run_report_ready": false,
+      "source_run_report_readiness_reasons": [
+        "missing_review_id",
+        "missing_strategy_reference",
+        "missing_phase",
+        "missing_coverage_or_partition_declaration",
+        "missing_effective_executed_query",
+        "run_id_not_explicitly_supplied_or_preserved",
+        "source_run_not_complete",
+        "staged_record_accounting_incomplete"
+      ],
+      "report_ready": false,
+      "report_readiness_reasons": [
+        "missing_review_id",
+        "missing_strategy_reference",
+        "missing_phase",
+        "missing_coverage_or_partition_declaration",
+        "missing_effective_executed_query",
+        "run_id_not_explicitly_supplied_or_preserved",
+        "source_run_not_complete",
+        "staged_record_accounting_incomplete"
+      ]
+    },
+    "prisma_report_ready": false,
+    "publication_commit_protocol": "academic_search_output_commit_marker_v1",
+    "publication_commit_state": "marker_required",
+    "publication_transaction_id": "f41b55411b13094e130484b1e45caea10c5bc33b78ac9d7059a4ea6bcefc70df",
+    "merge_commit_protocol": "academic_search_output_commit_marker_v1",
+    "merge_commit_state": "marker_required",
+    "merge_transaction_id": "f41b55411b13094e130484b1e45caea10c5bc33b78ac9d7059a4ea6bcefc70df",
+    "publication_marker_path_persisted": false
+  },
+  "executed_query": "",
+  "requested_query": "CubeSat",
+  "schema_version": "academic-search-result/v1",
+  "source": "ESA Indico",
+  "do_not_merge": true,
+  "execution_ledger": {
+    "schema_version": "academic-search-execution-ledger/v1",
+    "run_id": "af9d278c-a46e-4c03-84c9-05236590345c",
+    "source_id": "esa_indico",
+    "interface": {
+      "endpoint": "https://indico.esa.int/export/categ/0.json",
+      "method": "normal_public_category_and_event_exports",
+      "parameters": {
+        "category_id": 0,
+        "detail": "events"
+      },
+      "submission_endpoint": "https://indico.esa.int/export/categ/0.json",
+      "submission_method": "normal_public_category_and_event_exports",
+      "benign_parameters": {
+        "category_id": 0,
+        "detail": "events"
+      },
+      "controls": {
+        "endpoint": {
+          "name": "interface.endpoint",
+          "state": "applied",
+          "requested_value": "https://indico.esa.int/export/categ/0.json",
+          "effective_value": "https://indico.esa.int/export/categ/0.json",
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "method": {
+          "name": "interface.method",
+          "state": "applied",
+          "requested_value": "normal_public_category_and_event_exports",
+          "effective_value": "normal_public_category_and_event_exports",
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "parameters": {
+          "name": "interface.parameters",
+          "state": "applied",
+          "requested_value": {
+            "category_id": 0,
+            "detail": "events"
+          },
+          "effective_value": {
+            "category_id": 0,
+            "detail": "events"
+          },
+          "stage": "source_query",
+          "provenance": "derived"
+        }
+      }
+    },
+    "query": {
+      "requested": "CubeSat",
+      "requested_query": "CubeSat",
+      "executed": "",
+      "executed_query": "",
+      "source_native_executed_query": "",
+      "executed_query_provenance": "not_observed",
+      "source_q_used": null,
+      "fields": null,
+      "fields_control": {
+        "name": "query.fields",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      "controls": {
+        "requested": {
+          "name": "query.requested",
+          "state": "applied",
+          "requested_value": "CubeSat",
+          "effective_value": "CubeSat",
+          "stage": "source_query",
+          "provenance": "caller"
+        },
+        "executed": {
+          "name": "query.executed",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        "fields": {
+          "name": "query.fields",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        }
+      }
+    },
+    "scope": {
+      "source": {
+        "name": "scope.source",
+        "state": "applied",
+        "requested_value": {
+          "source_id": "esa_indico",
+          "source_label": "ESA Indico"
+        },
+        "effective_value": {
+          "source_id": "esa_indico",
+          "source_label": "ESA Indico"
+        },
+        "stage": "source_query",
+        "provenance": "hard_coded"
+      },
+      "source_scope": {
+        "name": "scope.source_scope",
+        "state": "applied",
+        "requested_value": "bounded local-harvest source universe",
+        "effective_value": "bounded local-harvest source universe",
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      "database": {
+        "name": "scope.database",
+        "state": "not_applicable",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "hard_coded"
+      },
+      "edition": {
+        "name": "scope.edition",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      "tab": {
+        "name": "scope.tab",
+        "state": "applied",
+        "requested_value": [
+          "events",
+          "contributions",
+          "materials"
+        ],
+        "effective_value": [
+          "events",
+          "contributions",
+          "materials"
+        ],
+        "stage": "source_query",
+        "provenance": "derived"
+      }
+    },
+    "filters": {
+      "applied": [],
+      "default": [],
+      "applied_control": {
+        "name": "filters.applied",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      "default_control": {
+        "name": "filters.default",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      "controls": []
+    },
+    "sort": {
+      "name": "sort",
+      "state": "unknown",
+      "requested_value": null,
+      "effective_value": null,
+      "stage": "source_query",
+      "provenance": "derived"
+    },
+    "query_processing": {
+      "name": "query_processing",
+      "state": "applied",
+      "requested_value": {
+        "searchmode": "bounded_local_harvest",
+        "stemming": "none"
+      },
+      "effective_value": {
+        "searchmode": "bounded_local_harvest",
+        "stemming": "none"
+      },
+      "stage": "source_query",
+      "provenance": "derived"
+    },
+    "pagination": {
+      "name": "pagination",
+      "state": "unknown",
+      "requested_value": null,
+      "effective_value": null,
+      "stage": "source_query",
+      "provenance": "derived",
+      "requested_limit": {
+        "name": "pagination.requested_limit",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      "max_pages": {
+        "name": "pagination.max_pages",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      "page_size": {
+        "name": "pagination.page_size",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      "caps": [],
+      "controls": [
+        {
+          "name": "pagination.requested_limit",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "pagination.max_pages",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        },
+        {
+          "name": "pagination.page_size",
+          "state": "unknown",
+          "requested_value": null,
+          "effective_value": null,
+          "stage": "source_query",
+          "provenance": "derived"
+        }
+      ]
+    },
+    "capture_export": {
+      "name": "capture_export",
+      "state": "applied",
+      "requested_value": {
+        "capture_method": "rendered_source_ui",
+        "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+      },
+      "effective_value": {
+        "capture_method": "rendered_source_ui",
+        "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+      },
+      "stage": "source_query",
+      "provenance": "derived",
+      "capture_method": {
+        "name": "capture_method",
+        "state": "applied",
+        "requested_value": "rendered_source_ui",
+        "effective_value": "rendered_source_ui",
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      "export_method": {
+        "name": "export_method",
+        "state": "applied",
+        "requested_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+        "effective_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+        "stage": "result_refinement",
+        "provenance": "derived"
+      }
+    },
+    "timestamps": {
+      "started_at_utc": "2026-08-29T20:57:02.969542Z",
+      "completed_at_utc": "2026-08-29T20:57:18.547107Z",
+      "started_at_provenance": "cli_configuration_time",
+      "completed_at_provenance": "adapter_observed"
+    },
+    "run_started_at_utc": "2026-08-29T20:57:02.969542Z",
+    "run_completed_at_utc": "2026-08-29T20:57:18.547107Z",
+    "count_accounting": {
+      "record_accounting_path": "output_metadata.record_accounting",
+      "search_log_record_accounting_path": "output_metadata.search_log.record_accounting",
+      "staged_counts_path": "output_metadata.prisma_search_run.staged_counts",
+      "references": [
+        "output_metadata.record_accounting",
+        "output_metadata.search_log.record_accounting",
+        "output_metadata.prisma_search_run.staged_counts"
+      ],
+      "record_accounting": "output_metadata.record_accounting",
+      "search_log": "output_metadata.search_log.record_accounting",
+      "staged_counts": "output_metadata.prisma_search_run.staged_counts"
+    },
+    "count_accounting_reference": "output_metadata.record_accounting",
+    "count_accounting_ref": "output_metadata.record_accounting",
+    "controls": [
+      {
+        "name": "interface.endpoint",
+        "state": "applied",
+        "requested_value": "https://indico.esa.int/export/categ/0.json",
+        "effective_value": "https://indico.esa.int/export/categ/0.json",
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "interface.method",
+        "state": "applied",
+        "requested_value": "normal_public_category_and_event_exports",
+        "effective_value": "normal_public_category_and_event_exports",
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "interface.parameters",
+        "state": "applied",
+        "requested_value": {
+          "category_id": 0,
+          "detail": "events"
+        },
+        "effective_value": {
+          "category_id": 0,
+          "detail": "events"
+        },
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "query.requested",
+        "state": "applied",
+        "requested_value": "CubeSat",
+        "effective_value": "CubeSat",
+        "stage": "source_query",
+        "provenance": "caller"
+      },
+      {
+        "name": "query.executed",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "query.fields",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "scope.source",
+        "state": "applied",
+        "requested_value": {
+          "source_id": "esa_indico",
+          "source_label": "ESA Indico"
+        },
+        "effective_value": {
+          "source_id": "esa_indico",
+          "source_label": "ESA Indico"
+        },
+        "stage": "source_query",
+        "provenance": "hard_coded"
+      },
+      {
+        "name": "scope.source_scope",
+        "state": "applied",
+        "requested_value": "bounded local-harvest source universe",
+        "effective_value": "bounded local-harvest source universe",
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "scope.database",
+        "state": "not_applicable",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "hard_coded"
+      },
+      {
+        "name": "scope.edition",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "scope.tab",
+        "state": "applied",
+        "requested_value": [
+          "events",
+          "contributions",
+          "materials"
+        ],
+        "effective_value": [
+          "events",
+          "contributions",
+          "materials"
+        ],
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "filters.applied",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "filters.default",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "sort",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "query_processing",
+        "state": "applied",
+        "requested_value": {
+          "searchmode": "bounded_local_harvest",
+          "stemming": "none"
+        },
+        "effective_value": {
+          "searchmode": "bounded_local_harvest",
+          "stemming": "none"
+        },
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "pagination",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "pagination.requested_limit",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "pagination.max_pages",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "pagination.page_size",
+        "state": "unknown",
+        "requested_value": null,
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "capture_export",
+        "state": "applied",
+        "requested_value": {
+          "capture_method": "rendered_source_ui",
+          "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+        },
+        "effective_value": {
+          "capture_method": "rendered_source_ui",
+          "export_method": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference"
+        },
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "capture_method",
+        "state": "applied",
+        "requested_value": "rendered_source_ui",
+        "effective_value": "rendered_source_ui",
+        "stage": "source_query",
+        "provenance": "derived"
+      },
+      {
+        "name": "export_method",
+        "state": "applied",
+        "requested_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+        "effective_value": "GET /export/categ/<category_id>.json?detail=events|contributions|subcontributions|sessions&from=YYYY-MM-DD&to=YYYY-MM-DD&type=lecture|simple_event|meeting|conference",
+        "stage": "result_refinement",
+        "provenance": "derived"
+      }
+    ]
+  }
+}

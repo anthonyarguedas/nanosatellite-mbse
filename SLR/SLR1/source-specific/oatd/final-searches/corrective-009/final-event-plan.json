@@ -1,0 +1,389 @@
+{
+  "schema_version": "slr1-oatd-final-plan/v1",
+  "created_at_utc": "2026-09-05T04:02:40.655675Z",
+  "repository_head_at_predeclaration": "930cfa93fc6044b61868989c2c1c4449fe148cc6",
+  "output_root": "SLR/SLR1/source-specific/oatd/final-searches/corrective-009",
+  "source": "Open Access Theses and Dissertations (OATD)",
+  "source_id": "oatd",
+  "review_id": "slr1-1.1-restart",
+  "run_id": "final-main-oatd-009",
+  "phase": "identification",
+  "strategy_reference": "slr1-oatd-main-direct-v9",
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "cutoff": {
+    "exact_common_cutoff": "2026-08-24",
+    "source_year_start": 2011,
+    "source_year_upper_bound": 2026,
+    "source_precision": "year",
+    "screening_requirement": "Screen every 2026 record against the exact common cutoff. OATD applies only inclusive calendar-year source bounds."
+  },
+  "source_configuration": {
+    "collection": "Full OATD index",
+    "endpoint": "https://oatd.org/oatd/search",
+    "field": "raw basic q over OATD advertised metadata scope",
+    "native_form_parameter": "basic",
+    "submission_method": "source basic form submission with complete controlled q",
+    "language": "English",
+    "language_source_value": "(en OR eng OR english)",
+    "publication_type_filter": null,
+    "publication_type_scope": "OATD ETD index",
+    "country_filter": null,
+    "creative_commons_filter": null,
+    "sort": "source_rendered_relevance_not_oldest_first",
+    "page_size": 30,
+    "full_abstracts_required": true,
+    "source_publication_type_required": true
+  },
+  "candidate_route": {
+    "identity": "(P AND M_H) OR (P AND M_B AND E_F) OR (P AND M_B AND E_H) OR (P AND M_B AND R) OR (P AND M_B AND T_precise) OR (P AND G_model) OR (P AND G_structure) OR (P AND C1)",
+    "implementation": "eight exact source-native gates",
+    "gate_ids": [
+      "G1-MH",
+      "G2A-MB-EF",
+      "G2B-MB-EH",
+      "G2C-MB-R",
+      "G2D-MB-T",
+      "G3-GMODEL",
+      "G4-GSTRUCTURE",
+      "G5-C1"
+    ],
+    "partition_branch_coverage": {
+      "A1": [
+        "G1-MH"
+      ],
+      "A2": [
+        "G1-MH",
+        "G2A-MB-EF"
+      ],
+      "A3": [
+        "G2B-MB-EH"
+      ],
+      "B1": [
+        "G1-MH"
+      ],
+      "B2": [
+        "G2C-MB-R"
+      ],
+      "BG1": [
+        "G3-GMODEL"
+      ],
+      "BG2": [
+        "G4-GSTRUCTURE"
+      ],
+      "BC1": [
+        "G5-C1"
+      ],
+      "BT2": [
+        "G2D-MB-T"
+      ]
+    },
+    "no_population_only_detail_route": true
+  },
+  "execution_policy": {
+    "initial_complete_card_id_passes_per_gate": 2,
+    "confirmation_complete_card_id_passes_per_gate": 1,
+    "membership_gate": "equal complete unique stable-ID sets per gate",
+    "deduplicate_before_record_details": true,
+    "detail_hydration": "one owned Record Details page request per unique stable ID",
+    "local_negative_removal": 0,
+    "stop_after_source_detail_or_confirmation_failure": true,
+    "inter_gate_delay_seconds": 120.0,
+    "pre_detail_delay_seconds": 180.0,
+    "detail_delay_seconds": 15.0,
+    "detail_batch_size": 8,
+    "detail_batch_cooldown_seconds": 180.0,
+    "pre_confirmation_delay_seconds": 300.0,
+    "detail_busy_retries": 2,
+    "detail_busy_retry_delay_seconds": 120.0,
+    "http_504_retry": false,
+    "fresh_browser": false,
+    "browser_profile": "shared_chrome_automation_cdp_9222",
+    "existing_shared_tabs_modified": false,
+    "shared_target_acquisition_attempts": 1,
+    "shared_target_acquisition_delay_seconds": 0.0,
+    "shared_target_retry_scope": "no automatic local retry",
+    "gate_page_lifecycle": "one directly created owned page per gate pass",
+    "concurrent_shared_profile_tabs_allowed_after_ownership": true,
+    "first_source_request_not_before_utc": "2026-09-05T03:43:59.754233Z"
+  },
+  "checkpoint_contract": {
+    "schema_version": "slr1-oatd-final-hydration-checkpoint/v2",
+    "path_free": true,
+    "public_normalized_metadata_only": true,
+    "write_after_each_completed_detail": true,
+    "validate_every_record_before_resume_skip": true
+  },
+  "output_contract": {
+    "gate_schema": "slr1-oatd-final-gate/v2",
+    "gate_marker_schema": "slr1-oatd-final-gate-commit/v1",
+    "hydrated_union_schema": "academic-search-result/v1",
+    "hydrated_union_marker_schema": "oatd_output_commit_marker_v1",
+    "gate_artifacts_merge_eligible": false,
+    "hydrated_union_merge_eligible": true,
+    "full_abstract_field": "results[].abstract",
+    "source_publication_type_fields": [
+      "results[].documentType",
+      "results[].publicationType",
+      "results[].sourcePublicationType"
+    ],
+    "reviewer_publication_type_not_inferred": true
+  },
+  "local_matching_plan": {
+    "path": "SLR/SLR1/source-specific/oatd/pilots/004/searches/local-matching-plan.json",
+    "sha256": "def19110525a9801f77961c5c94d1af4d851020d9765fcc5930a8985920c9065",
+    "schema_version": "oatd-local-matching-plan/v1",
+    "matcher_version": "oatd-local-matcher/v1",
+    "plan_sha256": "0779375e7f3348d044d5a1350d30e135e83e83bd47132ab680c1144dfa20c56a"
+  },
+  "adapter": {
+    "id": "search_oatd",
+    "version": "10",
+    "files": {
+      "entrypoint": {
+        "path": "~/agent-tools/internet/skills/browser/scripts/search_oatd.py",
+        "sha256": "25c5919693e1dccfc374d50c5a58e72301d48948b9713d5e540bb7595800744e"
+      },
+      "browser_helpers": {
+        "path": "~/agent-tools/internet/skills/browser/scripts/_browser_search_utils.py",
+        "sha256": "47a302edf165114ea55c6e99758e3a5836aade9cd6b23a096e83b6dccbe68600"
+      },
+      "output_loader": {
+        "path": "~/agent-tools/internet/skills/browser/scripts/_output_utils.py",
+        "sha256": "a3c5dcf06d80fe5e900b3d78fe5a109f34515d54b67ce10e61f76c27fcd1d766"
+      },
+      "output_implementation": {
+        "path": "~/agent-tools/academic-api-search/skills/academic-api-search/scripts/_output_utils.py",
+        "sha256": "579d85ee7c83ec97f0c9f02ec8b1c47a4a9c4380a594f881985f0cb80017c10a"
+      },
+      "merge_contract": {
+        "path": "~/agent-tools/academic-api-search/skills/academic-api-search/scripts/_merge_contract.py",
+        "sha256": "e210b8046fa2d9380b2d405d61490d60b93134589fe592038cab86f7025a577e"
+      }
+    }
+  },
+  "bindings": {
+    "files": {
+      "SLR/SLR1/source-specific/oatd/scripts/oatd_final/run.py": "10a9d66ef56b35583ef67b37f90edebbbaf72e16b0bc81904094d3153059d36f",
+      "SLR/SLR1/source-specific/oatd/scripts/oatd_final/record_metadata.py": "18775fcce4b8015728ee01c28014a03d4b3cee3b654c5fd34336541b7aff36be",
+      "SLR/SLR1/source-specific/oatd/scripts/oatd_final/source_native.py": "fbc10112c4c23811b09e6f47d2d9a451b35c0dd4d41817fae9914f14e5babbb2",
+      "SLR/SLR1/source-specific/oatd/scripts/oatd_final/diagnose.py": "ad64b1e0295265742e5a334ab68194a793fe6408d9063cd8f4b3f0ccd6c72192",
+      "SLR/SLR1/source-specific/oatd/scripts/oatd_pilot006/queries.py": "c447b9c04f60edf65889d78a7a0727749fc1ef76e555695b03d2e44d09d49069",
+      "SLR/SLR1/source-specific/oatd/source-specific-guidelines.md": "f31c450db93213cd9d51f07ec2ef4d0dd638ecd6801e73020fd945201d543a9f",
+      "SLR/SLR1/protocol-discovery-and-screening.md": "075b748f70a763eae8544ff8502b8696d3bebd80d1ad58fd9530f725557f0422",
+      "SLR/SLR1/protocol.md": "d2055142e25b294d8a32848eba8ae181cbe04d023a50ee18bad025b2328b1b76"
+    }
+  },
+  "checkpoint": "checkpoint/hydrated-union.checkpoint.json",
+  "union_output": "hydrated-union.json",
+  "events": [
+    {
+      "event_id": "G1-MH",
+      "query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"model-driven systems engineering\" OR \"model driven systems engineering\" OR \"model-driven system engineering\" OR \"model driven system engineering\" OR \"model-centric systems engineering\" OR \"model centric systems engineering\" OR \"model-centric system engineering\" OR \"model centric system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"systems modelling language\" OR \"system modeling language\" OR \"system modelling language\" OR \"object-process methodology\" OR \"object process methodology\" OR \"OPM\" OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR \"OOSEM\" OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR \"Arcadia\" OR \"Capella\" OR \"model-based engineering\" OR \"model based engineering\" OR \"model-driven engineering\" OR \"model driven engineering\" OR \"model-based design\" OR \"model based design\" OR \"model-driven design\" OR \"model driven design\" OR \"MBE\" OR \"MDE\" OR \"MBD\" OR \"MagicGrid\" OR \"Harmony-SE\" OR \"Harmony SE\" OR \"RFLP\" OR \"Cameo Systems Modeler\" OR \"MagicDraw\" OR \"IBM Engineering Systems Design Rhapsody\" OR \"Rational Rhapsody\" OR \"Vitech CORE\" OR \"Vitech GENESYS\" OR \"OpenMBEE\" OR \"Enterprise Architect\" OR \"MATLAB System Composer\" OR \"System Composer\" OR \"Modelio\"))",
+      "query_sha256": "686d042d5ef474d6320a39006e6b85f047f1d2e5d840b704bd35a199005f9f7b",
+      "query_characters": 1870,
+      "effective_query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"model-driven systems engineering\" OR \"model driven systems engineering\" OR \"model-driven system engineering\" OR \"model driven system engineering\" OR \"model-centric systems engineering\" OR \"model centric systems engineering\" OR \"model-centric system engineering\" OR \"model centric system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"systems modelling language\" OR \"system modeling language\" OR \"system modelling language\" OR \"object-process methodology\" OR \"object process methodology\" OR \"OPM\" OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR \"OOSEM\" OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR \"Arcadia\" OR \"Capella\" OR \"model-based engineering\" OR \"model based engineering\" OR \"model-driven engineering\" OR \"model driven engineering\" OR \"model-based design\" OR \"model based design\" OR \"model-driven design\" OR \"model driven design\" OR \"MBE\" OR \"MDE\" OR \"MBD\" OR \"MagicGrid\" OR \"Harmony-SE\" OR \"Harmony SE\" OR \"RFLP\" OR \"Cameo Systems Modeler\" OR \"MagicDraw\" OR \"IBM Engineering Systems Design Rhapsody\" OR \"Rational Rhapsody\" OR \"Vitech CORE\" OR \"Vitech GENESYS\" OR \"OpenMBEE\" OR \"Enterprise Architect\" OR \"MATLAB System Composer\" OR \"System Composer\" OR \"Modelio\")) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]",
+      "effective_query_sha256": "60439885ae7d8c9a4da27673b7a1c2d931cd516c4aee00cb5a0703c946694183",
+      "navigation_route_characters": 2358,
+      "language": "English",
+      "language_source_value": "(en OR eng OR english)",
+      "year_start": 2011,
+      "year_end": 2026,
+      "page_size": 30,
+      "limit": 100,
+      "max_pages": 4,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 6.0,
+      "busy_retries": 1,
+      "busy_retry_delay_seconds": 120.0,
+      "output": "gates/G1-MH.json",
+      "screenshots": {
+        "search_page": "gates/G1-MH.search-page.png",
+        "results_page": "gates/G1-MH.results-page.png"
+      }
+    },
+    {
+      "event_id": "G2A-MB-EF",
+      "query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\") AND (\"power budget\" OR \"power budgets\" OR \"energy budget\" OR \"energy budgets\" OR \"energy balance\" OR \"energy balances\" OR \"power balance\" OR \"power balances\" OR \"power margin\" OR \"power margins\" OR \"power generation\" OR \"photovoltaic generator\" OR \"photovoltaic generators\" OR \"solar array\" OR \"solar arrays\" OR \"solar panel\" OR \"solar panels\" OR \"battery\" OR \"batteries\" OR \"battery management\" OR \"state of charge\" OR \"states of charge\" OR \"energy storage\" OR \"power electronics\" OR \"power conditioning\" OR \"power distribution\" OR \"power management\" OR \"power interface\" OR \"power interfaces\" OR \"power mode\" OR \"power modes\" OR \"load profile\" OR \"load profiles\" OR \"power consumption\" OR \"power demand\" OR \"power profile\" OR \"energy harvesting\"))",
+      "query_sha256": "506a7a7e22b68169eb2031ad6e552403d7f7f3d1eb6c1a5000779c6c06d11aa8",
+      "query_characters": 2001,
+      "effective_query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\") AND (\"power budget\" OR \"power budgets\" OR \"energy budget\" OR \"energy budgets\" OR \"energy balance\" OR \"energy balances\" OR \"power balance\" OR \"power balances\" OR \"power margin\" OR \"power margins\" OR \"power generation\" OR \"photovoltaic generator\" OR \"photovoltaic generators\" OR \"solar array\" OR \"solar arrays\" OR \"solar panel\" OR \"solar panels\" OR \"battery\" OR \"batteries\" OR \"battery management\" OR \"state of charge\" OR \"states of charge\" OR \"energy storage\" OR \"power electronics\" OR \"power conditioning\" OR \"power distribution\" OR \"power management\" OR \"power interface\" OR \"power interfaces\" OR \"power mode\" OR \"power modes\" OR \"load profile\" OR \"load profiles\" OR \"power consumption\" OR \"power demand\" OR \"power profile\" OR \"energy harvesting\")) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]",
+      "effective_query_sha256": "0f975a0d97a6c1eddefb7e2e1fc4ee6f4b404fcdf8925829f7a7409579ced7e4",
+      "navigation_route_characters": 2549,
+      "language": "English",
+      "language_source_value": "(en OR eng OR english)",
+      "year_start": 2011,
+      "year_end": 2026,
+      "page_size": 30,
+      "limit": 100,
+      "max_pages": 4,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 6.0,
+      "busy_retries": 1,
+      "busy_retry_delay_seconds": 120.0,
+      "output": "gates/G2A-MB-EF.json",
+      "screenshots": {
+        "search_page": "gates/G2A-MB-EF.search-page.png",
+        "results_page": "gates/G2A-MB-EF.results-page.png"
+      }
+    },
+    {
+      "event_id": "G2B-MB-EH",
+      "query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\") AND (\"electrical power system\" OR \"electrical power systems\" OR \"electric power system\" OR \"electric power systems\" OR \"electrical power subsystem\" OR \"electrical power subsystems\" OR \"electric power subsystem\" OR \"electric power subsystems\" OR \"electrical energy subsystem\" OR \"electrical energy subsystems\" OR \"EPS\" OR \"EPSs\" OR \"power subsystem\" OR \"power subsystems\" OR \"power system\" OR \"power systems\" OR \"spacecraft power system\" OR \"spacecraft power systems\" OR \"power supply\" OR \"power supplies\" OR \"power distribution unit\" OR \"power distribution units\" OR \"PDU\" OR \"PDUs\" OR \"power processing unit\" OR \"power processing units\" OR \"power control and distribution\" OR \"power management and distribution\" OR \"electrical architecture\" OR \"electrical architectures\" OR \"power architecture\" OR \"power architectures\" OR \"DC power bus\" OR \"DC power buses\" OR \"PCDU\" OR \"PCDUs\" OR \"PMAD\" OR \"PMADs\"))",
+      "query_sha256": "c432779d7f73bf596208c2a23ee74c986fe815eaa02cbcbbcaacc0ad520a4ecd",
+      "query_characters": 2154,
+      "effective_query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\") AND (\"electrical power system\" OR \"electrical power systems\" OR \"electric power system\" OR \"electric power systems\" OR \"electrical power subsystem\" OR \"electrical power subsystems\" OR \"electric power subsystem\" OR \"electric power subsystems\" OR \"electrical energy subsystem\" OR \"electrical energy subsystems\" OR \"EPS\" OR \"EPSs\" OR \"power subsystem\" OR \"power subsystems\" OR \"power system\" OR \"power systems\" OR \"spacecraft power system\" OR \"spacecraft power systems\" OR \"power supply\" OR \"power supplies\" OR \"power distribution unit\" OR \"power distribution units\" OR \"PDU\" OR \"PDUs\" OR \"power processing unit\" OR \"power processing units\" OR \"power control and distribution\" OR \"power management and distribution\" OR \"electrical architecture\" OR \"electrical architectures\" OR \"power architecture\" OR \"power architectures\" OR \"DC power bus\" OR \"DC power buses\" OR \"PCDU\" OR \"PCDUs\" OR \"PMAD\" OR \"PMADs\")) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]",
+      "effective_query_sha256": "f20c95ce93f32bf1e5cd7a513ec0a5bf4bb68b754ac69cfe95bee947d10e548f",
+      "navigation_route_characters": 2706,
+      "language": "English",
+      "language_source_value": "(en OR eng OR english)",
+      "year_start": 2011,
+      "year_end": 2026,
+      "page_size": 30,
+      "limit": 100,
+      "max_pages": 4,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 6.0,
+      "busy_retries": 1,
+      "busy_retry_delay_seconds": 120.0,
+      "output": "gates/G2B-MB-EH.json",
+      "screenshots": {
+        "search_page": "gates/G2B-MB-EH.search-page.png",
+        "results_page": "gates/G2B-MB-EH.results-page.png"
+      }
+    },
+    {
+      "event_id": "G2C-MB-R",
+      "query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\") AND (\"requirement\" OR \"requirements\" OR \"function\" OR \"functions\" OR \"functional\" OR \"behavior\" OR \"behaviors\" OR \"behaviour\" OR \"behaviours\" OR \"behavioral\" OR \"behavioural\" OR \"architecture\" OR \"architectures\" OR \"architectural\" OR \"interface\" OR \"interfaces\" OR \"traceability\" OR \"trace\" OR \"traceable\" OR \"traced\" OR \"allocation\" OR \"allocate\" OR \"allocated\" OR \"constraint\" OR \"constraints\" OR \"parametric\" OR \"parametrics\" OR \"analysis\" OR \"analyses\" OR \"design\" OR \"designs\" OR \"designed\" OR \"designing\" OR \"decision\" OR \"decisions\" OR \"decision-making\" OR \"decision making\" OR \"trade study\" OR \"trade studies\" OR \"trade-off\" OR \"trade-offs\" OR \"tradeoff\" OR \"tradeoffs\" OR \"verification\" OR \"verifications\" OR \"verify\" OR \"verifies\" OR \"verified\" OR \"verifying\" OR \"validation\" OR \"validations\" OR \"validate\" OR \"validates\" OR \"validated\" OR \"validating\"))",
+      "query_sha256": "a9d1ee65232363cfaaeaef6d2e3ca6119e0bfc32aae190d58240f1c7739158a3",
+      "query_characters": 2116,
+      "effective_query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\") AND (\"requirement\" OR \"requirements\" OR \"function\" OR \"functions\" OR \"functional\" OR \"behavior\" OR \"behaviors\" OR \"behaviour\" OR \"behaviours\" OR \"behavioral\" OR \"behavioural\" OR \"architecture\" OR \"architectures\" OR \"architectural\" OR \"interface\" OR \"interfaces\" OR \"traceability\" OR \"trace\" OR \"traceable\" OR \"traced\" OR \"allocation\" OR \"allocate\" OR \"allocated\" OR \"constraint\" OR \"constraints\" OR \"parametric\" OR \"parametrics\" OR \"analysis\" OR \"analyses\" OR \"design\" OR \"designs\" OR \"designed\" OR \"designing\" OR \"decision\" OR \"decisions\" OR \"decision-making\" OR \"decision making\" OR \"trade study\" OR \"trade studies\" OR \"trade-off\" OR \"trade-offs\" OR \"tradeoff\" OR \"tradeoffs\" OR \"verification\" OR \"verifications\" OR \"verify\" OR \"verifies\" OR \"verified\" OR \"verifying\" OR \"validation\" OR \"validations\" OR \"validate\" OR \"validates\" OR \"validated\" OR \"validating\")) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]",
+      "effective_query_sha256": "f931b457d1dc5bec78e0fedc70a9c2f828f6e2f5639961ee0072bc935b4dac7a",
+      "navigation_route_characters": 2736,
+      "language": "English",
+      "language_source_value": "(en OR eng OR english)",
+      "year_start": 2011,
+      "year_end": 2026,
+      "page_size": 30,
+      "limit": 100,
+      "max_pages": 4,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 6.0,
+      "busy_retries": 1,
+      "busy_retry_delay_seconds": 120.0,
+      "output": "gates/G2C-MB-R.json",
+      "screenshots": {
+        "search_page": "gates/G2C-MB-R.search-page.png",
+        "results_page": "gates/G2C-MB-R.results-page.png"
+      }
+    },
+    {
+      "event_id": "G2D-MB-T",
+      "query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\") AND (\"tailor\" OR \"tailors\" OR \"tailored\" OR \"tailoring\" OR \"customize\" OR \"customizes\" OR \"customized\" OR \"customizing\" OR \"customization\" OR \"customise\" OR \"customises\" OR \"customised\" OR \"customising\" OR \"customisation\" OR \"parameterize\" OR \"parameterizes\" OR \"parameterized\" OR \"parameterizing\" OR \"parameterization\" OR \"parameterise\" OR \"parameterises\" OR \"parameterised\" OR \"parameterising\" OR \"parameterisation\" OR \"instantiate\" OR \"instantiates\" OR \"instantiated\" OR \"instantiating\" OR \"instantiation\" OR \"variability\" OR \"variation point\" OR \"variation points\"))",
+      "query_sha256": "36c01bc667ab0eec4ee955234f6fb386286c980bd311fcf3138674b45848b8f4",
+      "query_characters": 1822,
+      "effective_query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\") AND (\"tailor\" OR \"tailors\" OR \"tailored\" OR \"tailoring\" OR \"customize\" OR \"customizes\" OR \"customized\" OR \"customizing\" OR \"customization\" OR \"customise\" OR \"customises\" OR \"customised\" OR \"customising\" OR \"customisation\" OR \"parameterize\" OR \"parameterizes\" OR \"parameterized\" OR \"parameterizing\" OR \"parameterization\" OR \"parameterise\" OR \"parameterises\" OR \"parameterised\" OR \"parameterising\" OR \"parameterisation\" OR \"instantiate\" OR \"instantiates\" OR \"instantiated\" OR \"instantiating\" OR \"instantiation\" OR \"variability\" OR \"variation point\" OR \"variation points\")) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]",
+      "effective_query_sha256": "887349bf151ddbbe9ef495e451099be0336a1a9f1cf0fbcee8c10158d0c1f639",
+      "navigation_route_characters": 2350,
+      "language": "English",
+      "language_source_value": "(en OR eng OR english)",
+      "year_start": 2011,
+      "year_end": 2026,
+      "page_size": 30,
+      "limit": 100,
+      "max_pages": 4,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 6.0,
+      "busy_retries": 1,
+      "busy_retry_delay_seconds": 120.0,
+      "output": "gates/G2D-MB-T.json",
+      "screenshots": {
+        "search_page": "gates/G2D-MB-T.search-page.png",
+        "results_page": "gates/G2D-MB-T.results-page.png"
+      }
+    },
+    {
+      "event_id": "G3-GMODEL",
+      "query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))",
+      "query_sha256": "7618863620c2984983e3a00791d8083b7242fbf4b8b0b16eb1e4ddf38120a8ca",
+      "query_characters": 2234,
+      "effective_query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\")))) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]",
+      "effective_query_sha256": "b3ae8a92987073e555cefe1ba5c378a21cdda1d41ecba87c609a3c0104e653ad",
+      "navigation_route_characters": 2786,
+      "language": "English",
+      "language_source_value": "(en OR eng OR english)",
+      "year_start": 2011,
+      "year_end": 2026,
+      "page_size": 30,
+      "limit": 100,
+      "max_pages": 4,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 6.0,
+      "busy_retries": 1,
+      "busy_retry_delay_seconds": 120.0,
+      "output": "gates/G3-GMODEL.json",
+      "screenshots": {
+        "search_page": "gates/G3-GMODEL.search-page.png",
+        "results_page": "gates/G3-GMODEL.results-page.png"
+      }
+    },
+    {
+      "event_id": "G4-GSTRUCTURE",
+      "query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"reference architecture\" OR \"reference architectures\" OR \"domain model\" OR \"domain models\" OR \"metamodel\" OR \"metamodels\" OR \"meta-model\" OR \"meta-models\") OR (\"product-line model\" OR \"product-line models\" OR \"product line model\" OR \"product line models\" OR \"product-family model\" OR \"product-family models\" OR \"product family model\" OR \"product family models\") OR (\"variation point\" OR \"variation points\") OR ((\"product-line\" OR \"product line\" OR \"product-family\" OR \"product family\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))))",
+      "query_sha256": "4535057d86ea862da1572b8a63e243b1a836a2d5139f027fcccc8fa056a9da85",
+      "query_characters": 1746,
+      "effective_query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"reference architecture\" OR \"reference architectures\" OR \"domain model\" OR \"domain models\" OR \"metamodel\" OR \"metamodels\" OR \"meta-model\" OR \"meta-models\") OR (\"product-line model\" OR \"product-line models\" OR \"product line model\" OR \"product line models\" OR \"product-family model\" OR \"product-family models\" OR \"product family model\" OR \"product family models\") OR (\"variation point\" OR \"variation points\") OR ((\"product-line\" OR \"product line\" OR \"product-family\" OR \"product family\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\")))) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]",
+      "effective_query_sha256": "66ae9696791ac552dbd167e59a230fa0b0dbc4b703ff38d95dec680590d43933",
+      "navigation_route_characters": 2254,
+      "language": "English",
+      "language_source_value": "(en OR eng OR english)",
+      "year_start": 2011,
+      "year_end": 2026,
+      "page_size": 30,
+      "limit": 100,
+      "max_pages": 4,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 6.0,
+      "busy_retries": 1,
+      "busy_retry_delay_seconds": 120.0,
+      "output": "gates/G4-GSTRUCTURE.json",
+      "screenshots": {
+        "search_page": "gates/G4-GSTRUCTURE.search-page.png",
+        "results_page": "gates/G4-GSTRUCTURE.results-page.png"
+      }
+    },
+    {
+      "event_id": "G5-C1",
+      "query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"reference model\" OR \"reference models\" OR \"system reference model\" OR \"system reference models\" OR \"model library\" OR \"model libraries\" OR \"system model library\" OR \"system model libraries\" OR \"model pattern\" OR \"model patterns\" OR \"modeling pattern\" OR \"modeling patterns\" OR \"modelling pattern\" OR \"modelling patterns\" OR \"system model pattern\" OR \"system model patterns\" OR \"systems model pattern\" OR \"systems model patterns\" OR \"model profile\" OR \"model profiles\" OR \"system model profile\" OR \"system model profiles\" OR \"systems model profile\" OR \"systems model profiles\" OR \"SysML profile\" OR \"SysML profiles\") OR (\"domain-specific modeling language\" OR \"domain specific modeling language\" OR \"domain-specific modelling language\" OR \"domain specific modelling language\")))",
+      "query_sha256": "7078e02d51ebfe3e20a95637bc1166e93310eae8d562dd8b2966dff7ebb81623",
+      "query_characters": 1219,
+      "effective_query": "((\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"reference model\" OR \"reference models\" OR \"system reference model\" OR \"system reference models\" OR \"model library\" OR \"model libraries\" OR \"system model library\" OR \"system model libraries\" OR \"model pattern\" OR \"model patterns\" OR \"modeling pattern\" OR \"modeling patterns\" OR \"modelling pattern\" OR \"modelling patterns\" OR \"system model pattern\" OR \"system model patterns\" OR \"systems model pattern\" OR \"systems model patterns\" OR \"model profile\" OR \"model profiles\" OR \"system model profile\" OR \"system model profiles\" OR \"systems model profile\" OR \"systems model profiles\" OR \"SysML profile\" OR \"SysML profiles\") OR (\"domain-specific modeling language\" OR \"domain specific modeling language\" OR \"domain-specific modelling language\" OR \"domain specific modelling language\"))) AND language:(en OR eng OR english) AND pub_dt:[2011-01-01T00:00:00Z TO 2026-12-31T23:59:59Z]",
+      "effective_query_sha256": "1edf62adb49a7e1658d08c5f68289760359855f7be39b1746378b2c6025fa9c9",
+      "navigation_route_characters": 1619,
+      "language": "English",
+      "language_source_value": "(en OR eng OR english)",
+      "year_start": 2011,
+      "year_end": 2026,
+      "page_size": 30,
+      "limit": 100,
+      "max_pages": 4,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 6.0,
+      "busy_retries": 1,
+      "busy_retry_delay_seconds": 120.0,
+      "output": "gates/G5-C1.json",
+      "screenshots": {
+        "search_page": "gates/G5-C1.search-page.png",
+        "results_page": "gates/G5-C1.results-page.png"
+      }
+    }
+  ],
+  "corrective_run": {
+    "sequence": 9,
+    "reason": "Run 008 captured four initial gate sets, then direct URL navigation failed on G2D-MB-T. An independent native form submission returned an exact zero for the unchanged controlled query. This run uses actual native form submission and the independent rendered-observation sequence in a directly created owned page for each pass. Live checks validated zero, multi-record, and singleton gates. The backend cause of the HTTP errors remains unknown. No earlier gate or detail record is reused.",
+    "superseded_plan": "SLR/SLR1/source-specific/oatd/final-searches/corrective-008/final-event-plan.json",
+    "superseded_plan_sha256": "bb6eee5631e23efe6aad4b1c18615e0fc3f360b4e23fc4366d263833b8673c11",
+    "superseded_failure_receipt": "SLR/SLR1/source-specific/oatd/final-searches/corrective-008/failure-receipt-20260905T034359Z.json",
+    "superseded_failure_receipt_sha256": "23d5aa7440b85da47e7498c89516695c01f66a39524d2661ffb610a306ecb142",
+    "minimum_cooldown_after_prior_attempt_seconds": 0
+  }
+}

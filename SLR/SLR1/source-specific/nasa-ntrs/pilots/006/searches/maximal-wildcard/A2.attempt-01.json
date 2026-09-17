@@ -1,0 +1,204 @@
+{
+  "schema_version": "academic-search-result/v1",
+  "source": "NASA Technical Reports Server (NTRS)",
+  "executed_query": "",
+  "total": null,
+  "results": [],
+  "output_metadata": {
+    "count_only": false,
+    "retrieval_complete": false,
+    "status": "error",
+    "error_stage": "result_reconciliation",
+    "merge_contract": "academic-search-merge/v1",
+    "merge_eligible": false,
+    "normalized_export": {
+      "schema_version": "ntrs-normalized-export/v1",
+      "label": "NTRS adapter-normalized output (non-native export)",
+      "native": false,
+      "native_export": {
+        "state": "unavailable",
+        "requested_value": "NTRS native export",
+        "effective_value": null,
+        "stage": "source_query",
+        "provenance": "hard_coded",
+        "reason": "NTRS exposes no native export control on the current public rendered search UI"
+      },
+      "formats": [
+        "normalized_json"
+      ],
+      "csv_requested": false,
+      "csv_written": false,
+      "stable_identifier": {
+        "field": "paperId",
+        "csv_column": null,
+        "count": 0,
+        "unique": true,
+        "sequence_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "algorithm": "sha256_length_prefixed_utf8"
+      },
+      "count_reconciliation": {
+        "source_total": null,
+        "source_entries_retrieved": null,
+        "records_retained": 0,
+        "json_record_count": 0,
+        "csv_record_count": null,
+        "source_traversal_reconciled": false,
+        "stable_id_count_reconciled": true,
+        "json_count_reconciled": true,
+        "json_csv_count_reconciled": null
+      },
+      "source_total_is_exact": false,
+      "merge_contract": "academic-search-merge/v1"
+    },
+    "prisma_search_run": {
+      "schema_version": "academic-search-prisma-search-run/v2",
+      "run_id": "pilot-ntrs-006-A2-maximal-wildcard-attempt1",
+      "run_id_provenance": "preserved_explicit_run_id",
+      "review_id": "slr1-ntrs-pilot006",
+      "strategy_reference": "slr1-ntrs-post-proximity-wildcard-v1",
+      "strategy_version": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "phase": "pilot",
+      "coverage": {
+        "coverage_scope": "partition",
+        "is_full_source_coverage": false,
+        "partition_id": "A2",
+        "partition_label": "A2",
+        "partition_description": "NASA NTRS Pilot 006 A2-maximal-wildcard attempt 1"
+      },
+      "source_descriptor": {
+        "source_id": "nasa_ntrs",
+        "source_label": "NASA Technical Reports Server (NTRS)",
+        "prisma_category": "database",
+        "resource_name": "NASA Technical Reports Server",
+        "database_name": "NASA Technical Reports Server",
+        "platform_name": "NASA Technical Reports Server",
+        "platform_url": "https://ntrs.nasa.gov/"
+      },
+      "adapter": {
+        "adapter_id": "search_ntrs",
+        "adapter_version": "13",
+        "script_sha256": "0568d980a7e57a2609351fa77c0a70a30e87cf247e5d6a1f219cfe7bb35d4bab",
+        "script_hash_provenance": "sha256_regular_file"
+      },
+      "strategy": {
+        "query_fields": [],
+        "search_scope": "normal rendered NTRS search across all metadata fields and document full-text",
+        "query_syntax": {
+          "querysyntax": "NTRS normal rendered search UI syntax; exact raw query is submitted unchanged; see semantic_validation for the dated grammar boundary",
+          "searchmode": "normal_rendered_ntrs_search"
+        },
+        "limits": {
+          "publication_date": {
+            "state": "unknown",
+            "requested": {
+              "field": "publication",
+              "source_field": "published",
+              "gte": "2011-01-01",
+              "lte": "2026-08-29",
+              "precision": "calendar_day",
+              "inclusive": true,
+              "timezone": "date_only_no_client_timezone_conversion"
+            },
+            "provenance": "caller"
+          },
+          "acquired_date": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "title": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "author": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "organization": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "document_type": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "center": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "subject": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "report_number": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "funding_number": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "keyword": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "collection": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "source": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "distribution": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "subject_category": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "thesaurus_term": {
+            "state": "not_applied",
+            "provenance": "hard_coded"
+          },
+          "date_start": "2011-01-01",
+          "date_end": "2026-08-29",
+          "year_start": null,
+          "year_end": null
+        },
+        "sort": {
+          "state": "unknown",
+          "requested": "Publication Date (Oldest)",
+          "provenance": "hard_coded"
+        },
+        "requested_query": "((CubeSat* | \"cube sat*\" | cube-sat* | nanosat* | nano-sat* | \"nano sat*\" | SmallSat* | \"small sat*\") + (\"power budget*\" | \"energy budget*\" | \"energy balance*\" | \"power balance*\" | \"power margin*\" | \"power generation\" | \"photovoltaic generator*\" | \"solar array*\" | \"solar panel*\" | \"battery\" | \"batteries\" | \"battery management\" | \"state of charge\" | \"states of charge\" | \"energy storage\" | \"power electronics\" | \"power conditioning\" | \"power distribution\" | \"power management\" | \"power interface*\" | \"power mode*\" | \"load profile*\" | \"power consumption\" | \"power demand\" | \"power profile\" | \"energy harvesting\") + ((\"model-based system* engineering\" | \"model based system* engineering\" | \"model-driven system* engineering\" | \"model driven system* engineering\" | \"model-centric system* engineering\" | \"model centric system* engineering\" | \"MBSE\" | \"SysML\" | \"system* modeling language\" | \"system* modelling language\" | \"object-process methodology\" | \"object process methodology\" | \"OPM\" | \"object-oriented systems engineering method\" | \"object oriented systems engineering method\" | \"OOSEM\" | \"object-oriented systems engineering\" | \"object oriented systems engineering\" | \"Arcadia\" | \"Capella\" | \"model-based engineering\" | \"model based engineering\" | \"model-driven engineering\" | \"model driven engineering\" | \"model-based design\" | \"model based design\" | \"model-driven design\" | \"model driven design\" | \"MBE\" | \"MDE\" | \"MBD\" | \"MagicGrid\" | \"Harmony-SE\" | \"Harmony SE\" | \"RFLP\" | \"Cameo Systems Modeler\" | \"MagicDraw\" | \"IBM Engineering Systems Design Rhapsody\" | \"Rational Rhapsody\" | \"Vitech CORE\" | \"Vitech GENESYS\" | \"OpenMBEE\" | \"Enterprise Architect\" | \"MATLAB System Composer\" | \"System Composer\" | \"Modelio\") | (\"system* model*\" | \"reference model*\" | \"digital engineering\" | \"object-oriented systems model*\" | \"model-based system* design\" | \"model based system* design\" | \"system* architecture model*\" | \"integrated system* model*\" | \"system-level model*\" | \"system level model*\" | \"digital thread*\" | \"digital twin*\")))",
+        "executed_query_provenance": "not_observed"
+      },
+      "completed_at_utc": "2026-09-02T17:24:26.299478Z",
+      "staged_counts": {
+        "source_reported_total": null,
+        "source_reported_total_status": "unknown",
+        "source_reported_total_exact": null,
+        "source_reported_total_scope": null,
+        "source_universe_total": null,
+        "source_export_total": null,
+        "local_match_count": null,
+        "matched_total": null,
+        "raw_source_records": null,
+        "client_side_exclusions": null,
+        "within_source_duplicates_removed": null,
+        "malformed_records_dropped": null,
+        "records_exported": 0
+      },
+      "completion_status": "error",
+      "report_ready": false,
+      "report_readiness_reasons": [
+        "missing_effective_executed_query",
+        "source_run_not_complete",
+        "staged_record_accounting_incomplete"
+      ]
+    }
+  },
+  "do_not_merge": true,
+  "requested_query": "((CubeSat* | \"cube sat*\" | cube-sat* | nanosat* | nano-sat* | \"nano sat*\" | SmallSat* | \"small sat*\") + (\"power budget*\" | \"energy budget*\" | \"energy balance*\" | \"power balance*\" | \"power margin*\" | \"power generation\" | \"photovoltaic generator*\" | \"solar array*\" | \"solar panel*\" | \"battery\" | \"batteries\" | \"battery management\" | \"state of charge\" | \"states of charge\" | \"energy storage\" | \"power electronics\" | \"power conditioning\" | \"power distribution\" | \"power management\" | \"power interface*\" | \"power mode*\" | \"load profile*\" | \"power consumption\" | \"power demand\" | \"power profile\" | \"energy harvesting\") + ((\"model-based system* engineering\" | \"model based system* engineering\" | \"model-driven system* engineering\" | \"model driven system* engineering\" | \"model-centric system* engineering\" | \"model centric system* engineering\" | \"MBSE\" | \"SysML\" | \"system* modeling language\" | \"system* modelling language\" | \"object-process methodology\" | \"object process methodology\" | \"OPM\" | \"object-oriented systems engineering method\" | \"object oriented systems engineering method\" | \"OOSEM\" | \"object-oriented systems engineering\" | \"object oriented systems engineering\" | \"Arcadia\" | \"Capella\" | \"model-based engineering\" | \"model based engineering\" | \"model-driven engineering\" | \"model driven engineering\" | \"model-based design\" | \"model based design\" | \"model-driven design\" | \"model driven design\" | \"MBE\" | \"MDE\" | \"MBD\" | \"MagicGrid\" | \"Harmony-SE\" | \"Harmony SE\" | \"RFLP\" | \"Cameo Systems Modeler\" | \"MagicDraw\" | \"IBM Engineering Systems Design Rhapsody\" | \"Rational Rhapsody\" | \"Vitech CORE\" | \"Vitech GENESYS\" | \"OpenMBEE\" | \"Enterprise Architect\" | \"MATLAB System Composer\" | \"System Composer\" | \"Modelio\") | (\"system* model*\" | \"reference model*\" | \"digital engineering\" | \"object-oriented systems model*\" | \"model-based system* design\" | \"model based system* design\" | \"system* architecture model*\" | \"integrated system* model*\" | \"system-level model*\" | \"system level model*\" | \"digital thread*\" | \"digital twin*\")))"
+}

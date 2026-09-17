@@ -1,0 +1,358 @@
+{
+  "schema_version": "scopus-post-proximity-wildcard-pilot-plan/v1",
+  "pilot": "007",
+  "source": "Scopus",
+  "platform": "Elsevier Scopus",
+  "created_at_utc": "2026-09-02T04:13:56.750298Z",
+  "repository_head_at_predeclaration": "0bcafbf48b4b568f69a5d00222c09cffdd788af3",
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "objective": "Complete the six partitions left after Pilot 006. Compare each complete literal stable-ID set with the deferred ten-wildcard population translation using a smaller native page size.",
+  "continuation_of": {
+    "pilot": "006",
+    "completed_partitions_retained": [
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "failed_event_reused": false,
+    "reason": "Pilot 006 completed both variants for A1 through A3, then the literal B1 event failed while reconciling a 165-row page at native size 200. Pilot 007 predeclares size 50 for B1 and the five unattempted partitions."
+  },
+  "date_window": {
+    "source_year_start": 2011,
+    "source_year_end": 2026,
+    "inclusive": true,
+    "diagnostic_day_cutoff": "2026-08-29",
+    "day_cutoff_handling": "The source applies calendar years. Every 2026 record remains unresolved against the diagnostic day cutoff."
+  },
+  "controls": {
+    "result_scope": "Documents",
+    "language_facet": "English",
+    "sort": "Date (oldest)",
+    "page_size": 50,
+    "limit": 1999,
+    "max_pages": 10,
+    "full_abstracts": false,
+    "document_type": null,
+    "subject_area": null,
+    "access": null,
+    "peer_review": null,
+    "controlled_vocabulary": null,
+    "strict_passes_per_event": 2,
+    "automatic_screenshots": {
+      "required": true,
+      "opt_out": false,
+      "search_page_suffix": ".search-page.png",
+      "results_page_suffix": ".results-page.png",
+      "same_directory_as_json": true,
+      "schema_version": "scopus-automatic-screenshots/v1"
+    }
+  },
+  "translation": {
+    "literal": "TITLE-ABS-KEY(\"ordinary token or ordered phrase\")",
+    "boolean": "uppercase AND and OR with explicit parentheses",
+    "proximity": false,
+    "pair_expansion": false,
+    "compound_blocks": {
+      "G_model": "F(G_model_fixed) OR F(G_mission_exact) OR (F(G_mission) AND F(M_B))",
+      "G_structure": "F(G_structure_fixed) OR F(G_product_exact) OR F(G_variation) OR (F(G_product) AND F(M_B))",
+      "C1": "F(C1_fixed) OR F(G_DSL)",
+      "BT2": "F(P) AND F(M_B) AND F(T_precise)"
+    }
+  },
+  "wildcard_candidate": {
+    "operator": "attached trailing * in a loose quoted Scopus term or phrase",
+    "wildcard_count": 10,
+    "replaced_literal_count": 22,
+    "unchanged_population_literal_count": 4,
+    "character_reduction_per_partition": 375,
+    "replacements": [
+      {
+        "candidate": "CubeSat*",
+        "source_native_atom": "TITLE-ABS-KEY(\"CubeSat*\")",
+        "replaced_literals": [
+          "CubeSat",
+          "CubeSats"
+        ],
+        "coverage_basis": "The source documents an attached trailing asterisk as truncation. Adoption still requires complete partition-level stable-ID equality."
+      },
+      {
+        "candidate": "cube sat*",
+        "source_native_atom": "TITLE-ABS-KEY(\"cube sat*\")",
+        "replaced_literals": [
+          "cube sat",
+          "cube sats"
+        ],
+        "coverage_basis": "The source documents an attached trailing asterisk as truncation. Adoption still requires complete partition-level stable-ID equality."
+      },
+      {
+        "candidate": "cube-sat*",
+        "source_native_atom": "TITLE-ABS-KEY(\"cube-sat*\")",
+        "replaced_literals": [
+          "cube-sat",
+          "cube-sats"
+        ],
+        "coverage_basis": "The source documents an attached trailing asterisk as truncation. Adoption still requires complete partition-level stable-ID equality."
+      },
+      {
+        "candidate": "cube satellite*",
+        "source_native_atom": "TITLE-ABS-KEY(\"cube satellite*\")",
+        "replaced_literals": [
+          "cube satellite",
+          "cube satellites"
+        ],
+        "coverage_basis": "The source documents an attached trailing asterisk as truncation. Adoption still requires complete partition-level stable-ID equality."
+      },
+      {
+        "candidate": "nanosat*",
+        "source_native_atom": "TITLE-ABS-KEY(\"nanosat*\")",
+        "replaced_literals": [
+          "nanosat",
+          "nanosats",
+          "nanosatellite",
+          "nanosatellites"
+        ],
+        "coverage_basis": "The source documents an attached trailing asterisk as truncation. Adoption still requires complete partition-level stable-ID equality."
+      },
+      {
+        "candidate": "nano-sat*",
+        "source_native_atom": "TITLE-ABS-KEY(\"nano-sat*\")",
+        "replaced_literals": [
+          "nano-sat",
+          "nano-sats"
+        ],
+        "coverage_basis": "The source documents an attached trailing asterisk as truncation. Adoption still requires complete partition-level stable-ID equality."
+      },
+      {
+        "candidate": "nano sat*",
+        "source_native_atom": "TITLE-ABS-KEY(\"nano sat*\")",
+        "replaced_literals": [
+          "nano sat",
+          "nano sats"
+        ],
+        "coverage_basis": "The source documents an attached trailing asterisk as truncation. Adoption still requires complete partition-level stable-ID equality."
+      },
+      {
+        "candidate": "nano-satellite*",
+        "source_native_atom": "TITLE-ABS-KEY(\"nano-satellite*\")",
+        "replaced_literals": [
+          "nano-satellite",
+          "nano-satellites"
+        ],
+        "coverage_basis": "The source documents an attached trailing asterisk as truncation. Adoption still requires complete partition-level stable-ID equality."
+      },
+      {
+        "candidate": "nano satellite*",
+        "source_native_atom": "TITLE-ABS-KEY(\"nano satellite*\")",
+        "replaced_literals": [
+          "nano satellite",
+          "nano satellites"
+        ],
+        "coverage_basis": "The source documents an attached trailing asterisk as truncation. Adoption still requires complete partition-level stable-ID equality."
+      },
+      {
+        "candidate": "SmallSat*",
+        "source_native_atom": "TITLE-ABS-KEY(\"SmallSat*\")",
+        "replaced_literals": [
+          "SmallSat",
+          "SmallSats"
+        ],
+        "coverage_basis": "The source documents an attached trailing asterisk as truncation. Adoption still requires complete partition-level stable-ID equality."
+      }
+    ],
+    "preferred_if_safe": true
+  },
+  "acceptance_checks": [
+    "All 12 events complete two independent exhaustive ordered stable-ID passes.",
+    "Every event preserves exact query, year, language, scope, sort, and page-size readback.",
+    "Every successful JSON has both mandatory sibling screenshots with matching hashes and dimensions.",
+    "Each wildcard stable-ID set contains its fresh literal set for the same partition.",
+    "Adoption requires exact set equality in every main partition. Any wildcard-only record keeps the literal translation pending explicit assessment.",
+    "No count equality alone establishes wildcard safety."
+  ],
+  "stop_rules": [
+    "Run each literal event immediately before its wildcard event.",
+    "Stop after the first failed or invalid event. Do not retry or infer a set.",
+    "Retain a failed adapter JSON and any screenshots that were captured before failure."
+  ],
+  "adapter": {
+    "id": "search_scopus",
+    "version": "3",
+    "sha256": "d37ea806eae28826bfb08eb450cfbc3c9923cb6765850185b7706160a474cfc5",
+    "entrypoint": "/Users/antho/agent-tools/internet/skills/browser/scripts/search_scopus.py"
+  },
+  "term_snapshot": {
+    "path": "SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot007/queries.py",
+    "sha256": "7ab4c27fe49bd1bfa9c45600a669896b507fc08055045128b6212a6ee407193f",
+    "term_counts": {
+      "P": 26,
+      "E_H": 38,
+      "E_F": 37,
+      "M_H": 54,
+      "M_B": 31,
+      "R": 55,
+      "G_model_fixed": 14,
+      "G_mission": 4,
+      "G_mission_exact": 16,
+      "G_structure_fixed": 8,
+      "G_product": 4,
+      "G_product_exact": 8,
+      "G_variation": 2,
+      "C1_fixed": 26,
+      "G_DSL": 4,
+      "T_precise": 32
+    }
+  },
+  "source_affecting_scripts": {
+    "SLR/SLR1/source-specific/scopus/scripts/scopus_pilot007/queries.py": "0c191c442617eff1c9631d8282e9970c42761ff912be1d7f85cc6ea2df9314ce",
+    "SLR/SLR1/source-specific/scopus/scripts/scopus_pilot007/build_plan.py": "c27286d8eddd1d2d5241b06f48f24e5663216ffe6f936cd7bc4d99dc07d1ba59",
+    "SLR/SLR1/source-specific/scopus/scripts/scopus_pilot007/run_pilot.py": "71ea17995ac7cce4f121b3a04f94aacec4984d9f1c1a6f303a86e5ef8809a477"
+  },
+  "events": [
+    {
+      "event_id": "B1-literal",
+      "partition_id": "B1",
+      "variant": "literal",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat\") OR TITLE-ABS-KEY(\"CubeSats\") OR TITLE-ABS-KEY(\"cube sat\") OR TITLE-ABS-KEY(\"cube sats\") OR TITLE-ABS-KEY(\"cube-sat\") OR TITLE-ABS-KEY(\"cube-sats\") OR TITLE-ABS-KEY(\"cube satellite\") OR TITLE-ABS-KEY(\"cube satellites\") OR TITLE-ABS-KEY(\"nanosat\") OR TITLE-ABS-KEY(\"nanosats\") OR TITLE-ABS-KEY(\"nanosatellite\") OR TITLE-ABS-KEY(\"nanosatellites\") OR TITLE-ABS-KEY(\"nano-sat\") OR TITLE-ABS-KEY(\"nano-sats\") OR TITLE-ABS-KEY(\"nano sat\") OR TITLE-ABS-KEY(\"nano sats\") OR TITLE-ABS-KEY(\"nano-satellite\") OR TITLE-ABS-KEY(\"nano-satellites\") OR TITLE-ABS-KEY(\"nano satellite\") OR TITLE-ABS-KEY(\"nano satellites\") OR TITLE-ABS-KEY(\"SmallSat\") OR TITLE-ABS-KEY(\"SmallSats\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND (TITLE-ABS-KEY(\"model-based systems engineering\") OR TITLE-ABS-KEY(\"model based systems engineering\") OR TITLE-ABS-KEY(\"model-based system engineering\") OR TITLE-ABS-KEY(\"model based system engineering\") OR TITLE-ABS-KEY(\"model-driven systems engineering\") OR TITLE-ABS-KEY(\"model driven systems engineering\") OR TITLE-ABS-KEY(\"model-driven system engineering\") OR TITLE-ABS-KEY(\"model driven system engineering\") OR TITLE-ABS-KEY(\"model-centric systems engineering\") OR TITLE-ABS-KEY(\"model centric systems engineering\") OR TITLE-ABS-KEY(\"model-centric system engineering\") OR TITLE-ABS-KEY(\"model centric system engineering\") OR TITLE-ABS-KEY(\"MBSE\") OR TITLE-ABS-KEY(\"SysML\") OR TITLE-ABS-KEY(\"systems modeling language\") OR TITLE-ABS-KEY(\"systems modelling language\") OR TITLE-ABS-KEY(\"system modeling language\") OR TITLE-ABS-KEY(\"system modelling language\") OR TITLE-ABS-KEY(\"object-process methodology\") OR TITLE-ABS-KEY(\"object process methodology\") OR TITLE-ABS-KEY(\"OPM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering method\") OR TITLE-ABS-KEY(\"object oriented systems engineering method\") OR TITLE-ABS-KEY(\"OOSEM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering\") OR TITLE-ABS-KEY(\"object oriented systems engineering\") OR TITLE-ABS-KEY(\"Arcadia\") OR TITLE-ABS-KEY(\"Capella\") OR TITLE-ABS-KEY(\"model-based engineering\") OR TITLE-ABS-KEY(\"model based engineering\") OR TITLE-ABS-KEY(\"model-driven engineering\") OR TITLE-ABS-KEY(\"model driven engineering\") OR TITLE-ABS-KEY(\"model-based design\") OR TITLE-ABS-KEY(\"model based design\") OR TITLE-ABS-KEY(\"model-driven design\") OR TITLE-ABS-KEY(\"model driven design\") OR TITLE-ABS-KEY(\"MBE\") OR TITLE-ABS-KEY(\"MDE\") OR TITLE-ABS-KEY(\"MBD\") OR TITLE-ABS-KEY(\"MagicGrid\") OR TITLE-ABS-KEY(\"Harmony-SE\") OR TITLE-ABS-KEY(\"Harmony SE\") OR TITLE-ABS-KEY(\"RFLP\") OR TITLE-ABS-KEY(\"Cameo Systems Modeler\") OR TITLE-ABS-KEY(\"MagicDraw\") OR TITLE-ABS-KEY(\"IBM Engineering Systems Design Rhapsody\") OR TITLE-ABS-KEY(\"Rational Rhapsody\") OR TITLE-ABS-KEY(\"Vitech CORE\") OR TITLE-ABS-KEY(\"Vitech GENESYS\") OR TITLE-ABS-KEY(\"OpenMBEE\") OR TITLE-ABS-KEY(\"Enterprise Architect\") OR TITLE-ABS-KEY(\"MATLAB System Composer\") OR TITLE-ABS-KEY(\"System Composer\") OR TITLE-ABS-KEY(\"Modelio\")))",
+      "query_sha256": "d372f23de3ebe9afc577d76ea84919668ef219e443f74b98fea69134eee2bb0f",
+      "query_characters": 3070,
+      "output": "literal/B1.json",
+      "require_complete": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "B1-wildcard",
+      "partition_id": "B1",
+      "variant": "wildcard",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat*\") OR TITLE-ABS-KEY(\"cube sat*\") OR TITLE-ABS-KEY(\"cube-sat*\") OR TITLE-ABS-KEY(\"cube satellite*\") OR TITLE-ABS-KEY(\"nanosat*\") OR TITLE-ABS-KEY(\"nano-sat*\") OR TITLE-ABS-KEY(\"nano sat*\") OR TITLE-ABS-KEY(\"nano-satellite*\") OR TITLE-ABS-KEY(\"nano satellite*\") OR TITLE-ABS-KEY(\"SmallSat*\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND (TITLE-ABS-KEY(\"model-based systems engineering\") OR TITLE-ABS-KEY(\"model based systems engineering\") OR TITLE-ABS-KEY(\"model-based system engineering\") OR TITLE-ABS-KEY(\"model based system engineering\") OR TITLE-ABS-KEY(\"model-driven systems engineering\") OR TITLE-ABS-KEY(\"model driven systems engineering\") OR TITLE-ABS-KEY(\"model-driven system engineering\") OR TITLE-ABS-KEY(\"model driven system engineering\") OR TITLE-ABS-KEY(\"model-centric systems engineering\") OR TITLE-ABS-KEY(\"model centric systems engineering\") OR TITLE-ABS-KEY(\"model-centric system engineering\") OR TITLE-ABS-KEY(\"model centric system engineering\") OR TITLE-ABS-KEY(\"MBSE\") OR TITLE-ABS-KEY(\"SysML\") OR TITLE-ABS-KEY(\"systems modeling language\") OR TITLE-ABS-KEY(\"systems modelling language\") OR TITLE-ABS-KEY(\"system modeling language\") OR TITLE-ABS-KEY(\"system modelling language\") OR TITLE-ABS-KEY(\"object-process methodology\") OR TITLE-ABS-KEY(\"object process methodology\") OR TITLE-ABS-KEY(\"OPM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering method\") OR TITLE-ABS-KEY(\"object oriented systems engineering method\") OR TITLE-ABS-KEY(\"OOSEM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering\") OR TITLE-ABS-KEY(\"object oriented systems engineering\") OR TITLE-ABS-KEY(\"Arcadia\") OR TITLE-ABS-KEY(\"Capella\") OR TITLE-ABS-KEY(\"model-based engineering\") OR TITLE-ABS-KEY(\"model based engineering\") OR TITLE-ABS-KEY(\"model-driven engineering\") OR TITLE-ABS-KEY(\"model driven engineering\") OR TITLE-ABS-KEY(\"model-based design\") OR TITLE-ABS-KEY(\"model based design\") OR TITLE-ABS-KEY(\"model-driven design\") OR TITLE-ABS-KEY(\"model driven design\") OR TITLE-ABS-KEY(\"MBE\") OR TITLE-ABS-KEY(\"MDE\") OR TITLE-ABS-KEY(\"MBD\") OR TITLE-ABS-KEY(\"MagicGrid\") OR TITLE-ABS-KEY(\"Harmony-SE\") OR TITLE-ABS-KEY(\"Harmony SE\") OR TITLE-ABS-KEY(\"RFLP\") OR TITLE-ABS-KEY(\"Cameo Systems Modeler\") OR TITLE-ABS-KEY(\"MagicDraw\") OR TITLE-ABS-KEY(\"IBM Engineering Systems Design Rhapsody\") OR TITLE-ABS-KEY(\"Rational Rhapsody\") OR TITLE-ABS-KEY(\"Vitech CORE\") OR TITLE-ABS-KEY(\"Vitech GENESYS\") OR TITLE-ABS-KEY(\"OpenMBEE\") OR TITLE-ABS-KEY(\"Enterprise Architect\") OR TITLE-ABS-KEY(\"MATLAB System Composer\") OR TITLE-ABS-KEY(\"System Composer\") OR TITLE-ABS-KEY(\"Modelio\")))",
+      "query_sha256": "284e07ffd1a8b6b5b3080fdf4d3f53e6994d79ef352c43f24b67d7903b2b7d74",
+      "query_characters": 2695,
+      "output": "wildcard/B1.json",
+      "require_complete": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "B2-literal",
+      "partition_id": "B2",
+      "variant": "literal",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat\") OR TITLE-ABS-KEY(\"CubeSats\") OR TITLE-ABS-KEY(\"cube sat\") OR TITLE-ABS-KEY(\"cube sats\") OR TITLE-ABS-KEY(\"cube-sat\") OR TITLE-ABS-KEY(\"cube-sats\") OR TITLE-ABS-KEY(\"cube satellite\") OR TITLE-ABS-KEY(\"cube satellites\") OR TITLE-ABS-KEY(\"nanosat\") OR TITLE-ABS-KEY(\"nanosats\") OR TITLE-ABS-KEY(\"nanosatellite\") OR TITLE-ABS-KEY(\"nanosatellites\") OR TITLE-ABS-KEY(\"nano-sat\") OR TITLE-ABS-KEY(\"nano-sats\") OR TITLE-ABS-KEY(\"nano sat\") OR TITLE-ABS-KEY(\"nano sats\") OR TITLE-ABS-KEY(\"nano-satellite\") OR TITLE-ABS-KEY(\"nano-satellites\") OR TITLE-ABS-KEY(\"nano satellite\") OR TITLE-ABS-KEY(\"nano satellites\") OR TITLE-ABS-KEY(\"SmallSat\") OR TITLE-ABS-KEY(\"SmallSats\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND (TITLE-ABS-KEY(\"system model\") OR TITLE-ABS-KEY(\"systems model\") OR TITLE-ABS-KEY(\"system modeling\") OR TITLE-ABS-KEY(\"systems modeling\") OR TITLE-ABS-KEY(\"system modelling\") OR TITLE-ABS-KEY(\"systems modelling\") OR TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"digital engineering\") OR TITLE-ABS-KEY(\"object-oriented systems model\") OR TITLE-ABS-KEY(\"object-oriented systems models\") OR TITLE-ABS-KEY(\"model-based system design\") OR TITLE-ABS-KEY(\"model based system design\") OR TITLE-ABS-KEY(\"model-based systems design\") OR TITLE-ABS-KEY(\"model based systems design\") OR TITLE-ABS-KEY(\"system architecture model\") OR TITLE-ABS-KEY(\"system architecture models\") OR TITLE-ABS-KEY(\"systems architecture model\") OR TITLE-ABS-KEY(\"systems architecture models\") OR TITLE-ABS-KEY(\"integrated system model\") OR TITLE-ABS-KEY(\"integrated system models\") OR TITLE-ABS-KEY(\"integrated systems model\") OR TITLE-ABS-KEY(\"integrated systems models\") OR TITLE-ABS-KEY(\"system-level model\") OR TITLE-ABS-KEY(\"system-level models\") OR TITLE-ABS-KEY(\"system level model\") OR TITLE-ABS-KEY(\"system level models\") OR TITLE-ABS-KEY(\"digital thread\") OR TITLE-ABS-KEY(\"digital threads\") OR TITLE-ABS-KEY(\"digital twin\") OR TITLE-ABS-KEY(\"digital twins\")) AND (TITLE-ABS-KEY(\"requirement\") OR TITLE-ABS-KEY(\"requirements\") OR TITLE-ABS-KEY(\"function\") OR TITLE-ABS-KEY(\"functions\") OR TITLE-ABS-KEY(\"functional\") OR TITLE-ABS-KEY(\"behavior\") OR TITLE-ABS-KEY(\"behaviors\") OR TITLE-ABS-KEY(\"behaviour\") OR TITLE-ABS-KEY(\"behaviours\") OR TITLE-ABS-KEY(\"behavioral\") OR TITLE-ABS-KEY(\"behavioural\") OR TITLE-ABS-KEY(\"architecture\") OR TITLE-ABS-KEY(\"architectures\") OR TITLE-ABS-KEY(\"architectural\") OR TITLE-ABS-KEY(\"interface\") OR TITLE-ABS-KEY(\"interfaces\") OR TITLE-ABS-KEY(\"traceability\") OR TITLE-ABS-KEY(\"trace\") OR TITLE-ABS-KEY(\"traceable\") OR TITLE-ABS-KEY(\"traced\") OR TITLE-ABS-KEY(\"allocation\") OR TITLE-ABS-KEY(\"allocate\") OR TITLE-ABS-KEY(\"allocated\") OR TITLE-ABS-KEY(\"constraint\") OR TITLE-ABS-KEY(\"constraints\") OR TITLE-ABS-KEY(\"parametric\") OR TITLE-ABS-KEY(\"parametrics\") OR TITLE-ABS-KEY(\"analysis\") OR TITLE-ABS-KEY(\"analyses\") OR TITLE-ABS-KEY(\"design\") OR TITLE-ABS-KEY(\"designs\") OR TITLE-ABS-KEY(\"designed\") OR TITLE-ABS-KEY(\"designing\") OR TITLE-ABS-KEY(\"decision\") OR TITLE-ABS-KEY(\"decisions\") OR TITLE-ABS-KEY(\"decision-making\") OR TITLE-ABS-KEY(\"decision making\") OR TITLE-ABS-KEY(\"trade study\") OR TITLE-ABS-KEY(\"trade studies\") OR TITLE-ABS-KEY(\"trade-off\") OR TITLE-ABS-KEY(\"trade-offs\") OR TITLE-ABS-KEY(\"tradeoff\") OR TITLE-ABS-KEY(\"tradeoffs\") OR TITLE-ABS-KEY(\"verification\") OR TITLE-ABS-KEY(\"verifications\") OR TITLE-ABS-KEY(\"verify\") OR TITLE-ABS-KEY(\"verifies\") OR TITLE-ABS-KEY(\"verified\") OR TITLE-ABS-KEY(\"verifying\") OR TITLE-ABS-KEY(\"validation\") OR TITLE-ABS-KEY(\"validations\") OR TITLE-ABS-KEY(\"validate\") OR TITLE-ABS-KEY(\"validates\") OR TITLE-ABS-KEY(\"validated\") OR TITLE-ABS-KEY(\"validating\")))",
+      "query_sha256": "090c73aa1a6da79bcc6ba8bec84d0f9ae933603d8e892859a80ccc2c8de05860",
+      "query_characters": 3796,
+      "output": "literal/B2.json",
+      "require_complete": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "B2-wildcard",
+      "partition_id": "B2",
+      "variant": "wildcard",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat*\") OR TITLE-ABS-KEY(\"cube sat*\") OR TITLE-ABS-KEY(\"cube-sat*\") OR TITLE-ABS-KEY(\"cube satellite*\") OR TITLE-ABS-KEY(\"nanosat*\") OR TITLE-ABS-KEY(\"nano-sat*\") OR TITLE-ABS-KEY(\"nano sat*\") OR TITLE-ABS-KEY(\"nano-satellite*\") OR TITLE-ABS-KEY(\"nano satellite*\") OR TITLE-ABS-KEY(\"SmallSat*\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND (TITLE-ABS-KEY(\"system model\") OR TITLE-ABS-KEY(\"systems model\") OR TITLE-ABS-KEY(\"system modeling\") OR TITLE-ABS-KEY(\"systems modeling\") OR TITLE-ABS-KEY(\"system modelling\") OR TITLE-ABS-KEY(\"systems modelling\") OR TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"digital engineering\") OR TITLE-ABS-KEY(\"object-oriented systems model\") OR TITLE-ABS-KEY(\"object-oriented systems models\") OR TITLE-ABS-KEY(\"model-based system design\") OR TITLE-ABS-KEY(\"model based system design\") OR TITLE-ABS-KEY(\"model-based systems design\") OR TITLE-ABS-KEY(\"model based systems design\") OR TITLE-ABS-KEY(\"system architecture model\") OR TITLE-ABS-KEY(\"system architecture models\") OR TITLE-ABS-KEY(\"systems architecture model\") OR TITLE-ABS-KEY(\"systems architecture models\") OR TITLE-ABS-KEY(\"integrated system model\") OR TITLE-ABS-KEY(\"integrated system models\") OR TITLE-ABS-KEY(\"integrated systems model\") OR TITLE-ABS-KEY(\"integrated systems models\") OR TITLE-ABS-KEY(\"system-level model\") OR TITLE-ABS-KEY(\"system-level models\") OR TITLE-ABS-KEY(\"system level model\") OR TITLE-ABS-KEY(\"system level models\") OR TITLE-ABS-KEY(\"digital thread\") OR TITLE-ABS-KEY(\"digital threads\") OR TITLE-ABS-KEY(\"digital twin\") OR TITLE-ABS-KEY(\"digital twins\")) AND (TITLE-ABS-KEY(\"requirement\") OR TITLE-ABS-KEY(\"requirements\") OR TITLE-ABS-KEY(\"function\") OR TITLE-ABS-KEY(\"functions\") OR TITLE-ABS-KEY(\"functional\") OR TITLE-ABS-KEY(\"behavior\") OR TITLE-ABS-KEY(\"behaviors\") OR TITLE-ABS-KEY(\"behaviour\") OR TITLE-ABS-KEY(\"behaviours\") OR TITLE-ABS-KEY(\"behavioral\") OR TITLE-ABS-KEY(\"behavioural\") OR TITLE-ABS-KEY(\"architecture\") OR TITLE-ABS-KEY(\"architectures\") OR TITLE-ABS-KEY(\"architectural\") OR TITLE-ABS-KEY(\"interface\") OR TITLE-ABS-KEY(\"interfaces\") OR TITLE-ABS-KEY(\"traceability\") OR TITLE-ABS-KEY(\"trace\") OR TITLE-ABS-KEY(\"traceable\") OR TITLE-ABS-KEY(\"traced\") OR TITLE-ABS-KEY(\"allocation\") OR TITLE-ABS-KEY(\"allocate\") OR TITLE-ABS-KEY(\"allocated\") OR TITLE-ABS-KEY(\"constraint\") OR TITLE-ABS-KEY(\"constraints\") OR TITLE-ABS-KEY(\"parametric\") OR TITLE-ABS-KEY(\"parametrics\") OR TITLE-ABS-KEY(\"analysis\") OR TITLE-ABS-KEY(\"analyses\") OR TITLE-ABS-KEY(\"design\") OR TITLE-ABS-KEY(\"designs\") OR TITLE-ABS-KEY(\"designed\") OR TITLE-ABS-KEY(\"designing\") OR TITLE-ABS-KEY(\"decision\") OR TITLE-ABS-KEY(\"decisions\") OR TITLE-ABS-KEY(\"decision-making\") OR TITLE-ABS-KEY(\"decision making\") OR TITLE-ABS-KEY(\"trade study\") OR TITLE-ABS-KEY(\"trade studies\") OR TITLE-ABS-KEY(\"trade-off\") OR TITLE-ABS-KEY(\"trade-offs\") OR TITLE-ABS-KEY(\"tradeoff\") OR TITLE-ABS-KEY(\"tradeoffs\") OR TITLE-ABS-KEY(\"verification\") OR TITLE-ABS-KEY(\"verifications\") OR TITLE-ABS-KEY(\"verify\") OR TITLE-ABS-KEY(\"verifies\") OR TITLE-ABS-KEY(\"verified\") OR TITLE-ABS-KEY(\"verifying\") OR TITLE-ABS-KEY(\"validation\") OR TITLE-ABS-KEY(\"validations\") OR TITLE-ABS-KEY(\"validate\") OR TITLE-ABS-KEY(\"validates\") OR TITLE-ABS-KEY(\"validated\") OR TITLE-ABS-KEY(\"validating\")))",
+      "query_sha256": "a3904a5a20625f08b730aa7fedad4fda2ff4842a890cd19870aa49af15978d1d",
+      "query_characters": 3421,
+      "output": "wildcard/B2.json",
+      "require_complete": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BG1-literal",
+      "partition_id": "BG1",
+      "variant": "literal",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat\") OR TITLE-ABS-KEY(\"CubeSats\") OR TITLE-ABS-KEY(\"cube sat\") OR TITLE-ABS-KEY(\"cube sats\") OR TITLE-ABS-KEY(\"cube-sat\") OR TITLE-ABS-KEY(\"cube-sats\") OR TITLE-ABS-KEY(\"cube satellite\") OR TITLE-ABS-KEY(\"cube satellites\") OR TITLE-ABS-KEY(\"nanosat\") OR TITLE-ABS-KEY(\"nanosats\") OR TITLE-ABS-KEY(\"nanosatellite\") OR TITLE-ABS-KEY(\"nanosatellites\") OR TITLE-ABS-KEY(\"nano-sat\") OR TITLE-ABS-KEY(\"nano-sats\") OR TITLE-ABS-KEY(\"nano sat\") OR TITLE-ABS-KEY(\"nano sats\") OR TITLE-ABS-KEY(\"nano-satellite\") OR TITLE-ABS-KEY(\"nano-satellites\") OR TITLE-ABS-KEY(\"nano satellite\") OR TITLE-ABS-KEY(\"nano satellites\") OR TITLE-ABS-KEY(\"SmallSat\") OR TITLE-ABS-KEY(\"SmallSats\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND ((TITLE-ABS-KEY(\"generic model\") OR TITLE-ABS-KEY(\"generic models\") OR TITLE-ABS-KEY(\"generic system model\") OR TITLE-ABS-KEY(\"generic system models\") OR TITLE-ABS-KEY(\"reusable model\") OR TITLE-ABS-KEY(\"reusable models\") OR TITLE-ABS-KEY(\"reusable system model\") OR TITLE-ABS-KEY(\"reusable system models\") OR TITLE-ABS-KEY(\"configurable model\") OR TITLE-ABS-KEY(\"configurable models\") OR TITLE-ABS-KEY(\"configurable system model\") OR TITLE-ABS-KEY(\"configurable system models\") OR TITLE-ABS-KEY(\"model template\") OR TITLE-ABS-KEY(\"model templates\")) OR (TITLE-ABS-KEY(\"mission-agnostic model\") OR TITLE-ABS-KEY(\"mission-agnostic models\") OR TITLE-ABS-KEY(\"mission-agnostic architecture\") OR TITLE-ABS-KEY(\"mission-agnostic architectures\") OR TITLE-ABS-KEY(\"mission agnostic model\") OR TITLE-ABS-KEY(\"mission agnostic models\") OR TITLE-ABS-KEY(\"mission agnostic architecture\") OR TITLE-ABS-KEY(\"mission agnostic architectures\") OR TITLE-ABS-KEY(\"mission-independent model\") OR TITLE-ABS-KEY(\"mission-independent models\") OR TITLE-ABS-KEY(\"mission-independent architecture\") OR TITLE-ABS-KEY(\"mission-independent architectures\") OR TITLE-ABS-KEY(\"mission independent model\") OR TITLE-ABS-KEY(\"mission independent models\") OR TITLE-ABS-KEY(\"mission independent architecture\") OR TITLE-ABS-KEY(\"mission independent architectures\")) OR ((TITLE-ABS-KEY(\"mission-agnostic\") OR TITLE-ABS-KEY(\"mission agnostic\") OR TITLE-ABS-KEY(\"mission-independent\") OR TITLE-ABS-KEY(\"mission independent\")) AND (TITLE-ABS-KEY(\"system model\") OR TITLE-ABS-KEY(\"systems model\") OR TITLE-ABS-KEY(\"system modeling\") OR TITLE-ABS-KEY(\"systems modeling\") OR TITLE-ABS-KEY(\"system modelling\") OR TITLE-ABS-KEY(\"systems modelling\") OR TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"digital engineering\") OR TITLE-ABS-KEY(\"object-oriented systems model\") OR TITLE-ABS-KEY(\"object-oriented systems models\") OR TITLE-ABS-KEY(\"model-based system design\") OR TITLE-ABS-KEY(\"model based system design\") OR TITLE-ABS-KEY(\"model-based systems design\") OR TITLE-ABS-KEY(\"model based systems design\") OR TITLE-ABS-KEY(\"system architecture model\") OR TITLE-ABS-KEY(\"system architecture models\") OR TITLE-ABS-KEY(\"systems architecture model\") OR TITLE-ABS-KEY(\"systems architecture models\") OR TITLE-ABS-KEY(\"integrated system model\") OR TITLE-ABS-KEY(\"integrated system models\") OR TITLE-ABS-KEY(\"integrated systems model\") OR TITLE-ABS-KEY(\"integrated systems models\") OR TITLE-ABS-KEY(\"system-level model\") OR TITLE-ABS-KEY(\"system-level models\") OR TITLE-ABS-KEY(\"system level model\") OR TITLE-ABS-KEY(\"system level models\") OR TITLE-ABS-KEY(\"digital thread\") OR TITLE-ABS-KEY(\"digital threads\") OR TITLE-ABS-KEY(\"digital twin\") OR TITLE-ABS-KEY(\"digital twins\")))))",
+      "query_sha256": "26b5b4826991eaf10602c845321d6f7d1a6ffbcc2a2d8b28e94ce82971f7c250",
+      "query_characters": 3599,
+      "output": "literal/BG1.json",
+      "require_complete": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BG1-wildcard",
+      "partition_id": "BG1",
+      "variant": "wildcard",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat*\") OR TITLE-ABS-KEY(\"cube sat*\") OR TITLE-ABS-KEY(\"cube-sat*\") OR TITLE-ABS-KEY(\"cube satellite*\") OR TITLE-ABS-KEY(\"nanosat*\") OR TITLE-ABS-KEY(\"nano-sat*\") OR TITLE-ABS-KEY(\"nano sat*\") OR TITLE-ABS-KEY(\"nano-satellite*\") OR TITLE-ABS-KEY(\"nano satellite*\") OR TITLE-ABS-KEY(\"SmallSat*\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND ((TITLE-ABS-KEY(\"generic model\") OR TITLE-ABS-KEY(\"generic models\") OR TITLE-ABS-KEY(\"generic system model\") OR TITLE-ABS-KEY(\"generic system models\") OR TITLE-ABS-KEY(\"reusable model\") OR TITLE-ABS-KEY(\"reusable models\") OR TITLE-ABS-KEY(\"reusable system model\") OR TITLE-ABS-KEY(\"reusable system models\") OR TITLE-ABS-KEY(\"configurable model\") OR TITLE-ABS-KEY(\"configurable models\") OR TITLE-ABS-KEY(\"configurable system model\") OR TITLE-ABS-KEY(\"configurable system models\") OR TITLE-ABS-KEY(\"model template\") OR TITLE-ABS-KEY(\"model templates\")) OR (TITLE-ABS-KEY(\"mission-agnostic model\") OR TITLE-ABS-KEY(\"mission-agnostic models\") OR TITLE-ABS-KEY(\"mission-agnostic architecture\") OR TITLE-ABS-KEY(\"mission-agnostic architectures\") OR TITLE-ABS-KEY(\"mission agnostic model\") OR TITLE-ABS-KEY(\"mission agnostic models\") OR TITLE-ABS-KEY(\"mission agnostic architecture\") OR TITLE-ABS-KEY(\"mission agnostic architectures\") OR TITLE-ABS-KEY(\"mission-independent model\") OR TITLE-ABS-KEY(\"mission-independent models\") OR TITLE-ABS-KEY(\"mission-independent architecture\") OR TITLE-ABS-KEY(\"mission-independent architectures\") OR TITLE-ABS-KEY(\"mission independent model\") OR TITLE-ABS-KEY(\"mission independent models\") OR TITLE-ABS-KEY(\"mission independent architecture\") OR TITLE-ABS-KEY(\"mission independent architectures\")) OR ((TITLE-ABS-KEY(\"mission-agnostic\") OR TITLE-ABS-KEY(\"mission agnostic\") OR TITLE-ABS-KEY(\"mission-independent\") OR TITLE-ABS-KEY(\"mission independent\")) AND (TITLE-ABS-KEY(\"system model\") OR TITLE-ABS-KEY(\"systems model\") OR TITLE-ABS-KEY(\"system modeling\") OR TITLE-ABS-KEY(\"systems modeling\") OR TITLE-ABS-KEY(\"system modelling\") OR TITLE-ABS-KEY(\"systems modelling\") OR TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"digital engineering\") OR TITLE-ABS-KEY(\"object-oriented systems model\") OR TITLE-ABS-KEY(\"object-oriented systems models\") OR TITLE-ABS-KEY(\"model-based system design\") OR TITLE-ABS-KEY(\"model based system design\") OR TITLE-ABS-KEY(\"model-based systems design\") OR TITLE-ABS-KEY(\"model based systems design\") OR TITLE-ABS-KEY(\"system architecture model\") OR TITLE-ABS-KEY(\"system architecture models\") OR TITLE-ABS-KEY(\"systems architecture model\") OR TITLE-ABS-KEY(\"systems architecture models\") OR TITLE-ABS-KEY(\"integrated system model\") OR TITLE-ABS-KEY(\"integrated system models\") OR TITLE-ABS-KEY(\"integrated systems model\") OR TITLE-ABS-KEY(\"integrated systems models\") OR TITLE-ABS-KEY(\"system-level model\") OR TITLE-ABS-KEY(\"system-level models\") OR TITLE-ABS-KEY(\"system level model\") OR TITLE-ABS-KEY(\"system level models\") OR TITLE-ABS-KEY(\"digital thread\") OR TITLE-ABS-KEY(\"digital threads\") OR TITLE-ABS-KEY(\"digital twin\") OR TITLE-ABS-KEY(\"digital twins\")))))",
+      "query_sha256": "c4e00d5997d65aa0d62e13b202d6230f70520900f4140af3ce59820d9ad5a947",
+      "query_characters": 3224,
+      "output": "wildcard/BG1.json",
+      "require_complete": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BG2-literal",
+      "partition_id": "BG2",
+      "variant": "literal",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat\") OR TITLE-ABS-KEY(\"CubeSats\") OR TITLE-ABS-KEY(\"cube sat\") OR TITLE-ABS-KEY(\"cube sats\") OR TITLE-ABS-KEY(\"cube-sat\") OR TITLE-ABS-KEY(\"cube-sats\") OR TITLE-ABS-KEY(\"cube satellite\") OR TITLE-ABS-KEY(\"cube satellites\") OR TITLE-ABS-KEY(\"nanosat\") OR TITLE-ABS-KEY(\"nanosats\") OR TITLE-ABS-KEY(\"nanosatellite\") OR TITLE-ABS-KEY(\"nanosatellites\") OR TITLE-ABS-KEY(\"nano-sat\") OR TITLE-ABS-KEY(\"nano-sats\") OR TITLE-ABS-KEY(\"nano sat\") OR TITLE-ABS-KEY(\"nano sats\") OR TITLE-ABS-KEY(\"nano-satellite\") OR TITLE-ABS-KEY(\"nano-satellites\") OR TITLE-ABS-KEY(\"nano satellite\") OR TITLE-ABS-KEY(\"nano satellites\") OR TITLE-ABS-KEY(\"SmallSat\") OR TITLE-ABS-KEY(\"SmallSats\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND ((TITLE-ABS-KEY(\"reference architecture\") OR TITLE-ABS-KEY(\"reference architectures\") OR TITLE-ABS-KEY(\"domain model\") OR TITLE-ABS-KEY(\"domain models\") OR TITLE-ABS-KEY(\"metamodel\") OR TITLE-ABS-KEY(\"metamodels\") OR TITLE-ABS-KEY(\"meta-model\") OR TITLE-ABS-KEY(\"meta-models\")) OR (TITLE-ABS-KEY(\"product-line model\") OR TITLE-ABS-KEY(\"product-line models\") OR TITLE-ABS-KEY(\"product line model\") OR TITLE-ABS-KEY(\"product line models\") OR TITLE-ABS-KEY(\"product-family model\") OR TITLE-ABS-KEY(\"product-family models\") OR TITLE-ABS-KEY(\"product family model\") OR TITLE-ABS-KEY(\"product family models\")) OR (TITLE-ABS-KEY(\"variation point\") OR TITLE-ABS-KEY(\"variation points\")) OR ((TITLE-ABS-KEY(\"product-line\") OR TITLE-ABS-KEY(\"product line\") OR TITLE-ABS-KEY(\"product-family\") OR TITLE-ABS-KEY(\"product family\")) AND (TITLE-ABS-KEY(\"system model\") OR TITLE-ABS-KEY(\"systems model\") OR TITLE-ABS-KEY(\"system modeling\") OR TITLE-ABS-KEY(\"systems modeling\") OR TITLE-ABS-KEY(\"system modelling\") OR TITLE-ABS-KEY(\"systems modelling\") OR TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"digital engineering\") OR TITLE-ABS-KEY(\"object-oriented systems model\") OR TITLE-ABS-KEY(\"object-oriented systems models\") OR TITLE-ABS-KEY(\"model-based system design\") OR TITLE-ABS-KEY(\"model based system design\") OR TITLE-ABS-KEY(\"model-based systems design\") OR TITLE-ABS-KEY(\"model based systems design\") OR TITLE-ABS-KEY(\"system architecture model\") OR TITLE-ABS-KEY(\"system architecture models\") OR TITLE-ABS-KEY(\"systems architecture model\") OR TITLE-ABS-KEY(\"systems architecture models\") OR TITLE-ABS-KEY(\"integrated system model\") OR TITLE-ABS-KEY(\"integrated system models\") OR TITLE-ABS-KEY(\"integrated systems model\") OR TITLE-ABS-KEY(\"integrated systems models\") OR TITLE-ABS-KEY(\"system-level model\") OR TITLE-ABS-KEY(\"system-level models\") OR TITLE-ABS-KEY(\"system level model\") OR TITLE-ABS-KEY(\"system level models\") OR TITLE-ABS-KEY(\"digital thread\") OR TITLE-ABS-KEY(\"digital threads\") OR TITLE-ABS-KEY(\"digital twin\") OR TITLE-ABS-KEY(\"digital twins\")))))",
+      "query_sha256": "f9233777503d954ef3102df3fb8a8a6bef3fcac2a81445f6195414408a763610",
+      "query_characters": 2931,
+      "output": "literal/BG2.json",
+      "require_complete": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BG2-wildcard",
+      "partition_id": "BG2",
+      "variant": "wildcard",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat*\") OR TITLE-ABS-KEY(\"cube sat*\") OR TITLE-ABS-KEY(\"cube-sat*\") OR TITLE-ABS-KEY(\"cube satellite*\") OR TITLE-ABS-KEY(\"nanosat*\") OR TITLE-ABS-KEY(\"nano-sat*\") OR TITLE-ABS-KEY(\"nano sat*\") OR TITLE-ABS-KEY(\"nano-satellite*\") OR TITLE-ABS-KEY(\"nano satellite*\") OR TITLE-ABS-KEY(\"SmallSat*\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND ((TITLE-ABS-KEY(\"reference architecture\") OR TITLE-ABS-KEY(\"reference architectures\") OR TITLE-ABS-KEY(\"domain model\") OR TITLE-ABS-KEY(\"domain models\") OR TITLE-ABS-KEY(\"metamodel\") OR TITLE-ABS-KEY(\"metamodels\") OR TITLE-ABS-KEY(\"meta-model\") OR TITLE-ABS-KEY(\"meta-models\")) OR (TITLE-ABS-KEY(\"product-line model\") OR TITLE-ABS-KEY(\"product-line models\") OR TITLE-ABS-KEY(\"product line model\") OR TITLE-ABS-KEY(\"product line models\") OR TITLE-ABS-KEY(\"product-family model\") OR TITLE-ABS-KEY(\"product-family models\") OR TITLE-ABS-KEY(\"product family model\") OR TITLE-ABS-KEY(\"product family models\")) OR (TITLE-ABS-KEY(\"variation point\") OR TITLE-ABS-KEY(\"variation points\")) OR ((TITLE-ABS-KEY(\"product-line\") OR TITLE-ABS-KEY(\"product line\") OR TITLE-ABS-KEY(\"product-family\") OR TITLE-ABS-KEY(\"product family\")) AND (TITLE-ABS-KEY(\"system model\") OR TITLE-ABS-KEY(\"systems model\") OR TITLE-ABS-KEY(\"system modeling\") OR TITLE-ABS-KEY(\"systems modeling\") OR TITLE-ABS-KEY(\"system modelling\") OR TITLE-ABS-KEY(\"systems modelling\") OR TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"digital engineering\") OR TITLE-ABS-KEY(\"object-oriented systems model\") OR TITLE-ABS-KEY(\"object-oriented systems models\") OR TITLE-ABS-KEY(\"model-based system design\") OR TITLE-ABS-KEY(\"model based system design\") OR TITLE-ABS-KEY(\"model-based systems design\") OR TITLE-ABS-KEY(\"model based systems design\") OR TITLE-ABS-KEY(\"system architecture model\") OR TITLE-ABS-KEY(\"system architecture models\") OR TITLE-ABS-KEY(\"systems architecture model\") OR TITLE-ABS-KEY(\"systems architecture models\") OR TITLE-ABS-KEY(\"integrated system model\") OR TITLE-ABS-KEY(\"integrated system models\") OR TITLE-ABS-KEY(\"integrated systems model\") OR TITLE-ABS-KEY(\"integrated systems models\") OR TITLE-ABS-KEY(\"system-level model\") OR TITLE-ABS-KEY(\"system-level models\") OR TITLE-ABS-KEY(\"system level model\") OR TITLE-ABS-KEY(\"system level models\") OR TITLE-ABS-KEY(\"digital thread\") OR TITLE-ABS-KEY(\"digital threads\") OR TITLE-ABS-KEY(\"digital twin\") OR TITLE-ABS-KEY(\"digital twins\")))))",
+      "query_sha256": "1b19ac7c0b65b1248ace447e67602e80acd906a42cbf5d0066050b190864a1bf",
+      "query_characters": 2556,
+      "output": "wildcard/BG2.json",
+      "require_complete": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BC1-literal",
+      "partition_id": "BC1",
+      "variant": "literal",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat\") OR TITLE-ABS-KEY(\"CubeSats\") OR TITLE-ABS-KEY(\"cube sat\") OR TITLE-ABS-KEY(\"cube sats\") OR TITLE-ABS-KEY(\"cube-sat\") OR TITLE-ABS-KEY(\"cube-sats\") OR TITLE-ABS-KEY(\"cube satellite\") OR TITLE-ABS-KEY(\"cube satellites\") OR TITLE-ABS-KEY(\"nanosat\") OR TITLE-ABS-KEY(\"nanosats\") OR TITLE-ABS-KEY(\"nanosatellite\") OR TITLE-ABS-KEY(\"nanosatellites\") OR TITLE-ABS-KEY(\"nano-sat\") OR TITLE-ABS-KEY(\"nano-sats\") OR TITLE-ABS-KEY(\"nano sat\") OR TITLE-ABS-KEY(\"nano sats\") OR TITLE-ABS-KEY(\"nano-satellite\") OR TITLE-ABS-KEY(\"nano-satellites\") OR TITLE-ABS-KEY(\"nano satellite\") OR TITLE-ABS-KEY(\"nano satellites\") OR TITLE-ABS-KEY(\"SmallSat\") OR TITLE-ABS-KEY(\"SmallSats\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND ((TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"system reference model\") OR TITLE-ABS-KEY(\"system reference models\") OR TITLE-ABS-KEY(\"model library\") OR TITLE-ABS-KEY(\"model libraries\") OR TITLE-ABS-KEY(\"system model library\") OR TITLE-ABS-KEY(\"system model libraries\") OR TITLE-ABS-KEY(\"model pattern\") OR TITLE-ABS-KEY(\"model patterns\") OR TITLE-ABS-KEY(\"modeling pattern\") OR TITLE-ABS-KEY(\"modeling patterns\") OR TITLE-ABS-KEY(\"modelling pattern\") OR TITLE-ABS-KEY(\"modelling patterns\") OR TITLE-ABS-KEY(\"system model pattern\") OR TITLE-ABS-KEY(\"system model patterns\") OR TITLE-ABS-KEY(\"systems model pattern\") OR TITLE-ABS-KEY(\"systems model patterns\") OR TITLE-ABS-KEY(\"model profile\") OR TITLE-ABS-KEY(\"model profiles\") OR TITLE-ABS-KEY(\"system model profile\") OR TITLE-ABS-KEY(\"system model profiles\") OR TITLE-ABS-KEY(\"systems model profile\") OR TITLE-ABS-KEY(\"systems model profiles\") OR TITLE-ABS-KEY(\"SysML profile\") OR TITLE-ABS-KEY(\"SysML profiles\")) OR (TITLE-ABS-KEY(\"domain-specific modeling language\") OR TITLE-ABS-KEY(\"domain specific modeling language\") OR TITLE-ABS-KEY(\"domain-specific modelling language\") OR TITLE-ABS-KEY(\"domain specific modelling language\"))))",
+      "query_sha256": "17bc8b7c269f6ab21009321344a11834c107f802aeb397c77542bdf8c139dbe2",
+      "query_characters": 2059,
+      "output": "literal/BC1.json",
+      "require_complete": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BC1-wildcard",
+      "partition_id": "BC1",
+      "variant": "wildcard",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat*\") OR TITLE-ABS-KEY(\"cube sat*\") OR TITLE-ABS-KEY(\"cube-sat*\") OR TITLE-ABS-KEY(\"cube satellite*\") OR TITLE-ABS-KEY(\"nanosat*\") OR TITLE-ABS-KEY(\"nano-sat*\") OR TITLE-ABS-KEY(\"nano sat*\") OR TITLE-ABS-KEY(\"nano-satellite*\") OR TITLE-ABS-KEY(\"nano satellite*\") OR TITLE-ABS-KEY(\"SmallSat*\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND ((TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"system reference model\") OR TITLE-ABS-KEY(\"system reference models\") OR TITLE-ABS-KEY(\"model library\") OR TITLE-ABS-KEY(\"model libraries\") OR TITLE-ABS-KEY(\"system model library\") OR TITLE-ABS-KEY(\"system model libraries\") OR TITLE-ABS-KEY(\"model pattern\") OR TITLE-ABS-KEY(\"model patterns\") OR TITLE-ABS-KEY(\"modeling pattern\") OR TITLE-ABS-KEY(\"modeling patterns\") OR TITLE-ABS-KEY(\"modelling pattern\") OR TITLE-ABS-KEY(\"modelling patterns\") OR TITLE-ABS-KEY(\"system model pattern\") OR TITLE-ABS-KEY(\"system model patterns\") OR TITLE-ABS-KEY(\"systems model pattern\") OR TITLE-ABS-KEY(\"systems model patterns\") OR TITLE-ABS-KEY(\"model profile\") OR TITLE-ABS-KEY(\"model profiles\") OR TITLE-ABS-KEY(\"system model profile\") OR TITLE-ABS-KEY(\"system model profiles\") OR TITLE-ABS-KEY(\"systems model profile\") OR TITLE-ABS-KEY(\"systems model profiles\") OR TITLE-ABS-KEY(\"SysML profile\") OR TITLE-ABS-KEY(\"SysML profiles\")) OR (TITLE-ABS-KEY(\"domain-specific modeling language\") OR TITLE-ABS-KEY(\"domain specific modeling language\") OR TITLE-ABS-KEY(\"domain-specific modelling language\") OR TITLE-ABS-KEY(\"domain specific modelling language\"))))",
+      "query_sha256": "aaa2db1ded4d1206a24bf23025f01b5df5701d43abc61c6628dbfd4631790d32",
+      "query_characters": 1684,
+      "output": "wildcard/BC1.json",
+      "require_complete": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BT2-literal",
+      "partition_id": "BT2",
+      "variant": "literal",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat\") OR TITLE-ABS-KEY(\"CubeSats\") OR TITLE-ABS-KEY(\"cube sat\") OR TITLE-ABS-KEY(\"cube sats\") OR TITLE-ABS-KEY(\"cube-sat\") OR TITLE-ABS-KEY(\"cube-sats\") OR TITLE-ABS-KEY(\"cube satellite\") OR TITLE-ABS-KEY(\"cube satellites\") OR TITLE-ABS-KEY(\"nanosat\") OR TITLE-ABS-KEY(\"nanosats\") OR TITLE-ABS-KEY(\"nanosatellite\") OR TITLE-ABS-KEY(\"nanosatellites\") OR TITLE-ABS-KEY(\"nano-sat\") OR TITLE-ABS-KEY(\"nano-sats\") OR TITLE-ABS-KEY(\"nano sat\") OR TITLE-ABS-KEY(\"nano sats\") OR TITLE-ABS-KEY(\"nano-satellite\") OR TITLE-ABS-KEY(\"nano-satellites\") OR TITLE-ABS-KEY(\"nano satellite\") OR TITLE-ABS-KEY(\"nano satellites\") OR TITLE-ABS-KEY(\"SmallSat\") OR TITLE-ABS-KEY(\"SmallSats\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND (TITLE-ABS-KEY(\"system model\") OR TITLE-ABS-KEY(\"systems model\") OR TITLE-ABS-KEY(\"system modeling\") OR TITLE-ABS-KEY(\"systems modeling\") OR TITLE-ABS-KEY(\"system modelling\") OR TITLE-ABS-KEY(\"systems modelling\") OR TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"digital engineering\") OR TITLE-ABS-KEY(\"object-oriented systems model\") OR TITLE-ABS-KEY(\"object-oriented systems models\") OR TITLE-ABS-KEY(\"model-based system design\") OR TITLE-ABS-KEY(\"model based system design\") OR TITLE-ABS-KEY(\"model-based systems design\") OR TITLE-ABS-KEY(\"model based systems design\") OR TITLE-ABS-KEY(\"system architecture model\") OR TITLE-ABS-KEY(\"system architecture models\") OR TITLE-ABS-KEY(\"systems architecture model\") OR TITLE-ABS-KEY(\"systems architecture models\") OR TITLE-ABS-KEY(\"integrated system model\") OR TITLE-ABS-KEY(\"integrated system models\") OR TITLE-ABS-KEY(\"integrated systems model\") OR TITLE-ABS-KEY(\"integrated systems models\") OR TITLE-ABS-KEY(\"system-level model\") OR TITLE-ABS-KEY(\"system-level models\") OR TITLE-ABS-KEY(\"system level model\") OR TITLE-ABS-KEY(\"system level models\") OR TITLE-ABS-KEY(\"digital thread\") OR TITLE-ABS-KEY(\"digital threads\") OR TITLE-ABS-KEY(\"digital twin\") OR TITLE-ABS-KEY(\"digital twins\")) AND (TITLE-ABS-KEY(\"tailor\") OR TITLE-ABS-KEY(\"tailors\") OR TITLE-ABS-KEY(\"tailored\") OR TITLE-ABS-KEY(\"tailoring\") OR TITLE-ABS-KEY(\"customize\") OR TITLE-ABS-KEY(\"customizes\") OR TITLE-ABS-KEY(\"customized\") OR TITLE-ABS-KEY(\"customizing\") OR TITLE-ABS-KEY(\"customization\") OR TITLE-ABS-KEY(\"customise\") OR TITLE-ABS-KEY(\"customises\") OR TITLE-ABS-KEY(\"customised\") OR TITLE-ABS-KEY(\"customising\") OR TITLE-ABS-KEY(\"customisation\") OR TITLE-ABS-KEY(\"parameterize\") OR TITLE-ABS-KEY(\"parameterizes\") OR TITLE-ABS-KEY(\"parameterized\") OR TITLE-ABS-KEY(\"parameterizing\") OR TITLE-ABS-KEY(\"parameterization\") OR TITLE-ABS-KEY(\"parameterise\") OR TITLE-ABS-KEY(\"parameterises\") OR TITLE-ABS-KEY(\"parameterised\") OR TITLE-ABS-KEY(\"parameterising\") OR TITLE-ABS-KEY(\"parameterisation\") OR TITLE-ABS-KEY(\"instantiate\") OR TITLE-ABS-KEY(\"instantiates\") OR TITLE-ABS-KEY(\"instantiated\") OR TITLE-ABS-KEY(\"instantiating\") OR TITLE-ABS-KEY(\"instantiation\") OR TITLE-ABS-KEY(\"variability\") OR TITLE-ABS-KEY(\"variation point\") OR TITLE-ABS-KEY(\"variation points\")))",
+      "query_sha256": "dbc8c85a7672f91d0851de3366d29869b84ee5d680bdaec9a41eab3b40bec4b0",
+      "query_characters": 3157,
+      "output": "literal/BT2.json",
+      "require_complete": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BT2-wildcard",
+      "partition_id": "BT2",
+      "variant": "wildcard",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat*\") OR TITLE-ABS-KEY(\"cube sat*\") OR TITLE-ABS-KEY(\"cube-sat*\") OR TITLE-ABS-KEY(\"cube satellite*\") OR TITLE-ABS-KEY(\"nanosat*\") OR TITLE-ABS-KEY(\"nano-sat*\") OR TITLE-ABS-KEY(\"nano sat*\") OR TITLE-ABS-KEY(\"nano-satellite*\") OR TITLE-ABS-KEY(\"nano satellite*\") OR TITLE-ABS-KEY(\"SmallSat*\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND (TITLE-ABS-KEY(\"system model\") OR TITLE-ABS-KEY(\"systems model\") OR TITLE-ABS-KEY(\"system modeling\") OR TITLE-ABS-KEY(\"systems modeling\") OR TITLE-ABS-KEY(\"system modelling\") OR TITLE-ABS-KEY(\"systems modelling\") OR TITLE-ABS-KEY(\"reference model\") OR TITLE-ABS-KEY(\"reference models\") OR TITLE-ABS-KEY(\"digital engineering\") OR TITLE-ABS-KEY(\"object-oriented systems model\") OR TITLE-ABS-KEY(\"object-oriented systems models\") OR TITLE-ABS-KEY(\"model-based system design\") OR TITLE-ABS-KEY(\"model based system design\") OR TITLE-ABS-KEY(\"model-based systems design\") OR TITLE-ABS-KEY(\"model based systems design\") OR TITLE-ABS-KEY(\"system architecture model\") OR TITLE-ABS-KEY(\"system architecture models\") OR TITLE-ABS-KEY(\"systems architecture model\") OR TITLE-ABS-KEY(\"systems architecture models\") OR TITLE-ABS-KEY(\"integrated system model\") OR TITLE-ABS-KEY(\"integrated system models\") OR TITLE-ABS-KEY(\"integrated systems model\") OR TITLE-ABS-KEY(\"integrated systems models\") OR TITLE-ABS-KEY(\"system-level model\") OR TITLE-ABS-KEY(\"system-level models\") OR TITLE-ABS-KEY(\"system level model\") OR TITLE-ABS-KEY(\"system level models\") OR TITLE-ABS-KEY(\"digital thread\") OR TITLE-ABS-KEY(\"digital threads\") OR TITLE-ABS-KEY(\"digital twin\") OR TITLE-ABS-KEY(\"digital twins\")) AND (TITLE-ABS-KEY(\"tailor\") OR TITLE-ABS-KEY(\"tailors\") OR TITLE-ABS-KEY(\"tailored\") OR TITLE-ABS-KEY(\"tailoring\") OR TITLE-ABS-KEY(\"customize\") OR TITLE-ABS-KEY(\"customizes\") OR TITLE-ABS-KEY(\"customized\") OR TITLE-ABS-KEY(\"customizing\") OR TITLE-ABS-KEY(\"customization\") OR TITLE-ABS-KEY(\"customise\") OR TITLE-ABS-KEY(\"customises\") OR TITLE-ABS-KEY(\"customised\") OR TITLE-ABS-KEY(\"customising\") OR TITLE-ABS-KEY(\"customisation\") OR TITLE-ABS-KEY(\"parameterize\") OR TITLE-ABS-KEY(\"parameterizes\") OR TITLE-ABS-KEY(\"parameterized\") OR TITLE-ABS-KEY(\"parameterizing\") OR TITLE-ABS-KEY(\"parameterization\") OR TITLE-ABS-KEY(\"parameterise\") OR TITLE-ABS-KEY(\"parameterises\") OR TITLE-ABS-KEY(\"parameterised\") OR TITLE-ABS-KEY(\"parameterising\") OR TITLE-ABS-KEY(\"parameterisation\") OR TITLE-ABS-KEY(\"instantiate\") OR TITLE-ABS-KEY(\"instantiates\") OR TITLE-ABS-KEY(\"instantiated\") OR TITLE-ABS-KEY(\"instantiating\") OR TITLE-ABS-KEY(\"instantiation\") OR TITLE-ABS-KEY(\"variability\") OR TITLE-ABS-KEY(\"variation point\") OR TITLE-ABS-KEY(\"variation points\")))",
+      "query_sha256": "2754645e19e229727c8b901357733aa59af653e4928ca75820bf9cd2f5ecf605",
+      "query_characters": 2782,
+      "output": "wildcard/BT2.json",
+      "require_complete": true,
+      "do_not_merge": true
+    }
+  ]
+}

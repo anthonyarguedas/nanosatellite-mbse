@@ -1,0 +1,1995 @@
+{
+  "schema_version": "slr1-prior-secondary-review-extraction/v2",
+  "identity": {
+    "report_id": "psr-report-0024",
+    "screening_record_id": "psr-candidate-0024",
+    "report_date_used": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c001"
+      ],
+      "value": "2026"
+    },
+    "review_type_as_stated": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c002"
+      ],
+      "value": "systematic literature review"
+    },
+    "review_type_normalized": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c002"
+      ],
+      "value": "systematic literature review"
+    },
+    "duplicate_or_companion_report_relationship": {
+      "status": "not_reported",
+      "reason": "The report does not identify a duplicate or companion report for this review."
+    },
+    "extractor": "openai-codex/gpt-5.6-sol",
+    "source_file_path": "SLR/SLR1/pdfs/psr-reports/psr-report-0024.md",
+    "verification_passes": [
+      {
+        "report_id": "psr-report-0024",
+        "audit_id": "psr-report-0024-verification-001",
+        "actor": "openai-codex/gpt-5.6-sol",
+        "date": "2026-09-04",
+        "scope": "Complete LLM source reread of all 22 frozen-text pages and four extracted figures; checks of eligibility, CRD/DARE, nanosatellite and EPS separability, every RQ1 element, RQ2/RQ3 overlap, schema version, currency interval, disposition, citations, and deterministic validator output.",
+        "audit_completion_status": "complete",
+        "issues_raised_count": 2,
+        "corrections_accepted_count": 2,
+        "flags_rejected_count": 0,
+        "unresolved_ambiguities_count": 0
+      }
+    ]
+  },
+  "scope_and_currency": {
+    "stated_objective": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c002"
+      ],
+      "value": "Systematically review digital-twin applications in space robotics by classifying their objectives, mapping applications across lifecycle phases, identifying challenges, and reporting advantages with analytical insights."
+    },
+    "stated_research_questions": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c003",
+        "psr-report-0024-c004",
+        "psr-report-0024-c005",
+        "psr-report-0024-c006"
+      ],
+      "value": [
+        "RQ1: What are the primary objectives of using DTs in space robotics?",
+        "RQ2: What are the applications of DTs in space robotics?",
+        "RQ3: What are the current challenges and limitations of integrating DTs in space robotics?",
+        "RQ4: What are the advantages of using DTs in space robotics?"
+      ]
+    },
+    "populations": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c002",
+        "psr-report-0024-c007"
+      ],
+      "value": [
+        "Digital-twin applications in space robotics",
+        "Robotic systems, processes, and human interactions in space and aerospace settings"
+      ]
+    },
+    "systems": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c016",
+        "psr-report-0024-c017",
+        "psr-report-0024-c018",
+        "psr-report-0024-c029"
+      ],
+      "value": [
+        "Satellites and satellite networks",
+        "Rovers and space robots",
+        "Aerospace and satellite assembly/manufacturing systems",
+        "Astronaut-training and human-robot collaboration systems"
+      ]
+    },
+    "mission_classes": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c018",
+        "psr-report-0024-c019",
+        "psr-report-0024-c034"
+      ],
+      "value": [
+        "In-orbit small-satellite and CubeSat production",
+        "Low-Earth-orbit satellite constellations",
+        "Lunar and planetary exploration, including Artemis",
+        "Broad spacecraft and aerospace manufacturing/service contexts"
+      ]
+    },
+    "application_domains": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c017"
+      ],
+      "value": [
+        "Design: iterative optimization, data integrity, and virtual evaluation/verification",
+        "Manufacturing: monitoring, production control/planning, performance prediction, human-robot interaction, process optimization, and asset management",
+        "Service/operations: predictive maintenance, fault diagnosis, state monitoring, performance prediction, and virtual testing"
+      ]
+    },
+    "space_systems_coverage": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c007",
+        "psr-report-0024-c017"
+      ],
+      "included": "yes",
+      "findings_separable": "yes",
+      "notes": "Space systems are the review context and findings are organized at that level."
+    },
+    "smallsat_coverage": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c018"
+      ],
+      "included": "yes",
+      "findings_separable": "yes",
+      "notes": "The included in-orbit factory case is described as small-satellite production and its CubeSat application is individually identifiable."
+    },
+    "cubesat_coverage": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c018"
+      ],
+      "included": "yes",
+      "findings_separable": "yes",
+      "notes": "The report separately describes assembly and integration of CubeSats."
+    },
+    "nanosatellite_coverage": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c007",
+        "psr-report-0024-c018"
+      ],
+      "included": "no",
+      "findings_separable": "not_applicable",
+      "notes": "Complete-source review found a CubeSat/small-satellite case but no study or finding identified with the nanosatellite label."
+    },
+    "eps_coverage": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c019",
+        "psr-report-0024-c020"
+      ],
+      "included": "yes",
+      "findings_separable": "yes",
+      "notes": "Power-manager, electrical-equipment, battery-pack, solar-panel, and electric-heater examples are individually identifiable, but they are not tied to the CubeSat case."
+    },
+    "mbse_scope": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c040",
+        "psr-report-0024-c023"
+      ],
+      "value": "MBSE is not an eligibility construct. The review interprets heterogeneous digital twins through a systems-engineering framework in which requirements traceability (MBSE), V&V, uncertainty, cybersecurity, and configuration management are assurance/governance concerns."
+    },
+    "structured_model_scope": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c023",
+        "psr-report-0024-c043"
+      ],
+      "value": "Digital twins span offline digital models, digital shadows, bidirectional twins, and predictive/prescriptive twins, using physics-based, data-driven, hybrid, or unspecified modeling paradigms and physical-to-digital coupling."
+    },
+    "modeling_language_scope": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c029",
+        "psr-report-0024-c033",
+        "psr-report-0024-c019"
+      ],
+      "value": "The review is not organized by modeling language; examples include Modelica, Simulink/Simscape, CAD/CAM representations, Vortex Studio, NVIDIA Omniverse, robotic simulators, fault/behavior trees, and knowledge graphs."
+    },
+    "tool_scope": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c029"
+      ],
+      "value": "A six-layer synthesis covers physical assets, connection technologies, data/infrastructure, modeling and simulation tools, intelligence, and visualization; named tools include Simulink/Simscape, Modelica, Vortex Studio, NVIDIA Omniverse, CAD/CAM, databases, ROS, and HPC/GPU resources."
+    },
+    "artifact_scope": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c018",
+        "psr-report-0024-c019",
+        "psr-report-0024-c023",
+        "psr-report-0024-c034"
+      ],
+      "value": "Digital-twin models, multi-layer DT frameworks, virtual representations, data/models/services, knowledge graphs, model libraries, and validation environments are described; EPS-specific structured artifacts are not a review category."
+    },
+    "lifecycle_scope": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c017",
+        "psr-report-0024-c024"
+      ],
+      "value": "Design, manufacturing, and service/operations are explicit synthesis phases; 40 of 46 studies address one phase, four span multiple phases, and two span all three."
+    },
+    "model_generation_method_scope": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c035",
+        "psr-report-0024-c033",
+        "psr-report-0024-c019",
+        "psr-report-0024-c043"
+      ],
+      "value": "QA4 examines modeling choices and calibration/training, the synthesis classifies modeling paradigms, and selected study summaries describe construction from CAD features, libraries, fault/behavior trees, or data; no nanosatellite-EPS generation-method synthesis is provided."
+    },
+    "generic_or_reference_model_construction_scope": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c021",
+        "psr-report-0024-c030"
+      ],
+      "value": "The review identifies the lack of general, reusable DT frameworks and architectures, but does not synthesize how a generic or reference engineering model was constructed."
+    },
+    "engineering_workflow_scope": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c017",
+        "psr-report-0024-c038"
+      ],
+      "value": "Lifecycle applications and selected ordered processes are described, including monitoring, decision, feedback, and model-update activities; roles, handoffs, governance, and checks are not systematically extracted as engineering workflows."
+    },
+    "procedure_reporting_scope": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c035",
+        "psr-report-0024-c036",
+        "psr-report-0024-c038"
+      ],
+      "value": "QA4 and QA7 assess implementation/calibration detail and reproducibility support. The narrative gives occasional method sequences, but no per-study QA results or standardized procedure-detail assessment is reported."
+    },
+    "generic_model_procedural_evidence_scope": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c021",
+        "psr-report-0024-c030"
+      ],
+      "value": "No generic/reference model is linked to an actionable construction or tailoring procedure, worked tailoring example, or post-tailoring assurance; reusable frameworks are reported as missing."
+    },
+    "artifact_reuse_and_tailoring_scope": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c021",
+        "psr-report-0024-c024",
+        "psr-report-0024-c027"
+      ],
+      "value": "Lifecycle continuity and reuse are discussed as gaps and future design principles, but no artifact applicability envelope, reusable core, variation points, tailoring rules, application, assurance, independence, or bounded reuse level is synthesized."
+    },
+    "method_reuse_and_adaptation_scope": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c021",
+        "psr-report-0024-c027"
+      ],
+      "value": "No bounded reuse or adaptation of model generation methods is sought or reported."
+    },
+    "workflow_reuse_and_adaptation_scope": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c024",
+        "psr-report-0024-c027"
+      ],
+      "value": "The report recommends lifecycle-spanning reuse and change-impact procedures but reports no stable workflow core, variation points, adaptation process, application, assurance, or independence evidence."
+    },
+    "outcome_scope": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c022",
+        "psr-report-0024-c025"
+      ],
+      "value": "Advantages include efficiency, system management, smart process design, quality/reliability, decision-making, real-time analysis, performance, and human work; application and validation maturity are also mapped."
+    },
+    "burden_scope": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c021",
+        "psr-report-0024-c028",
+        "psr-report-0024-c044"
+      ],
+      "value": "Challenges and burdens include model accuracy and uncertainty, data quality/synchronization, interoperability, missing general frameworks, latency/intermittency, onboard compute and power, computational cost, validation effort, and integration complexity."
+    },
+    "verification_and_validation_scope": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c017",
+        "psr-report-0024-c025",
+        "psr-report-0024-c034",
+        "psr-report-0024-c035"
+      ],
+      "value": "Virtual evaluation/verification and virtual testing are application categories; QA5 assesses validation against claims, and validation realism is classified as simulation, lab prototype, field analogue, operational use, or HIL/SIL."
+    },
+    "review_search_dates": {
+      "status": "not_reported",
+      "reason": "The report gives an evidence-window end but no date on which any database or snowballing search was executed."
+    },
+    "last_search_date": {
+      "status": "not_reported",
+      "reason": "No search execution date is reported; end of June 2024 is described as the study-coverage limit."
+    },
+    "evidence_window_start": {
+      "status": "not_reported",
+      "reason": "The phrase 'from scratch' indicates no stated lower limit but does not identify a calendar start for the evidence window."
+    },
+    "evidence_window_end": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c007",
+        "psr-report-0024-c009"
+      ],
+      "value": "2024-06"
+    },
+    "unsearched_interval_to_common_cutoff": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_derived",
+      "citation_ids": [
+        "psr-report-0024-c007",
+        "psr-report-0024-c009"
+      ],
+      "value": "2024-07-01 to 2026-08-24",
+      "notes": "The interval starts after the reported evidence-window end (end of June 2024), because the review does not report a search execution date, and ends at the main review's common cutoff of 2026-08-24."
+    },
+    "reported_counts": [
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c042"
+        ],
+        "reported_count_id": "psr-report-0024-count-001",
+        "category": "records",
+        "source_label": "total initial records",
+        "value": 2142,
+        "denominator_value": {
+          "status": "not_applicable",
+          "reason": "The source reports this as a standalone total rather than a proportion."
+        },
+        "denominator_label": {
+          "status": "not_applicable",
+          "reason": "No denominator applies to the standalone total."
+        }
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c042"
+        ],
+        "reported_count_id": "psr-report-0024-count-002",
+        "category": "records",
+        "source_label": "Scopus initial records",
+        "value": 1835,
+        "denominator_value": 2142,
+        "denominator_label": "total initial records"
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c042"
+        ],
+        "reported_count_id": "psr-report-0024-count-003",
+        "category": "records",
+        "source_label": "IEEE initial records",
+        "value": 98,
+        "denominator_value": 2142,
+        "denominator_label": "total initial records"
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c042"
+        ],
+        "reported_count_id": "psr-report-0024-count-004",
+        "category": "records",
+        "source_label": "ACM initial records",
+        "value": 209,
+        "denominator_value": 2142,
+        "denominator_label": "total initial records"
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c042",
+          "psr-report-0024-c032"
+        ],
+        "reported_count_id": "psr-report-0024-count-005",
+        "category": "records",
+        "source_label": "papers remaining after inclusion and exclusion criteria",
+        "value": 1403,
+        "denominator_value": 2142,
+        "denominator_label": "total initial records",
+        "notes": "The prose and database subtotals report 1403, while Fig. 2 labels this merged stage 1406; the prose value is retained and the conflict is explicit."
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c013"
+        ],
+        "reported_count_id": "psr-report-0024-count-006",
+        "category": "records",
+        "source_label": "papers left after duplicate removal for initial check",
+        "value": 1358,
+        "denominator_value": 1403,
+        "denominator_label": "papers remaining after inclusion and exclusion criteria (prose value)"
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c013"
+        ],
+        "reported_count_id": "psr-report-0024-count-007",
+        "category": "records",
+        "source_label": "papers left for meticulous review and analysis",
+        "value": 67,
+        "denominator_value": 1358,
+        "denominator_label": "papers left for initial check"
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c013"
+        ],
+        "reported_count_id": "psr-report-0024-count-008",
+        "category": "included_reports",
+        "source_label": "papers directly related before snowballing additions",
+        "value": 38,
+        "denominator_value": 67,
+        "denominator_label": "papers left for meticulous review and analysis"
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c013"
+        ],
+        "reported_count_id": "psr-report-0024-count-009",
+        "category": "included_reports",
+        "source_label": "additional papers yielded by snowballing",
+        "value": 8,
+        "denominator_value": {
+          "status": "not_applicable",
+          "reason": "The source reports this as a standalone total rather than a proportion."
+        },
+        "denominator_label": {
+          "status": "not_applicable",
+          "reason": "No denominator applies to the standalone total."
+        }
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c013"
+        ],
+        "reported_count_id": "psr-report-0024-count-010",
+        "category": "included_reports",
+        "source_label": "total number of selected papers",
+        "value": 46,
+        "denominator_value": {
+          "status": "not_applicable",
+          "reason": "The source reports this as a standalone total rather than a proportion."
+        },
+        "denominator_label": {
+          "status": "not_applicable",
+          "reason": "No denominator applies to the standalone total."
+        }
+      }
+    ],
+    "author_stated_limitations": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c028"
+      ],
+      "value": [
+        "Heterogeneous DT definitions and evaluation practices constrain the synthesis.",
+        "Inconsistent reporting of coupling level, synchronization semantics, and validation realism limits strong causal inference."
+      ]
+    },
+    "update_status": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c041"
+      ],
+      "value": "The report is presented as a new systematic literature review motivated by the lack of an up-to-date review; it is not labeled an update of a specified prior review."
+    }
+  },
+  "review_methods": {
+    "searched_sources_and_routes": [
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c010"
+        ],
+        "source_route_id": "psr-report-0024-source-001",
+        "route_type": "database",
+        "source_name": "Scopus"
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c010"
+        ],
+        "source_route_id": "psr-report-0024-source-002",
+        "route_type": "database",
+        "source_name": "IEEE Xplore Digital Library"
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c010"
+        ],
+        "source_route_id": "psr-report-0024-source-003",
+        "route_type": "database",
+        "source_name": "ACM Digital Library"
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c013"
+        ],
+        "source_route_id": "psr-report-0024-source-004",
+        "route_type": "citation_route",
+        "source_name": "Backward snowballing"
+      },
+      {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c013"
+        ],
+        "source_route_id": "psr-report-0024-source-005",
+        "route_type": "citation_route",
+        "source_name": "Forward snowballing"
+      }
+    ],
+    "exact_search_availability": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c008",
+        "psr-report-0024-c010"
+      ],
+      "value": "yes",
+      "notes": "One complete Boolean string is printed and described as the keyword used for Scopus, IEEE Xplore, and ACM; no source-specific translations are shown."
+    },
+    "date_limits": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c009"
+      ],
+      "value": [
+        "No lower date bound stated ('from scratch')",
+        "Studies covered through the end of June 2024"
+      ]
+    },
+    "language_limits": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c012"
+      ],
+      "value": [
+        "English-language manuscripts only"
+      ]
+    },
+    "publication_type_limits": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c012"
+      ],
+      "value": [
+        "Include journal or conference publications with space applications",
+        "Exclude papers under 2000 words, posters, doctoral theses, book chapters, proceedings papers, surveys, and reviews"
+      ]
+    },
+    "other_restrictions": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c012"
+      ],
+      "value": [
+        "Computer Science and Engineering domains",
+        "Explicit mention of a DT-integrated robotic methodology in the space domain"
+      ]
+    },
+    "inclusion_criteria": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c012"
+      ],
+      "value": [
+        "IC1: journal or conference publications with space applications",
+        "IC2: studies reporting digital-twin applications in robotics",
+        "IC3: publications presenting digital-twin applications in the space domain"
+      ]
+    },
+    "exclusion_criteria": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c012"
+      ],
+      "value": [
+        "EC1: non-English manuscripts",
+        "EC2: short papers under 2000 words, poster-based papers, doctoral theses, and book chapters",
+        "EC3: papers outside computer science and engineering",
+        "EC4: proceedings papers",
+        "EC5: surveys and reviews",
+        "EC6: studies not explicitly mentioning a digital-twin-integrated robotic methodology in the space domain"
+      ]
+    },
+    "eligibility_criteria_application": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c011",
+        "psr-report-0024-c013"
+      ],
+      "value": "All final publications were required to satisfy every criterion. Title and abstract screening removed records outside the domain; 67 papers then received meticulous review and analysis, followed by final filtering and backward/forward snowballing."
+    },
+    "number_of_screeners": {
+      "status": "not_reported",
+      "reason": "The number of people screening titles/abstracts or full texts is not reported."
+    },
+    "screener_independence": {
+      "status": "not_reported",
+      "reason": "Independent or duplicate screening is not reported."
+    },
+    "screening_disagreement_resolution": {
+      "status": "not_reported",
+      "reason": "No screening disagreement-resolution process is reported."
+    },
+    "reported_screening_agreement": {
+      "status": "not_reported",
+      "reason": "No screening agreement statistic is reported."
+    },
+    "appraisal_or_validity_criteria": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c014",
+        "psr-report-0024-c035"
+      ],
+      "value": [
+        "QA1: clarity of DT definition/scope, physical counterpart, boundary, assumptions, and intended use",
+        "QA2: coupling and update semantics (offline model, digital shadow, bidirectional twin, or predictive/prescriptive)",
+        "QA3: data sources, handling, inputs, preprocessing, and provenance",
+        "QA4: model and implementation detail, modeling choices, and calibration/training procedures",
+        "QA5: validation matched to claims, setup, baselines, and realism",
+        "QA6: quantitative or well-defined metrics and outcomes aligned with conclusions",
+        "QA7: reproducibility detail or shared code/data/configuration",
+        "QA8: limitations and threats such as mismatch, latency, drift, or environmental uncertainty",
+        "QA9: lifecycle fit and model/data governance or updating",
+        "QA10: alignment between claim strength, validation, and assumptions"
+      ]
+    },
+    "appraisal_application_and_use": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c015",
+        "psr-report-0024-c036"
+      ],
+      "value": "Each QA1-QA10 criterion was scored 0, 0.5, or 1 and summed to a maximum of 10. Scores were used to interpret evidence strength and did not affect inclusion; objectives, lifecycle, modeling paradigm, validation realism, and deployment were separately coded."
+    },
+    "data_extraction_fields": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c002",
+        "psr-report-0024-c015"
+      ],
+      "value": [
+        "Objectives",
+        "Lifecycle phase",
+        "Modeling paradigm",
+        "Validation realism",
+        "Deployment characteristics",
+        "Applications",
+        "Challenges/limitations",
+        "Advantages"
+      ]
+    },
+    "number_of_extractors_or_checkers": {
+      "status": "not_reported",
+      "reason": "The number of data extractors or checkers is not reported."
+    },
+    "extraction_disagreement_handling": {
+      "status": "not_reported",
+      "reason": "No data-extraction disagreement procedure is reported."
+    },
+    "duplicate_publication_handling": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c013"
+      ],
+      "value": "Duplicate database entries were removed before initial checking; no policy for multiple publications of one underlying study is reported."
+    },
+    "synthesis_method": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c016",
+        "psr-report-0024-c017",
+        "psr-report-0024-c023",
+        "psr-report-0024-c025",
+        "psr-report-0024-c026"
+      ],
+      "value": "Structured classification and narrative synthesis by four DT objectives, lifecycle applications, challenge categories, and advantage categories, followed by cross-tabulated matrices for lifecycle, coupling, modeling paradigm, validation realism, deployment, and synchronization and a decision-centric conceptual synthesis."
+    },
+    "qualitative_evidence_treatment": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c002",
+        "psr-report-0024-c016",
+        "psr-report-0024-c017",
+        "psr-report-0024-c030"
+      ],
+      "value": "Study accounts were thematically classified and narratively summarized by objectives, applications, challenges, advantages, and systems-engineering implications."
+    },
+    "quantitative_evidence_treatment": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c016",
+        "psr-report-0024-c024",
+        "psr-report-0024-c025",
+        "psr-report-0024-c026",
+        "psr-report-0024-c036"
+      ],
+      "value": "The review reports category frequencies and cross-tabulated counts and uses a 0/0.5/1 quality rubric; it does not report common effect estimates."
+    },
+    "pooling": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c024",
+        "psr-report-0024-c025",
+        "psr-report-0024-c028"
+      ],
+      "value": "No statistical pooling or meta-analysis is reported; quantitative combination is descriptive counting across heterogeneous study categories."
+    },
+    "investigation_of_differences": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c023",
+        "psr-report-0024-c024",
+        "psr-report-0024-c025",
+        "psr-report-0024-c026"
+      ],
+      "value": "Differences are explored by objective, lifecycle phase, DT coupling level, modeling paradigm, validation realism, deployment architecture, synchronization policy, and application environment."
+    },
+    "heterogeneity_investigation": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c028",
+        "psr-report-0024-c023"
+      ],
+      "value": "The discussion explicitly identifies heterogeneity in DT definitions and evaluation practice and examines architectural/evidence dimensions through matrices; no statistical heterogeneity analysis is applicable or reported."
+    },
+    "sensitivity_analysis": {
+      "status": "not_reported",
+      "reason": "No sensitivity analysis is reported."
+    },
+    "publication_or_reporting_bias": {
+      "status": "not_reported",
+      "reason": "No assessment of publication bias or selective reporting is reported."
+    },
+    "protocol_availability": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c037"
+      ],
+      "value": "described_only",
+      "notes": "The article describes a Kitchenham-guided planning/conducting/documenting protocol but identifies no registration or separate protocol access route."
+    },
+    "data_availability": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c031"
+      ],
+      "value": "available_on_request"
+    },
+    "extraction_forms_availability": {
+      "status": "not_reported",
+      "reason": "No extraction form or access route is identified."
+    },
+    "code_availability": {
+      "status": "not_reported",
+      "reason": "No review-analysis code or access route is identified."
+    },
+    "excluded_report_lists_availability": {
+      "status": "not_reported",
+      "reason": "No list of excluded full-text reports is identified."
+    }
+  },
+  "overlap_findings": {
+    "rq1_elements": {
+      "eps_representation_and_use": {
+        "explicitly_sought": {
+          "status": "none",
+          "citation_ids": [
+            "psr-report-0024-c003",
+            "psr-report-0024-c004",
+            "psr-report-0024-c005",
+            "psr-report-0024-c006"
+          ],
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "notes": "The four review questions target DT objectives, applications, challenges, and advantages; none targets EPS representation or EPS use."
+        },
+        "reported": {
+          "coding_confidence": "moderate",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "psr-report-0024-c019",
+            "psr-report-0024-c020",
+            "psr-report-0024-c018"
+          ],
+          "value": [
+            "An Artemis power-manager DT built from electrical-equipment domain libraries is reported for fault diagnosis.",
+            "A spacecraft battery-pack degradation assessment and rover solar-panel/electric-heater anomaly detection are mentioned as performance applications.",
+            "These EPS-adjacent examples are not connected to the separately reported CubeSat application."
+          ]
+        }
+      },
+      "generic_or_reference_model_construction": {
+        "explicitly_sought": {
+          "status": "none",
+          "citation_ids": [
+            "psr-report-0024-c003",
+            "psr-report-0024-c004",
+            "psr-report-0024-c005",
+            "psr-report-0024-c006"
+          ],
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "notes": "No review question requests how generic or reference engineering models are constructed."
+        },
+        "reported": {
+          "status": "none",
+          "citation_ids": [
+            "psr-report-0024-c021",
+            "psr-report-0024-c030"
+          ],
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "notes": "The report identifies missing reusable frameworks and architectures as a gap, but reports no construction method for a generic or reference model."
+        }
+      },
+      "model_generation_methods": {
+        "explicitly_sought": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "psr-report-0024-c035",
+            "psr-report-0024-c015"
+          ],
+          "value": [
+            "QA4 asks whether modeling choices and calibration or training procedures are reported.",
+            "Each study was coded for its modeling paradigm."
+          ]
+        },
+        "reported": {
+          "coding_confidence": "moderate",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "psr-report-0024-c043",
+            "psr-report-0024-c033",
+            "psr-report-0024-c019"
+          ],
+          "value": [
+            "The synthesis classifies dominant modeling paradigms as data-driven, hybrid, physics-based, or other/not specified.",
+            "Individual examples summarize model generation from CAD features and constraints and from electrical-equipment libraries, but not for a nanosatellite EPS model."
+          ]
+        }
+      },
+      "engineering_workflows": {
+        "explicitly_sought": {
+          "coding_confidence": "moderate",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "psr-report-0024-c004",
+            "psr-report-0024-c035"
+          ],
+          "value": [
+            "RQ2 maps applications over design, manufacturing, and service/operations phases.",
+            "QA9 asks where work fits in the lifecycle and how models or data are managed or updated."
+          ]
+        },
+        "reported": {
+          "coding_confidence": "moderate",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "psr-report-0024-c017",
+            "psr-report-0024-c038"
+          ],
+          "value": [
+            "The review maps iterative optimization, virtual verification, production control, monitoring, fault diagnosis, predictive maintenance, and other activities to lifecycle phases.",
+            "It reproduces occasional ordered primary-study processes, including a five-phase monitoring and feedback methodology, but does not synthesize nanosatellite-EPS engineering handoffs or roles."
+          ]
+        }
+      },
+      "procedural_reporting_detail": {
+        "explicitly_sought": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "psr-report-0024-c035"
+          ],
+          "value": [
+            "QA4 examines model and implementation details and calibration/training procedures.",
+            "QA7 examines replication detail or shared code, data, and configuration."
+          ]
+        },
+        "reported": {
+          "coding_confidence": "moderate",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "psr-report-0024-c033",
+            "psr-report-0024-c038",
+            "psr-report-0024-c036"
+          ],
+          "value": [
+            "Some primary-study summaries give ordered actions and inputs, such as CAD-derived PDTM generation and a five-phase monitoring method.",
+            "No aggregate QA4/QA7 results or procedure-detail classification is presented in the report."
+          ]
+        }
+      },
+      "generic_model_with_actionable_construction_or_tailoring": {
+        "explicitly_sought": {
+          "status": "none",
+          "citation_ids": [
+            "psr-report-0024-c003",
+            "psr-report-0024-c004",
+            "psr-report-0024-c005",
+            "psr-report-0024-c006"
+          ],
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "notes": "No review question or extraction dimension seeks a generic model linked to an actionable construction or tailoring procedure."
+        },
+        "reported": {
+          "status": "none",
+          "citation_ids": [
+            "psr-report-0024-c021",
+            "psr-report-0024-c030"
+          ],
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "notes": "Reusable/general frameworks are described as missing; no generic model with an actionable construction or tailoring procedure is reported."
+        }
+      },
+      "inputs_and_assumptions": {
+        "explicitly_sought": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "psr-report-0024-c035"
+          ],
+          "value": [
+            "QA1 includes DT boundaries, assumptions, and intended use.",
+            "QA3 includes inputs, preprocessing, and provenance."
+          ]
+        },
+        "reported": {
+          "coding_confidence": "moderate",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "psr-report-0024-c033",
+            "psr-report-0024-c044"
+          ],
+          "value": [
+            "The synthesis discusses historical and real-time data, telemetry, CAD features, environmental uncertainty, latency/intermittency, and onboard compute and power constraints.",
+            "These inputs and constraints are broad space-robotics dimensions, not nanosatellite-EPS model inputs and assumptions."
+          ]
+        }
+      },
+      "implementation_needs_and_footprint": {
+        "explicitly_sought": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "psr-report-0024-c005",
+            "psr-report-0024-c015"
+          ],
+          "value": [
+            "RQ3 seeks integration challenges and limitations.",
+            "The extraction includes deployment characteristics."
+          ]
+        },
+        "reported": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "psr-report-0024-c026",
+            "psr-report-0024-c029",
+            "psr-report-0024-c044"
+          ],
+          "value": [
+            "Deployment is summarized as 35/46 ground-only, 11/46 hybrid ground/onboard, and no onboard-only cases, with continuous, event-driven, and intermittent/batch synchronization counts.",
+            "A six-layer tool/environment abstraction covers physical assets, connections, data/infrastructure, modeling/simulation, intelligence, and visualization.",
+            "Reported footprint constraints include onboard compute and power, latency/intermittency, computational cost, validation effort, and integration complexity."
+          ]
+        }
+      },
+      "bounded_artifact_reuse_and_tailoring": {
+        "explicitly_sought": {
+          "coding_confidence": "moderate",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "psr-report-0024-c004",
+            "psr-report-0024-c005"
+          ],
+          "value": [
+            "The RQ2 rationale asks where lifecycle continuity and digital-thread reuse are missing, and RQ3 includes absence of reusable frameworks."
+          ]
+        },
+        "reported": {
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "psr-report-0024-c021",
+            "psr-report-0024-c027",
+            "psr-report-0024-c030"
+          ],
+          "value": [
+            "The review reports that reusable DT modules/frameworks are absent and recommends treating DT artifacts as versioned configuration items across lifecycle phases.",
+            "It does not report a declared applicability envelope, reusable core, variation points, tailoring rules, or an assured reuse application."
+          ]
+        }
+      },
+      "bounded_method_reuse_and_adaptation": {
+        "explicitly_sought": {
+          "status": "none",
+          "citation_ids": [
+            "psr-report-0024-c003",
+            "psr-report-0024-c004",
+            "psr-report-0024-c005",
+            "psr-report-0024-c006"
+          ],
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "notes": "The review does not ask about reuse or adaptation of model generation methods."
+        },
+        "reported": {
+          "status": "none",
+          "citation_ids": [
+            "psr-report-0024-c021",
+            "psr-report-0024-c027"
+          ],
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "notes": "No stable method core, method variation points, adaptation process, method application, or post-application assurance is reported."
+        }
+      },
+      "bounded_workflow_reuse_and_adaptation": {
+        "explicitly_sought": {
+          "status": "none",
+          "citation_ids": [
+            "psr-report-0024-c003",
+            "psr-report-0024-c004",
+            "psr-report-0024-c005",
+            "psr-report-0024-c006"
+          ],
+          "coding_confidence": "high",
+          "provenance": "reviewer_inferred",
+          "notes": "Lifecycle mapping does not explicitly seek reusable workflow definitions or adaptation practices."
+        },
+        "reported": {
+          "coding_confidence": "moderate",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "psr-report-0024-c024",
+            "psr-report-0024-c027"
+          ],
+          "value": [
+            "Phase-local work and missing lifecycle continuity are reported, with a recommendation to version and reuse DT assets across phases.",
+            "No stable workflow core, workflow variation points, adaptation steps, distinct workflow application, or post-application assurance is reported."
+          ]
+        }
+      },
+      "evidence_support_for_characterizations": {
+        "explicitly_sought": {
+          "coding_confidence": "high",
+          "provenance": "source_reported",
+          "citation_ids": [
+            "psr-report-0024-c014",
+            "psr-report-0024-c035",
+            "psr-report-0024-c036"
+          ],
+          "value": [
+            "The QA rubric examines validation, metrics, reproducibility, limitations, and evidence-aligned claims; scoring was intended to interpret evidence strength."
+          ]
+        },
+        "reported": {
+          "coding_confidence": "moderate",
+          "provenance": "reviewer_inferred",
+          "citation_ids": [
+            "psr-report-0024-c025",
+            "psr-report-0024-c022",
+            "psr-report-0024-c036"
+          ],
+          "value": [
+            "Validation realism is cross-tabulated, including 15/46 simulation-only, 19/46 lab prototypes, 3/46 field analogues, and 9/46 operational-use studies.",
+            "Application, challenge, and advantage tables link categories to reference numbers, but per-study QA scores are not presented in the report."
+          ]
+        }
+      }
+    },
+    "rq2_outcomes": {
+      "explicitly_sought": {
+        "coding_confidence": "high",
+        "provenance": "source_reported",
+        "citation_ids": [
+          "psr-report-0024-c005",
+          "psr-report-0024-c006"
+        ],
+        "value": [
+          "RQ4 seeks advantages of DT use in space robotics.",
+          "RQ3 seeks challenges and limitations, including implementation and assurance barriers."
+        ]
+      },
+      "reported": {
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c021",
+          "psr-report-0024-c022",
+          "psr-report-0024-c028",
+          "psr-report-0024-c044"
+        ],
+        "value": [
+          "Advantages include efficiency, management, process design, quality/reliability, decision support, real-time analysis, performance, and human work.",
+          "Challenges include accuracy/uncertainty, data quality/synchronization, multi-DT interoperability, missing reusable frameworks, latency, compute/power constraints, validation effort, and integration complexity.",
+          "No outcome or burden joins a CubeSat/nanosatellite EPS thread to a qualifying MBSE relationship."
+        ]
+      }
+    },
+    "rq3_outcomes": {
+      "explicitly_sought": {
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c004",
+          "psr-report-0024-c017",
+          "psr-report-0024-c035"
+        ],
+        "value": [
+          "RQ2 maps lifecycle applications, including virtual verification and testing.",
+          "QA5 evaluates validation setup, baselines, claim alignment, and realism."
+        ]
+      },
+      "reported": {
+        "coding_confidence": "moderate",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c025",
+          "psr-report-0024-c034",
+          "psr-report-0024-c018",
+          "psr-report-0024-c019"
+        ],
+        "value": [
+          "Virtual evaluation/verification and virtual testing are described for broad space-robotics DTs.",
+          "The corpus is classified by validation realism: 15 simulation-only, 19 lab prototypes, 3 field analogues, 9 operational uses, and no explicit HIL/SIL stage.",
+          "No extractable pre-physical V&V activity joins a nanosatellite EPS target to a qualifying model-to-V&V bridge, criterion, execution, and result."
+        ]
+      }
+    },
+    "nanosatellite_eps_evidence_extractability": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c018",
+        "psr-report-0024-c019",
+        "psr-report-0024-c020"
+      ],
+      "value": "absent",
+      "notes": "A CubeSat application and several EPS-adjacent applications are separately identifiable, but the report never connects them as nanosatellite/CubeSat EPS evidence."
+    },
+    "mbse_eps_relationship_at_least_as_specific": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c018",
+        "psr-report-0024-c019",
+        "psr-report-0024-c023",
+        "psr-report-0024-c040"
+      ],
+      "value": "no",
+      "notes": "The review does not require the main review's same-EPS-entity relationships across at least two systems-engineering concerns, and no qualifying relationship is connected to the CubeSat case."
+    },
+    "coverage_findings_or_author_conclusions": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c016",
+        "psr-report-0024-c022",
+        "psr-report-0024-c024",
+        "psr-report-0024-c025"
+      ],
+      "value": [
+        "DT work concentrates on assembly and robot behavior; communication and human-robot collaboration are sparse.",
+        "Most studies are phase-local rather than lifecycle-spanning.",
+        "Benefits are commonly reported for efficiency, system management, quality/reliability, decision support, and performance.",
+        "Validation evidence is concentrated in simulations and laboratory prototypes rather than representative or operational settings."
+      ]
+    },
+    "author_identified_gaps": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c016",
+        "psr-report-0024-c030"
+      ],
+      "value": [
+        "Lifecycle continuity from design to operations is usually absent.",
+        "Validation under representative space conditions is limited.",
+        "Data availability and interoperability are barriers, especially for proprietary data.",
+        "Reusable architectures and reporting standards are missing.",
+        "Communication/networking and human-robot collaboration are underexplored."
+      ]
+    },
+    "reviewer_identified_gaps": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c018",
+        "psr-report-0024-c019",
+        "psr-report-0024-c020",
+        "psr-report-0024-c021",
+        "psr-report-0024-c024",
+        "psr-report-0024-c025",
+        "psr-report-0024-c030"
+      ],
+      "value": [
+        "No finding combines the separately reported CubeSat/small-satellite population evidence with EPS evidence and a qualifying MBSE relationship.",
+        "No generic/reference nanosatellite-EPS model construction, actionable construction/tailoring procedure, or post-tailoring assurance is extracted.",
+        "No bounded artifact, method, or workflow reuse/adaptation evidence is reported.",
+        "No main-RQ2 EPS-attributed outcome/burden or main-RQ3 EPS-linked V&V activity is extractable for the target population.",
+        "The evidence window ends in June 2024, leaving July 2024 through the 2026-08-24 common cutoff unsearched."
+      ]
+    }
+  },
+  "crd_assessment": {
+    "crd1_objectives": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c002"
+      ],
+      "value": "Review digital-twin applications in space robotics by classifying objectives, lifecycle applications, challenges, and advantages and deriving cross-cutting analytical insights."
+    },
+    "crd2_sources_and_restrictions": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c008",
+        "psr-report-0024-c009",
+        "psr-report-0024-c010",
+        "psr-report-0024-c012",
+        "psr-report-0024-c013"
+      ],
+      "value": "Scopus, IEEE Xplore, and ACM were searched with one reported Boolean string; backward and forward snowballing followed. Coverage had no stated lower date bound and ended June 2024. English, publication-type, domain, and explicit space-robotics DT-methodology restrictions were applied."
+    },
+    "crd3_eligibility_criteria_and_application": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c011",
+        "psr-report-0024-c012",
+        "psr-report-0024-c013"
+      ],
+      "value": "Three inclusion and six exclusion criteria are listed. All final papers had to meet every criterion; title/abstract screening was followed by meticulous review/final filtering and snowballing. The report does not state screener counts, independence, disagreements, or a detailed full-text decision procedure."
+    },
+    "crd4_quality_or_validity_criteria": {
+      "coding_confidence": "high",
+      "provenance": "source_reported",
+      "citation_ids": [
+        "psr-report-0024-c014",
+        "psr-report-0024-c035"
+      ],
+      "value": "QA1-QA10 cover DT scope, coupling, data, model/implementation detail, validation, metrics/outcomes, reproducibility, limitations, lifecycle/governance, and evidence-aligned claims."
+    },
+    "crd5_appraisal_application_and_use": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c036"
+      ],
+      "value": "Each criterion was scored 0, 0.5, or 1 and summed to 10; appraisal informed interpretation of evidence strength and was not an inclusion filter. Per-study scores are not presented in the report."
+    },
+    "crd6_data_extraction": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c002",
+        "psr-report-0024-c015"
+      ],
+      "value": "Studies were separately coded for objectives, lifecycle phase, modeling paradigm, validation realism, and deployment characteristics; applications, challenges, and advantages were also classified. Extractor number, checking, and disagreement handling are not reported."
+    },
+    "crd7_data_synthesis": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c016",
+        "psr-report-0024-c017",
+        "psr-report-0024-c023",
+        "psr-report-0024-c024",
+        "psr-report-0024-c025",
+        "psr-report-0024-c026"
+      ],
+      "value": "The review combines thematic narrative, category counts, objective-by-dimension cross-tabs, and a decision-centric systems-engineering framework; no statistical effect pooling is reported."
+    },
+    "crd8_investigation_of_differences": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c023",
+        "psr-report-0024-c024",
+        "psr-report-0024-c025",
+        "psr-report-0024-c026",
+        "psr-report-0024-c028"
+      ],
+      "value": "Differences are investigated descriptively across objective, lifecycle, coupling, modeling paradigm, validation realism, deployment architecture, synchronization policy, and environment; heterogeneity is discussed but not statistically modeled."
+    },
+    "crd9_data_combination_and_reasonableness": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c024",
+        "psr-report-0024-c025",
+        "psr-report-0024-c028",
+        "psr-report-0024-c036"
+      ],
+      "value": "The heterogeneous evidence is combined through frequencies, cross-tabs, and narrative rather than pooled effects. This is reasonable for the categorical corpus, but the absent per-study QA results and inconsistent source reporting limit evidence-weighted interpretation."
+    },
+    "crd10_conclusions_flow_from_evidence": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c016",
+        "psr-report-0024-c022",
+        "psr-report-0024-c024",
+        "psr-report-0024-c025",
+        "psr-report-0024-c028",
+        "psr-report-0024-c036"
+      ],
+      "value": "Descriptive conclusions on dominant objectives, phase locality, applications, and validation maturity generally follow from reported matrices and linked references. Strong benefit language is less secure because outcomes use inconsistent metrics, causal inference is explicitly limited, and per-study quality scores are not shown."
+    }
+  },
+  "dare_assessment": {
+    "dare1_eligibility_criteria": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c011",
+        "psr-report-0024-c012",
+        "psr-report-0024-c013"
+      ],
+      "answer": "partly",
+      "reason": "Explicit inclusion and exclusion criteria are provided and broadly target space-robotics DT applications, but conference inclusion conflicts ambiguously with exclusion of proceedings papers, and application beyond title/abstract screening is incompletely described."
+    },
+    "dare2_literature_search_coverage": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c008",
+        "psr-report-0024-c009",
+        "psr-report-0024-c010",
+        "psr-report-0024-c012",
+        "psr-report-0024-c013"
+      ],
+      "answer": "partly",
+      "reason": "Three relevant multidisciplinary/computing databases, an exact broad query, and backward/forward snowballing support coverage, but execution dates, source-specific translations, snowballing mechanics, and several review-process details are absent and restrictive publication/domain criteria may omit relevant evidence."
+    },
+    "dare3_quality_or_validity_assessment": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c014",
+        "psr-report-0024-c035",
+        "psr-report-0024-c036"
+      ],
+      "answer": "yes",
+      "reason": "The authors used a ten-criterion, three-level quality rubric and state that its summed scores informed evidence-strength interpretation without controlling inclusion."
+    },
+    "dare4_included_evidence_description": {
+      "coding_confidence": "moderate",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c015",
+        "psr-report-0024-c016",
+        "psr-report-0024-c017",
+        "psr-report-0024-c025",
+        "psr-report-0024-c036",
+        "psr-report-0024-c039"
+      ],
+      "answer": "partly",
+      "reason": "All selected publications are linked by reference number to application/objective/challenge/advantage tables and aggregate architecture/evidence matrices, but no complete study-characteristics table or per-study QA scores appears in the report and the mentioned online documentation has no stated access route."
+    }
+  },
+  "overlap_and_need_assessment": {
+    "population_overlap": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c018"
+      ],
+      "reason": "A separately described study applies a DT to assembly and integration of CubeSats, which fall within the main review's nanosatellite-class population, although the report never uses the nanosatellite label.",
+      "value": "separable_nanosatellite_evidence"
+    },
+    "eps_overlap": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c019",
+        "psr-report-0024-c020"
+      ],
+      "reason": "EPS content is not a review target, but individual power-manager/electrical-library, battery-pack, solar-panel, and electric-heater examples can be isolated from the broader synthesis.",
+      "value": "embedded_but_separable"
+    },
+    "mbse_definition_overlap": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c019",
+        "psr-report-0024-c023",
+        "psr-report-0024-c040",
+        "psr-report-0024-c043"
+      ],
+      "reason": "The review includes heterogeneous DTs, including offline models, without requiring explicit relationships across two systems-engineering concerns; some structured DT examples and the systems-engineering assurance framework are compatible with MBSE, but the corpus boundary is broader.",
+      "value": "broader_than_main_review"
+    },
+    "rq1_element_coverage": {
+      "eps_representation_and_use": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c018",
+          "psr-report-0024-c019",
+          "psr-report-0024-c020"
+        ],
+        "reason": "The report isolates several broad-space EPS examples, but none is connected to its CubeSat case or to a qualifying nanosatellite-EPS MBSE thread.",
+        "value": "adjacent"
+      },
+      "generic_or_reference_model_construction": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c021",
+          "psr-report-0024-c030"
+        ],
+        "reason": "Missing reusable DT frameworks are identified as a broad-space gap, but no generic/reference model construction evidence is synthesized for nanosatellite EPS.",
+        "value": "adjacent"
+      },
+      "model_generation_methods": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c019",
+          "psr-report-0024-c033",
+          "psr-report-0024-c043"
+        ],
+        "reason": "Broad DT modeling paradigms and isolated construction examples are reported, but not for a combined nanosatellite-EPS qualifying MBSE relationship.",
+        "value": "adjacent"
+      },
+      "engineering_workflows": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c017",
+          "psr-report-0024-c038"
+        ],
+        "reason": "Lifecycle applications and occasional ordered manufacturing processes provide context, but no nanosatellite-EPS engineering workflow is extractable.",
+        "value": "adjacent"
+      },
+      "procedural_reporting_detail": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c035",
+          "psr-report-0024-c036",
+          "psr-report-0024-c038"
+        ],
+        "reason": "QA4 and QA7 seek implementation and reproducibility detail, but the report gives no nanosatellite-EPS procedure assessment and no aggregate QA results.",
+        "value": "adjacent"
+      },
+      "generic_model_with_actionable_construction_or_tailoring": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c021",
+          "psr-report-0024-c030"
+        ],
+        "reason": "No generic/reference model is linked to an actionable construction or tailoring procedure; such frameworks are described as missing.",
+        "value": "none"
+      },
+      "inputs_and_assumptions": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c033",
+          "psr-report-0024-c044"
+        ],
+        "reason": "Inputs and mission constraints are discussed only for broad space-robotics DTs, not a nanosatellite-EPS model thread.",
+        "value": "adjacent"
+      },
+      "implementation_needs_and_footprint": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c026",
+          "psr-report-0024-c029",
+          "psr-report-0024-c044"
+        ],
+        "reason": "Deployment, synchronization, tools, compute, power, and integration constraints are synthesized broadly but not for nanosatellite EPS.",
+        "value": "adjacent"
+      },
+      "bounded_artifact_reuse_and_tailoring": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c021",
+          "psr-report-0024-c024",
+          "psr-report-0024-c027"
+        ],
+        "reason": "The report identifies missing reusable architectures and lifecycle continuity, but reports no bounded nanosatellite-EPS artifact reuse or tailoring application.",
+        "value": "adjacent"
+      },
+      "bounded_method_reuse_and_adaptation": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c021",
+          "psr-report-0024-c027"
+        ],
+        "reason": "No bounded reuse or adaptation evidence for a model generation method is reported.",
+        "value": "none"
+      },
+      "bounded_workflow_reuse_and_adaptation": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c024",
+          "psr-report-0024-c027"
+        ],
+        "reason": "No bounded reusable workflow, adaptation process, or assured workflow application is reported.",
+        "value": "none"
+      },
+      "evidence_support_for_characterizations": {
+        "coding_confidence": "high",
+        "provenance": "reviewer_inferred",
+        "citation_ids": [
+          "psr-report-0024-c025",
+          "psr-report-0024-c035",
+          "psr-report-0024-c036"
+        ],
+        "reason": "A quality rubric and validation-realism counts address evidence maturity for broad space-robotics DTs, but not support for nanosatellite-EPS characterizations.",
+        "value": "adjacent"
+      }
+    },
+    "rq1_coverage": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c018",
+        "psr-report-0024-c019",
+        "psr-report-0024-c020",
+        "psr-report-0024-c021",
+        "psr-report-0024-c024",
+        "psr-report-0024-c030"
+      ],
+      "reason": "The review contributes broad DT context for many RQ1 elements, but no result connects any element to both the CubeSat/nanosatellite population and an EPS thread satisfying the main MBSE qualification; key construction, actionable procedure, and bounded reuse elements are absent.",
+      "value": "adjacent"
+    },
+    "rq2_coverage": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c018",
+        "psr-report-0024-c019",
+        "psr-report-0024-c020",
+        "psr-report-0024-c022",
+        "psr-report-0024-c028"
+      ],
+      "reason": "Broad advantages and burdens and a few separable EPS examples are reported, but no outcome or burden is attributed to qualifying MBSE for a nanosatellite/CubeSat EPS thread.",
+      "value": "adjacent"
+    },
+    "rq3_coverage": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c018",
+        "psr-report-0024-c019",
+        "psr-report-0024-c025",
+        "psr-report-0024-c034"
+      ],
+      "reason": "Virtual verification/testing and validation realism are synthesized broadly, but no nanosatellite-EPS target has an extractable model-to-V&V bridge, criterion, pre-physical execution, and result.",
+      "value": "adjacent"
+    },
+    "methodological_and_reporting_limitations": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c009",
+        "psr-report-0024-c011",
+        "psr-report-0024-c012",
+        "psr-report-0024-c013",
+        "psr-report-0024-c028",
+        "psr-report-0024-c032",
+        "psr-report-0024-c036",
+        "psr-report-0024-c039",
+        "psr-report-0024-c042"
+      ],
+      "value": [
+        "The evidence window ends June 2024 and no database search execution date is reported.",
+        "Numbers and independence of screeners and extractors, disagreement handling, screening agreement, duplicate-publication handling, sensitivity analysis, and reporting-bias assessment are not reported.",
+        "Conference-paper inclusion and proceedings-paper exclusion are ambiguous when read together.",
+        "Per-study QA scores are not presented, and the stated online documentation is not given an access route in the report.",
+        "The prose reports 1403 papers after selection criteria, while Fig. 2 reports 1406; source subtotals sum to 1403.",
+        "The authors acknowledge heterogeneous DT definitions/evaluation practices and inconsistent coupling, synchronization, and validation reporting, limiting causal inference."
+      ]
+    },
+    "supporting_search_disposition": {
+      "coding_confidence": "high",
+      "provenance": "reviewer_inferred",
+      "citation_ids": [
+        "psr-report-0024-c007",
+        "psr-report-0024-c018",
+        "psr-report-0024-c019",
+        "psr-report-0024-c020",
+        "psr-report-0024-c021",
+        "psr-report-0024-c025",
+        "psr-report-0024-c030"
+      ],
+      "reason": "The report has separable CubeSat-population evidence and separable EPS examples, but never combines them in a qualifying MBSE relationship. Its RQ1 elements and RQ2/RQ3 content are therefore adjacent or absent rather than direct, and its evidence ends more than two years before the common cutoff. The main nanosatellite-EPS MBSE review remains needed.",
+      "value": "no_substantial_overlap_identified"
+    }
+  },
+  "citations": [
+    {
+      "citation_id": "psr-report-0024-c001",
+      "report_id": "psr-report-0024",
+      "page": 1,
+      "quote": "Array 30 (2026) 100902",
+      "graphic": "Publication header",
+      "graphic_quote_description": "The page-one publication header identifies the journal volume, publication year, and article number."
+    },
+    {
+      "citation_id": "psr-report-0024-c002",
+      "report_id": "psr-report-0024",
+      "page": 1,
+      "quote": "Objectives: This paper provides a systematic literature review of DT applications in space robotics. The study aims to (i) classify primary objectives of their use, (ii) map applications across system lifecycle phases, (iii) identify recurring challenges, and (iv) report advantages while deriving analytical insights for future research."
+    },
+    {
+      "citation_id": "psr-report-0024-c003",
+      "report_id": "psr-report-0024",
+      "page": 2,
+      "quote": "RQ1: What are the primary objectives of using DTs in space robotics?"
+    },
+    {
+      "citation_id": "psr-report-0024-c004",
+      "report_id": "psr-report-0024",
+      "page": 2,
+      "quote": "RQ2: What are the applications of DTs in space robotics?"
+    },
+    {
+      "citation_id": "psr-report-0024-c005",
+      "report_id": "psr-report-0024",
+      "page": 2,
+      "quote": "RQ3: What are the current challenges and limitations of integrating DTs in space robotics?"
+    },
+    {
+      "citation_id": "psr-report-0024-c006",
+      "report_id": "psr-report-0024",
+      "page": 2,
+      "quote": "RQ4: What are the advantages of using DTs in space robotics?"
+    },
+    {
+      "citation_id": "psr-report-0024-c007",
+      "report_id": "psr-report-0024",
+      "page": 2,
+      "quote": "Building on these questions, our systematic literature review synthesizes the state of the art on DTs for space robotics by analyzing 46 peer-reviewed publications indexed in IEEE Xplore, ACM, and Scopus (covering studies up to the end of June 2024)."
+    },
+    {
+      "citation_id": "psr-report-0024-c008",
+      "report_id": "psr-report-0024",
+      "page": 4,
+      "quote": "\"Digital twin*\" AND ((\"Aerospace\" OR \" Astronautical\" OR \"Spacecraft\" OR \"Space technology\" OR \"Space domain*\" OR (\" space exploration\" OR \"space mission*\")) AND (\"Robotic*\" OR \"Robot*\")) OR ((\" Rover*\" OR \"Perseverance\" OR \"Sojourner\" OR \"Spirit\" OR \"Curiosity\")))"
+    },
+    {
+      "citation_id": "psr-report-0024-c009",
+      "report_id": "psr-report-0024",
+      "page": 4,
+      "quote": "We covered all the studies from scratch till the end of June 2024."
+    },
+    {
+      "citation_id": "psr-report-0024-c010",
+      "report_id": "psr-report-0024",
+      "page": 4,
+      "quote": "Using this keyword, relevant papers were derived from the largest and most widely used scientific indexing systems and databases in software engineering: SCOPUS, IEEE Xplore Digital Library, and ACM."
+    },
+    {
+      "citation_id": "psr-report-0024-c011",
+      "report_id": "psr-report-0024",
+      "page": 4,
+      "quote": "These criteria were applied while reading the abstract and title of the articles. The articles that were identified outside the research domain did not proceed to the analysis stage."
+    },
+    {
+      "citation_id": "psr-report-0024-c012",
+      "report_id": "psr-report-0024",
+      "page": 5,
+      "quote": "IC1: Journal or conference publications with space applications.",
+      "graphic": "Table 2",
+      "graphic_quote_description": "Table 2 lists all three inclusion criteria and all six exclusion criteria; this quoted first cell anchors the table used for the eligibility coding."
+    },
+    {
+      "citation_id": "psr-report-0024-c013",
+      "report_id": "psr-report-0024",
+      "page": 5,
+      "quote": "only once, then, 1358 papers were left to initial check. In this stage, we exclude irrelevant studies by reading the titles and abstracts. At the end of this stage, 67 papers were left for meticulous review and analysis. The drastic decrease in the number of papers was caused by studies that only referenced the initial study of DT, which pertains to the aerospace domain, without further investigation. After filtering out in the final selection and conducting backward and forward snowballing search, 38 papers were discerned as directly related to the purpose of our study. We then conducted snowballing on the remaining papers to identify additional relevant studies. This process yielded 8 additional papers, bringing the total number of selected papers to 46."
+    },
+    {
+      "citation_id": "psr-report-0024-c014",
+      "report_id": "psr-report-0024",
+      "page": 5,
+      "quote": "To address the methodological rigor of the included studies, we conducted a structured quality assessment of each selected paper. The goal of this appraisal is to analyze the papers and to enable an evidence-based synthesis."
+    },
+    {
+      "citation_id": "psr-report-0024-c015",
+      "report_id": "psr-report-0024",
+      "page": 5,
+      "quote": "We assessed methodological reporting quality using the rubric in Table 3 and separately coded each study for objectives, lifecycle phase, modeling paradigm, validation realism, and deployment characteristics."
+    },
+    {
+      "citation_id": "psr-report-0024-c016",
+      "report_id": "psr-report-0024",
+      "page": 6,
+      "quote": "DT objectives in space robotics are mainly centered on assembly tasks and robot behavior modeling, reflecting a focus on measurable performance optimization and operational refinement. Conversely, usage targeting satellite communication and networking infrastructures, along with human-robot collaboration, is less represented."
+    },
+    {
+      "citation_id": "psr-report-0024-c017",
+      "report_id": "psr-report-0024",
+      "page": 11,
+      "quote": "DT applications in space robotics span the design, manufacturing, and service phases; however, they are unevenly distributed and predominantly phase-local. In the design phase, DTs are mainly used for iterative optimization and virtual verification of complex models. In manufacturing, they support production control, real-time monitoring, and quality management in smart assembly environments. In the service phase, DT implementations primarily focus on state monitoring, fault detection, and predictive maintenance."
+    },
+    {
+      "citation_id": "psr-report-0024-c018",
+      "report_id": "psr-report-0024",
+      "page": 10,
+      "quote": "They applied DT to monitor and control production processes, test different scenarios, optimize the assembly and integration of CubeSats before the actual physical implementation, provide data and bidirectional connection with the physical entity, detect faults, and enhance the robustness of the process."
+    },
+    {
+      "citation_id": "psr-report-0024-c019",
+      "report_id": "psr-report-0024",
+      "page": 10,
+      "quote": "Figueroa et al. [45] implemented a DT for the power manager system of the NASA Artemis Mission. They used the NASA Platform for Autonomous Systems electrical equipment domain libraries to create DT for fault diagnosis in the system."
+    },
+    {
+      "citation_id": "psr-report-0024-c020",
+      "report_id": "psr-report-0024",
+      "page": 13,
+      "quote": "In space exploration, DTs enhance the performance of rovers by detecting anomalies such as driving motors, solar panels, and electric heaters [44], assessing the degradation of spacecraft battery packs [55], and improving control strategies under realistic conditions [53]."
+    },
+    {
+      "citation_id": "psr-report-0024-c021",
+      "report_id": "psr-report-0024",
+      "page": 12,
+      "quote": "Currently, there are no ready-to-use modules available to create DTs for any system, or reusable DTs capable of replicating all relationships within a system [52]. Without a general framework, it becomes difficult to apply a DT across different applications and systems uniformly, which complicates development and implementation."
+    },
+    {
+      "citation_id": "psr-report-0024-c022",
+      "report_id": "psr-report-0024",
+      "page": 13,
+      "quote": "DTs improve efficiency by reducing operational, development, and production times and errors. They streamline and facilitate system management. Additionally, they support smarter process design through simplified and reusable models and improve both quality and reliability in assembly and machining processes of satellite systems."
+    },
+    {
+      "citation_id": "psr-report-0024-c023",
+      "report_id": "psr-report-0024",
+      "page": 14,
+      "quote": "Fig. 5 conceptualizes DT value creation as a chain: mission & system context constrains DT design choices, which enable DT capabilities, producing measurable system outcomes."
+    },
+    {
+      "citation_id": "psr-report-0024-c024",
+      "report_id": "psr-report-0024",
+      "page": 15,
+      "quote": "In this review, most studies address exactly one lifecycle phase (40 out of 46), while only a small subset spans multiple phases (4 out of 46), and only two span all three phases. This matters because phase-local DTs typically yield local performance improvements, whereas lifecycle-spanning DTs enable digital thread continuity: requirements traceability, configuration management of models/data, and evidence accumulation across mission evolution."
+    },
+    {
+      "citation_id": "psr-report-0024-c025",
+      "report_id": "psr-report-0024",
+      "page": 15,
+      "quote": "The evidence base concentrates in simulation only (15/46) and lab prototype settings (19/46), with fewer operationaluse studies (9/46) and limited field-analogue validation (3/46). No studies in this corpus were coded as explicitly reporting a hardware-/software-in-the-loop (HIL/SIL) validation stage."
+    },
+    {
+      "citation_id": "psr-report-0024-c026",
+      "report_id": "psr-report-0024",
+      "page": 15,
+      "quote": "Ground-only deployment dominates (35/46), with fewer hybrid ground/onboard instances (11/46) and no onboard-only cases in this corpus. Synchronization policies are predominantly continuous (22/46) and intermittent/batch (19/46), with few event-driven designs (5/46)."
+    },
+    {
+      "citation_id": "psr-report-0024-c027",
+      "report_id": "psr-report-0024",
+      "page": 16,
+      "quote": "DP4: Engineer lifecycle traceability: Treat DT artifacts as configuration items. Version models and data, maintain requirements traceability, and define change-impact procedures so that assets can be reused across lifecycle phases (Table 8)."
+    },
+    {
+      "citation_id": "psr-report-0024-c028",
+      "report_id": "psr-report-0024",
+      "page": 16,
+      "quote": "This synthesis is constrained by heterogeneity in DT definitions and evaluation practices across the reviewed studies. In particular, inconsistent reporting of coupling level, synchronization semantics, and validation realism limits strong causal inference."
+    },
+    {
+      "citation_id": "psr-report-0024-c029",
+      "report_id": "psr-report-0024",
+      "page": 17,
+      "quote": "Simulink/Simscape, Vortex Studio, NVIDIA Omniverse, Modelica, robotic simulators",
+      "graphic": "Table 14",
+      "graphic_quote_description": "The space-exploration modeling-and-simulation cell lists the recurring tools; the table also maps physical, connection, data/infrastructure, intelligence, and visualization layers."
+    },
+    {
+      "citation_id": "psr-report-0024-c030",
+      "report_id": "psr-report-0024",
+      "page": 18,
+      "quote": "Research gaps. The reviewed literature highlights four main gaps. First, many DT implementations remain phase-local and do not support lifecycle continuity from design to operation. Second, validation under representative space conditions remains limited, especially for uncertain environments and delayed communication. Third, data availability and interoperability remain major barriers, particularly when proprietary design and production data are required. Fourth, reusable architectures and reporting standards are still missing, making it difficult to compare DT implementations across studies."
+    },
+    {
+      "citation_id": "psr-report-0024-c031",
+      "report_id": "psr-report-0024",
+      "page": 20,
+      "quote": "Data will be made available on request."
+    },
+    {
+      "citation_id": "psr-report-0024-c032",
+      "report_id": "psr-report-0024",
+      "page": 4,
+      "quote": "1406",
+      "graphic": "Fig. 2",
+      "graphic_quote_description": "The review-flow graphic labels the merged post-selection-criteria count as 1406, whereas the page-four prose reports 1403 and its source subtotals sum to 1403."
+    },
+    {
+      "citation_id": "psr-report-0024-c033",
+      "report_id": "psr-report-0024",
+      "page": 9,
+      "quote": "They extracted features and constraints from CAD data (Geometrical Dimension including GD&T design data, surface deformation data, and point-cloud data) and a perception model for PDTM (Part DT Model) generation. Their proposed DT assembly process model integrates PDTM with assembly process information."
+    },
+    {
+      "citation_id": "psr-report-0024-c034",
+      "report_id": "psr-report-0024",
+      "page": 11,
+      "quote": "They utilized DT technology for network virtualization and the construction of a validation environment. The DT platform includes four layers: resource, virtualization, management, and interaction layers."
+    },
+    {
+      "citation_id": "psr-report-0024-c035",
+      "report_id": "psr-report-0024",
+      "page": 5,
+      "quote": "QA5 Validation is described and matched to claims. The evaluation setup, baselines (if any), and validation realism level are reported clearly.",
+      "graphic": "Table 3",
+      "graphic_quote_description": "The QA5 row states the validation criterion; adjacent QA1–QA10 rows cover scope, coupling, data, implementation, metrics, reproducibility, limitations, lifecycle/governance, and evidence alignment."
+    },
+    {
+      "citation_id": "psr-report-0024-c036",
+      "report_id": "psr-report-0024",
+      "page": 5,
+      "quote": "Each criterion was assessed using a threelevel scale: 0 (not addressed), 0.5 (partially addressed or unclear), and 1 (explicit and sufficient detail). The total quality score for each study is the sum across QA1-QA10 (max 10). Quality scoring was used to interpret evidence strength and does not affect inclusion."
+    },
+    {
+      "citation_id": "psr-report-0024-c037",
+      "report_id": "psr-report-0024",
+      "page": 3,
+      "quote": "In this research, we followed Kitchenham's guidelines [13] to review systematically and provide our literature review."
+    },
+    {
+      "citation_id": "psr-report-0024-c038",
+      "report_id": "psr-report-0024",
+      "page": 8,
+      "quote": "Their methodology includes five phases: (i) modeling, (ii) data collection (from external sensors & CNC system), (iii) indicator designing (indicators of the energy ratio for chatter detection and the residual force component for tool wear monitoring), (iv) threshold setting & decision-making (using tool condition monitoring & chatter detection), and (v) feedback control and model updating (to regulate the operational parameters)."
+    },
+    {
+      "citation_id": "psr-report-0024-c039",
+      "report_id": "psr-report-0024",
+      "page": 4,
+      "quote": "In the conducting phase, the selected papers were analyzed and evaluated, which is provided as an online documentation, to meet the research questions."
+    },
+    {
+      "citation_id": "psr-report-0024-c040",
+      "report_id": "psr-report-0024",
+      "page": 14,
+      "quote": "Assurance & Governance (cross-cutting) Requirements traceability (MBSE), V&V strategy, uncertainty quantification (UQ)",
+      "graphic": "Fig. 5",
+      "graphic_quote_description": "The conceptual framework explicitly places MBSE requirements traceability and V&V in a cross-cutting assurance/governance layer, not as an eligibility boundary for the reviewed corpus."
+    },
+    {
+      "citation_id": "psr-report-0024-c041",
+      "report_id": "psr-report-0024",
+      "page": 18,
+      "quote": "This paper presented a systematic literature review of available studies to explore objectives, applications, challenges, and advantages of DTs in space robotics. The lack of an up-to-date systematic literature review motivated this study to classify available publications based on applications through all stages of the system lifecycle."
+    },
+    {
+      "citation_id": "psr-report-0024-c042",
+      "report_id": "psr-report-0024",
+      "page": 4,
+      "quote": "As can be seen in Fig. 2, we conducted an automatic search on our objective datasets (Scopus, IEEE, and ACM) to retrieve studies aligned with our search string, from which a total of 2142 initial records were retrieved (Scopus: 1835; IEEE: 98; ACM: 209). Once we employed the inclusion and exclusion criteria 1403 papers remained (Scopus: 1237; IEEE: 90; ACM: 76)."
+    },
+    {
+      "citation_id": "psr-report-0024-c043",
+      "report_id": "psr-report-0024",
+      "page": 15,
+      "quote": "Modeling paradigm is an additional axis (Table 10). Data-driven (14/46) and hybrid approaches (13/46) are prominent, but physics-based methods (12/46) remain important, particularly where extrapolation, interpretability, or physical constraints matter."
+    },
+    {
+      "citation_id": "psr-report-0024-c044",
+      "report_id": "psr-report-0024",
+      "page": 14,
+      "quote": "Context-constrained coupling: Communication latency/intermittency, onboard compute and power limits, and safety criticality (e.g., crewed or proximity operations) shape whether continuous synchronization and closed-loop decision automation are feasible."
+    }
+  ]
+}

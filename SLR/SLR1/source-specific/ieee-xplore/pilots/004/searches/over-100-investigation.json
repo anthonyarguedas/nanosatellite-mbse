@@ -1,0 +1,32 @@
+{
+  "schema_version": "slr1-ieee-xplore-pilot004-over-100-investigation/v1",
+  "source": "IEEE Xplore",
+  "partition_id": "B2",
+  "threshold": 100,
+  "source_count_observations": [
+    {
+      "artifact": "source-specific/ieee-xplore/pilots/004/searches/preflight/B2-full.json",
+      "total": 131,
+      "status": "count_only",
+      "error_stage": null,
+      "year_readback": "exact_source_echo",
+      "count_only": true
+    }
+  ],
+  "deduplicated_stable_article_number_union": null,
+  "investigation": {
+    "status": "stable_union_unavailable_not_treated_as_a_union",
+    "finding": "A native-Year-Apply count-only event reported 131, but the full stable-ID capture failed closed when IEEE omitted page-size evidence outside a complete small page. The subsequent explicit normal result route was also inconsistent. No 100-record prefix or local date-filtered substitute was promoted to a union.",
+    "linked_failure_events": [
+      {
+        "artifact": "source-specific/ieee-xplore/pilots/004/searches/two-pass-b2/B2-full-pass1.json",
+        "total": null,
+        "status": "error",
+        "error_stage": "rendered_state",
+        "year_readback": null,
+        "count_only": null
+      }
+    ],
+    "action": "Retain total and failures as pilot diagnostics; leave B2 union null and do not merge it into a final search."
+  }
+}

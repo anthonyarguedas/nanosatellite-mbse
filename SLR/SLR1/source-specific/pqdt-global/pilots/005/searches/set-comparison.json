@@ -1,0 +1,538 @@
+{
+  "schema_version": "pqdt-global-pilot005-set-comparison/v1",
+  "source": "ProQuest Dissertations & Theses Global",
+  "source_id": "proquest_dissertations_theses_global",
+  "platform": "ProQuest",
+  "pilot": "005",
+  "status": "complete_no_descriptor_only_records",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "inputs": {
+    "event_plan": {
+      "path": "searches/event-plan.json",
+      "sha256": "d0dbead2dd822d8968a5c4137a09d856cf17460b03c06d680be13a99bc8e012d"
+    },
+    "run_receipt": {
+      "path": "searches/run-receipt.json",
+      "sha256": "8df33e32a76c3f941d8bb932b03eb4f7a5e98494767b898fdb76fb060f4c174b"
+    }
+  },
+  "controls": {
+    "database": "exactly one allowed PQDT Global database label",
+    "language": "LA(English)",
+    "sort": "DateAsc / Oldest first",
+    "page_size": 20,
+    "full_text": false,
+    "exclude_duplicates": false,
+    "spelling_variants": false,
+    "form_variants": false,
+    "show_variants": false,
+    "degree_or_document_type": null
+  },
+  "comparison_method": {
+    "events": 18,
+    "passes_per_event": 2,
+    "stable_identifier": "numeric PQDT document ID",
+    "source_order": "DateAsc / Oldest first",
+    "free_text": "accepted Pilot 004 bounded-wildcard schedule",
+    "augmented": "free text OR validated PSUB.EXACT and IF.EXACT constructions",
+    "local_union_bridge": {
+      "path": "source-specific/pqdt-global/scripts/pqdt_pilot005/pqdt_union_bridge.py",
+      "sha256": "e1aaec07a2fcc8ed58a62d015f620d5e4bb3ed348a9cfb61f54848c034c1ce93",
+      "scope": "Allow several raw PSUB or IF clauses when no typed Subject or Index term restriction is requested. Preserve every source and output check."
+    }
+  },
+  "partition_comparisons": {
+    "A1": {
+      "free_text_total": 1,
+      "augmented_total": 1,
+      "free_text_ids_in_source_order": [
+        "2838438016"
+      ],
+      "augmented_ids_in_source_order": [
+        "2838438016"
+      ],
+      "free_text_ids_missing_from_augmented": [],
+      "descriptor_only_ids": [],
+      "descriptor_only_total": 0,
+      "sets_equal": true,
+      "orders_equal": true,
+      "augmented_is_superset": true,
+      "free_text_artifact": "searches/events/free-text-A1.json",
+      "augmented_artifact": "searches/events/augmented-A1.json",
+      "free_text_screenshots": {
+        "search_page": {
+          "path": "searches/events/free-text-A1.search-page.png",
+          "sha256": "3b5cdcd249a1eb8f5793fa2f834d2ebb20857119df2372a286126af29fccd3df"
+        },
+        "results_page": {
+          "path": "searches/events/free-text-A1.results-page.png",
+          "sha256": "6843ac77bbaa75f4b14e00bd6199c7d8e62059866c4ee3d8237e33fb746d752d"
+        }
+      },
+      "augmented_screenshots": {
+        "search_page": {
+          "path": "searches/events/augmented-A1.search-page.png",
+          "sha256": "24687ef438d7c0c0a9038b26a7f5e206229fbf4ce94dd106ed9e3ac06f208b84"
+        },
+        "results_page": {
+          "path": "searches/events/augmented-A1.results-page.png",
+          "sha256": "616d2865871a5bcc4d97e13970ca5cb0af9abb1e3482cf2db151330a31ed477f"
+        }
+      }
+    },
+    "A2": {
+      "free_text_total": 3,
+      "augmented_total": 3,
+      "free_text_ids_in_source_order": [
+        "2166237827",
+        "3094909990",
+        "3347898730"
+      ],
+      "augmented_ids_in_source_order": [
+        "2166237827",
+        "3094909990",
+        "3347898730"
+      ],
+      "free_text_ids_missing_from_augmented": [],
+      "descriptor_only_ids": [],
+      "descriptor_only_total": 0,
+      "sets_equal": true,
+      "orders_equal": true,
+      "augmented_is_superset": true,
+      "free_text_artifact": "searches/events/free-text-A2.json",
+      "augmented_artifact": "searches/events/augmented-A2.json",
+      "free_text_screenshots": {
+        "search_page": {
+          "path": "searches/events/free-text-A2.search-page.png",
+          "sha256": "8aecf03d4ec379d3bbd8bc2f65174b6fcd88f7c59126effcd5fa3eceb58927a5"
+        },
+        "results_page": {
+          "path": "searches/events/free-text-A2.results-page.png",
+          "sha256": "bdf21932849179acc0c7b8e9e127243887ef6e75dc14360b722cf0c9bec96ff8"
+        }
+      },
+      "augmented_screenshots": {
+        "search_page": {
+          "path": "searches/events/augmented-A2.search-page.png",
+          "sha256": "fecf6313fd0807a11a376473d003e346c516c1ee5ebc3c3bf5fb769ea8e1021b"
+        },
+        "results_page": {
+          "path": "searches/events/augmented-A2.results-page.png",
+          "sha256": "4015128fcddaf96d74b5cf9a6095489cbb48b4961086120c3afbe25a732ca377"
+        }
+      }
+    },
+    "A3": {
+      "free_text_total": 1,
+      "augmented_total": 1,
+      "free_text_ids_in_source_order": [
+        "3347898730"
+      ],
+      "augmented_ids_in_source_order": [
+        "3347898730"
+      ],
+      "free_text_ids_missing_from_augmented": [],
+      "descriptor_only_ids": [],
+      "descriptor_only_total": 0,
+      "sets_equal": true,
+      "orders_equal": true,
+      "augmented_is_superset": true,
+      "free_text_artifact": "searches/events/free-text-A3.json",
+      "augmented_artifact": "searches/events/augmented-A3.json",
+      "free_text_screenshots": {
+        "search_page": {
+          "path": "searches/events/free-text-A3.search-page.png",
+          "sha256": "1d375f1e111e5f0a1b0a5046268efbb0a2e15aab54f016190977f1679a7d2f5a"
+        },
+        "results_page": {
+          "path": "searches/events/free-text-A3.results-page.png",
+          "sha256": "203f52296fe7504a4ee542022a68a84b973e909169ae51dcd9e72df87cb4ba37"
+        }
+      },
+      "augmented_screenshots": {
+        "search_page": {
+          "path": "searches/events/augmented-A3.search-page.png",
+          "sha256": "ce62c44abf68c994067b6a878ad0c7e8e8ada0e911f32423d30e3c63587ecc83"
+        },
+        "results_page": {
+          "path": "searches/events/augmented-A3.results-page.png",
+          "sha256": "96afcb02bb7db8ca26f67064e24bff787f24295f0be4311916e1ce4b7b0c5e92"
+        }
+      }
+    },
+    "B1": {
+      "free_text_total": 21,
+      "augmented_total": 21,
+      "free_text_ids_in_source_order": [
+        "1418024583",
+        "1716333147",
+        "2838439210",
+        "2166237827",
+        "2050565383",
+        "2838437962",
+        "2838438905",
+        "2436411986",
+        "2796603206",
+        "2459205256",
+        "2697136573",
+        "2838438016",
+        "2828592607",
+        "3039685878",
+        "3094909990",
+        "3213679310",
+        "3241100212",
+        "3244643407",
+        "3291109676",
+        "3304631814",
+        "3350027961"
+      ],
+      "augmented_ids_in_source_order": [
+        "1418024583",
+        "1716333147",
+        "2838439210",
+        "2166237827",
+        "2050565383",
+        "2838437962",
+        "2838438905",
+        "2436411986",
+        "2796603206",
+        "2459205256",
+        "2697136573",
+        "2838438016",
+        "2828592607",
+        "3039685878",
+        "3094909990",
+        "3213679310",
+        "3241100212",
+        "3244643407",
+        "3291109676",
+        "3304631814",
+        "3350027961"
+      ],
+      "free_text_ids_missing_from_augmented": [],
+      "descriptor_only_ids": [],
+      "descriptor_only_total": 0,
+      "sets_equal": true,
+      "orders_equal": true,
+      "augmented_is_superset": true,
+      "free_text_artifact": "searches/events/free-text-B1.json",
+      "augmented_artifact": "searches/events/augmented-B1.json",
+      "free_text_screenshots": {
+        "search_page": {
+          "path": "searches/events/free-text-B1.search-page.png",
+          "sha256": "2ff472161509601e1189cacf953957ceb8a5b8a3f33cc387be2018e3dd2de0a5"
+        },
+        "results_page": {
+          "path": "searches/events/free-text-B1.results-page.png",
+          "sha256": "11d2c5f17865e19c031961edd1eb8b5285cdcab99ae57c7a5dcac24e6c3c2b8a"
+        }
+      },
+      "augmented_screenshots": {
+        "search_page": {
+          "path": "searches/events/augmented-B1.search-page.png",
+          "sha256": "bbf7ee5de8528c1fa9f8e99367e4166adb0b9a756a30ec0d40df00136b544bba"
+        },
+        "results_page": {
+          "path": "searches/events/augmented-B1.results-page.png",
+          "sha256": "0921a91f4c75e673c14cadc1fc336cdb51e4ac0bdf8910661a73ee3c9f791d29"
+        }
+      }
+    },
+    "B2": {
+      "free_text_total": 13,
+      "augmented_total": 13,
+      "free_text_ids_in_source_order": [
+        "2838439210",
+        "2050565383",
+        "2459205256",
+        "2679668074",
+        "2928801515",
+        "3039685878",
+        "3059245100",
+        "3143048671",
+        "3241100212",
+        "3275490205",
+        "3304631814",
+        "3347898730",
+        "3350027961"
+      ],
+      "augmented_ids_in_source_order": [
+        "2838439210",
+        "2050565383",
+        "2459205256",
+        "2679668074",
+        "2928801515",
+        "3039685878",
+        "3059245100",
+        "3143048671",
+        "3241100212",
+        "3275490205",
+        "3304631814",
+        "3347898730",
+        "3350027961"
+      ],
+      "free_text_ids_missing_from_augmented": [],
+      "descriptor_only_ids": [],
+      "descriptor_only_total": 0,
+      "sets_equal": true,
+      "orders_equal": true,
+      "augmented_is_superset": true,
+      "free_text_artifact": "searches/events/free-text-B2.json",
+      "augmented_artifact": "searches/events/augmented-B2.json",
+      "free_text_screenshots": {
+        "search_page": {
+          "path": "searches/events/free-text-B2.search-page.png",
+          "sha256": "897c59085d0186c48e841daf3a25aac789062e40d5596bff829e044c65b7f405"
+        },
+        "results_page": {
+          "path": "searches/events/free-text-B2.results-page.png",
+          "sha256": "1bfb67ba6e228090ea68b7f0e7677ff33a31d072d0f83cdf5093f91aaebc35ed"
+        }
+      },
+      "augmented_screenshots": {
+        "search_page": {
+          "path": "searches/events/augmented-B2.search-page.png",
+          "sha256": "609424c97416097d496222304385680acf8cc374426187220ab864975c0479e9"
+        },
+        "results_page": {
+          "path": "searches/events/augmented-B2.results-page.png",
+          "sha256": "298b502fe59815042fbd2008aa703d72bac5c4ad6e7747cb97117bd0938929d0"
+        }
+      }
+    },
+    "BG1": {
+      "free_text_total": 1,
+      "augmented_total": 1,
+      "free_text_ids_in_source_order": [
+        "3304631814"
+      ],
+      "augmented_ids_in_source_order": [
+        "3304631814"
+      ],
+      "free_text_ids_missing_from_augmented": [],
+      "descriptor_only_ids": [],
+      "descriptor_only_total": 0,
+      "sets_equal": true,
+      "orders_equal": true,
+      "augmented_is_superset": true,
+      "free_text_artifact": "searches/events/free-text-BG1.json",
+      "augmented_artifact": "searches/events/augmented-BG1.json",
+      "free_text_screenshots": {
+        "search_page": {
+          "path": "searches/events/free-text-BG1.search-page.png",
+          "sha256": "3cd7923de601a3872a37b72685100f115324fcc4f61e6e1c60fedfb203edb89b"
+        },
+        "results_page": {
+          "path": "searches/events/free-text-BG1.results-page.png",
+          "sha256": "f5530d32402628b4e028c1d89ccc54a05876fd114180d7be04f347b3531038eb"
+        }
+      },
+      "augmented_screenshots": {
+        "search_page": {
+          "path": "searches/events/augmented-BG1.search-page.png",
+          "sha256": "42413af7bd09cdf71accc5b14e52bc18563c6294b766f678c1b883a6ed4685fa"
+        },
+        "results_page": {
+          "path": "searches/events/augmented-BG1.results-page.png",
+          "sha256": "d3ce38c4c40441ec11b5609eb7eda326e4a2aadf896221839f5bdaf383a4397c"
+        }
+      }
+    },
+    "BG2": {
+      "free_text_total": 3,
+      "augmented_total": 3,
+      "free_text_ids_in_source_order": [
+        "2167862193",
+        "2301892987",
+        "3350027961"
+      ],
+      "augmented_ids_in_source_order": [
+        "2167862193",
+        "2301892987",
+        "3350027961"
+      ],
+      "free_text_ids_missing_from_augmented": [],
+      "descriptor_only_ids": [],
+      "descriptor_only_total": 0,
+      "sets_equal": true,
+      "orders_equal": true,
+      "augmented_is_superset": true,
+      "free_text_artifact": "searches/events/free-text-BG2.json",
+      "augmented_artifact": "searches/events/augmented-BG2.json",
+      "free_text_screenshots": {
+        "search_page": {
+          "path": "searches/events/free-text-BG2.search-page.png",
+          "sha256": "676ab645c2e38255a088134a21a43185dae62cc2be767facf21d283ce85bc9f6"
+        },
+        "results_page": {
+          "path": "searches/events/free-text-BG2.results-page.png",
+          "sha256": "7dd9f59a5c53bea9b0aa6ffa08e090b7c6a1a443234986b2f3d849e50e07ed96"
+        }
+      },
+      "augmented_screenshots": {
+        "search_page": {
+          "path": "searches/events/augmented-BG2.search-page.png",
+          "sha256": "f7e3c5cb1c7dd5def997b1710aff927140aff14167ecefa8133dcbe3ba98e8af"
+        },
+        "results_page": {
+          "path": "searches/events/augmented-BG2.results-page.png",
+          "sha256": "c69408a7a003808eecd91884c39ff61016378f96231164e6ea0538b6f6f3b01c"
+        }
+      }
+    },
+    "BC1": {
+      "free_text_total": 3,
+      "augmented_total": 3,
+      "free_text_ids_in_source_order": [
+        "2050565383",
+        "3039685878",
+        "3350027961"
+      ],
+      "augmented_ids_in_source_order": [
+        "2050565383",
+        "3039685878",
+        "3350027961"
+      ],
+      "free_text_ids_missing_from_augmented": [],
+      "descriptor_only_ids": [],
+      "descriptor_only_total": 0,
+      "sets_equal": true,
+      "orders_equal": true,
+      "augmented_is_superset": true,
+      "free_text_artifact": "searches/events/free-text-BC1.json",
+      "augmented_artifact": "searches/events/augmented-BC1.json",
+      "free_text_screenshots": {
+        "search_page": {
+          "path": "searches/events/free-text-BC1.search-page.png",
+          "sha256": "428baa8098596a91bb4c89293f0e06d046388a0632a373a58cdda18ea82ada83"
+        },
+        "results_page": {
+          "path": "searches/events/free-text-BC1.results-page.png",
+          "sha256": "25277a404c34f50dcff429061a78b0ebd491b558d468f8154f01be1de8197ff1"
+        }
+      },
+      "augmented_screenshots": {
+        "search_page": {
+          "path": "searches/events/augmented-BC1.search-page.png",
+          "sha256": "664b292b189312c405aa99483fcd3fa4495312b02ca2a869f5e63af6e2a0fe8d"
+        },
+        "results_page": {
+          "path": "searches/events/augmented-BC1.results-page.png",
+          "sha256": "d3ebb4e3dc0a13dc4d786868d164151c8fdc92c259019469fac83fa4c4075054"
+        }
+      }
+    },
+    "BT2": {
+      "free_text_total": 1,
+      "augmented_total": 1,
+      "free_text_ids_in_source_order": [
+        "3241100212"
+      ],
+      "augmented_ids_in_source_order": [
+        "3241100212"
+      ],
+      "free_text_ids_missing_from_augmented": [],
+      "descriptor_only_ids": [],
+      "descriptor_only_total": 0,
+      "sets_equal": true,
+      "orders_equal": true,
+      "augmented_is_superset": true,
+      "free_text_artifact": "searches/events/free-text-BT2.json",
+      "augmented_artifact": "searches/events/augmented-BT2.json",
+      "free_text_screenshots": {
+        "search_page": {
+          "path": "searches/events/free-text-BT2.search-page.png",
+          "sha256": "feda3e63f0e51dab62b5ccf234b8102be862ca83c97c5591e0104ca2a8c5eb1b"
+        },
+        "results_page": {
+          "path": "searches/events/free-text-BT2.results-page.png",
+          "sha256": "4f1bc28897edfeb9e90fe7f6addd20dc0e0a576547c6bcadaee9e83cc25d04bb"
+        }
+      },
+      "augmented_screenshots": {
+        "search_page": {
+          "path": "searches/events/augmented-BT2.search-page.png",
+          "sha256": "b290f107463af223e2eb75ce4d7d7bc7d0ffd7508e9603822da1f8a9b3055041"
+        },
+        "results_page": {
+          "path": "searches/events/augmented-BT2.results-page.png",
+          "sha256": "dd023878ab762c4f9b42190c68c40b6f07e6b96e11c7866b6d26f443bab45a09"
+        }
+      }
+    }
+  },
+  "union_comparison": {
+    "free_text_distinct_ids": 29,
+    "augmented_distinct_ids": 29,
+    "free_text_ids_in_first_seen_schedule_order": [
+      "2838438016",
+      "2166237827",
+      "3094909990",
+      "3347898730",
+      "1418024583",
+      "1716333147",
+      "2838439210",
+      "2050565383",
+      "2838437962",
+      "2838438905",
+      "2436411986",
+      "2796603206",
+      "2459205256",
+      "2697136573",
+      "2828592607",
+      "3039685878",
+      "3213679310",
+      "3241100212",
+      "3244643407",
+      "3291109676",
+      "3304631814",
+      "3350027961",
+      "2679668074",
+      "2928801515",
+      "3059245100",
+      "3143048671",
+      "3275490205",
+      "2167862193",
+      "2301892987"
+    ],
+    "augmented_ids_in_first_seen_schedule_order": [
+      "2838438016",
+      "2166237827",
+      "3094909990",
+      "3347898730",
+      "1418024583",
+      "1716333147",
+      "2838439210",
+      "2050565383",
+      "2838437962",
+      "2838438905",
+      "2436411986",
+      "2796603206",
+      "2459205256",
+      "2697136573",
+      "2828592607",
+      "3039685878",
+      "3213679310",
+      "3241100212",
+      "3244643407",
+      "3291109676",
+      "3304631814",
+      "3350027961",
+      "2679668074",
+      "2928801515",
+      "3059245100",
+      "3143048671",
+      "3275490205",
+      "2167862193",
+      "2301892987"
+    ],
+    "free_text_ids_missing_from_augmented": [],
+    "descriptor_only_ids": [],
+    "descriptor_only_total": 0,
+    "sets_equal": true
+  },
+  "descriptor_only_records": [],
+  "review_required": false,
+  "interpretation": "The validated descriptor constructions added no record to any partition."
+}

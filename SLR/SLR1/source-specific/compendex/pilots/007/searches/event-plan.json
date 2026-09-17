@@ -1,0 +1,416 @@
+{
+  "schema_version": "engineering-village-readiness-pilot-plan/v1",
+  "pilot": "007",
+  "source": "Compendex with a retained paired Inspec projection",
+  "platform": "Elsevier Engineering Village",
+  "created_at_utc": "2026-09-02T17:00:56.845989Z",
+  "repository_head_at_predeclaration": "99174740bcaac8b1fd9e52d2c84a0e899e3c850e",
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "objective": "Run one consolidated readiness pilot over all nine current Boolean partitions with the approved Compendex F(P) wildcard translation, no proximity, strict paired Compendex and Inspec capture, and both mandatory adapter v16 screenshots. Confirm current B2 and the changed BG1, BG2, BC1, and BT2 definitions before any final search.",
+  "historical_gaps": {
+    "pilot003": {
+      "B2": "explicit null strict-capture failure",
+      "changed_definitions_not_current": [
+        "BG1",
+        "BG2",
+        "BC1",
+        "BT2"
+      ]
+    },
+    "pilot006": {
+      "outcome": "A1, A2, A3, and B1 completed. Current B2 then stopped on one unverified next-page transition, so the predeclared stop rule left the consolidated run incomplete.",
+      "failure_artifact": "SLR/SLR1/source-specific/compendex/pilots/006/searches/cells/B2.NON_MERGEABLE_FAILURE.json",
+      "failure_artifact_sha256": "57dc00dffd3d3113ea5be2bd5af6a6346189436a6b1a491ff01f2c4edad106fe",
+      "run_receipt": "SLR/SLR1/source-specific/compendex/pilots/006/searches/run-receipt.json",
+      "run_receipt_sha256": "6ff634d70ddf47e5ac2c42a7de401afd834edc64a052bff9d061f252dbb7733b"
+    },
+    "source_events_reused": false,
+    "interpretation": "Pilots 003 and 006 remain immutable. Pilot 007 starts every partition again as a fresh source event. The critical gaps run first, and all nine events must still pass."
+  },
+  "scope": {
+    "decision_target": "Compendex readiness for a later final search",
+    "paired_event": true,
+    "inspec_projection": "Retain and validate the Inspec records separately because the fixed paired route selects both databases. This Compendex pilot does not approve an Inspec wildcard translation or create an Inspec final search.",
+    "final_search": false
+  },
+  "date_window": {
+    "control": "Published",
+    "start_year": 2011,
+    "end_year": 2026,
+    "inclusive": true,
+    "source_precision": "year",
+    "common_evidence_cutoff": "TBD",
+    "cutoff_handling": "Screen records in the cutoff year against the later exact common cutoff."
+  },
+  "controls": {
+    "database_selection": [
+      "compendex",
+      "inspec"
+    ],
+    "database_mask": "3",
+    "search_mode": "Expert",
+    "field": "ALL",
+    "language_clause": "(English WN LA)",
+    "autostemming": "off",
+    "sort": "Date (Oldest)",
+    "page_size": 25,
+    "document_type": null,
+    "open_access": null,
+    "controlled_vocabulary": null,
+    "strict_passes_per_event": 2,
+    "native_ris": "required for every retained record in each strict pass",
+    "raw_ris_persistence": false,
+    "automatic_screenshots": {
+      "required": true,
+      "opt_out": false,
+      "capture_pass": "pass-1",
+      "search_page_suffix": ".search-page.png",
+      "results_page_suffix": ".results-page.png",
+      "same_directory_as_json": true,
+      "schema_version": "engineering-village-automatic-screenshots/v1"
+    }
+  },
+  "translation": {
+    "literal": "(\"ordinary token or ordered phrase\" WN ALL)",
+    "boolean": "uppercase AND and OR with explicit parentheses",
+    "proximity": false,
+    "pair_expansion": false,
+    "population_block": {
+      "status": "approved for all nine Compendex schedule entries",
+      "wildcard_atoms": [
+        "(CubeSat* WN ALL)",
+        "(nanosat* WN ALL)",
+        "(SmallSat* WN ALL)"
+      ],
+      "replaced_literal_count": 8,
+      "preserved_other_population_terms": true
+    },
+    "compound_definitions": {
+      "F(G_model)": "F(G_model_fixed) OR F(G_mission_exact) OR (F(G_mission) AND F(M_B))",
+      "F(G_structure)": "F(G_structure_fixed) OR F(G_product_exact) OR F(G_variation) OR (F(G_product) AND F(M_B))",
+      "F(C1)": "F(C1_fixed) OR F(G_DSL)",
+      "F(T_precise)": "ordinary union of all 32 precise tailoring terms"
+    },
+    "schedule": {
+      "A1": "F(P) AND F(E_H) AND F(M_H)",
+      "A2": "F(P) AND F(E_F) AND (F(M_H) OR F(M_B))",
+      "A3": "F(P) AND F(E_H) AND F(M_B)",
+      "B1": "F(P) AND F(M_H)",
+      "B2": "F(P) AND F(M_B) AND F(R)",
+      "BG1": "F(P) AND F(G_model)",
+      "BG2": "F(P) AND F(G_structure)",
+      "BC1": "F(P) AND F(C1)",
+      "BT2": "F(P) AND F(M_B) AND F(T_precise)"
+    }
+  },
+  "critical_live_checks": {
+    "B2": "Must complete a fresh strict paired event. A null, partial, inferred, or reused result fails readiness.",
+    "changed_partitions": {
+      "BG1": {
+        "boolean_form": "F(P) AND F(G_model)",
+        "must_complete_live": true
+      },
+      "BG2": {
+        "boolean_form": "F(P) AND F(G_structure)",
+        "must_complete_live": true
+      },
+      "BC1": {
+        "boolean_form": "F(P) AND F(C1)",
+        "must_complete_live": true
+      },
+      "BT2": {
+        "boolean_form": "F(P) AND F(M_B) AND F(T_precise)",
+        "must_complete_live": true
+      }
+    }
+  },
+  "acceptance_checks": [
+    "All nine fresh events complete two independent source-exhaustive paired passes.",
+    "Every event uses exactly three approved trailing population wildcards and no proximity operator.",
+    "Every event preserves exact query, database, Published-year, language, autostemming, sort, page-size, and no-facet readback.",
+    "Every retained record reconciles against native RIS in both strict passes and has one database-scoped stable accession.",
+    "Compendex and Inspec totals, accessions, and unions remain separate.",
+    "Every event retains a configured-search screenshot and verified-first-results screenshot whose hashes and dimensions match the JSON receipt.",
+    "B2 completes with a non-null strict result.",
+    "BG1, BG2, BC1, and BT2 each complete with the current compound definition.",
+    "No event or union is treated as a final search."
+  ],
+  "execution_order": {
+    "partitions": [
+      "B2",
+      "BG1",
+      "BG2",
+      "BC1",
+      "BT2",
+      "A1",
+      "A2",
+      "A3",
+      "B1"
+    ],
+    "basis": "Run B2 and the four changed definitions before repeating the partitions that already completed in Pilot 006. This ordering changes no query or acceptance rule.",
+    "page_delay_seconds": 2.0,
+    "default_inter_event_delay_seconds": 10.0
+  },
+  "stop_rules": [
+    "Run events once in the predeclared critical-first order.",
+    "Stop after the first source, strict-capture, screenshot, control, or artifact failure.",
+    "Do not retry, narrow, infer a count, resume a pass, or reuse a prior source result.",
+    "Retain a create-only non-mergeable failure receipt and any screenshots already captured."
+  ],
+  "adapter": {
+    "id": "engineering_village_search",
+    "version": "16",
+    "entrypoint": "search_compendex_inspec.py",
+    "entrypoint_sha256": "c8c38f8751e9b51e03dff8b1a0386b95997f4bbdbae70a3511a319ffe458268a",
+    "implementation": "_engineering_village_search.py",
+    "implementation_sha256": "382426551fcbf0ce27b1a53ef5080dfd83b02e338e7d7ba469d688887d1529a3",
+    "execution_route": "strict paired Python API with mandatory screenshot paths"
+  },
+  "term_snapshot": {
+    "path": "SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot007/queries.py",
+    "sha256": "7ab4c27fe49bd1bfa9c45600a669896b507fc08055045128b6212a6ee407193f",
+    "term_counts": {
+      "P": 26,
+      "E_H": 38,
+      "E_F": 37,
+      "M_H": 54,
+      "M_B": 31,
+      "R": 55,
+      "G_model_fixed": 14,
+      "G_mission": 4,
+      "G_mission_exact": 16,
+      "G_structure_fixed": 8,
+      "G_product": 4,
+      "G_product_exact": 8,
+      "G_variation": 2,
+      "C1_fixed": 26,
+      "G_DSL": 4,
+      "T_precise": 32
+    }
+  },
+  "source_affecting_scripts": {
+    "SLR/SLR1/source-specific/compendex/scripts/compendex_pilot007/queries.py": "52417ad4d7633ddbe2aadf1b5d461d5c1a3c7e674ce6d6aa5c4a25525dfccf3c",
+    "SLR/SLR1/source-specific/compendex/scripts/compendex_pilot007/build_plan.py": "ab0d05a8f0cae5daa4b467a83e3171ba10a7c59dc794031235f759bbe8d4f05f",
+    "SLR/SLR1/source-specific/compendex/scripts/compendex_pilot007/run_pilot.py": "6530199a5096f746c984ba6cf2e54c157ff22df3dac83c97bb2a433642c2128c"
+  },
+  "events": [
+    {
+      "event_id": "B2",
+      "partition_id": "B2",
+      "boolean_form": "F(P) AND F(M_B) AND F(R)",
+      "changed_definition_since_pilot003": false,
+      "purpose": "Strict paired two-pass complete current B2 readiness capture with the approved Compendex population wildcard block.",
+      "query": "((((CubeSat* WN ALL) OR (\"cube sat\" WN ALL) OR (\"cube sats\" WN ALL) OR (\"cube-sat\" WN ALL) OR (\"cube-sats\" WN ALL) OR (\"cube satellite\" WN ALL) OR (\"cube satellites\" WN ALL) OR (nanosat* WN ALL) OR (\"nano-sat\" WN ALL) OR (\"nano-sats\" WN ALL) OR (\"nano sat\" WN ALL) OR (\"nano sats\" WN ALL) OR (\"nano-satellite\" WN ALL) OR (\"nano-satellites\" WN ALL) OR (\"nano satellite\" WN ALL) OR (\"nano satellites\" WN ALL) OR (SmallSat* WN ALL) OR (\"small satellite\" WN ALL) OR (\"small satellites\" WN ALL) OR (\"small sat\" WN ALL) OR (\"small sats\" WN ALL)) AND ((\"system model\" WN ALL) OR (\"systems model\" WN ALL) OR (\"system modeling\" WN ALL) OR (\"systems modeling\" WN ALL) OR (\"system modelling\" WN ALL) OR (\"systems modelling\" WN ALL) OR (\"reference model\" WN ALL) OR (\"reference models\" WN ALL) OR (\"digital engineering\" WN ALL) OR (\"object-oriented systems model\" WN ALL) OR (\"object-oriented systems models\" WN ALL) OR (\"model-based system design\" WN ALL) OR (\"model based system design\" WN ALL) OR (\"model-based systems design\" WN ALL) OR (\"model based systems design\" WN ALL) OR (\"system architecture model\" WN ALL) OR (\"system architecture models\" WN ALL) OR (\"systems architecture model\" WN ALL) OR (\"systems architecture models\" WN ALL) OR (\"integrated system model\" WN ALL) OR (\"integrated system models\" WN ALL) OR (\"integrated systems model\" WN ALL) OR (\"integrated systems models\" WN ALL) OR (\"system-level model\" WN ALL) OR (\"system-level models\" WN ALL) OR (\"system level model\" WN ALL) OR (\"system level models\" WN ALL) OR (\"digital thread\" WN ALL) OR (\"digital threads\" WN ALL) OR (\"digital twin\" WN ALL) OR (\"digital twins\" WN ALL)) AND ((\"requirement\" WN ALL) OR (\"requirements\" WN ALL) OR (\"function\" WN ALL) OR (\"functions\" WN ALL) OR (\"functional\" WN ALL) OR (\"behavior\" WN ALL) OR (\"behaviors\" WN ALL) OR (\"behaviour\" WN ALL) OR (\"behaviours\" WN ALL) OR (\"behavioral\" WN ALL) OR (\"behavioural\" WN ALL) OR (\"architecture\" WN ALL) OR (\"architectures\" WN ALL) OR (\"architectural\" WN ALL) OR (\"interface\" WN ALL) OR (\"interfaces\" WN ALL) OR (\"traceability\" WN ALL) OR (\"trace\" WN ALL) OR (\"traceable\" WN ALL) OR (\"traced\" WN ALL) OR (\"allocation\" WN ALL) OR (\"allocate\" WN ALL) OR (\"allocated\" WN ALL) OR (\"constraint\" WN ALL) OR (\"constraints\" WN ALL) OR (\"parametric\" WN ALL) OR (\"parametrics\" WN ALL) OR (\"analysis\" WN ALL) OR (\"analyses\" WN ALL) OR (\"design\" WN ALL) OR (\"designs\" WN ALL) OR (\"designed\" WN ALL) OR (\"designing\" WN ALL) OR (\"decision\" WN ALL) OR (\"decisions\" WN ALL) OR (\"decision-making\" WN ALL) OR (\"decision making\" WN ALL) OR (\"trade study\" WN ALL) OR (\"trade studies\" WN ALL) OR (\"trade-off\" WN ALL) OR (\"trade-offs\" WN ALL) OR (\"tradeoff\" WN ALL) OR (\"tradeoffs\" WN ALL) OR (\"verification\" WN ALL) OR (\"verifications\" WN ALL) OR (\"verify\" WN ALL) OR (\"verifies\" WN ALL) OR (\"verified\" WN ALL) OR (\"verifying\" WN ALL) OR (\"validation\" WN ALL) OR (\"validations\" WN ALL) OR (\"validate\" WN ALL) OR (\"validates\" WN ALL) OR (\"validated\" WN ALL) OR (\"validating\" WN ALL))) AND (English WN LA))",
+      "query_sha256": "0fc0e2a709aa051491afb974d7bec016acc056e4d16257c1e9ad1896b4ad748f",
+      "query_characters": 3016,
+      "wildcard_count": 3,
+      "year_start": 2011,
+      "year_end": 2026,
+      "limit": 5000,
+      "max_pages": 200,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 2.0,
+      "require_complete": true,
+      "output": "cells/B2.json",
+      "screenshot_outputs": [
+        "cells/B2.search-page.png",
+        "cells/B2.results-page.png"
+      ],
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BG1",
+      "partition_id": "BG1",
+      "boolean_form": "F(P) AND F(G_model)",
+      "changed_definition_since_pilot003": true,
+      "purpose": "Strict paired two-pass complete current BG1 readiness capture with the approved Compendex population wildcard block.",
+      "query": "((((CubeSat* WN ALL) OR (\"cube sat\" WN ALL) OR (\"cube sats\" WN ALL) OR (\"cube-sat\" WN ALL) OR (\"cube-sats\" WN ALL) OR (\"cube satellite\" WN ALL) OR (\"cube satellites\" WN ALL) OR (nanosat* WN ALL) OR (\"nano-sat\" WN ALL) OR (\"nano-sats\" WN ALL) OR (\"nano sat\" WN ALL) OR (\"nano sats\" WN ALL) OR (\"nano-satellite\" WN ALL) OR (\"nano-satellites\" WN ALL) OR (\"nano satellite\" WN ALL) OR (\"nano satellites\" WN ALL) OR (SmallSat* WN ALL) OR (\"small satellite\" WN ALL) OR (\"small satellites\" WN ALL) OR (\"small sat\" WN ALL) OR (\"small sats\" WN ALL)) AND (((\"generic model\" WN ALL) OR (\"generic models\" WN ALL) OR (\"generic system model\" WN ALL) OR (\"generic system models\" WN ALL) OR (\"reusable model\" WN ALL) OR (\"reusable models\" WN ALL) OR (\"reusable system model\" WN ALL) OR (\"reusable system models\" WN ALL) OR (\"configurable model\" WN ALL) OR (\"configurable models\" WN ALL) OR (\"configurable system model\" WN ALL) OR (\"configurable system models\" WN ALL) OR (\"model template\" WN ALL) OR (\"model templates\" WN ALL)) OR ((\"mission-agnostic model\" WN ALL) OR (\"mission-agnostic models\" WN ALL) OR (\"mission-agnostic architecture\" WN ALL) OR (\"mission-agnostic architectures\" WN ALL) OR (\"mission agnostic model\" WN ALL) OR (\"mission agnostic models\" WN ALL) OR (\"mission agnostic architecture\" WN ALL) OR (\"mission agnostic architectures\" WN ALL) OR (\"mission-independent model\" WN ALL) OR (\"mission-independent models\" WN ALL) OR (\"mission-independent architecture\" WN ALL) OR (\"mission-independent architectures\" WN ALL) OR (\"mission independent model\" WN ALL) OR (\"mission independent models\" WN ALL) OR (\"mission independent architecture\" WN ALL) OR (\"mission independent architectures\" WN ALL)) OR (((\"mission-agnostic\" WN ALL) OR (\"mission agnostic\" WN ALL) OR (\"mission-independent\" WN ALL) OR (\"mission independent\" WN ALL)) AND ((\"system model\" WN ALL) OR (\"systems model\" WN ALL) OR (\"system modeling\" WN ALL) OR (\"systems modeling\" WN ALL) OR (\"system modelling\" WN ALL) OR (\"systems modelling\" WN ALL) OR (\"reference model\" WN ALL) OR (\"reference models\" WN ALL) OR (\"digital engineering\" WN ALL) OR (\"object-oriented systems model\" WN ALL) OR (\"object-oriented systems models\" WN ALL) OR (\"model-based system design\" WN ALL) OR (\"model based system design\" WN ALL) OR (\"model-based systems design\" WN ALL) OR (\"model based systems design\" WN ALL) OR (\"system architecture model\" WN ALL) OR (\"system architecture models\" WN ALL) OR (\"systems architecture model\" WN ALL) OR (\"systems architecture models\" WN ALL) OR (\"integrated system model\" WN ALL) OR (\"integrated system models\" WN ALL) OR (\"integrated systems model\" WN ALL) OR (\"integrated systems models\" WN ALL) OR (\"system-level model\" WN ALL) OR (\"system-level models\" WN ALL) OR (\"system level model\" WN ALL) OR (\"system level models\" WN ALL) OR (\"digital thread\" WN ALL) OR (\"digital threads\" WN ALL) OR (\"digital twin\" WN ALL) OR (\"digital twins\" WN ALL))))) AND (English WN LA))",
+      "query_sha256": "2deba5bc9ff35ff2abfa9e7cc2b83061aec237651f680921032b438cf99dcbe0",
+      "query_characters": 2945,
+      "wildcard_count": 3,
+      "year_start": 2011,
+      "year_end": 2026,
+      "limit": 5000,
+      "max_pages": 200,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 2.0,
+      "require_complete": true,
+      "output": "cells/BG1.json",
+      "screenshot_outputs": [
+        "cells/BG1.search-page.png",
+        "cells/BG1.results-page.png"
+      ],
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BG2",
+      "partition_id": "BG2",
+      "boolean_form": "F(P) AND F(G_structure)",
+      "changed_definition_since_pilot003": true,
+      "purpose": "Strict paired two-pass complete current BG2 readiness capture with the approved Compendex population wildcard block.",
+      "query": "((((CubeSat* WN ALL) OR (\"cube sat\" WN ALL) OR (\"cube sats\" WN ALL) OR (\"cube-sat\" WN ALL) OR (\"cube-sats\" WN ALL) OR (\"cube satellite\" WN ALL) OR (\"cube satellites\" WN ALL) OR (nanosat* WN ALL) OR (\"nano-sat\" WN ALL) OR (\"nano-sats\" WN ALL) OR (\"nano sat\" WN ALL) OR (\"nano sats\" WN ALL) OR (\"nano-satellite\" WN ALL) OR (\"nano-satellites\" WN ALL) OR (\"nano satellite\" WN ALL) OR (\"nano satellites\" WN ALL) OR (SmallSat* WN ALL) OR (\"small satellite\" WN ALL) OR (\"small satellites\" WN ALL) OR (\"small sat\" WN ALL) OR (\"small sats\" WN ALL)) AND (((\"reference architecture\" WN ALL) OR (\"reference architectures\" WN ALL) OR (\"domain model\" WN ALL) OR (\"domain models\" WN ALL) OR (\"metamodel\" WN ALL) OR (\"metamodels\" WN ALL) OR (\"meta-model\" WN ALL) OR (\"meta-models\" WN ALL)) OR ((\"product-line model\" WN ALL) OR (\"product-line models\" WN ALL) OR (\"product line model\" WN ALL) OR (\"product line models\" WN ALL) OR (\"product-family model\" WN ALL) OR (\"product-family models\" WN ALL) OR (\"product family model\" WN ALL) OR (\"product family models\" WN ALL)) OR ((\"variation point\" WN ALL) OR (\"variation points\" WN ALL)) OR (((\"product-line\" WN ALL) OR (\"product line\" WN ALL) OR (\"product-family\" WN ALL) OR (\"product family\" WN ALL)) AND ((\"system model\" WN ALL) OR (\"systems model\" WN ALL) OR (\"system modeling\" WN ALL) OR (\"systems modeling\" WN ALL) OR (\"system modelling\" WN ALL) OR (\"systems modelling\" WN ALL) OR (\"reference model\" WN ALL) OR (\"reference models\" WN ALL) OR (\"digital engineering\" WN ALL) OR (\"object-oriented systems model\" WN ALL) OR (\"object-oriented systems models\" WN ALL) OR (\"model-based system design\" WN ALL) OR (\"model based system design\" WN ALL) OR (\"model-based systems design\" WN ALL) OR (\"model based systems design\" WN ALL) OR (\"system architecture model\" WN ALL) OR (\"system architecture models\" WN ALL) OR (\"systems architecture model\" WN ALL) OR (\"systems architecture models\" WN ALL) OR (\"integrated system model\" WN ALL) OR (\"integrated system models\" WN ALL) OR (\"integrated systems model\" WN ALL) OR (\"integrated systems models\" WN ALL) OR (\"system-level model\" WN ALL) OR (\"system-level models\" WN ALL) OR (\"system level model\" WN ALL) OR (\"system level models\" WN ALL) OR (\"digital thread\" WN ALL) OR (\"digital threads\" WN ALL) OR (\"digital twin\" WN ALL) OR (\"digital twins\" WN ALL))))) AND (English WN LA))",
+      "query_sha256": "943fbbeaa7342e4ce76d0b7c6f1b36f05c797e29630ae0fcdaf8c70f8f1abc81",
+      "query_characters": 2349,
+      "wildcard_count": 3,
+      "year_start": 2011,
+      "year_end": 2026,
+      "limit": 5000,
+      "max_pages": 200,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 2.0,
+      "require_complete": true,
+      "output": "cells/BG2.json",
+      "screenshot_outputs": [
+        "cells/BG2.search-page.png",
+        "cells/BG2.results-page.png"
+      ],
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BC1",
+      "partition_id": "BC1",
+      "boolean_form": "F(P) AND F(C1)",
+      "changed_definition_since_pilot003": true,
+      "purpose": "Strict paired two-pass complete current BC1 readiness capture with the approved Compendex population wildcard block.",
+      "query": "((((CubeSat* WN ALL) OR (\"cube sat\" WN ALL) OR (\"cube sats\" WN ALL) OR (\"cube-sat\" WN ALL) OR (\"cube-sats\" WN ALL) OR (\"cube satellite\" WN ALL) OR (\"cube satellites\" WN ALL) OR (nanosat* WN ALL) OR (\"nano-sat\" WN ALL) OR (\"nano-sats\" WN ALL) OR (\"nano sat\" WN ALL) OR (\"nano sats\" WN ALL) OR (\"nano-satellite\" WN ALL) OR (\"nano-satellites\" WN ALL) OR (\"nano satellite\" WN ALL) OR (\"nano satellites\" WN ALL) OR (SmallSat* WN ALL) OR (\"small satellite\" WN ALL) OR (\"small satellites\" WN ALL) OR (\"small sat\" WN ALL) OR (\"small sats\" WN ALL)) AND (((\"reference model\" WN ALL) OR (\"reference models\" WN ALL) OR (\"system reference model\" WN ALL) OR (\"system reference models\" WN ALL) OR (\"model library\" WN ALL) OR (\"model libraries\" WN ALL) OR (\"system model library\" WN ALL) OR (\"system model libraries\" WN ALL) OR (\"model pattern\" WN ALL) OR (\"model patterns\" WN ALL) OR (\"modeling pattern\" WN ALL) OR (\"modeling patterns\" WN ALL) OR (\"modelling pattern\" WN ALL) OR (\"modelling patterns\" WN ALL) OR (\"system model pattern\" WN ALL) OR (\"system model patterns\" WN ALL) OR (\"systems model pattern\" WN ALL) OR (\"systems model patterns\" WN ALL) OR (\"model profile\" WN ALL) OR (\"model profiles\" WN ALL) OR (\"system model profile\" WN ALL) OR (\"system model profiles\" WN ALL) OR (\"systems model profile\" WN ALL) OR (\"systems model profiles\" WN ALL) OR (\"SysML profile\" WN ALL) OR (\"SysML profiles\" WN ALL)) OR ((\"domain-specific modeling language\" WN ALL) OR (\"domain specific modeling language\" WN ALL) OR (\"domain-specific modelling language\" WN ALL) OR (\"domain specific modelling language\" WN ALL)))) AND (English WN LA))",
+      "query_sha256": "e8ec0e16fc7362c1a2e622590de6d680a490ae42b3785987b13dddd355618b1f",
+      "query_characters": 1615,
+      "wildcard_count": 3,
+      "year_start": 2011,
+      "year_end": 2026,
+      "limit": 5000,
+      "max_pages": 200,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 2.0,
+      "require_complete": true,
+      "output": "cells/BC1.json",
+      "screenshot_outputs": [
+        "cells/BC1.search-page.png",
+        "cells/BC1.results-page.png"
+      ],
+      "do_not_merge": true
+    },
+    {
+      "event_id": "BT2",
+      "partition_id": "BT2",
+      "boolean_form": "F(P) AND F(M_B) AND F(T_precise)",
+      "changed_definition_since_pilot003": true,
+      "purpose": "Strict paired two-pass complete current BT2 readiness capture with the approved Compendex population wildcard block.",
+      "query": "((((CubeSat* WN ALL) OR (\"cube sat\" WN ALL) OR (\"cube sats\" WN ALL) OR (\"cube-sat\" WN ALL) OR (\"cube-sats\" WN ALL) OR (\"cube satellite\" WN ALL) OR (\"cube satellites\" WN ALL) OR (nanosat* WN ALL) OR (\"nano-sat\" WN ALL) OR (\"nano-sats\" WN ALL) OR (\"nano sat\" WN ALL) OR (\"nano sats\" WN ALL) OR (\"nano-satellite\" WN ALL) OR (\"nano-satellites\" WN ALL) OR (\"nano satellite\" WN ALL) OR (\"nano satellites\" WN ALL) OR (SmallSat* WN ALL) OR (\"small satellite\" WN ALL) OR (\"small satellites\" WN ALL) OR (\"small sat\" WN ALL) OR (\"small sats\" WN ALL)) AND ((\"system model\" WN ALL) OR (\"systems model\" WN ALL) OR (\"system modeling\" WN ALL) OR (\"systems modeling\" WN ALL) OR (\"system modelling\" WN ALL) OR (\"systems modelling\" WN ALL) OR (\"reference model\" WN ALL) OR (\"reference models\" WN ALL) OR (\"digital engineering\" WN ALL) OR (\"object-oriented systems model\" WN ALL) OR (\"object-oriented systems models\" WN ALL) OR (\"model-based system design\" WN ALL) OR (\"model based system design\" WN ALL) OR (\"model-based systems design\" WN ALL) OR (\"model based systems design\" WN ALL) OR (\"system architecture model\" WN ALL) OR (\"system architecture models\" WN ALL) OR (\"systems architecture model\" WN ALL) OR (\"systems architecture models\" WN ALL) OR (\"integrated system model\" WN ALL) OR (\"integrated system models\" WN ALL) OR (\"integrated systems model\" WN ALL) OR (\"integrated systems models\" WN ALL) OR (\"system-level model\" WN ALL) OR (\"system-level models\" WN ALL) OR (\"system level model\" WN ALL) OR (\"system level models\" WN ALL) OR (\"digital thread\" WN ALL) OR (\"digital threads\" WN ALL) OR (\"digital twin\" WN ALL) OR (\"digital twins\" WN ALL)) AND ((\"tailor\" WN ALL) OR (\"tailors\" WN ALL) OR (\"tailored\" WN ALL) OR (\"tailoring\" WN ALL) OR (\"customize\" WN ALL) OR (\"customizes\" WN ALL) OR (\"customized\" WN ALL) OR (\"customizing\" WN ALL) OR (\"customization\" WN ALL) OR (\"customise\" WN ALL) OR (\"customises\" WN ALL) OR (\"customised\" WN ALL) OR (\"customising\" WN ALL) OR (\"customisation\" WN ALL) OR (\"parameterize\" WN ALL) OR (\"parameterizes\" WN ALL) OR (\"parameterized\" WN ALL) OR (\"parameterizing\" WN ALL) OR (\"parameterization\" WN ALL) OR (\"parameterise\" WN ALL) OR (\"parameterises\" WN ALL) OR (\"parameterised\" WN ALL) OR (\"parameterising\" WN ALL) OR (\"parameterisation\" WN ALL) OR (\"instantiate\" WN ALL) OR (\"instantiates\" WN ALL) OR (\"instantiated\" WN ALL) OR (\"instantiating\" WN ALL) OR (\"instantiation\" WN ALL) OR (\"variability\" WN ALL) OR (\"variation point\" WN ALL) OR (\"variation points\" WN ALL))) AND (English WN LA))",
+      "query_sha256": "fb79b5604f1ea5d244b0a56332964b697828a6222d5fed527f51fcc534318357",
+      "query_characters": 2515,
+      "wildcard_count": 3,
+      "year_start": 2011,
+      "year_end": 2026,
+      "limit": 5000,
+      "max_pages": 200,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 2.0,
+      "require_complete": true,
+      "output": "cells/BT2.json",
+      "screenshot_outputs": [
+        "cells/BT2.search-page.png",
+        "cells/BT2.results-page.png"
+      ],
+      "do_not_merge": true
+    },
+    {
+      "event_id": "A1",
+      "partition_id": "A1",
+      "boolean_form": "F(P) AND F(E_H) AND F(M_H)",
+      "changed_definition_since_pilot003": false,
+      "purpose": "Strict paired two-pass complete current A1 readiness capture with the approved Compendex population wildcard block.",
+      "query": "((((CubeSat* WN ALL) OR (\"cube sat\" WN ALL) OR (\"cube sats\" WN ALL) OR (\"cube-sat\" WN ALL) OR (\"cube-sats\" WN ALL) OR (\"cube satellite\" WN ALL) OR (\"cube satellites\" WN ALL) OR (nanosat* WN ALL) OR (\"nano-sat\" WN ALL) OR (\"nano-sats\" WN ALL) OR (\"nano sat\" WN ALL) OR (\"nano sats\" WN ALL) OR (\"nano-satellite\" WN ALL) OR (\"nano-satellites\" WN ALL) OR (\"nano satellite\" WN ALL) OR (\"nano satellites\" WN ALL) OR (SmallSat* WN ALL) OR (\"small satellite\" WN ALL) OR (\"small satellites\" WN ALL) OR (\"small sat\" WN ALL) OR (\"small sats\" WN ALL)) AND ((\"electrical power system\" WN ALL) OR (\"electrical power systems\" WN ALL) OR (\"electric power system\" WN ALL) OR (\"electric power systems\" WN ALL) OR (\"electrical power subsystem\" WN ALL) OR (\"electrical power subsystems\" WN ALL) OR (\"electric power subsystem\" WN ALL) OR (\"electric power subsystems\" WN ALL) OR (\"electrical energy subsystem\" WN ALL) OR (\"electrical energy subsystems\" WN ALL) OR (\"EPS\" WN ALL) OR (\"EPSs\" WN ALL) OR (\"power subsystem\" WN ALL) OR (\"power subsystems\" WN ALL) OR (\"power system\" WN ALL) OR (\"power systems\" WN ALL) OR (\"spacecraft power system\" WN ALL) OR (\"spacecraft power systems\" WN ALL) OR (\"power supply\" WN ALL) OR (\"power supplies\" WN ALL) OR (\"power distribution unit\" WN ALL) OR (\"power distribution units\" WN ALL) OR (\"PDU\" WN ALL) OR (\"PDUs\" WN ALL) OR (\"power processing unit\" WN ALL) OR (\"power processing units\" WN ALL) OR (\"power control and distribution\" WN ALL) OR (\"power management and distribution\" WN ALL) OR (\"electrical architecture\" WN ALL) OR (\"electrical architectures\" WN ALL) OR (\"power architecture\" WN ALL) OR (\"power architectures\" WN ALL) OR (\"DC power bus\" WN ALL) OR (\"DC power buses\" WN ALL) OR (\"PCDU\" WN ALL) OR (\"PCDUs\" WN ALL) OR (\"PMAD\" WN ALL) OR (\"PMADs\" WN ALL)) AND ((\"model-based systems engineering\" WN ALL) OR (\"model based systems engineering\" WN ALL) OR (\"model-based system engineering\" WN ALL) OR (\"model based system engineering\" WN ALL) OR (\"model-driven systems engineering\" WN ALL) OR (\"model driven systems engineering\" WN ALL) OR (\"model-driven system engineering\" WN ALL) OR (\"model driven system engineering\" WN ALL) OR (\"model-centric systems engineering\" WN ALL) OR (\"model centric systems engineering\" WN ALL) OR (\"model-centric system engineering\" WN ALL) OR (\"model centric system engineering\" WN ALL) OR (\"MBSE\" WN ALL) OR (\"SysML\" WN ALL) OR (\"systems modeling language\" WN ALL) OR (\"systems modelling language\" WN ALL) OR (\"system modeling language\" WN ALL) OR (\"system modelling language\" WN ALL) OR (\"object-process methodology\" WN ALL) OR (\"object process methodology\" WN ALL) OR (\"OPM\" WN ALL) OR (\"object-oriented systems engineering method\" WN ALL) OR (\"object oriented systems engineering method\" WN ALL) OR (\"OOSEM\" WN ALL) OR (\"object-oriented systems engineering\" WN ALL) OR (\"object oriented systems engineering\" WN ALL) OR (\"Arcadia\" WN ALL) OR (\"Capella\" WN ALL) OR (\"model-based engineering\" WN ALL) OR (\"model based engineering\" WN ALL) OR (\"model-driven engineering\" WN ALL) OR (\"model driven engineering\" WN ALL) OR (\"model-based design\" WN ALL) OR (\"model based design\" WN ALL) OR (\"model-driven design\" WN ALL) OR (\"model driven design\" WN ALL) OR (\"MBE\" WN ALL) OR (\"MDE\" WN ALL) OR (\"MBD\" WN ALL) OR (\"MagicGrid\" WN ALL) OR (\"Harmony-SE\" WN ALL) OR (\"Harmony SE\" WN ALL) OR (\"RFLP\" WN ALL) OR (\"Cameo Systems Modeler\" WN ALL) OR (\"MagicDraw\" WN ALL) OR (\"IBM Engineering Systems Design Rhapsody\" WN ALL) OR (\"Rational Rhapsody\" WN ALL) OR (\"Vitech CORE\" WN ALL) OR (\"Vitech GENESYS\" WN ALL) OR (\"OpenMBEE\" WN ALL) OR (\"Enterprise Architect\" WN ALL) OR (\"MATLAB System Composer\" WN ALL) OR (\"System Composer\" WN ALL) OR (\"Modelio\" WN ALL))) AND (English WN LA))",
+      "query_sha256": "b4596970a6e23c039881b8cf5eed6505bd2f3a8212f07626aef130734c3c3064",
+      "query_characters": 3726,
+      "wildcard_count": 3,
+      "year_start": 2011,
+      "year_end": 2026,
+      "limit": 5000,
+      "max_pages": 200,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 2.0,
+      "require_complete": true,
+      "output": "cells/A1.json",
+      "screenshot_outputs": [
+        "cells/A1.search-page.png",
+        "cells/A1.results-page.png"
+      ],
+      "do_not_merge": true
+    },
+    {
+      "event_id": "A2",
+      "partition_id": "A2",
+      "boolean_form": "F(P) AND F(E_F) AND (F(M_H) OR F(M_B))",
+      "changed_definition_since_pilot003": false,
+      "purpose": "Strict paired two-pass complete current A2 readiness capture with the approved Compendex population wildcard block.",
+      "query": "((((CubeSat* WN ALL) OR (\"cube sat\" WN ALL) OR (\"cube sats\" WN ALL) OR (\"cube-sat\" WN ALL) OR (\"cube-sats\" WN ALL) OR (\"cube satellite\" WN ALL) OR (\"cube satellites\" WN ALL) OR (nanosat* WN ALL) OR (\"nano-sat\" WN ALL) OR (\"nano-sats\" WN ALL) OR (\"nano sat\" WN ALL) OR (\"nano sats\" WN ALL) OR (\"nano-satellite\" WN ALL) OR (\"nano-satellites\" WN ALL) OR (\"nano satellite\" WN ALL) OR (\"nano satellites\" WN ALL) OR (SmallSat* WN ALL) OR (\"small satellite\" WN ALL) OR (\"small satellites\" WN ALL) OR (\"small sat\" WN ALL) OR (\"small sats\" WN ALL)) AND ((\"power budget\" WN ALL) OR (\"power budgets\" WN ALL) OR (\"energy budget\" WN ALL) OR (\"energy budgets\" WN ALL) OR (\"energy balance\" WN ALL) OR (\"energy balances\" WN ALL) OR (\"power balance\" WN ALL) OR (\"power balances\" WN ALL) OR (\"power margin\" WN ALL) OR (\"power margins\" WN ALL) OR (\"power generation\" WN ALL) OR (\"photovoltaic generator\" WN ALL) OR (\"photovoltaic generators\" WN ALL) OR (\"solar array\" WN ALL) OR (\"solar arrays\" WN ALL) OR (\"solar panel\" WN ALL) OR (\"solar panels\" WN ALL) OR (\"battery\" WN ALL) OR (\"batteries\" WN ALL) OR (\"battery management\" WN ALL) OR (\"state of charge\" WN ALL) OR (\"states of charge\" WN ALL) OR (\"energy storage\" WN ALL) OR (\"power electronics\" WN ALL) OR (\"power conditioning\" WN ALL) OR (\"power distribution\" WN ALL) OR (\"power management\" WN ALL) OR (\"power interface\" WN ALL) OR (\"power interfaces\" WN ALL) OR (\"power mode\" WN ALL) OR (\"power modes\" WN ALL) OR (\"load profile\" WN ALL) OR (\"load profiles\" WN ALL) OR (\"power consumption\" WN ALL) OR (\"power demand\" WN ALL) OR (\"power profile\" WN ALL) OR (\"energy harvesting\" WN ALL)) AND (((\"model-based systems engineering\" WN ALL) OR (\"model based systems engineering\" WN ALL) OR (\"model-based system engineering\" WN ALL) OR (\"model based system engineering\" WN ALL) OR (\"model-driven systems engineering\" WN ALL) OR (\"model driven systems engineering\" WN ALL) OR (\"model-driven system engineering\" WN ALL) OR (\"model driven system engineering\" WN ALL) OR (\"model-centric systems engineering\" WN ALL) OR (\"model centric systems engineering\" WN ALL) OR (\"model-centric system engineering\" WN ALL) OR (\"model centric system engineering\" WN ALL) OR (\"MBSE\" WN ALL) OR (\"SysML\" WN ALL) OR (\"systems modeling language\" WN ALL) OR (\"systems modelling language\" WN ALL) OR (\"system modeling language\" WN ALL) OR (\"system modelling language\" WN ALL) OR (\"object-process methodology\" WN ALL) OR (\"object process methodology\" WN ALL) OR (\"OPM\" WN ALL) OR (\"object-oriented systems engineering method\" WN ALL) OR (\"object oriented systems engineering method\" WN ALL) OR (\"OOSEM\" WN ALL) OR (\"object-oriented systems engineering\" WN ALL) OR (\"object oriented systems engineering\" WN ALL) OR (\"Arcadia\" WN ALL) OR (\"Capella\" WN ALL) OR (\"model-based engineering\" WN ALL) OR (\"model based engineering\" WN ALL) OR (\"model-driven engineering\" WN ALL) OR (\"model driven engineering\" WN ALL) OR (\"model-based design\" WN ALL) OR (\"model based design\" WN ALL) OR (\"model-driven design\" WN ALL) OR (\"model driven design\" WN ALL) OR (\"MBE\" WN ALL) OR (\"MDE\" WN ALL) OR (\"MBD\" WN ALL) OR (\"MagicGrid\" WN ALL) OR (\"Harmony-SE\" WN ALL) OR (\"Harmony SE\" WN ALL) OR (\"RFLP\" WN ALL) OR (\"Cameo Systems Modeler\" WN ALL) OR (\"MagicDraw\" WN ALL) OR (\"IBM Engineering Systems Design Rhapsody\" WN ALL) OR (\"Rational Rhapsody\" WN ALL) OR (\"Vitech CORE\" WN ALL) OR (\"Vitech GENESYS\" WN ALL) OR (\"OpenMBEE\" WN ALL) OR (\"Enterprise Architect\" WN ALL) OR (\"MATLAB System Composer\" WN ALL) OR (\"System Composer\" WN ALL) OR (\"Modelio\" WN ALL)) OR ((\"system model\" WN ALL) OR (\"systems model\" WN ALL) OR (\"system modeling\" WN ALL) OR (\"systems modeling\" WN ALL) OR (\"system modelling\" WN ALL) OR (\"systems modelling\" WN ALL) OR (\"reference model\" WN ALL) OR (\"reference models\" WN ALL) OR (\"digital engineering\" WN ALL) OR (\"object-oriented systems model\" WN ALL) OR (\"object-oriented systems models\" WN ALL) OR (\"model-based system design\" WN ALL) OR (\"model based system design\" WN ALL) OR (\"model-based systems design\" WN ALL) OR (\"model based systems design\" WN ALL) OR (\"system architecture model\" WN ALL) OR (\"system architecture models\" WN ALL) OR (\"systems architecture model\" WN ALL) OR (\"systems architecture models\" WN ALL) OR (\"integrated system model\" WN ALL) OR (\"integrated system models\" WN ALL) OR (\"integrated systems model\" WN ALL) OR (\"integrated systems models\" WN ALL) OR (\"system-level model\" WN ALL) OR (\"system-level models\" WN ALL) OR (\"system level model\" WN ALL) OR (\"system level models\" WN ALL) OR (\"digital thread\" WN ALL) OR (\"digital threads\" WN ALL) OR (\"digital twin\" WN ALL) OR (\"digital twins\" WN ALL)))) AND (English WN LA))",
+      "query_sha256": "da73c1b88736c26ba6b7242f4547997499df73d1ce728bcecb77bd71a021faeb",
+      "query_characters": 4661,
+      "wildcard_count": 3,
+      "year_start": 2011,
+      "year_end": 2026,
+      "limit": 5000,
+      "max_pages": 200,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 2.0,
+      "require_complete": true,
+      "output": "cells/A2.json",
+      "screenshot_outputs": [
+        "cells/A2.search-page.png",
+        "cells/A2.results-page.png"
+      ],
+      "do_not_merge": true
+    },
+    {
+      "event_id": "A3",
+      "partition_id": "A3",
+      "boolean_form": "F(P) AND F(E_H) AND F(M_B)",
+      "changed_definition_since_pilot003": false,
+      "purpose": "Strict paired two-pass complete current A3 readiness capture with the approved Compendex population wildcard block.",
+      "query": "((((CubeSat* WN ALL) OR (\"cube sat\" WN ALL) OR (\"cube sats\" WN ALL) OR (\"cube-sat\" WN ALL) OR (\"cube-sats\" WN ALL) OR (\"cube satellite\" WN ALL) OR (\"cube satellites\" WN ALL) OR (nanosat* WN ALL) OR (\"nano-sat\" WN ALL) OR (\"nano-sats\" WN ALL) OR (\"nano sat\" WN ALL) OR (\"nano sats\" WN ALL) OR (\"nano-satellite\" WN ALL) OR (\"nano-satellites\" WN ALL) OR (\"nano satellite\" WN ALL) OR (\"nano satellites\" WN ALL) OR (SmallSat* WN ALL) OR (\"small satellite\" WN ALL) OR (\"small satellites\" WN ALL) OR (\"small sat\" WN ALL) OR (\"small sats\" WN ALL)) AND ((\"electrical power system\" WN ALL) OR (\"electrical power systems\" WN ALL) OR (\"electric power system\" WN ALL) OR (\"electric power systems\" WN ALL) OR (\"electrical power subsystem\" WN ALL) OR (\"electrical power subsystems\" WN ALL) OR (\"electric power subsystem\" WN ALL) OR (\"electric power subsystems\" WN ALL) OR (\"electrical energy subsystem\" WN ALL) OR (\"electrical energy subsystems\" WN ALL) OR (\"EPS\" WN ALL) OR (\"EPSs\" WN ALL) OR (\"power subsystem\" WN ALL) OR (\"power subsystems\" WN ALL) OR (\"power system\" WN ALL) OR (\"power systems\" WN ALL) OR (\"spacecraft power system\" WN ALL) OR (\"spacecraft power systems\" WN ALL) OR (\"power supply\" WN ALL) OR (\"power supplies\" WN ALL) OR (\"power distribution unit\" WN ALL) OR (\"power distribution units\" WN ALL) OR (\"PDU\" WN ALL) OR (\"PDUs\" WN ALL) OR (\"power processing unit\" WN ALL) OR (\"power processing units\" WN ALL) OR (\"power control and distribution\" WN ALL) OR (\"power management and distribution\" WN ALL) OR (\"electrical architecture\" WN ALL) OR (\"electrical architectures\" WN ALL) OR (\"power architecture\" WN ALL) OR (\"power architectures\" WN ALL) OR (\"DC power bus\" WN ALL) OR (\"DC power buses\" WN ALL) OR (\"PCDU\" WN ALL) OR (\"PCDUs\" WN ALL) OR (\"PMAD\" WN ALL) OR (\"PMADs\" WN ALL)) AND ((\"system model\" WN ALL) OR (\"systems model\" WN ALL) OR (\"system modeling\" WN ALL) OR (\"systems modeling\" WN ALL) OR (\"system modelling\" WN ALL) OR (\"systems modelling\" WN ALL) OR (\"reference model\" WN ALL) OR (\"reference models\" WN ALL) OR (\"digital engineering\" WN ALL) OR (\"object-oriented systems model\" WN ALL) OR (\"object-oriented systems models\" WN ALL) OR (\"model-based system design\" WN ALL) OR (\"model based system design\" WN ALL) OR (\"model-based systems design\" WN ALL) OR (\"model based systems design\" WN ALL) OR (\"system architecture model\" WN ALL) OR (\"system architecture models\" WN ALL) OR (\"systems architecture model\" WN ALL) OR (\"systems architecture models\" WN ALL) OR (\"integrated system model\" WN ALL) OR (\"integrated system models\" WN ALL) OR (\"integrated systems model\" WN ALL) OR (\"integrated systems models\" WN ALL) OR (\"system-level model\" WN ALL) OR (\"system-level models\" WN ALL) OR (\"system level model\" WN ALL) OR (\"system level models\" WN ALL) OR (\"digital thread\" WN ALL) OR (\"digital threads\" WN ALL) OR (\"digital twin\" WN ALL) OR (\"digital twins\" WN ALL))) AND (English WN LA))",
+      "query_sha256": "6ba066f0a12bd3e14deff02ed6627a83b7ff873927e734e92c711d2844d99e8a",
+      "query_characters": 2901,
+      "wildcard_count": 3,
+      "year_start": 2011,
+      "year_end": 2026,
+      "limit": 5000,
+      "max_pages": 200,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 2.0,
+      "require_complete": true,
+      "output": "cells/A3.json",
+      "screenshot_outputs": [
+        "cells/A3.search-page.png",
+        "cells/A3.results-page.png"
+      ],
+      "do_not_merge": true
+    },
+    {
+      "event_id": "B1",
+      "partition_id": "B1",
+      "boolean_form": "F(P) AND F(M_H)",
+      "changed_definition_since_pilot003": false,
+      "purpose": "Strict paired two-pass complete current B1 readiness capture with the approved Compendex population wildcard block.",
+      "query": "((((CubeSat* WN ALL) OR (\"cube sat\" WN ALL) OR (\"cube sats\" WN ALL) OR (\"cube-sat\" WN ALL) OR (\"cube-sats\" WN ALL) OR (\"cube satellite\" WN ALL) OR (\"cube satellites\" WN ALL) OR (nanosat* WN ALL) OR (\"nano-sat\" WN ALL) OR (\"nano-sats\" WN ALL) OR (\"nano sat\" WN ALL) OR (\"nano sats\" WN ALL) OR (\"nano-satellite\" WN ALL) OR (\"nano-satellites\" WN ALL) OR (\"nano satellite\" WN ALL) OR (\"nano satellites\" WN ALL) OR (SmallSat* WN ALL) OR (\"small satellite\" WN ALL) OR (\"small satellites\" WN ALL) OR (\"small sat\" WN ALL) OR (\"small sats\" WN ALL)) AND ((\"model-based systems engineering\" WN ALL) OR (\"model based systems engineering\" WN ALL) OR (\"model-based system engineering\" WN ALL) OR (\"model based system engineering\" WN ALL) OR (\"model-driven systems engineering\" WN ALL) OR (\"model driven systems engineering\" WN ALL) OR (\"model-driven system engineering\" WN ALL) OR (\"model driven system engineering\" WN ALL) OR (\"model-centric systems engineering\" WN ALL) OR (\"model centric systems engineering\" WN ALL) OR (\"model-centric system engineering\" WN ALL) OR (\"model centric system engineering\" WN ALL) OR (\"MBSE\" WN ALL) OR (\"SysML\" WN ALL) OR (\"systems modeling language\" WN ALL) OR (\"systems modelling language\" WN ALL) OR (\"system modeling language\" WN ALL) OR (\"system modelling language\" WN ALL) OR (\"object-process methodology\" WN ALL) OR (\"object process methodology\" WN ALL) OR (\"OPM\" WN ALL) OR (\"object-oriented systems engineering method\" WN ALL) OR (\"object oriented systems engineering method\" WN ALL) OR (\"OOSEM\" WN ALL) OR (\"object-oriented systems engineering\" WN ALL) OR (\"object oriented systems engineering\" WN ALL) OR (\"Arcadia\" WN ALL) OR (\"Capella\" WN ALL) OR (\"model-based engineering\" WN ALL) OR (\"model based engineering\" WN ALL) OR (\"model-driven engineering\" WN ALL) OR (\"model driven engineering\" WN ALL) OR (\"model-based design\" WN ALL) OR (\"model based design\" WN ALL) OR (\"model-driven design\" WN ALL) OR (\"model driven design\" WN ALL) OR (\"MBE\" WN ALL) OR (\"MDE\" WN ALL) OR (\"MBD\" WN ALL) OR (\"MagicGrid\" WN ALL) OR (\"Harmony-SE\" WN ALL) OR (\"Harmony SE\" WN ALL) OR (\"RFLP\" WN ALL) OR (\"Cameo Systems Modeler\" WN ALL) OR (\"MagicDraw\" WN ALL) OR (\"IBM Engineering Systems Design Rhapsody\" WN ALL) OR (\"Rational Rhapsody\" WN ALL) OR (\"Vitech CORE\" WN ALL) OR (\"Vitech GENESYS\" WN ALL) OR (\"OpenMBEE\" WN ALL) OR (\"Enterprise Architect\" WN ALL) OR (\"MATLAB System Composer\" WN ALL) OR (\"System Composer\" WN ALL) OR (\"Modelio\" WN ALL))) AND (English WN LA))",
+      "query_sha256": "045fbb71bd8b603d8c19eced775e93e679a6444e1224ddb7b07fdff1ba402e4b",
+      "query_characters": 2482,
+      "wildcard_count": 3,
+      "year_start": 2011,
+      "year_end": 2026,
+      "limit": 5000,
+      "max_pages": 200,
+      "timeout_seconds": 180.0,
+      "page_delay_seconds": 2.0,
+      "require_complete": true,
+      "output": "cells/B1.json",
+      "screenshot_outputs": [
+        "cells/B1.search-page.png",
+        "cells/B1.results-page.png"
+      ],
+      "do_not_merge": true
+    }
+  ]
+}

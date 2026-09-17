@@ -1,0 +1,81 @@
+{
+  "schema_version": "esa-indico-pilot-005-route-restart-checkpoint/v1",
+  "artifact_kind": "resumable_shared_route_checkpoint",
+  "source": "ESA Indico",
+  "pilot": "005",
+  "diagnostic_cutoff": "2026-08-29",
+  "route": {
+    "category_id": 0,
+    "mode": "bounded_local_harvest",
+    "covered_groups": [
+      "events",
+      "contributions",
+      "materials"
+    ],
+    "uncovered_groups": [
+      "notes",
+      "categories"
+    ],
+    "source_q_submitted": false
+  },
+  "state": "restart_universe_before_matching",
+  "next_event_index": 0,
+  "source_universe": {
+    "first_snapshot_complete": false,
+    "reported_count": null,
+    "ordered_event_ids_sha256": null,
+    "reason": "The compact persisted adapter result records the attachment failure but intentionally omits the candidate snapshot body, count, ID ledger, and adapter checkpoint. Do not promote or reconstruct a first snapshot."
+  },
+  "resume_procedure": [
+    "When a future approved continuation is available, obtain a new category-0 first snapshot under the bounded local route.",
+    "Harvest every event export and every declared public attachment with content-state evidence; do not treat unsupported, missing, inaccessible, or unparseable attachments as searchable.",
+    "Obtain and reconcile the second ordered root snapshot before matching.",
+    "Only then run all nine exact pilot_schedule local expressions, reconcile type-prefixed stable IDs, and investigate every set over 100."
+  ],
+  "not_an_adapter_resume_state": true,
+  "reason_not_adapter_resume_state": "No candidate root ID ledger survived the compact result; this checkpoint safely restarts the shared source universe rather than pretending it can resume at an unverified event ID.",
+  "shared_live_evidence": {
+    "path": "root-local-harvest-A1.json",
+    "sha256": "56a1f45d9eb9f46e34bb45421260bd82edcc8ed6b2fb83aee7ae755fc462d12d",
+    "failure_code": "attachment_content_retrieval_failed"
+  },
+  "partition_bindings": [
+    {
+      "partition_id": "A1",
+      "expression_sha256": "51d735e837882a684cc179c8a2a4d255e7c7fd52bc2a82f5a224e52e8a9daebd"
+    },
+    {
+      "partition_id": "A2",
+      "expression_sha256": "b30060d89566fd8cb9b36a61e72b15f9b8316dbb2c7948dee9ab18c5fc4c1aa3"
+    },
+    {
+      "partition_id": "A3",
+      "expression_sha256": "767d7c1356fd6e0b54bdf7ecfab8ea7ec14cf847c72c6a53ac0bf998689eade4"
+    },
+    {
+      "partition_id": "B1",
+      "expression_sha256": "56b814cd675d898b037b395a8aea505ceb12bb4d4bc498ff5ddf48a23e418134"
+    },
+    {
+      "partition_id": "B2",
+      "expression_sha256": "d5ed8b9575e46788b385d58b9c0ee13bd708342c13056eb72ada432b21057fb2"
+    },
+    {
+      "partition_id": "BG1",
+      "expression_sha256": "49f5fec0ff2e9176653710ff57b46366f8eb3383e37c32c94d172523ea5eeeef"
+    },
+    {
+      "partition_id": "BG2",
+      "expression_sha256": "01f1800160f4d4d389820484be39c5c38e2b9f5cf9676a9412c2b2ec814a51bc"
+    },
+    {
+      "partition_id": "BC1",
+      "expression_sha256": "c5f97ef4de6399113ee40a4e00854e005a154d88f95aa90e80d321bddbac880d"
+    },
+    {
+      "partition_id": "BT2",
+      "expression_sha256": "0792f450723211aeba304c9bce2852c86986ab828ce233db82e10a39fe7cebc0"
+    }
+  ],
+  "do_not_merge": true
+}

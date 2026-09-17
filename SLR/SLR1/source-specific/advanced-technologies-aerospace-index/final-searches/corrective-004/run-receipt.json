@@ -1,0 +1,53 @@
+{
+  "schema_version": "slr1-atai-final-direct-run/v1",
+  "source": "Advanced Technologies & Aerospace Index",
+  "source_id": "proquest_aerospace_index",
+  "review_namespace": "main",
+  "event_kind": "final",
+  "plan": "SLR/SLR1/source-specific/advanced-technologies-aerospace-index/final-searches/corrective-004/final-event-plan.json",
+  "plan_sha256": "cd4eb7b6d424295ef50de79fca09063b7276bc00f0610bf666983196cb870182",
+  "adapter": {
+    "id": "search_proquest_aerospace",
+    "version": "6",
+    "sha256": "65a61399f11e8f360b3798bd4d908bc13790a041666ea8f0b3997546c61659f9",
+    "entrypoint": "/Users/antho/agent-tools/internet/skills/browser/scripts/search_proquest_aerospace.py",
+    "automatic_screenshots": true
+  },
+  "execution_policy": {
+    "one_source_execution_per_partition": true,
+    "continue_after_partition_failure": true,
+    "retry_policy": "none after final-plan execution begins",
+    "fresh_browser_per_partition": false,
+    "skip_full_abstracts": false,
+    "source_publication_type_capture": true
+  },
+  "started_at_utc": null,
+  "completed_at_utc": "2026-09-04T19:43:13.167456Z",
+  "planned_partition_count": 1,
+  "attempted_partition_count": 1,
+  "source_command_attempt_count": 1,
+  "accepted_event_count": 0,
+  "all_partitions_attempted": true,
+  "success": false,
+  "interruption": {
+    "kind": "local_failure_artifact_namespace_collision",
+    "reason": "The B2 source event was not accepted, then the local runner found an existing retained-failure screenshot basename and stopped before preserving its compact source artifact or writing the normal run receipt. The final query-ID namespace remained empty.",
+    "source_artifact_retained": false,
+    "final_artifact_published": false
+  },
+  "outcomes": [
+    {
+      "event_id": "final-main-B2-atai-r004",
+      "partition_id": "B2",
+      "success": false,
+      "artifact": null,
+      "failure_artifact": null,
+      "exit_code": null,
+      "attempt_count": 1,
+      "source_command_attempt_count": 1,
+      "local_harness_failure": "retained_failure_screenshot_destination_exists",
+      "source_artifact_retained": false,
+      "final_artifact_published": false
+    }
+  ]
+}

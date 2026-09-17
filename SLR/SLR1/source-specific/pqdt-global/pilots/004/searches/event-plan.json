@@ -1,0 +1,1646 @@
+{
+  "schema_version": "pqdt-global-pilot004-event-plan/v1",
+  "pilot": "004",
+  "source": "ProQuest Dissertations & Theses Global",
+  "source_id": "proquest_dissertations_theses_global",
+  "platform": "ProQuest",
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "created_at_utc": "2026-09-02T16:34:46.534384Z",
+  "repository_head_at_predeclaration": "8cda07723c3280a8be75b0ec165899799d5380af",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "objective": "Compare strict complete literal and maximally bounded-wildcard translations of all nine schedule partitions after proximity removal.",
+  "adapter": {
+    "id": "search_pqdt",
+    "version": "5",
+    "sha256": "6ec27749ebc5d24778a84ebb2b9a4cf83b4d5f13e2a1536936e54504340673de",
+    "mandatory_automatic_screenshots": true,
+    "screenshot_schema": "pqdt-automatic-screenshots/v1",
+    "screenshot_opt_out": false,
+    "screenshot_files_per_event": 2
+  },
+  "source_window": {
+    "year_start": 2011,
+    "year_end": 2026,
+    "source_precision": "year",
+    "diagnostic_cutoff": "2026-08-29",
+    "cutoff_handling": "Retain 2026 records for later screening against the exact diagnostic cutoff."
+  },
+  "controls": {
+    "database": "exactly one allowed PQDT Global database label",
+    "field": "NOFT",
+    "language": "LA(English)",
+    "sort": "DateAsc / Oldest first",
+    "page_size": 20,
+    "passes_per_event": 2,
+    "full_text": false,
+    "exclude_duplicates": false,
+    "spelling_variants": false,
+    "form_variants": false,
+    "show_variants": false,
+    "degree_or_document_type": null,
+    "access": null,
+    "controlled_vocabulary": null,
+    "proximity": false,
+    "pair_expansion": false,
+    "screenshots": "automatic configured search-page and first results-page PNGs beside every JSON"
+  },
+  "translation": {
+    "literal_atom": "NOFT(quoted literal)",
+    "wildcard_atom": "NOFT(token or ordered phrase using the smallest safe bounded [*n])",
+    "wildcard_scope": "Every declared variant family with one safe common source stem. Singleton, punctuation, and unsafe-stem alternatives remain literal.",
+    "compound_blocks": {
+      "G_model": "G_model_fixed OR G_mission_exact OR (G_mission AND M_B)",
+      "G_structure": "G_structure_fixed OR G_product_exact OR G_variation OR (G_product AND M_B)",
+      "C1": "C1_fixed OR G_DSL",
+      "BT2": "P AND M_B AND T_precise"
+    },
+    "term_counts": {
+      "P": 26,
+      "E_H": 38,
+      "E_F": 37,
+      "M_H": 54,
+      "M_B": 31,
+      "R": 55,
+      "G_model_fixed": 14,
+      "G_mission": 4,
+      "G_mission_exact": 16,
+      "G_structure_fixed": 8,
+      "G_product": 4,
+      "G_product_exact": 8,
+      "G_variation": 2,
+      "C1_fixed": 26,
+      "G_DSL": 4,
+      "T_precise": 32
+    },
+    "wildcard_family_count": 128,
+    "replaced_literal_occurrence_count_across_blocks": 292,
+    "wildcard_operators_by_block": {
+      "P": 12,
+      "E_H": 18,
+      "E_F": 13,
+      "M_H": 8,
+      "M_B": 15,
+      "R": 20,
+      "G_model_fixed": 7,
+      "G_mission": 0,
+      "G_mission_exact": 8,
+      "G_structure_fixed": 4,
+      "G_product": 0,
+      "G_product_exact": 4,
+      "G_variation": 1,
+      "C1_fixed": 13,
+      "G_DSL": 0,
+      "T_precise": 7
+    },
+    "wildcard_families": {
+      "P": [
+        {
+          "pattern": "CubeSat[*1]",
+          "explicit_terms": [
+            "CubeSat",
+            "CubeSats"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"cube sat[*1]\"",
+          "explicit_terms": [
+            "cube sat",
+            "cube sats"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"cube-sat[*1]\"",
+          "explicit_terms": [
+            "cube-sat",
+            "cube-sats"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"cube satellite[*1]\"",
+          "explicit_terms": [
+            "cube satellite",
+            "cube satellites"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "nanosat[*7]",
+          "explicit_terms": [
+            "nanosat",
+            "nanosats",
+            "nanosatellite",
+            "nanosatellites"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"nano-sat[*1]\"",
+          "explicit_terms": [
+            "nano-sat",
+            "nano-sats"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"nano sat[*1]\"",
+          "explicit_terms": [
+            "nano sat",
+            "nano sats"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"nano-satellite[*1]\"",
+          "explicit_terms": [
+            "nano-satellite",
+            "nano-satellites"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"nano satellite[*1]\"",
+          "explicit_terms": [
+            "nano satellite",
+            "nano satellites"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "SmallSat[*1]",
+          "explicit_terms": [
+            "SmallSat",
+            "SmallSats"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"small satellite[*1]\"",
+          "explicit_terms": [
+            "small satellite",
+            "small satellites"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"small sat[*1]\"",
+          "explicit_terms": [
+            "small sat",
+            "small sats"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "E_H": [
+        {
+          "pattern": "\"electrical power system[*1]\"",
+          "explicit_terms": [
+            "electrical power system",
+            "electrical power systems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"electric power system[*1]\"",
+          "explicit_terms": [
+            "electric power system",
+            "electric power systems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"electrical power subsystem[*1]\"",
+          "explicit_terms": [
+            "electrical power subsystem",
+            "electrical power subsystems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"electric power subsystem[*1]\"",
+          "explicit_terms": [
+            "electric power subsystem",
+            "electric power subsystems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"electrical energy subsystem[*1]\"",
+          "explicit_terms": [
+            "electrical energy subsystem",
+            "electrical energy subsystems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "EPS[*1]",
+          "explicit_terms": [
+            "EPS",
+            "EPSs"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power subsystem[*1]\"",
+          "explicit_terms": [
+            "power subsystem",
+            "power subsystems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power system[*1]\"",
+          "explicit_terms": [
+            "power system",
+            "power systems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"spacecraft power system[*1]\"",
+          "explicit_terms": [
+            "spacecraft power system",
+            "spacecraft power systems"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power suppl[*3]\"",
+          "explicit_terms": [
+            "power supply",
+            "power supplies"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power distribution unit[*1]\"",
+          "explicit_terms": [
+            "power distribution unit",
+            "power distribution units"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "PDU[*1]",
+          "explicit_terms": [
+            "PDU",
+            "PDUs"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power processing unit[*1]\"",
+          "explicit_terms": [
+            "power processing unit",
+            "power processing units"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"electrical architecture[*1]\"",
+          "explicit_terms": [
+            "electrical architecture",
+            "electrical architectures"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power architecture[*1]\"",
+          "explicit_terms": [
+            "power architecture",
+            "power architectures"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"DC power bus[*2]\"",
+          "explicit_terms": [
+            "DC power bus",
+            "DC power buses"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "PCDU[*1]",
+          "explicit_terms": [
+            "PCDU",
+            "PCDUs"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "PMAD[*1]",
+          "explicit_terms": [
+            "PMAD",
+            "PMADs"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "E_F": [
+        {
+          "pattern": "\"power budget[*1]\"",
+          "explicit_terms": [
+            "power budget",
+            "power budgets"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"energy budget[*1]\"",
+          "explicit_terms": [
+            "energy budget",
+            "energy budgets"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"energy balance[*1]\"",
+          "explicit_terms": [
+            "energy balance",
+            "energy balances"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power balance[*1]\"",
+          "explicit_terms": [
+            "power balance",
+            "power balances"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power margin[*1]\"",
+          "explicit_terms": [
+            "power margin",
+            "power margins"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"photovoltaic generator[*1]\"",
+          "explicit_terms": [
+            "photovoltaic generator",
+            "photovoltaic generators"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"solar array[*1]\"",
+          "explicit_terms": [
+            "solar array",
+            "solar arrays"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"solar panel[*1]\"",
+          "explicit_terms": [
+            "solar panel",
+            "solar panels"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "batter[*3]",
+          "explicit_terms": [
+            "battery",
+            "batteries"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"state[*1] of charge\"",
+          "explicit_terms": [
+            "state of charge",
+            "states of charge"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power interface[*1]\"",
+          "explicit_terms": [
+            "power interface",
+            "power interfaces"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"power mode[*1]\"",
+          "explicit_terms": [
+            "power mode",
+            "power modes"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"load profile[*1]\"",
+          "explicit_terms": [
+            "load profile",
+            "load profiles"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "M_H": [
+        {
+          "pattern": "\"model-based system[*1] engineering\"",
+          "explicit_terms": [
+            "model-based systems engineering",
+            "model-based system engineering"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model based system[*1] engineering\"",
+          "explicit_terms": [
+            "model based systems engineering",
+            "model based system engineering"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model-driven system[*1] engineering\"",
+          "explicit_terms": [
+            "model-driven systems engineering",
+            "model-driven system engineering"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model driven system[*1] engineering\"",
+          "explicit_terms": [
+            "model driven systems engineering",
+            "model driven system engineering"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model-centric system[*1] engineering\"",
+          "explicit_terms": [
+            "model-centric systems engineering",
+            "model-centric system engineering"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model centric system[*1] engineering\"",
+          "explicit_terms": [
+            "model centric systems engineering",
+            "model centric system engineering"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system[*1] modeling language\"",
+          "explicit_terms": [
+            "systems modeling language",
+            "system modeling language"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system[*1] modelling language\"",
+          "explicit_terms": [
+            "systems modelling language",
+            "system modelling language"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "M_B": [
+        {
+          "pattern": "\"system[*1] model\"",
+          "explicit_terms": [
+            "system model",
+            "systems model"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system[*1] modeling\"",
+          "explicit_terms": [
+            "system modeling",
+            "systems modeling"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system[*1] modelling\"",
+          "explicit_terms": [
+            "system modelling",
+            "systems modelling"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"reference model[*1]\"",
+          "explicit_terms": [
+            "reference model",
+            "reference models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"object-oriented systems model[*1]\"",
+          "explicit_terms": [
+            "object-oriented systems model",
+            "object-oriented systems models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model-based system[*1] design\"",
+          "explicit_terms": [
+            "model-based system design",
+            "model-based systems design"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model based system[*1] design\"",
+          "explicit_terms": [
+            "model based system design",
+            "model based systems design"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system[*1] architecture model[*1]\"",
+          "explicit_terms": [
+            "system architecture model",
+            "system architecture models",
+            "systems architecture model",
+            "systems architecture models"
+          ],
+          "wildcard_operators": 2
+        },
+        {
+          "pattern": "\"integrated system[*1] model[*1]\"",
+          "explicit_terms": [
+            "integrated system model",
+            "integrated system models",
+            "integrated systems model",
+            "integrated systems models"
+          ],
+          "wildcard_operators": 2
+        },
+        {
+          "pattern": "\"system-level model[*1]\"",
+          "explicit_terms": [
+            "system-level model",
+            "system-level models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system level model[*1]\"",
+          "explicit_terms": [
+            "system level model",
+            "system level models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"digital thread[*1]\"",
+          "explicit_terms": [
+            "digital thread",
+            "digital threads"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"digital twin[*1]\"",
+          "explicit_terms": [
+            "digital twin",
+            "digital twins"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "R": [
+        {
+          "pattern": "requirement[*1]",
+          "explicit_terms": [
+            "requirement",
+            "requirements"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "function[*2]",
+          "explicit_terms": [
+            "function",
+            "functions",
+            "functional"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "behavior[*2]",
+          "explicit_terms": [
+            "behavior",
+            "behaviors",
+            "behavioral"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "behaviour[*2]",
+          "explicit_terms": [
+            "behaviour",
+            "behaviours",
+            "behavioural"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "architectur[*2]",
+          "explicit_terms": [
+            "architecture",
+            "architectures",
+            "architectural"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "interface[*1]",
+          "explicit_terms": [
+            "interface",
+            "interfaces"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "trace[*7]",
+          "explicit_terms": [
+            "traceability",
+            "trace",
+            "traceable",
+            "traced"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "allocat[*3]",
+          "explicit_terms": [
+            "allocation",
+            "allocate",
+            "allocated"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "constraint[*1]",
+          "explicit_terms": [
+            "constraint",
+            "constraints"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "parametric[*1]",
+          "explicit_terms": [
+            "parametric",
+            "parametrics"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "analys[*2]",
+          "explicit_terms": [
+            "analysis",
+            "analyses"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "design[*3]",
+          "explicit_terms": [
+            "design",
+            "designs",
+            "designed",
+            "designing"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "decision[*1]",
+          "explicit_terms": [
+            "decision",
+            "decisions"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"trade stud[*3]\"",
+          "explicit_terms": [
+            "trade study",
+            "trade studies"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"trade-off[*1]\"",
+          "explicit_terms": [
+            "trade-off",
+            "trade-offs"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "tradeoff[*1]",
+          "explicit_terms": [
+            "tradeoff",
+            "tradeoffs"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "verification[*1]",
+          "explicit_terms": [
+            "verification",
+            "verifications"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "verif[*4]",
+          "explicit_terms": [
+            "verify",
+            "verifies",
+            "verified",
+            "verifying"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "validation[*1]",
+          "explicit_terms": [
+            "validation",
+            "validations"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "validat[*3]",
+          "explicit_terms": [
+            "validate",
+            "validates",
+            "validated",
+            "validating"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "G_model_fixed": [
+        {
+          "pattern": "\"generic model[*1]\"",
+          "explicit_terms": [
+            "generic model",
+            "generic models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"generic system model[*1]\"",
+          "explicit_terms": [
+            "generic system model",
+            "generic system models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"reusable model[*1]\"",
+          "explicit_terms": [
+            "reusable model",
+            "reusable models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"reusable system model[*1]\"",
+          "explicit_terms": [
+            "reusable system model",
+            "reusable system models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"configurable model[*1]\"",
+          "explicit_terms": [
+            "configurable model",
+            "configurable models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"configurable system model[*1]\"",
+          "explicit_terms": [
+            "configurable system model",
+            "configurable system models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model template[*1]\"",
+          "explicit_terms": [
+            "model template",
+            "model templates"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "G_mission": [],
+      "G_mission_exact": [
+        {
+          "pattern": "\"mission-agnostic model[*1]\"",
+          "explicit_terms": [
+            "mission-agnostic model",
+            "mission-agnostic models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission-agnostic architecture[*1]\"",
+          "explicit_terms": [
+            "mission-agnostic architecture",
+            "mission-agnostic architectures"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission agnostic model[*1]\"",
+          "explicit_terms": [
+            "mission agnostic model",
+            "mission agnostic models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission agnostic architecture[*1]\"",
+          "explicit_terms": [
+            "mission agnostic architecture",
+            "mission agnostic architectures"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission-independent model[*1]\"",
+          "explicit_terms": [
+            "mission-independent model",
+            "mission-independent models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission-independent architecture[*1]\"",
+          "explicit_terms": [
+            "mission-independent architecture",
+            "mission-independent architectures"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission independent model[*1]\"",
+          "explicit_terms": [
+            "mission independent model",
+            "mission independent models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"mission independent architecture[*1]\"",
+          "explicit_terms": [
+            "mission independent architecture",
+            "mission independent architectures"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "G_structure_fixed": [
+        {
+          "pattern": "\"reference architecture[*1]\"",
+          "explicit_terms": [
+            "reference architecture",
+            "reference architectures"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"domain model[*1]\"",
+          "explicit_terms": [
+            "domain model",
+            "domain models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "metamodel[*1]",
+          "explicit_terms": [
+            "metamodel",
+            "metamodels"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "meta-model[*1]",
+          "explicit_terms": [
+            "meta-model",
+            "meta-models"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "G_product": [],
+      "G_product_exact": [
+        {
+          "pattern": "\"product-line model[*1]\"",
+          "explicit_terms": [
+            "product-line model",
+            "product-line models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"product line model[*1]\"",
+          "explicit_terms": [
+            "product line model",
+            "product line models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"product-family model[*1]\"",
+          "explicit_terms": [
+            "product-family model",
+            "product-family models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"product family model[*1]\"",
+          "explicit_terms": [
+            "product family model",
+            "product family models"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "G_variation": [
+        {
+          "pattern": "\"variation point[*1]\"",
+          "explicit_terms": [
+            "variation point",
+            "variation points"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "C1_fixed": [
+        {
+          "pattern": "\"reference model[*1]\"",
+          "explicit_terms": [
+            "reference model",
+            "reference models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system reference model[*1]\"",
+          "explicit_terms": [
+            "system reference model",
+            "system reference models"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model librar[*3]\"",
+          "explicit_terms": [
+            "model library",
+            "model libraries"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system model librar[*3]\"",
+          "explicit_terms": [
+            "system model library",
+            "system model libraries"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model pattern[*1]\"",
+          "explicit_terms": [
+            "model pattern",
+            "model patterns"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"modeling pattern[*1]\"",
+          "explicit_terms": [
+            "modeling pattern",
+            "modeling patterns"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"modelling pattern[*1]\"",
+          "explicit_terms": [
+            "modelling pattern",
+            "modelling patterns"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system model pattern[*1]\"",
+          "explicit_terms": [
+            "system model pattern",
+            "system model patterns"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"systems model pattern[*1]\"",
+          "explicit_terms": [
+            "systems model pattern",
+            "systems model patterns"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"model profile[*1]\"",
+          "explicit_terms": [
+            "model profile",
+            "model profiles"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"system model profile[*1]\"",
+          "explicit_terms": [
+            "system model profile",
+            "system model profiles"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"systems model profile[*1]\"",
+          "explicit_terms": [
+            "systems model profile",
+            "systems model profiles"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"SysML profile[*1]\"",
+          "explicit_terms": [
+            "SysML profile",
+            "SysML profiles"
+          ],
+          "wildcard_operators": 1
+        }
+      ],
+      "G_DSL": [],
+      "T_precise": [
+        {
+          "pattern": "tailor[*3]",
+          "explicit_terms": [
+            "tailor",
+            "tailors",
+            "tailored",
+            "tailoring"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "customiz[*5]",
+          "explicit_terms": [
+            "customize",
+            "customizes",
+            "customized",
+            "customizing",
+            "customization"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "customis[*5]",
+          "explicit_terms": [
+            "customise",
+            "customises",
+            "customised",
+            "customising",
+            "customisation"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "parameteriz[*5]",
+          "explicit_terms": [
+            "parameterize",
+            "parameterizes",
+            "parameterized",
+            "parameterizing",
+            "parameterization"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "parameteris[*5]",
+          "explicit_terms": [
+            "parameterise",
+            "parameterises",
+            "parameterised",
+            "parameterising",
+            "parameterisation"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "instantiat[*3]",
+          "explicit_terms": [
+            "instantiate",
+            "instantiates",
+            "instantiated",
+            "instantiating",
+            "instantiation"
+          ],
+          "wildcard_operators": 1
+        },
+        {
+          "pattern": "\"variation point[*1]\"",
+          "explicit_terms": [
+            "variation point",
+            "variation points"
+          ],
+          "wildcard_operators": 1
+        }
+      ]
+    },
+    "literal_query_lengths": {
+      "A1": 3480,
+      "A2": 4325,
+      "A3": 2724,
+      "B1": 2350,
+      "B2": 2788,
+      "BG1": 2780,
+      "BG2": 2220,
+      "BC1": 1555,
+      "BT2": 2356
+    },
+    "wildcard_query_lengths": {
+      "A1": 2421,
+      "A2": 2939,
+      "A3": 1466,
+      "B1": 1758,
+      "B2": 1313,
+      "BG1": 1513,
+      "BG2": 1200,
+      "BC1": 925,
+      "BT2": 998
+    },
+    "character_reductions": {
+      "A1": 1059,
+      "A2": 1386,
+      "A3": 1258,
+      "B1": 592,
+      "B2": 1475,
+      "BG1": 1267,
+      "BG2": 1020,
+      "BC1": 630,
+      "BT2": 1358
+    },
+    "wildcard_operators_by_partition": {
+      "A1": 38,
+      "A2": 48,
+      "A3": 45,
+      "B1": 20,
+      "B2": 47,
+      "BG1": 42,
+      "BG2": 36,
+      "BC1": 25,
+      "BT2": 34
+    },
+    "literal_query_sha256": {
+      "A1": "60949c5ee998d787ebc43eb521fd97d09da330beadff2597d9dc5c9bb707442c",
+      "A2": "630dd9a38e6aa3d00f43bf6166896e9258f11744c25454144658955bb719c8ee",
+      "A3": "5ddacf42c290a84bca78fa25bf9e8be55c4ea40124b25bd1589659901a36f405",
+      "B1": "bb5abbb3471a0624288d6f35645e621ef5eba36cbc39d755591cc0344fd0f020",
+      "B2": "5b1718ee852b47b8fa74ead7d262b50ac59fb7c52011ce14dc3be5c07b57d5e2",
+      "BG1": "59e665680bb34a829a5e67110610b1def88a5c4b17e18c2241b7d797458c91c3",
+      "BG2": "92dc1d541d5cebe9f60d4c9906cc81a8afaa7b7102f17ab857e53b8162eb5051",
+      "BC1": "f9a25e4034a5e07cb4dff7209eb96f35a21507c3cdae56399edbb8622efaddf7",
+      "BT2": "74e4909fa55c95707145cfabba1b405dbc74fb903f9558f0ccca81c1b91cee06"
+    },
+    "wildcard_query_sha256": {
+      "A1": "8881031065d24caacdc6cff2baa320791fc08f696435e8d352d134b34a005bc6",
+      "A2": "6d51e2a3d22feb2fb0d31bd1bc8fbcf5d030e8cf1d02509e14fcfb81d0e1cc14",
+      "A3": "a1ff9a52ef7d60fc3c9c4e7eab4ae50b75df36ac456fca7432bc7c86e3f7bc71",
+      "B1": "ac2d731dd93e0e7bca9cf169243bc537dc6bc898c00e7158eb9ee2f865bafbad",
+      "B2": "4bd87a44969b63c9d18fbd5522ccfe227c08db4fd25589427ba293d9670d1e37",
+      "BG1": "fdabf8ccda4680cc6216fe7a00574f4755f74ca4940bea058cf7b4c66aa56762",
+      "BG2": "d6f870d8a8e4dd4be268810f48e4fa4300978899a9fbc48ed6d8249909ef3a6c",
+      "BC1": "e1335c66aee708a92c4354066fa2c8ab6444aaf63cf100a694aacc807f8071ab",
+      "BT2": "5e5509ecb7cdbcd755a7f2979861a5bd01ff61a1c89d02f5fb008f033fa81c2c"
+    },
+    "validated_character_limit": 50000,
+    "shared_declaration_snapshot": {
+      "path": "SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot008/queries.py",
+      "sha256": "ce39aeee6c901324a16a588fc368a92ac1f3b5bb15a19705dcb2b8aa7c24a348"
+    }
+  },
+  "acceptance_checks": [
+    "Every event receives exact source query, scope, year, language, variant, and sort readback.",
+    "Every event completes two full record passes with the same total and ordered numeric document IDs.",
+    "Every event saves both mandatory sibling screenshots with matching JSON receipts.",
+    "Every wildcard partition contains every stable ID from its fresh adjacent literal partition.",
+    "Every wildcard-only record is inspected against the intended protocol concepts before adoption.",
+    "No proximity, pair expansion, result-driven split, type, access, or vocabulary restriction is introduced."
+  ],
+  "stop_rules": [
+    "Stop on the first source, access, challenge, control, screenshot, cleanup, or output failure.",
+    "Retain a failed adapter JSON and any screenshots already captured.",
+    "Never replace an event JSON, marker, screenshot, assessment, or validation report."
+  ],
+  "schedule_ids": [
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "BG1",
+    "BG2",
+    "BC1",
+    "BT2"
+  ],
+  "event_count": 18,
+  "events": [
+    {
+      "event_id": "literal-A1",
+      "partition_id": "A1",
+      "variant": "literal",
+      "purpose": "Strict complete two-pass literal capture for the A1 bounded-wildcard comparison.",
+      "query": "((NOFT(\"CubeSat\") OR NOFT(\"CubeSats\") OR NOFT(\"cube sat\") OR NOFT(\"cube sats\") OR NOFT(\"cube-sat\") OR NOFT(\"cube-sats\") OR NOFT(\"cube satellite\") OR NOFT(\"cube satellites\") OR NOFT(\"nanosat\") OR NOFT(\"nanosats\") OR NOFT(\"nanosatellite\") OR NOFT(\"nanosatellites\") OR NOFT(\"nano-sat\") OR NOFT(\"nano-sats\") OR NOFT(\"nano sat\") OR NOFT(\"nano sats\") OR NOFT(\"nano-satellite\") OR NOFT(\"nano-satellites\") OR NOFT(\"nano satellite\") OR NOFT(\"nano satellites\") OR NOFT(\"SmallSat\") OR NOFT(\"SmallSats\") OR NOFT(\"small satellite\") OR NOFT(\"small satellites\") OR NOFT(\"small sat\") OR NOFT(\"small sats\")) AND (NOFT(\"electrical power system\") OR NOFT(\"electrical power systems\") OR NOFT(\"electric power system\") OR NOFT(\"electric power systems\") OR NOFT(\"electrical power subsystem\") OR NOFT(\"electrical power subsystems\") OR NOFT(\"electric power subsystem\") OR NOFT(\"electric power subsystems\") OR NOFT(\"electrical energy subsystem\") OR NOFT(\"electrical energy subsystems\") OR NOFT(\"EPS\") OR NOFT(\"EPSs\") OR NOFT(\"power subsystem\") OR NOFT(\"power subsystems\") OR NOFT(\"power system\") OR NOFT(\"power systems\") OR NOFT(\"spacecraft power system\") OR NOFT(\"spacecraft power systems\") OR NOFT(\"power supply\") OR NOFT(\"power supplies\") OR NOFT(\"power distribution unit\") OR NOFT(\"power distribution units\") OR NOFT(\"PDU\") OR NOFT(\"PDUs\") OR NOFT(\"power processing unit\") OR NOFT(\"power processing units\") OR NOFT(\"power control and distribution\") OR NOFT(\"power management and distribution\") OR NOFT(\"electrical architecture\") OR NOFT(\"electrical architectures\") OR NOFT(\"power architecture\") OR NOFT(\"power architectures\") OR NOFT(\"DC power bus\") OR NOFT(\"DC power buses\") OR NOFT(\"PCDU\") OR NOFT(\"PCDUs\") OR NOFT(\"PMAD\") OR NOFT(\"PMADs\")) AND (NOFT(\"model-based systems engineering\") OR NOFT(\"model based systems engineering\") OR NOFT(\"model-based system engineering\") OR NOFT(\"model based system engineering\") OR NOFT(\"model-driven systems engineering\") OR NOFT(\"model driven systems engineering\") OR NOFT(\"model-driven system engineering\") OR NOFT(\"model driven system engineering\") OR NOFT(\"model-centric systems engineering\") OR NOFT(\"model centric systems engineering\") OR NOFT(\"model-centric system engineering\") OR NOFT(\"model centric system engineering\") OR NOFT(\"MBSE\") OR NOFT(\"SysML\") OR NOFT(\"systems modeling language\") OR NOFT(\"systems modelling language\") OR NOFT(\"system modeling language\") OR NOFT(\"system modelling language\") OR NOFT(\"object-process methodology\") OR NOFT(\"object process methodology\") OR NOFT(\"OPM\") OR NOFT(\"object-oriented systems engineering method\") OR NOFT(\"object oriented systems engineering method\") OR NOFT(\"OOSEM\") OR NOFT(\"object-oriented systems engineering\") OR NOFT(\"object oriented systems engineering\") OR NOFT(\"Arcadia\") OR NOFT(\"Capella\") OR NOFT(\"model-based engineering\") OR NOFT(\"model based engineering\") OR NOFT(\"model-driven engineering\") OR NOFT(\"model driven engineering\") OR NOFT(\"model-based design\") OR NOFT(\"model based design\") OR NOFT(\"model-driven design\") OR NOFT(\"model driven design\") OR NOFT(\"MBE\") OR NOFT(\"MDE\") OR NOFT(\"MBD\") OR NOFT(\"MagicGrid\") OR NOFT(\"Harmony-SE\") OR NOFT(\"Harmony SE\") OR NOFT(\"RFLP\") OR NOFT(\"Cameo Systems Modeler\") OR NOFT(\"MagicDraw\") OR NOFT(\"IBM Engineering Systems Design Rhapsody\") OR NOFT(\"Rational Rhapsody\") OR NOFT(\"Vitech CORE\") OR NOFT(\"Vitech GENESYS\") OR NOFT(\"OpenMBEE\") OR NOFT(\"Enterprise Architect\") OR NOFT(\"MATLAB System Composer\") OR NOFT(\"System Composer\") OR NOFT(\"Modelio\")))",
+      "query_characters": 3480,
+      "query_sha256": "60949c5ee998d787ebc43eb521fd97d09da330beadff2597d9dc5c9bb707442c",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/literal-A1.json",
+      "screenshots": {
+        "search_page": "events/literal-A1.search-page.png",
+        "results_page": "events/literal-A1.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-A1",
+      "partition_id": "A1",
+      "variant": "wildcard",
+      "purpose": "Strict complete two-pass wildcard capture for the A1 bounded-wildcard comparison.",
+      "query": "((NOFT(CubeSat[*1]) OR NOFT(\"cube sat[*1]\") OR NOFT(\"cube-sat[*1]\") OR NOFT(\"cube satellite[*1]\") OR NOFT(nanosat[*7]) OR NOFT(\"nano-sat[*1]\") OR NOFT(\"nano sat[*1]\") OR NOFT(\"nano-satellite[*1]\") OR NOFT(\"nano satellite[*1]\") OR NOFT(SmallSat[*1]) OR NOFT(\"small satellite[*1]\") OR NOFT(\"small sat[*1]\")) AND (NOFT(\"electrical power system[*1]\") OR NOFT(\"electric power system[*1]\") OR NOFT(\"electrical power subsystem[*1]\") OR NOFT(\"electric power subsystem[*1]\") OR NOFT(\"electrical energy subsystem[*1]\") OR NOFT(EPS[*1]) OR NOFT(\"power subsystem[*1]\") OR NOFT(\"power system[*1]\") OR NOFT(\"spacecraft power system[*1]\") OR NOFT(\"power suppl[*3]\") OR NOFT(\"power distribution unit[*1]\") OR NOFT(PDU[*1]) OR NOFT(\"power processing unit[*1]\") OR NOFT(\"power control and distribution\") OR NOFT(\"power management and distribution\") OR NOFT(\"electrical architecture[*1]\") OR NOFT(\"power architecture[*1]\") OR NOFT(\"DC power bus[*2]\") OR NOFT(PCDU[*1]) OR NOFT(PMAD[*1])) AND (NOFT(\"model-based system[*1] engineering\") OR NOFT(\"model based system[*1] engineering\") OR NOFT(\"model-driven system[*1] engineering\") OR NOFT(\"model driven system[*1] engineering\") OR NOFT(\"model-centric system[*1] engineering\") OR NOFT(\"model centric system[*1] engineering\") OR NOFT(\"MBSE\") OR NOFT(\"SysML\") OR NOFT(\"system[*1] modeling language\") OR NOFT(\"system[*1] modelling language\") OR NOFT(\"object-process methodology\") OR NOFT(\"object process methodology\") OR NOFT(\"OPM\") OR NOFT(\"object-oriented systems engineering method\") OR NOFT(\"object oriented systems engineering method\") OR NOFT(\"OOSEM\") OR NOFT(\"object-oriented systems engineering\") OR NOFT(\"object oriented systems engineering\") OR NOFT(\"Arcadia\") OR NOFT(\"Capella\") OR NOFT(\"model-based engineering\") OR NOFT(\"model based engineering\") OR NOFT(\"model-driven engineering\") OR NOFT(\"model driven engineering\") OR NOFT(\"model-based design\") OR NOFT(\"model based design\") OR NOFT(\"model-driven design\") OR NOFT(\"model driven design\") OR NOFT(\"MBE\") OR NOFT(\"MDE\") OR NOFT(\"MBD\") OR NOFT(\"MagicGrid\") OR NOFT(\"Harmony-SE\") OR NOFT(\"Harmony SE\") OR NOFT(\"RFLP\") OR NOFT(\"Cameo Systems Modeler\") OR NOFT(\"MagicDraw\") OR NOFT(\"IBM Engineering Systems Design Rhapsody\") OR NOFT(\"Rational Rhapsody\") OR NOFT(\"Vitech CORE\") OR NOFT(\"Vitech GENESYS\") OR NOFT(\"OpenMBEE\") OR NOFT(\"Enterprise Architect\") OR NOFT(\"MATLAB System Composer\") OR NOFT(\"System Composer\") OR NOFT(\"Modelio\")))",
+      "query_characters": 2421,
+      "query_sha256": "8881031065d24caacdc6cff2baa320791fc08f696435e8d352d134b34a005bc6",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/wildcard-A1.json",
+      "screenshots": {
+        "search_page": "events/wildcard-A1.search-page.png",
+        "results_page": "events/wildcard-A1.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-A2",
+      "partition_id": "A2",
+      "variant": "literal",
+      "purpose": "Strict complete two-pass literal capture for the A2 bounded-wildcard comparison.",
+      "query": "((NOFT(\"CubeSat\") OR NOFT(\"CubeSats\") OR NOFT(\"cube sat\") OR NOFT(\"cube sats\") OR NOFT(\"cube-sat\") OR NOFT(\"cube-sats\") OR NOFT(\"cube satellite\") OR NOFT(\"cube satellites\") OR NOFT(\"nanosat\") OR NOFT(\"nanosats\") OR NOFT(\"nanosatellite\") OR NOFT(\"nanosatellites\") OR NOFT(\"nano-sat\") OR NOFT(\"nano-sats\") OR NOFT(\"nano sat\") OR NOFT(\"nano sats\") OR NOFT(\"nano-satellite\") OR NOFT(\"nano-satellites\") OR NOFT(\"nano satellite\") OR NOFT(\"nano satellites\") OR NOFT(\"SmallSat\") OR NOFT(\"SmallSats\") OR NOFT(\"small satellite\") OR NOFT(\"small satellites\") OR NOFT(\"small sat\") OR NOFT(\"small sats\")) AND (NOFT(\"power budget\") OR NOFT(\"power budgets\") OR NOFT(\"energy budget\") OR NOFT(\"energy budgets\") OR NOFT(\"energy balance\") OR NOFT(\"energy balances\") OR NOFT(\"power balance\") OR NOFT(\"power balances\") OR NOFT(\"power margin\") OR NOFT(\"power margins\") OR NOFT(\"power generation\") OR NOFT(\"photovoltaic generator\") OR NOFT(\"photovoltaic generators\") OR NOFT(\"solar array\") OR NOFT(\"solar arrays\") OR NOFT(\"solar panel\") OR NOFT(\"solar panels\") OR NOFT(\"battery\") OR NOFT(\"batteries\") OR NOFT(\"battery management\") OR NOFT(\"state of charge\") OR NOFT(\"states of charge\") OR NOFT(\"energy storage\") OR NOFT(\"power electronics\") OR NOFT(\"power conditioning\") OR NOFT(\"power distribution\") OR NOFT(\"power management\") OR NOFT(\"power interface\") OR NOFT(\"power interfaces\") OR NOFT(\"power mode\") OR NOFT(\"power modes\") OR NOFT(\"load profile\") OR NOFT(\"load profiles\") OR NOFT(\"power consumption\") OR NOFT(\"power demand\") OR NOFT(\"power profile\") OR NOFT(\"energy harvesting\")) AND ((NOFT(\"model-based systems engineering\") OR NOFT(\"model based systems engineering\") OR NOFT(\"model-based system engineering\") OR NOFT(\"model based system engineering\") OR NOFT(\"model-driven systems engineering\") OR NOFT(\"model driven systems engineering\") OR NOFT(\"model-driven system engineering\") OR NOFT(\"model driven system engineering\") OR NOFT(\"model-centric systems engineering\") OR NOFT(\"model centric systems engineering\") OR NOFT(\"model-centric system engineering\") OR NOFT(\"model centric system engineering\") OR NOFT(\"MBSE\") OR NOFT(\"SysML\") OR NOFT(\"systems modeling language\") OR NOFT(\"systems modelling language\") OR NOFT(\"system modeling language\") OR NOFT(\"system modelling language\") OR NOFT(\"object-process methodology\") OR NOFT(\"object process methodology\") OR NOFT(\"OPM\") OR NOFT(\"object-oriented systems engineering method\") OR NOFT(\"object oriented systems engineering method\") OR NOFT(\"OOSEM\") OR NOFT(\"object-oriented systems engineering\") OR NOFT(\"object oriented systems engineering\") OR NOFT(\"Arcadia\") OR NOFT(\"Capella\") OR NOFT(\"model-based engineering\") OR NOFT(\"model based engineering\") OR NOFT(\"model-driven engineering\") OR NOFT(\"model driven engineering\") OR NOFT(\"model-based design\") OR NOFT(\"model based design\") OR NOFT(\"model-driven design\") OR NOFT(\"model driven design\") OR NOFT(\"MBE\") OR NOFT(\"MDE\") OR NOFT(\"MBD\") OR NOFT(\"MagicGrid\") OR NOFT(\"Harmony-SE\") OR NOFT(\"Harmony SE\") OR NOFT(\"RFLP\") OR NOFT(\"Cameo Systems Modeler\") OR NOFT(\"MagicDraw\") OR NOFT(\"IBM Engineering Systems Design Rhapsody\") OR NOFT(\"Rational Rhapsody\") OR NOFT(\"Vitech CORE\") OR NOFT(\"Vitech GENESYS\") OR NOFT(\"OpenMBEE\") OR NOFT(\"Enterprise Architect\") OR NOFT(\"MATLAB System Composer\") OR NOFT(\"System Composer\") OR NOFT(\"Modelio\")) OR (NOFT(\"system model\") OR NOFT(\"systems model\") OR NOFT(\"system modeling\") OR NOFT(\"systems modeling\") OR NOFT(\"system modelling\") OR NOFT(\"systems modelling\") OR NOFT(\"reference model\") OR NOFT(\"reference models\") OR NOFT(\"digital engineering\") OR NOFT(\"object-oriented systems model\") OR NOFT(\"object-oriented systems models\") OR NOFT(\"model-based system design\") OR NOFT(\"model based system design\") OR NOFT(\"model-based systems design\") OR NOFT(\"model based systems design\") OR NOFT(\"system architecture model\") OR NOFT(\"system architecture models\") OR NOFT(\"systems architecture model\") OR NOFT(\"systems architecture models\") OR NOFT(\"integrated system model\") OR NOFT(\"integrated system models\") OR NOFT(\"integrated systems model\") OR NOFT(\"integrated systems models\") OR NOFT(\"system-level model\") OR NOFT(\"system-level models\") OR NOFT(\"system level model\") OR NOFT(\"system level models\") OR NOFT(\"digital thread\") OR NOFT(\"digital threads\") OR NOFT(\"digital twin\") OR NOFT(\"digital twins\"))))",
+      "query_characters": 4325,
+      "query_sha256": "630dd9a38e6aa3d00f43bf6166896e9258f11744c25454144658955bb719c8ee",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/literal-A2.json",
+      "screenshots": {
+        "search_page": "events/literal-A2.search-page.png",
+        "results_page": "events/literal-A2.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-A2",
+      "partition_id": "A2",
+      "variant": "wildcard",
+      "purpose": "Strict complete two-pass wildcard capture for the A2 bounded-wildcard comparison.",
+      "query": "((NOFT(CubeSat[*1]) OR NOFT(\"cube sat[*1]\") OR NOFT(\"cube-sat[*1]\") OR NOFT(\"cube satellite[*1]\") OR NOFT(nanosat[*7]) OR NOFT(\"nano-sat[*1]\") OR NOFT(\"nano sat[*1]\") OR NOFT(\"nano-satellite[*1]\") OR NOFT(\"nano satellite[*1]\") OR NOFT(SmallSat[*1]) OR NOFT(\"small satellite[*1]\") OR NOFT(\"small sat[*1]\")) AND (NOFT(\"power budget[*1]\") OR NOFT(\"energy budget[*1]\") OR NOFT(\"energy balance[*1]\") OR NOFT(\"power balance[*1]\") OR NOFT(\"power margin[*1]\") OR NOFT(\"power generation\") OR NOFT(\"photovoltaic generator[*1]\") OR NOFT(\"solar array[*1]\") OR NOFT(\"solar panel[*1]\") OR NOFT(batter[*3]) OR NOFT(\"battery management\") OR NOFT(\"state[*1] of charge\") OR NOFT(\"energy storage\") OR NOFT(\"power electronics\") OR NOFT(\"power conditioning\") OR NOFT(\"power distribution\") OR NOFT(\"power management\") OR NOFT(\"power interface[*1]\") OR NOFT(\"power mode[*1]\") OR NOFT(\"load profile[*1]\") OR NOFT(\"power consumption\") OR NOFT(\"power demand\") OR NOFT(\"power profile\") OR NOFT(\"energy harvesting\")) AND ((NOFT(\"model-based system[*1] engineering\") OR NOFT(\"model based system[*1] engineering\") OR NOFT(\"model-driven system[*1] engineering\") OR NOFT(\"model driven system[*1] engineering\") OR NOFT(\"model-centric system[*1] engineering\") OR NOFT(\"model centric system[*1] engineering\") OR NOFT(\"MBSE\") OR NOFT(\"SysML\") OR NOFT(\"system[*1] modeling language\") OR NOFT(\"system[*1] modelling language\") OR NOFT(\"object-process methodology\") OR NOFT(\"object process methodology\") OR NOFT(\"OPM\") OR NOFT(\"object-oriented systems engineering method\") OR NOFT(\"object oriented systems engineering method\") OR NOFT(\"OOSEM\") OR NOFT(\"object-oriented systems engineering\") OR NOFT(\"object oriented systems engineering\") OR NOFT(\"Arcadia\") OR NOFT(\"Capella\") OR NOFT(\"model-based engineering\") OR NOFT(\"model based engineering\") OR NOFT(\"model-driven engineering\") OR NOFT(\"model driven engineering\") OR NOFT(\"model-based design\") OR NOFT(\"model based design\") OR NOFT(\"model-driven design\") OR NOFT(\"model driven design\") OR NOFT(\"MBE\") OR NOFT(\"MDE\") OR NOFT(\"MBD\") OR NOFT(\"MagicGrid\") OR NOFT(\"Harmony-SE\") OR NOFT(\"Harmony SE\") OR NOFT(\"RFLP\") OR NOFT(\"Cameo Systems Modeler\") OR NOFT(\"MagicDraw\") OR NOFT(\"IBM Engineering Systems Design Rhapsody\") OR NOFT(\"Rational Rhapsody\") OR NOFT(\"Vitech CORE\") OR NOFT(\"Vitech GENESYS\") OR NOFT(\"OpenMBEE\") OR NOFT(\"Enterprise Architect\") OR NOFT(\"MATLAB System Composer\") OR NOFT(\"System Composer\") OR NOFT(\"Modelio\")) OR (NOFT(\"system[*1] model\") OR NOFT(\"system[*1] modeling\") OR NOFT(\"system[*1] modelling\") OR NOFT(\"reference model[*1]\") OR NOFT(\"digital engineering\") OR NOFT(\"object-oriented systems model[*1]\") OR NOFT(\"model-based system[*1] design\") OR NOFT(\"model based system[*1] design\") OR NOFT(\"system[*1] architecture model[*1]\") OR NOFT(\"integrated system[*1] model[*1]\") OR NOFT(\"system-level model[*1]\") OR NOFT(\"system level model[*1]\") OR NOFT(\"digital thread[*1]\") OR NOFT(\"digital twin[*1]\"))))",
+      "query_characters": 2939,
+      "query_sha256": "6d51e2a3d22feb2fb0d31bd1bc8fbcf5d030e8cf1d02509e14fcfb81d0e1cc14",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/wildcard-A2.json",
+      "screenshots": {
+        "search_page": "events/wildcard-A2.search-page.png",
+        "results_page": "events/wildcard-A2.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-A3",
+      "partition_id": "A3",
+      "variant": "literal",
+      "purpose": "Strict complete two-pass literal capture for the A3 bounded-wildcard comparison.",
+      "query": "((NOFT(\"CubeSat\") OR NOFT(\"CubeSats\") OR NOFT(\"cube sat\") OR NOFT(\"cube sats\") OR NOFT(\"cube-sat\") OR NOFT(\"cube-sats\") OR NOFT(\"cube satellite\") OR NOFT(\"cube satellites\") OR NOFT(\"nanosat\") OR NOFT(\"nanosats\") OR NOFT(\"nanosatellite\") OR NOFT(\"nanosatellites\") OR NOFT(\"nano-sat\") OR NOFT(\"nano-sats\") OR NOFT(\"nano sat\") OR NOFT(\"nano sats\") OR NOFT(\"nano-satellite\") OR NOFT(\"nano-satellites\") OR NOFT(\"nano satellite\") OR NOFT(\"nano satellites\") OR NOFT(\"SmallSat\") OR NOFT(\"SmallSats\") OR NOFT(\"small satellite\") OR NOFT(\"small satellites\") OR NOFT(\"small sat\") OR NOFT(\"small sats\")) AND (NOFT(\"electrical power system\") OR NOFT(\"electrical power systems\") OR NOFT(\"electric power system\") OR NOFT(\"electric power systems\") OR NOFT(\"electrical power subsystem\") OR NOFT(\"electrical power subsystems\") OR NOFT(\"electric power subsystem\") OR NOFT(\"electric power subsystems\") OR NOFT(\"electrical energy subsystem\") OR NOFT(\"electrical energy subsystems\") OR NOFT(\"EPS\") OR NOFT(\"EPSs\") OR NOFT(\"power subsystem\") OR NOFT(\"power subsystems\") OR NOFT(\"power system\") OR NOFT(\"power systems\") OR NOFT(\"spacecraft power system\") OR NOFT(\"spacecraft power systems\") OR NOFT(\"power supply\") OR NOFT(\"power supplies\") OR NOFT(\"power distribution unit\") OR NOFT(\"power distribution units\") OR NOFT(\"PDU\") OR NOFT(\"PDUs\") OR NOFT(\"power processing unit\") OR NOFT(\"power processing units\") OR NOFT(\"power control and distribution\") OR NOFT(\"power management and distribution\") OR NOFT(\"electrical architecture\") OR NOFT(\"electrical architectures\") OR NOFT(\"power architecture\") OR NOFT(\"power architectures\") OR NOFT(\"DC power bus\") OR NOFT(\"DC power buses\") OR NOFT(\"PCDU\") OR NOFT(\"PCDUs\") OR NOFT(\"PMAD\") OR NOFT(\"PMADs\")) AND (NOFT(\"system model\") OR NOFT(\"systems model\") OR NOFT(\"system modeling\") OR NOFT(\"systems modeling\") OR NOFT(\"system modelling\") OR NOFT(\"systems modelling\") OR NOFT(\"reference model\") OR NOFT(\"reference models\") OR NOFT(\"digital engineering\") OR NOFT(\"object-oriented systems model\") OR NOFT(\"object-oriented systems models\") OR NOFT(\"model-based system design\") OR NOFT(\"model based system design\") OR NOFT(\"model-based systems design\") OR NOFT(\"model based systems design\") OR NOFT(\"system architecture model\") OR NOFT(\"system architecture models\") OR NOFT(\"systems architecture model\") OR NOFT(\"systems architecture models\") OR NOFT(\"integrated system model\") OR NOFT(\"integrated system models\") OR NOFT(\"integrated systems model\") OR NOFT(\"integrated systems models\") OR NOFT(\"system-level model\") OR NOFT(\"system-level models\") OR NOFT(\"system level model\") OR NOFT(\"system level models\") OR NOFT(\"digital thread\") OR NOFT(\"digital threads\") OR NOFT(\"digital twin\") OR NOFT(\"digital twins\")))",
+      "query_characters": 2724,
+      "query_sha256": "5ddacf42c290a84bca78fa25bf9e8be55c4ea40124b25bd1589659901a36f405",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/literal-A3.json",
+      "screenshots": {
+        "search_page": "events/literal-A3.search-page.png",
+        "results_page": "events/literal-A3.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-A3",
+      "partition_id": "A3",
+      "variant": "wildcard",
+      "purpose": "Strict complete two-pass wildcard capture for the A3 bounded-wildcard comparison.",
+      "query": "((NOFT(CubeSat[*1]) OR NOFT(\"cube sat[*1]\") OR NOFT(\"cube-sat[*1]\") OR NOFT(\"cube satellite[*1]\") OR NOFT(nanosat[*7]) OR NOFT(\"nano-sat[*1]\") OR NOFT(\"nano sat[*1]\") OR NOFT(\"nano-satellite[*1]\") OR NOFT(\"nano satellite[*1]\") OR NOFT(SmallSat[*1]) OR NOFT(\"small satellite[*1]\") OR NOFT(\"small sat[*1]\")) AND (NOFT(\"electrical power system[*1]\") OR NOFT(\"electric power system[*1]\") OR NOFT(\"electrical power subsystem[*1]\") OR NOFT(\"electric power subsystem[*1]\") OR NOFT(\"electrical energy subsystem[*1]\") OR NOFT(EPS[*1]) OR NOFT(\"power subsystem[*1]\") OR NOFT(\"power system[*1]\") OR NOFT(\"spacecraft power system[*1]\") OR NOFT(\"power suppl[*3]\") OR NOFT(\"power distribution unit[*1]\") OR NOFT(PDU[*1]) OR NOFT(\"power processing unit[*1]\") OR NOFT(\"power control and distribution\") OR NOFT(\"power management and distribution\") OR NOFT(\"electrical architecture[*1]\") OR NOFT(\"power architecture[*1]\") OR NOFT(\"DC power bus[*2]\") OR NOFT(PCDU[*1]) OR NOFT(PMAD[*1])) AND (NOFT(\"system[*1] model\") OR NOFT(\"system[*1] modeling\") OR NOFT(\"system[*1] modelling\") OR NOFT(\"reference model[*1]\") OR NOFT(\"digital engineering\") OR NOFT(\"object-oriented systems model[*1]\") OR NOFT(\"model-based system[*1] design\") OR NOFT(\"model based system[*1] design\") OR NOFT(\"system[*1] architecture model[*1]\") OR NOFT(\"integrated system[*1] model[*1]\") OR NOFT(\"system-level model[*1]\") OR NOFT(\"system level model[*1]\") OR NOFT(\"digital thread[*1]\") OR NOFT(\"digital twin[*1]\")))",
+      "query_characters": 1466,
+      "query_sha256": "a1ff9a52ef7d60fc3c9c4e7eab4ae50b75df36ac456fca7432bc7c86e3f7bc71",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/wildcard-A3.json",
+      "screenshots": {
+        "search_page": "events/wildcard-A3.search-page.png",
+        "results_page": "events/wildcard-A3.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-B1",
+      "partition_id": "B1",
+      "variant": "literal",
+      "purpose": "Strict complete two-pass literal capture for the B1 bounded-wildcard comparison.",
+      "query": "((NOFT(\"CubeSat\") OR NOFT(\"CubeSats\") OR NOFT(\"cube sat\") OR NOFT(\"cube sats\") OR NOFT(\"cube-sat\") OR NOFT(\"cube-sats\") OR NOFT(\"cube satellite\") OR NOFT(\"cube satellites\") OR NOFT(\"nanosat\") OR NOFT(\"nanosats\") OR NOFT(\"nanosatellite\") OR NOFT(\"nanosatellites\") OR NOFT(\"nano-sat\") OR NOFT(\"nano-sats\") OR NOFT(\"nano sat\") OR NOFT(\"nano sats\") OR NOFT(\"nano-satellite\") OR NOFT(\"nano-satellites\") OR NOFT(\"nano satellite\") OR NOFT(\"nano satellites\") OR NOFT(\"SmallSat\") OR NOFT(\"SmallSats\") OR NOFT(\"small satellite\") OR NOFT(\"small satellites\") OR NOFT(\"small sat\") OR NOFT(\"small sats\")) AND (NOFT(\"model-based systems engineering\") OR NOFT(\"model based systems engineering\") OR NOFT(\"model-based system engineering\") OR NOFT(\"model based system engineering\") OR NOFT(\"model-driven systems engineering\") OR NOFT(\"model driven systems engineering\") OR NOFT(\"model-driven system engineering\") OR NOFT(\"model driven system engineering\") OR NOFT(\"model-centric systems engineering\") OR NOFT(\"model centric systems engineering\") OR NOFT(\"model-centric system engineering\") OR NOFT(\"model centric system engineering\") OR NOFT(\"MBSE\") OR NOFT(\"SysML\") OR NOFT(\"systems modeling language\") OR NOFT(\"systems modelling language\") OR NOFT(\"system modeling language\") OR NOFT(\"system modelling language\") OR NOFT(\"object-process methodology\") OR NOFT(\"object process methodology\") OR NOFT(\"OPM\") OR NOFT(\"object-oriented systems engineering method\") OR NOFT(\"object oriented systems engineering method\") OR NOFT(\"OOSEM\") OR NOFT(\"object-oriented systems engineering\") OR NOFT(\"object oriented systems engineering\") OR NOFT(\"Arcadia\") OR NOFT(\"Capella\") OR NOFT(\"model-based engineering\") OR NOFT(\"model based engineering\") OR NOFT(\"model-driven engineering\") OR NOFT(\"model driven engineering\") OR NOFT(\"model-based design\") OR NOFT(\"model based design\") OR NOFT(\"model-driven design\") OR NOFT(\"model driven design\") OR NOFT(\"MBE\") OR NOFT(\"MDE\") OR NOFT(\"MBD\") OR NOFT(\"MagicGrid\") OR NOFT(\"Harmony-SE\") OR NOFT(\"Harmony SE\") OR NOFT(\"RFLP\") OR NOFT(\"Cameo Systems Modeler\") OR NOFT(\"MagicDraw\") OR NOFT(\"IBM Engineering Systems Design Rhapsody\") OR NOFT(\"Rational Rhapsody\") OR NOFT(\"Vitech CORE\") OR NOFT(\"Vitech GENESYS\") OR NOFT(\"OpenMBEE\") OR NOFT(\"Enterprise Architect\") OR NOFT(\"MATLAB System Composer\") OR NOFT(\"System Composer\") OR NOFT(\"Modelio\")))",
+      "query_characters": 2350,
+      "query_sha256": "bb5abbb3471a0624288d6f35645e621ef5eba36cbc39d755591cc0344fd0f020",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/literal-B1.json",
+      "screenshots": {
+        "search_page": "events/literal-B1.search-page.png",
+        "results_page": "events/literal-B1.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-B1",
+      "partition_id": "B1",
+      "variant": "wildcard",
+      "purpose": "Strict complete two-pass wildcard capture for the B1 bounded-wildcard comparison.",
+      "query": "((NOFT(CubeSat[*1]) OR NOFT(\"cube sat[*1]\") OR NOFT(\"cube-sat[*1]\") OR NOFT(\"cube satellite[*1]\") OR NOFT(nanosat[*7]) OR NOFT(\"nano-sat[*1]\") OR NOFT(\"nano sat[*1]\") OR NOFT(\"nano-satellite[*1]\") OR NOFT(\"nano satellite[*1]\") OR NOFT(SmallSat[*1]) OR NOFT(\"small satellite[*1]\") OR NOFT(\"small sat[*1]\")) AND (NOFT(\"model-based system[*1] engineering\") OR NOFT(\"model based system[*1] engineering\") OR NOFT(\"model-driven system[*1] engineering\") OR NOFT(\"model driven system[*1] engineering\") OR NOFT(\"model-centric system[*1] engineering\") OR NOFT(\"model centric system[*1] engineering\") OR NOFT(\"MBSE\") OR NOFT(\"SysML\") OR NOFT(\"system[*1] modeling language\") OR NOFT(\"system[*1] modelling language\") OR NOFT(\"object-process methodology\") OR NOFT(\"object process methodology\") OR NOFT(\"OPM\") OR NOFT(\"object-oriented systems engineering method\") OR NOFT(\"object oriented systems engineering method\") OR NOFT(\"OOSEM\") OR NOFT(\"object-oriented systems engineering\") OR NOFT(\"object oriented systems engineering\") OR NOFT(\"Arcadia\") OR NOFT(\"Capella\") OR NOFT(\"model-based engineering\") OR NOFT(\"model based engineering\") OR NOFT(\"model-driven engineering\") OR NOFT(\"model driven engineering\") OR NOFT(\"model-based design\") OR NOFT(\"model based design\") OR NOFT(\"model-driven design\") OR NOFT(\"model driven design\") OR NOFT(\"MBE\") OR NOFT(\"MDE\") OR NOFT(\"MBD\") OR NOFT(\"MagicGrid\") OR NOFT(\"Harmony-SE\") OR NOFT(\"Harmony SE\") OR NOFT(\"RFLP\") OR NOFT(\"Cameo Systems Modeler\") OR NOFT(\"MagicDraw\") OR NOFT(\"IBM Engineering Systems Design Rhapsody\") OR NOFT(\"Rational Rhapsody\") OR NOFT(\"Vitech CORE\") OR NOFT(\"Vitech GENESYS\") OR NOFT(\"OpenMBEE\") OR NOFT(\"Enterprise Architect\") OR NOFT(\"MATLAB System Composer\") OR NOFT(\"System Composer\") OR NOFT(\"Modelio\")))",
+      "query_characters": 1758,
+      "query_sha256": "ac2d731dd93e0e7bca9cf169243bc537dc6bc898c00e7158eb9ee2f865bafbad",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/wildcard-B1.json",
+      "screenshots": {
+        "search_page": "events/wildcard-B1.search-page.png",
+        "results_page": "events/wildcard-B1.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-B2",
+      "partition_id": "B2",
+      "variant": "literal",
+      "purpose": "Strict complete two-pass literal capture for the B2 bounded-wildcard comparison.",
+      "query": "((NOFT(\"CubeSat\") OR NOFT(\"CubeSats\") OR NOFT(\"cube sat\") OR NOFT(\"cube sats\") OR NOFT(\"cube-sat\") OR NOFT(\"cube-sats\") OR NOFT(\"cube satellite\") OR NOFT(\"cube satellites\") OR NOFT(\"nanosat\") OR NOFT(\"nanosats\") OR NOFT(\"nanosatellite\") OR NOFT(\"nanosatellites\") OR NOFT(\"nano-sat\") OR NOFT(\"nano-sats\") OR NOFT(\"nano sat\") OR NOFT(\"nano sats\") OR NOFT(\"nano-satellite\") OR NOFT(\"nano-satellites\") OR NOFT(\"nano satellite\") OR NOFT(\"nano satellites\") OR NOFT(\"SmallSat\") OR NOFT(\"SmallSats\") OR NOFT(\"small satellite\") OR NOFT(\"small satellites\") OR NOFT(\"small sat\") OR NOFT(\"small sats\")) AND (NOFT(\"system model\") OR NOFT(\"systems model\") OR NOFT(\"system modeling\") OR NOFT(\"systems modeling\") OR NOFT(\"system modelling\") OR NOFT(\"systems modelling\") OR NOFT(\"reference model\") OR NOFT(\"reference models\") OR NOFT(\"digital engineering\") OR NOFT(\"object-oriented systems model\") OR NOFT(\"object-oriented systems models\") OR NOFT(\"model-based system design\") OR NOFT(\"model based system design\") OR NOFT(\"model-based systems design\") OR NOFT(\"model based systems design\") OR NOFT(\"system architecture model\") OR NOFT(\"system architecture models\") OR NOFT(\"systems architecture model\") OR NOFT(\"systems architecture models\") OR NOFT(\"integrated system model\") OR NOFT(\"integrated system models\") OR NOFT(\"integrated systems model\") OR NOFT(\"integrated systems models\") OR NOFT(\"system-level model\") OR NOFT(\"system-level models\") OR NOFT(\"system level model\") OR NOFT(\"system level models\") OR NOFT(\"digital thread\") OR NOFT(\"digital threads\") OR NOFT(\"digital twin\") OR NOFT(\"digital twins\")) AND (NOFT(\"requirement\") OR NOFT(\"requirements\") OR NOFT(\"function\") OR NOFT(\"functions\") OR NOFT(\"functional\") OR NOFT(\"behavior\") OR NOFT(\"behaviors\") OR NOFT(\"behaviour\") OR NOFT(\"behaviours\") OR NOFT(\"behavioral\") OR NOFT(\"behavioural\") OR NOFT(\"architecture\") OR NOFT(\"architectures\") OR NOFT(\"architectural\") OR NOFT(\"interface\") OR NOFT(\"interfaces\") OR NOFT(\"traceability\") OR NOFT(\"trace\") OR NOFT(\"traceable\") OR NOFT(\"traced\") OR NOFT(\"allocation\") OR NOFT(\"allocate\") OR NOFT(\"allocated\") OR NOFT(\"constraint\") OR NOFT(\"constraints\") OR NOFT(\"parametric\") OR NOFT(\"parametrics\") OR NOFT(\"analysis\") OR NOFT(\"analyses\") OR NOFT(\"design\") OR NOFT(\"designs\") OR NOFT(\"designed\") OR NOFT(\"designing\") OR NOFT(\"decision\") OR NOFT(\"decisions\") OR NOFT(\"decision-making\") OR NOFT(\"decision making\") OR NOFT(\"trade study\") OR NOFT(\"trade studies\") OR NOFT(\"trade-off\") OR NOFT(\"trade-offs\") OR NOFT(\"tradeoff\") OR NOFT(\"tradeoffs\") OR NOFT(\"verification\") OR NOFT(\"verifications\") OR NOFT(\"verify\") OR NOFT(\"verifies\") OR NOFT(\"verified\") OR NOFT(\"verifying\") OR NOFT(\"validation\") OR NOFT(\"validations\") OR NOFT(\"validate\") OR NOFT(\"validates\") OR NOFT(\"validated\") OR NOFT(\"validating\")))",
+      "query_characters": 2788,
+      "query_sha256": "5b1718ee852b47b8fa74ead7d262b50ac59fb7c52011ce14dc3be5c07b57d5e2",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/literal-B2.json",
+      "screenshots": {
+        "search_page": "events/literal-B2.search-page.png",
+        "results_page": "events/literal-B2.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-B2",
+      "partition_id": "B2",
+      "variant": "wildcard",
+      "purpose": "Strict complete two-pass wildcard capture for the B2 bounded-wildcard comparison.",
+      "query": "((NOFT(CubeSat[*1]) OR NOFT(\"cube sat[*1]\") OR NOFT(\"cube-sat[*1]\") OR NOFT(\"cube satellite[*1]\") OR NOFT(nanosat[*7]) OR NOFT(\"nano-sat[*1]\") OR NOFT(\"nano sat[*1]\") OR NOFT(\"nano-satellite[*1]\") OR NOFT(\"nano satellite[*1]\") OR NOFT(SmallSat[*1]) OR NOFT(\"small satellite[*1]\") OR NOFT(\"small sat[*1]\")) AND (NOFT(\"system[*1] model\") OR NOFT(\"system[*1] modeling\") OR NOFT(\"system[*1] modelling\") OR NOFT(\"reference model[*1]\") OR NOFT(\"digital engineering\") OR NOFT(\"object-oriented systems model[*1]\") OR NOFT(\"model-based system[*1] design\") OR NOFT(\"model based system[*1] design\") OR NOFT(\"system[*1] architecture model[*1]\") OR NOFT(\"integrated system[*1] model[*1]\") OR NOFT(\"system-level model[*1]\") OR NOFT(\"system level model[*1]\") OR NOFT(\"digital thread[*1]\") OR NOFT(\"digital twin[*1]\")) AND (NOFT(requirement[*1]) OR NOFT(function[*2]) OR NOFT(behavior[*2]) OR NOFT(behaviour[*2]) OR NOFT(architectur[*2]) OR NOFT(interface[*1]) OR NOFT(trace[*7]) OR NOFT(allocat[*3]) OR NOFT(constraint[*1]) OR NOFT(parametric[*1]) OR NOFT(analys[*2]) OR NOFT(design[*3]) OR NOFT(decision[*1]) OR NOFT(\"decision-making\") OR NOFT(\"decision making\") OR NOFT(\"trade stud[*3]\") OR NOFT(\"trade-off[*1]\") OR NOFT(tradeoff[*1]) OR NOFT(verification[*1]) OR NOFT(verif[*4]) OR NOFT(validation[*1]) OR NOFT(validat[*3])))",
+      "query_characters": 1313,
+      "query_sha256": "4bd87a44969b63c9d18fbd5522ccfe227c08db4fd25589427ba293d9670d1e37",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/wildcard-B2.json",
+      "screenshots": {
+        "search_page": "events/wildcard-B2.search-page.png",
+        "results_page": "events/wildcard-B2.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-BG1",
+      "partition_id": "BG1",
+      "variant": "literal",
+      "purpose": "Strict complete two-pass literal capture for the BG1 bounded-wildcard comparison.",
+      "query": "((NOFT(\"CubeSat\") OR NOFT(\"CubeSats\") OR NOFT(\"cube sat\") OR NOFT(\"cube sats\") OR NOFT(\"cube-sat\") OR NOFT(\"cube-sats\") OR NOFT(\"cube satellite\") OR NOFT(\"cube satellites\") OR NOFT(\"nanosat\") OR NOFT(\"nanosats\") OR NOFT(\"nanosatellite\") OR NOFT(\"nanosatellites\") OR NOFT(\"nano-sat\") OR NOFT(\"nano-sats\") OR NOFT(\"nano sat\") OR NOFT(\"nano sats\") OR NOFT(\"nano-satellite\") OR NOFT(\"nano-satellites\") OR NOFT(\"nano satellite\") OR NOFT(\"nano satellites\") OR NOFT(\"SmallSat\") OR NOFT(\"SmallSats\") OR NOFT(\"small satellite\") OR NOFT(\"small satellites\") OR NOFT(\"small sat\") OR NOFT(\"small sats\")) AND ((NOFT(\"generic model\") OR NOFT(\"generic models\") OR NOFT(\"generic system model\") OR NOFT(\"generic system models\") OR NOFT(\"reusable model\") OR NOFT(\"reusable models\") OR NOFT(\"reusable system model\") OR NOFT(\"reusable system models\") OR NOFT(\"configurable model\") OR NOFT(\"configurable models\") OR NOFT(\"configurable system model\") OR NOFT(\"configurable system models\") OR NOFT(\"model template\") OR NOFT(\"model templates\")) OR (NOFT(\"mission-agnostic model\") OR NOFT(\"mission-agnostic models\") OR NOFT(\"mission-agnostic architecture\") OR NOFT(\"mission-agnostic architectures\") OR NOFT(\"mission agnostic model\") OR NOFT(\"mission agnostic models\") OR NOFT(\"mission agnostic architecture\") OR NOFT(\"mission agnostic architectures\") OR NOFT(\"mission-independent model\") OR NOFT(\"mission-independent models\") OR NOFT(\"mission-independent architecture\") OR NOFT(\"mission-independent architectures\") OR NOFT(\"mission independent model\") OR NOFT(\"mission independent models\") OR NOFT(\"mission independent architecture\") OR NOFT(\"mission independent architectures\")) OR ((NOFT(\"mission-agnostic\") OR NOFT(\"mission agnostic\") OR NOFT(\"mission-independent\") OR NOFT(\"mission independent\")) AND (NOFT(\"system model\") OR NOFT(\"systems model\") OR NOFT(\"system modeling\") OR NOFT(\"systems modeling\") OR NOFT(\"system modelling\") OR NOFT(\"systems modelling\") OR NOFT(\"reference model\") OR NOFT(\"reference models\") OR NOFT(\"digital engineering\") OR NOFT(\"object-oriented systems model\") OR NOFT(\"object-oriented systems models\") OR NOFT(\"model-based system design\") OR NOFT(\"model based system design\") OR NOFT(\"model-based systems design\") OR NOFT(\"model based systems design\") OR NOFT(\"system architecture model\") OR NOFT(\"system architecture models\") OR NOFT(\"systems architecture model\") OR NOFT(\"systems architecture models\") OR NOFT(\"integrated system model\") OR NOFT(\"integrated system models\") OR NOFT(\"integrated systems model\") OR NOFT(\"integrated systems models\") OR NOFT(\"system-level model\") OR NOFT(\"system-level models\") OR NOFT(\"system level model\") OR NOFT(\"system level models\") OR NOFT(\"digital thread\") OR NOFT(\"digital threads\") OR NOFT(\"digital twin\") OR NOFT(\"digital twins\")))))",
+      "query_characters": 2780,
+      "query_sha256": "59e665680bb34a829a5e67110610b1def88a5c4b17e18c2241b7d797458c91c3",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/literal-BG1.json",
+      "screenshots": {
+        "search_page": "events/literal-BG1.search-page.png",
+        "results_page": "events/literal-BG1.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-BG1",
+      "partition_id": "BG1",
+      "variant": "wildcard",
+      "purpose": "Strict complete two-pass wildcard capture for the BG1 bounded-wildcard comparison.",
+      "query": "((NOFT(CubeSat[*1]) OR NOFT(\"cube sat[*1]\") OR NOFT(\"cube-sat[*1]\") OR NOFT(\"cube satellite[*1]\") OR NOFT(nanosat[*7]) OR NOFT(\"nano-sat[*1]\") OR NOFT(\"nano sat[*1]\") OR NOFT(\"nano-satellite[*1]\") OR NOFT(\"nano satellite[*1]\") OR NOFT(SmallSat[*1]) OR NOFT(\"small satellite[*1]\") OR NOFT(\"small sat[*1]\")) AND ((NOFT(\"generic model[*1]\") OR NOFT(\"generic system model[*1]\") OR NOFT(\"reusable model[*1]\") OR NOFT(\"reusable system model[*1]\") OR NOFT(\"configurable model[*1]\") OR NOFT(\"configurable system model[*1]\") OR NOFT(\"model template[*1]\")) OR (NOFT(\"mission-agnostic model[*1]\") OR NOFT(\"mission-agnostic architecture[*1]\") OR NOFT(\"mission agnostic model[*1]\") OR NOFT(\"mission agnostic architecture[*1]\") OR NOFT(\"mission-independent model[*1]\") OR NOFT(\"mission-independent architecture[*1]\") OR NOFT(\"mission independent model[*1]\") OR NOFT(\"mission independent architecture[*1]\")) OR ((NOFT(\"mission-agnostic\") OR NOFT(\"mission agnostic\") OR NOFT(\"mission-independent\") OR NOFT(\"mission independent\")) AND (NOFT(\"system[*1] model\") OR NOFT(\"system[*1] modeling\") OR NOFT(\"system[*1] modelling\") OR NOFT(\"reference model[*1]\") OR NOFT(\"digital engineering\") OR NOFT(\"object-oriented systems model[*1]\") OR NOFT(\"model-based system[*1] design\") OR NOFT(\"model based system[*1] design\") OR NOFT(\"system[*1] architecture model[*1]\") OR NOFT(\"integrated system[*1] model[*1]\") OR NOFT(\"system-level model[*1]\") OR NOFT(\"system level model[*1]\") OR NOFT(\"digital thread[*1]\") OR NOFT(\"digital twin[*1]\")))))",
+      "query_characters": 1513,
+      "query_sha256": "fdabf8ccda4680cc6216fe7a00574f4755f74ca4940bea058cf7b4c66aa56762",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/wildcard-BG1.json",
+      "screenshots": {
+        "search_page": "events/wildcard-BG1.search-page.png",
+        "results_page": "events/wildcard-BG1.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-BG2",
+      "partition_id": "BG2",
+      "variant": "literal",
+      "purpose": "Strict complete two-pass literal capture for the BG2 bounded-wildcard comparison.",
+      "query": "((NOFT(\"CubeSat\") OR NOFT(\"CubeSats\") OR NOFT(\"cube sat\") OR NOFT(\"cube sats\") OR NOFT(\"cube-sat\") OR NOFT(\"cube-sats\") OR NOFT(\"cube satellite\") OR NOFT(\"cube satellites\") OR NOFT(\"nanosat\") OR NOFT(\"nanosats\") OR NOFT(\"nanosatellite\") OR NOFT(\"nanosatellites\") OR NOFT(\"nano-sat\") OR NOFT(\"nano-sats\") OR NOFT(\"nano sat\") OR NOFT(\"nano sats\") OR NOFT(\"nano-satellite\") OR NOFT(\"nano-satellites\") OR NOFT(\"nano satellite\") OR NOFT(\"nano satellites\") OR NOFT(\"SmallSat\") OR NOFT(\"SmallSats\") OR NOFT(\"small satellite\") OR NOFT(\"small satellites\") OR NOFT(\"small sat\") OR NOFT(\"small sats\")) AND ((NOFT(\"reference architecture\") OR NOFT(\"reference architectures\") OR NOFT(\"domain model\") OR NOFT(\"domain models\") OR NOFT(\"metamodel\") OR NOFT(\"metamodels\") OR NOFT(\"meta-model\") OR NOFT(\"meta-models\")) OR (NOFT(\"product-line model\") OR NOFT(\"product-line models\") OR NOFT(\"product line model\") OR NOFT(\"product line models\") OR NOFT(\"product-family model\") OR NOFT(\"product-family models\") OR NOFT(\"product family model\") OR NOFT(\"product family models\")) OR (NOFT(\"variation point\") OR NOFT(\"variation points\")) OR ((NOFT(\"product-line\") OR NOFT(\"product line\") OR NOFT(\"product-family\") OR NOFT(\"product family\")) AND (NOFT(\"system model\") OR NOFT(\"systems model\") OR NOFT(\"system modeling\") OR NOFT(\"systems modeling\") OR NOFT(\"system modelling\") OR NOFT(\"systems modelling\") OR NOFT(\"reference model\") OR NOFT(\"reference models\") OR NOFT(\"digital engineering\") OR NOFT(\"object-oriented systems model\") OR NOFT(\"object-oriented systems models\") OR NOFT(\"model-based system design\") OR NOFT(\"model based system design\") OR NOFT(\"model-based systems design\") OR NOFT(\"model based systems design\") OR NOFT(\"system architecture model\") OR NOFT(\"system architecture models\") OR NOFT(\"systems architecture model\") OR NOFT(\"systems architecture models\") OR NOFT(\"integrated system model\") OR NOFT(\"integrated system models\") OR NOFT(\"integrated systems model\") OR NOFT(\"integrated systems models\") OR NOFT(\"system-level model\") OR NOFT(\"system-level models\") OR NOFT(\"system level model\") OR NOFT(\"system level models\") OR NOFT(\"digital thread\") OR NOFT(\"digital threads\") OR NOFT(\"digital twin\") OR NOFT(\"digital twins\")))))",
+      "query_characters": 2220,
+      "query_sha256": "92dc1d541d5cebe9f60d4c9906cc81a8afaa7b7102f17ab857e53b8162eb5051",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/literal-BG2.json",
+      "screenshots": {
+        "search_page": "events/literal-BG2.search-page.png",
+        "results_page": "events/literal-BG2.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-BG2",
+      "partition_id": "BG2",
+      "variant": "wildcard",
+      "purpose": "Strict complete two-pass wildcard capture for the BG2 bounded-wildcard comparison.",
+      "query": "((NOFT(CubeSat[*1]) OR NOFT(\"cube sat[*1]\") OR NOFT(\"cube-sat[*1]\") OR NOFT(\"cube satellite[*1]\") OR NOFT(nanosat[*7]) OR NOFT(\"nano-sat[*1]\") OR NOFT(\"nano sat[*1]\") OR NOFT(\"nano-satellite[*1]\") OR NOFT(\"nano satellite[*1]\") OR NOFT(SmallSat[*1]) OR NOFT(\"small satellite[*1]\") OR NOFT(\"small sat[*1]\")) AND ((NOFT(\"reference architecture[*1]\") OR NOFT(\"domain model[*1]\") OR NOFT(metamodel[*1]) OR NOFT(meta-model[*1])) OR (NOFT(\"product-line model[*1]\") OR NOFT(\"product line model[*1]\") OR NOFT(\"product-family model[*1]\") OR NOFT(\"product family model[*1]\")) OR (NOFT(\"variation point[*1]\")) OR ((NOFT(\"product-line\") OR NOFT(\"product line\") OR NOFT(\"product-family\") OR NOFT(\"product family\")) AND (NOFT(\"system[*1] model\") OR NOFT(\"system[*1] modeling\") OR NOFT(\"system[*1] modelling\") OR NOFT(\"reference model[*1]\") OR NOFT(\"digital engineering\") OR NOFT(\"object-oriented systems model[*1]\") OR NOFT(\"model-based system[*1] design\") OR NOFT(\"model based system[*1] design\") OR NOFT(\"system[*1] architecture model[*1]\") OR NOFT(\"integrated system[*1] model[*1]\") OR NOFT(\"system-level model[*1]\") OR NOFT(\"system level model[*1]\") OR NOFT(\"digital thread[*1]\") OR NOFT(\"digital twin[*1]\")))))",
+      "query_characters": 1200,
+      "query_sha256": "d6f870d8a8e4dd4be268810f48e4fa4300978899a9fbc48ed6d8249909ef3a6c",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/wildcard-BG2.json",
+      "screenshots": {
+        "search_page": "events/wildcard-BG2.search-page.png",
+        "results_page": "events/wildcard-BG2.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-BC1",
+      "partition_id": "BC1",
+      "variant": "literal",
+      "purpose": "Strict complete two-pass literal capture for the BC1 bounded-wildcard comparison.",
+      "query": "((NOFT(\"CubeSat\") OR NOFT(\"CubeSats\") OR NOFT(\"cube sat\") OR NOFT(\"cube sats\") OR NOFT(\"cube-sat\") OR NOFT(\"cube-sats\") OR NOFT(\"cube satellite\") OR NOFT(\"cube satellites\") OR NOFT(\"nanosat\") OR NOFT(\"nanosats\") OR NOFT(\"nanosatellite\") OR NOFT(\"nanosatellites\") OR NOFT(\"nano-sat\") OR NOFT(\"nano-sats\") OR NOFT(\"nano sat\") OR NOFT(\"nano sats\") OR NOFT(\"nano-satellite\") OR NOFT(\"nano-satellites\") OR NOFT(\"nano satellite\") OR NOFT(\"nano satellites\") OR NOFT(\"SmallSat\") OR NOFT(\"SmallSats\") OR NOFT(\"small satellite\") OR NOFT(\"small satellites\") OR NOFT(\"small sat\") OR NOFT(\"small sats\")) AND ((NOFT(\"reference model\") OR NOFT(\"reference models\") OR NOFT(\"system reference model\") OR NOFT(\"system reference models\") OR NOFT(\"model library\") OR NOFT(\"model libraries\") OR NOFT(\"system model library\") OR NOFT(\"system model libraries\") OR NOFT(\"model pattern\") OR NOFT(\"model patterns\") OR NOFT(\"modeling pattern\") OR NOFT(\"modeling patterns\") OR NOFT(\"modelling pattern\") OR NOFT(\"modelling patterns\") OR NOFT(\"system model pattern\") OR NOFT(\"system model patterns\") OR NOFT(\"systems model pattern\") OR NOFT(\"systems model patterns\") OR NOFT(\"model profile\") OR NOFT(\"model profiles\") OR NOFT(\"system model profile\") OR NOFT(\"system model profiles\") OR NOFT(\"systems model profile\") OR NOFT(\"systems model profiles\") OR NOFT(\"SysML profile\") OR NOFT(\"SysML profiles\")) OR (NOFT(\"domain-specific modeling language\") OR NOFT(\"domain specific modeling language\") OR NOFT(\"domain-specific modelling language\") OR NOFT(\"domain specific modelling language\"))))",
+      "query_characters": 1555,
+      "query_sha256": "f9a25e4034a5e07cb4dff7209eb96f35a21507c3cdae56399edbb8622efaddf7",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/literal-BC1.json",
+      "screenshots": {
+        "search_page": "events/literal-BC1.search-page.png",
+        "results_page": "events/literal-BC1.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-BC1",
+      "partition_id": "BC1",
+      "variant": "wildcard",
+      "purpose": "Strict complete two-pass wildcard capture for the BC1 bounded-wildcard comparison.",
+      "query": "((NOFT(CubeSat[*1]) OR NOFT(\"cube sat[*1]\") OR NOFT(\"cube-sat[*1]\") OR NOFT(\"cube satellite[*1]\") OR NOFT(nanosat[*7]) OR NOFT(\"nano-sat[*1]\") OR NOFT(\"nano sat[*1]\") OR NOFT(\"nano-satellite[*1]\") OR NOFT(\"nano satellite[*1]\") OR NOFT(SmallSat[*1]) OR NOFT(\"small satellite[*1]\") OR NOFT(\"small sat[*1]\")) AND ((NOFT(\"reference model[*1]\") OR NOFT(\"system reference model[*1]\") OR NOFT(\"model librar[*3]\") OR NOFT(\"system model librar[*3]\") OR NOFT(\"model pattern[*1]\") OR NOFT(\"modeling pattern[*1]\") OR NOFT(\"modelling pattern[*1]\") OR NOFT(\"system model pattern[*1]\") OR NOFT(\"systems model pattern[*1]\") OR NOFT(\"model profile[*1]\") OR NOFT(\"system model profile[*1]\") OR NOFT(\"systems model profile[*1]\") OR NOFT(\"SysML profile[*1]\")) OR (NOFT(\"domain-specific modeling language\") OR NOFT(\"domain specific modeling language\") OR NOFT(\"domain-specific modelling language\") OR NOFT(\"domain specific modelling language\"))))",
+      "query_characters": 925,
+      "query_sha256": "e1335c66aee708a92c4354066fa2c8ab6444aaf63cf100a694aacc807f8071ab",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/wildcard-BC1.json",
+      "screenshots": {
+        "search_page": "events/wildcard-BC1.search-page.png",
+        "results_page": "events/wildcard-BC1.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-BT2",
+      "partition_id": "BT2",
+      "variant": "literal",
+      "purpose": "Strict complete two-pass literal capture for the BT2 bounded-wildcard comparison.",
+      "query": "((NOFT(\"CubeSat\") OR NOFT(\"CubeSats\") OR NOFT(\"cube sat\") OR NOFT(\"cube sats\") OR NOFT(\"cube-sat\") OR NOFT(\"cube-sats\") OR NOFT(\"cube satellite\") OR NOFT(\"cube satellites\") OR NOFT(\"nanosat\") OR NOFT(\"nanosats\") OR NOFT(\"nanosatellite\") OR NOFT(\"nanosatellites\") OR NOFT(\"nano-sat\") OR NOFT(\"nano-sats\") OR NOFT(\"nano sat\") OR NOFT(\"nano sats\") OR NOFT(\"nano-satellite\") OR NOFT(\"nano-satellites\") OR NOFT(\"nano satellite\") OR NOFT(\"nano satellites\") OR NOFT(\"SmallSat\") OR NOFT(\"SmallSats\") OR NOFT(\"small satellite\") OR NOFT(\"small satellites\") OR NOFT(\"small sat\") OR NOFT(\"small sats\")) AND (NOFT(\"system model\") OR NOFT(\"systems model\") OR NOFT(\"system modeling\") OR NOFT(\"systems modeling\") OR NOFT(\"system modelling\") OR NOFT(\"systems modelling\") OR NOFT(\"reference model\") OR NOFT(\"reference models\") OR NOFT(\"digital engineering\") OR NOFT(\"object-oriented systems model\") OR NOFT(\"object-oriented systems models\") OR NOFT(\"model-based system design\") OR NOFT(\"model based system design\") OR NOFT(\"model-based systems design\") OR NOFT(\"model based systems design\") OR NOFT(\"system architecture model\") OR NOFT(\"system architecture models\") OR NOFT(\"systems architecture model\") OR NOFT(\"systems architecture models\") OR NOFT(\"integrated system model\") OR NOFT(\"integrated system models\") OR NOFT(\"integrated systems model\") OR NOFT(\"integrated systems models\") OR NOFT(\"system-level model\") OR NOFT(\"system-level models\") OR NOFT(\"system level model\") OR NOFT(\"system level models\") OR NOFT(\"digital thread\") OR NOFT(\"digital threads\") OR NOFT(\"digital twin\") OR NOFT(\"digital twins\")) AND (NOFT(\"tailor\") OR NOFT(\"tailors\") OR NOFT(\"tailored\") OR NOFT(\"tailoring\") OR NOFT(\"customize\") OR NOFT(\"customizes\") OR NOFT(\"customized\") OR NOFT(\"customizing\") OR NOFT(\"customization\") OR NOFT(\"customise\") OR NOFT(\"customises\") OR NOFT(\"customised\") OR NOFT(\"customising\") OR NOFT(\"customisation\") OR NOFT(\"parameterize\") OR NOFT(\"parameterizes\") OR NOFT(\"parameterized\") OR NOFT(\"parameterizing\") OR NOFT(\"parameterization\") OR NOFT(\"parameterise\") OR NOFT(\"parameterises\") OR NOFT(\"parameterised\") OR NOFT(\"parameterising\") OR NOFT(\"parameterisation\") OR NOFT(\"instantiate\") OR NOFT(\"instantiates\") OR NOFT(\"instantiated\") OR NOFT(\"instantiating\") OR NOFT(\"instantiation\") OR NOFT(\"variability\") OR NOFT(\"variation point\") OR NOFT(\"variation points\")))",
+      "query_characters": 2356,
+      "query_sha256": "74e4909fa55c95707145cfabba1b405dbc74fb903f9558f0ccca81c1b91cee06",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/literal-BT2.json",
+      "screenshots": {
+        "search_page": "events/literal-BT2.search-page.png",
+        "results_page": "events/literal-BT2.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-BT2",
+      "partition_id": "BT2",
+      "variant": "wildcard",
+      "purpose": "Strict complete two-pass wildcard capture for the BT2 bounded-wildcard comparison.",
+      "query": "((NOFT(CubeSat[*1]) OR NOFT(\"cube sat[*1]\") OR NOFT(\"cube-sat[*1]\") OR NOFT(\"cube satellite[*1]\") OR NOFT(nanosat[*7]) OR NOFT(\"nano-sat[*1]\") OR NOFT(\"nano sat[*1]\") OR NOFT(\"nano-satellite[*1]\") OR NOFT(\"nano satellite[*1]\") OR NOFT(SmallSat[*1]) OR NOFT(\"small satellite[*1]\") OR NOFT(\"small sat[*1]\")) AND (NOFT(\"system[*1] model\") OR NOFT(\"system[*1] modeling\") OR NOFT(\"system[*1] modelling\") OR NOFT(\"reference model[*1]\") OR NOFT(\"digital engineering\") OR NOFT(\"object-oriented systems model[*1]\") OR NOFT(\"model-based system[*1] design\") OR NOFT(\"model based system[*1] design\") OR NOFT(\"system[*1] architecture model[*1]\") OR NOFT(\"integrated system[*1] model[*1]\") OR NOFT(\"system-level model[*1]\") OR NOFT(\"system level model[*1]\") OR NOFT(\"digital thread[*1]\") OR NOFT(\"digital twin[*1]\")) AND (NOFT(tailor[*3]) OR NOFT(customiz[*5]) OR NOFT(customis[*5]) OR NOFT(parameteriz[*5]) OR NOFT(parameteris[*5]) OR NOFT(instantiat[*3]) OR NOFT(\"variability\") OR NOFT(\"variation point[*1]\")))",
+      "query_characters": 998,
+      "query_sha256": "5e5509ecb7cdbcd755a7f2979861a5bd01ff61a1c89d02f5fb008f033fa81c2c",
+      "year_start": 2011,
+      "year_end": 2026,
+      "language": "English",
+      "mode": "strict_complete_two_pass",
+      "output": "events/wildcard-BT2.json",
+      "screenshots": {
+        "search_page": "events/wildcard-BT2.search-page.png",
+        "results_page": "events/wildcard-BT2.results-page.png"
+      },
+      "diagnostic_only": true,
+      "do_not_merge": true
+    }
+  ]
+}

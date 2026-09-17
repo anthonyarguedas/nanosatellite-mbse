@@ -1,0 +1,97 @@
+{
+  "schema_version": "scopus-set-reconciled-strict-validation-plan/v1",
+  "pilot": "012",
+  "source": "Scopus",
+  "created_at_utc": "2026-09-02T16:27:48.037973Z",
+  "repository_head_at_predeclaration": "06dfdf058efde58f0eed520735c26e97ffaae414",
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "objective": "Validate the relaxed strict contract on the four swapping papers, then test the accepted wildcard B1 query under the same complete-set reconciliation.",
+  "supersedes": {
+    "pilot": "011",
+    "reason": "Pilot 011 stopped before Search when short EID key events lacked exact Monaco readback in strict mode. The adapter now uses one target-scoped browser text-entry event for every nonempty query.",
+    "source_events_reused": false
+  },
+  "pilot010_finding": {
+    "complete_event_count": 6,
+    "unique_order_count": 2,
+    "all_stable_id_sets_equal": true,
+    "stable_secondary_tie_breaker_observed": false
+  },
+  "strict_contract": {
+    "receipt_schema": "academic-search-scopus-strict-two-pass/v2",
+    "membership_gate": "equal complete unique stable-ID sets",
+    "required_equal_controls": [
+      "source total",
+      "page count",
+      "page size",
+      "scope",
+      "Date (oldest) control"
+    ],
+    "order_handling": "Retain both ordered hashes and the changed-position count. Order equality is audit evidence and is not a membership-completeness gate."
+  },
+  "controls": {
+    "year_start": 2011,
+    "year_end": 2026,
+    "result_scope": "Documents",
+    "language_facet": "English",
+    "sort": "Date (oldest)",
+    "full_abstracts": false,
+    "automatic_screenshots_required": true,
+    "strict_passes_per_event": 2
+  },
+  "acceptance_checks": [
+    "Each event completes two exhaustive passes with equal stable-ID sets.",
+    "Each v2 receipt retains both pass-order hashes and an order-difference count.",
+    "The swapping-paper event returns exactly its four requested IDs.",
+    "The B1 event returns 165 unique IDs unless the live source total has changed explicitly.",
+    "Every successful JSON has both mandatory sibling screenshots."
+  ],
+  "stop_rules": [
+    "Stop after the first failed or invalid event.",
+    "Do not retry or infer a set from a null-total failure."
+  ],
+  "adapter": {
+    "id": "search_scopus",
+    "version": "3",
+    "sha256": "4889373d405b849e9246168363c0a78dc8e253281c1f3935d54a85dd88d97344",
+    "entrypoint": "/Users/antho/agent-tools/internet/skills/browser/scripts/search_scopus.py"
+  },
+  "query_snapshot": {
+    "path": "SLR/SLR1/source-specific/scopus/scripts/scopus_pilot009/queries.py",
+    "sha256": "8d741bb5dac62d13027f0c07b5199b5d923f64addd177c8d19e0fbfcd24f4bac"
+  },
+  "source_affecting_scripts": {
+    "SLR/SLR1/source-specific/scopus/scripts/scopus_pilot012/build_plan.py": "19c9ad45cd30fbe257d462d6327540142859f3879f342139bdc12a3db3093be2",
+    "SLR/SLR1/source-specific/scopus/scripts/scopus_pilot012/run_pilot.py": "d4ee4c41b1960c223ae0eb0c9acde5e940ad2ee8871c3f7b4af3ebaa83a6817f"
+  },
+  "events": [
+    {
+      "event_id": "swapping-papers-strict",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "EID(2-s2.0-85137554950 OR 2-s2.0-105005251801 OR 2-s2.0-105002219161 OR 2-s2.0-105033917858)",
+      "query_sha256": "007b178782fb811436057274a7932f016830a974a51d943be0531dbb41c92cb4",
+      "query_characters": 92,
+      "output": "swapping-papers.json",
+      "page_size": 10,
+      "limit": 10,
+      "max_pages": 1,
+      "require_complete": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "B1-wildcard-strict",
+      "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+      "query": "((TITLE-ABS-KEY(\"CubeSat*\") OR TITLE-ABS-KEY(\"cube sat*\") OR TITLE-ABS-KEY(\"cube-sat*\") OR TITLE-ABS-KEY(\"cube satellite*\") OR TITLE-ABS-KEY(\"nanosat*\") OR TITLE-ABS-KEY(\"nano-sat*\") OR TITLE-ABS-KEY(\"nano sat*\") OR TITLE-ABS-KEY(\"nano-satellite*\") OR TITLE-ABS-KEY(\"nano satellite*\") OR TITLE-ABS-KEY(\"SmallSat*\") OR TITLE-ABS-KEY(\"small satellite\") OR TITLE-ABS-KEY(\"small satellites\") OR TITLE-ABS-KEY(\"small sat\") OR TITLE-ABS-KEY(\"small sats\")) AND (TITLE-ABS-KEY(\"model-based systems engineering\") OR TITLE-ABS-KEY(\"model based systems engineering\") OR TITLE-ABS-KEY(\"model-based system engineering\") OR TITLE-ABS-KEY(\"model based system engineering\") OR TITLE-ABS-KEY(\"model-driven systems engineering\") OR TITLE-ABS-KEY(\"model driven systems engineering\") OR TITLE-ABS-KEY(\"model-driven system engineering\") OR TITLE-ABS-KEY(\"model driven system engineering\") OR TITLE-ABS-KEY(\"model-centric systems engineering\") OR TITLE-ABS-KEY(\"model centric systems engineering\") OR TITLE-ABS-KEY(\"model-centric system engineering\") OR TITLE-ABS-KEY(\"model centric system engineering\") OR TITLE-ABS-KEY(\"MBSE\") OR TITLE-ABS-KEY(\"SysML\") OR TITLE-ABS-KEY(\"systems modeling language\") OR TITLE-ABS-KEY(\"systems modelling language\") OR TITLE-ABS-KEY(\"system modeling language\") OR TITLE-ABS-KEY(\"system modelling language\") OR TITLE-ABS-KEY(\"object-process methodology\") OR TITLE-ABS-KEY(\"object process methodology\") OR TITLE-ABS-KEY(\"OPM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering method\") OR TITLE-ABS-KEY(\"object oriented systems engineering method\") OR TITLE-ABS-KEY(\"OOSEM\") OR TITLE-ABS-KEY(\"object-oriented systems engineering\") OR TITLE-ABS-KEY(\"object oriented systems engineering\") OR TITLE-ABS-KEY(\"Arcadia\") OR TITLE-ABS-KEY(\"Capella\") OR TITLE-ABS-KEY(\"model-based engineering\") OR TITLE-ABS-KEY(\"model based engineering\") OR TITLE-ABS-KEY(\"model-driven engineering\") OR TITLE-ABS-KEY(\"model driven engineering\") OR TITLE-ABS-KEY(\"model-based design\") OR TITLE-ABS-KEY(\"model based design\") OR TITLE-ABS-KEY(\"model-driven design\") OR TITLE-ABS-KEY(\"model driven design\") OR TITLE-ABS-KEY(\"MBE\") OR TITLE-ABS-KEY(\"MDE\") OR TITLE-ABS-KEY(\"MBD\") OR TITLE-ABS-KEY(\"MagicGrid\") OR TITLE-ABS-KEY(\"Harmony-SE\") OR TITLE-ABS-KEY(\"Harmony SE\") OR TITLE-ABS-KEY(\"RFLP\") OR TITLE-ABS-KEY(\"Cameo Systems Modeler\") OR TITLE-ABS-KEY(\"MagicDraw\") OR TITLE-ABS-KEY(\"IBM Engineering Systems Design Rhapsody\") OR TITLE-ABS-KEY(\"Rational Rhapsody\") OR TITLE-ABS-KEY(\"Vitech CORE\") OR TITLE-ABS-KEY(\"Vitech GENESYS\") OR TITLE-ABS-KEY(\"OpenMBEE\") OR TITLE-ABS-KEY(\"Enterprise Architect\") OR TITLE-ABS-KEY(\"MATLAB System Composer\") OR TITLE-ABS-KEY(\"System Composer\") OR TITLE-ABS-KEY(\"Modelio\")))",
+      "query_sha256": "284e07ffd1a8b6b5b3080fdf4d3f53e6994d79ef352c43f24b67d7903b2b7d74",
+      "query_characters": 2695,
+      "output": "B1-wildcard.json",
+      "page_size": 50,
+      "limit": 1999,
+      "max_pages": 10,
+      "require_complete": true,
+      "do_not_merge": true
+    }
+  ]
+}

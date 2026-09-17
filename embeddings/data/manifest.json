@@ -1,0 +1,45 @@
+{
+  "chunking": {
+    "caption_and_table_neighbor_context_words": 120,
+    "equation_context_words": 120,
+    "equation_detection": "display math blocks and standalone mathematical expressions",
+    "max_words": 300,
+    "overlap_words": 30,
+    "references_excluded": true,
+    "strategy": "section bounded paragraph groups, grouped atomic table rows, contextual captions, dedicated equations with captions or surrounding context, page context for uncaptioned images, and visually extracted model diagrams",
+    "target_words": 180,
+    "title_and_section_prefix": true
+  },
+  "counts": {
+    "chunk_words": 2182755,
+    "chunks": 18239,
+    "diagram_chunks": 3393,
+    "diagrams_indexed": 513,
+    "directly_included_records": 129,
+    "equation_chunks": 432,
+    "equations_indexed": 426,
+    "reports_indexed": 129,
+    "reports_missing": 0,
+    "text_chunks": 14846,
+    "units": 41463
+  },
+  "diagram_extraction": {
+    "acceptance_rule": "status is ok and contains_target_diagram is true",
+    "analyses_path": "data/diagram-analyses.jsonl",
+    "candidate_rule": "matching caption evidence, captioned images in Simulink sections, plus uncaptioned images from reports whose title names SysML, Capella, Arcadia, or Simulink",
+    "parts": [
+      "overview",
+      "elements",
+      "relationships",
+      "labels"
+    ]
+  },
+  "exact_duplicate_report_groups": [],
+  "missing_reports": [],
+  "schema_version": "slr1-embedding-corpus/v2",
+  "selection_rule": "listed in SLR/SLR1/included_reports.json",
+  "selection_source": {
+    "path": "SLR/SLR1/included_reports.json",
+    "sha256": "04ae452b4d9ae76bce836d60e93de3fc6ef67c6ebb2c2820b8a918688494921e"
+  }
+}

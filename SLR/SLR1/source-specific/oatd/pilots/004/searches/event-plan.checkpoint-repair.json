@@ -1,0 +1,113 @@
+{
+  "schema_version": "oatd-pilot-004-checkpoint-repair-plan/v1",
+  "source": "Open Access Theses and Dissertations (OATD)",
+  "source_id": "oatd",
+  "platform": "OATD",
+  "pilot": "004",
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "objective": "Resume the unchanged page-size-30 P-only harvest after repairing a checkpoint false positive for public thesis text.",
+  "page_size_retry_plan": {
+    "path": "searches/event-plan.page-size-30.json",
+    "sha256": "cde365c9bbc457798e11568581b43eacfbab502e0a5d0fb28e45573db6cb8eed"
+  },
+  "adapter": {
+    "id": "search_oatd",
+    "version": "10",
+    "files": {
+      "entrypoint": {
+        "path": "~/agent-tools/internet/skills/browser/scripts/search_oatd.py",
+        "sha256": "1818a4f824ea9b12ada417e62bcd580f6fbc9b1380cad85ba8c4c2089b462b67"
+      },
+      "browser_helpers": {
+        "path": "~/agent-tools/internet/skills/browser/scripts/_browser_search_utils.py",
+        "sha256": "47a302edf165114ea55c6e99758e3a5836aade9cd6b23a096e83b6dccbe68600"
+      },
+      "output_loader": {
+        "path": "~/agent-tools/internet/skills/browser/scripts/_output_utils.py",
+        "sha256": "a3c5dcf06d80fe5e900b3d78fe5a109f34515d54b67ce10e61f76c27fcd1d766"
+      },
+      "output_implementation": {
+        "path": "~/agent-tools/academic-api-search/skills/academic-api-search/scripts/_output_utils.py",
+        "sha256": "579d85ee7c83ec97f0c9f02ec8b1c47a4a9c4380a594f881985f0cb80017c10a"
+      },
+      "merge_contract": {
+        "path": "~/agent-tools/academic-api-search/skills/academic-api-search/scripts/_merge_contract.py",
+        "sha256": "143ef8075a027bdbfdcfa5d7bd3196d29416e00603459c0360b72c2fe95f102f"
+      }
+    },
+    "mandatory_automatic_screenshots": true,
+    "screenshot_opt_out": false
+  },
+  "checkpoint_repair": {
+    "failure": "A public thesis metadata field mentioned local computing. The broad checkpoint scan misclassified that public text as private runtime context.",
+    "repair": "Apply local-context value checks only to operational query and URL locations. Preserve public bibliographic text verbatim.",
+    "forbidden_checkpoint_keys_unchanged": true,
+    "query_location_checks_retained": true,
+    "url_location_checks_retained": true,
+    "checkpoint_schema_changed": false,
+    "source_query_changed": false,
+    "source_controls_changed": false,
+    "local_plan_changed": false,
+    "minimum_completed_ids": 2,
+    "source_reported_total": 1249,
+    "stable_record_ids_sha256": "7010481d3b0591237eeb70398511504a26e7dd44cbebe968913d68304b977d08",
+    "page_size": 30,
+    "failed_checkpoint_snapshot": {
+      "path": "searches/checkpoint/P-shared.attempt-03.checkpoint.json",
+      "sha256": "e8bbec7d628febe7f134765a97a790307302dfc6b18cee65ad43a23cd0fa2359"
+    }
+  },
+  "source_affecting_scripts": {
+    "SLR/SLR1/source-specific/oatd/scripts/oatd_pilot004/queries.py": "de705b358d09aff6f536484c3e24078a1d295f1ce463a428d884117e70069129",
+    "SLR/SLR1/source-specific/oatd/scripts/oatd_pilot004/run_pilot.py": "900b4bb5300c925a311449da801541e0bc457d65987c7ce3d129b6b7528a29d6",
+    "SLR/SLR1/source-specific/oatd/scripts/oatd_pilot004/run_page_size_retry.py": "c8bb9f7f5270dcf53ba5460f1732d43cf878db8c5fab5d832d8fb18b6cd15d6b",
+    "SLR/SLR1/source-specific/oatd/scripts/oatd_pilot004/build_checkpoint_retry_plan.py": "b81a5773d2f4f9c19f4d170019f577c36a51eb8671aaea559083d52a4701cb89",
+    "SLR/SLR1/source-specific/oatd/scripts/oatd_pilot004/run_checkpoint_retry.py": "f993fb848c22600e142184b9eb66de1fd49ab7b53f3835e10d5dcc130be16db5"
+  },
+  "acceptance_checks": [
+    "The source receives exactly one P-only query.",
+    "The source reads back the exact effective P, English, and year query.",
+    "Two complete source card-ID snapshots have equal stable-ID sets.",
+    "Every unique source ID has one complete normalized detail record.",
+    "Every retained record has all nine local annotation outcomes.",
+    "Local negatives remove no source record.",
+    "Both mandatory sibling screenshot PNGs match their JSON receipts.",
+    "No wildcard, proximity operator, pair expansion, or result refinement is used."
+  ],
+  "event_count": 1,
+  "events": [
+    {
+      "event_id": "P-shared",
+      "source_submission": "P",
+      "purpose": "Submit only the complete literal population block, retain every stable OATD record, then apply all nine current schedule expressions locally as annotations.",
+      "query": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\")",
+      "query_characters": 433,
+      "query_sha256": "8204662df197b2a329549267b34f2ffe05248e315f2ed73d86a084e42bc92fb8",
+      "language": "English",
+      "language_source_value": "(en OR eng OR english)",
+      "year_start": 2011,
+      "year_end": 2026,
+      "diagnostic_exact_cutoff": "2026-08-29",
+      "page_size": 30,
+      "limit": 2000,
+      "max_pages": 100,
+      "timeout_seconds": 180,
+      "page_delay_seconds": 0.75,
+      "detail_delay_seconds": 0.5,
+      "busy_retries": 2,
+      "busy_retry_delay_seconds": 60,
+      "shared_population_harvest": true,
+      "local_matching_plan": "searches/local-matching-plan.json",
+      "local_matching_plan_sha256": "def19110525a9801f77961c5c94d1af4d851020d9765fcc5930a8985920c9065",
+      "checkpoint": "searches/checkpoint/P-shared.checkpoint.json",
+      "output": "searches/P-shared.json",
+      "screenshots": {
+        "search_page": "searches/P-shared.search-page.png",
+        "results_page": "searches/P-shared.results-page.png"
+      },
+      "do_not_merge": true
+    }
+  ]
+}

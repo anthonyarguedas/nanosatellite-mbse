@@ -1,0 +1,179 @@
+{
+  "schema_version": "pqdt-global-pilot005-inclusion-assessment/v1",
+  "source": "ProQuest Dissertations & Theses Global",
+  "source_id": "proquest_dissertations_theses_global",
+  "platform": "ProQuest",
+  "pilot": "005",
+  "status": "complete",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "decision": "do_not_add_pq_subject_or_index_term_supplement",
+  "decision_scope": "The current PQDT schedule and the assigned PSUB and IF candidates mapped from fourteen selected Pilot 004 known records.",
+  "inputs": {
+    "assigned_terms": {
+      "path": "searches/assigned-terms.json",
+      "sha256": "f4534f7cdb284cff3efe6b29a76683cca4fa37cc81b4346e7a82b4d43c7c00e3"
+    },
+    "validated_candidate_map": {
+      "path": "searches/validated-candidate-map.json",
+      "sha256": "d2db776bac7e4afefedc3190cab45cb9068e93c278571ba146a2f32dd8911e71"
+    },
+    "set_comparison": {
+      "path": "searches/set-comparison.json",
+      "sha256": "3251e0341f09c36a391e245dd13f0e8d92820d8357a8e76bee215fdb0de130ed"
+    },
+    "descriptor_only_review": {
+      "path": "searches/descriptor-only-review.json",
+      "sha256": "19cd08b46fbd7ec89bd7e9a1202f0225c2be9fcfacc2824c788a540fe9c7cefd"
+    }
+  },
+  "evidence": {
+    "selected_known_record_count": 14,
+    "unique_pq_subject_term_count": 9,
+    "unique_index_term_count": 42,
+    "assigned_candidates_tested": 28,
+    "validated_exact_candidates": 27,
+    "assigned_candidate_without_exact_browse_label": 1,
+    "mapped_protocol_blocks": [
+      "P",
+      "M_H",
+      "M_B",
+      "R"
+    ],
+    "selected_record_assignment_coverage": {
+      "P": {
+        "assigned_selected_record_count": 9,
+        "assigned_selected_document_ids": [
+          "2050565383",
+          "2459205256",
+          "2828592607",
+          "3039685878",
+          "3059245100",
+          "3241100212",
+          "3244643407",
+          "3291109676",
+          "3304631814"
+        ]
+      },
+      "M_H": {
+        "assigned_selected_record_count": 4,
+        "assigned_selected_document_ids": [
+          "2050565383",
+          "2459205256",
+          "2828592607",
+          "3241100212"
+        ]
+      },
+      "M_B": {
+        "assigned_selected_record_count": 3,
+        "assigned_selected_document_ids": [
+          "2050565383",
+          "3059245100",
+          "3241100212"
+        ]
+      },
+      "R": {
+        "assigned_selected_record_count": 5,
+        "assigned_selected_document_ids": [
+          "2838439210",
+          "2050565383",
+          "2828592607",
+          "3241100212",
+          "3244643407"
+        ]
+      }
+    },
+    "partition_totals": {
+      "A1": {
+        "free_text": 1,
+        "augmented": 1
+      },
+      "A2": {
+        "free_text": 3,
+        "augmented": 3
+      },
+      "A3": {
+        "free_text": 1,
+        "augmented": 1
+      },
+      "B1": {
+        "free_text": 21,
+        "augmented": 21
+      },
+      "B2": {
+        "free_text": 13,
+        "augmented": 13
+      },
+      "BG1": {
+        "free_text": 1,
+        "augmented": 1
+      },
+      "BG2": {
+        "free_text": 3,
+        "augmented": 3
+      },
+      "BC1": {
+        "free_text": 3,
+        "augmented": 3
+      },
+      "BT2": {
+        "free_text": 1,
+        "augmented": 1
+      }
+    },
+    "all_partition_sets_equal": true,
+    "all_partition_orders_equal": true,
+    "free_text_schedule_union": 29,
+    "augmented_schedule_union": 29,
+    "descriptor_only_record_count": 0,
+    "descriptor_only_review_outcome": "no_descriptor_only_records_to_review"
+  },
+  "criteria": [
+    {
+      "criterion": "source_assignment",
+      "result": "passed_bounded",
+      "reason": "Two complete record-detail passes returned identical PSUB and IF assignments for all fourteen selected known records."
+    },
+    {
+      "criterion": "exact_source_mapping",
+      "result": "passed_for_27_candidates",
+      "reason": "Two browse and Add-to-search passes validated 27 assigned or case-normalized labels. Assigned IF Architecture had no exact selectable label under either tested capitalization."
+    },
+    {
+      "criterion": "preserve_normative_free_text",
+      "result": "passed",
+      "reason": "Every tested construction joined exact descriptors to its complete free-text block with OR."
+    },
+    {
+      "criterion": "marginal_stable_id_recall",
+      "result": "failed_to_show_value",
+      "reason": "All nine fresh free-text and augmented partition pairs returned the same complete ordered IDs. The schedule unions each contained 29 IDs."
+    },
+    {
+      "criterion": "descriptor_only_concept_review",
+      "result": "complete_empty_frame",
+      "reason": "No augmented-only record existed in any partition."
+    },
+    {
+      "criterion": "reproducible_vocabulary_identity",
+      "result": "limited",
+      "reason": "PQDT publishes no stable term IDs, vocabulary release, scope notes, hierarchy, or explosion state for these flat browse indexes."
+    }
+  ],
+  "rationale": [
+    "The tested descriptor unions added no numeric PQDT document ID.",
+    "Several assigned labels were absent, generic, or unsuitable for a protocol block.",
+    "Mapped controlled terms covered only part of the selected known-record set and cannot replace free text.",
+    "Adoption would add query and local transport complexity without observed recall value."
+  ],
+  "accepted_descriptors": [],
+  "prospective_translation": "Retain the accepted bounded-wildcard NOFT schedule without a PSUB.EXACT or IF.EXACT supplement.",
+  "future_candidate_rule": "A new descriptor or indexed term requires another assigned-record mapping and complete no-loss value comparison before adoption.",
+  "limitations": [
+    "The test covers labels assigned to fourteen selected records and does not establish the value of every future PQDT label.",
+    "The selected records are known items for vocabulary testing and are not final screening decisions.",
+    "PQDT applies year precision. Records from 2026 still require exact-cutoff screening.",
+    "A pilot-local bridge relaxed the adapter's multiple-raw-field preflight guard. Exact source query echo and every normal strict capture check remained mandatory.",
+    "Pilot artifacts create no final-search union."
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "schema_version": "atai-adapter-v4-repair-validation/v1",
+  "source": "Advanced Technologies & Aerospace Index",
+  "pilot": "005",
+  "status": "passed",
+  "do_not_merge": true,
+  "adapter": {
+    "id": "search_proquest_aerospace",
+    "version": "4",
+    "repairs": [
+      "canonical terminal abstract More handling",
+      "exact restore-session overlay dismissal on the owned page",
+      "inventory-proven target identity for verified cleanup"
+    ]
+  },
+  "strict_runs": {
+    "A3": {
+      "total": 1,
+      "stable_complete_passes": 2,
+      "artifact": "A3.strict-v4.json",
+      "cleanup": {
+        "page_count_before": 10,
+        "page_count_after": 10,
+        "page_count_restored": true
+      }
+    },
+    "B1": {
+      "total": 19,
+      "stable_complete_passes": 2,
+      "artifact": "B1.strict-v4.json",
+      "cleanup": {
+        "page_count_before": 10,
+        "page_count_after": 10,
+        "page_count_restored": true
+      }
+    }
+  },
+  "abstract_audit": {
+    "A3": {
+      "partition": "A3",
+      "record_count": 1,
+      "historical_records_with_only_terminal_more_instability": 1,
+      "differences": [
+        {
+          "paper_id": "3097792411",
+          "title": "Implementation of a 6U CubeSat Electrical Power System Digital Twin",
+          "pass_1_had_terminal_more": false,
+          "pass_2_had_terminal_more": true,
+          "canonical_abstract_characters": 1705,
+          "fresh_v4_exactly_matches_canonical_text": true
+        }
+      ],
+      "all_historical_abstracts_match_fresh_v4_after_canonicalization": true,
+      "fresh_abstracts_ending_in_ellipsis": []
+    },
+    "B1": {
+      "partition": "B1",
+      "record_count": 19,
+      "historical_records_with_only_terminal_more_instability": 7,
+      "differences": [
+        {
+          "paper_id": "1660062261",
+          "title": "Rapid model-based inter-disciplinary design of a CubeSat mission",
+          "pass_1_had_terminal_more": true,
+          "pass_2_had_terminal_more": false,
+          "canonical_abstract_characters": 1393,
+          "fresh_v4_exactly_matches_canonical_text": true
+        },
+        {
+          "paper_id": "1825532815",
+          "title": "Developing a CubeSat Model-Based System Engineering (MBSE) reference model - Interim status #2",
+          "pass_1_had_terminal_more": true,
+          "pass_2_had_terminal_more": false,
+          "canonical_abstract_characters": 3110,
+          "fresh_v4_exactly_matches_canonical_text": true
+        },
+        {
+          "paper_id": "1835576377",
+          "title": "Effect of satellite formations and imaging modes on global albedo estimation",
+          "pass_1_had_terminal_more": true,
+          "pass_2_had_terminal_more": false,
+          "canonical_abstract_characters": 2233,
+          "fresh_v4_exactly_matches_canonical_text": true
+        },
+        {
+          "paper_id": "2599217975",
+          "title": "Architecting an MBSE Black-Box System Model for the Physical Layer of a Visible Light Intersatellite Communication System",
+          "pass_1_had_terminal_more": true,
+          "pass_2_had_terminal_more": false,
+          "canonical_abstract_characters": 1242,
+          "fresh_v4_exactly_matches_canonical_text": true
+        },
+        {
+          "paper_id": "2486865210",
+          "title": "Unified modeling for digital twin of a knowledge-based system design",
+          "pass_1_had_terminal_more": true,
+          "pass_2_had_terminal_more": false,
+          "canonical_abstract_characters": 1394,
+          "fresh_v4_exactly_matches_canonical_text": true
+        },
+        {
+          "paper_id": "3307467895",
+          "title": "An Efficient Design-to-Verification Framework for CubeSat ADCS: Application to INHA RoSAT",
+          "pass_1_had_terminal_more": false,
+          "pass_2_had_terminal_more": true,
+          "canonical_abstract_characters": 1563,
+          "fresh_v4_exactly_matches_canonical_text": true
+        },
+        {
+          "paper_id": "3371247439",
+          "title": "A Novel MBSE-Driven Integrated Modeling and Simulation Methodology for Small Satellites Development, (IM3S)",
+          "pass_1_had_terminal_more": false,
+          "pass_2_had_terminal_more": true,
+          "canonical_abstract_characters": 1347,
+          "fresh_v4_exactly_matches_canonical_text": true
+        }
+      ],
+      "all_historical_abstracts_match_fresh_v4_after_canonicalization": true,
+      "fresh_abstracts_ending_in_ellipsis": []
+    },
+    "terminal_more_is_truncation": false,
+    "finding": "Every historical abstract matched the fresh adapter v4 text exactly after removing only terminal standalone More. No fresh canonical abstract ended in an ellipsis. No truncation was observed."
+  },
+  "restore_session_overlay": {
+    "historical_live_observation": "The exact #restoresession_confirm modal blocked ATAI database submission before repair.",
+    "repair": "Verify the exact dialog and click its exact Dismiss action before owned-page source actions.",
+    "cookie_consent_unchanged": true
+  },
+  "cleanup": {
+    "A3_page_count_restored": true,
+    "B1_page_count_restored": true,
+    "shared_browser_closed": false,
+    "owned_page_only": true
+  },
+  "limitations": [
+    "This diagnostic uses the 2026-08-29 pilot window. It is not the final evidence cutoff.",
+    "Historical failure artifacts remain immutable evidence of adapter v3 behavior."
+  ]
+}

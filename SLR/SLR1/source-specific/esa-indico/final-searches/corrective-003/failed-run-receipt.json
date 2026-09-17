@@ -1,0 +1,40 @@
+{
+  "schema_version": "slr1-esa-indico-final-direct-failure/v1",
+  "source": "ESA Indico",
+  "attempt": "003",
+  "status": "failed_nonmergeable_restart_required",
+  "do_not_merge": true,
+  "plan": "final-event-plan.json",
+  "plan_sha256": "c31c171015dad9ee513ecfc263dd2b833f3c2bce5e8408ac6ecd325e49dfe817",
+  "failed_event_id": "final-main-A1-esa-indico-003",
+  "failed_partition_id": "A1",
+  "failure_stage": "final_root_universe_confirmation",
+  "failure_code": "global_source_universe_unparseable",
+  "failure_summary": "The same 441 event IDs were present, but one event changed source order between the saved first snapshot and the fresh confirmation. The complete contract requires equal ordered snapshots.",
+  "completed_event_prefix_count": 441,
+  "source_harvest_publication_completed": false,
+  "compact_failure_artifact": {
+    "path": "A1.json",
+    "sha256": "ca48fe7f0cdd515297c27d541823ceea78baa5f9a99d97674acca7a48ad79bbb"
+  },
+  "checkpoint_sidecar": {
+    "path": ".A1.json.ESA_LOCAL_HARVEST_CHECKPOINT.json",
+    "sha256": "75a043e4ebff486d793a894e46069c7a2ab612a84c92666115c51c8a75315458",
+    "bytes": 32767215
+  },
+  "terminal_marker": {
+    "path": ".A1.json.ESA_INDICO_HARVEST_COMMIT.json",
+    "sha256": "827192690234569a8641b884bd418517eb75e8313bf5574c53b5b2cce755286d"
+  },
+  "metadata_ledger_published": false,
+  "merge_eligible": false,
+  "partial_import_allowed": false,
+  "adapter": {
+    "id": "search_esa_indico",
+    "version": "9",
+    "sha256": "65bb102a398dd279a617a5c1104fcbdeb1c6f05f0ef763f7e9785c69d2bad253",
+    "matcher_schema": "esa-indico-local-concept-matcher/v3",
+    "entrypoint": "~/agent-tools/internet/skills/browser/scripts/search_esa_indico.py"
+  },
+  "corrective_action": "Start a new complete harvest. The changed ordered root snapshot cannot be resumed under the fixed-corpus contract."
+}

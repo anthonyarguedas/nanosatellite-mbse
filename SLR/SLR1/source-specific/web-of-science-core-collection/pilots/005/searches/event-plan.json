@@ -1,0 +1,1504 @@
+{
+  "schema_version": "wos-broad-wildcard-pilot-plan/v1",
+  "pilot": "005",
+  "source": "Web of Science Core Collection",
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "objective": "Use a source-specific wildcard for every ordinary variant family with one reviewed stem, then compare each complete set with Pilot 004's fresh literal baseline.",
+  "adapter": {
+    "id": "search_web_of_science",
+    "version": "2",
+    "sha256": "f2794c2c0aa17872f5f26976e52d547e17fd733e4a9d7d82bc34e34822910fa8",
+    "mandatory_screenshots": true,
+    "screenshot_opt_out": false
+  },
+  "dependencies": {
+    "wos_pilot004_queries_sha256": "5b0120b1ed9f7b49e4c12c0b93cb823a01bc4f59451369efd5f01a158dcfd2be",
+    "ordinary_family_map_sha256": "ce39aeee6c901324a16a588fc368a92ac1f3b5bb15a19705dcb2b8aa7c24a348",
+    "pilot004_assessment": "source-specific/web-of-science-core-collection/pilots/004/searches/assessment.json",
+    "pilot004_assessment_sha256": "6e23afe1de47ffb409ef0521424767ac73d01092e79f926d75caedd2698ade41"
+  },
+  "wildcard_policy": {
+    "family_count": 128,
+    "replaced_term_occurrence_count": 292,
+    "zero_or_one_character_operator": "$",
+    "zero_or_more_character_operator": "*",
+    "rule": "Use `$` when every declared suffix differs by at most one character. Use `*` only when a reviewed family requires a longer suffix. Keep singletons and families without one safe common stem literal.",
+    "ordered_phrase_rule": "Keep every multiword pattern in straight double quotes.",
+    "families": {
+      "P": [
+        {
+          "source_pattern": "\"CubeSat$\"",
+          "family_basis": "CubeSat[*1]",
+          "explicit_terms": [
+            "CubeSat",
+            "CubeSats"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"cube sat$\"",
+          "family_basis": "\"cube sat[*1]\"",
+          "explicit_terms": [
+            "cube sat",
+            "cube sats"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"cube-sat$\"",
+          "family_basis": "\"cube-sat[*1]\"",
+          "explicit_terms": [
+            "cube-sat",
+            "cube-sats"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"cube satellite$\"",
+          "family_basis": "\"cube satellite[*1]\"",
+          "explicit_terms": [
+            "cube satellite",
+            "cube satellites"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"nanosat*\"",
+          "family_basis": "nanosat[*7]",
+          "explicit_terms": [
+            "nanosat",
+            "nanosats",
+            "nanosatellite",
+            "nanosatellites"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"nano-sat$\"",
+          "family_basis": "\"nano-sat[*1]\"",
+          "explicit_terms": [
+            "nano-sat",
+            "nano-sats"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"nano sat$\"",
+          "family_basis": "\"nano sat[*1]\"",
+          "explicit_terms": [
+            "nano sat",
+            "nano sats"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"nano-satellite$\"",
+          "family_basis": "\"nano-satellite[*1]\"",
+          "explicit_terms": [
+            "nano-satellite",
+            "nano-satellites"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"nano satellite$\"",
+          "family_basis": "\"nano satellite[*1]\"",
+          "explicit_terms": [
+            "nano satellite",
+            "nano satellites"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"SmallSat$\"",
+          "family_basis": "SmallSat[*1]",
+          "explicit_terms": [
+            "SmallSat",
+            "SmallSats"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"small satellite$\"",
+          "family_basis": "\"small satellite[*1]\"",
+          "explicit_terms": [
+            "small satellite",
+            "small satellites"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"small sat$\"",
+          "family_basis": "\"small sat[*1]\"",
+          "explicit_terms": [
+            "small sat",
+            "small sats"
+          ],
+          "operators": 1
+        }
+      ],
+      "E_H": [
+        {
+          "source_pattern": "\"electrical power system$\"",
+          "family_basis": "\"electrical power system[*1]\"",
+          "explicit_terms": [
+            "electrical power system",
+            "electrical power systems"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"electric power system$\"",
+          "family_basis": "\"electric power system[*1]\"",
+          "explicit_terms": [
+            "electric power system",
+            "electric power systems"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"electrical power subsystem$\"",
+          "family_basis": "\"electrical power subsystem[*1]\"",
+          "explicit_terms": [
+            "electrical power subsystem",
+            "electrical power subsystems"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"electric power subsystem$\"",
+          "family_basis": "\"electric power subsystem[*1]\"",
+          "explicit_terms": [
+            "electric power subsystem",
+            "electric power subsystems"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"electrical energy subsystem$\"",
+          "family_basis": "\"electrical energy subsystem[*1]\"",
+          "explicit_terms": [
+            "electrical energy subsystem",
+            "electrical energy subsystems"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"EPS$\"",
+          "family_basis": "EPS[*1]",
+          "explicit_terms": [
+            "EPS",
+            "EPSs"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"power subsystem$\"",
+          "family_basis": "\"power subsystem[*1]\"",
+          "explicit_terms": [
+            "power subsystem",
+            "power subsystems"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"power system$\"",
+          "family_basis": "\"power system[*1]\"",
+          "explicit_terms": [
+            "power system",
+            "power systems"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"spacecraft power system$\"",
+          "family_basis": "\"spacecraft power system[*1]\"",
+          "explicit_terms": [
+            "spacecraft power system",
+            "spacecraft power systems"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"power suppl*\"",
+          "family_basis": "\"power suppl[*3]\"",
+          "explicit_terms": [
+            "power supply",
+            "power supplies"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"power distribution unit$\"",
+          "family_basis": "\"power distribution unit[*1]\"",
+          "explicit_terms": [
+            "power distribution unit",
+            "power distribution units"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"PDU$\"",
+          "family_basis": "PDU[*1]",
+          "explicit_terms": [
+            "PDU",
+            "PDUs"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"power processing unit$\"",
+          "family_basis": "\"power processing unit[*1]\"",
+          "explicit_terms": [
+            "power processing unit",
+            "power processing units"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"electrical architecture$\"",
+          "family_basis": "\"electrical architecture[*1]\"",
+          "explicit_terms": [
+            "electrical architecture",
+            "electrical architectures"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"power architecture$\"",
+          "family_basis": "\"power architecture[*1]\"",
+          "explicit_terms": [
+            "power architecture",
+            "power architectures"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"DC power bus*\"",
+          "family_basis": "\"DC power bus[*2]\"",
+          "explicit_terms": [
+            "DC power bus",
+            "DC power buses"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"PCDU$\"",
+          "family_basis": "PCDU[*1]",
+          "explicit_terms": [
+            "PCDU",
+            "PCDUs"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"PMAD$\"",
+          "family_basis": "PMAD[*1]",
+          "explicit_terms": [
+            "PMAD",
+            "PMADs"
+          ],
+          "operators": 1
+        }
+      ],
+      "E_F": [
+        {
+          "source_pattern": "\"power budget$\"",
+          "family_basis": "\"power budget[*1]\"",
+          "explicit_terms": [
+            "power budget",
+            "power budgets"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"energy budget$\"",
+          "family_basis": "\"energy budget[*1]\"",
+          "explicit_terms": [
+            "energy budget",
+            "energy budgets"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"energy balance$\"",
+          "family_basis": "\"energy balance[*1]\"",
+          "explicit_terms": [
+            "energy balance",
+            "energy balances"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"power balance$\"",
+          "family_basis": "\"power balance[*1]\"",
+          "explicit_terms": [
+            "power balance",
+            "power balances"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"power margin$\"",
+          "family_basis": "\"power margin[*1]\"",
+          "explicit_terms": [
+            "power margin",
+            "power margins"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"photovoltaic generator$\"",
+          "family_basis": "\"photovoltaic generator[*1]\"",
+          "explicit_terms": [
+            "photovoltaic generator",
+            "photovoltaic generators"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"solar array$\"",
+          "family_basis": "\"solar array[*1]\"",
+          "explicit_terms": [
+            "solar array",
+            "solar arrays"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"solar panel$\"",
+          "family_basis": "\"solar panel[*1]\"",
+          "explicit_terms": [
+            "solar panel",
+            "solar panels"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"batter*\"",
+          "family_basis": "batter[*3]",
+          "explicit_terms": [
+            "battery",
+            "batteries"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"state$ of charge\"",
+          "family_basis": "\"state[*1] of charge\"",
+          "explicit_terms": [
+            "state of charge",
+            "states of charge"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"power interface$\"",
+          "family_basis": "\"power interface[*1]\"",
+          "explicit_terms": [
+            "power interface",
+            "power interfaces"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"power mode$\"",
+          "family_basis": "\"power mode[*1]\"",
+          "explicit_terms": [
+            "power mode",
+            "power modes"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"load profile$\"",
+          "family_basis": "\"load profile[*1]\"",
+          "explicit_terms": [
+            "load profile",
+            "load profiles"
+          ],
+          "operators": 1
+        }
+      ],
+      "M_H": [
+        {
+          "source_pattern": "\"model-based system$ engineering\"",
+          "family_basis": "\"model-based system[*1] engineering\"",
+          "explicit_terms": [
+            "model-based systems engineering",
+            "model-based system engineering"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"model based system$ engineering\"",
+          "family_basis": "\"model based system[*1] engineering\"",
+          "explicit_terms": [
+            "model based systems engineering",
+            "model based system engineering"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"model-driven system$ engineering\"",
+          "family_basis": "\"model-driven system[*1] engineering\"",
+          "explicit_terms": [
+            "model-driven systems engineering",
+            "model-driven system engineering"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"model driven system$ engineering\"",
+          "family_basis": "\"model driven system[*1] engineering\"",
+          "explicit_terms": [
+            "model driven systems engineering",
+            "model driven system engineering"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"model-centric system$ engineering\"",
+          "family_basis": "\"model-centric system[*1] engineering\"",
+          "explicit_terms": [
+            "model-centric systems engineering",
+            "model-centric system engineering"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"model centric system$ engineering\"",
+          "family_basis": "\"model centric system[*1] engineering\"",
+          "explicit_terms": [
+            "model centric systems engineering",
+            "model centric system engineering"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"system$ modeling language\"",
+          "family_basis": "\"system[*1] modeling language\"",
+          "explicit_terms": [
+            "systems modeling language",
+            "system modeling language"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"system$ modelling language\"",
+          "family_basis": "\"system[*1] modelling language\"",
+          "explicit_terms": [
+            "systems modelling language",
+            "system modelling language"
+          ],
+          "operators": 1
+        }
+      ],
+      "M_B": [
+        {
+          "source_pattern": "\"system$ model\"",
+          "family_basis": "\"system[*1] model\"",
+          "explicit_terms": [
+            "system model",
+            "systems model"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"system$ modeling\"",
+          "family_basis": "\"system[*1] modeling\"",
+          "explicit_terms": [
+            "system modeling",
+            "systems modeling"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"system$ modelling\"",
+          "family_basis": "\"system[*1] modelling\"",
+          "explicit_terms": [
+            "system modelling",
+            "systems modelling"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"reference model$\"",
+          "family_basis": "\"reference model[*1]\"",
+          "explicit_terms": [
+            "reference model",
+            "reference models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"object-oriented systems model$\"",
+          "family_basis": "\"object-oriented systems model[*1]\"",
+          "explicit_terms": [
+            "object-oriented systems model",
+            "object-oriented systems models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"model-based system$ design\"",
+          "family_basis": "\"model-based system[*1] design\"",
+          "explicit_terms": [
+            "model-based system design",
+            "model-based systems design"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"model based system$ design\"",
+          "family_basis": "\"model based system[*1] design\"",
+          "explicit_terms": [
+            "model based system design",
+            "model based systems design"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"system$ architecture model$\"",
+          "family_basis": "\"system[*1] architecture model[*1]\"",
+          "explicit_terms": [
+            "system architecture model",
+            "system architecture models",
+            "systems architecture model",
+            "systems architecture models"
+          ],
+          "operators": 2
+        },
+        {
+          "source_pattern": "\"integrated system$ model$\"",
+          "family_basis": "\"integrated system[*1] model[*1]\"",
+          "explicit_terms": [
+            "integrated system model",
+            "integrated system models",
+            "integrated systems model",
+            "integrated systems models"
+          ],
+          "operators": 2
+        },
+        {
+          "source_pattern": "\"system-level model$\"",
+          "family_basis": "\"system-level model[*1]\"",
+          "explicit_terms": [
+            "system-level model",
+            "system-level models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"system level model$\"",
+          "family_basis": "\"system level model[*1]\"",
+          "explicit_terms": [
+            "system level model",
+            "system level models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"digital thread$\"",
+          "family_basis": "\"digital thread[*1]\"",
+          "explicit_terms": [
+            "digital thread",
+            "digital threads"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"digital twin$\"",
+          "family_basis": "\"digital twin[*1]\"",
+          "explicit_terms": [
+            "digital twin",
+            "digital twins"
+          ],
+          "operators": 1
+        }
+      ],
+      "R": [
+        {
+          "source_pattern": "\"requirement$\"",
+          "family_basis": "requirement[*1]",
+          "explicit_terms": [
+            "requirement",
+            "requirements"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"function*\"",
+          "family_basis": "function[*2]",
+          "explicit_terms": [
+            "function",
+            "functions",
+            "functional"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"behavior*\"",
+          "family_basis": "behavior[*2]",
+          "explicit_terms": [
+            "behavior",
+            "behaviors",
+            "behavioral"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"behaviour*\"",
+          "family_basis": "behaviour[*2]",
+          "explicit_terms": [
+            "behaviour",
+            "behaviours",
+            "behavioural"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"architectur*\"",
+          "family_basis": "architectur[*2]",
+          "explicit_terms": [
+            "architecture",
+            "architectures",
+            "architectural"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"interface$\"",
+          "family_basis": "interface[*1]",
+          "explicit_terms": [
+            "interface",
+            "interfaces"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"trace*\"",
+          "family_basis": "trace[*7]",
+          "explicit_terms": [
+            "traceability",
+            "trace",
+            "traceable",
+            "traced"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"allocat*\"",
+          "family_basis": "allocat[*3]",
+          "explicit_terms": [
+            "allocation",
+            "allocate",
+            "allocated"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"constraint$\"",
+          "family_basis": "constraint[*1]",
+          "explicit_terms": [
+            "constraint",
+            "constraints"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"parametric$\"",
+          "family_basis": "parametric[*1]",
+          "explicit_terms": [
+            "parametric",
+            "parametrics"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"analys*\"",
+          "family_basis": "analys[*2]",
+          "explicit_terms": [
+            "analysis",
+            "analyses"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"design*\"",
+          "family_basis": "design[*3]",
+          "explicit_terms": [
+            "design",
+            "designs",
+            "designed",
+            "designing"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"decision$\"",
+          "family_basis": "decision[*1]",
+          "explicit_terms": [
+            "decision",
+            "decisions"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"trade stud*\"",
+          "family_basis": "\"trade stud[*3]\"",
+          "explicit_terms": [
+            "trade study",
+            "trade studies"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"trade-off$\"",
+          "family_basis": "\"trade-off[*1]\"",
+          "explicit_terms": [
+            "trade-off",
+            "trade-offs"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"tradeoff$\"",
+          "family_basis": "tradeoff[*1]",
+          "explicit_terms": [
+            "tradeoff",
+            "tradeoffs"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"verification$\"",
+          "family_basis": "verification[*1]",
+          "explicit_terms": [
+            "verification",
+            "verifications"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"verif*\"",
+          "family_basis": "verif[*4]",
+          "explicit_terms": [
+            "verify",
+            "verifies",
+            "verified",
+            "verifying"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"validation$\"",
+          "family_basis": "validation[*1]",
+          "explicit_terms": [
+            "validation",
+            "validations"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"validat*\"",
+          "family_basis": "validat[*3]",
+          "explicit_terms": [
+            "validate",
+            "validates",
+            "validated",
+            "validating"
+          ],
+          "operators": 1
+        }
+      ],
+      "G_model_fixed": [
+        {
+          "source_pattern": "\"generic model$\"",
+          "family_basis": "\"generic model[*1]\"",
+          "explicit_terms": [
+            "generic model",
+            "generic models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"generic system model$\"",
+          "family_basis": "\"generic system model[*1]\"",
+          "explicit_terms": [
+            "generic system model",
+            "generic system models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"reusable model$\"",
+          "family_basis": "\"reusable model[*1]\"",
+          "explicit_terms": [
+            "reusable model",
+            "reusable models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"reusable system model$\"",
+          "family_basis": "\"reusable system model[*1]\"",
+          "explicit_terms": [
+            "reusable system model",
+            "reusable system models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"configurable model$\"",
+          "family_basis": "\"configurable model[*1]\"",
+          "explicit_terms": [
+            "configurable model",
+            "configurable models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"configurable system model$\"",
+          "family_basis": "\"configurable system model[*1]\"",
+          "explicit_terms": [
+            "configurable system model",
+            "configurable system models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"model template$\"",
+          "family_basis": "\"model template[*1]\"",
+          "explicit_terms": [
+            "model template",
+            "model templates"
+          ],
+          "operators": 1
+        }
+      ],
+      "G_mission": [],
+      "G_mission_exact": [
+        {
+          "source_pattern": "\"mission-agnostic model$\"",
+          "family_basis": "\"mission-agnostic model[*1]\"",
+          "explicit_terms": [
+            "mission-agnostic model",
+            "mission-agnostic models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"mission-agnostic architecture$\"",
+          "family_basis": "\"mission-agnostic architecture[*1]\"",
+          "explicit_terms": [
+            "mission-agnostic architecture",
+            "mission-agnostic architectures"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"mission agnostic model$\"",
+          "family_basis": "\"mission agnostic model[*1]\"",
+          "explicit_terms": [
+            "mission agnostic model",
+            "mission agnostic models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"mission agnostic architecture$\"",
+          "family_basis": "\"mission agnostic architecture[*1]\"",
+          "explicit_terms": [
+            "mission agnostic architecture",
+            "mission agnostic architectures"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"mission-independent model$\"",
+          "family_basis": "\"mission-independent model[*1]\"",
+          "explicit_terms": [
+            "mission-independent model",
+            "mission-independent models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"mission-independent architecture$\"",
+          "family_basis": "\"mission-independent architecture[*1]\"",
+          "explicit_terms": [
+            "mission-independent architecture",
+            "mission-independent architectures"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"mission independent model$\"",
+          "family_basis": "\"mission independent model[*1]\"",
+          "explicit_terms": [
+            "mission independent model",
+            "mission independent models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"mission independent architecture$\"",
+          "family_basis": "\"mission independent architecture[*1]\"",
+          "explicit_terms": [
+            "mission independent architecture",
+            "mission independent architectures"
+          ],
+          "operators": 1
+        }
+      ],
+      "G_structure_fixed": [
+        {
+          "source_pattern": "\"reference architecture$\"",
+          "family_basis": "\"reference architecture[*1]\"",
+          "explicit_terms": [
+            "reference architecture",
+            "reference architectures"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"domain model$\"",
+          "family_basis": "\"domain model[*1]\"",
+          "explicit_terms": [
+            "domain model",
+            "domain models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"metamodel$\"",
+          "family_basis": "metamodel[*1]",
+          "explicit_terms": [
+            "metamodel",
+            "metamodels"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"meta-model$\"",
+          "family_basis": "meta-model[*1]",
+          "explicit_terms": [
+            "meta-model",
+            "meta-models"
+          ],
+          "operators": 1
+        }
+      ],
+      "G_product": [],
+      "G_product_exact": [
+        {
+          "source_pattern": "\"product-line model$\"",
+          "family_basis": "\"product-line model[*1]\"",
+          "explicit_terms": [
+            "product-line model",
+            "product-line models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"product line model$\"",
+          "family_basis": "\"product line model[*1]\"",
+          "explicit_terms": [
+            "product line model",
+            "product line models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"product-family model$\"",
+          "family_basis": "\"product-family model[*1]\"",
+          "explicit_terms": [
+            "product-family model",
+            "product-family models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"product family model$\"",
+          "family_basis": "\"product family model[*1]\"",
+          "explicit_terms": [
+            "product family model",
+            "product family models"
+          ],
+          "operators": 1
+        }
+      ],
+      "G_variation": [
+        {
+          "source_pattern": "\"variation point$\"",
+          "family_basis": "\"variation point[*1]\"",
+          "explicit_terms": [
+            "variation point",
+            "variation points"
+          ],
+          "operators": 1
+        }
+      ],
+      "C1_fixed": [
+        {
+          "source_pattern": "\"reference model$\"",
+          "family_basis": "\"reference model[*1]\"",
+          "explicit_terms": [
+            "reference model",
+            "reference models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"system reference model$\"",
+          "family_basis": "\"system reference model[*1]\"",
+          "explicit_terms": [
+            "system reference model",
+            "system reference models"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"model librar*\"",
+          "family_basis": "\"model librar[*3]\"",
+          "explicit_terms": [
+            "model library",
+            "model libraries"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"system model librar*\"",
+          "family_basis": "\"system model librar[*3]\"",
+          "explicit_terms": [
+            "system model library",
+            "system model libraries"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"model pattern$\"",
+          "family_basis": "\"model pattern[*1]\"",
+          "explicit_terms": [
+            "model pattern",
+            "model patterns"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"modeling pattern$\"",
+          "family_basis": "\"modeling pattern[*1]\"",
+          "explicit_terms": [
+            "modeling pattern",
+            "modeling patterns"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"modelling pattern$\"",
+          "family_basis": "\"modelling pattern[*1]\"",
+          "explicit_terms": [
+            "modelling pattern",
+            "modelling patterns"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"system model pattern$\"",
+          "family_basis": "\"system model pattern[*1]\"",
+          "explicit_terms": [
+            "system model pattern",
+            "system model patterns"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"systems model pattern$\"",
+          "family_basis": "\"systems model pattern[*1]\"",
+          "explicit_terms": [
+            "systems model pattern",
+            "systems model patterns"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"model profile$\"",
+          "family_basis": "\"model profile[*1]\"",
+          "explicit_terms": [
+            "model profile",
+            "model profiles"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"system model profile$\"",
+          "family_basis": "\"system model profile[*1]\"",
+          "explicit_terms": [
+            "system model profile",
+            "system model profiles"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"systems model profile$\"",
+          "family_basis": "\"systems model profile[*1]\"",
+          "explicit_terms": [
+            "systems model profile",
+            "systems model profiles"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"SysML profile$\"",
+          "family_basis": "\"SysML profile[*1]\"",
+          "explicit_terms": [
+            "SysML profile",
+            "SysML profiles"
+          ],
+          "operators": 1
+        }
+      ],
+      "G_DSL": [],
+      "T_precise": [
+        {
+          "source_pattern": "\"tailor*\"",
+          "family_basis": "tailor[*3]",
+          "explicit_terms": [
+            "tailor",
+            "tailors",
+            "tailored",
+            "tailoring"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"customiz*\"",
+          "family_basis": "customiz[*5]",
+          "explicit_terms": [
+            "customize",
+            "customizes",
+            "customized",
+            "customizing",
+            "customization"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"customis*\"",
+          "family_basis": "customis[*5]",
+          "explicit_terms": [
+            "customise",
+            "customises",
+            "customised",
+            "customising",
+            "customisation"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"parameteriz*\"",
+          "family_basis": "parameteriz[*5]",
+          "explicit_terms": [
+            "parameterize",
+            "parameterizes",
+            "parameterized",
+            "parameterizing",
+            "parameterization"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"parameteris*\"",
+          "family_basis": "parameteris[*5]",
+          "explicit_terms": [
+            "parameterise",
+            "parameterises",
+            "parameterised",
+            "parameterising",
+            "parameterisation"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"instantiat*\"",
+          "family_basis": "instantiat[*3]",
+          "explicit_terms": [
+            "instantiate",
+            "instantiates",
+            "instantiated",
+            "instantiating",
+            "instantiation"
+          ],
+          "operators": 1
+        },
+        {
+          "source_pattern": "\"variation point$\"",
+          "family_basis": "\"variation point[*1]\"",
+          "explicit_terms": [
+            "variation point",
+            "variation points"
+          ],
+          "operators": 1
+        }
+      ]
+    }
+  },
+  "controls": {
+    "field": "TS Topic",
+    "year": "PY=(2011-2026)",
+    "language": "LA=(English)",
+    "editions": "all currently exposed editions",
+    "sort": "Date: oldest first",
+    "page_size": 50,
+    "strict_passes": 2,
+    "native_export": "RIS (other reference software)",
+    "proximity": false,
+    "pair_expansion": false,
+    "publication_type": null,
+    "subject": null,
+    "access": null,
+    "controlled_vocabulary": null
+  },
+  "retry_policy": {
+    "maximum_attempts_per_event": 3,
+    "exact_query_only": true,
+    "fresh_owned_page_per_attempt": true,
+    "stop_after_first_success": true,
+    "retain_every_failure": true,
+    "retryable": "source or adapter failure with total null"
+  },
+  "acceptance_rule": "Accept each family-bearing schedule query only when strict capture succeeds, every Pilot 004 literal ID is retained, and every wildcard-only record is confirmed to satisfy the intended concept. Exact set equality requires no wildcard-only review.",
+  "schedule_ids": [
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "BG1",
+    "BG2",
+    "BC1",
+    "BT2"
+  ],
+  "event_count": 9,
+  "events": [
+    {
+      "event_id": "broad-wildcard-A1",
+      "partition_id": "A1",
+      "variant": "broad_wildcard",
+      "query": "((TS=(\"CubeSat$\") OR TS=(\"cube sat$\") OR TS=(\"cube-sat$\") OR TS=(\"cube satellite$\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat$\") OR TS=(\"nano sat$\") OR TS=(\"nano-satellite$\") OR TS=(\"nano satellite$\") OR TS=(\"SmallSat$\") OR TS=(\"small satellite$\") OR TS=(\"small sat$\")) AND (TS=(\"electrical power system$\") OR TS=(\"electric power system$\") OR TS=(\"electrical power subsystem$\") OR TS=(\"electric power subsystem$\") OR TS=(\"electrical energy subsystem$\") OR TS=(\"EPS$\") OR TS=(\"power subsystem$\") OR TS=(\"power system$\") OR TS=(\"spacecraft power system$\") OR TS=(\"power suppl*\") OR TS=(\"power distribution unit$\") OR TS=(\"PDU$\") OR TS=(\"power processing unit$\") OR TS=(\"power control and distribution\") OR TS=(\"power management and distribution\") OR TS=(\"electrical architecture$\") OR TS=(\"power architecture$\") OR TS=(\"DC power bus*\") OR TS=(\"PCDU$\") OR TS=(\"PMAD$\")) AND (TS=(\"model-based system$ engineering\") OR TS=(\"model based system$ engineering\") OR TS=(\"model-driven system$ engineering\") OR TS=(\"model driven system$ engineering\") OR TS=(\"model-centric system$ engineering\") OR TS=(\"model centric system$ engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"system$ modeling language\") OR TS=(\"system$ modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "8428a3c438bd57a9a654ad04dd5daab447dfe7ec83ecc0deb9495d23a50a56b5",
+      "query_characters": 2279,
+      "literal_query_characters": 3398,
+      "character_reduction": 1119,
+      "wildcard_operator_count": 38,
+      "literal_baseline": {
+        "artifact": "searches/events/literal-A1.json",
+        "artifact_sha256": "e4e3d46b24eb9a11b0ec175f76b886619b696a829ef16d449974ab76b12ccce1",
+        "total": 1,
+        "ordered_wos_ids_sha256": "4c955eb8fe26c28a169e771da43b8ae68bb332bd7b5cba0c19ab2e38c86778f6"
+      },
+      "attempt_outputs": [
+        "events/A1.attempt-01.json",
+        "events/A1.attempt-02.json",
+        "events/A1.attempt-03.json"
+      ],
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "broad-wildcard-A2",
+      "partition_id": "A2",
+      "variant": "broad_wildcard",
+      "query": "((TS=(\"CubeSat$\") OR TS=(\"cube sat$\") OR TS=(\"cube-sat$\") OR TS=(\"cube satellite$\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat$\") OR TS=(\"nano sat$\") OR TS=(\"nano-satellite$\") OR TS=(\"nano satellite$\") OR TS=(\"SmallSat$\") OR TS=(\"small satellite$\") OR TS=(\"small sat$\")) AND (TS=(\"power budget$\") OR TS=(\"energy budget$\") OR TS=(\"energy balance$\") OR TS=(\"power balance$\") OR TS=(\"power margin$\") OR TS=(\"power generation\") OR TS=(\"photovoltaic generator$\") OR TS=(\"solar array$\") OR TS=(\"solar panel$\") OR TS=(\"batter*\") OR TS=(\"battery management\") OR TS=(\"state$ of charge\") OR TS=(\"energy storage\") OR TS=(\"power electronics\") OR TS=(\"power conditioning\") OR TS=(\"power distribution\") OR TS=(\"power management\") OR TS=(\"power interface$\") OR TS=(\"power mode$\") OR TS=(\"load profile$\") OR TS=(\"power consumption\") OR TS=(\"power demand\") OR TS=(\"power profile\") OR TS=(\"energy harvesting\")) AND ((TS=(\"model-based system$ engineering\") OR TS=(\"model based system$ engineering\") OR TS=(\"model-driven system$ engineering\") OR TS=(\"model driven system$ engineering\") OR TS=(\"model-centric system$ engineering\") OR TS=(\"model centric system$ engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"system$ modeling language\") OR TS=(\"system$ modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\")) OR (TS=(\"system$ model\") OR TS=(\"system$ modeling\") OR TS=(\"system$ modelling\") OR TS=(\"reference model$\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model$\") OR TS=(\"model-based system$ design\") OR TS=(\"model based system$ design\") OR TS=(\"system$ architecture model$\") OR TS=(\"integrated system$ model$\") OR TS=(\"system-level model$\") OR TS=(\"system level model$\") OR TS=(\"digital thread$\") OR TS=(\"digital twin$\")))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "b37ae961187c8534423eb1d0965643b8170c364ade14f319846b99d852130c64",
+      "query_characters": 2743,
+      "literal_query_characters": 4213,
+      "character_reduction": 1470,
+      "wildcard_operator_count": 48,
+      "literal_baseline": {
+        "artifact": "searches/events/literal-A2.json",
+        "artifact_sha256": "0c47fc852c58c9086dfb61467900036f74200424b6389057cbda88607a149a9f",
+        "total": 11,
+        "ordered_wos_ids_sha256": "4b8abf87109ac031c7659a5f5ca68694f2bf64ebaa670e5df51d218b6d2bc56d"
+      },
+      "attempt_outputs": [
+        "events/A2.attempt-01.json",
+        "events/A2.attempt-02.json",
+        "events/A2.attempt-03.json"
+      ],
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "broad-wildcard-A3",
+      "partition_id": "A3",
+      "variant": "broad_wildcard",
+      "query": "((TS=(\"CubeSat$\") OR TS=(\"cube sat$\") OR TS=(\"cube-sat$\") OR TS=(\"cube satellite$\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat$\") OR TS=(\"nano sat$\") OR TS=(\"nano-satellite$\") OR TS=(\"nano satellite$\") OR TS=(\"SmallSat$\") OR TS=(\"small satellite$\") OR TS=(\"small sat$\")) AND (TS=(\"electrical power system$\") OR TS=(\"electric power system$\") OR TS=(\"electrical power subsystem$\") OR TS=(\"electric power subsystem$\") OR TS=(\"electrical energy subsystem$\") OR TS=(\"EPS$\") OR TS=(\"power subsystem$\") OR TS=(\"power system$\") OR TS=(\"spacecraft power system$\") OR TS=(\"power suppl*\") OR TS=(\"power distribution unit$\") OR TS=(\"PDU$\") OR TS=(\"power processing unit$\") OR TS=(\"power control and distribution\") OR TS=(\"power management and distribution\") OR TS=(\"electrical architecture$\") OR TS=(\"power architecture$\") OR TS=(\"DC power bus*\") OR TS=(\"PCDU$\") OR TS=(\"PMAD$\")) AND (TS=(\"system$ model\") OR TS=(\"system$ modeling\") OR TS=(\"system$ modelling\") OR TS=(\"reference model$\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model$\") OR TS=(\"model-based system$ design\") OR TS=(\"model based system$ design\") OR TS=(\"system$ architecture model$\") OR TS=(\"integrated system$ model$\") OR TS=(\"system-level model$\") OR TS=(\"system level model$\") OR TS=(\"digital thread$\") OR TS=(\"digital twin$\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "75240311fa8259f630a24f3b2aec4a9d2235a74aab2c040405f8d07193f254de",
+      "query_characters": 1335,
+      "literal_query_characters": 2665,
+      "character_reduction": 1330,
+      "wildcard_operator_count": 45,
+      "literal_baseline": {
+        "artifact": "searches/events/literal-A3.json",
+        "artifact_sha256": "2c46d2bd47399fc2164d7e8afe79b1ffeaf8fbcca65549be966015efc209f9f1",
+        "total": 2,
+        "ordered_wos_ids_sha256": "3cebda0d19bf4e6b4fc84bb19590e51aba3699550e45e21b23800f68cfb4bea8"
+      },
+      "attempt_outputs": [
+        "events/A3.attempt-01.json",
+        "events/A3.attempt-02.json",
+        "events/A3.attempt-03.json"
+      ],
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "broad-wildcard-B1",
+      "partition_id": "B1",
+      "variant": "broad_wildcard",
+      "query": "((TS=(\"CubeSat$\") OR TS=(\"cube sat$\") OR TS=(\"cube-sat$\") OR TS=(\"cube satellite$\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat$\") OR TS=(\"nano sat$\") OR TS=(\"nano-satellite$\") OR TS=(\"nano satellite$\") OR TS=(\"SmallSat$\") OR TS=(\"small satellite$\") OR TS=(\"small sat$\")) AND (TS=(\"model-based system$ engineering\") OR TS=(\"model based system$ engineering\") OR TS=(\"model-driven system$ engineering\") OR TS=(\"model driven system$ engineering\") OR TS=(\"model-centric system$ engineering\") OR TS=(\"model centric system$ engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"system$ modeling language\") OR TS=(\"system$ modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "76aabb98730be2ec173b33bd11e1245683372190725190f09304447f99c4426f",
+      "query_characters": 1682,
+      "literal_query_characters": 2306,
+      "character_reduction": 624,
+      "wildcard_operator_count": 20,
+      "literal_baseline": {
+        "artifact": "searches/events/literal-B1.json",
+        "artifact_sha256": "c796fe648573e584a151beb847c254c1f0346a3cdc7deb1c017f06c4202416d8",
+        "total": 93,
+        "ordered_wos_ids_sha256": "b604da837b0c23ccd6da54eb4732d70c65027fbc1d84617f36b92a83b08e2af8"
+      },
+      "attempt_outputs": [
+        "events/B1.attempt-01.json",
+        "events/B1.attempt-02.json",
+        "events/B1.attempt-03.json"
+      ],
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "broad-wildcard-B2",
+      "partition_id": "B2",
+      "variant": "broad_wildcard",
+      "query": "((TS=(\"CubeSat$\") OR TS=(\"cube sat$\") OR TS=(\"cube-sat$\") OR TS=(\"cube satellite$\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat$\") OR TS=(\"nano sat$\") OR TS=(\"nano-satellite$\") OR TS=(\"nano satellite$\") OR TS=(\"SmallSat$\") OR TS=(\"small satellite$\") OR TS=(\"small sat$\")) AND (TS=(\"system$ model\") OR TS=(\"system$ modeling\") OR TS=(\"system$ modelling\") OR TS=(\"reference model$\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model$\") OR TS=(\"model-based system$ design\") OR TS=(\"model based system$ design\") OR TS=(\"system$ architecture model$\") OR TS=(\"integrated system$ model$\") OR TS=(\"system-level model$\") OR TS=(\"system level model$\") OR TS=(\"digital thread$\") OR TS=(\"digital twin$\")) AND (TS=(\"requirement$\") OR TS=(\"function*\") OR TS=(\"behavior*\") OR TS=(\"behaviour*\") OR TS=(\"architectur*\") OR TS=(\"interface$\") OR TS=(\"trace*\") OR TS=(\"allocat*\") OR TS=(\"constraint$\") OR TS=(\"parametric$\") OR TS=(\"analys*\") OR TS=(\"design*\") OR TS=(\"decision$\") OR TS=(\"decision-making\") OR TS=(\"decision making\") OR TS=(\"trade stud*\") OR TS=(\"trade-off$\") OR TS=(\"tradeoff$\") OR TS=(\"verification$\") OR TS=(\"verif*\") OR TS=(\"validation$\") OR TS=(\"validat*\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "8034b0ea976bc021116ac03b903188e2d9309db4e65cfbdcd7fb313689a99d1c",
+      "query_characters": 1202,
+      "literal_query_characters": 2712,
+      "character_reduction": 1510,
+      "wildcard_operator_count": 47,
+      "literal_baseline": {
+        "artifact": "searches/events/literal-B2.json",
+        "artifact_sha256": "8c9b0fe36eb0d03e5e2eb6dbb6f307392db8cd83bd27f1f39f1d760910bcd73e",
+        "total": 78,
+        "ordered_wos_ids_sha256": "b17807dbf7a11f8c40ad67f80ff4eb1d452e310661229f98837f8c2c65490864"
+      },
+      "attempt_outputs": [
+        "events/B2.attempt-01.json",
+        "events/B2.attempt-02.json",
+        "events/B2.attempt-03.json"
+      ],
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "broad-wildcard-BG1",
+      "partition_id": "BG1",
+      "variant": "broad_wildcard",
+      "query": "((TS=(\"CubeSat$\") OR TS=(\"cube sat$\") OR TS=(\"cube-sat$\") OR TS=(\"cube satellite$\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat$\") OR TS=(\"nano sat$\") OR TS=(\"nano-satellite$\") OR TS=(\"nano satellite$\") OR TS=(\"SmallSat$\") OR TS=(\"small satellite$\") OR TS=(\"small sat$\")) AND ((TS=(\"generic model$\") OR TS=(\"generic system model$\") OR TS=(\"reusable model$\") OR TS=(\"reusable system model$\") OR TS=(\"configurable model$\") OR TS=(\"configurable system model$\") OR TS=(\"model template$\")) OR (TS=(\"mission-agnostic model$\") OR TS=(\"mission-agnostic architecture$\") OR TS=(\"mission agnostic model$\") OR TS=(\"mission agnostic architecture$\") OR TS=(\"mission-independent model$\") OR TS=(\"mission-independent architecture$\") OR TS=(\"mission independent model$\") OR TS=(\"mission independent architecture$\")) OR ((TS=(\"mission-agnostic\") OR TS=(\"mission agnostic\") OR TS=(\"mission-independent\") OR TS=(\"mission independent\")) AND (TS=(\"system$ model\") OR TS=(\"system$ modeling\") OR TS=(\"system$ modelling\") OR TS=(\"reference model$\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model$\") OR TS=(\"model-based system$ design\") OR TS=(\"model based system$ design\") OR TS=(\"system$ architecture model$\") OR TS=(\"integrated system$ model$\") OR TS=(\"system-level model$\") OR TS=(\"system level model$\") OR TS=(\"digital thread$\") OR TS=(\"digital twin$\"))))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "84d003e927b0a22b17f4cf2279f53b44afc3455e6e4fddd10455a0c9bc83f81e",
+      "query_characters": 1384,
+      "literal_query_characters": 2725,
+      "character_reduction": 1341,
+      "wildcard_operator_count": 42,
+      "literal_baseline": {
+        "artifact": "searches/events/literal-BG1.json",
+        "artifact_sha256": "e6edc45cfd4c09605eec09661438f53a5b527e67b39d039eafb1cd065be74d22",
+        "total": 3,
+        "ordered_wos_ids_sha256": "8004294c8834006fbc4f408712c797f503d4513bb1f5bae26ac546f338c73355"
+      },
+      "attempt_outputs": [
+        "events/BG1.attempt-01.json",
+        "events/BG1.attempt-02.json",
+        "events/BG1.attempt-03.json"
+      ],
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "broad-wildcard-BG2",
+      "partition_id": "BG2",
+      "variant": "broad_wildcard",
+      "query": "((TS=(\"CubeSat$\") OR TS=(\"cube sat$\") OR TS=(\"cube-sat$\") OR TS=(\"cube satellite$\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat$\") OR TS=(\"nano sat$\") OR TS=(\"nano-satellite$\") OR TS=(\"nano satellite$\") OR TS=(\"SmallSat$\") OR TS=(\"small satellite$\") OR TS=(\"small sat$\")) AND ((TS=(\"reference architecture$\") OR TS=(\"domain model$\") OR TS=(\"metamodel$\") OR TS=(\"meta-model$\")) OR (TS=(\"product-line model$\") OR TS=(\"product line model$\") OR TS=(\"product-family model$\") OR TS=(\"product family model$\")) OR (TS=(\"variation point$\")) OR ((TS=(\"product-line\") OR TS=(\"product line\") OR TS=(\"product-family\") OR TS=(\"product family\")) AND (TS=(\"system$ model\") OR TS=(\"system$ modeling\") OR TS=(\"system$ modelling\") OR TS=(\"reference model$\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model$\") OR TS=(\"model-based system$ design\") OR TS=(\"model based system$ design\") OR TS=(\"system$ architecture model$\") OR TS=(\"integrated system$ model$\") OR TS=(\"system-level model$\") OR TS=(\"system level model$\") OR TS=(\"digital thread$\") OR TS=(\"digital twin$\"))))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "451d3d048f92fa6035ae80cabde5c34d21e1f9b025c8b1193726765ac34f55b7",
+      "query_characters": 1099,
+      "literal_query_characters": 2177,
+      "character_reduction": 1078,
+      "wildcard_operator_count": 36,
+      "literal_baseline": {
+        "artifact": "searches/events/literal-BG2.json",
+        "artifact_sha256": "8925d472ddd9dbd6fa613db24cf758278a55f33a08938e71135cdfaca5abe0f5",
+        "total": 7,
+        "ordered_wos_ids_sha256": "85fb6ee768b8272520de66e265e5f638a9b6bcc003b9f0c53b4dd68295996685"
+      },
+      "attempt_outputs": [
+        "events/BG2.attempt-01.json",
+        "events/BG2.attempt-02.json",
+        "events/BG2.attempt-03.json"
+      ],
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "broad-wildcard-BC1",
+      "partition_id": "BC1",
+      "variant": "broad_wildcard",
+      "query": "((TS=(\"CubeSat$\") OR TS=(\"cube sat$\") OR TS=(\"cube-sat$\") OR TS=(\"cube satellite$\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat$\") OR TS=(\"nano sat$\") OR TS=(\"nano-satellite$\") OR TS=(\"nano satellite$\") OR TS=(\"SmallSat$\") OR TS=(\"small satellite$\") OR TS=(\"small sat$\")) AND ((TS=(\"reference model$\") OR TS=(\"system reference model$\") OR TS=(\"model librar*\") OR TS=(\"system model librar*\") OR TS=(\"model pattern$\") OR TS=(\"modeling pattern$\") OR TS=(\"modelling pattern$\") OR TS=(\"system model pattern$\") OR TS=(\"systems model pattern$\") OR TS=(\"model profile$\") OR TS=(\"system model profile$\") OR TS=(\"systems model profile$\") OR TS=(\"SysML profile$\")) OR (TS=(\"domain-specific modeling language\") OR TS=(\"domain specific modeling language\") OR TS=(\"domain-specific modelling language\") OR TS=(\"domain specific modelling language\")))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "0b815715b8c82ad382103cdb9cd3cb2644323a3e7ef660eeba5c9193e5e17ee8",
+      "query_characters": 863,
+      "literal_query_characters": 1535,
+      "character_reduction": 672,
+      "wildcard_operator_count": 25,
+      "literal_baseline": {
+        "artifact": "searches/events/literal-BC1.json",
+        "artifact_sha256": "c0940ed41e519bb17d19efbeae5f7b6ac6ecbf8e8384c8301b574d75f89522a4",
+        "total": 17,
+        "ordered_wos_ids_sha256": "b07470cf38fe7edc21aef51caf226b04b4532e1e81c6bf95eb8652e875497ccd"
+      },
+      "attempt_outputs": [
+        "events/BC1.attempt-01.json",
+        "events/BC1.attempt-02.json",
+        "events/BC1.attempt-03.json"
+      ],
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "broad-wildcard-BT2",
+      "partition_id": "BT2",
+      "variant": "broad_wildcard",
+      "query": "((TS=(\"CubeSat$\") OR TS=(\"cube sat$\") OR TS=(\"cube-sat$\") OR TS=(\"cube satellite$\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat$\") OR TS=(\"nano sat$\") OR TS=(\"nano-satellite$\") OR TS=(\"nano satellite$\") OR TS=(\"SmallSat$\") OR TS=(\"small satellite$\") OR TS=(\"small sat$\")) AND (TS=(\"system$ model\") OR TS=(\"system$ modeling\") OR TS=(\"system$ modelling\") OR TS=(\"reference model$\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model$\") OR TS=(\"model-based system$ design\") OR TS=(\"model based system$ design\") OR TS=(\"system$ architecture model$\") OR TS=(\"integrated system$ model$\") OR TS=(\"system-level model$\") OR TS=(\"system level model$\") OR TS=(\"digital thread$\") OR TS=(\"digital twin$\")) AND (TS=(\"tailor*\") OR TS=(\"customiz*\") OR TS=(\"customis*\") OR TS=(\"parameteriz*\") OR TS=(\"parameteris*\") OR TS=(\"instantiat*\") OR TS=(\"variability\") OR TS=(\"variation point$\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_sha256": "1cf84ad74ef45fc03ed93eb2ac725ac8805ab0df474f789897a0ce473ff9237d",
+      "query_characters": 916,
+      "literal_query_characters": 2303,
+      "character_reduction": 1387,
+      "wildcard_operator_count": 34,
+      "literal_baseline": {
+        "artifact": "searches/events/literal-BT2.json",
+        "artifact_sha256": "84564b94965120bf284c0213ce532a9b8662212554ee9171a02c6fe01c347716",
+        "total": 3,
+        "ordered_wos_ids_sha256": "5a939854b7a293efe1a7d185310045f1e73b130bcd30ee4a60b52b1706f431b6"
+      },
+      "attempt_outputs": [
+        "events/BT2.attempt-01.json",
+        "events/BT2.attempt-02.json",
+        "events/BT2.attempt-03.json"
+      ],
+      "diagnostic_only": true,
+      "do_not_merge": true
+    }
+  ]
+}

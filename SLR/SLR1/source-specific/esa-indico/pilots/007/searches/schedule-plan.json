@@ -1,0 +1,274 @@
+{
+  "schema_version": "esa-indico-pilot007-schedule-plan/v1",
+  "source": "ESA Indico",
+  "pilot": "007",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "objective": "Execute all nine current direct-query partitions over the complete, marker-bound Pilot 006 category-0 metadata ledger with the exact adapter v8 local matcher.",
+  "protocol": {
+    "strategy_reference": "SLR/SLR1/protocol-discovery-and-appraisal.md#direct-query-schedule",
+    "term_snapshot_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+    "term_snapshot": "SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot007/queries.py",
+    "term_snapshot_sha256": "7ab4c27fe49bd1bfa9c45600a669896b507fc08055045128b6212a6ee407193f",
+    "term_counts": {
+      "P": 26,
+      "E_H": 38,
+      "E_F": 37,
+      "M_H": 54,
+      "M_B": 31,
+      "R": 55,
+      "G_model_fixed": 14,
+      "G_mission": 4,
+      "G_mission_exact": 16,
+      "G_structure_fixed": 8,
+      "G_product": 4,
+      "G_product_exact": 8,
+      "G_variation": 2,
+      "C1_fixed": 26,
+      "G_DSL": 4,
+      "T_precise": 32
+    },
+    "schedule_ids": [
+      "A1",
+      "A2",
+      "A3",
+      "B1",
+      "B2",
+      "BG1",
+      "BG2",
+      "BC1",
+      "BT2"
+    ],
+    "historical_pair_expansion_replaced_for": [
+      "BG1",
+      "BG2",
+      "BC1",
+      "BT2"
+    ]
+  },
+  "source_corpus": {
+    "compact_artifact": "SLR/SLR1/source-specific/esa-indico/pilots/006/searches/A1-r15.json",
+    "compact_artifact_sha256": "17dd02cb5a076f33a939988a7a7842bb2c24b9fd87b41123d79374308d162e8c",
+    "terminal_marker": "SLR/SLR1/source-specific/esa-indico/pilots/006/searches/.A1-r15.json.ESA_INDICO_HARVEST_COMMIT.json",
+    "terminal_marker_sha256": "d26ea54e51fe2ef71566bd18a836da6b01a19bd151057fffc84a4dd5d2c17351",
+    "metadata_ledger": "SLR/SLR1/source-specific/esa-indico/pilots/006/searches/.A1-r15.json.ESA_INDICO_METADATA_LEDGER.json",
+    "metadata_ledger_file_sha256": "37fa1cf68596615d95018dab5f8b48875caa50dec352f6c02e2b3ed7f04150e6",
+    "metadata_ledger_payload_sha256": "d409971790f40782f3c4b08ae5b46e9d2880b68cef56b95d06a710ecb565e522",
+    "records_sha256": "380a3c4df813090d177b7dcda404fd06f66ce878dbbf5aca3c37365c5dc573fb",
+    "anchor_query_sha256": "51d735e837882a684cc179c8a2a4d255e7c7fd52bc2a82f5a224e52e8a9daebd",
+    "transaction_id": "61b5e2ba246846eba10555cdb331231614d5096de609bbfab9dca8615683a16f",
+    "adapter": {
+      "id": "search_esa_indico",
+      "version": "8",
+      "script_sha256": "6032a7984a1f6c8a170d94a5a30d2b534785b0d860d85be46dcfe5d966a29f6f"
+    },
+    "matcher_schema": "esa-indico-local-concept-matcher/v3",
+    "category_id": 0,
+    "root_snapshot_count": 440,
+    "ordered_event_ids_sha256": "2c25ea82f291320700dcba30c1cd8cc35b1ccb9edeb5cf6678dec83f9812a8f4",
+    "root_snapshots_equal": true,
+    "event_export_witness_count": 440,
+    "counts": {
+      "events": 440,
+      "contributions": 8922,
+      "subcontributions": 17,
+      "materials": 7138,
+      "records": 16517,
+      "events_in_root_snapshot": 440
+    },
+    "source_completed_at_utc": "2026-09-02T18:28:06.094751Z",
+    "marker_bound_harvest_verified": true,
+    "attachment_bodies_persisted": false
+  },
+  "execution_method": {
+    "kind": "read_only_matching_over_validated_complete_metadata_ledger",
+    "source_requests": 0,
+    "browser_requests": 0,
+    "attachment_body_requests": 0,
+    "matcher": "esa-indico-local-concept-matcher/v3",
+    "adapter_id": "search_esa_indico",
+    "adapter_version": "8",
+    "adapter_path": "~/agent-tools/internet/skills/browser/scripts/search_esa_indico.py",
+    "adapter_sha256": "6032a7984a1f6c8a170d94a5a30d2b534785b0d860d85be46dcfe5d966a29f6f",
+    "record_order": "root snapshot order, then native event export order",
+    "one_bounded_match_pass_per_partition": true
+  },
+  "source_affecting_scripts": {
+    "SLR/SLR1/source-specific/esa-indico/scripts/esa_indico_pilot007/queries.py": "53b38da4fc98119f44629f7c042911d74d3eb5118534ff2e6213bd8b5bf5c607",
+    "SLR/SLR1/source-specific/esa-indico/scripts/esa_indico_pilot007/common.py": "e2ddbbe95f62f8fd90da76759b1d79d2c63f2e0b5995ce6e5d9b74cb5fbb56a2",
+    "SLR/SLR1/source-specific/esa-indico/scripts/esa_indico_pilot007/build_plan.py": "1ea9e66e99f67e57e7881efc13a2034352dfb9f636d406e9fa380954907e0fe1",
+    "SLR/SLR1/source-specific/esa-indico/scripts/esa_indico_pilot007/run_pilot.py": "381915b0087b4b8a159e982ca38cd166dabf7c0213c46f0c407b40ad6fe3e3db"
+  },
+  "translation": {
+    "literal": "one straight-double-quoted lexical literal",
+    "ordinary_block": "source OR across every declared literal",
+    "compound_blocks": "current declared AND and OR definitions",
+    "boolean": "uppercase AND and OR with explicit parentheses",
+    "wildcard": false,
+    "proximity": false,
+    "pair_expansion": false,
+    "controlled_vocabulary_supplement": false,
+    "fields_by_record_type": {
+      "event": [
+        "title",
+        "description",
+        "keywords"
+      ],
+      "contribution": [
+        "title",
+        "description",
+        "keywords"
+      ],
+      "subcontribution": [
+        "title",
+        "description",
+        "keywords"
+      ],
+      "attachment": [
+        "title",
+        "filename",
+        "description"
+      ]
+    },
+    "phrase_and_boolean_scope": "Phrases stay within one declared field. Boolean factors apply within one normalized record."
+  },
+  "controls": {
+    "category_id": 0,
+    "category_scope": "selected category and descendants",
+    "date_filter": null,
+    "date_handling": "No source or local match date restriction. Apply the evidence window during downstream screening.",
+    "language_filter": null,
+    "publication_type_filter": null,
+    "access_filter": null,
+    "full_text_filter": null,
+    "result_types": [
+      "events",
+      "contributions",
+      "materials"
+    ],
+    "notes_and_categories_covered": false,
+    "sort": "preserved complete-ledger source order"
+  },
+  "acceptance_checks": [
+    "The Pilot 006 compact artifact, terminal marker, and full ledger pass the shared ESA v8 gate.",
+    "Both root snapshots retain the same ordered 440 event IDs.",
+    "All 440 event-export witnesses and all 16,517 normalized records reconcile.",
+    "The current adapter file hash equals the source artifact adapter hash.",
+    "A1 exactly reproduces the Pilot 006 expression and zero-match result.",
+    "Every current no-proximity expression parses and runs over every ledger record.",
+    "Every match keeps its type-prefixed stable identity and source order.",
+    "No partition exceeds 100 matches.",
+    "No source, browser, attachment, or full-text request occurs."
+  ],
+  "event_count": 9,
+  "events": [
+    {
+      "event_id": "pilot-007-A1",
+      "partition_id": "A1",
+      "semantic_form": "P AND E_H AND M_H",
+      "source_construction": "F(P) AND F(E_H) AND F(M_H)",
+      "query": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"electrical power system\" OR \"electrical power systems\" OR \"electric power system\" OR \"electric power systems\" OR \"electrical power subsystem\" OR \"electrical power subsystems\" OR \"electric power subsystem\" OR \"electric power subsystems\" OR \"electrical energy subsystem\" OR \"electrical energy subsystems\" OR \"EPS\" OR \"EPSs\" OR \"power subsystem\" OR \"power subsystems\" OR \"power system\" OR \"power systems\" OR \"spacecraft power system\" OR \"spacecraft power systems\" OR \"power supply\" OR \"power supplies\" OR \"power distribution unit\" OR \"power distribution units\" OR \"PDU\" OR \"PDUs\" OR \"power processing unit\" OR \"power processing units\" OR \"power control and distribution\" OR \"power management and distribution\" OR \"electrical architecture\" OR \"electrical architectures\" OR \"power architecture\" OR \"power architectures\" OR \"DC power bus\" OR \"DC power buses\" OR \"PCDU\" OR \"PCDUs\" OR \"PMAD\" OR \"PMADs\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"model-driven systems engineering\" OR \"model driven systems engineering\" OR \"model-driven system engineering\" OR \"model driven system engineering\" OR \"model-centric systems engineering\" OR \"model centric systems engineering\" OR \"model-centric system engineering\" OR \"model centric system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"systems modelling language\" OR \"system modeling language\" OR \"system modelling language\" OR \"object-process methodology\" OR \"object process methodology\" OR \"OPM\" OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR \"OOSEM\" OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR \"Arcadia\" OR \"Capella\" OR \"model-based engineering\" OR \"model based engineering\" OR \"model-driven engineering\" OR \"model driven engineering\" OR \"model-based design\" OR \"model based design\" OR \"model-driven design\" OR \"model driven design\" OR \"MBE\" OR \"MDE\" OR \"MBD\" OR \"MagicGrid\" OR \"Harmony-SE\" OR \"Harmony SE\" OR \"RFLP\" OR \"Cameo Systems Modeler\" OR \"MagicDraw\" OR \"IBM Engineering Systems Design Rhapsody\" OR \"Rational Rhapsody\" OR \"Vitech CORE\" OR \"Vitech GENESYS\" OR \"OpenMBEE\" OR \"Enterprise Architect\" OR \"MATLAB System Composer\" OR \"System Composer\" OR \"Modelio\")",
+      "query_characters": 2770,
+      "query_sha256": "51d735e837882a684cc179c8a2a4d255e7c7fd52bc2a82f5a224e52e8a9daebd",
+      "output": "searches/A1.json",
+      "maximum_retained_matches": 100,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "pilot-007-A2",
+      "partition_id": "A2",
+      "semantic_form": "P AND E_F AND (M_H OR M_B)",
+      "source_construction": "F(P) AND F(E_F) AND (F(M_H) OR F(M_B))",
+      "query": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"power budget\" OR \"power budgets\" OR \"energy budget\" OR \"energy budgets\" OR \"energy balance\" OR \"energy balances\" OR \"power balance\" OR \"power balances\" OR \"power margin\" OR \"power margins\" OR \"power generation\" OR \"photovoltaic generator\" OR \"photovoltaic generators\" OR \"solar array\" OR \"solar arrays\" OR \"solar panel\" OR \"solar panels\" OR \"battery\" OR \"batteries\" OR \"battery management\" OR \"state of charge\" OR \"states of charge\" OR \"energy storage\" OR \"power electronics\" OR \"power conditioning\" OR \"power distribution\" OR \"power management\" OR \"power interface\" OR \"power interfaces\" OR \"power mode\" OR \"power modes\" OR \"load profile\" OR \"load profiles\" OR \"power consumption\" OR \"power demand\" OR \"power profile\" OR \"energy harvesting\") AND ((\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"model-driven systems engineering\" OR \"model driven systems engineering\" OR \"model-driven system engineering\" OR \"model driven system engineering\" OR \"model-centric systems engineering\" OR \"model centric systems engineering\" OR \"model-centric system engineering\" OR \"model centric system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"systems modelling language\" OR \"system modeling language\" OR \"system modelling language\" OR \"object-process methodology\" OR \"object process methodology\" OR \"OPM\" OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR \"OOSEM\" OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR \"Arcadia\" OR \"Capella\" OR \"model-based engineering\" OR \"model based engineering\" OR \"model-driven engineering\" OR \"model driven engineering\" OR \"model-based design\" OR \"model based design\" OR \"model-driven design\" OR \"model driven design\" OR \"MBE\" OR \"MDE\" OR \"MBD\" OR \"MagicGrid\" OR \"Harmony-SE\" OR \"Harmony SE\" OR \"RFLP\" OR \"Cameo Systems Modeler\" OR \"MagicDraw\" OR \"IBM Engineering Systems Design Rhapsody\" OR \"Rational Rhapsody\" OR \"Vitech CORE\" OR \"Vitech GENESYS\" OR \"OpenMBEE\" OR \"Enterprise Architect\" OR \"MATLAB System Composer\" OR \"System Composer\" OR \"Modelio\") OR (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\"))",
+      "query_characters": 3435,
+      "query_sha256": "c6961edcc4430dd808cb78534cbd62fba2a1516813ad2c21ff6d69972462bf0c",
+      "output": "searches/A2.json",
+      "maximum_retained_matches": 100,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "pilot-007-A3",
+      "partition_id": "A3",
+      "semantic_form": "P AND E_H AND M_B",
+      "source_construction": "F(P) AND F(E_H) AND F(M_B)",
+      "query": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"electrical power system\" OR \"electrical power systems\" OR \"electric power system\" OR \"electric power systems\" OR \"electrical power subsystem\" OR \"electrical power subsystems\" OR \"electric power subsystem\" OR \"electric power subsystems\" OR \"electrical energy subsystem\" OR \"electrical energy subsystems\" OR \"EPS\" OR \"EPSs\" OR \"power subsystem\" OR \"power subsystems\" OR \"power system\" OR \"power systems\" OR \"spacecraft power system\" OR \"spacecraft power systems\" OR \"power supply\" OR \"power supplies\" OR \"power distribution unit\" OR \"power distribution units\" OR \"PDU\" OR \"PDUs\" OR \"power processing unit\" OR \"power processing units\" OR \"power control and distribution\" OR \"power management and distribution\" OR \"electrical architecture\" OR \"electrical architectures\" OR \"power architecture\" OR \"power architectures\" OR \"DC power bus\" OR \"DC power buses\" OR \"PCDU\" OR \"PCDUs\" OR \"PMAD\" OR \"PMADs\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\")",
+      "query_characters": 2152,
+      "query_sha256": "767d7c1356fd6e0b54bdf7ecfab8ea7ec14cf847c72c6a53ac0bf998689eade4",
+      "output": "searches/A3.json",
+      "maximum_retained_matches": 100,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "pilot-007-B1",
+      "partition_id": "B1",
+      "semantic_form": "P AND M_H",
+      "source_construction": "F(P) AND F(M_H)",
+      "query": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"model-based systems engineering\" OR \"model based systems engineering\" OR \"model-based system engineering\" OR \"model based system engineering\" OR \"model-driven systems engineering\" OR \"model driven systems engineering\" OR \"model-driven system engineering\" OR \"model driven system engineering\" OR \"model-centric systems engineering\" OR \"model centric systems engineering\" OR \"model-centric system engineering\" OR \"model centric system engineering\" OR \"MBSE\" OR \"SysML\" OR \"systems modeling language\" OR \"systems modelling language\" OR \"system modeling language\" OR \"system modelling language\" OR \"object-process methodology\" OR \"object process methodology\" OR \"OPM\" OR \"object-oriented systems engineering method\" OR \"object oriented systems engineering method\" OR \"OOSEM\" OR \"object-oriented systems engineering\" OR \"object oriented systems engineering\" OR \"Arcadia\" OR \"Capella\" OR \"model-based engineering\" OR \"model based engineering\" OR \"model-driven engineering\" OR \"model driven engineering\" OR \"model-based design\" OR \"model based design\" OR \"model-driven design\" OR \"model driven design\" OR \"MBE\" OR \"MDE\" OR \"MBD\" OR \"MagicGrid\" OR \"Harmony-SE\" OR \"Harmony SE\" OR \"RFLP\" OR \"Cameo Systems Modeler\" OR \"MagicDraw\" OR \"IBM Engineering Systems Design Rhapsody\" OR \"Rational Rhapsody\" OR \"Vitech CORE\" OR \"Vitech GENESYS\" OR \"OpenMBEE\" OR \"Enterprise Architect\" OR \"MATLAB System Composer\" OR \"System Composer\" OR \"Modelio\")",
+      "query_characters": 1868,
+      "query_sha256": "56b814cd675d898b037b395a8aea505ceb12bb4d4bc498ff5ddf48a23e418134",
+      "output": "searches/B1.json",
+      "maximum_retained_matches": 100,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "pilot-007-B2",
+      "partition_id": "B2",
+      "semantic_form": "P AND M_B AND R",
+      "source_construction": "F(P) AND F(M_B) AND F(R)",
+      "query": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\") AND (\"requirement\" OR \"requirements\" OR \"function\" OR \"functions\" OR \"functional\" OR \"behavior\" OR \"behaviors\" OR \"behaviour\" OR \"behaviours\" OR \"behavioral\" OR \"behavioural\" OR \"architecture\" OR \"architectures\" OR \"architectural\" OR \"interface\" OR \"interfaces\" OR \"traceability\" OR \"trace\" OR \"traceable\" OR \"traced\" OR \"allocation\" OR \"allocate\" OR \"allocated\" OR \"constraint\" OR \"constraints\" OR \"parametric\" OR \"parametrics\" OR \"analysis\" OR \"analyses\" OR \"design\" OR \"designs\" OR \"designed\" OR \"designing\" OR \"decision\" OR \"decisions\" OR \"decision-making\" OR \"decision making\" OR \"trade study\" OR \"trade studies\" OR \"trade-off\" OR \"trade-offs\" OR \"tradeoff\" OR \"tradeoffs\" OR \"verification\" OR \"verifications\" OR \"verify\" OR \"verifies\" OR \"verified\" OR \"verifying\" OR \"validation\" OR \"validations\" OR \"validate\" OR \"validates\" OR \"validated\" OR \"validating\")",
+      "query_characters": 2114,
+      "query_sha256": "d5ed8b9575e46788b385d58b9c0ee13bd708342c13056eb72ada432b21057fb2",
+      "output": "searches/B2.json",
+      "maximum_retained_matches": 100,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "pilot-007-BG1",
+      "partition_id": "BG1",
+      "semantic_form": "P AND G_model",
+      "source_construction": "F(P) AND (F(G_model_fixed) OR F(G_mission_exact) OR (F(G_mission) AND F(M_B)))",
+      "query": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"generic model\" OR \"generic models\" OR \"generic system model\" OR \"generic system models\" OR \"reusable model\" OR \"reusable models\" OR \"reusable system model\" OR \"reusable system models\" OR \"configurable model\" OR \"configurable models\" OR \"configurable system model\" OR \"configurable system models\" OR \"model template\" OR \"model templates\") OR (\"mission-agnostic model\" OR \"mission-agnostic models\" OR \"mission-agnostic architecture\" OR \"mission-agnostic architectures\" OR \"mission agnostic model\" OR \"mission agnostic models\" OR \"mission agnostic architecture\" OR \"mission agnostic architectures\" OR \"mission-independent model\" OR \"mission-independent models\" OR \"mission-independent architecture\" OR \"mission-independent architectures\" OR \"mission independent model\" OR \"mission independent models\" OR \"mission independent architecture\" OR \"mission independent architectures\") OR ((\"mission-agnostic\" OR \"mission agnostic\" OR \"mission-independent\" OR \"mission independent\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\")))",
+      "query_characters": 2232,
+      "query_sha256": "ff7ec78671cc07df476754d2cd472c7ba742702a55fe0597a52c299739a959ec",
+      "output": "searches/BG1.json",
+      "maximum_retained_matches": 100,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "pilot-007-BG2",
+      "partition_id": "BG2",
+      "semantic_form": "P AND G_structure",
+      "source_construction": "F(P) AND (F(G_structure_fixed) OR F(G_product_exact) OR F(G_variation) OR (F(G_product) AND F(M_B)))",
+      "query": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"reference architecture\" OR \"reference architectures\" OR \"domain model\" OR \"domain models\" OR \"metamodel\" OR \"metamodels\" OR \"meta-model\" OR \"meta-models\") OR (\"product-line model\" OR \"product-line models\" OR \"product line model\" OR \"product line models\" OR \"product-family model\" OR \"product-family models\" OR \"product family model\" OR \"product family models\") OR (\"variation point\" OR \"variation points\") OR ((\"product-line\" OR \"product line\" OR \"product-family\" OR \"product family\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\")))",
+      "query_characters": 1744,
+      "query_sha256": "a38a2929dab333cec902b7f0e4381980d561aeb82116fbb6c57efe641303b8fd",
+      "output": "searches/BG2.json",
+      "maximum_retained_matches": 100,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "pilot-007-BC1",
+      "partition_id": "BC1",
+      "semantic_form": "P AND C1",
+      "source_construction": "F(P) AND (F(C1_fixed) OR F(G_DSL))",
+      "query": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND ((\"reference model\" OR \"reference models\" OR \"system reference model\" OR \"system reference models\" OR \"model library\" OR \"model libraries\" OR \"system model library\" OR \"system model libraries\" OR \"model pattern\" OR \"model patterns\" OR \"modeling pattern\" OR \"modeling patterns\" OR \"modelling pattern\" OR \"modelling patterns\" OR \"system model pattern\" OR \"system model patterns\" OR \"systems model pattern\" OR \"systems model patterns\" OR \"model profile\" OR \"model profiles\" OR \"system model profile\" OR \"system model profiles\" OR \"systems model profile\" OR \"systems model profiles\" OR \"SysML profile\" OR \"SysML profiles\") OR (\"domain-specific modeling language\" OR \"domain specific modeling language\" OR \"domain-specific modelling language\" OR \"domain specific modelling language\"))",
+      "query_characters": 1217,
+      "query_sha256": "6653e5d892a49cd3612e0b5d6f90e4af7d151ea70c3ad7408aa06eba7d4c8745",
+      "output": "searches/BC1.json",
+      "maximum_retained_matches": 100,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "pilot-007-BT2",
+      "partition_id": "BT2",
+      "semantic_form": "P AND M_B AND T_precise",
+      "source_construction": "F(P) AND F(M_B) AND F(T_precise)",
+      "query": "(\"CubeSat\" OR \"CubeSats\" OR \"cube sat\" OR \"cube sats\" OR \"cube-sat\" OR \"cube-sats\" OR \"cube satellite\" OR \"cube satellites\" OR \"nanosat\" OR \"nanosats\" OR \"nanosatellite\" OR \"nanosatellites\" OR \"nano-sat\" OR \"nano-sats\" OR \"nano sat\" OR \"nano sats\" OR \"nano-satellite\" OR \"nano-satellites\" OR \"nano satellite\" OR \"nano satellites\" OR \"SmallSat\" OR \"SmallSats\" OR \"small satellite\" OR \"small satellites\" OR \"small sat\" OR \"small sats\") AND (\"system model\" OR \"systems model\" OR \"system modeling\" OR \"systems modeling\" OR \"system modelling\" OR \"systems modelling\" OR \"reference model\" OR \"reference models\" OR \"digital engineering\" OR \"object-oriented systems model\" OR \"object-oriented systems models\" OR \"model-based system design\" OR \"model based system design\" OR \"model-based systems design\" OR \"model based systems design\" OR \"system architecture model\" OR \"system architecture models\" OR \"systems architecture model\" OR \"systems architecture models\" OR \"integrated system model\" OR \"integrated system models\" OR \"integrated systems model\" OR \"integrated systems models\" OR \"system-level model\" OR \"system-level models\" OR \"system level model\" OR \"system level models\" OR \"digital thread\" OR \"digital threads\" OR \"digital twin\" OR \"digital twins\") AND (\"tailor\" OR \"tailors\" OR \"tailored\" OR \"tailoring\" OR \"customize\" OR \"customizes\" OR \"customized\" OR \"customizing\" OR \"customization\" OR \"customise\" OR \"customises\" OR \"customised\" OR \"customising\" OR \"customisation\" OR \"parameterize\" OR \"parameterizes\" OR \"parameterized\" OR \"parameterizing\" OR \"parameterization\" OR \"parameterise\" OR \"parameterises\" OR \"parameterised\" OR \"parameterising\" OR \"parameterisation\" OR \"instantiate\" OR \"instantiates\" OR \"instantiated\" OR \"instantiating\" OR \"instantiation\" OR \"variability\" OR \"variation point\" OR \"variation points\")",
+      "query_characters": 1820,
+      "query_sha256": "6aab427f16bd73dbbc67045cd8eefd58eee5d461e5a67f694b0e2170094497f5",
+      "output": "searches/BT2.json",
+      "maximum_retained_matches": 100,
+      "do_not_merge": true
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": "arxiv-browser-pilot004-plan-repair/v1",
+  "pilot": "004",
+  "status": "complete",
+  "do_not_merge": true,
+  "superseded_plan": {
+    "path": "event-plan-initial.json",
+    "sha256": "68eb72a2c04e0143e699d1c6deec7cfe2891252ccdd05a3d452559c70b46fc50",
+    "event_count": 11
+  },
+  "revised_plan": {
+    "path": "event-plan.json",
+    "sha256": "b732f13bd6e3c782220760436a6218a8de4a1b144a0fb94818604013588632d2",
+    "event_count": 12,
+    "revision": 2,
+    "inter_event_delay_seconds": 30,
+    "strict_pass_delay_seconds": 10
+  },
+  "trigger": {
+    "original_run_receipt": "run-receipt-attempt2.json",
+    "retained_reproduction": "failures/A2-direct-cell-failure-reproduction.NON_MERGEABLE_FAILURE.json",
+    "total": null,
+    "outcome": "source_rejected_before_total"
+  },
+  "repair": "Distribute only the unchanged A2 M_H OR M_B factor into two cells. Keep P, E_F, literals, fields, controls, and date window unchanged.",
+  "lossless_identity": "P AND E_F AND (M_H OR M_B) equals (P AND E_F AND M_H) OR (P AND E_F AND M_B).",
+  "rate_control": {
+    "reason": "A later unchanged B2 retry encountered an HTTP 429 between strict passes. Revision 2 execution now spaces source events by 30 seconds.",
+    "query_or_control_change": false
+  },
+  "failure_retention_receipt": "failure-retention-receipt.json"
+}

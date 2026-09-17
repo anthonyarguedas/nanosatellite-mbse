@@ -1,0 +1,724 @@
+{
+  "schema_version": "arxiv-atom-pilot003-transport-validation/v1",
+  "event_kind": "pilot_transport_validation",
+  "merge_eligible": false,
+  "do_not_merge": true,
+  "observed_at_utc": "2026-08-30T05:27:45.750718Z",
+  "diagnostic_window": {
+    "from": "2011-01-01",
+    "to": "2026-08-29"
+  },
+  "route": {
+    "transport": "arXiv Atom API",
+    "endpoint": "https://export.arxiv.org/api/query",
+    "method": "GET",
+    "query_field": "documented all: field atoms with ti:/abs: validation controls",
+    "boolean_syntax": "Atom API AND, OR, parentheses; separate from rendered Advanced Search semantics",
+    "date_clause": "submittedDate:[201101010000 TO 202608292359]",
+    "sort": {
+      "sortBy": "submittedDate",
+      "sortOrder": "ascending"
+    },
+    "capture": "Atom XML parsed locally; start/max_results pagination; bare and versioned arXiv IDs retained"
+  },
+  "checks": {
+    "documentation": {
+      "status": "passed",
+      "url": "https://info.arxiv.org/help/api/user-manual.html",
+      "response_status": 200,
+      "sha256": "f6c3ce2936f629e03fd42faf911604a7b0677ae3475c9c8608a543e9a7579671",
+      "required_fragments_found": {
+        "all_field": true,
+        "date_filter": true,
+        "boolean_grouping": true,
+        "phrase": true,
+        "ordering": true,
+        "pagination": true
+      }
+    },
+    "transport_fields": {
+      "status": "passed",
+      "observations": {
+        "all": {
+          "query": "all:\"Attention Is All You Need\"",
+          "id_list": [
+            "1706.03762"
+          ],
+          "response_status": 200,
+          "source_query_echo": "arXiv Query: search_query=all:\"Attention Is All You Need\"&id_list=1706.03762&start=0&max_results=20",
+          "source_reported_total": 1,
+          "source_start_index": 0,
+          "source_items_per_page": 20,
+          "returned_stable_ids": [
+            "1706.03762"
+          ],
+          "returned_versioned_ids": [
+            "1706.03762v7"
+          ],
+          "records": [
+            {
+              "source_record_stable_id": "1706.03762",
+              "source_record_version_id": "1706.03762v7",
+              "source_record_version": "v7",
+              "atom_id": "http://arxiv.org/abs/1706.03762v7",
+              "title": "Attention Is All You Need",
+              "abstract": "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.",
+              "published": "2017-06-12T17:57:34Z",
+              "updated": "2023-08-02T00:41:18Z",
+              "authors": [
+                "Ashish Vaswani",
+                "Noam Shazeer",
+                "Niki Parmar",
+                "Jakob Uszkoreit",
+                "Llion Jones",
+                "Aidan N. Gomez",
+                "Lukasz Kaiser",
+                "Illia Polosukhin"
+              ],
+              "categories": [
+                "cs.CL",
+                "cs.LG"
+              ],
+              "primary_category": "cs.CL",
+              "doi": null,
+              "journal_ref": null,
+              "local_pair_evidence_title_abstract": []
+            }
+          ],
+          "response_sha256": "a5413b4d71b2146f41bd619c9c2f5ff42356c3b394c2c323910f82c845169eaf",
+          "url_length": 168,
+          "transient_attempt_failures": []
+        },
+        "title": {
+          "query": "ti:\"Attention Is All You Need\"",
+          "id_list": [
+            "1706.03762"
+          ],
+          "response_status": 200,
+          "source_query_echo": "arXiv Query: search_query=ti:\"Attention Is All You Need\"&id_list=1706.03762&start=0&max_results=20",
+          "source_reported_total": 1,
+          "source_start_index": 0,
+          "source_items_per_page": 20,
+          "returned_stable_ids": [
+            "1706.03762"
+          ],
+          "returned_versioned_ids": [
+            "1706.03762v7"
+          ],
+          "records": [
+            {
+              "source_record_stable_id": "1706.03762",
+              "source_record_version_id": "1706.03762v7",
+              "source_record_version": "v7",
+              "atom_id": "http://arxiv.org/abs/1706.03762v7",
+              "title": "Attention Is All You Need",
+              "abstract": "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.",
+              "published": "2017-06-12T17:57:34Z",
+              "updated": "2023-08-02T00:41:18Z",
+              "authors": [
+                "Ashish Vaswani",
+                "Noam Shazeer",
+                "Niki Parmar",
+                "Jakob Uszkoreit",
+                "Llion Jones",
+                "Aidan N. Gomez",
+                "Lukasz Kaiser",
+                "Illia Polosukhin"
+              ],
+              "categories": [
+                "cs.CL",
+                "cs.LG"
+              ],
+              "primary_category": "cs.CL",
+              "doi": null,
+              "journal_ref": null,
+              "local_pair_evidence_title_abstract": []
+            }
+          ],
+          "response_sha256": "83aa19043154320e664d1d56149ea75653e994502629c631117520147108f50f",
+          "url_length": 167,
+          "transient_attempt_failures": []
+        },
+        "abstract": {
+          "query": "abs:\"dominant sequence transduction models\"",
+          "id_list": [
+            "1706.03762"
+          ],
+          "response_status": 200,
+          "source_query_echo": "arXiv Query: search_query=abs:\"dominant sequence transduction models\"&id_list=1706.03762&start=0&max_results=20",
+          "source_reported_total": 1,
+          "source_start_index": 0,
+          "source_items_per_page": 20,
+          "returned_stable_ids": [
+            "1706.03762"
+          ],
+          "returned_versioned_ids": [
+            "1706.03762v7"
+          ],
+          "records": [
+            {
+              "source_record_stable_id": "1706.03762",
+              "source_record_version_id": "1706.03762v7",
+              "source_record_version": "v7",
+              "atom_id": "http://arxiv.org/abs/1706.03762v7",
+              "title": "Attention Is All You Need",
+              "abstract": "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.",
+              "published": "2017-06-12T17:57:34Z",
+              "updated": "2023-08-02T00:41:18Z",
+              "authors": [
+                "Ashish Vaswani",
+                "Noam Shazeer",
+                "Niki Parmar",
+                "Jakob Uszkoreit",
+                "Llion Jones",
+                "Aidan N. Gomez",
+                "Lukasz Kaiser",
+                "Illia Polosukhin"
+              ],
+              "categories": [
+                "cs.CL",
+                "cs.LG"
+              ],
+              "primary_category": "cs.CL",
+              "doi": null,
+              "journal_ref": null,
+              "local_pair_evidence_title_abstract": []
+            }
+          ],
+          "response_sha256": "46f64ac18e63d45b9e5d22f80f0b1c87d1351d194eb8f2a5a39dfd4983cedcd6",
+          "url_length": 180,
+          "transient_attempt_failures": []
+        }
+      },
+      "membership": [
+        {
+          "known_present": [
+            "1706.03762"
+          ],
+          "known_absent": [],
+          "missing_known_present": [],
+          "unexpected_known_absent": [],
+          "passed": true
+        },
+        {
+          "known_present": [
+            "1706.03762"
+          ],
+          "known_absent": [],
+          "missing_known_present": [],
+          "unexpected_known_absent": [],
+          "passed": true
+        },
+        {
+          "known_present": [
+            "1706.03762"
+          ],
+          "known_absent": [],
+          "missing_known_present": [],
+          "unexpected_known_absent": [],
+          "passed": true
+        }
+      ]
+    },
+    "boolean_grouping": {
+      "status": "passed",
+      "observations": {
+        "and_before_or": {
+          "query": "all:\"Attention Is All You Need\" OR all:\"GLU Variants Improve Transformer\" AND all:GLU",
+          "id_list": [
+            "1706.03762",
+            "2002.05202"
+          ],
+          "response_status": 200,
+          "source_query_echo": "arXiv Query: search_query=all:\"Attention Is All You Need\" OR all:\"GLU Variants Improve Transformer\" AND all:GLU&id_list=1706.03762,2002.05202&start=0&max_results=20",
+          "source_reported_total": 2,
+          "source_start_index": 0,
+          "source_items_per_page": 20,
+          "returned_stable_ids": [
+            "1706.03762",
+            "2002.05202"
+          ],
+          "returned_versioned_ids": [
+            "1706.03762v7",
+            "2002.05202v1"
+          ],
+          "records": [
+            {
+              "source_record_stable_id": "1706.03762",
+              "source_record_version_id": "1706.03762v7",
+              "source_record_version": "v7",
+              "atom_id": "http://arxiv.org/abs/1706.03762v7",
+              "title": "Attention Is All You Need",
+              "abstract": "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.",
+              "published": "2017-06-12T17:57:34Z",
+              "updated": "2023-08-02T00:41:18Z",
+              "authors": [
+                "Ashish Vaswani",
+                "Noam Shazeer",
+                "Niki Parmar",
+                "Jakob Uszkoreit",
+                "Llion Jones",
+                "Aidan N. Gomez",
+                "Lukasz Kaiser",
+                "Illia Polosukhin"
+              ],
+              "categories": [
+                "cs.CL",
+                "cs.LG"
+              ],
+              "primary_category": "cs.CL",
+              "doi": null,
+              "journal_ref": null,
+              "local_pair_evidence_title_abstract": []
+            },
+            {
+              "source_record_stable_id": "2002.05202",
+              "source_record_version_id": "2002.05202v1",
+              "source_record_version": "v1",
+              "atom_id": "http://arxiv.org/abs/2002.05202v1",
+              "title": "GLU Variants Improve Transformer",
+              "abstract": "Gated Linear Units (arXiv:1612.08083) consist of the component-wise product of two linear projections, one of which is first passed through a sigmoid function. Variations on GLU are possible, using different nonlinear (or even linear) functions in place of sigmoid. We test these variants in the feed-forward sublayers of the Transformer (arXiv:1706.03762) sequence-to-sequence model, and find that some of them yield quality improvements over the typically-used ReLU or GELU activations.",
+              "published": "2020-02-12T19:57:13Z",
+              "updated": "2020-02-12T19:57:13Z",
+              "authors": [
+                "Noam Shazeer"
+              ],
+              "categories": [
+                "cs.LG",
+                "cs.NE",
+                "stat.ML"
+              ],
+              "primary_category": "cs.LG",
+              "doi": null,
+              "journal_ref": null,
+              "local_pair_evidence_title_abstract": []
+            }
+          ],
+          "response_sha256": "56d231d94c2379904851e3df1d28ceded258b2f86ecb7cd7e453287a48039045",
+          "url_length": 243,
+          "transient_attempt_failures": []
+        },
+        "left_grouped": {
+          "query": "(all:\"Attention Is All You Need\" OR all:\"GLU Variants Improve Transformer\") AND all:GLU",
+          "id_list": [
+            "1706.03762",
+            "2002.05202"
+          ],
+          "response_status": 200,
+          "source_query_echo": "arXiv Query: search_query=(all:\"Attention Is All You Need\" OR all:\"GLU Variants Improve Transformer\") AND all:GLU&id_list=1706.03762,2002.05202&start=0&max_results=20",
+          "source_reported_total": 1,
+          "source_start_index": 0,
+          "source_items_per_page": 20,
+          "returned_stable_ids": [
+            "2002.05202"
+          ],
+          "returned_versioned_ids": [
+            "2002.05202v1"
+          ],
+          "records": [
+            {
+              "source_record_stable_id": "2002.05202",
+              "source_record_version_id": "2002.05202v1",
+              "source_record_version": "v1",
+              "atom_id": "http://arxiv.org/abs/2002.05202v1",
+              "title": "GLU Variants Improve Transformer",
+              "abstract": "Gated Linear Units (arXiv:1612.08083) consist of the component-wise product of two linear projections, one of which is first passed through a sigmoid function. Variations on GLU are possible, using different nonlinear (or even linear) functions in place of sigmoid. We test these variants in the feed-forward sublayers of the Transformer (arXiv:1706.03762) sequence-to-sequence model, and find that some of them yield quality improvements over the typically-used ReLU or GELU activations.",
+              "published": "2020-02-12T19:57:13Z",
+              "updated": "2020-02-12T19:57:13Z",
+              "authors": [
+                "Noam Shazeer"
+              ],
+              "categories": [
+                "cs.LG",
+                "cs.NE",
+                "stat.ML"
+              ],
+              "primary_category": "cs.LG",
+              "doi": null,
+              "journal_ref": null,
+              "local_pair_evidence_title_abstract": []
+            }
+          ],
+          "response_sha256": "ad37498eb0c30ec62e917e72e75cd8e24fa6ccd1d7a2152e8b0e556ef4a5cf20",
+          "url_length": 249,
+          "transient_attempt_failures": []
+        },
+        "right_grouped": {
+          "query": "all:\"Attention Is All You Need\" OR (all:\"GLU Variants Improve Transformer\" AND all:GLU)",
+          "id_list": [
+            "1706.03762",
+            "2002.05202"
+          ],
+          "response_status": 200,
+          "source_query_echo": "arXiv Query: search_query=all:\"Attention Is All You Need\" OR (all:\"GLU Variants Improve Transformer\" AND all:GLU)&id_list=1706.03762,2002.05202&start=0&max_results=20",
+          "source_reported_total": 2,
+          "source_start_index": 0,
+          "source_items_per_page": 20,
+          "returned_stable_ids": [
+            "1706.03762",
+            "2002.05202"
+          ],
+          "returned_versioned_ids": [
+            "1706.03762v7",
+            "2002.05202v1"
+          ],
+          "records": [
+            {
+              "source_record_stable_id": "1706.03762",
+              "source_record_version_id": "1706.03762v7",
+              "source_record_version": "v7",
+              "atom_id": "http://arxiv.org/abs/1706.03762v7",
+              "title": "Attention Is All You Need",
+              "abstract": "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.",
+              "published": "2017-06-12T17:57:34Z",
+              "updated": "2023-08-02T00:41:18Z",
+              "authors": [
+                "Ashish Vaswani",
+                "Noam Shazeer",
+                "Niki Parmar",
+                "Jakob Uszkoreit",
+                "Llion Jones",
+                "Aidan N. Gomez",
+                "Lukasz Kaiser",
+                "Illia Polosukhin"
+              ],
+              "categories": [
+                "cs.CL",
+                "cs.LG"
+              ],
+              "primary_category": "cs.CL",
+              "doi": null,
+              "journal_ref": null,
+              "local_pair_evidence_title_abstract": []
+            },
+            {
+              "source_record_stable_id": "2002.05202",
+              "source_record_version_id": "2002.05202v1",
+              "source_record_version": "v1",
+              "atom_id": "http://arxiv.org/abs/2002.05202v1",
+              "title": "GLU Variants Improve Transformer",
+              "abstract": "Gated Linear Units (arXiv:1612.08083) consist of the component-wise product of two linear projections, one of which is first passed through a sigmoid function. Variations on GLU are possible, using different nonlinear (or even linear) functions in place of sigmoid. We test these variants in the feed-forward sublayers of the Transformer (arXiv:1706.03762) sequence-to-sequence model, and find that some of them yield quality improvements over the typically-used ReLU or GELU activations.",
+              "published": "2020-02-12T19:57:13Z",
+              "updated": "2020-02-12T19:57:13Z",
+              "authors": [
+                "Noam Shazeer"
+              ],
+              "categories": [
+                "cs.LG",
+                "cs.NE",
+                "stat.ML"
+              ],
+              "primary_category": "cs.LG",
+              "doi": null,
+              "journal_ref": null,
+              "local_pair_evidence_title_abstract": []
+            }
+          ],
+          "response_sha256": "350beca88be193dd4d8082d1a948376878be61ca7f53c89bf1e8e48224fbe73a",
+          "url_length": 249,
+          "transient_attempt_failures": []
+        }
+      },
+      "membership": {
+        "and_before_or": {
+          "known_present": [
+            "1706.03762",
+            "2002.05202"
+          ],
+          "known_absent": [],
+          "missing_known_present": [],
+          "unexpected_known_absent": [],
+          "passed": true
+        },
+        "left_grouped": {
+          "known_present": [
+            "2002.05202"
+          ],
+          "known_absent": [
+            "1706.03762"
+          ],
+          "missing_known_present": [],
+          "unexpected_known_absent": [],
+          "passed": true
+        },
+        "right_grouped": {
+          "known_present": [
+            "1706.03762",
+            "2002.05202"
+          ],
+          "known_absent": [],
+          "missing_known_present": [],
+          "unexpected_known_absent": [],
+          "passed": true
+        }
+      },
+      "interpretation": "The direct Atom route observed AND-before-OR and respected explicit parentheses; this finding is not attributed to rendered Advanced Search rows."
+    },
+    "phrases": {
+      "status": "passed",
+      "observations": {
+        "positive": {
+          "query": "ti:\"Attention Is All You Need\"",
+          "id_list": [
+            "1706.03762"
+          ],
+          "response_status": 200,
+          "source_query_echo": "arXiv Query: search_query=ti:\"Attention Is All You Need\"&id_list=1706.03762&start=0&max_results=20",
+          "source_reported_total": 1,
+          "source_start_index": 0,
+          "source_items_per_page": 20,
+          "returned_stable_ids": [
+            "1706.03762"
+          ],
+          "returned_versioned_ids": [
+            "1706.03762v7"
+          ],
+          "records": [
+            {
+              "source_record_stable_id": "1706.03762",
+              "source_record_version_id": "1706.03762v7",
+              "source_record_version": "v7",
+              "atom_id": "http://arxiv.org/abs/1706.03762v7",
+              "title": "Attention Is All You Need",
+              "abstract": "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.",
+              "published": "2017-06-12T17:57:34Z",
+              "updated": "2023-08-02T00:41:18Z",
+              "authors": [
+                "Ashish Vaswani",
+                "Noam Shazeer",
+                "Niki Parmar",
+                "Jakob Uszkoreit",
+                "Llion Jones",
+                "Aidan N. Gomez",
+                "Lukasz Kaiser",
+                "Illia Polosukhin"
+              ],
+              "categories": [
+                "cs.CL",
+                "cs.LG"
+              ],
+              "primary_category": "cs.CL",
+              "doi": null,
+              "journal_ref": null,
+              "local_pair_evidence_title_abstract": []
+            }
+          ],
+          "response_sha256": "83aa19043154320e664d1d56149ea75653e994502629c631117520147108f50f",
+          "url_length": 167,
+          "transient_attempt_failures": []
+        },
+        "reordered_negative": {
+          "query": "ti:\"Need All Is Attention You\"",
+          "id_list": [
+            "1706.03762"
+          ],
+          "response_status": 200,
+          "source_query_echo": "arXiv Query: search_query=ti:\"Need All Is Attention You\"&id_list=1706.03762&start=0&max_results=20",
+          "source_reported_total": 0,
+          "source_start_index": 0,
+          "source_items_per_page": 20,
+          "returned_stable_ids": [],
+          "returned_versioned_ids": [],
+          "records": [],
+          "response_sha256": "cb0d445dfd0d3801268bf903c6120370e5eb53f57cdc168c225a38ebd72a0d60",
+          "url_length": 167,
+          "transient_attempt_failures": []
+        }
+      },
+      "membership": [
+        {
+          "known_present": [
+            "1706.03762"
+          ],
+          "known_absent": [],
+          "missing_known_present": [],
+          "unexpected_known_absent": [],
+          "passed": true
+        },
+        {
+          "known_present": [],
+          "known_absent": [
+            "1706.03762"
+          ],
+          "missing_known_present": [],
+          "unexpected_known_absent": [],
+          "passed": true
+        }
+      ]
+    },
+    "dates": {
+      "status": "passed",
+      "observations": {
+        "inside": {
+          "query": "all:\"Attention Is All You Need\" AND submittedDate:[201706120000 TO 201706122359]",
+          "id_list": [
+            "1706.03762"
+          ],
+          "response_status": 200,
+          "source_query_echo": "arXiv Query: search_query=all:\"Attention Is All You Need\" AND submittedDate:\"201706120000 TO 201706122359\"&id_list=1706.03762&start=0&max_results=20",
+          "source_reported_total": 1,
+          "source_start_index": 0,
+          "source_items_per_page": 20,
+          "returned_stable_ids": [
+            "1706.03762"
+          ],
+          "returned_versioned_ids": [
+            "1706.03762v7"
+          ],
+          "records": [
+            {
+              "source_record_stable_id": "1706.03762",
+              "source_record_version_id": "1706.03762v7",
+              "source_record_version": "v7",
+              "atom_id": "http://arxiv.org/abs/1706.03762v7",
+              "title": "Attention Is All You Need",
+              "abstract": "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.",
+              "published": "2017-06-12T17:57:34Z",
+              "updated": "2023-08-02T00:41:18Z",
+              "authors": [
+                "Ashish Vaswani",
+                "Noam Shazeer",
+                "Niki Parmar",
+                "Jakob Uszkoreit",
+                "Llion Jones",
+                "Aidan N. Gomez",
+                "Lukasz Kaiser",
+                "Illia Polosukhin"
+              ],
+              "categories": [
+                "cs.CL",
+                "cs.LG"
+              ],
+              "primary_category": "cs.CL",
+              "doi": null,
+              "journal_ref": null,
+              "local_pair_evidence_title_abstract": []
+            }
+          ],
+          "response_sha256": "9ece9716e1924c6b1b5e8300223e9467f64eee2b7b87770db69a774926661116",
+          "url_length": 223,
+          "transient_attempt_failures": []
+        },
+        "outside": {
+          "query": "all:\"Attention Is All You Need\" AND submittedDate:[201706130000 TO 201706132359]",
+          "id_list": [
+            "1706.03762"
+          ],
+          "response_status": 200,
+          "source_query_echo": "arXiv Query: search_query=all:\"Attention Is All You Need\" AND submittedDate:\"201706130000 TO 201706132359\"&id_list=1706.03762&start=0&max_results=20",
+          "source_reported_total": 0,
+          "source_start_index": 0,
+          "source_items_per_page": 20,
+          "returned_stable_ids": [],
+          "returned_versioned_ids": [],
+          "records": [],
+          "response_sha256": "2753349da6bbab067d7c1e200d5b0501df2e184a7ff40080ee20c0d4c3a26e6b",
+          "url_length": 223,
+          "transient_attempt_failures": []
+        }
+      },
+      "membership": [
+        {
+          "known_present": [
+            "1706.03762"
+          ],
+          "known_absent": [],
+          "missing_known_present": [],
+          "unexpected_known_absent": [],
+          "passed": true
+        },
+        {
+          "known_present": [],
+          "known_absent": [
+            "1706.03762"
+          ],
+          "missing_known_present": [],
+          "unexpected_known_absent": [],
+          "passed": true
+        }
+      ],
+      "interpretation": "1706.03762 was retrieved in its 2017 v1 interval although its Atom updated timestamp is later; the pilot therefore records submittedDate as an original-submission/v1 route observation."
+    },
+    "ordering_and_complete_stable_id_capture": {
+      "status": "passed",
+      "artifact": "pagination-capture.json",
+      "query": "all:CubeSat AND submittedDate:[202401010000 TO 202412312359]",
+      "interpretation": "Two complete 25-record-page traversals reconciled source total, ordered versioned IDs, bare stable IDs, and ascending published timestamps."
+    },
+    "pair_fallback": {
+      "status": "passed",
+      "observation": {
+        "query": "all:reusable AND all:model AND submittedDate:[201101010000 TO 202608292359]",
+        "id_list": [
+          "1102.2933"
+        ],
+        "response_status": 200,
+        "source_query_echo": "arXiv Query: search_query=all:reusable AND all:model AND submittedDate:\"201101010000 TO 202608292359\"&id_list=1102.2933&start=0&max_results=20",
+        "source_reported_total": 1,
+        "source_start_index": 0,
+        "source_items_per_page": 20,
+        "returned_stable_ids": [
+          "1102.2933"
+        ],
+        "returned_versioned_ids": [
+          "1102.2933v2"
+        ],
+        "records": [
+          {
+            "source_record_stable_id": "1102.2933",
+            "source_record_version_id": "1102.2933v2",
+            "source_record_version": "v2",
+            "atom_id": "http://arxiv.org/abs/1102.2933v2",
+            "title": "A FEniCS-Based Programming Framework for Modeling Turbulent Flow by the Reynolds-Averaged Navier-Stokes Equations",
+            "abstract": "Finding an appropriate turbulence model for a given flow case usually calls for extensive experimentation with both models and numerical solution methods. This work presents the design and implementation of a flexible, programmable software framework for assisting with numerical experiments in computational turbulence. The framework targets Reynolds-averaged Navier-Stokes models, discretized by finite element methods. The novel implementation makes use of Python and the FEniCS package, the combination of which leads to compact and reusable code, where model- and solver-specific code resemble closely the mathematical formulation of equations and algorithms. The presented ideas and programming techniques are also applicable to other fields that involve systems of nonlinear partial differential equations. We demonstrate the framework in two applications and investigate the impact of various linearizations on the convergence properties of nonlinear solvers for a Reynolds-averaged Navier-Stokes model.",
+            "published": "2011-02-15T00:08:11Z",
+            "updated": "2011-03-31T17:12:17Z",
+            "authors": [
+              "Mikael Mortensen",
+              "Hans Petter Langtangen",
+              "Garth N. Wells"
+            ],
+            "categories": [
+              "cs.CE",
+              "physics.comp-ph",
+              "physics.flu-dyn"
+            ],
+            "primary_category": "cs.CE",
+            "doi": "10.1016/j.advwatres.2011.02.013",
+            "journal_ref": null,
+            "local_pair_evidence_title_abstract": []
+          }
+        ],
+        "response_sha256": "bf3273252355369573ebbfbd14add29138920dd30affcaa84ec810ca6cd02bc9",
+        "url_length": 215,
+        "transient_attempt_failures": []
+      },
+      "membership": {
+        "known_present": [
+          "1102.2933"
+        ],
+        "known_absent": [],
+        "missing_known_present": [],
+        "unexpected_known_absent": [],
+        "passed": true,
+        "local_title_or_abstract_evidence": {
+          "declared_pair": [
+            "reusable",
+            "model"
+          ],
+          "field": "abstract",
+          "matches": [
+            {
+              "left_start": 75,
+              "right_start": 78,
+              "intervening_lexical_tokens": 2,
+              "order": "left_then_right"
+            }
+          ],
+          "passed": true
+        }
+      },
+      "interpretation": "The Atom conjunction is a deliberately broader candidate fallback for an unavailable same-field ≤5-token predicate. The local abstract check confirms one declared T2 pair without excluding any API candidate."
+    }
+  }
+}

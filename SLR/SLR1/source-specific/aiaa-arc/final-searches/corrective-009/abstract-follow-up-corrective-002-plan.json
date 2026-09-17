@@ -1,0 +1,46 @@
+{
+  "schema_version": "slr1-aiaa-arc-final-abstract-corrective-plan/v1",
+  "created_at_utc": "2026-09-05T05:52:01.256185Z",
+  "corrective_sequence": 2,
+  "source": "AIAA Aerospace Research Central (ARC)",
+  "source_id": "aiaa_arc",
+  "review_namespace": "main",
+  "abstract_plan": "SLR/SLR1/source-specific/aiaa-arc/final-searches/corrective-009/abstract-follow-up-plan.json",
+  "abstract_plan_sha256": "bbfdd4703e1abedc5a646743609732c2bed2ba6ac809120cbf1f7e48241d7b08",
+  "superseded_corrective_receipt": "SLR/SLR1/source-specific/aiaa-arc/final-searches/corrective-009/abstract-follow-up-corrective-001-receipt.json",
+  "superseded_corrective_receipt_sha256": "924b19b8d7bec828dc27d944baaec46ff7891a5e89ce0010e9099e646fd26dec",
+  "diagnosis": {
+    "failed_event_id": "final-main-aiaa-arc-abstract-follow-up-0007",
+    "paper_id": "10.2514/5.9781624107443.0133.0146",
+    "first_failure": "The source redirected its abstract route to the same-DOI EPUB route.",
+    "second_failure": "The same source route returned a transient non-normal navigation response. A later read-only diagnostic returned HTTP 200 at the requested abstract URL."
+  },
+  "correction": {
+    "accepted_same_doi_routes": [
+      "/doi/abs/<DOI>",
+      "/doi/epub/<DOI>"
+    ],
+    "max_attempts": 3,
+    "retry_delay_seconds": 2,
+    "challenge_automation": false,
+    "prior_successful_capture_count": 60,
+    "prior_successes_reused": true,
+    "failed_capture_reexecuted": true,
+    "event_count": 1
+  },
+  "runner": "SLR/SLR1/source-specific/aiaa-arc/scripts/aiaa_arc_final_direct/run.py",
+  "runner_sha256": "e28ff5562b7c262d2750e5635d6c6128892759dc55ac373ea744c646fe959c84",
+  "output_directory": "SLR/SLR1/source-specific/aiaa-arc/final-searches/corrective-009/abstract-captures-corrective-002",
+  "output_receipt": "SLR/SLR1/source-specific/aiaa-arc/final-searches/corrective-009/abstract-follow-up-corrective-002-receipt.json",
+  "events": [
+    {
+      "event_id": "final-main-aiaa-arc-abstract-follow-up-0007",
+      "source_id": "aiaa_arc",
+      "paper_id": "10.2514/5.9781624107443.0133.0146",
+      "title": "The Mathematical Models for Orbit Prediction",
+      "document_type": "CHAP",
+      "abstract_url": "https://arc.aiaa.org/doi/abs/10.2514/5.9781624107443.0133.0146",
+      "output": "record-0007.json"
+    }
+  ]
+}

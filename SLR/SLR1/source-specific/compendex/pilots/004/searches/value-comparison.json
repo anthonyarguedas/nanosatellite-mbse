@@ -1,0 +1,168 @@
+{
+  "schema_version": "compendex-controlled-vocabulary-value-comparison/v1",
+  "source": "Compendex",
+  "platform": "Engineering Village",
+  "pilot": "004",
+  "status": "complete_two_pass_terminal_cell_comparison",
+  "do_not_merge": true,
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "started_at_utc": "2026-09-02T01:09:55.734327Z",
+  "completed_at_utc": "2026-09-02T01:10:28.603508Z",
+  "adapter": {
+    "id": "engineering_village_search",
+    "version": "15"
+  },
+  "method": {
+    "passes_per_cell": 2,
+    "source_window": "Published 2011-2026",
+    "common_evidence_cutoff": {
+      "state": "TBD",
+      "source_precision": "year",
+      "handling": "Screen records in the cutoff year against the later exact common cutoff."
+    },
+    "candidate_only_logic": "Lossless two-route decomposition of descriptor-augmented B1 minus current post-proximity literal B1.",
+    "positive_control_contract": "Exact source total, page 1 of 1, total-matching rows and stable accessions, no enabled Next, and complete native RIS reconciliation.",
+    "adapter_repair_state": "Adapter v15 accepts the current omitted numeric interval as optional corroboration while retaining exact total, page, row, control, stable-ID, and native RIS checks. Separate bounded live checks validated a guarded two-page transition and strict two-pass publication."
+  },
+  "cells": {
+    "known-P-controlled": {
+      "query": "(((20122115042229 WN AN) OR (20142617854738 WN AN) OR (20163002629469 WN AN) OR (20171603573466 WN AN) OR (20182005200201 WN AN) OR (20204209361264 WN AN) OR (20223712726738 WN AN) OR (20232514262795 WN AN) OR (20241215786220 WN AN) OR (20241916046896 WN AN) OR (20251318145456 WN AN)) AND (({Nanosatellites} WN CV) OR ({Small satellites} WN CV)) AND (English WN LA))",
+      "query_sha256": "74d1a5e09eb399e37109f669142d2ec146cb04ddb9e5766833db92ed1550b0e3",
+      "total": 3,
+      "ordered_stable_accessions": [
+        "20223712726738",
+        "20232514262795",
+        "20241215786220"
+      ],
+      "pass_artifacts": [
+        "cells/known-P-controlled-pass1.json",
+        "cells/known-P-controlled-pass2.json"
+      ],
+      "passes_equal": true,
+      "terminal_page_contract": {
+        "state": "complete_terminal_single_page",
+        "fixed_adapter_outcome": "accepted",
+        "rendered_interval": null,
+        "page_number": 1,
+        "page_count": 1,
+        "rendered_row_count": 3,
+        "source_total": 3,
+        "enabled_visible_next_controls": 0,
+        "boundary": "This pilot-local contract accepts only an explicit source zero or a fully reconciled terminal one-page result. It cannot traverse a second page."
+      }
+    },
+    "known-MH-controlled": {
+      "query": "(((20122115042229 WN AN) OR (20142617854738 WN AN) OR (20163002629469 WN AN) OR (20171603573466 WN AN) OR (20182005200201 WN AN) OR (20204209361264 WN AN) OR (20223712726738 WN AN) OR (20232514262795 WN AN) OR (20241215786220 WN AN) OR (20241916046896 WN AN) OR (20251318145456 WN AN)) AND (({Systems engineering} WN CV) AND ({Modeling languages} WN CV)) AND (English WN LA))",
+      "query_sha256": "b5deaa3ce47bb4beacc11ad324cfcc51ed7e0acb95ce8bf9269647e01eca551c",
+      "total": 3,
+      "ordered_stable_accessions": [
+        "20122115042229",
+        "20163002629469",
+        "20204209361264"
+      ],
+      "pass_artifacts": [
+        "cells/known-MH-controlled-pass1.json",
+        "cells/known-MH-controlled-pass2.json"
+      ],
+      "passes_equal": true,
+      "terminal_page_contract": {
+        "state": "complete_terminal_single_page",
+        "fixed_adapter_outcome": "accepted",
+        "rendered_interval": null,
+        "page_number": 1,
+        "page_count": 1,
+        "rendered_row_count": 3,
+        "source_total": 3,
+        "enabled_visible_next_controls": 0,
+        "boundary": "This pilot-local contract accepts only an explicit source zero or a fully reconciled terminal one-page result. It cannot traverse a second page."
+      }
+    },
+    "known-SysML-controlled": {
+      "query": "(((20122115042229 WN AN) OR (20142617854738 WN AN) OR (20163002629469 WN AN) OR (20171603573466 WN AN) OR (20182005200201 WN AN) OR (20204209361264 WN AN) OR (20223712726738 WN AN) OR (20232514262795 WN AN) OR (20241215786220 WN AN) OR (20241916046896 WN AN) OR (20251318145456 WN AN)) AND ({SysML} WN CV) AND (English WN LA))",
+      "query_sha256": "1496bf2f282a941471e58be2cab4d58ff6c6ba032289ff5b866088acc7973672",
+      "total": 0,
+      "ordered_stable_accessions": [],
+      "pass_artifacts": [
+        "cells/known-SysML-controlled-pass1.json",
+        "cells/known-SysML-controlled-pass2.json"
+      ],
+      "passes_equal": true,
+      "terminal_page_contract": {
+        "state": "explicit_source_zero",
+        "fixed_adapter_outcome": "accepted_zero_without_numeric_interval",
+        "rendered_interval": null,
+        "page_number": null,
+        "page_count": null,
+        "rendered_row_count": 0,
+        "source_total": 0,
+        "enabled_visible_next_controls": 0,
+        "boundary": "This pilot-local contract accepts only an explicit source zero or a fully reconciled terminal one-page result. It cannot traverse a second page."
+      }
+    },
+    "B1-MH-candidate-only": {
+      "query": "((((((\"CubeSat\" WN ALL) OR (\"CubeSats\" WN ALL) OR (\"cube sat\" WN ALL) OR (\"cube sats\" WN ALL) OR (\"cube-sat\" WN ALL) OR (\"cube-sats\" WN ALL) OR (\"cube satellite\" WN ALL) OR (\"cube satellites\" WN ALL) OR (\"nanosat\" WN ALL) OR (\"nanosats\" WN ALL) OR (\"nanosatellite\" WN ALL) OR (\"nanosatellites\" WN ALL) OR (\"nano-sat\" WN ALL) OR (\"nano-sats\" WN ALL) OR (\"nano sat\" WN ALL) OR (\"nano sats\" WN ALL) OR (\"nano-satellite\" WN ALL) OR (\"nano-satellites\" WN ALL) OR (\"nano satellite\" WN ALL) OR (\"nano satellites\" WN ALL) OR (\"SmallSat\" WN ALL) OR (\"SmallSats\" WN ALL) OR (\"small satellite\" WN ALL) OR (\"small satellites\" WN ALL) OR (\"small sat\" WN ALL) OR (\"small sats\" WN ALL)) OR (({Nanosatellites} WN CV) OR ({Small satellites} WN CV))) AND (({Systems engineering} WN CV) AND ({Modeling languages} WN CV))) NOT ((\"model-based systems engineering\" WN ALL) OR (\"model based systems engineering\" WN ALL) OR (\"model-based system engineering\" WN ALL) OR (\"model based system engineering\" WN ALL) OR (\"model-driven systems engineering\" WN ALL) OR (\"model driven systems engineering\" WN ALL) OR (\"model-driven system engineering\" WN ALL) OR (\"model driven system engineering\" WN ALL) OR (\"model-centric systems engineering\" WN ALL) OR (\"model centric systems engineering\" WN ALL) OR (\"model-centric system engineering\" WN ALL) OR (\"model centric system engineering\" WN ALL) OR (\"MBSE\" WN ALL) OR (\"SysML\" WN ALL) OR (\"systems modeling language\" WN ALL) OR (\"systems modelling language\" WN ALL) OR (\"system modeling language\" WN ALL) OR (\"system modelling language\" WN ALL) OR (\"object-process methodology\" WN ALL) OR (\"object process methodology\" WN ALL) OR (\"OPM\" WN ALL) OR (\"object-oriented systems engineering method\" WN ALL) OR (\"object oriented systems engineering method\" WN ALL) OR (\"OOSEM\" WN ALL) OR (\"object-oriented systems engineering\" WN ALL) OR (\"object oriented systems engineering\" WN ALL) OR (\"Arcadia\" WN ALL) OR (\"Capella\" WN ALL) OR (\"model-based engineering\" WN ALL) OR (\"model based engineering\" WN ALL) OR (\"model-driven engineering\" WN ALL) OR (\"model driven engineering\" WN ALL) OR (\"model-based design\" WN ALL) OR (\"model based design\" WN ALL) OR (\"model-driven design\" WN ALL) OR (\"model driven design\" WN ALL) OR (\"MBE\" WN ALL) OR (\"MDE\" WN ALL) OR (\"MBD\" WN ALL) OR (\"MagicGrid\" WN ALL) OR (\"Harmony-SE\" WN ALL) OR (\"Harmony SE\" WN ALL) OR (\"RFLP\" WN ALL) OR (\"Cameo Systems Modeler\" WN ALL) OR (\"MagicDraw\" WN ALL) OR (\"IBM Engineering Systems Design Rhapsody\" WN ALL) OR (\"Rational Rhapsody\" WN ALL) OR (\"Vitech CORE\" WN ALL) OR (\"Vitech GENESYS\" WN ALL) OR (\"OpenMBEE\" WN ALL) OR (\"Enterprise Architect\" WN ALL) OR (\"MATLAB System Composer\" WN ALL) OR (\"System Composer\" WN ALL) OR (\"Modelio\" WN ALL))) AND (English WN LA))",
+      "query_sha256": "c096cea3a22c0b1dc4f7d57ceda6459f78eec203a12ecd2d030b0f96df39c11b",
+      "total": 0,
+      "ordered_stable_accessions": [],
+      "pass_artifacts": [
+        "cells/B1-MH-candidate-only-pass1.json",
+        "cells/B1-MH-candidate-only-pass2.json"
+      ],
+      "passes_equal": true,
+      "terminal_page_contract": {
+        "state": "explicit_source_zero",
+        "fixed_adapter_outcome": "accepted_zero_without_numeric_interval",
+        "rendered_interval": null,
+        "page_number": null,
+        "page_count": null,
+        "rendered_row_count": 0,
+        "source_total": 0,
+        "enabled_visible_next_controls": 0,
+        "boundary": "This pilot-local contract accepts only an explicit source zero or a fully reconciled terminal one-page result. It cannot traverse a second page."
+      }
+    },
+    "B1-P-candidate-only": {
+      "query": "((((({Nanosatellites} WN CV) OR ({Small satellites} WN CV)) AND (((\"model-based systems engineering\" WN ALL) OR (\"model based systems engineering\" WN ALL) OR (\"model-based system engineering\" WN ALL) OR (\"model based system engineering\" WN ALL) OR (\"model-driven systems engineering\" WN ALL) OR (\"model driven systems engineering\" WN ALL) OR (\"model-driven system engineering\" WN ALL) OR (\"model driven system engineering\" WN ALL) OR (\"model-centric systems engineering\" WN ALL) OR (\"model centric systems engineering\" WN ALL) OR (\"model-centric system engineering\" WN ALL) OR (\"model centric system engineering\" WN ALL) OR (\"MBSE\" WN ALL) OR (\"SysML\" WN ALL) OR (\"systems modeling language\" WN ALL) OR (\"systems modelling language\" WN ALL) OR (\"system modeling language\" WN ALL) OR (\"system modelling language\" WN ALL) OR (\"object-process methodology\" WN ALL) OR (\"object process methodology\" WN ALL) OR (\"OPM\" WN ALL) OR (\"object-oriented systems engineering method\" WN ALL) OR (\"object oriented systems engineering method\" WN ALL) OR (\"OOSEM\" WN ALL) OR (\"object-oriented systems engineering\" WN ALL) OR (\"object oriented systems engineering\" WN ALL) OR (\"Arcadia\" WN ALL) OR (\"Capella\" WN ALL) OR (\"model-based engineering\" WN ALL) OR (\"model based engineering\" WN ALL) OR (\"model-driven engineering\" WN ALL) OR (\"model driven engineering\" WN ALL) OR (\"model-based design\" WN ALL) OR (\"model based design\" WN ALL) OR (\"model-driven design\" WN ALL) OR (\"model driven design\" WN ALL) OR (\"MBE\" WN ALL) OR (\"MDE\" WN ALL) OR (\"MBD\" WN ALL) OR (\"MagicGrid\" WN ALL) OR (\"Harmony-SE\" WN ALL) OR (\"Harmony SE\" WN ALL) OR (\"RFLP\" WN ALL) OR (\"Cameo Systems Modeler\" WN ALL) OR (\"MagicDraw\" WN ALL) OR (\"IBM Engineering Systems Design Rhapsody\" WN ALL) OR (\"Rational Rhapsody\" WN ALL) OR (\"Vitech CORE\" WN ALL) OR (\"Vitech GENESYS\" WN ALL) OR (\"OpenMBEE\" WN ALL) OR (\"Enterprise Architect\" WN ALL) OR (\"MATLAB System Composer\" WN ALL) OR (\"System Composer\" WN ALL) OR (\"Modelio\" WN ALL)) OR (({Systems engineering} WN CV) AND ({Modeling languages} WN CV)))) NOT ((\"CubeSat\" WN ALL) OR (\"CubeSats\" WN ALL) OR (\"cube sat\" WN ALL) OR (\"cube sats\" WN ALL) OR (\"cube-sat\" WN ALL) OR (\"cube-sats\" WN ALL) OR (\"cube satellite\" WN ALL) OR (\"cube satellites\" WN ALL) OR (\"nanosat\" WN ALL) OR (\"nanosats\" WN ALL) OR (\"nanosatellite\" WN ALL) OR (\"nanosatellites\" WN ALL) OR (\"nano-sat\" WN ALL) OR (\"nano-sats\" WN ALL) OR (\"nano sat\" WN ALL) OR (\"nano sats\" WN ALL) OR (\"nano-satellite\" WN ALL) OR (\"nano-satellites\" WN ALL) OR (\"nano satellite\" WN ALL) OR (\"nano satellites\" WN ALL) OR (\"SmallSat\" WN ALL) OR (\"SmallSats\" WN ALL) OR (\"small satellite\" WN ALL) OR (\"small satellites\" WN ALL) OR (\"small sat\" WN ALL) OR (\"small sats\" WN ALL))) AND (English WN LA))",
+      "query_sha256": "baab8ee008f32577f7f547ce844a44f05cefa5a0f8f993abf7a5cf9504cf70c7",
+      "total": 0,
+      "ordered_stable_accessions": [],
+      "pass_artifacts": [
+        "cells/B1-P-candidate-only-pass1.json",
+        "cells/B1-P-candidate-only-pass2.json"
+      ],
+      "passes_equal": true,
+      "terminal_page_contract": {
+        "state": "explicit_source_zero",
+        "fixed_adapter_outcome": "accepted_zero_without_numeric_interval",
+        "rendered_interval": null,
+        "page_number": null,
+        "page_count": null,
+        "rendered_row_count": 0,
+        "source_total": 0,
+        "enabled_visible_next_controls": 0,
+        "boundary": "This pilot-local contract accepts only an explicit source zero or a fully reconciled terminal one-page result. It cannot traverse a second page."
+      }
+    }
+  },
+  "known_set_mapping": {
+    "selected_record_count": 11,
+    "P_controlled_matched_count": 3,
+    "M_H_controlled_matched_count": 3,
+    "SysML_controlled_matched_count": 0
+  },
+  "comparison": {
+    "literal_B1_query_sha256": "6a0a9bcd6d435bbbb92c35942a3b17115b01fd49bbb19590954cd89acb99451e",
+    "augmented_B1_query_sha256": "f6e105eac5c71b63acd53cfaacfc830da9a8b008df3a9df1d2616fd0cdc4b8e8",
+    "candidate_only_route_totals": {
+      "M_H": 0,
+      "P": 0
+    },
+    "candidate_only_union_count": 0,
+    "candidate_only_accessions": []
+  },
+  "boundaries": [
+    "This is a diagnostic pilot and no artifact is merge eligible.",
+    "No Pilot 003 changed-partition set is treated as current schedule evidence.",
+    "No full B1 traversal was attempted under the missing-interval source state."
+  ]
+}

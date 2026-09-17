@@ -1,0 +1,482 @@
+{
+  "schema_version": "wos-current-schedule-wildcard-pilot-plan/v1",
+  "pilot": "004",
+  "source": {
+    "id": "web_of_science_core_collection",
+    "label": "Web of Science Core Collection",
+    "platform": "Clarivate Web of Science"
+  },
+  "protocol_commit": "3194156e90497186664260a8e86435e78d2e2aa1",
+  "diagnostic_cutoff": "2026-08-29",
+  "diagnostic_only": true,
+  "do_not_merge": true,
+  "objective": "Test all nine main partitions from the no-proximity schedule and compare each literal result set with the accepted ten-wildcard population candidate.",
+  "adapter": {
+    "path": "/Users/antho/agent-tools/internet/skills/browser/scripts/search_web_of_science.py",
+    "id": "search_web_of_science",
+    "version": "2",
+    "sha256": "f2794c2c0aa17872f5f26976e52d547e17fd733e4a9d7d82bc34e34822910fa8",
+    "mandatory_automatic_screenshots": true,
+    "screenshot_schema": "web-of-science-automatic-screenshots/v1",
+    "screenshot_opt_out": false
+  },
+  "term_snapshot": {
+    "path": "SLR/SLR1/source-specific/advanced-technologies-aerospace-index/scripts/atai_pilot007/queries.py",
+    "sha256": "7ab4c27fe49bd1bfa9c45600a669896b507fc08055045128b6212a6ee407193f",
+    "counts": {
+      "P": 26,
+      "E_H": 38,
+      "E_F": 37,
+      "M_H": 54,
+      "M_B": 31,
+      "R": 55,
+      "G_model_fixed": 14,
+      "G_mission": 4,
+      "G_mission_exact": 16,
+      "G_structure_fixed": 8,
+      "G_product": 4,
+      "G_product_exact": 8,
+      "G_variation": 2,
+      "C1_fixed": 26,
+      "G_DSL": 4,
+      "T_precise": 32
+    }
+  },
+  "controls": {
+    "source": "Web of Science Core Collection",
+    "editions": "all currently exposed editions",
+    "field": "TS Topic",
+    "year": "PY=(2011-2026)",
+    "language": "LA=(English)",
+    "sort": "Date: oldest first",
+    "page_size": 50,
+    "limit": 2000,
+    "max_pages": 40,
+    "timeout_seconds": 120,
+    "strict_passes": 2,
+    "native_export": "RIS (other reference software)",
+    "publication_type": null,
+    "subject": null,
+    "access": null,
+    "full_text": null,
+    "controlled_vocabulary": null,
+    "proximity": false,
+    "pair_expansion": false
+  },
+  "current_compound_blocks": {
+    "G_model": "G_model_fixed OR G_mission_exact OR (G_mission AND M_B)",
+    "G_structure": "G_structure_fixed OR G_product_exact OR G_variation OR (G_product AND M_B)",
+    "C1": "C1_fixed OR G_DSL",
+    "BT2": "P AND M_B AND T_precise"
+  },
+  "wildcard_candidate": {
+    "operator": "documented quoted trailing * in TS",
+    "prior_basis": "Pilot 002 accepted this exact candidate for A1",
+    "replacements": [
+      {
+        "candidate": "CubeSat*",
+        "explicit_terms": [
+          "CubeSat",
+          "CubeSats"
+        ]
+      },
+      {
+        "candidate": "cube sat*",
+        "explicit_terms": [
+          "cube sat",
+          "cube sats"
+        ]
+      },
+      {
+        "candidate": "cube-sat*",
+        "explicit_terms": [
+          "cube-sat",
+          "cube-sats"
+        ]
+      },
+      {
+        "candidate": "cube satellite*",
+        "explicit_terms": [
+          "cube satellite",
+          "cube satellites"
+        ]
+      },
+      {
+        "candidate": "nanosat*",
+        "explicit_terms": [
+          "nanosat",
+          "nanosats",
+          "nanosatellite",
+          "nanosatellites"
+        ]
+      },
+      {
+        "candidate": "nano-sat*",
+        "explicit_terms": [
+          "nano-sat",
+          "nano-sats"
+        ]
+      },
+      {
+        "candidate": "nano sat*",
+        "explicit_terms": [
+          "nano sat",
+          "nano sats"
+        ]
+      },
+      {
+        "candidate": "nano-satellite*",
+        "explicit_terms": [
+          "nano-satellite",
+          "nano-satellites"
+        ]
+      },
+      {
+        "candidate": "nano satellite*",
+        "explicit_terms": [
+          "nano satellite",
+          "nano satellites"
+        ]
+      },
+      {
+        "candidate": "SmallSat*",
+        "explicit_terms": [
+          "SmallSat",
+          "SmallSats"
+        ]
+      }
+    ],
+    "explicit_population_terms": 26,
+    "replaced_population_literals": 22,
+    "candidate_population_atoms": 14,
+    "population_atoms_after_compression": [
+      "TS=(\"CubeSat*\")",
+      "TS=(\"cube sat*\")",
+      "TS=(\"cube-sat*\")",
+      "TS=(\"cube satellite*\")",
+      "TS=(\"nanosat*\")",
+      "TS=(\"nano-sat*\")",
+      "TS=(\"nano sat*\")",
+      "TS=(\"nano-satellite*\")",
+      "TS=(\"nano satellite*\")",
+      "TS=(\"SmallSat*\")",
+      "TS=(\"small satellite\")",
+      "TS=(\"small satellites\")",
+      "TS=(\"small sat\")",
+      "TS=(\"small sats\")"
+    ],
+    "query_character_reduction": 255,
+    "acceptance_rule": "Adopt the candidate in a partition only if its strict complete result contains every literal stable ID. Inspect every wildcard-only record before accepting a broader set.",
+    "preference_rule": "Prefer the shorter wildcard rendering after acceptance."
+  },
+  "acceptance_checks": [
+    "All 18 events complete strict two-pass ordered WOS-ID and total reconciliation.",
+    "Every event has exact query, Core Collection, all-edition, oldest-sort, page-size, and native RIS evidence.",
+    "Every event saves a configured-search PNG and first-results PNG beside its JSON.",
+    "No query contains NEAR, SAME, another proximity operator, or pair expansion.",
+    "Each wildcard partition retains every literal WOS ID.",
+    "Every wildcard-only record receives a population-meaning review before acceptance."
+  ],
+  "schedule_ids": [
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "BG1",
+    "BG2",
+    "BC1",
+    "BT2"
+  ],
+  "event_count": 18,
+  "events": [
+    {
+      "event_id": "literal-A1",
+      "partition_id": "A1",
+      "variant": "literal",
+      "query": "((TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"electrical power system\") OR TS=(\"electrical power systems\") OR TS=(\"electric power system\") OR TS=(\"electric power systems\") OR TS=(\"electrical power subsystem\") OR TS=(\"electrical power subsystems\") OR TS=(\"electric power subsystem\") OR TS=(\"electric power subsystems\") OR TS=(\"electrical energy subsystem\") OR TS=(\"electrical energy subsystems\") OR TS=(\"EPS\") OR TS=(\"EPSs\") OR TS=(\"power subsystem\") OR TS=(\"power subsystems\") OR TS=(\"power system\") OR TS=(\"power systems\") OR TS=(\"spacecraft power system\") OR TS=(\"spacecraft power systems\") OR TS=(\"power supply\") OR TS=(\"power supplies\") OR TS=(\"power distribution unit\") OR TS=(\"power distribution units\") OR TS=(\"PDU\") OR TS=(\"PDUs\") OR TS=(\"power processing unit\") OR TS=(\"power processing units\") OR TS=(\"power control and distribution\") OR TS=(\"power management and distribution\") OR TS=(\"electrical architecture\") OR TS=(\"electrical architectures\") OR TS=(\"power architecture\") OR TS=(\"power architectures\") OR TS=(\"DC power bus\") OR TS=(\"DC power buses\") OR TS=(\"PCDU\") OR TS=(\"PCDUs\") OR TS=(\"PMAD\") OR TS=(\"PMADs\")) AND (TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 3398,
+      "query_sha256": "2aee2c27838fd1f28c893152fe15f8070745422d32f5fc9790cf436667070993",
+      "output": "events/literal-A1.json",
+      "screenshots": {
+        "search_page": "events/literal-A1.search-page.png",
+        "results_page": "events/literal-A1.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-A1",
+      "partition_id": "A1",
+      "variant": "wildcard",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"electrical power system\") OR TS=(\"electrical power systems\") OR TS=(\"electric power system\") OR TS=(\"electric power systems\") OR TS=(\"electrical power subsystem\") OR TS=(\"electrical power subsystems\") OR TS=(\"electric power subsystem\") OR TS=(\"electric power subsystems\") OR TS=(\"electrical energy subsystem\") OR TS=(\"electrical energy subsystems\") OR TS=(\"EPS\") OR TS=(\"EPSs\") OR TS=(\"power subsystem\") OR TS=(\"power subsystems\") OR TS=(\"power system\") OR TS=(\"power systems\") OR TS=(\"spacecraft power system\") OR TS=(\"spacecraft power systems\") OR TS=(\"power supply\") OR TS=(\"power supplies\") OR TS=(\"power distribution unit\") OR TS=(\"power distribution units\") OR TS=(\"PDU\") OR TS=(\"PDUs\") OR TS=(\"power processing unit\") OR TS=(\"power processing units\") OR TS=(\"power control and distribution\") OR TS=(\"power management and distribution\") OR TS=(\"electrical architecture\") OR TS=(\"electrical architectures\") OR TS=(\"power architecture\") OR TS=(\"power architectures\") OR TS=(\"DC power bus\") OR TS=(\"DC power buses\") OR TS=(\"PCDU\") OR TS=(\"PCDUs\") OR TS=(\"PMAD\") OR TS=(\"PMADs\")) AND (TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 3143,
+      "query_sha256": "de54fc809834de4fc22ca3ec7625dfad4366cad3c059643935d5f57ff271365c",
+      "output": "events/wildcard-A1.json",
+      "screenshots": {
+        "search_page": "events/wildcard-A1.search-page.png",
+        "results_page": "events/wildcard-A1.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-A2",
+      "partition_id": "A2",
+      "variant": "literal",
+      "query": "((TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"power budget\") OR TS=(\"power budgets\") OR TS=(\"energy budget\") OR TS=(\"energy budgets\") OR TS=(\"energy balance\") OR TS=(\"energy balances\") OR TS=(\"power balance\") OR TS=(\"power balances\") OR TS=(\"power margin\") OR TS=(\"power margins\") OR TS=(\"power generation\") OR TS=(\"photovoltaic generator\") OR TS=(\"photovoltaic generators\") OR TS=(\"solar array\") OR TS=(\"solar arrays\") OR TS=(\"solar panel\") OR TS=(\"solar panels\") OR TS=(\"battery\") OR TS=(\"batteries\") OR TS=(\"battery management\") OR TS=(\"state of charge\") OR TS=(\"states of charge\") OR TS=(\"energy storage\") OR TS=(\"power electronics\") OR TS=(\"power conditioning\") OR TS=(\"power distribution\") OR TS=(\"power management\") OR TS=(\"power interface\") OR TS=(\"power interfaces\") OR TS=(\"power mode\") OR TS=(\"power modes\") OR TS=(\"load profile\") OR TS=(\"load profiles\") OR TS=(\"power consumption\") OR TS=(\"power demand\") OR TS=(\"power profile\") OR TS=(\"energy harvesting\")) AND ((TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\")) OR (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 4213,
+      "query_sha256": "717b1c9fb5cc238524f2f96e26ceebeef7b93cb671f704647558e5a0c86030eb",
+      "output": "events/literal-A2.json",
+      "screenshots": {
+        "search_page": "events/literal-A2.search-page.png",
+        "results_page": "events/literal-A2.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-A2",
+      "partition_id": "A2",
+      "variant": "wildcard",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"power budget\") OR TS=(\"power budgets\") OR TS=(\"energy budget\") OR TS=(\"energy budgets\") OR TS=(\"energy balance\") OR TS=(\"energy balances\") OR TS=(\"power balance\") OR TS=(\"power balances\") OR TS=(\"power margin\") OR TS=(\"power margins\") OR TS=(\"power generation\") OR TS=(\"photovoltaic generator\") OR TS=(\"photovoltaic generators\") OR TS=(\"solar array\") OR TS=(\"solar arrays\") OR TS=(\"solar panel\") OR TS=(\"solar panels\") OR TS=(\"battery\") OR TS=(\"batteries\") OR TS=(\"battery management\") OR TS=(\"state of charge\") OR TS=(\"states of charge\") OR TS=(\"energy storage\") OR TS=(\"power electronics\") OR TS=(\"power conditioning\") OR TS=(\"power distribution\") OR TS=(\"power management\") OR TS=(\"power interface\") OR TS=(\"power interfaces\") OR TS=(\"power mode\") OR TS=(\"power modes\") OR TS=(\"load profile\") OR TS=(\"load profiles\") OR TS=(\"power consumption\") OR TS=(\"power demand\") OR TS=(\"power profile\") OR TS=(\"energy harvesting\")) AND ((TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\")) OR (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 3958,
+      "query_sha256": "25a9202d264394d5de48f1f06d714321fdc99d5083384433dd567870ec0f32f7",
+      "output": "events/wildcard-A2.json",
+      "screenshots": {
+        "search_page": "events/wildcard-A2.search-page.png",
+        "results_page": "events/wildcard-A2.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-A3",
+      "partition_id": "A3",
+      "variant": "literal",
+      "query": "((TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"electrical power system\") OR TS=(\"electrical power systems\") OR TS=(\"electric power system\") OR TS=(\"electric power systems\") OR TS=(\"electrical power subsystem\") OR TS=(\"electrical power subsystems\") OR TS=(\"electric power subsystem\") OR TS=(\"electric power subsystems\") OR TS=(\"electrical energy subsystem\") OR TS=(\"electrical energy subsystems\") OR TS=(\"EPS\") OR TS=(\"EPSs\") OR TS=(\"power subsystem\") OR TS=(\"power subsystems\") OR TS=(\"power system\") OR TS=(\"power systems\") OR TS=(\"spacecraft power system\") OR TS=(\"spacecraft power systems\") OR TS=(\"power supply\") OR TS=(\"power supplies\") OR TS=(\"power distribution unit\") OR TS=(\"power distribution units\") OR TS=(\"PDU\") OR TS=(\"PDUs\") OR TS=(\"power processing unit\") OR TS=(\"power processing units\") OR TS=(\"power control and distribution\") OR TS=(\"power management and distribution\") OR TS=(\"electrical architecture\") OR TS=(\"electrical architectures\") OR TS=(\"power architecture\") OR TS=(\"power architectures\") OR TS=(\"DC power bus\") OR TS=(\"DC power buses\") OR TS=(\"PCDU\") OR TS=(\"PCDUs\") OR TS=(\"PMAD\") OR TS=(\"PMADs\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 2665,
+      "query_sha256": "0f352da20215b20a4964160dec8a805d489bc0cd7e35d699317a15e1fd5932f5",
+      "output": "events/literal-A3.json",
+      "screenshots": {
+        "search_page": "events/literal-A3.search-page.png",
+        "results_page": "events/literal-A3.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-A3",
+      "partition_id": "A3",
+      "variant": "wildcard",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"electrical power system\") OR TS=(\"electrical power systems\") OR TS=(\"electric power system\") OR TS=(\"electric power systems\") OR TS=(\"electrical power subsystem\") OR TS=(\"electrical power subsystems\") OR TS=(\"electric power subsystem\") OR TS=(\"electric power subsystems\") OR TS=(\"electrical energy subsystem\") OR TS=(\"electrical energy subsystems\") OR TS=(\"EPS\") OR TS=(\"EPSs\") OR TS=(\"power subsystem\") OR TS=(\"power subsystems\") OR TS=(\"power system\") OR TS=(\"power systems\") OR TS=(\"spacecraft power system\") OR TS=(\"spacecraft power systems\") OR TS=(\"power supply\") OR TS=(\"power supplies\") OR TS=(\"power distribution unit\") OR TS=(\"power distribution units\") OR TS=(\"PDU\") OR TS=(\"PDUs\") OR TS=(\"power processing unit\") OR TS=(\"power processing units\") OR TS=(\"power control and distribution\") OR TS=(\"power management and distribution\") OR TS=(\"electrical architecture\") OR TS=(\"electrical architectures\") OR TS=(\"power architecture\") OR TS=(\"power architectures\") OR TS=(\"DC power bus\") OR TS=(\"DC power buses\") OR TS=(\"PCDU\") OR TS=(\"PCDUs\") OR TS=(\"PMAD\") OR TS=(\"PMADs\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 2410,
+      "query_sha256": "edbe73711006dd7d57a3a310dc3773c9e0a3329ae596880012d1917cae188227",
+      "output": "events/wildcard-A3.json",
+      "screenshots": {
+        "search_page": "events/wildcard-A3.search-page.png",
+        "results_page": "events/wildcard-A3.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-B1",
+      "partition_id": "B1",
+      "variant": "literal",
+      "query": "((TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 2306,
+      "query_sha256": "b193878ee06a4349e053306817004073161106ef906afd0fd2d8e05fe97f4e2a",
+      "output": "events/literal-B1.json",
+      "screenshots": {
+        "search_page": "events/literal-B1.search-page.png",
+        "results_page": "events/literal-B1.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-B1",
+      "partition_id": "B1",
+      "variant": "wildcard",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"model-based systems engineering\") OR TS=(\"model based systems engineering\") OR TS=(\"model-based system engineering\") OR TS=(\"model based system engineering\") OR TS=(\"model-driven systems engineering\") OR TS=(\"model driven systems engineering\") OR TS=(\"model-driven system engineering\") OR TS=(\"model driven system engineering\") OR TS=(\"model-centric systems engineering\") OR TS=(\"model centric systems engineering\") OR TS=(\"model-centric system engineering\") OR TS=(\"model centric system engineering\") OR TS=(\"MBSE\") OR TS=(\"SysML\") OR TS=(\"systems modeling language\") OR TS=(\"systems modelling language\") OR TS=(\"system modeling language\") OR TS=(\"system modelling language\") OR TS=(\"object-process methodology\") OR TS=(\"object process methodology\") OR TS=(\"OPM\") OR TS=(\"object-oriented systems engineering method\") OR TS=(\"object oriented systems engineering method\") OR TS=(\"OOSEM\") OR TS=(\"object-oriented systems engineering\") OR TS=(\"object oriented systems engineering\") OR TS=(\"Arcadia\") OR TS=(\"Capella\") OR TS=(\"model-based engineering\") OR TS=(\"model based engineering\") OR TS=(\"model-driven engineering\") OR TS=(\"model driven engineering\") OR TS=(\"model-based design\") OR TS=(\"model based design\") OR TS=(\"model-driven design\") OR TS=(\"model driven design\") OR TS=(\"MBE\") OR TS=(\"MDE\") OR TS=(\"MBD\") OR TS=(\"MagicGrid\") OR TS=(\"Harmony-SE\") OR TS=(\"Harmony SE\") OR TS=(\"RFLP\") OR TS=(\"Cameo Systems Modeler\") OR TS=(\"MagicDraw\") OR TS=(\"IBM Engineering Systems Design Rhapsody\") OR TS=(\"Rational Rhapsody\") OR TS=(\"Vitech CORE\") OR TS=(\"Vitech GENESYS\") OR TS=(\"OpenMBEE\") OR TS=(\"Enterprise Architect\") OR TS=(\"MATLAB System Composer\") OR TS=(\"System Composer\") OR TS=(\"Modelio\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 2051,
+      "query_sha256": "3016dbf800cd83ff3cac25618e70641074d59f14ea4dcb721b803407237f4239",
+      "output": "events/wildcard-B1.json",
+      "screenshots": {
+        "search_page": "events/wildcard-B1.search-page.png",
+        "results_page": "events/wildcard-B1.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-B2",
+      "partition_id": "B2",
+      "variant": "literal",
+      "query": "((TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")) AND (TS=(\"requirement\") OR TS=(\"requirements\") OR TS=(\"function\") OR TS=(\"functions\") OR TS=(\"functional\") OR TS=(\"behavior\") OR TS=(\"behaviors\") OR TS=(\"behaviour\") OR TS=(\"behaviours\") OR TS=(\"behavioral\") OR TS=(\"behavioural\") OR TS=(\"architecture\") OR TS=(\"architectures\") OR TS=(\"architectural\") OR TS=(\"interface\") OR TS=(\"interfaces\") OR TS=(\"traceability\") OR TS=(\"trace\") OR TS=(\"traceable\") OR TS=(\"traced\") OR TS=(\"allocation\") OR TS=(\"allocate\") OR TS=(\"allocated\") OR TS=(\"constraint\") OR TS=(\"constraints\") OR TS=(\"parametric\") OR TS=(\"parametrics\") OR TS=(\"analysis\") OR TS=(\"analyses\") OR TS=(\"design\") OR TS=(\"designs\") OR TS=(\"designed\") OR TS=(\"designing\") OR TS=(\"decision\") OR TS=(\"decisions\") OR TS=(\"decision-making\") OR TS=(\"decision making\") OR TS=(\"trade study\") OR TS=(\"trade studies\") OR TS=(\"trade-off\") OR TS=(\"trade-offs\") OR TS=(\"tradeoff\") OR TS=(\"tradeoffs\") OR TS=(\"verification\") OR TS=(\"verifications\") OR TS=(\"verify\") OR TS=(\"verifies\") OR TS=(\"verified\") OR TS=(\"verifying\") OR TS=(\"validation\") OR TS=(\"validations\") OR TS=(\"validate\") OR TS=(\"validates\") OR TS=(\"validated\") OR TS=(\"validating\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 2712,
+      "query_sha256": "5a3fb9eab82ce7a2d559ffb2020a70a076f8236527cbe46074852d182f8dc70c",
+      "output": "events/literal-B2.json",
+      "screenshots": {
+        "search_page": "events/literal-B2.search-page.png",
+        "results_page": "events/literal-B2.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-B2",
+      "partition_id": "B2",
+      "variant": "wildcard",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")) AND (TS=(\"requirement\") OR TS=(\"requirements\") OR TS=(\"function\") OR TS=(\"functions\") OR TS=(\"functional\") OR TS=(\"behavior\") OR TS=(\"behaviors\") OR TS=(\"behaviour\") OR TS=(\"behaviours\") OR TS=(\"behavioral\") OR TS=(\"behavioural\") OR TS=(\"architecture\") OR TS=(\"architectures\") OR TS=(\"architectural\") OR TS=(\"interface\") OR TS=(\"interfaces\") OR TS=(\"traceability\") OR TS=(\"trace\") OR TS=(\"traceable\") OR TS=(\"traced\") OR TS=(\"allocation\") OR TS=(\"allocate\") OR TS=(\"allocated\") OR TS=(\"constraint\") OR TS=(\"constraints\") OR TS=(\"parametric\") OR TS=(\"parametrics\") OR TS=(\"analysis\") OR TS=(\"analyses\") OR TS=(\"design\") OR TS=(\"designs\") OR TS=(\"designed\") OR TS=(\"designing\") OR TS=(\"decision\") OR TS=(\"decisions\") OR TS=(\"decision-making\") OR TS=(\"decision making\") OR TS=(\"trade study\") OR TS=(\"trade studies\") OR TS=(\"trade-off\") OR TS=(\"trade-offs\") OR TS=(\"tradeoff\") OR TS=(\"tradeoffs\") OR TS=(\"verification\") OR TS=(\"verifications\") OR TS=(\"verify\") OR TS=(\"verifies\") OR TS=(\"verified\") OR TS=(\"verifying\") OR TS=(\"validation\") OR TS=(\"validations\") OR TS=(\"validate\") OR TS=(\"validates\") OR TS=(\"validated\") OR TS=(\"validating\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 2457,
+      "query_sha256": "ce4ffc12c1ef828a13d2bb56d061cd2f60b4920a602632ccae996fc78415bea3",
+      "output": "events/wildcard-B2.json",
+      "screenshots": {
+        "search_page": "events/wildcard-B2.search-page.png",
+        "results_page": "events/wildcard-B2.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-BG1",
+      "partition_id": "BG1",
+      "variant": "literal",
+      "query": "((TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND ((TS=(\"generic model\") OR TS=(\"generic models\") OR TS=(\"generic system model\") OR TS=(\"generic system models\") OR TS=(\"reusable model\") OR TS=(\"reusable models\") OR TS=(\"reusable system model\") OR TS=(\"reusable system models\") OR TS=(\"configurable model\") OR TS=(\"configurable models\") OR TS=(\"configurable system model\") OR TS=(\"configurable system models\") OR TS=(\"model template\") OR TS=(\"model templates\")) OR (TS=(\"mission-agnostic model\") OR TS=(\"mission-agnostic models\") OR TS=(\"mission-agnostic architecture\") OR TS=(\"mission-agnostic architectures\") OR TS=(\"mission agnostic model\") OR TS=(\"mission agnostic models\") OR TS=(\"mission agnostic architecture\") OR TS=(\"mission agnostic architectures\") OR TS=(\"mission-independent model\") OR TS=(\"mission-independent models\") OR TS=(\"mission-independent architecture\") OR TS=(\"mission-independent architectures\") OR TS=(\"mission independent model\") OR TS=(\"mission independent models\") OR TS=(\"mission independent architecture\") OR TS=(\"mission independent architectures\")) OR ((TS=(\"mission-agnostic\") OR TS=(\"mission agnostic\") OR TS=(\"mission-independent\") OR TS=(\"mission independent\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\"))))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 2725,
+      "query_sha256": "2eef98fcd9fd161f021e8b5e39463db4dfaad6625cbab74cfbce0efb8034ad7d",
+      "output": "events/literal-BG1.json",
+      "screenshots": {
+        "search_page": "events/literal-BG1.search-page.png",
+        "results_page": "events/literal-BG1.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-BG1",
+      "partition_id": "BG1",
+      "variant": "wildcard",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND ((TS=(\"generic model\") OR TS=(\"generic models\") OR TS=(\"generic system model\") OR TS=(\"generic system models\") OR TS=(\"reusable model\") OR TS=(\"reusable models\") OR TS=(\"reusable system model\") OR TS=(\"reusable system models\") OR TS=(\"configurable model\") OR TS=(\"configurable models\") OR TS=(\"configurable system model\") OR TS=(\"configurable system models\") OR TS=(\"model template\") OR TS=(\"model templates\")) OR (TS=(\"mission-agnostic model\") OR TS=(\"mission-agnostic models\") OR TS=(\"mission-agnostic architecture\") OR TS=(\"mission-agnostic architectures\") OR TS=(\"mission agnostic model\") OR TS=(\"mission agnostic models\") OR TS=(\"mission agnostic architecture\") OR TS=(\"mission agnostic architectures\") OR TS=(\"mission-independent model\") OR TS=(\"mission-independent models\") OR TS=(\"mission-independent architecture\") OR TS=(\"mission-independent architectures\") OR TS=(\"mission independent model\") OR TS=(\"mission independent models\") OR TS=(\"mission independent architecture\") OR TS=(\"mission independent architectures\")) OR ((TS=(\"mission-agnostic\") OR TS=(\"mission agnostic\") OR TS=(\"mission-independent\") OR TS=(\"mission independent\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\"))))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 2470,
+      "query_sha256": "77eaf62bbff61ef4a47cb05e1a4a8ae51c2370860e05c22c4ad2b0d9c2594b19",
+      "output": "events/wildcard-BG1.json",
+      "screenshots": {
+        "search_page": "events/wildcard-BG1.search-page.png",
+        "results_page": "events/wildcard-BG1.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-BG2",
+      "partition_id": "BG2",
+      "variant": "literal",
+      "query": "((TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND ((TS=(\"reference architecture\") OR TS=(\"reference architectures\") OR TS=(\"domain model\") OR TS=(\"domain models\") OR TS=(\"metamodel\") OR TS=(\"metamodels\") OR TS=(\"meta-model\") OR TS=(\"meta-models\")) OR (TS=(\"product-line model\") OR TS=(\"product-line models\") OR TS=(\"product line model\") OR TS=(\"product line models\") OR TS=(\"product-family model\") OR TS=(\"product-family models\") OR TS=(\"product family model\") OR TS=(\"product family models\")) OR (TS=(\"variation point\") OR TS=(\"variation points\")) OR ((TS=(\"product-line\") OR TS=(\"product line\") OR TS=(\"product-family\") OR TS=(\"product family\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\"))))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 2177,
+      "query_sha256": "1115fbae6afcbc2706ceb08e52b0b2afabfa53860f7dad0e13fec9279e995969",
+      "output": "events/literal-BG2.json",
+      "screenshots": {
+        "search_page": "events/literal-BG2.search-page.png",
+        "results_page": "events/literal-BG2.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-BG2",
+      "partition_id": "BG2",
+      "variant": "wildcard",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND ((TS=(\"reference architecture\") OR TS=(\"reference architectures\") OR TS=(\"domain model\") OR TS=(\"domain models\") OR TS=(\"metamodel\") OR TS=(\"metamodels\") OR TS=(\"meta-model\") OR TS=(\"meta-models\")) OR (TS=(\"product-line model\") OR TS=(\"product-line models\") OR TS=(\"product line model\") OR TS=(\"product line models\") OR TS=(\"product-family model\") OR TS=(\"product-family models\") OR TS=(\"product family model\") OR TS=(\"product family models\")) OR (TS=(\"variation point\") OR TS=(\"variation points\")) OR ((TS=(\"product-line\") OR TS=(\"product line\") OR TS=(\"product-family\") OR TS=(\"product family\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\"))))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 1922,
+      "query_sha256": "a4ff5a03f8c3059be048f4bd4c4bc409bb03841b47b081eb824fa2706027e98e",
+      "output": "events/wildcard-BG2.json",
+      "screenshots": {
+        "search_page": "events/wildcard-BG2.search-page.png",
+        "results_page": "events/wildcard-BG2.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-BC1",
+      "partition_id": "BC1",
+      "variant": "literal",
+      "query": "((TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND ((TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"system reference model\") OR TS=(\"system reference models\") OR TS=(\"model library\") OR TS=(\"model libraries\") OR TS=(\"system model library\") OR TS=(\"system model libraries\") OR TS=(\"model pattern\") OR TS=(\"model patterns\") OR TS=(\"modeling pattern\") OR TS=(\"modeling patterns\") OR TS=(\"modelling pattern\") OR TS=(\"modelling patterns\") OR TS=(\"system model pattern\") OR TS=(\"system model patterns\") OR TS=(\"systems model pattern\") OR TS=(\"systems model patterns\") OR TS=(\"model profile\") OR TS=(\"model profiles\") OR TS=(\"system model profile\") OR TS=(\"system model profiles\") OR TS=(\"systems model profile\") OR TS=(\"systems model profiles\") OR TS=(\"SysML profile\") OR TS=(\"SysML profiles\")) OR (TS=(\"domain-specific modeling language\") OR TS=(\"domain specific modeling language\") OR TS=(\"domain-specific modelling language\") OR TS=(\"domain specific modelling language\")))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 1535,
+      "query_sha256": "08b8495b6e5c92b6c8b56bf8bcc626579b4fbebc7fe4beea4b89095baacd0856",
+      "output": "events/literal-BC1.json",
+      "screenshots": {
+        "search_page": "events/literal-BC1.search-page.png",
+        "results_page": "events/literal-BC1.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-BC1",
+      "partition_id": "BC1",
+      "variant": "wildcard",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND ((TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"system reference model\") OR TS=(\"system reference models\") OR TS=(\"model library\") OR TS=(\"model libraries\") OR TS=(\"system model library\") OR TS=(\"system model libraries\") OR TS=(\"model pattern\") OR TS=(\"model patterns\") OR TS=(\"modeling pattern\") OR TS=(\"modeling patterns\") OR TS=(\"modelling pattern\") OR TS=(\"modelling patterns\") OR TS=(\"system model pattern\") OR TS=(\"system model patterns\") OR TS=(\"systems model pattern\") OR TS=(\"systems model patterns\") OR TS=(\"model profile\") OR TS=(\"model profiles\") OR TS=(\"system model profile\") OR TS=(\"system model profiles\") OR TS=(\"systems model profile\") OR TS=(\"systems model profiles\") OR TS=(\"SysML profile\") OR TS=(\"SysML profiles\")) OR (TS=(\"domain-specific modeling language\") OR TS=(\"domain specific modeling language\") OR TS=(\"domain-specific modelling language\") OR TS=(\"domain specific modelling language\")))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 1280,
+      "query_sha256": "587b3effe42a2644500b13785e40966f31592fc4a42ce47fa3451c2c6f5c6a4e",
+      "output": "events/wildcard-BC1.json",
+      "screenshots": {
+        "search_page": "events/wildcard-BC1.search-page.png",
+        "results_page": "events/wildcard-BC1.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "literal-BT2",
+      "partition_id": "BT2",
+      "variant": "literal",
+      "query": "((TS=(\"CubeSat\") OR TS=(\"CubeSats\") OR TS=(\"cube sat\") OR TS=(\"cube sats\") OR TS=(\"cube-sat\") OR TS=(\"cube-sats\") OR TS=(\"cube satellite\") OR TS=(\"cube satellites\") OR TS=(\"nanosat\") OR TS=(\"nanosats\") OR TS=(\"nanosatellite\") OR TS=(\"nanosatellites\") OR TS=(\"nano-sat\") OR TS=(\"nano-sats\") OR TS=(\"nano sat\") OR TS=(\"nano sats\") OR TS=(\"nano-satellite\") OR TS=(\"nano-satellites\") OR TS=(\"nano satellite\") OR TS=(\"nano satellites\") OR TS=(\"SmallSat\") OR TS=(\"SmallSats\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")) AND (TS=(\"tailor\") OR TS=(\"tailors\") OR TS=(\"tailored\") OR TS=(\"tailoring\") OR TS=(\"customize\") OR TS=(\"customizes\") OR TS=(\"customized\") OR TS=(\"customizing\") OR TS=(\"customization\") OR TS=(\"customise\") OR TS=(\"customises\") OR TS=(\"customised\") OR TS=(\"customising\") OR TS=(\"customisation\") OR TS=(\"parameterize\") OR TS=(\"parameterizes\") OR TS=(\"parameterized\") OR TS=(\"parameterizing\") OR TS=(\"parameterization\") OR TS=(\"parameterise\") OR TS=(\"parameterises\") OR TS=(\"parameterised\") OR TS=(\"parameterising\") OR TS=(\"parameterisation\") OR TS=(\"instantiate\") OR TS=(\"instantiates\") OR TS=(\"instantiated\") OR TS=(\"instantiating\") OR TS=(\"instantiation\") OR TS=(\"variability\") OR TS=(\"variation point\") OR TS=(\"variation points\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 2303,
+      "query_sha256": "63fbe60d2664335c518f1c5bee3e3b95457d47db7b56222c41e6ec8400f67f11",
+      "output": "events/literal-BT2.json",
+      "screenshots": {
+        "search_page": "events/literal-BT2.search-page.png",
+        "results_page": "events/literal-BT2.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    },
+    {
+      "event_id": "wildcard-BT2",
+      "partition_id": "BT2",
+      "variant": "wildcard",
+      "query": "((TS=(\"CubeSat*\") OR TS=(\"cube sat*\") OR TS=(\"cube-sat*\") OR TS=(\"cube satellite*\") OR TS=(\"nanosat*\") OR TS=(\"nano-sat*\") OR TS=(\"nano sat*\") OR TS=(\"nano-satellite*\") OR TS=(\"nano satellite*\") OR TS=(\"SmallSat*\") OR TS=(\"small satellite\") OR TS=(\"small satellites\") OR TS=(\"small sat\") OR TS=(\"small sats\")) AND (TS=(\"system model\") OR TS=(\"systems model\") OR TS=(\"system modeling\") OR TS=(\"systems modeling\") OR TS=(\"system modelling\") OR TS=(\"systems modelling\") OR TS=(\"reference model\") OR TS=(\"reference models\") OR TS=(\"digital engineering\") OR TS=(\"object-oriented systems model\") OR TS=(\"object-oriented systems models\") OR TS=(\"model-based system design\") OR TS=(\"model based system design\") OR TS=(\"model-based systems design\") OR TS=(\"model based systems design\") OR TS=(\"system architecture model\") OR TS=(\"system architecture models\") OR TS=(\"systems architecture model\") OR TS=(\"systems architecture models\") OR TS=(\"integrated system model\") OR TS=(\"integrated system models\") OR TS=(\"integrated systems model\") OR TS=(\"integrated systems models\") OR TS=(\"system-level model\") OR TS=(\"system-level models\") OR TS=(\"system level model\") OR TS=(\"system level models\") OR TS=(\"digital thread\") OR TS=(\"digital threads\") OR TS=(\"digital twin\") OR TS=(\"digital twins\")) AND (TS=(\"tailor\") OR TS=(\"tailors\") OR TS=(\"tailored\") OR TS=(\"tailoring\") OR TS=(\"customize\") OR TS=(\"customizes\") OR TS=(\"customized\") OR TS=(\"customizing\") OR TS=(\"customization\") OR TS=(\"customise\") OR TS=(\"customises\") OR TS=(\"customised\") OR TS=(\"customising\") OR TS=(\"customisation\") OR TS=(\"parameterize\") OR TS=(\"parameterizes\") OR TS=(\"parameterized\") OR TS=(\"parameterizing\") OR TS=(\"parameterization\") OR TS=(\"parameterise\") OR TS=(\"parameterises\") OR TS=(\"parameterised\") OR TS=(\"parameterising\") OR TS=(\"parameterisation\") OR TS=(\"instantiate\") OR TS=(\"instantiates\") OR TS=(\"instantiated\") OR TS=(\"instantiating\") OR TS=(\"instantiation\") OR TS=(\"variability\") OR TS=(\"variation point\") OR TS=(\"variation points\"))) AND PY=(2011-2026) AND LA=(English)",
+      "query_characters": 2048,
+      "query_sha256": "71a2b77e9b33ff9efde70f6fe961d18199d7245cc8775ecb287fe3979db2963d",
+      "output": "events/wildcard-BT2.json",
+      "screenshots": {
+        "search_page": "events/wildcard-BT2.search-page.png",
+        "results_page": "events/wildcard-BT2.results-page.png"
+      },
+      "mode": "strict_two_pass_complete_native_ris",
+      "diagnostic_only": true,
+      "do_not_merge": true
+    }
+  ]
+}

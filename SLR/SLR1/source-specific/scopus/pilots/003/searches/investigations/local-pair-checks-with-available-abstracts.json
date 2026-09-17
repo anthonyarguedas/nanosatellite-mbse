@@ -1,0 +1,99 @@
+{
+  "schema_version": "slr1-scopus-pilot003-local-pair-audit/v1",
+  "purpose": "Exact local checks use only retained title text. They are an audit of source W/6 fallback hits, never a source-record exclusion or a proof about unavailable abstract/indexed fields.",
+  "max_intervening_lexical_tokens": 5,
+  "source_fallback": "Scopus W/6; source result may use title, abstract, author keyword, or indexed metadata not retained in the no-abstract stable-ID pass.",
+  "partitions": {
+    "BG1": {
+      "concept": "G_model",
+      "declared_pair_count": 16,
+      "source_record_count": 8,
+      "native_abstracts_checked": 1,
+      "exact_pair_match_count_in_retained_title_and_available_abstract": 0,
+      "exact_pair_matches": [],
+      "action": "All source records retained regardless of local match; missing local match is expected when the source hit occurs in unavailable abstract/keyword/indexed metadata."
+    },
+    "BG2": {
+      "concept": "G_structure",
+      "declared_pair_count": 16,
+      "source_record_count": 17,
+      "native_abstracts_checked": 3,
+      "exact_pair_match_count_in_retained_title_and_available_abstract": 1,
+      "exact_pair_matches": [
+        {
+          "paper_id": "SCOPUS-PUBLICATION:85049828421",
+          "pair_hits": [
+            {
+              "left": "product-line",
+              "right": "model"
+            },
+            {
+              "left": "product line",
+              "right": "model"
+            }
+          ],
+          "native_abstract_checked": true
+        }
+      ],
+      "action": "All source records retained regardless of local match; missing local match is expected when the source hit occurs in unavailable abstract/keyword/indexed metadata."
+    },
+    "BC1": {
+      "concept": "C1",
+      "declared_pair_count": 36,
+      "source_record_count": 32,
+      "native_abstracts_checked": 12,
+      "exact_pair_match_count_in_retained_title_and_available_abstract": 1,
+      "exact_pair_matches": [
+        {
+          "paper_id": "SCOPUS-PUBLICATION:84861121452",
+          "pair_hits": [
+            {
+              "left": "domain-specific modeling language",
+              "right": "SysML"
+            },
+            {
+              "left": "domain specific modeling language",
+              "right": "SysML"
+            }
+          ],
+          "native_abstract_checked": true
+        }
+      ],
+      "action": "All source records retained regardless of local match; missing local match is expected when the source hit occurs in unavailable abstract/keyword/indexed metadata."
+    },
+    "BT2": {
+      "concept": "T2",
+      "declared_pair_count": 224,
+      "source_record_count": 13,
+      "native_abstracts_checked": 2,
+      "exact_pair_match_count_in_retained_title_and_available_abstract": 2,
+      "exact_pair_matches": [
+        {
+          "paper_id": "SCOPUS-PUBLICATION:85195241500",
+          "pair_hits": [
+            {
+              "left": "parameterized",
+              "right": "model"
+            }
+          ],
+          "native_abstract_checked": true
+        },
+        {
+          "paper_id": "SCOPUS-PUBLICATION:105035992922",
+          "pair_hits": [
+            {
+              "left": "customized",
+              "right": "models"
+            }
+          ],
+          "native_abstract_checked": true
+        }
+      ],
+      "action": "All source records retained regardless of local match; missing local match is expected when the source hit occurs in unavailable abstract/keyword/indexed metadata."
+    }
+  },
+  "not_applicable": {
+    "B1": "No declared paired block",
+    "B2": "No declared paired block"
+  }
+}

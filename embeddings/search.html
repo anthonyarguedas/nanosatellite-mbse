@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SLR Search</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #0b0b0b;
+      --surface: #111111;
+      --line: #343434;
+      --muted: #969696;
+      --text: #efefef;
+      --strong: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      width: min(100% - 32px, 960px);
+      margin: 0 auto;
+      padding: 32px 0 72px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      padding: 0 0 20px;
+      background: var(--background);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      margin: 0;
+      color: var(--strong);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+    }
+
+    .corpus-count {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .index-health {
+      margin-bottom: 16px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .index-health-head,
+    .index-card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+    }
+
+    .index-health-title,
+    .index-name {
+      color: var(--strong);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .index-refresh {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+
+    .index-refresh:hover,
+    .index-refresh:focus-visible {
+      color: var(--strong);
+    }
+
+    .index-cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .index-card {
+      min-width: 0;
+      padding: 8px;
+      border: 1px solid var(--line);
+      background: var(--background);
+    }
+
+    .index-state {
+      padding: 1px 5px;
+      border: 1px solid currentColor;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .state-ready .index-state {
+      color: var(--strong);
+    }
+
+    .state-stale,
+    .state-error {
+      border-color: #777777;
+    }
+
+    .index-metrics,
+    .index-reasons,
+    .index-samples,
+    .index-loading {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      overflow-wrap: anywhere;
+    }
+
+    .index-reasons {
+      padding-left: 17px;
+    }
+
+    .index-reasons li + li {
+      margin-top: 3px;
+    }
+
+    .index-details {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .index-details summary {
+      cursor: pointer;
+    }
+
+    .search-line {
+      display: flex;
+      gap: 8px;
+    }
+
+    #query {
+      min-width: 0;
+      flex: 1;
+      height: 46px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      outline: none;
+      background: var(--surface);
+      color: var(--strong);
+    }
+
+    #query::placeholder {
+      color: #707070;
+    }
+
+    #query:focus {
+      border-color: var(--strong);
+    }
+
+    .search-button {
+      min-width: 94px;
+      border: 1px solid var(--strong);
+      border-radius: 0;
+      background: var(--strong);
+      color: #090909;
+      cursor: pointer;
+    }
+
+    .search-button:hover,
+    .search-button:focus-visible {
+      background: var(--background);
+      color: var(--strong);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: end;
+      margin-top: 16px;
+    }
+
+    fieldset {
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    legend,
+    .slider-label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .modes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .mode {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .mode input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .mode span {
+      display: block;
+      padding: 5px 9px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .mode input:checked + span {
+      border-color: var(--strong);
+      background: var(--strong);
+      color: #090909;
+    }
+
+    .mode input:focus-visible + span {
+      outline: 1px solid var(--strong);
+      outline-offset: 2px;
+    }
+
+    .slider-control {
+      min-width: 210px;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    output {
+      color: var(--text);
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 16px;
+      margin: 0;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 2px;
+      background: var(--line);
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      width: 12px;
+      height: 12px;
+      margin-top: -5px;
+      appearance: none;
+      border: 1px solid var(--strong);
+      border-radius: 50%;
+      background: var(--strong);
+    }
+
+    input[type="range"]::-moz-range-track {
+      height: 2px;
+      background: var(--line);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 10px;
+      height: 10px;
+      border: 1px solid var(--strong);
+      border-radius: 50%;
+      background: var(--strong);
+    }
+
+    input[type="range"]:focus-visible {
+      outline: 1px solid var(--strong);
+      outline-offset: 4px;
+    }
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: baseline;
+      padding: 20px 0 10px;
+    }
+
+    .results-header h1 {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    #status {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    #results {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .result,
+    .empty {
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .result {
+      padding: 18px;
+    }
+
+    .result-head,
+    .result-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: baseline;
+    }
+
+    .result-title {
+      margin: 0;
+      color: var(--strong);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .rank {
+      display: inline-block;
+      min-width: 2.4em;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .result-meta {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .chunk-text {
+      margin: 18px 0;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .image-link {
+      display: block;
+      margin: 18px 0;
+      border: 1px solid var(--line);
+      background: #080808;
+    }
+
+    .result-image {
+      display: block;
+      width: 100%;
+      max-height: 640px;
+      object-fit: contain;
+    }
+
+    .source-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .source-link,
+    .copy-citation {
+      color: var(--text);
+      font-size: 12px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .copy-citation {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .copy-citation:disabled {
+      color: var(--muted);
+      cursor: wait;
+    }
+
+    .source-link:hover,
+    .source-link:focus-visible,
+    .copy-citation:hover,
+    .copy-citation:focus-visible {
+      color: var(--strong);
+    }
+
+    .chunk-id {
+      color: var(--muted);
+      font-size: 11px;
+      overflow-wrap: anywhere;
+      text-align: right;
+    }
+
+    .empty {
+      padding: 28px 18px;
+      color: var(--muted);
+    }
+
+    .error {
+      border-color: #777777;
+      color: var(--text);
+    }
+
+    @media (max-width: 620px) {
+      .app {
+        width: min(100% - 24px, 960px);
+        padding-top: 20px;
+      }
+
+      .controls,
+      .result-head,
+      .result-footer {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .index-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .slider-control {
+        width: 100%;
+      }
+
+      #status,
+      .chunk-id {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand-row">
+        <p class="brand">SLR / SEARCH</p>
+        <span id="corpus-count" class="corpus-count">local retrieval</span>
+      </div>
+      <section id="index-health" class="index-health" aria-live="polite">
+        <div class="index-health-head">
+          <span class="index-health-title">Index status</span>
+          <button id="index-refresh" class="index-refresh" type="button">Refresh</button>
+        </div>
+        <div id="index-cards" class="index-cards">
+          <p class="index-loading">Checking indexes…</p>
+        </div>
+      </section>
+      <form id="search-form" role="search">
+        <div class="search-line">
+          <input id="query" name="q" type="search" autocomplete="off" autofocus
+                 placeholder="Search the corpus" aria-label="Search query" required>
+          <button id="search-button" class="search-button" type="submit">Search</button>
+        </div>
+        <div class="controls">
+          <fieldset>
+            <legend>Method</legend>
+            <div class="modes">
+              <label class="mode"><input type="radio" name="mode" value="hybrid" checked><span>Hybrid</span></label>
+              <label class="mode"><input type="radio" name="mode" value="vector"><span>Vector</span></label>
+              <label class="mode"><input type="radio" name="mode" value="visual"><span>Visual</span></label>
+              <label class="mode"><input type="radio" name="mode" value="bm25"><span>BM25</span></label>
+              <label class="mode"><input type="radio" name="mode" value="regex"><span>Regex</span></label>
+            </div>
+          </fieldset>
+          <div class="slider-control">
+            <label class="slider-label" for="top-k">Chunks <output id="top-k-value" for="top-k">12</output></label>
+            <input id="top-k" name="top_k" type="range" min="1" max="50" value="12">
+          </div>
+        </div>
+      </form>
+    </header>
+
+    <section class="results-header" aria-live="polite">
+      <h1>Results</h1>
+      <p id="status">Enter a query to search the corpus.</p>
+    </section>
+    <ol id="results" aria-live="polite">
+      <li class="empty">Choose a method, enter a query, then press Search.</li>
+    </ol>
+  </main>
+
+  <script>
+    const form = document.querySelector("#search-form");
+    const query = document.querySelector("#query");
+    const topK = document.querySelector("#top-k");
+    const topKValue = document.querySelector("#top-k-value");
+    const button = document.querySelector("#search-button");
+    const results = document.querySelector("#results");
+    const status = document.querySelector("#status");
+    const corpusCount = document.querySelector("#corpus-count");
+    const indexHealth = document.querySelector("#index-health");
+    const indexCards = document.querySelector("#index-cards");
+    const indexRefresh = document.querySelector("#index-refresh");
+    let requestNumber = 0;
+    let indexRefreshTimer = null;
+
+    function selectedMode() {
+      return document.querySelector('input[name="mode"]:checked').value;
+    }
+
+    function pageRange(result) {
+      if (result.page_start === null || result.page_start === undefined) {
+        return "page unavailable";
+      }
+      if (result.page_end && result.page_end !== result.page_start) {
+        return `pp. ${result.page_start}-${result.page_end}`;
+      }
+      return `p. ${result.page_start}`;
+    }
+
+    function element(name, className, text) {
+      const node = document.createElement(name);
+      if (className) {
+        node.className = className;
+      }
+      if (text !== undefined) {
+        node.textContent = text;
+      }
+      return node;
+    }
+
+    function formatNumber(value) {
+      return Number(value || 0).toLocaleString();
+    }
+
+    function indexSamples(index) {
+      return [
+        ...(index.missing_figure_samples || []),
+        ...(index.unindexed_figure_samples || []),
+        ...(index.changed_figure_samples || []),
+      ].filter((value, position, values) => values.indexOf(value) === position);
+    }
+
+    function indexCard(name, index, kind) {
+      const card = element("article", `index-card state-${index.state}`);
+      const head = element("div", "index-card-head");
+      head.append(
+        element("span", "index-name", name),
+        element("span", "index-state", index.state)
+      );
+      card.append(head);
+
+      let metrics;
+      if (kind === "text") {
+        metrics = `${formatNumber(index.chunks_indexed)} / ${formatNumber(index.chunks_expected)} chunks`;
+      } else {
+        const indexed = index.state === "building" || index.state === "partial"
+          ? index.build_completed
+          : index.images_indexed;
+        metrics = `${formatNumber(indexed)} / ${formatNumber(index.images_expected)} figures indexed`;
+        metrics += ` · ${formatNumber(index.missing_figures)} missing`;
+        metrics += ` · ${formatNumber(index.changed_figures)} changed`;
+        if (index.cached_images) {
+          metrics += ` · ${formatNumber(index.cached_images)} cached`;
+        }
+      }
+      card.append(element("p", "index-metrics", metrics));
+
+      if (index.reasons && index.reasons.length) {
+        const reasons = element("ul", "index-reasons");
+        index.reasons.forEach((reason) => reasons.append(element("li", "", reason)));
+        card.append(reasons);
+      }
+
+      const samples = indexSamples(index);
+      if (samples.length) {
+        const details = element("details", "index-details");
+        details.append(element("summary", "", "Affected figures"));
+        details.append(element("p", "index-samples", samples.join("\n")));
+        card.append(details);
+      }
+      return card;
+    }
+
+    function renderIndexStatus(payload) {
+      indexHealth.className = `index-health state-${payload.overall}`;
+      corpusCount.textContent = `${formatNumber(payload.corpus.reports)} reports · ${formatNumber(payload.corpus.figures)} figures`;
+      indexCards.replaceChildren(
+        indexCard("Text", payload.text, "text"),
+        indexCard("Visual", payload.visual, "visual")
+      );
+      if (indexRefreshTimer) {
+        clearTimeout(indexRefreshTimer);
+        indexRefreshTimer = null;
+      }
+      if (payload.visual.build_active) {
+        indexRefreshTimer = setTimeout(() => loadIndexStatus(true), 5000);
+      }
+    }
+
+    async function loadIndexStatus(force = false) {
+      indexRefresh.disabled = true;
+      try {
+        const suffix = force ? "?refresh=1" : "";
+        const response = await fetch(`/api/status${suffix}`);
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || "Index status failed.");
+        }
+        renderIndexStatus(payload);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "Index status failed.";
+        indexHealth.className = "index-health state-error";
+        indexCards.replaceChildren(element("p", "index-loading", message));
+      } finally {
+        indexRefresh.disabled = false;
+      }
+    }
+
+    function externalLink(label, href) {
+      const link = element("a", "source-link", label);
+      link.href = href;
+      link.target = "_blank";
+      link.rel = "noopener";
+      return link;
+    }
+
+    function sourceLinks(result) {
+      const links = element("span", "source-links");
+      if (result.image_url) {
+        links.append(externalLink("Open image", result.image_url));
+      }
+      if (result.pdf_url) {
+        links.append(externalLink("Open PDF", result.pdf_url));
+      }
+      if (!links.childElementCount) {
+        links.append(element("span", "source-link", "Source unavailable"));
+      }
+      return links;
+    }
+
+    function bibtexEscape(value) {
+      const escaped = {
+        "\\": "\\textbackslash{}",
+        "{": "\\{",
+        "}": "\\}",
+        "%": "\\%",
+        "&": "\\&",
+        "_": "\\_",
+        "#": "\\#",
+        "$": "\\$",
+        "~": "\\textasciitilde{}",
+        "^": "\\textasciicircum{}",
+      };
+      return String(value).replace(/[\\{}%&_#$~^]/g, (character) => escaped[character]);
+    }
+
+    function bibtexEntryType(publicationType) {
+      const entryTypes = {
+        journal_article: "article",
+        conference_paper: "inproceedings",
+        thesis_or_dissertation: "techreport",
+        workshop_presentation: "unpublished",
+        preprint: "unpublished",
+        edited_book_research_chapter: "incollection",
+        institutional_technical_report: "techreport",
+        arxiv_preprint: "unpublished",
+        masters_thesis: "mastersthesis",
+        doctoral_thesis_or_dissertation: "phdthesis",
+      };
+      return entryTypes[publicationType] || "misc";
+    }
+
+    function bibtexVenueField(publicationType) {
+      const venueFields = {
+        journal_article: "journal",
+        conference_paper: "booktitle",
+        thesis_or_dissertation: "institution",
+        workshop_presentation: "note",
+        preprint: "note",
+        edited_book_research_chapter: "booktitle",
+        institutional_technical_report: "institution",
+        arxiv_preprint: "note",
+        masters_thesis: "school",
+        doctoral_thesis_or_dissertation: "school",
+      };
+      return venueFields[publicationType];
+    }
+
+    function bibtexCitation(result) {
+      const citation = result.citation && typeof result.citation === "object"
+        ? result.citation
+        : result;
+      const publicationType = citation.publication_type;
+      const authors = Array.isArray(citation.authors)
+        ? citation.authors.filter(Boolean).join(" and ")
+        : citation.authors;
+      const venueField = bibtexVenueField(publicationType);
+      const publicationLabel = String(publicationType || "").replaceAll("_", " ");
+      const venue = venueField === "note" && citation.venue
+        ? `${publicationLabel}: ${citation.venue}`
+        : citation.venue;
+      const fields = [
+        ["author", authors],
+        ["title", citation.title || result.title],
+        [venueField, venue],
+        ...(publicationType === "thesis_or_dissertation"
+          ? [["type", "Thesis or dissertation"]]
+          : []),
+        ["year", citation.year],
+        ["doi", citation.doi],
+      ].filter(([name, value]) => name && value !== null && value !== undefined && String(value).trim())
+        .map(([name, value]) => `  ${name} = {${bibtexEscape(value)}}`);
+      const key = String(citation.key || result.report_id || result.chunk_id || "source")
+        .replace(/[^A-Za-z0-9_:-]/g, "_") || "source";
+      const entryType = bibtexEntryType(publicationType);
+      return fields.length
+        ? `@${entryType}{${key},\n${fields.join(",\n")}\n}`
+        : `@${entryType}{${key}}`;
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return;
+        } catch {
+          // Fall back when clipboard permission is unavailable.
+        }
+      }
+
+      const textarea = element("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "");
+      textarea.setAttribute("aria-hidden", "true");
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      textarea.style.pointerEvents = "none";
+      document.body.append(textarea);
+      textarea.select();
+      try {
+        if (typeof document.execCommand !== "function" || !document.execCommand("copy")) {
+          throw new Error("Clipboard access is unavailable.");
+        }
+      } finally {
+        textarea.remove();
+      }
+    }
+
+    function copyCitationButton(result) {
+      const copyButton = element("button", "copy-citation", "Copy citation");
+      const label = `Copy BibTeX citation for ${result.title}`;
+      copyButton.type = "button";
+      copyButton.setAttribute("aria-label", label);
+      copyButton.addEventListener("click", async () => {
+        copyButton.disabled = true;
+        try {
+          await copyText(bibtexCitation(result));
+          copyButton.textContent = "Copied";
+          copyButton.setAttribute("aria-label", `BibTeX citation copied for ${result.title}`);
+        } catch {
+          copyButton.textContent = "Copy failed";
+          copyButton.setAttribute("aria-label", `Could not copy citation for ${result.title}`);
+        } finally {
+          window.setTimeout(() => {
+            copyButton.disabled = false;
+            copyButton.textContent = "Copy citation";
+            copyButton.setAttribute("aria-label", label);
+          }, 1600);
+        }
+      });
+      return copyButton;
+    }
+
+    function resultItem(result) {
+      const item = element("li", "result");
+      const head = element("div", "result-head");
+      const title = element("h2", "result-title");
+      const rank = element("span", "rank", String(result.rank).padStart(2, "0"));
+      title.append(rank, document.createTextNode(result.title));
+      head.append(title);
+      item.append(head);
+
+      const metadata = element(
+        "p",
+        "result-meta",
+        `${result.report_id} · ${pageRange(result)} · ${result.chunk_type}`
+      );
+      item.append(metadata);
+
+      if (result.display_type === "image" && result.image_url) {
+        const imageLink = element("a", "image-link");
+        imageLink.href = result.image_url;
+        imageLink.target = "_blank";
+        imageLink.rel = "noopener";
+        const image = element("img", "result-image");
+        image.src = result.image_url;
+        image.alt = `${result.title}, ${result.section}`;
+        image.loading = "lazy";
+        imageLink.append(image);
+        item.append(imageLink);
+      }
+      if (result.text) {
+        item.append(element("p", "chunk-text", result.text));
+      }
+
+      const footer = element("div", "result-footer");
+      const links = sourceLinks(result);
+      links.append(copyCitationButton(result));
+      footer.append(links);
+      footer.append(element("span", "chunk-id", result.chunk_id));
+      item.append(footer);
+      return item;
+    }
+
+    function showMessage(message, error = false) {
+      results.replaceChildren(element("li", error ? "empty error" : "empty", message));
+    }
+
+    function render(payload) {
+      if (!payload.results.length) {
+        showMessage("No matching chunks.");
+        status.textContent = "0 chunks";
+        return;
+      }
+      results.replaceChildren(...payload.results.map(resultItem));
+      const ranking = payload.reranked ? " · reranked" : "";
+      const fallback = payload.visual_search_requested && !payload.visual_search
+        ? " · visual index skipped"
+        : "";
+      status.textContent = `${payload.results.length} ${payload.results.length === 1 ? "result" : "results"} · ${payload.mode}${ranking}${fallback}`;
+    }
+
+    function updateModeHint() {
+      query.placeholder = selectedMode() === "regex"
+        ? "Regular expression, for example state\\s+machine"
+        : "Search the corpus";
+    }
+
+    indexRefresh.addEventListener("click", () => loadIndexStatus(true));
+
+    topK.addEventListener("input", () => {
+      topKValue.value = topK.value;
+      topKValue.textContent = topK.value;
+    });
+
+    document.querySelectorAll('input[name="mode"]').forEach((mode) => {
+      mode.addEventListener("change", updateModeHint);
+    });
+
+    loadIndexStatus();
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const value = query.value.trim();
+      if (!value) {
+        query.focus();
+        return;
+      }
+
+      const currentRequest = ++requestNumber;
+      button.disabled = true;
+      button.textContent = "Searching";
+      status.textContent = "Searching…";
+      results.setAttribute("aria-busy", "true");
+
+      try {
+        const parameters = new URLSearchParams({
+          q: value,
+          mode: selectedMode(),
+          top_k: topK.value,
+        });
+        const response = await fetch(`/api/search?${parameters}`);
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || "Search failed.");
+        }
+        if (currentRequest === requestNumber) {
+          render(payload);
+        }
+      } catch (error) {
+        if (currentRequest === requestNumber) {
+          const message = error instanceof Error ? error.message : "Search failed.";
+          showMessage(message, true);
+          status.textContent = "Search failed";
+        }
+      } finally {
+        if (currentRequest === requestNumber) {
+          button.disabled = false;
+          button.textContent = "Search";
+          results.removeAttribute("aria-busy");
+        }
+      }
+    });
+  </script>
+</body>
+</html>

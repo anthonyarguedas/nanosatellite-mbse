@@ -1,0 +1,112 @@
+{
+  "schema_version": "engineering-village-adapter-screenshot-validation/v1",
+  "source": "Compendex with a retained paired Inspec projection",
+  "platform": "Engineering Village",
+  "status": "passed",
+  "do_not_merge": true,
+  "adapter": {
+    "id": "engineering_village_search",
+    "version": "16",
+    "implementation_sha256": "382426551fcbf0ce27b1a53ef5080dfd83b02e338e7d7ba469d688887d1529a3"
+  },
+  "offline_validation": {
+    "command_scope": "seven focused EngineeringVillageSearchTests covering screenshots, paired delegation, strict reconciliation, and failure publication",
+    "tests_run": 7,
+    "tests_passed": 7,
+    "new_screenshot_contract_tests": 2
+  },
+  "live_validation": {
+    "date_utc": "2026-09-02",
+    "normal_browser_profile": true,
+    "challenge_or_login_automation": false,
+    "events": [
+      {
+        "event": "single-pass-compendex-known-item",
+        "completed_at_utc": "2026-09-02T16:17:52.637739Z",
+        "query": "(20232514262795 WN AN)",
+        "Published": {
+          "start": 2011,
+          "end": 2026
+        },
+        "source_total": 1,
+        "compendex_accessions": [
+          "20232514262795"
+        ],
+        "screenshots": {
+          "automatic": true,
+          "opt_out_available": false,
+          "capture_pass": "single-pass",
+          "search_page": {
+            "file_name": "known-item.search-page.png",
+            "sha256": "2ab8035abae188f53c432414761bbea1168ffe63c5a8b452a89f56367bec9f7d",
+            "width": 2704,
+            "height": 1994,
+            "account_elements_masked": 1,
+            "email_elements_masked": 0
+          },
+          "results_page": {
+            "file_name": "known-item.results-page.png",
+            "sha256": "9a6d0cc90a56d1bdd1e870f65bc80b21900aed72e085bc6c39c05091b38fdc53",
+            "width": 2704,
+            "height": 3522,
+            "account_elements_masked": 1,
+            "email_elements_masked": 0
+          },
+          "hashes_and_dimensions_matched_json_receipt": true
+        }
+      },
+      {
+        "event": "strict-paired-known-items",
+        "completed_at_utc": "2026-09-02T16:21:13.369282Z",
+        "query": "(((20232514262795 WN AN) OR (23201028 WN AN)) AND (English WN LA))",
+        "Published": {
+          "start": 2011,
+          "end": 2026
+        },
+        "strict_complete_passes": 2,
+        "source_total": 2,
+        "compendex_accessions": [
+          "20232514262795"
+        ],
+        "inspec_accessions": [
+          "23201028"
+        ],
+        "screenshots": {
+          "automatic": true,
+          "opt_out_available": false,
+          "capture_pass": "pass-1",
+          "search_page": {
+            "file_name": "paired-known-items.search-page.png",
+            "sha256": "5634c5edfc9a540ae2ab315c5e283265f6f8a2e404456c949bed6c689186437d",
+            "width": 2704,
+            "height": 1994,
+            "account_elements_masked": 1,
+            "email_elements_masked": 0
+          },
+          "results_page": {
+            "file_name": "paired-known-items.results-page.png",
+            "sha256": "fd23c9988ce8278b6015c7261e2c1bfd11d51c62ae8f2c7e0733946a73ab4634",
+            "width": 2704,
+            "height": 4350,
+            "account_elements_masked": 1,
+            "email_elements_masked": 0
+          },
+          "hashes_and_dimensions_matched_json_receipt": true
+        },
+        "marker_gated_json_csv_pair_usable": true
+      }
+    ],
+    "pre_source_setup_failures": {
+      "count": 2,
+      "source_query_submitted": false,
+      "reason": "The strict output namespace correctly rejected roots beneath the symlinked temporary directory. The successful strict check used a fresh owner-private root."
+    },
+    "temporary_live_outputs_removed_after_validation": true
+  },
+  "decision": "Adapter v16 satisfies the mandatory automatic search-page and results-page screenshot contract for the bounded single-pass and strict paired routes.",
+  "boundaries": [
+    "This is adapter validation, not a final search.",
+    "The screenshot behavior was tested on bounded known-item result pages.",
+    "The first strict pass supplies the images. The second strict pass remains an independent source and RIS reconciliation."
+  ]
+}
