@@ -39,62 +39,75 @@ Outcome: Beneficial, null, mixed, or adverse EPS-linked technical and process ou
 Intervention: EPS-primary MBSE or a clear embedded EPS model thread
 Comparison: Not required
 Outcome:
-- source-reported identities and types for EPS model artifacts (such as models, repositories, packages, or files), preserving the term "digital twin" when the source uses it, with links to their presented representations when reported;
-- structured model representations (views, diagrams, matrices, tables, or model excerpts presented in the source) of organizational or mission context, requirements, scenarios, sequences, states or modes, structure or architecture, interfaces, and data-/resource-flows, recording each representation's source-reported name and type, containing model artifacts when reported, coverage of engineering viewpoints (electronics, electrical, software, mechanical), and level of abstraction;
-- source-reported names and types for modeled EPS elements and relationships, plus the endpoints and direction of each relationship when reported, before language-neutral semantic classification;
-- language-neutral semantic classifications of modeled EPS content and relationships, including external actors and systems/subsystems, capabilities, functions/behaviors, activities/actions, data/resource flows and exchanges, exchanged items/signals, interfaces, ports/connectors, blocks/components/parts/instances and any source-reported logical or physical classification, properties/parameters/constraints, allocations/mappings and other connections/links, states or modes, state or mode transitions, scenarios, sequences, use cases, hazards/feared events/faults/failures, and requirements, noting whether each element is inside or outside the EPS boundary and identifying the external actor or system/subsystem for outside elements when reported;
-- model execution:
-  - model artifacts, representations, elements, and relationships involved in each reported execution or execution capability;
-  - formal or computational content used in execution (equations, constraints, parameters, algorithms, or executable behaviors), with links from modeled content to the corresponding model elements, relationships, and structured representations recorded above;
-  - executable artifacts generated from the model (simulation models, test scripts, or code), with links to their source model artifacts, elements, or relationships;
-  - execution setup, including engines, tools, connected models, simulators, software, hardware, exchanged inputs/outputs, and execution coordination;
-  - whether each setup item is represented within an extracted model, linked to modeled content, or reported only outside the models, with links from represented items to the corresponding model elements, relationships, and structured representations recorded above;
-  - execution type (check/computation, simulation, co-simulation, SIL, HIL, or deployed/operational execution);
-  - whether each execution capability is claimed or demonstrated;
-- what the EPS models are used for;
-- EPS model generation/reuse/tailoring methods, modeling language/ontology/metamodel, modeling/reuse/tailoring tools;
-- model and method inputs and assumptions, applicability, reusable core, variation points, tailoring or adaptation rules and steps, tools, demonstrated uses and post hoc checks, distinguishing novel, tailored, and reused elements and preserving the source description and reported name of any originating method, process, or framework;
-- if the method itself has a structured representation:
-  - the representation's source-reported name and type;
-  - each represented method element's source-reported name and native type before semantic classification;
-  - represented phases, activities or steps, stakeholders or roles, inputs, outputs, assumptions, requirements, applicability conditions, rules, decisions, reusable cores, variation points, tailoring steps, tools, and checks;
-  - each represented method relationship's source-reported name and native type, its endpoints and direction when reported, and its condition when conditional;
-  - for reusable cores and variation points represented as model elements, links to the corresponding model element records and to the structured representations that show them;
-  - links to the EPS model content already extracted;
-- if the model or method is called generic, why;
-- model or method lineage, if reported
+1. Source-reported types for EPS model artifacts (such as MBSE models, digital twins, repositories, packages, or simulation environments), with links to their presented representations when reported;
+1.2. modeling language/ontology/metamodel/theory if stated (could be more than one for different representations);
+1.3. what the EPS model artifacts are used for;
+1.4. if the model artifact is called generic, record any justification with the original wording;
+1.5. if the model artifact is explicitly stated to be part of a lineage, record it with the original wording.
+
+2. Structured model representations (views, diagrams, matrices, tables, or model excerpts presented in the source) of organizational or mission context, requirements, scenarios, sequences, states or modes, structure or architecture, interfaces, and data-/resource-flows, recording:
+2.1. each representation's source-reported name and type; if no name or type is reported, classify it with a type of electrical diagram, informal architectue/structure diagram, simulation/digital twin diagram, sequence diagram, or black box diagram;
+2.2. containing model artifacts when reported;
+2.3. modeling language/ontology/metamodel/theory (only one per representation);
+2.3. coverage of engineering viewpoints (electronics, electrical, software, mechanical, thermal, chemical);
+2.4 source-reported names and types for modeled EPS elements and relationships, plus the endpoints and direction of each relationship when reported, before language-neutral semantic classification;
+2.5 language-neutral semantic classifications of modeled EPS content and relationships, including external actors and systems/subsystems, capabilities, functions/behaviors, activities/actions, data/resource flows and exchanges, exchanged items/signals, interfaces, ports/connectors, blocks/components/parts/instances and any source-reported or evident (i.e. explicitly named hardware or software) logical or physical classification, allocations/mappings and other connections/links, states or modes, state or mode transitions, scenarios, sequences, use cases, hazards/feared events/faults/failures, and requirements, noting whether each element is inside or outside the EPS boundary and identifying the external actor or system/subsystem for outside elements when reported;
+2.6. executable content (equations, constraints, parameters, algorithms, simulators, or explicitly-stated physically-implemented behavior), with links from this content to the corresponding model elements, relationships, and structured representations recorded above;
+2.7. elements labelled as reusable core or variation points of the model (with links to existing model elements).
+
+3. EPS model generation/reuse/tailoring methods (which could be implicitly or explicitly used to generate/reuse/tailor the models already extracted);
+3.1. modeling language/ontology/metamodel/theory if stated;
+3.2. inputs and assumptions;
+3.3. applicability;
+3.4. reusable core and variation points of the model generated/reused/tailored (with links to existing model elements and their containing representations if applicable, and avoiding duplication if this has already been extracted for the model itself),
+3.5. tailoring or adaptation phases, rules and steps, tools, and post hoc checks (only extract as text if not modeled, see 3.6);
+3.6. if the method itself has a structured representation:
+3.6.1. the representation's source-reported name and type;
+3.6.2. each represented method element's source-reported name and native type before semantic classification;
+3.6.3. represented phases, activities or steps, stakeholders or roles, inputs, outputs, assumptions, requirements, applicability conditions, rules, decisions, models, model elements, reusable cores and variation points involved in the steps, tools, checks, and the other element types also used for EPS element representations;
+3.6.4. source-reported name and native type of each represented relationship between method elements, its endpoints and direction when reported, and its condition when conditional;
+3.7. demonstrated reuses of the method, distinguishing if the report generates and reuses its own method or if the report reuses a method introduced elsewhere.
+3.8. demonstrated tailorings of the method (that is, one report tailoring another report's method and explicitly stating it).
+3.9. If the method is called generic, record any justification with the original wording.
+3.10. If the method is explicitly stated to be part of a lineage, record it with the original wording.
 
 ### RQ3
 
 Intervention: EPS-specific or system-wide but EPS-linked model-based V&V
 Comparison: When reported: separate or document-based V&V, manual checking, another method, or another explicit comparator
 Outcome:
-- source-reported identities and types for V&V model artifacts (such as models, repositories, packages, or files), preserving the term "digital twin" when the source uses it, with links to their presented representations when reported;
-- structured model representations (views, diagrams, matrices, tables, or model excerpts presented in the source) of V&V requirements, objectives, pass/fail criteria, scenarios/test cases, sequences, states or modes, structure or architecture, interfaces, and data-/resource-flows, recording each representation's source-reported name and type and containing model artifacts when reported, noting whether each representation is integrated into the EPS model, held in a separate linked model, or held in a separate model without a reported link, as well as its coverage of engineering viewpoints (electronics, electrical, software, mechanical) and level of abstraction;
-- source-reported names and types for modeled V&V elements and relationships, plus the endpoints and direction of each relationship when reported, before language-neutral semantic classification;
-- language-neutral semantic classifications of modeled V&V content and relationships, including external actors and systems/subsystems, functions/behaviors, activities/actions, data/resource flows and exchanges, exchanged items/signals, interfaces, ports/connectors, blocks/components/parts/instances and any source-reported logical or physical classification, test setups/equipment, properties/parameters/constraints, allocations/mappings and other connections/links, states or modes, state or mode transitions, scenarios, sequences, use cases, hazards/feared events/faults/failures, requirements, objectives, and pass/fail criteria, noting whether each element is integrated into the EPS model, held in a separate linked model, or held in a separate model without a reported link;
-- definitions of setup and equipment, requirements, objectives, and pass/fail criteria for V&V test cases/scenarios that are not modeled;
-- links between V&V models, modeled elements or definitions; and EPS models or modeled elements;
-- V&V model or V&V test case/scenario definition generation/reuse/tailoring methods, noting specifically if an EPS model or modeled element is an input to the method;
-- methods for EPS or V&V model/definition update from test results;
-- methods for executing V&V test cases/scenarios or checks from a V&V or EPS model:
-  - model artifacts, representations, elements, and relationships involved in each reported execution or execution capability;
-  - formal or computational content used in execution (equations, constraints, parameters, algorithms, or executable behaviors), with links from modeled content to the corresponding model elements, relationships, and structured representations recorded above;
-  - executable artifacts generated from the model (simulation models, test scripts, or code), with links to their source model artifacts, elements, or relationships;
-  - execution setup, including engines, tools, connected models, simulators, software, hardware, exchanged inputs/outputs, and execution coordination;
-  - whether each setup item is represented within an extracted model, linked to modeled content, or reported only outside the models, with links from represented items to the corresponding model elements, relationships, and structured representations recorded above;
-  - execution type (check/computation, simulation, co-simulation, SIL, HIL, physical execution, or deployed/operational execution);
-  - whether each execution is claimed or demonstrated;
-- model and method method inputs and assumptions, applicability, reusable core, variation points, tailoring or adaptation rules and steps, tools, demonstrated uses and post hoc checks, distinguishing novel, tailored, and reused elements and preserving the source description and reported name of any originating method, process, or framework;
-- if the method itself has a structured representation:
-  - the representation's source-reported name and type;
-  - each represented method element's source-reported name and native type before semantic classification;
-  - represented phases, activities or steps, stakeholders or roles, inputs, outputs, assumptions, requirements, applicability conditions, rules, decisions, reusable cores, variation points, tailoring steps, tools, and checks;
-  - each represented method relationship's source-reported name and native type, its endpoints and direction when reported, and its condition when conditional;
-  - for reusable cores and variation points represented as model elements, links to the corresponding model element records and to the structured representations that show them;
-  - links to the EPS and V&V model content already extracted;
-- if the V&V model or method is called generic, why;
-- model or method lineage, if reported
+1. source-reported types for V&V strategy artifacts (such as MBSE models, repositories, packages, simulation environments, executable scripts, or document-based definitions), with links to their presented representations when reported. An EPS model artifact that does not include any V&V content must not be duplicated as a V&V strategy artifact.
+1.2. modeling language/ontology/metamodel/theory if stated (could be more than one for different representations);
+1.3. whether the strategy artifact is integrated into an EPS model artifact of interest or is separate but linked, or separate and unlinked.
+1.4. If the strategy artifact is called generic, record any justification with the original wording.
+1.5. If the strategy artifact is explicitly stated to be part of a lineage, record it with the original wording.
+
+2. strategy artifact representations (views, diagrams, matrices, tables, model excerpts or text-based definitions presented in the source) of V&V requirements, objectives, pass/fail criteria, scenarios/test cases, sequences, states or modes, structure or architecture, interfaces, and data-/resource-flows, recording each representation's source-reported name and type (including "text-based");
+2.2. modeling language/ontology/metamodel/theory (or text-based, only one per representation);
+2.1. containing strategy artifacts when reported,
+2.3. whether the representation is integrated into a representation of the EPS model artifact of interest or is separate but linked, or separate and unlinked, or unknown.
+2.4. coverage of engineering viewpoints (electronics, electrical, software, mechanical, thermal, chemical);
+2.5. execution type (check/computation, simulation, co-simulation, SIL, HIL, physical execution, or deployed/operational execution);
+2.6 source-reported names and types for modeled V&V elements and relationships, plus the endpoints and direction of each relationship when reported, before language-neutral semantic classification;
+2.7. language-neutral semantic classifications of modeled V&V content and relationships, including external actors and systems/subsystems, functions/behaviors, activities/actions, data/resource flows and exchanges, exchanged items/signals, interfaces, ports/connectors, blocks/components/parts/instances and any source-reported logical or physical classification, test setups/equipment, properties/parameters/constraints, allocations/mappings and other connections/links, states or modes, state or mode transitions, scenarios, sequences, use cases, hazards/feared events/faults/failures, requirements, objectives, and pass/fail criteria;
+2.6. executable content (equations, constraints, parameters, algorithms, simulators, or explicitly-stated physically-implemented behavior), with links from this content to the corresponding model elements, relationships, and structured representations recorded above.
+2.7. elements labelled as reusable core or variation points of the V&V strategy artifact (with links to existing model elements).
+
+3. methods for: V&V strategy artifact generation/reuse/tailoring, and executing V&V test cases/scenarios from a V&V or EPS model, and updating an EPS model or V&V strategy based on test results (which could all be a single method covering these 3 phases and more):
+3.1. modeling language/ontology/metamodel/theory if stated;
+3.2. inputs and assumptions, for generation/reuse/tailoring, noting specifically if an EPS model or modeled element is an input to the method (for the other two it's an obvious yes);
+3.3. applicability (for V&V test cases/scenarios execution methods, note whether it is applicable to check/computation, simulation, co-simulation, SIL, HIL, physical execution, or deployed/operational execution);
+3.4. phases, rules and steps, tools, and post hoc checks (only extract as text if not modeled, see 3.6), noting if the 3 phases from 3 are covered;
+3.5. reusable core and variation points of the V&V strategy artifact generated/reused/tailored (for generation/reuse/tailoring methods only, with links to existing model elements and their containing representations if applicable, and avoiding duplication if this has already been extracted for the V&V strategy artifact itself),
+3.6. if the method itself has a structured representation:
+3.6.1. the representation's source-reported name and type;
+3.6.2. each represented method element's source-reported name and native type before semantic classification;
+3.6.3. represented phases, activities or steps, stakeholders or roles, inputs, outputs, assumptions, requirements, applicability conditions, rules, decisions, models, model elements, reusable cores and variation points involved in the steps, tools, checks, and the other element types also used for EPS element representations;
+3.6.4. source-reported name and native type of each represented relationship between method elements, its endpoints and direction when reported, and its condition when conditional;
+3.7. demonstrated reuses of the method, distinguishing if the report generates and reuses its own method or if the report reuses a method introduced elsewhere.
+3.8. demonstrated tailorings of the method (that is, one report tailoring another report's method and explicitly stating it).
+3.9. If the method is called generic, record any justification with the original wording.
+3.10. If the method is explicitly stated to be part of a lineage, record it with the original wording.
 
 ## Research questions
 
