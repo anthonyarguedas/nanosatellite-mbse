@@ -22,6 +22,8 @@ from diagram_corpus import build_diagram_chunks
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
 DATA_DIR = SCRIPT_DIR / "data"
+INCLUDED_REPORTS_PATH = REPO_ROOT / "SLR/SLR1/included_reports.json"
+REPORT_MARKDOWN_RE = re.compile(r"^(review|citation)-report-([0-9]+)\.md$")
 PAGE_RE = re.compile(r"<!--\s*PDF_PAGE:\s*([1-9][0-9]*)\s*-->")
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
 IMAGE_RE = re.compile(r"!\[([^]]*)]\(([^)]+)\)")
@@ -38,6 +40,26 @@ SPACE_RE = re.compile(r"\s+")
 SENTENCE_BOUNDARY_RE = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9\[(])")
 LIST_LINE_RE = re.compile(r"^\s*(?:[-*+]\s+|\d+[.)]\s+)")
 TABLE_SEPARATOR_RE = re.compile(r"^:?-{3,}:?$")
+DISPLAY_MATH_ENV_RE = re.compile(
+    r"\\begin\{(?:equation|align|aligned|gather|multline|split|array)\*?\}",
+    re.IGNORECASE,
+)
+SINGLE_LINE_MATH_RE = re.compile(r"^\s*\$(?!\$).+\$\s*$", re.DOTALL)
+EQUATION_CUE_RE = re.compile(
+    r"\b(?:equations?|eqs?|eqns?)\.?\b|"
+    r"\b(?:following|preceding)\s+(?:formula|expression|relationship)\b|"
+    r"\b(?:formula|expression|relationship)\s+(?:below|above|as follows)\b",
+    re.IGNORECASE,
+)
+EQUATION_RANGE_RE = re.compile(
+    r"\b(?:equations?|eqs?|eqns?)\.?\s*[([]?\s*(\d+)\s*"
+    r"(?:-|–|—|to|through|until)\s*(?:equations?\s*)?[([]?\s*(\d+)",
+    re.IGNORECASE,
+)
+EQUATION_NUMBER_RE = re.compile(
+    r"\b(?:equation|eq)\.?\s*[([]?\s*(\d+[a-z]?)", re.IGNORECASE
+)
+EQUATION_TAG_RE = re.compile(r"\\tag\*?\{([^{}]+)\}")
 
 
 @dataclass
@@ -217,9 +239,32 @@ def extract_html_table_texts(text: str) -> list[str]:
     )
 
 
+def is_display_equation(lines: list[str]) -> bool:
+    raw = "\n".join(lines).strip()
+    if not raw:
+        return False
+    if raw.startswith("$$") and raw.endswith("$$"):
+        return True
+    if raw.startswith(r"\[") and raw.endswith(r"\]"):
+        return True
+    if DISPLAY_MATH_ENV_RE.search(raw):
+        return True
+    if len(lines) == 1 and SINGLE_LINE_MATH_RE.fullmatch(raw):
+        inner = raw[1:-1]
+        return bool(
+            re.search(
+                r"=|\\(?:leq?|geq?|sum|int|prod|frac|left|right|begin)\b",
+                inner,
+            )
+        )
+    return False
+
+
 def classify_block(lines: list[str], text: str) -> str:
     if CAPTION_RE.match(text):
         return "caption"
+    if is_display_equation(lines):
+        return "equation"
     nonempty = [line for line in lines if line.strip()]
     if (
         nonempty
@@ -227,8 +272,6 @@ def classify_block(lines: list[str], text: str) -> str:
         >= len(nonempty) / 2
     ):
         return "list"
-    if re.search(r"\b(?:equation|where)\b", text, re.IGNORECASE) and "$" in text:
-        return "equation"
     return "prose"
 
 
@@ -424,6 +467,252 @@ def overlap_tail(text: str, overlap_words: int) -> str:
     return " ".join(text.split()[-overlap_words:])
 
 
+def word_excerpt(text: str, limit: int) -> str:
+    words = text.split()
+    excerpt = " ".join(words[:limit])
+    return excerpt + ("…" if len(words) > limit else "")
+
+
+def equation_labels(text: str) -> list[str]:
+    matches: list[tuple[int, list[str]]] = []
+    range_spans: list[tuple[int, int]] = []
+    for match in EQUATION_RANGE_RE.finditer(text):
+        start, end = int(match.group(1)), int(match.group(2))
+        if end >= start and end - start <= 100:
+            matches.append((match.start(), [str(value) for value in range(start, end + 1)]))
+            range_spans.append(match.span())
+    for match in EQUATION_NUMBER_RE.finditer(text):
+        if any(start <= match.start() < end for start, end in range_spans):
+            continue
+        matches.append((match.start(), [match.group(1)]))
+    labels: list[str] = []
+    for _, values in sorted(matches):
+        for value in values:
+            if value not in labels:
+                labels.append(value)
+    return labels
+
+
+def is_equation_caption(text: str) -> bool:
+    return bool(
+        EQUATION_CUE_RE.search(text)
+        or (len(text.split()) <= 20 and text.rstrip().endswith(":"))
+    )
+
+
+def equation_neighbor(
+    units: list[Unit], start: int, direction: int, max_distance: int = 4
+) -> Unit | None:
+    origin = units[start]
+    fallback = None
+    for distance in range(1, max_distance + 1):
+        index = start + direction * distance
+        if not 0 <= index < len(units):
+            break
+        candidate = units[index]
+        if candidate.section_key != origin.section_key:
+            break
+        if candidate.kind not in {"prose", "list"}:
+            continue
+        pages = [
+            page
+            for page in (
+                origin.page_start,
+                origin.page_end,
+                candidate.page_start,
+                candidate.page_end,
+            )
+            if page is not None
+        ]
+        if pages and max(pages) - min(pages) > 1:
+            continue
+        fallback = fallback or candidate
+        if len(candidate.text.split()) >= 4 or is_equation_caption(candidate.text):
+            return candidate
+    return fallback
+
+
+def split_long_equation(text: str, max_words: int) -> list[str]:
+    if len(text.split()) <= max_words:
+        return [text]
+    rows = text.split(r"\\")
+    if len(rows) == 1:
+        return split_long_text(text, max_words)
+
+    parts: list[str] = []
+    current: list[str] = []
+    current_words = 0
+    for index, row in enumerate(rows):
+        row = row + (r"\\" if index < len(rows) - 1 else "")
+        row_words = len(row.split())
+        if row_words > max_words:
+            if current:
+                parts.append(" ".join(current))
+                current = []
+                current_words = 0
+            parts.extend(split_long_text(row, max_words))
+            continue
+        if current and current_words + row_words > max_words:
+            parts.append(" ".join(current))
+            current = []
+            current_words = 0
+        current.append(row)
+        current_words += row_words
+    if current:
+        parts.append(" ".join(current))
+    return parts
+
+
+def build_equation_chunks(
+    report: dict,
+    units: list[Unit],
+    max_words: int,
+    context_words: int = 120,
+) -> list[dict]:
+    """Create dedicated equation chunks with captions or nearby prose."""
+    report_id = report["report_id"]
+    title = report["title"]
+    chunks: list[dict] = []
+    equation_number = 0
+    index = 0
+
+    while index < len(units):
+        if units[index].kind != "equation":
+            index += 1
+            continue
+        run_start = index
+        run_section_key = units[run_start].section_key
+        while (
+            index < len(units)
+            and units[index].kind == "equation"
+            and units[index].section_key == run_section_key
+        ):
+            index += 1
+        run_end = index
+        before = equation_neighbor(units, run_start, -1)
+        after = equation_neighbor(units, run_end - 1, 1)
+        caption = next(
+            (
+                unit
+                for unit in (before, after)
+                if unit is not None and is_equation_caption(unit.text)
+            ),
+            None,
+        )
+        run_labels = equation_labels(caption.text) if caption is not None else []
+        assigned_labels: list[str] = []
+        if len(run_labels) == run_end - run_start:
+            assigned_labels = run_labels
+        elif run_end - run_start == 1 and len(run_labels) == 1:
+            assigned_labels = run_labels
+
+        for run_offset, unit in enumerate(units[run_start:run_end]):
+            equation_number += 1
+            equation_id = f"{report_id}:equation-{equation_number:05d}"
+            tag_match = EQUATION_TAG_RE.search(unit.text)
+            label = (
+                tag_match.group(1).strip()
+                if tag_match
+                else assigned_labels[run_offset]
+                if run_offset < len(assigned_labels)
+                else None
+            )
+
+            context_limit = max(20, min(context_words, max_words // 2))
+            context_lines: list[str] = []
+            context_units: list[Unit] = []
+            context_source = "none"
+            equation_caption = None
+            if caption is not None:
+                equation_caption = word_excerpt(caption.text, context_limit)
+                context_lines.append(f"Equation caption: {equation_caption}")
+                context_units.append(caption)
+                context_source = "caption"
+            else:
+                context_source = "surrounding_context"
+                per_side = max(10, context_limit // 2)
+                if before is not None:
+                    context_lines.append(
+                        "Context before equation: "
+                        + word_excerpt(before.text, per_side)
+                    )
+                    context_units.append(before)
+                if after is not None:
+                    context_lines.append(
+                        "Context after equation: " + word_excerpt(after.text, per_side)
+                    )
+                    context_units.append(after)
+                if not context_units:
+                    context_source = "none"
+
+            label_line = f"Equation label: Equation ({label})." if label else ""
+            prefix_lines = [line for line in (label_line, *context_lines) if line]
+            prefix_words = len(" ".join(prefix_lines).split())
+            formula_budget = max(50, max_words - prefix_words - 10)
+            formula_parts = split_long_equation(unit.text, formula_budget)
+            source_units = [unit, *context_units]
+            pages = [
+                page
+                for source_unit in source_units
+                for page in (source_unit.page_start, source_unit.page_end)
+                if page is not None
+            ]
+
+            for part_index, formula_part in enumerate(formula_parts, start=1):
+                part_line = (
+                    f"Equation part: {part_index} of {len(formula_parts)}."
+                    if len(formula_parts) > 1
+                    else ""
+                )
+                body_lines = [
+                    *prefix_lines,
+                    part_line,
+                    f"Formula: {formula_part}",
+                ]
+                body = "\n".join(line for line in body_lines if line)
+                chunk_id = (
+                    equation_id
+                    if len(formula_parts) == 1
+                    else f"{equation_id}:part-{part_index:03d}"
+                )
+                embedding_text = (
+                    f"Document: {title}\n"
+                    f"Section: {unit.section}\n"
+                    f"Type: equation\n\n{body}"
+                )
+                chunks.append(
+                    {
+                        "chunk_id": chunk_id,
+                        "report_id": report_id,
+                        "screening_record_id": report["screening_record_id"],
+                        "title": title,
+                        "year": report.get("publication_year"),
+                        "section": unit.section,
+                        "section_key": unit.section_key,
+                        "chunk_type": "equation",
+                        "equation_id": equation_id,
+                        "equation_label": label,
+                        "equation_caption": equation_caption,
+                        "equation_context_source": context_source,
+                        "equation_part": part_index,
+                        "equation_parts": len(formula_parts),
+                        "page_start": min(pages) if pages else unit.page_start,
+                        "page_end": max(pages) if pages else unit.page_end,
+                        "source_unit_ids": list(
+                            dict.fromkeys(
+                                source_unit.unit_id for source_unit in source_units
+                            )
+                        ),
+                        "image_refs": [],
+                        "text": body,
+                        "embedding_text": embedding_text,
+                        "word_count": len(body.split()),
+                        "character_count": len(body),
+                    }
+                )
+    return chunks
+
+
 def build_chunks(
     report: dict,
     units: list[Unit],
@@ -579,68 +868,77 @@ def build_chunks(
     return chunks
 
 
-def source_markdown_path(
-    root: Path, prefix: str, suffix: str, nested: bool
-) -> Path:
-    name = f"{prefix}{suffix}"
-    return root / name / f"{name}.md" if nested else root / f"{name}.md"
+def included_report_sources() -> dict[str, Path]:
+    """Return the report files selected by the authoritative included list."""
+    records = json.loads(INCLUDED_REPORTS_PATH.read_text(encoding="utf-8"))
+    if not isinstance(records, list):
+        raise ValueError(f"Expected a JSON array in {INCLUDED_REPORTS_PATH}")
+
+    sources: dict[str, Path] = {}
+    repository_root = REPO_ROOT.resolve()
+    for index, record in enumerate(records, start=1):
+        if not isinstance(record, dict):
+            raise ValueError(f"Included report {index} must be a JSON object")
+        source_value = record.get("full_text_markdown")
+        if not isinstance(source_value, str) or not source_value.strip():
+            raise ValueError(
+                f"Included report {index} lacks a full_text_markdown path"
+            )
+        relative_path = Path(source_value)
+        if relative_path.is_absolute():
+            raise ValueError(
+                f"Included report path must be repository relative: {source_value}"
+            )
+        try:
+            source_path = (REPO_ROOT / relative_path).resolve()
+            source_path.relative_to(repository_root)
+        except (OSError, ValueError) as error:
+            raise ValueError(
+                f"Included report path leaves the repository: {source_value}"
+            ) from error
+
+        match = REPORT_MARKDOWN_RE.fullmatch(source_path.name)
+        if match is None:
+            raise ValueError(f"Cannot derive a report ID from {source_value}")
+        namespace, suffix = match.groups()
+        report_id = f"{namespace}-{suffix}"
+        if report_id in sources:
+            raise ValueError(f"Duplicate included report ID: {report_id}")
+        sources[report_id] = source_path
+    return sources
 
 
 def expected_sources() -> Iterator[tuple[dict, Path | None, str]]:
+    selected_sources = included_report_sources()
+    unmatched_report_ids = set(selected_sources)
     configurations = [
         {
             "namespace": "review",
             "json_path": REPO_ROOT / "SLR/SLR1/review-candidates.json",
             "id_prefix": "review-candidate-",
-            "preferred": REPO_ROOT / "SLR/SLR1/pdfs/review-reports",
-            "preferred_prefix": "review-report-",
-            "preferred_nested": True,
-            "fallback": REPO_ROOT / "SLR/SLR1/pdfs/review-candidates",
-            "fallback_prefix": "review-candidate-",
-            "fallback_nested": True,
         },
         {
             "namespace": "citation",
             "json_path": REPO_ROOT / "SLR/SLR1/citation-candidates.json",
             "id_prefix": "citation-candidate-",
-            "preferred": REPO_ROOT / "SLR/SLR1/pdfs/citation-reports",
-            "preferred_prefix": "citation-report-",
-            "preferred_nested": True,
-            "fallback": DATA_DIR / "generated-sources",
-            "fallback_prefix": "citation-candidate-",
-            "fallback_nested": False,
         },
     ]
     for config in configurations:
         source_data = json.loads(config["json_path"].read_text(encoding="utf-8"))
         for candidate in source_data["records"]:
-            decision = str(candidate.get("screening_decision") or "").casefold()
-            if not decision.startswith("include_"):
-                continue
             suffix = candidate["candidate_id"].removeprefix(config["id_prefix"])
-            preferred = source_markdown_path(
-                config["preferred"],
-                config["preferred_prefix"],
-                suffix,
-                config["preferred_nested"],
-            )
-            fallback = source_markdown_path(
-                config["fallback"],
-                config["fallback_prefix"],
-                suffix,
-                config["fallback_nested"],
-            )
-            if preferred.exists():
-                path, source_kind = preferred, "preferred_markdown"
-            elif fallback.exists():
-                path, source_kind = fallback, "fallback_markdown"
-            else:
-                path, source_kind = None, "missing"
+            report_id = f"{config['namespace']}-{suffix}"
+            source_path = selected_sources.get(report_id)
+            if source_path is None:
+                continue
+            unmatched_report_ids.remove(report_id)
+            path = source_path if source_path.is_file() else None
+            source_kind = "preferred_markdown" if path is not None else "missing"
             report = {
-                "report_id": f"{config['namespace']}-{suffix}",
+                "report_id": report_id,
                 "namespace": config["namespace"],
                 "screening_record_id": candidate["candidate_id"],
-                "screening_decision": candidate["screening_decision"],
+                "screening_decision": candidate.get("screening_decision"),
                 "title": candidate.get("title") or candidate["candidate_id"],
                 "authors": candidate.get("authors") or [],
                 "publication_year": candidate.get("publication_year"),
@@ -648,11 +946,16 @@ def expected_sources() -> Iterator[tuple[dict, Path | None, str]]:
             }
             yield report, path, source_kind
 
+    if unmatched_report_ids:
+        identifiers = ", ".join(sorted(unmatched_report_ids))
+        raise ValueError(f"Included reports lack candidate records: {identifiers}")
+
 
 def build(args: argparse.Namespace) -> dict:
     reports: list[dict] = []
     all_units: list[Unit] = []
     all_chunks: list[dict] = []
+    all_equation_chunks: list[dict] = []
     missing: list[dict] = []
     content_hashes: dict[str, list[str]] = defaultdict(list)
 
@@ -669,6 +972,11 @@ def build(args: argparse.Namespace) -> dict:
             max_words=args.max_words,
             overlap_words=args.overlap_words,
         )
+        equation_chunks = build_equation_chunks(
+            report,
+            units,
+            max_words=args.max_words,
+        )
         digest = hashlib.sha256(
             SPACE_RE.sub(" ", strip_frontmatter(markdown)).encode("utf-8")
         ).hexdigest()
@@ -681,12 +989,17 @@ def build(args: argparse.Namespace) -> dict:
                 "content_sha256": digest,
                 "unit_count": len(units),
                 "chunk_count": len(chunks),
+                "equation_count": len(
+                    {chunk["equation_id"] for chunk in equation_chunks}
+                ),
+                "equation_chunk_count": len(equation_chunks),
                 "source_word_count": len(markdown.split()),
             }
         )
         reports.append(report)
         all_units.extend(units)
         all_chunks.extend(chunks)
+        all_equation_chunks.extend(equation_chunks)
 
     if missing and not args.allow_missing:
         identifiers = ", ".join(item["screening_record_id"] for item in missing)
@@ -706,28 +1019,41 @@ def build(args: argparse.Namespace) -> dict:
         diagram_ids[report_id].add(chunk["diagram_id"])
     for report in reports:
         report_id = report["report_id"]
-        report["text_chunk_count"] = report["chunk_count"]
+        base_text_chunks = report["chunk_count"]
+        report["base_text_chunk_count"] = base_text_chunks
+        report["text_chunk_count"] = (
+            base_text_chunks + report["equation_chunk_count"]
+        )
         report["diagram_count"] = len(diagram_ids[report_id])
         report["diagram_chunk_count"] = diagram_chunk_counts[report_id]
-        report["chunk_count"] += report["diagram_chunk_count"]
+        report["chunk_count"] = (
+            report["text_chunk_count"] + report["diagram_chunk_count"]
+        )
     all_chunks.extend(diagram_chunks)
+    all_chunks.extend(all_equation_chunks)
 
     exact_duplicates = [ids for ids in content_hashes.values() if len(ids) > 1]
     manifest = {
         "schema_version": "slr1-embedding-corpus/v2",
-        "selection_rule": "screening_decision starts with include_, case insensitive; already_included is excluded",
+        "selection_rule": "listed in SLR/SLR1/included_reports.json",
+        "selection_source": {
+            "path": str(INCLUDED_REPORTS_PATH.relative_to(REPO_ROOT)),
+            "sha256": hashlib.sha256(INCLUDED_REPORTS_PATH.read_bytes()).hexdigest(),
+        },
         "chunking": {
-            "strategy": "section bounded paragraph groups, grouped atomic table rows, contextual captions, page context for uncaptioned images, and visually extracted model diagrams",
+            "strategy": "section bounded paragraph groups, grouped atomic table rows, contextual captions, dedicated equations with captions or surrounding context, page context for uncaptioned images, and visually extracted model diagrams",
             "target_words": args.target_words,
             "max_words": args.max_words,
             "overlap_words": args.overlap_words,
             "title_and_section_prefix": True,
             "caption_and_table_neighbor_context_words": 120,
+            "equation_context_words": 120,
+            "equation_detection": "display math blocks and standalone mathematical expressions",
             "references_excluded": True,
         },
         "diagram_extraction": {
             "analyses_path": "data/diagram-analyses.jsonl",
-            "candidate_rule": "matching caption evidence, plus uncaptioned images from reports whose title names SysML, Capella, or Arcadia",
+            "candidate_rule": "matching caption evidence, captioned images in Simulink sections, plus uncaptioned images from reports whose title names SysML, Capella, Arcadia, or Simulink",
             "acceptance_rule": "status is ok and contains_target_diagram is true",
             "parts": ["overview", "elements", "relationships", "labels"],
         },
@@ -741,6 +1067,10 @@ def build(args: argparse.Namespace) -> dict:
                 {chunk["diagram_id"] for chunk in diagram_chunks}
             ),
             "diagram_chunks": len(diagram_chunks),
+            "equations_indexed": len(
+                {chunk["equation_id"] for chunk in all_equation_chunks}
+            ),
+            "equation_chunks": len(all_equation_chunks),
             "chunks": len(all_chunks),
             "chunk_words": sum(chunk["word_count"] for chunk in all_chunks),
         },

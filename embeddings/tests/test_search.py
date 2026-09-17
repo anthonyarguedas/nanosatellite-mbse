@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from search import (
     QUERY_PROMPT,
+    SearchError,
     SearchService,
     bm25_scores,
     embed_questions,
@@ -85,6 +86,35 @@ class SearchTests(unittest.TestCase):
             },
         )
 
+    def test_results_preserve_equation_metadata(self) -> None:
+        result = SearchService()._result(
+            chunk={
+                "chunk_id": "review-0001:equation-00001",
+                "report_id": "review-0001",
+                "title": "Example",
+                "section": "Power",
+                "page_start": 2,
+                "page_end": 2,
+                "chunk_type": "equation",
+                "equation_id": "review-0001:equation-00001",
+                "equation_label": "3",
+                "equation_caption": "Equation (3) defines battery energy.",
+                "equation_context_source": "caption",
+                "equation_part": 1,
+                "equation_parts": 1,
+                "text": "Formula: E = P t",
+            },
+            report={},
+            rank=1,
+            score=1.0,
+            dense_score=None,
+            bm25_score=None,
+            regex_score=None,
+        )
+
+        self.assertEqual(result["equation_label"], "3")
+        self.assertEqual(result["equation_context_source"], "caption")
+
     def test_colpali_maxsim_scores_each_query_token(self) -> None:
         import numpy as np
         import torch
@@ -125,6 +155,51 @@ class SearchTests(unittest.TestCase):
         scores = regex_scores(r"state\s+machine", chunks)
 
         self.assertEqual(scores.tolist(), [2.0, 0.0])
+
+    def test_hybrid_search_skips_an_unavailable_visual_index(self) -> None:
+        import numpy as np
+
+        service = SearchService()
+
+        def unavailable_visual_scores(_question: str):
+            raise SearchError("The ColPali image index is missing.")
+
+        service._visual_scores = unavailable_visual_scores
+        chunks = [
+            {
+                "chunk_id": "review-0001:chunk-00001",
+                "report_id": "review-0001",
+                "title": "Example",
+                "section": "Introduction",
+                "page_start": 1,
+                "page_end": 1,
+                "chunk_type": "passage",
+                "text": "CubeSat evidence.",
+                "embedding_text": "CubeSat evidence.",
+            }
+        ]
+
+        results, visual_device, visual_search, warnings = service._hybrid_results(
+            question="CubeSat",
+            chunks=chunks,
+            reports={"review-0001": {}},
+            dense_scores=np.array([1.0]),
+            lexical_scores=np.array([1.0]),
+            top_k=1,
+            max_per_report=2,
+            fusion_depth=10,
+            include_visual=True,
+            rerank=False,
+            rerank_depth=10,
+        )
+
+        self.assertEqual(len(results), 1)
+        self.assertIsNone(visual_device)
+        self.assertFalse(visual_search)
+        self.assertEqual(
+            warnings,
+            ["Visual search unavailable: The ColPali image index is missing."],
+        )
 
 
 if __name__ == "__main__":

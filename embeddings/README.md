@@ -1,6 +1,6 @@
 # SLR1 multimodal retrieval
 
-The corpus contains text chunks, every source image, and GPT-5.6-Luna extractions of SysML and Capella/Arcadia diagrams from the 129 included reports. Qwen3 provides text embeddings, ColPali searches the source images directly, and Qwen3-Reranker orders the fused candidates.
+The corpus contains structure aware text chunks, dedicated mathematical equation chunks, every source image, and GPT-5.6-Luna extractions of SysML, Capella/Arcadia, and Simulink diagrams from the 129 included reports. Qwen3 provides text embeddings, ColPali searches the source images directly, and Qwen3-Reranker orders the fused candidates.
 
 ## Answer a question
 
@@ -14,7 +14,7 @@ echo "How is a CubeSat power budget verified?" \
 
 Available modes:
 
-- `hybrid`: fuses Qwen3 vector, BM25, and ColPali visual ranks, then reranks the top 50 candidates with Qwen3-Reranker. This is the default.
+- `hybrid`: fuses Qwen3 vector, BM25, and available ColPali visual ranks, then reranks the top 50 candidates with Qwen3-Reranker. This is the default. If the visual index is missing, stale, or still building, the search continues with Qwen3 and BM25 and reports that it skipped visual retrieval.
 - `vector`: embeds the question with Qwen3 and finds semantic text matches. `dense` remains an alias.
 - `visual`: matches the question directly against every report image with ColPali.
 - `bm25`: finds exact acronyms, tool names, numbers, and technical terms. Double-quoted terms receive an exact phrase bonus.
@@ -38,6 +38,8 @@ It provides Hybrid, Vector, Visual, BM25, and Regex modes and a result count sli
 
 Treat retrieved chunks as evidence candidates. Check important claims in the source Markdown.
 
+Display equations receive dedicated `equation` chunks while remaining available in their original passage chunks. An adjacent sentence that explicitly names an equation becomes its caption. When no caption is present, the chunk includes preceding and following prose from the same section and nearby page. Equation ranges such as “Equations (1-4)” label consecutive formulas when the counts agree. Long formulas are split into numbered parts with repeated context.
+
 ## Rebuild after corpus changes
 
 ```bash
@@ -57,8 +59,8 @@ To refresh visual diagram extraction first:
 .venv/bin/python build_visual_index.py --batch-size 1
 ```
 
-`diagram_pipeline.py` selects images from caption chunks that name SysML, Capella, Arcadia, a native diagram type, or a model representation term. It also includes uncaptioned images when the report title names SysML, Capella, or Arcadia. It runs one `gpt-5.6-luna` subagent per candidate image. Accepted visual extractions are stored in `data/diagram-analyses.jsonl` and split into overview, element, relationship, and visible label chunks.
+`diagram_pipeline.py` selects images from caption chunks that name SysML, Capella, Arcadia, Simulink, a native diagram type, or a model representation term. It also selects captioned images from sections that discuss Simulink, which catches figures whose short captions omit the tool name. Uncaptioned images are included when the report title names one of these modeling languages or tools. It runs one `gpt-5.6-luna` subagent per candidate image. Accepted visual extractions are stored in `data/diagram-analyses.jsonl` and split into overview, element, relationship, and visible label chunks.
 
-`build_visual_index.py` independently discovers every image referenced by the included reports. It preserves the Luna metadata for accepted MBSE diagrams and indexes all images with `vidore/colpali-v1.3-hf`. The first build downloads the model and encodes the full image corpus. It caches each completed image, so an interrupted build resumes on the next run. Later builds reuse unchanged image vectors.
+`build_visual_index.py` independently discovers every image referenced by the included reports. It preserves the Luna metadata for accepted SysML, Capella/Arcadia, and Simulink diagrams and indexes all images with `vidore/colpali-v1.3-hf`. The first build downloads the model and encodes the full image corpus. It caches each completed image, so an interrupted build resumes on the next run. Later builds reuse unchanged image vectors.
 
 Add `--json` to `search.py` when passing results to another program.

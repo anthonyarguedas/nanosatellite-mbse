@@ -882,7 +882,10 @@
       }
       results.replaceChildren(...payload.results.map(resultItem));
       const ranking = payload.reranked ? " · reranked" : "";
-      status.textContent = `${payload.results.length} ${payload.results.length === 1 ? "result" : "results"} · ${payload.mode}${ranking}`;
+      const fallback = payload.visual_search_requested && !payload.visual_search
+        ? " · visual index skipped"
+        : "";
+      status.textContent = `${payload.results.length} ${payload.results.length === 1 ? "result" : "results"} · ${payload.mode}${ranking}${fallback}`;
     }
 
     function updateModeHint() {

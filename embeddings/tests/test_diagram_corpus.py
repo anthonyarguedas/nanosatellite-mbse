@@ -10,7 +10,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from diagram_corpus import build_diagram_chunks
-from diagram_pipeline import page_image_contexts, parse_json_response, selection_reasons
+from diagram_pipeline import (
+    build_candidates,
+    page_image_contexts,
+    parse_json_response,
+    selection_reasons,
+)
 
 
 class DiagramCorpusTests(unittest.TestCase):
@@ -31,7 +36,24 @@ class DiagramCorpusTests(unittest.TestCase):
             "model_representation_term",
             selection_reasons("Figure 6. Logical architecture model view"),
         )
-        self.assertEqual(selection_reasons("Figure 7. Battery voltage plot"), [])
+        self.assertIn(
+            "language_name",
+            selection_reasons("Figure 7. MATLAB/Simulink controller model"),
+        )
+        self.assertEqual(selection_reasons("Figure 8. Battery voltage plot"), [])
+
+    def test_simulink_section_context_selects_short_figure_captions(self) -> None:
+        candidate = next(
+            row
+            for row in build_candidates()
+            if row["diagram_id"] == "review-0973--figure-011-f3d9c004"
+        )
+
+        self.assertIn("simulink_in_section", candidate["selection_reasons"])
+        self.assertIn(
+            "SIMULINK's Target Language Compiler",
+            candidate["caption_chunks"][0]["context"],
+        )
 
     def test_uncaptioned_page_images_keep_page_context(self) -> None:
         report = {

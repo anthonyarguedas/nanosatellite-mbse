@@ -627,6 +627,12 @@ class SearchService:
             "diagram_part",
             "modeling_language",
             "representation_type",
+            "equation_id",
+            "equation_label",
+            "equation_caption",
+            "equation_context_source",
+            "equation_part",
+            "equation_parts",
             "image_refs",
         ):
             if optional_field in chunk:
@@ -875,11 +881,18 @@ class SearchService:
         include_visual: bool,
         rerank: bool,
         rerank_depth: int,
-    ) -> tuple[list[dict], str | None]:
+    ) -> tuple[list[dict], str | None, bool, list[str]]:
         candidates: dict[str, dict] = {}
         visual_device = None
+        visual_search = False
+        warnings: list[str] = []
         if include_visual:
-            visual_scores, records, visual_device = self._visual_scores(question)
+            try:
+                visual_scores, records, visual_device = self._visual_scores(question)
+                visual_search = True
+            except SearchError as error:
+                visual_scores, records = None, []
+                warnings.append(f"Visual search unavailable: {error}")
         else:
             visual_scores, records = None, []
 
@@ -960,7 +973,7 @@ class SearchService:
             )
             if len(results) >= top_k:
                 break
-        return results, visual_device
+        return results, visual_device, visual_search, warnings
 
     def _search(
         self,
@@ -1022,7 +1035,7 @@ class SearchService:
             }
 
         if mode == "hybrid":
-            results, visual_device = self._hybrid_results(
+            results, visual_device, visual_search, warnings = self._hybrid_results(
                 question=question,
                 chunks=chunks,
                 reports=reports,
@@ -1041,7 +1054,9 @@ class SearchService:
                 "device": device,
                 "visual_device": visual_device,
                 "reranker_device": self._reranker_device if rerank else None,
-                "visual_search": include_visual,
+                "visual_search_requested": include_visual,
+                "visual_search": visual_search,
+                "warnings": warnings,
                 "reranked": rerank,
                 "results": results,
             }
@@ -1185,6 +1200,8 @@ def main(args: argparse.Namespace) -> int:
 
     for row in output:
         print(f"\n# {row['question']}")
+        for warning in row.get("warnings", []):
+            print(f"Warning: {warning}", file=sys.stderr)
         for result in row["results"]:
             excerpt = " ".join(result["text"].split())[: args.excerpt_chars]
             image = ""

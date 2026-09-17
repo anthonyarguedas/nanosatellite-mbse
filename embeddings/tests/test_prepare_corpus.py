@@ -7,7 +7,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from prepare_corpus import build_chunks, parse_markdown
+from prepare_corpus import (
+    build_chunks,
+    build_equation_chunks,
+    expected_sources,
+    included_report_sources,
+    parse_markdown,
+)
 
 
 class PrepareCorpusTests(unittest.TestCase):
@@ -18,6 +24,15 @@ class PrepareCorpusTests(unittest.TestCase):
             "title": "Example CubeSat Study",
             "publication_year": 2025,
         }
+
+    def test_expected_sources_match_authoritative_included_reports(self) -> None:
+        selected = included_report_sources()
+        actual = {
+            report["report_id"]: path
+            for report, path, _source_kind in expected_sources()
+        }
+
+        self.assertEqual(actual, selected)
 
     def test_page_and_section_provenance(self) -> None:
         markdown = """---
@@ -59,6 +74,66 @@ The model computes the energy margin before integration.
         self.assertEqual(len(chunks), 1)
         self.assertEqual(chunks[0]["chunk_type"], "table")
         self.assertIn("Mode: Imaging", chunks[0]["text"])
+
+    def test_equation_chunk_uses_an_explicit_caption(self) -> None:
+        markdown = r"""<!-- PDF_PAGE: 4 -->
+## Power analysis
+Equation (3) defines stored battery energy over the orbit.
+
+$$
+E_{battery} = \int_0^T (P_{solar} - P_{load})\,dt
+$$
+
+where solar power is generation and load power is consumption.
+"""
+        units = parse_markdown("review-9999", self.report["title"], markdown)
+        self.assertEqual([unit.kind for unit in units], ["prose", "equation", "prose"])
+
+        chunks = build_equation_chunks(self.report, units, max_words=100)
+
+        self.assertEqual(len(chunks), 1)
+        self.assertEqual(chunks[0]["chunk_type"], "equation")
+        self.assertEqual(chunks[0]["equation_label"], "3")
+        self.assertEqual(chunks[0]["equation_context_source"], "caption")
+        self.assertIn("stored battery energy", chunks[0]["equation_caption"])
+        self.assertIn("E_{battery}", chunks[0]["text"])
+
+    def test_equation_chunk_falls_back_to_surrounding_context(self) -> None:
+        markdown = r"""<!-- PDF_PAGE: 5 -->
+## Link budget
+Received power depends on transmitter and path properties.
+
+$$
+P_r = P_t G_t G_r L_s
+$$
+
+The terms describe transmit power, antenna gains, and free-space loss.
+"""
+        units = parse_markdown("review-9999", self.report["title"], markdown)
+        chunks = build_equation_chunks(self.report, units, max_words=100)
+
+        self.assertEqual(chunks[0]["equation_context_source"], "surrounding_context")
+        self.assertIsNone(chunks[0]["equation_caption"])
+        self.assertIn("Context before equation", chunks[0]["text"])
+        self.assertIn("Context after equation", chunks[0]["text"])
+
+    def test_equation_range_labels_consecutive_display_math(self) -> None:
+        markdown = r"""<!-- PDF_PAGE: 6 -->
+## Constraints
+Equations (1-2) define the lower and upper energy limits.
+
+$$
+e \geq e_{min}
+$$
+
+$$
+e \leq e_{max}
+$$
+"""
+        units = parse_markdown("review-9999", self.report["title"], markdown)
+        chunks = build_equation_chunks(self.report, units, max_words=100)
+
+        self.assertEqual([chunk["equation_label"] for chunk in chunks], ["1", "2"])
 
     def test_caption_gets_nearby_context(self) -> None:
         markdown = """<!-- PDF_PAGE: 4 -->

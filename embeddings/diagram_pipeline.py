@@ -23,7 +23,10 @@ CANDIDATES_PATH = DATA_DIR / "diagram-candidates.jsonl"
 ANALYSES_PATH = DATA_DIR / "diagram-analyses.jsonl"
 MODEL = "openai-codex/gpt-5.6-luna"
 
-LANGUAGE_RE = re.compile(r"\b(?:SysML|Capella|Arcadia)\b", re.IGNORECASE)
+LANGUAGE_RE = re.compile(
+    r"\b(?:SysML|Capella|Arcadia|Simulink)\b", re.IGNORECASE
+)
+SIMULINK_RE = re.compile(r"\bSimulink\b", re.IGNORECASE)
 SYSML_RE = re.compile(
     r"\b(?:BDD|IBD|UCD|block definition diagram|internal block diagram|"
     r"requirements? diagram|activity diagram|sequence diagram|"
@@ -56,12 +59,12 @@ HEADING_RE = re.compile(r"^#{1,6}\s+(.+?)\s*$")
 
 EXTRACTION_INSTRUCTIONS = """You are extracting one candidate MBSE figure for search indexing. Inspect the attached image itself. Caption context may identify the language or representation type. Never report an element or relationship unless it is visible in the image.
 
-Decide whether the image contains an actual SysML diagram or an actual Capella/Arcadia model diagram. Screenshots of model diagrams count. Exclude photos, plots, tables, ordinary flowcharts, methodology graphics, taxonomies, and prose even when their captions discuss SysML or Capella.
+Decide whether the image contains an actual SysML diagram, Capella/Arcadia model diagram, or Simulink block diagram. Screenshots of model diagrams count. Caption context may establish that visible block and signal notation is Simulink. Exclude photos, plots, tables, ordinary flowcharts, methodology graphics, taxonomies, and prose even when their captions discuss a target modeling language or tool.
 
 Return exactly one valid JSON object without Markdown or commentary:
 {
   "contains_target_diagram": true,
-  "diagram_family": "sysml | capella_arcadia | both | uncertain | none",
+  "diagram_family": "sysml | capella_arcadia | simulink | mixed | uncertain | none",
   "modeling_language": "verbatim language or null",
   "representation_name": "visible title or caption name, or null",
   "representation_type": "native diagram type or null",
@@ -86,7 +89,7 @@ Return exactly one valid JSON object without Markdown or commentary:
   "confidence": 0.0
 }
 
-For a non-target figure, set contains_target_diagram to false and diagram_family to "none". Give a short visible-content summary and leave elements and relationships empty. Transcribe all legible model elements and named exchanges that matter for retrieval. Preserve wording and capitalization. Do not expand acronyms or invent hidden endpoints. Use "unknown" when the image does not establish an EPS boundary or logical/physical classification."""
+For a non-target figure, set contains_target_diagram to false and diagram_family to "none". For a figure containing more than one target family, use "mixed". Give a short visible-content summary and leave elements and relationships empty. Transcribe all legible model elements and named exchanges that matter for retrieval. Preserve wording and capitalization. Do not expand acronyms or invent hidden endpoints. Use "unknown" when the image does not establish an EPS boundary or logical/physical classification."""
 
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -121,6 +124,26 @@ def selection_reasons(text: str) -> list[str]:
     if MODEL_REPRESENTATION_RE.search(text):
         reasons.append("model_representation_term")
     return reasons
+
+
+def simulink_section_contexts(
+    chunks: list[dict[str, Any]],
+) -> dict[tuple[str, str], str]:
+    contexts: dict[tuple[str, str], list[str]] = {}
+    for chunk in chunks:
+        section_key = chunk.get("section_key")
+        if (
+            chunk.get("chunk_type") not in {"passage", "table"}
+            or not section_key
+            or not SIMULINK_RE.search(chunk.get("text", ""))
+        ):
+            continue
+        key = (chunk["report_id"], section_key)
+        contexts.setdefault(key, []).append(chunk["text"])
+    return {
+        key: "\n\n".join(dict.fromkeys(values))[:3000]
+        for key, values in contexts.items()
+    }
 
 
 def image_path(report: dict[str, Any], image_ref: str) -> Path:
@@ -176,16 +199,30 @@ def page_image_contexts(report: dict[str, Any]) -> list[dict[str, Any]]:
 
 def build_candidates() -> list[dict[str, Any]]:
     reports = {row["report_id"]: row for row in read_jsonl(DATA_DIR / "reports.jsonl")}
+    chunks = read_jsonl(DATA_DIR / "chunks.jsonl")
+    section_contexts = simulink_section_contexts(chunks)
     grouped: dict[tuple[str, str], dict[str, Any]] = {}
-    for chunk in read_jsonl(DATA_DIR / "chunks.jsonl"):
+    for chunk in chunks:
         if chunk.get("chunk_type") != "caption" or not chunk.get("image_refs"):
             continue
-        reasons = selection_reasons(chunk.get("text", ""))
+        text = chunk.get("text", "")
+        reasons = selection_reasons(text)
+        section_context = section_contexts.get(
+            (chunk["report_id"], chunk.get("section_key"))
+        )
+        if section_context and not SIMULINK_RE.search(text):
+            reasons.append("simulink_in_section")
         if not reasons:
             continue
         report_id = chunk["report_id"]
         report = reports[report_id]
-        caption, context = split_caption_context(chunk["text"])
+        caption, context = split_caption_context(text)
+        if section_context and section_context not in context:
+            context = "\n\n".join(
+                value
+                for value in (context, f"Section evidence: {section_context}")
+                if value
+            )
         for image_ref in chunk["image_refs"]:
             key = (report_id, image_ref)
             candidate = grouped.setdefault(
@@ -440,11 +477,23 @@ def process_candidate(
 
 
 def collect(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    results = []
-    for candidate in candidates:
-        path = LOG_DIR / candidate["diagram_id"] / "result.json"
+    candidate_ids = [candidate["diagram_id"] for candidate in candidates]
+    available = {}
+    for diagram in candidate_ids:
+        path = LOG_DIR / diagram / "result.json"
         if path.exists():
-            results.append(json.loads(path.read_text(encoding="utf-8")))
+            available[diagram] = json.loads(path.read_text(encoding="utf-8"))
+
+    previous_ids = [
+        row["diagram_id"]
+        for row in read_jsonl(ANALYSES_PATH)
+        if row.get("diagram_id") in available
+    ]
+    seen = set(previous_ids)
+    ordered_ids = previous_ids + [
+        diagram for diagram in candidate_ids if diagram not in seen
+    ]
+    results = [available[diagram] for diagram in ordered_ids if diagram in available]
     write_jsonl(ANALYSES_PATH, results)
     return results
 
