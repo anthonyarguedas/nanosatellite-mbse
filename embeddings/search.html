@@ -423,15 +423,30 @@
       gap: 12px;
     }
 
-    .source-link {
+    .source-link,
+    .copy-citation {
       color: var(--text);
       font-size: 12px;
       text-decoration: underline;
       text-underline-offset: 3px;
     }
 
+    .copy-citation {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .copy-citation:disabled {
+      color: var(--muted);
+      cursor: wait;
+    }
+
     .source-link:hover,
-    .source-link:focus-visible {
+    .source-link:focus-visible,
+    .copy-citation:hover,
+    .copy-citation:focus-visible {
       color: var(--strong);
     }
 
@@ -681,6 +696,139 @@
       return links;
     }
 
+    function bibtexEscape(value) {
+      const escaped = {
+        "\\": "\\textbackslash{}",
+        "{": "\\{",
+        "}": "\\}",
+        "%": "\\%",
+        "&": "\\&",
+        "_": "\\_",
+        "#": "\\#",
+        "$": "\\$",
+        "~": "\\textasciitilde{}",
+        "^": "\\textasciicircum{}",
+      };
+      return String(value).replace(/[\\{}%&_#$~^]/g, (character) => escaped[character]);
+    }
+
+    function bibtexEntryType(publicationType) {
+      const entryTypes = {
+        journal_article: "article",
+        conference_paper: "inproceedings",
+        thesis_or_dissertation: "techreport",
+        workshop_presentation: "unpublished",
+        preprint: "unpublished",
+        edited_book_research_chapter: "incollection",
+        institutional_technical_report: "techreport",
+        arxiv_preprint: "unpublished",
+        masters_thesis: "mastersthesis",
+        doctoral_thesis_or_dissertation: "phdthesis",
+      };
+      return entryTypes[publicationType] || "misc";
+    }
+
+    function bibtexVenueField(publicationType) {
+      const venueFields = {
+        journal_article: "journal",
+        conference_paper: "booktitle",
+        thesis_or_dissertation: "institution",
+        workshop_presentation: "note",
+        preprint: "note",
+        edited_book_research_chapter: "booktitle",
+        institutional_technical_report: "institution",
+        arxiv_preprint: "note",
+        masters_thesis: "school",
+        doctoral_thesis_or_dissertation: "school",
+      };
+      return venueFields[publicationType];
+    }
+
+    function bibtexCitation(result) {
+      const citation = result.citation && typeof result.citation === "object"
+        ? result.citation
+        : result;
+      const publicationType = citation.publication_type;
+      const authors = Array.isArray(citation.authors)
+        ? citation.authors.filter(Boolean).join(" and ")
+        : citation.authors;
+      const venueField = bibtexVenueField(publicationType);
+      const publicationLabel = String(publicationType || "").replaceAll("_", " ");
+      const venue = venueField === "note" && citation.venue
+        ? `${publicationLabel}: ${citation.venue}`
+        : citation.venue;
+      const fields = [
+        ["author", authors],
+        ["title", citation.title || result.title],
+        [venueField, venue],
+        ...(publicationType === "thesis_or_dissertation"
+          ? [["type", "Thesis or dissertation"]]
+          : []),
+        ["year", citation.year],
+        ["doi", citation.doi],
+      ].filter(([name, value]) => name && value !== null && value !== undefined && String(value).trim())
+        .map(([name, value]) => `  ${name} = {${bibtexEscape(value)}}`);
+      const key = String(citation.key || result.report_id || result.chunk_id || "source")
+        .replace(/[^A-Za-z0-9_:-]/g, "_") || "source";
+      const entryType = bibtexEntryType(publicationType);
+      return fields.length
+        ? `@${entryType}{${key},\n${fields.join(",\n")}\n}`
+        : `@${entryType}{${key}}`;
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return;
+        } catch {
+          // Fall back when clipboard permission is unavailable.
+        }
+      }
+
+      const textarea = element("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "");
+      textarea.setAttribute("aria-hidden", "true");
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      textarea.style.pointerEvents = "none";
+      document.body.append(textarea);
+      textarea.select();
+      try {
+        if (typeof document.execCommand !== "function" || !document.execCommand("copy")) {
+          throw new Error("Clipboard access is unavailable.");
+        }
+      } finally {
+        textarea.remove();
+      }
+    }
+
+    function copyCitationButton(result) {
+      const copyButton = element("button", "copy-citation", "Copy citation");
+      const label = `Copy BibTeX citation for ${result.title}`;
+      copyButton.type = "button";
+      copyButton.setAttribute("aria-label", label);
+      copyButton.addEventListener("click", async () => {
+        copyButton.disabled = true;
+        try {
+          await copyText(bibtexCitation(result));
+          copyButton.textContent = "Copied";
+          copyButton.setAttribute("aria-label", `BibTeX citation copied for ${result.title}`);
+        } catch {
+          copyButton.textContent = "Copy failed";
+          copyButton.setAttribute("aria-label", `Could not copy citation for ${result.title}`);
+        } finally {
+          window.setTimeout(() => {
+            copyButton.disabled = false;
+            copyButton.textContent = "Copy citation";
+            copyButton.setAttribute("aria-label", label);
+          }, 1600);
+        }
+      });
+      return copyButton;
+    }
+
     function resultItem(result) {
       const item = element("li", "result");
       const head = element("div", "result-head");
@@ -714,7 +862,9 @@
       }
 
       const footer = element("div", "result-footer");
-      footer.append(sourceLinks(result));
+      const links = sourceLinks(result);
+      links.append(copyCitationButton(result));
+      footer.append(links);
       footer.append(element("span", "chunk-id", result.chunk_id));
       item.append(footer);
       return item;

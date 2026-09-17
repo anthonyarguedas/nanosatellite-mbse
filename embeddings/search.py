@@ -40,6 +40,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
 DATA_DIR = SCRIPT_DIR / "data"
 ARTIFACT_DIR = SCRIPT_DIR / "artifacts/qwen3-embedding-0.6b"
+INCLUDED_REPORTS_PATH = REPO_ROOT / "SLR/SLR1/included_reports.json"
 GUI_PATH = SCRIPT_DIR / "search.html"
 MODEL_ID = "Qwen/Qwen3-Embedding-0.6B"
 MODEL_REVISION = "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
@@ -57,6 +58,7 @@ RERANKER_INSTRUCTION = (
 )
 TOKEN_RE = re.compile(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)?")
 QUOTED_PHRASE_RE = re.compile(r'"([^"]+)"')
+REPORT_MARKDOWN_RE = re.compile(r"^(review|citation)-report-([0-9]+)\.md$")
 SEARCH_MODES = ("hybrid", "vector", "visual", "bm25", "regex")
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
 SERVED_SUFFIXES = IMAGE_SUFFIXES | {".pdf"}
@@ -73,6 +75,41 @@ class RegexSearchError(SearchError):
 def read_jsonl(path: Path) -> list[dict]:
     with path.open(encoding="utf-8") as handle:
         return [json.loads(line) for line in handle if line.strip()]
+
+
+def included_report_citations() -> dict[str, dict[str, str]]:
+    """Load citation metadata from the authoritative included-report list."""
+    try:
+        records = json.loads(INCLUDED_REPORTS_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise SearchError(f"Cannot read included reports: {error}") from error
+    if not isinstance(records, list):
+        raise SearchError(f"Expected a JSON array in {INCLUDED_REPORTS_PATH}")
+
+    citations: dict[str, dict[str, str]] = {}
+    for index, record in enumerate(records, start=1):
+        if not isinstance(record, dict):
+            raise SearchError(f"Included report {index} must be a JSON object")
+        source_path = record.get("full_text_markdown")
+        publication_type = record.get("publication_type")
+        venue = record.get("venue")
+        if not isinstance(source_path, str) or not source_path.strip():
+            raise SearchError(f"Included report {index} lacks a source path")
+        if not isinstance(publication_type, str) or not publication_type.strip():
+            raise SearchError(f"Included report {index} lacks a publication type")
+        if not isinstance(venue, str) or not venue.strip():
+            raise SearchError(f"Included report {index} lacks a venue")
+        match = REPORT_MARKDOWN_RE.fullmatch(Path(source_path).name)
+        if match is None:
+            raise SearchError(f"Cannot derive a report ID from {source_path}")
+        report_id = "-".join(match.groups())
+        if report_id in citations:
+            raise SearchError(f"Duplicate included report ID: {report_id}")
+        citations[report_id] = {
+            "publication_type": publication_type.strip(),
+            "venue": venue.strip(),
+        }
+    return citations
 
 
 def file_sha256(path: Path) -> str:
@@ -402,6 +439,9 @@ class SearchService:
                 self._reports = {
                     row["report_id"]: row for row in read_jsonl(reports_path)
                 }
+                citation_metadata = included_report_citations()
+                for report_id, report in self._reports.items():
+                    report.update(citation_metadata.get(report_id, {}))
         return self._chunks, self._reports
 
     def _get_bm25_data(self) -> tuple[list[list[str]], Counter[str], float]:
@@ -561,6 +601,15 @@ class SearchService:
             "chunk_id": chunk["chunk_id"],
             "report_id": chunk["report_id"],
             "title": chunk["title"],
+            "citation": {
+                "key": chunk["report_id"],
+                "authors": report.get("authors") or [],
+                "title": report.get("title") or chunk["title"],
+                "year": report.get("publication_year"),
+                "publication_type": report.get("publication_type"),
+                "venue": report.get("venue"),
+                "doi": report.get("doi"),
+            },
             "source_path": source_path,
             "section": chunk["section"],
             "page_start": chunk["page_start"],
@@ -596,6 +645,7 @@ class SearchService:
         rank: int,
         score: float,
         visual_score: float | None,
+        report: dict | None = None,
     ) -> dict:
         image = repository_path(record["source_image"])
         if image is None:
@@ -611,6 +661,7 @@ class SearchService:
             )
             if value
         ]
+        report = report or {}
         result = {
             "rank": rank,
             "score": score,
@@ -618,6 +669,15 @@ class SearchService:
             "image_id": record["image_id"],
             "report_id": record["report_id"],
             "title": record["title"],
+            "citation": {
+                "key": record["report_id"],
+                "authors": report.get("authors") or [],
+                "title": report.get("title") or record["title"],
+                "year": report.get("publication_year") or record.get("year"),
+                "publication_type": report.get("publication_type"),
+                "venue": report.get("venue"),
+                "doi": report.get("doi"),
+            },
             "source_path": record.get("source_path", ""),
             "section": record.get("section") or "Document",
             "page_start": record.get("page_start"),
@@ -786,11 +846,13 @@ class SearchService:
                         result["source_url"] = file_url(image)
                         result["source_label"] = "Open image"
         else:
+            image_record = candidate["image_record"]
             result = self._image_result(
-                candidate["image_record"],
+                image_record,
                 rank=rank,
                 score=float(candidate["final_score"]),
                 visual_score=raw_scores.get("visual"),
+                report=reports.get(image_record["report_id"], {}),
             )
         result["retrieval_sources"] = sorted(candidate["source_ranks"])
         result["source_ranks"] = candidate["source_ranks"]
@@ -946,6 +1008,7 @@ class SearchService:
                         rank=len(results) + 1,
                         score=float(visual_scores[int(row_index)]),
                         visual_score=float(visual_scores[int(row_index)]),
+                        report=reports.get(report_id, {}),
                     )
                 )
                 if len(results) >= top_k:

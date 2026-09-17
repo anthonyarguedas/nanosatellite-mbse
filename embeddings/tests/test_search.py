@@ -9,8 +9,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from search import (
     QUERY_PROMPT,
+    SearchService,
     bm25_scores,
     embed_questions,
+    included_report_citations,
     maxsim_scores,
     prepare_bm25,
     regex_scores,
@@ -33,6 +35,55 @@ class SearchTests(unittest.TestCase):
         self.assertEqual(model.options["prompt"], QUERY_PROMPT)
         self.assertNotIn("prompt_name", model.options)
         np.testing.assert_allclose(embeddings, [[0.6, 0.8]])
+
+    def test_included_report_citations_use_authoritative_metadata(self) -> None:
+        self.assertEqual(
+            included_report_citations()["review-0012"],
+            {
+                "publication_type": "journal_article",
+                "venue": "CEAS Space Journal",
+            },
+        )
+
+    def test_results_include_bibliographic_citation(self) -> None:
+        result = SearchService()._result(
+            chunk={
+                "chunk_id": "review-0001:chunk-00001",
+                "report_id": "review-0001",
+                "title": "Fallback title",
+                "section": "Introduction",
+                "page_start": 1,
+                "page_end": 1,
+                "chunk_type": "passage",
+                "text": "Evidence text.",
+            },
+            report={
+                "authors": ["Doe, Jane", "Roe, John"],
+                "title": "Citation title",
+                "publication_year": 2025,
+                "publication_type": "journal_article",
+                "venue": "Journal of CubeSat Studies",
+                "doi": "10.1000/example",
+            },
+            rank=1,
+            score=1.0,
+            dense_score=None,
+            bm25_score=None,
+            regex_score=None,
+        )
+
+        self.assertEqual(
+            result["citation"],
+            {
+                "key": "review-0001",
+                "authors": ["Doe, Jane", "Roe, John"],
+                "title": "Citation title",
+                "year": 2025,
+                "publication_type": "journal_article",
+                "venue": "Journal of CubeSat Studies",
+                "doi": "10.1000/example",
+            },
+        )
 
     def test_colpali_maxsim_scores_each_query_token(self) -> None:
         import numpy as np
