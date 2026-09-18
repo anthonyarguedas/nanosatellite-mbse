@@ -4,18 +4,18 @@ The corpus contains structure aware text chunks, dedicated mathematical equation
 
 ## Answer a question
 
-Use hybrid retrieval by default:
+Use vector retrieval by default:
 
 ```bash
 cd embeddings
 echo "How is a CubeSat power budget verified?" \
-  | .venv/bin/python search.py --mode hybrid --top-k 12
+  | .venv/bin/python search.py --mode vector --top-k 12
 ```
 
 Available modes:
 
+- `vector`: **recommended**. embeds the question with Qwen3, finds semantic matches, and optionally reranks the shortlist. `dense` remains an alias.
 - `hybrid`: fuses Qwen3 vector, BM25, and available ColPali visual ranks, then reranks the top 50 candidates with Qwen3-Reranker. This is the default. If the visual index is missing, stale, or still building, the search continues with Qwen3 and BM25 and reports that it skipped visual retrieval.
-- `vector`: embeds the question with Qwen3, finds semantic matches, and optionally reranks the shortlist. `dense` remains an alias.
 - `visual`: matches the question directly against every report image with ColPali.
 - `bm25`: finds exact acronyms, tool names, numbers, and technical terms. Double-quoted terms receive an exact phrase bonus.
 - `regex`: finds case insensitive Python regular expression matches in the original chunk text.
