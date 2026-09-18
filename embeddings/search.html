@@ -296,6 +296,73 @@
       min-width: 210px;
     }
 
+    .report-control {
+      margin-top: 14px;
+    }
+
+    .report-control-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: baseline;
+      margin-bottom: 7px;
+    }
+
+    .report-label {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .report-clear,
+    .result-report-filter {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+
+    .report-clear {
+      font-size: 11px;
+    }
+
+    .report-clear:disabled {
+      color: var(--muted);
+      cursor: default;
+      text-decoration: none;
+    }
+
+    #report-filter {
+      width: 100%;
+      height: 38px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      outline: none;
+      background: var(--surface);
+      color: var(--strong);
+    }
+
+    #report-filter:focus {
+      border-color: var(--strong);
+    }
+
+    #report-filter::placeholder {
+      color: #707070;
+    }
+
+    .report-filter-status {
+      min-height: 1.5em;
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      overflow-wrap: anywhere;
+    }
+
     .slider-label {
       display: flex;
       justify-content: space-between;
@@ -417,6 +484,18 @@
       margin: 7px 0 0;
       color: var(--muted);
       font-size: 12px;
+    }
+
+    .result-report-filter {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .report-clear:hover:not(:disabled),
+    .report-clear:focus-visible,
+    .result-report-filter:hover,
+    .result-report-filter:focus-visible {
+      color: var(--strong);
     }
 
     .chunk-text {
@@ -569,6 +648,17 @@
             <input id="top-k" name="top_k" type="range" min="1" max="50" value="12">
           </div>
         </div>
+        <div class="report-control">
+          <div class="report-control-head">
+            <label class="report-label" for="report-filter">Report filter</label>
+            <button id="report-clear" class="report-clear" type="button" disabled>Clear</button>
+          </div>
+          <input id="report-filter" name="report" type="search" list="report-options"
+                 autocomplete="off" placeholder="All reports, or enter a report code or title"
+                 aria-describedby="report-filter-status">
+          <datalist id="report-options"></datalist>
+          <p id="report-filter-status" class="report-filter-status" aria-live="polite">All reports</p>
+        </div>
       </form>
     </header>
 
@@ -593,11 +683,17 @@
     const indexHealth = document.querySelector("#index-health");
     const indexCards = document.querySelector("#index-cards");
     const indexRefresh = document.querySelector("#index-refresh");
+    const reportFilter = document.querySelector("#report-filter");
+    const reportOptions = document.querySelector("#report-options");
+    const reportFilterStatus = document.querySelector("#report-filter-status");
+    const reportClear = document.querySelector("#report-clear");
     let requestNumber = 0;
     let indexRefreshTimer = null;
     let mathGeneration = 0;
     let requestedMathGeneration = -1;
     let mathTypesetQueue = Promise.resolve();
+    let reportCatalog = [];
+    let selectedReport = null;
 
     function selectedMode() {
       return document.querySelector('input[name="mode"]:checked').value;
@@ -772,6 +868,80 @@
 
     function formatNumber(value) {
       return Number(value || 0).toLocaleString();
+    }
+
+    function normalizedReportValue(value) {
+      return String(value || "").trim().toLocaleLowerCase();
+    }
+
+    function findCatalogReport(value) {
+      const normalized = normalizedReportValue(value);
+      if (!normalized) {
+        return null;
+      }
+      return reportCatalog.find((report) => [
+        report.report_id,
+        report.code,
+        report.source_code,
+        report.title,
+      ].some((candidate) => normalizedReportValue(candidate) === normalized)) || null;
+    }
+
+    function renderReportFilterStatus() {
+      const value = reportFilter.value.trim();
+      reportClear.disabled = !value && !selectedReport;
+      if (selectedReport) {
+        reportFilterStatus.textContent = `${selectedReport.code} · ${selectedReport.title}`;
+      } else if (value) {
+        reportFilterStatus.textContent = "Press Search to resolve this report code or title.";
+      } else {
+        reportFilterStatus.textContent = "All reports";
+      }
+    }
+
+    function selectReport(report, submit = false) {
+      selectedReport = report;
+      reportFilter.value = report ? report.code : "";
+      renderReportFilterStatus();
+      if (submit && query.value.trim()) {
+        form.requestSubmit();
+      }
+    }
+
+    function syncReportFilter() {
+      selectedReport = findCatalogReport(reportFilter.value);
+      renderReportFilterStatus();
+    }
+
+    function activeReportQuery() {
+      return selectedReport?.report_id || reportFilter.value.trim();
+    }
+
+    async function loadReportOptions() {
+      try {
+        const response = await fetch("/api/reports");
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || "Report lookup failed.");
+        }
+        reportCatalog = payload.reports || [];
+        const options = [];
+        reportCatalog.forEach((report) => {
+          const year = report.year ? ` · ${report.year}` : "";
+          const codeOption = element("option");
+          codeOption.value = report.code;
+          codeOption.label = `${report.title}${year}`;
+          const titleOption = element("option");
+          titleOption.value = report.title;
+          titleOption.label = `${report.code}${year}`;
+          options.push(codeOption, titleOption);
+        });
+        reportOptions.replaceChildren(...options);
+        syncReportFilter();
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "Report lookup failed.";
+        reportFilterStatus.textContent = `${message} Report codes remain available.`;
+      }
     }
 
     function indexSamples(index) {
@@ -1022,10 +1192,33 @@
       head.append(title);
       item.append(head);
 
-      const metadata = element(
-        "p",
-        "result-meta",
-        `${result.report_id} · ${pageRange(result)} · ${result.chunk_type}`
+      const metadata = element("p", "result-meta");
+      const reportButton = element(
+        "button",
+        "result-report-filter",
+        result.report_code || result.report_id
+      );
+      reportButton.type = "button";
+      reportButton.title = `Filter results to ${result.title}`;
+      reportButton.setAttribute(
+        "aria-label",
+        `Filter search results to report ${result.title}`
+      );
+      reportButton.addEventListener("click", () => {
+        selectReport(
+          {
+            report_id: result.report_id,
+            code: result.report_code || result.report_id,
+            source_code: result.report_code || result.report_id,
+            title: result.title,
+            year: result.citation?.year,
+          },
+          true
+        );
+      });
+      metadata.append(
+        reportButton,
+        document.createTextNode(` · ${pageRange(result)} · ${result.chunk_type}`)
       );
       item.append(metadata);
 
@@ -1061,9 +1254,13 @@
     }
 
     function render(payload) {
+      selectReport(payload.report_filter || null);
+      const reportSuffix = payload.report_filter
+        ? ` · ${payload.report_filter.code}`
+        : "";
       if (!payload.results.length) {
         showMessage("No matching chunks.");
-        status.textContent = "0 chunks";
+        status.textContent = `0 chunks${reportSuffix}`;
         return;
       }
       replaceResultNodes(...payload.results.map(resultItem));
@@ -1072,7 +1269,7 @@
       const fallback = payload.visual_search_requested && !payload.visual_search
         ? " · visual index skipped"
         : "";
-      status.textContent = `${payload.results.length} ${payload.results.length === 1 ? "result" : "results"} · ${payload.mode}${ranking}${fallback}`;
+      status.textContent = `${payload.results.length} ${payload.results.length === 1 ? "result" : "results"} · ${payload.mode}${ranking}${fallback}${reportSuffix}`;
     }
 
     function updateModeHint() {
@@ -1082,6 +1279,10 @@
     }
 
     window.addEventListener("mathjax-ready", typesetResultMath);
+
+    reportFilter.addEventListener("input", syncReportFilter);
+    reportFilter.addEventListener("change", syncReportFilter);
+    reportClear.addEventListener("click", () => selectReport(null, true));
 
     indexRefresh.addEventListener("click", () => loadIndexStatus(true));
 
@@ -1095,6 +1296,7 @@
     });
 
     loadIndexStatus();
+    loadReportOptions();
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -1116,6 +1318,10 @@
           mode: selectedMode(),
           top_k: topK.value,
         });
+        const report = activeReportQuery();
+        if (report) {
+          parameters.set("report", report);
+        }
         const response = await fetch(`/api/search?${parameters}`);
         const payload = await response.json();
         if (!response.ok) {

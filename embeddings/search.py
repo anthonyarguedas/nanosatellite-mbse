@@ -112,6 +112,102 @@ def included_report_citations() -> dict[str, dict[str, str]]:
     return citations
 
 
+def canonical_report_code(report_id: str) -> str:
+    """Return the report code shown in the search interface."""
+    namespace, separator, number = report_id.partition("-")
+    if not separator or not number:
+        return report_id
+    prefix = "candidate" if namespace == "citation" else namespace
+    return f"{prefix}-report-{number}"
+
+
+def report_aliases(report: dict) -> set[str]:
+    """Return accepted case insensitive codes for one report."""
+    report_id = str(report.get("report_id") or "").strip()
+    aliases = {
+        report_id,
+        canonical_report_code(report_id),
+        str(report.get("screening_record_id") or "").strip(),
+    }
+    source_path = str(report.get("source_path") or "").strip()
+    if source_path:
+        aliases.add(Path(source_path).stem)
+
+    namespace, separator, number = report_id.partition("-")
+    if separator and number.isdigit():
+        short_number = str(int(number))
+        prefixes = {namespace}
+        if namespace == "citation":
+            prefixes.add("candidate")
+        for prefix in prefixes:
+            aliases.update(
+                {
+                    f"{prefix}-{number}",
+                    f"{prefix}-{short_number}",
+                    f"{prefix}-report-{number}",
+                    f"{prefix}-report-{short_number}",
+                }
+            )
+    return {alias.casefold() for alias in aliases if alias}
+
+
+def report_summary(report: dict) -> dict:
+    report_id = str(report["report_id"])
+    return {
+        "report_id": report_id,
+        "code": canonical_report_code(report_id),
+        "source_code": Path(str(report.get("source_path") or "")).stem or report_id,
+        "title": str(report.get("title") or report_id),
+        "year": report.get("publication_year"),
+    }
+
+
+def matching_reports(value: str, reports: dict[str, dict]) -> list[dict]:
+    """Find reports by code alias or title terms."""
+    needle = value.strip().casefold()
+    records = list(reports.values())
+    if not needle:
+        return records
+
+    exact_aliases = [report for report in records if needle in report_aliases(report)]
+    if exact_aliases:
+        return exact_aliases
+
+    exact_titles = [
+        report
+        for report in records
+        if str(report.get("title") or "").strip().casefold() == needle
+    ]
+    if exact_titles:
+        return exact_titles
+
+    terms = tokenize(needle)
+    matches = []
+    for report in records:
+        searchable = " ".join(
+            [
+                str(report.get("title") or ""),
+                *report_aliases(report),
+            ]
+        ).casefold()
+        if needle in searchable or (terms and all(term in searchable for term in terms)):
+            matches.append(report)
+    return matches
+
+
+def resolve_report_filter(value: str, reports: dict[str, dict]) -> dict:
+    """Resolve one user supplied report code or title search."""
+    matches = matching_reports(value, reports)
+    if len(matches) == 1:
+        return matches[0]
+    if not matches:
+        raise SearchError(f"No report matches {value!r}.")
+    raise SearchError(
+        f"Report filter {value!r} matches {len(matches)} reports. "
+        "Choose a report code or a full title."
+    )
+
+
 def file_sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -465,6 +561,16 @@ class SearchService:
                     report.update(citation_metadata.get(report_id, {}))
         return self._chunks, self._reports
 
+    def report_options(self, query: str = "") -> dict:
+        """Return report choices for the browser filter."""
+        _, reports = self._load_corpus()
+        matches = matching_reports(query, reports)
+        options = sorted(
+            (report_summary(report) for report in matches),
+            key=lambda report: (report["title"].casefold(), report["code"]),
+        )
+        return {"query": query, "count": len(options), "reports": options}
+
     def _get_bm25_data(self) -> tuple[list[list[str]], Counter[str], float]:
         with self._bm25_lock:
             if self._bm25_data is None:
@@ -621,6 +727,7 @@ class SearchService:
             "score": score,
             "chunk_id": chunk["chunk_id"],
             "report_id": chunk["report_id"],
+            "report_code": canonical_report_code(chunk["report_id"]),
             "title": chunk["title"],
             "citation": {
                 "key": chunk["report_id"],
@@ -695,6 +802,7 @@ class SearchService:
             "chunk_id": record["image_id"],
             "image_id": record["image_id"],
             "report_id": record["report_id"],
+            "report_code": canonical_report_code(record["report_id"]),
             "title": record["title"],
             "citation": {
                 "key": record["report_id"],
@@ -750,6 +858,7 @@ class SearchService:
         chunks: list[dict],
         reports: dict[str, dict],
         depth: int,
+        report_id: str | None = None,
         positive_only: bool = False,
         constant: int = 60,
     ) -> None:
@@ -762,6 +871,8 @@ class SearchService:
             if positive_only and raw_score <= 0:
                 break
             chunk = chunks[int(row_index)]
+            if report_id is not None and chunk["report_id"] != report_id:
+                continue
             key, source_image = self._chunk_candidate_key(chunk, reports)
             if key in seen:
                 continue
@@ -800,14 +911,19 @@ class SearchService:
         visual_scores: Any,
         records: list[dict],
         depth: int,
+        report_id: str | None = None,
         constant: int = 60,
     ) -> None:
         import numpy as np
 
-        for rank, row_index in enumerate(
-            np.argsort(-visual_scores, kind="stable")[:depth], start=1
-        ):
+        rank = 0
+        for row_index in np.argsort(-visual_scores, kind="stable"):
             record = records[int(row_index)]
+            if report_id is not None and record["report_id"] != report_id:
+                continue
+            rank += 1
+            if rank > depth:
+                break
             source_image = record["source_image"]
             key = f"image:{source_image}"
             candidate = candidates.setdefault(
@@ -898,6 +1014,7 @@ class SearchService:
         lexical_scores: Any,
         top_k: int,
         max_per_report: int | None,
+        report_id: str | None,
         fusion_depth: int,
         include_visual: bool,
         rerank: bool,
@@ -924,6 +1041,7 @@ class SearchService:
             chunks,
             reports,
             fusion_depth,
+            report_id=report_id,
         )
         self._add_chunk_ranking(
             candidates,
@@ -932,6 +1050,7 @@ class SearchService:
             chunks,
             reports,
             fusion_depth,
+            report_id=report_id,
             positive_only=True,
         )
         if visual_scores is not None:
@@ -940,6 +1059,7 @@ class SearchService:
                 visual_scores,
                 records,
                 fusion_depth,
+                report_id=report_id,
             )
 
         first_stage = sorted(
@@ -978,17 +1098,17 @@ class SearchService:
                 candidate["chunks"].values(),
                 key=lambda option: option["priority"],
             )
-            report_id = (
+            candidate_report_id = (
                 options[0]["chunk"]["report_id"]
                 if options
                 else candidate["image_record"]["report_id"]
             )
             if (
                 max_per_report is not None
-                and report_counts[report_id] >= max_per_report
+                and report_counts[candidate_report_id] >= max_per_report
             ):
                 continue
-            report_counts[report_id] += 1
+            report_counts[candidate_report_id] += 1
             results.append(
                 self._candidate_result(candidate, reports, rank=len(results) + 1)
             )
@@ -1006,6 +1126,7 @@ class SearchService:
         include_visual: bool,
         rerank: bool,
         rerank_depth: int,
+        report_id: str | None,
     ) -> dict:
         import numpy as np
 
@@ -1029,20 +1150,22 @@ class SearchService:
             report_counts: Counter[str] = Counter()
             for row_index in order:
                 record = records[int(row_index)]
-                report_id = record["report_id"]
+                record_report_id = record["report_id"]
+                if report_id is not None and record_report_id != report_id:
+                    continue
                 if (
                     max_per_report is not None
-                    and report_counts[report_id] >= max_per_report
+                    and report_counts[record_report_id] >= max_per_report
                 ):
                     continue
-                report_counts[report_id] += 1
+                report_counts[record_report_id] += 1
                 results.append(
                     self._image_result(
                         record,
                         rank=len(results) + 1,
                         score=float(visual_scores[int(row_index)]),
                         visual_score=float(visual_scores[int(row_index)]),
-                        report=reports.get(report_id, {}),
+                        report=reports.get(record_report_id, {}),
                     )
                 )
                 if len(results) >= top_k:
@@ -1064,6 +1187,7 @@ class SearchService:
                 lexical_scores=lexical_scores,
                 top_k=top_k,
                 max_per_report=max_per_report,
+                report_id=report_id,
                 fusion_depth=fusion_depth,
                 include_visual=include_visual,
                 rerank=rerank,
@@ -1101,17 +1225,19 @@ class SearchService:
         report_counts: Counter[str] = Counter()
         for row_index in order:
             chunk = chunks[int(row_index)]
-            report_id = chunk["report_id"]
+            chunk_report_id = chunk["report_id"]
+            if report_id is not None and chunk_report_id != report_id:
+                continue
             if (
                 max_per_report is not None
-                and report_counts[report_id] >= max_per_report
+                and report_counts[chunk_report_id] >= max_per_report
             ):
                 continue
-            report_counts[report_id] += 1
+            report_counts[chunk_report_id] += 1
             results.append(
                 self._result(
                     chunk=chunk,
-                    report=reports.get(report_id, {}),
+                    report=reports.get(chunk_report_id, {}),
                     rank=len(results) + 1,
                     score=float(final_scores[int(row_index)]),
                     dense_score=(
@@ -1151,6 +1277,7 @@ class SearchService:
         include_visual: bool = True,
         rerank: bool = True,
         rerank_depth: int = 50,
+        report: str | None = None,
     ) -> dict:
         question = question.strip()
         if not question:
@@ -1164,17 +1291,31 @@ class SearchService:
         if rerank_depth < 1:
             raise SearchError("The reranking depth must be at least 1.")
         mode = normalize_mode(mode)
+        report_query = (report or "").strip()
         with self._search_lock:
+            _, reports = self._load_corpus()
+            selected_report = (
+                resolve_report_filter(report_query, reports) if report_query else None
+            )
+            report_id = (
+                str(selected_report["report_id"])
+                if selected_report is not None
+                else None
+            )
             payload = self._search(
                 question=question,
                 mode=mode,
                 top_k=top_k,
-                max_per_report=max_per_report,
+                max_per_report=None if report_id is not None else max_per_report,
                 fusion_depth=fusion_depth,
                 include_visual=include_visual,
                 rerank=rerank and mode == "hybrid",
                 rerank_depth=rerank_depth,
+                report_id=report_id,
             )
+        payload["report_filter"] = (
+            report_summary(selected_report) if selected_report is not None else None
+        )
         for result in payload["results"]:
             if result.get("display_type") == "text":
                 result["exact_match_spans"] = exact_match_spans(
@@ -1215,6 +1356,7 @@ def main(args: argparse.Namespace) -> int:
                 include_visual=not args.no_visual,
                 rerank=not args.no_rerank,
                 rerank_depth=args.rerank_depth,
+                report=args.report,
             )
             for question in questions
         ]
@@ -1289,6 +1431,9 @@ def make_gui_handler(
             if request.path == "/api/status":
                 self.index_status(request)
                 return
+            if request.path == "/api/reports":
+                self.report_options(request)
+                return
             if request.path == "/file":
                 self.source_file(request)
                 return
@@ -1314,6 +1459,7 @@ def make_gui_handler(
                     include_visual=query_boolean(parameters, "visual", include_visual),
                     rerank=query_boolean(parameters, "rerank", rerank),
                     rerank_depth=rerank_depth,
+                    report=parameters.get("report", [""])[0],
                 )
             except SearchError as error:
                 self.send_json({"error": str(error)}, 400)
@@ -1322,6 +1468,19 @@ def make_gui_handler(
                 self.send_json({"error": str(error) or "Search failed."}, 500)
                 return
             self.send_json(result)
+
+        def report_options(self, request) -> None:
+            parameters = parse_qs(request.query, keep_blank_values=True)
+            query = parameters.get("q", [""])[0]
+            try:
+                payload = service.report_options(query)
+            except SearchError as error:
+                self.send_json({"error": str(error)}, 400)
+                return
+            except Exception as error:  # pragma: no cover - local file failures
+                self.send_json({"error": str(error) or "Report lookup failed."}, 500)
+                return
+            self.send_json(payload)
 
         def index_status(self, request) -> None:
             parameters = parse_qs(request.query, keep_blank_values=True)
@@ -1419,6 +1578,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-per-report", type=int, default=2)
     parser.add_argument("--fusion-depth", type=int, default=1000)
     parser.add_argument("--rerank-depth", type=int, default=50)
+    parser.add_argument(
+        "--report",
+        help="Restrict results by report code or a unique title search.",
+    )
     parser.add_argument(
         "--no-visual",
         action="store_true",

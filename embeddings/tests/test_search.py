@@ -12,12 +12,14 @@ from search import (
     SearchError,
     SearchService,
     bm25_scores,
+    canonical_report_code,
     embed_questions,
     exact_match_spans,
     included_report_citations,
     maxsim_scores,
     prepare_bm25,
     regex_scores,
+    resolve_report_filter,
 )
 
 
@@ -46,6 +48,56 @@ class SearchTests(unittest.TestCase):
                 "venue": "CEAS Space Journal",
             },
         )
+
+    def test_report_codes_distinguish_review_and_candidate_reports(self) -> None:
+        self.assertEqual(canonical_report_code("review-0012"), "review-report-0012")
+        self.assertEqual(
+            canonical_report_code("citation-0136"), "candidate-report-0136"
+        )
+
+    def test_report_filter_resolves_codes_and_unique_title_searches(self) -> None:
+        reports = {
+            "review-0012": {
+                "report_id": "review-0012",
+                "screening_record_id": "review-candidate-0012",
+                "source_path": "reports/review-report-0012.md",
+                "title": "Power Budget Verification",
+            },
+            "citation-0136": {
+                "report_id": "citation-0136",
+                "screening_record_id": "citation-candidate-0136",
+                "source_path": "reports/citation-report-0136.md",
+                "title": "Flight Software Case Study",
+            },
+        }
+
+        self.assertEqual(
+            resolve_report_filter("review-report-12", reports)["report_id"],
+            "review-0012",
+        )
+        self.assertEqual(
+            resolve_report_filter("candidate-report-136", reports)["report_id"],
+            "citation-0136",
+        )
+        self.assertEqual(
+            resolve_report_filter("budget verification", reports)["report_id"],
+            "review-0012",
+        )
+
+    def test_report_filter_rejects_an_ambiguous_title_search(self) -> None:
+        reports = {
+            "review-0001": {
+                "report_id": "review-0001",
+                "title": "CubeSat power analysis",
+            },
+            "review-0002": {
+                "report_id": "review-0002",
+                "title": "CubeSat software analysis",
+            },
+        }
+
+        with self.assertRaisesRegex(SearchError, "matches 2 reports"):
+            resolve_report_filter("CubeSat analysis", reports)
 
     def test_results_include_bibliographic_citation(self) -> None:
         result = SearchService()._result(
@@ -193,6 +245,66 @@ class SearchTests(unittest.TestCase):
         self.assertEqual(payload["results"][0]["exact_match_spans"], [[0, 5]])
         self.assertNotIn("exact_match_spans", payload["results"][1])
 
+    def test_search_resolves_report_filter_and_removes_report_result_cap(self) -> None:
+        service = SearchService()
+        reports = {
+            "citation-0136": {
+                "report_id": "citation-0136",
+                "source_path": "reports/citation-report-0136.md",
+                "title": "Flight Software Case Study",
+                "publication_year": 2025,
+            }
+        }
+        captured = {}
+        service._load_corpus = lambda: ([], reports)
+
+        def fake_search(**options):
+            captured.update(options)
+            return {"question": "software", "mode": "bm25", "results": []}
+
+        service._search = fake_search
+
+        payload = service.search(
+            "software",
+            mode="bm25",
+            max_per_report=2,
+            report="candidate-report-136",
+        )
+
+        self.assertEqual(captured["report_id"], "citation-0136")
+        self.assertIsNone(captured["max_per_report"])
+        self.assertEqual(payload["report_filter"]["code"], "candidate-report-0136")
+
+    def test_chunk_ranking_filters_before_applying_depth(self) -> None:
+        import numpy as np
+
+        service = SearchService()
+        candidates = {}
+        chunks = [
+            {
+                "chunk_id": "review-0001:chunk-00001",
+                "report_id": "review-0001",
+                "image_refs": [],
+            },
+            {
+                "chunk_id": "review-0002:chunk-00001",
+                "report_id": "review-0002",
+                "image_refs": [],
+            },
+        ]
+
+        service._add_chunk_ranking(
+            candidates,
+            "dense",
+            np.array([10.0, 1.0]),
+            chunks,
+            {},
+            depth=1,
+            report_id="review-0002",
+        )
+
+        self.assertEqual(list(candidates), ["chunk:review-0002:chunk-00001"])
+
     def test_hybrid_search_skips_an_unavailable_visual_index(self) -> None:
         import numpy as np
 
@@ -224,6 +336,7 @@ class SearchTests(unittest.TestCase):
             lexical_scores=np.array([1.0]),
             top_k=1,
             max_per_report=2,
+            report_id=None,
             fusion_depth=10,
             include_visual=True,
             rerank=False,
