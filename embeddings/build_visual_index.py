@@ -158,6 +158,16 @@ def source_hash(path: Path) -> str | None:
     return file_sha256(path) if path.exists() else None
 
 
+def corpus_source_hashes() -> dict[str, str | None]:
+    return {
+        "reports_sha256": source_hash(DATA_DIR / "reports.jsonl"),
+        "units_sha256": source_hash(DATA_DIR / "units.jsonl"),
+        "diagram_analyses_sha256": source_hash(
+            DATA_DIR / "diagram-analyses.jsonl"
+        ),
+    }
+
+
 def write_build_state(payload: dict[str, Any]) -> None:
     temporary = BUILD_STATE_PATH.with_name(BUILD_STATE_PATH.name + ".tmp")
     temporary.write_text(
@@ -199,6 +209,7 @@ def main(args: argparse.Namespace) -> int:
     import numpy as np
 
     started = time.perf_counter()
+    input_hashes = corpus_source_hashes()
     records = current_records()
     if not records:
         raise RuntimeError("No report images were found")
@@ -321,6 +332,16 @@ def main(args: argparse.Namespace) -> int:
         del old_vectors
 
     write_jsonl(images_temporary, records)
+    if corpus_source_hashes() != input_hashes:
+        vectors_temporary.unlink(missing_ok=True)
+        images_temporary.unlink(missing_ok=True)
+        manifest_temporary.unlink(missing_ok=True)
+        BUILD_STATE_PATH.unlink(missing_ok=True)
+        raise RuntimeError(
+            "Corpus metadata changed during the visual-index build. "
+            "Cached image vectors were preserved. Run the build again."
+        )
+
     images_sha256 = file_sha256(images_temporary)
     manifest = {
         "schema_version": "slr1-colpali-index/v1",
@@ -329,9 +350,7 @@ def main(args: argparse.Namespace) -> int:
         "model_revision": MODEL_REVISION,
         "images_path": str(IMAGES_PATH.relative_to(SCRIPT_DIR)),
         "images_sha256": images_sha256,
-        "reports_sha256": source_hash(DATA_DIR / "reports.jsonl"),
-        "units_sha256": source_hash(DATA_DIR / "units.jsonl"),
-        "diagram_analyses_sha256": source_hash(DATA_DIR / "diagram-analyses.jsonl"),
+        **input_hashes,
         "images": len(records),
         "mbse_diagrams": sum(record["is_mbse_diagram"] for record in records),
         "reused_images": len(reusable_rows),

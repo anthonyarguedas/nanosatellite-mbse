@@ -54,6 +54,52 @@ def relationship_sentence(relationship: dict[str, Any]) -> str:
     )
 
 
+def relationship_annotation_sentence(
+    relationship: dict[str, Any], annotation: dict[str, Any]
+) -> str:
+    relationship_name = relationship.get("name")
+    relationship_text = (
+        f" named {quoted(relationship_name)}" if relationship_name else ""
+    )
+    return (
+        f"Relationship annotation {quoted(annotation.get('name'))} on the "
+        f"relationship from {quoted(relationship.get('source'))} to "
+        f"{quoted(relationship.get('target'))}{relationship_text}. "
+        f"Native annotation type: {clean(annotation.get('native_type'))}. "
+        f"Language-neutral annotation type: "
+        f"{clean(annotation.get('semantic_class')).replace('_', ' ')}."
+    )
+
+
+def formal_content_sentence(item: dict[str, Any]) -> str:
+    sentence = (
+        f"Formal or executable content {quoted(item.get('name'))}. "
+        f"Native type: {clean(item.get('native_type'))}. "
+        f"Language-neutral semantic class: "
+        f"{clean(item.get('semantic_class')).replace('_', ' ')}."
+    )
+    elements = [
+        quoted(value)
+        for value in item.get("linked_elements", [])
+        if clean(value, "")
+    ]
+    if elements:
+        sentence += " Linked model elements: " + ", ".join(elements) + "."
+    relationships = []
+    for relationship in item.get("linked_relationships", []):
+        if not isinstance(relationship, dict):
+            continue
+        name = relationship.get("name")
+        name_text = f" named {quoted(name)}" if name else ""
+        relationships.append(
+            f"from {quoted(relationship.get('source'))} to "
+            f"{quoted(relationship.get('target'))}{name_text}"
+        )
+    if relationships:
+        sentence += " Linked model relationships: " + "; ".join(relationships) + "."
+    return sentence
+
+
 def groups(
     prefix: list[str], statements: Iterable[str], target_words: int, max_words: int
 ) -> list[str]:
@@ -85,9 +131,18 @@ def common_lines(row: dict[str, Any], analysis: dict[str, Any]) -> list[str]:
         for item in row.get("caption_chunks", [])
         if clean(item.get("caption"), "")
     ]
+    formal_families = {
+        "formal_automata",
+        "bip",
+        "fault_tree",
+        "bayesian_network",
+        "gsn",
+        "fault_propagation",
+        "formal_state_transition",
+    }
     diagram_kind = (
-        "formal automaton"
-        if analysis.get("diagram_family") == "formal_automata"
+        "formal model"
+        if analysis.get("diagram_family") in formal_families
         else "MBSE model"
     )
     lines = [
@@ -151,6 +206,30 @@ def build_diagram_chunks(
             for text in groups(common, relationship_texts, target_words, max_words)
         )
 
+        annotation_texts = [
+            relationship_annotation_sentence(relationship, annotation)
+            for relationship in analysis.get("relationships", [])
+            if isinstance(relationship, dict)
+            for annotation in relationship.get("annotations", [])
+            if isinstance(annotation, dict)
+        ]
+        parts.extend(
+            ("annotations", text)
+            for text in groups(common, annotation_texts, target_words, max_words)
+        )
+
+        formal_content_texts = [
+            formal_content_sentence(item)
+            for item in analysis.get("formal_or_executable_content", [])
+            if isinstance(item, dict)
+        ]
+        parts.extend(
+            ("formal_content", text)
+            for text in groups(
+                common, formal_content_texts, target_words, max_words
+            )
+        )
+
         labels = [
             clean(value, "") for value in analysis.get("other_visible_labels", [])
         ]
@@ -181,6 +260,9 @@ def build_diagram_chunks(
                     "chunk_type": "diagram",
                     "diagram_part": part_name,
                     "diagram_id": row["diagram_id"],
+                    "diagram_extraction_schema_version": row.get(
+                        "extraction_schema_version"
+                    ),
                     "modeling_language": analysis.get("modeling_language"),
                     "representation_type": analysis.get("representation_type"),
                     "diagram_confidence": analysis.get("confidence"),

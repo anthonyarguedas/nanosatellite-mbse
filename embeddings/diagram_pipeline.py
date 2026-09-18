@@ -22,6 +22,14 @@ LOG_DIR = SCRIPT_DIR / "logs/diagram-subagents"
 CANDIDATES_PATH = DATA_DIR / "diagram-candidates.jsonl"
 ANALYSES_PATH = DATA_DIR / "diagram-analyses.jsonl"
 MODEL = "openai-codex/gpt-5.6-luna"
+EXTRACTION_SCHEMA_VERSION = "diagram-analysis/v2"
+ANNOTATION_SEMANTIC_CLASSES = {
+    "guard",
+    "cost",
+    "parameter",
+    "exchanged_item_data_or_resource",
+    "other_formal_or_executable",
+}
 
 LANGUAGE_RE = re.compile(
     r"\b(?:SysML|Capella|Arcadia|Simulink)\b", re.IGNORECASE
@@ -32,6 +40,36 @@ FORMAL_AUTOMATA_RE = re.compile(
     r"\b(?:priced\s+timed\s+automata?|stochastic\s+timed\s+automata?|"
     r"timed\s+automata?|UPPAAL(?:\s+(?:CORA|SMC|STRATEGO))?|"
     r"automaton|automata)\b",
+    re.IGNORECASE,
+)
+BIP_RE = re.compile(
+    r"(?<![A-Za-z0-9])BIP(?![A-Za-z0-9])|"
+    r"\bBehavior\s+Interaction\s+Priority\b",
+    re.IGNORECASE,
+)
+FAULT_TREE_RE = re.compile(
+    r"\b(?:fault[- ]tree(?: analysis)?|FTA)\b", re.IGNORECASE
+)
+BAYESIAN_NETWORK_RE = re.compile(
+    r"\b(?:Bayesian\s+(?:network|model)|BN\s+model)\b", re.IGNORECASE
+)
+GSN_RE = re.compile(
+    r"(?<![A-Za-z0-9])GSN(?![A-Za-z0-9])|"
+    r"\bGoal\s+Structuring\s+Notation\b|"
+    r"\bassurance\s+(?:argument|case)(?:\s+model)?\b",
+    re.IGNORECASE,
+)
+FAULT_PROPAGATION_RE = re.compile(
+    r"\b(?:fault\s+propagation\s+model|fault\s+model)\b", re.IGNORECASE
+)
+FORMAL_STATE_TRANSITION_RE = re.compile(
+    r"\b(?:formal\s+state(?:\s+transition)?\s+(?:model|diagram)|"
+    r"state\s+transition\s+network)\b",
+    re.IGNORECASE,
+)
+FORMAL_TITLE_RE = re.compile(
+    r"\b(?:priced\s+timed\s+automata?|Bayesian\s+networks?|"
+    r"Goal\s+Structuring\s+Notation|fault\s+models?)\b",
     re.IGNORECASE,
 )
 SYSML_RE = re.compile(
@@ -64,39 +102,72 @@ PAGE_MARKER_RE = re.compile(r"<!--\s*PDF_PAGE:\s*([1-9][0-9]*)\s*-->")
 HEADING_RE = re.compile(r"^#{1,6}\s+(.+?)\s*$")
 
 
-EXTRACTION_INSTRUCTIONS = """You are extracting one candidate model or formal diagram for search indexing. Inspect the attached image itself. Caption and section context may identify the language, formalism, tool, or representation type. Never report an element or relationship unless it is visible in the image.
+EXTRACTION_INSTRUCTIONS = """You are extracting one candidate model or formal diagram for search indexing. Inspect the attached image itself. Caption and section context may identify the language, formalism, tool, or representation type. Never report an element, relationship, annotation, or formal expression unless it is visible in the image.
 
-Decide whether the image contains an actual SysML diagram, Capella/Arcadia model diagram, Simulink block diagram, or formal automata diagram. Formal automata include timed automata, priced timed automata (PTA), stochastic timed automata, and UPPAAL automata. Screenshots of target diagrams count. Caption context may establish that visible block and signal notation is Simulink or that visible state and transition notation is a formal automaton. Exclude photos, plots, tables, ordinary flowcharts, methodology graphics, taxonomies, and prose even when their captions discuss a target modeling language, formalism, or tool.
+Target diagrams are actual SysML diagrams, Capella/Arcadia model diagrams, Simulink block diagrams, and these formal diagram families:
+- formal automata, including timed automata, priced timed automata (PTA), stochastic timed automata, and UPPAAL automata
+- Behavior Interaction Priority (BIP) component, connector, interaction, and architecture diagrams
+- fault trees with events and logic gates
+- Bayesian networks with probabilistic nodes and directed dependencies
+- Goal Structuring Notation (GSN) assurance arguments
+- fault propagation or fault model diagrams
+- formal state transition networks
+
+Screenshots of target diagrams count. Caption context may establish the exact formalism or tool. Exclude photos, plots, tables, sensitivity charts, ordinary flowcharts, methodology graphics, taxonomies, and prose even when their captions discuss a target language, formalism, or tool.
 
 Return exactly one valid JSON object without Markdown or commentary:
 {
   "contains_target_diagram": true,
-  "diagram_family": "sysml | capella_arcadia | simulink | formal_automata | mixed | uncertain | none",
-  "modeling_language": "verbatim language or null",
+  "diagram_family": "sysml | capella_arcadia | simulink | formal_automata | bip | fault_tree | bayesian_network | gsn | fault_propagation | formal_state_transition | mixed | uncertain | none",
+  "modeling_language": "verbatim language, formalism, or tool name, or null",
   "representation_name": "visible title or caption name, or null",
   "representation_type": "native diagram type or null",
   "summary": "one factual sentence based on visible content",
   "elements": [{
     "name": "verbatim visible label",
-    "native_type": "notation type or unknown",
-    "semantic_class": "external_actor | external_system_or_subsystem | capability | function_or_behavior | activity_or_action | exchanged_item_or_signal | interface | port_or_connector | block_component_part_or_instance | state_or_mode | scenario | use_case | hazard_fault_failure | requirement | property_parameter_constraint | test_setup_or_equipment | objective | pass_fail_criterion | unknown",
+    "native_type": "source notation type or unknown",
+    "semantic_class": "external_actor | external_system_or_subsystem | capability | function_or_behavior | activity_or_action | exchanged_item_or_signal | interface | port_or_connector | block_component_part_or_instance | state_or_mode | scenario | use_case | hazard_fault_failure | requirement | property_parameter_constraint | test_setup_or_equipment | objective | pass_fail_criterion | logic_gate | probabilistic_variable | assurance_claim_or_goal | assurance_strategy | assurance_evidence_or_solution | unknown",
     "logical_or_physical": "logical | physical | unspecified",
     "eps_boundary": "inside | outside | unknown"
   }],
   "relationships": [{
     "source": "verbatim endpoint or unknown",
     "target": "verbatim endpoint or unknown",
-    "name": "verbatim visible label or null",
-    "native_type": "notation type or unknown",
-    "semantic_class": "data_or_resource_flow_or_exchange | allocation_or_mapping | connection_or_link | state_or_mode_transition | decomposition_or_containment | sequence | trace_satisfy_verify | unknown",
-    "direction": "source_to_target | target_to_source | bidirectional | undirected | unknown"
+    "name": "explicit source-reported relationship name, or null",
+    "native_type": "source notation type or unknown",
+    "semantic_class": "data_or_resource_flow_or_exchange | allocation_or_mapping | connection_or_link | state_or_mode_transition | decomposition_or_containment | sequence | trace_satisfy_verify | causal_or_dependency | evidence_support_or_context | interaction_or_synchronization | unknown",
+    "direction": "source_to_target | target_to_source | bidirectional | undirected | unknown",
+    "annotations": [{
+      "name": "verbatim visible annotation",
+      "native_type": "source-reported annotation type or unknown",
+      "semantic_class": "guard | cost | parameter | exchanged_item_data_or_resource | other_formal_or_executable"
+    }]
+  }],
+  "formal_or_executable_content": [{
+    "name": "verbatim visible expression or label",
+    "native_type": "source-reported type or unknown",
+    "semantic_class": "equation | guard | constraint | parameter | algorithm | simulator | physically_implemented_behavior | other",
+    "linked_elements": ["verbatim visible element name"],
+    "linked_relationships": [{
+      "source": "verbatim endpoint or unknown",
+      "target": "verbatim endpoint or unknown",
+      "name": "explicit relationship name or null"
+    }]
   }],
   "other_visible_labels": ["meaningful verbatim labels not captured above"],
   "uncertainties": ["short uncertainty"],
   "confidence": 0.0
 }
 
-For a non-target figure, set contains_target_diagram to false and diagram_family to "none". For a figure containing more than one target family, use "mixed". Give a short visible-content summary and leave elements and relationships empty. Transcribe all legible model elements and named exchanges that matter for retrieval. For formal automata, record every legible location as an element with semantic_class "state_or_mode". Record every legible transition as a relationship with semantic_class "state_or_mode_transition". Put its complete visible guard, synchronization, assignment, and cost or rate annotation in the relationship name. Put location invariants and other standalone formal labels in other_visible_labels. Preserve wording and capitalization. Do not expand acronyms or invent hidden endpoints. Use "unknown" when the image does not establish an EPS boundary or logical/physical classification."""
+For a non-target figure, set contains_target_diagram to false and diagram_family to "none". Give a short visible-content summary and leave elements, relationships, and formal_or_executable_content empty. For a figure containing more than one target family, use "mixed".
+
+Preserve each explicit relationship name separately from annotations carried by that relationship. If a relationship has no separate name, set name to null. Split visibly distinct relationship annotations into separate records. Classify each as a guard, cost, parameter, exchanged item/data/resource, or other formal or executable content. A nested annotation is implicitly linked to its containing relationship. Do not duplicate it in formal_or_executable_content.
+
+Use formal_or_executable_content for other visible equations, guards, constraints, parameters, algorithms, simulators, or explicitly implemented behavior. Link each item to visible elements and relationships when the image establishes the link. Empty link arrays are allowed.
+
+For formal automata, record every legible location as a state_or_mode element and every legible transition as a state_or_mode_transition relationship. Record location invariants, location cost rates, and other element-linked formal expressions in formal_or_executable_content. For BIP behavior transitions, record visible port or action labels as relationship annotations rather than relationship names. Record BIP ports, connectors, interactions, components, and control locations according to their visible native types. For Bayesian networks, record visible node states and probabilities as parameter content linked to the corresponding node. For fault trees, preserve visible event and logic-gate types. For GSN, preserve each visible Goal, Strategy, Context, Assumption, Justification, and Solution type.
+
+Transcribe all legible model elements and relationships that matter for retrieval. Preserve wording and capitalization. Do not expand acronyms or invent hidden endpoints or links. Use "unknown" when the image does not establish an EPS boundary, logical or physical classification, or native type."""
 
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -126,6 +197,18 @@ def selection_reasons(text: str) -> list[str]:
         reasons.append("language_name")
     if FORMAL_AUTOMATA_RE.search(text):
         reasons.append("formal_automata_term")
+    if BIP_RE.search(text):
+        reasons.append("bip_term")
+    if FAULT_TREE_RE.search(text):
+        reasons.append("fault_tree_term")
+    if BAYESIAN_NETWORK_RE.search(text):
+        reasons.append("bayesian_network_term")
+    if GSN_RE.search(text):
+        reasons.append("gsn_term")
+    if FAULT_PROPAGATION_RE.search(text):
+        reasons.append("fault_propagation_term")
+    if FORMAL_STATE_TRANSITION_RE.search(text):
+        reasons.append("formal_state_transition_term")
     if SYSML_RE.search(text):
         reasons.append("sysml_diagram_type")
     if ARCADIA_RE.search(text):
@@ -152,6 +235,22 @@ def simulink_section_contexts(
     return {
         key: "\n\n".join(dict.fromkeys(values))[:3000]
         for key, values in contexts.items()
+    }
+
+
+def bip_report_contexts(chunks: list[dict[str, Any]]) -> dict[str, str]:
+    contexts: dict[str, list[str]] = {}
+    for chunk in chunks:
+        if (
+            chunk.get("chunk_type") not in {"passage", "table"}
+            or not BIP_RE.search(chunk.get("text", ""))
+        ):
+            continue
+        contexts.setdefault(chunk["report_id"], []).append(chunk["text"])
+    return {
+        report_id: "\n\n".join(dict.fromkeys(values))[:3000]
+        for report_id, values in contexts.items()
+        if len(values) >= 2
     }
 
 
@@ -210,26 +309,38 @@ def build_candidates() -> list[dict[str, Any]]:
     reports = {row["report_id"]: row for row in read_jsonl(DATA_DIR / "reports.jsonl")}
     chunks = read_jsonl(DATA_DIR / "chunks.jsonl")
     section_contexts = simulink_section_contexts(chunks)
+    bip_contexts = bip_report_contexts(chunks)
     grouped: dict[tuple[str, str], dict[str, Any]] = {}
     for chunk in chunks:
         if chunk.get("chunk_type") != "caption" or not chunk.get("image_refs"):
             continue
         text = chunk.get("text", "")
         reasons = selection_reasons(text)
+        report_id = chunk["report_id"]
+        report = reports[report_id]
+        if FORMAL_TITLE_RE.search(report["title"]):
+            reasons.append("formalism_in_report_title")
         section_context = section_contexts.get(
             (chunk["report_id"], chunk.get("section_key"))
         )
         if section_context and not SIMULINK_RE.search(text):
             reasons.append("simulink_in_section")
+        bip_context = bip_contexts.get(chunk["report_id"])
+        if bip_context and not BIP_RE.search(text):
+            reasons.append("bip_in_report")
         if not reasons:
             continue
-        report_id = chunk["report_id"]
-        report = reports[report_id]
         caption, context = split_caption_context(text)
         if section_context and section_context not in context:
             context = "\n\n".join(
                 value
                 for value in (context, f"Section evidence: {section_context}")
+                if value
+            )
+        if "bip_in_report" in reasons and bip_context not in context:
+            context = "\n\n".join(
+                value
+                for value in (context, f"Report evidence: {bip_context}")
                 if value
             )
         for image_ref in chunk["image_refs"]:
@@ -283,7 +394,12 @@ def build_candidates() -> list[dict[str, Any]]:
     caption_candidates = sorted(grouped.values(), key=lambda row: row["diagram_id"])
     fallback_candidates = []
     for report in reports.values():
-        if not LANGUAGE_RE.search(report["title"]):
+        title_reasons = []
+        if LANGUAGE_RE.search(report["title"]):
+            title_reasons.append("language_in_report_title")
+        if FORMAL_TITLE_RE.search(report["title"]):
+            title_reasons.append("formalism_in_report_title")
+        if not title_reasons:
             continue
         for image in page_image_contexts(report):
             image_ref = image["image_ref"]
@@ -318,7 +434,7 @@ def build_candidates() -> list[dict[str, Any]]:
                             "page_end": image["page"],
                         }
                     ],
-                    "selection_reasons": ["language_in_report_title"],
+                    "selection_reasons": title_reasons,
                 }
             )
     fallback_candidates.sort(key=lambda row: row["diagram_id"])
@@ -382,9 +498,43 @@ def parse_json_response(text: str) -> dict[str, Any]:
         raise ValueError("Subagent response is not a JSON object")
     if not isinstance(value.get("contains_target_diagram"), bool):
         raise ValueError("Subagent response lacks contains_target_diagram boolean")
-    for field in ("elements", "relationships", "other_visible_labels", "uncertainties"):
+    for field in (
+        "elements",
+        "relationships",
+        "formal_or_executable_content",
+        "other_visible_labels",
+        "uncertainties",
+    ):
         if not isinstance(value.get(field), list):
             raise ValueError(f"Subagent response lacks {field} array")
+    for relationship in value["relationships"]:
+        if not isinstance(relationship, dict):
+            raise ValueError("Subagent relationship is not an object")
+        relationship.setdefault("annotations", [])
+        if not isinstance(relationship["annotations"], list):
+            raise ValueError("Subagent relationship annotations is not an array")
+        for annotation in relationship["annotations"]:
+            if not isinstance(annotation, dict):
+                raise ValueError("Subagent relationship annotation is not an object")
+            annotation.setdefault("native_type", "unknown")
+            semantic_class = annotation.get("semantic_class")
+            if (
+                semantic_class is None
+                and annotation["native_type"] in ANNOTATION_SEMANTIC_CLASSES
+            ):
+                annotation["semantic_class"] = annotation["native_type"]
+                annotation["native_type"] = "unknown"
+            elif semantic_class not in ANNOTATION_SEMANTIC_CLASSES:
+                raise ValueError(
+                    f"Unsupported relationship annotation class: {semantic_class}"
+                )
+    for item in value["formal_or_executable_content"]:
+        if not isinstance(item, dict):
+            raise ValueError("Formal or executable content is not an object")
+        for field in ("linked_elements", "linked_relationships"):
+            item.setdefault(field, [])
+            if not isinstance(item[field], list):
+                raise ValueError(f"Formal or executable content {field} is not an array")
     return value
 
 
@@ -400,11 +550,14 @@ def load_events(path: Path) -> list[dict[str, Any]]:
 
 
 def process_candidate(
-    candidate: dict[str, Any], thinking: str, timeout_seconds: int
+    candidate: dict[str, Any],
+    thinking: str,
+    timeout_seconds: int,
+    refresh: bool = False,
 ) -> tuple[str, str]:
     item_dir = LOG_DIR / candidate["diagram_id"]
     result_path = item_dir / "result.json"
-    if result_path.exists():
+    if result_path.exists() and not refresh:
         return candidate["diagram_id"], "cached"
 
     item_dir.mkdir(parents=True, exist_ok=True)
@@ -465,6 +618,7 @@ def process_candidate(
 
     result = {
         **candidate,
+        "extraction_schema_version": EXTRACTION_SCHEMA_VERSION,
         "status": "ok" if exit_code == 0 and analysis is not None else "error",
         "analysis": analysis,
         "raw_response": response_text if analysis is None else None,
@@ -488,11 +642,15 @@ def process_candidate(
 
 def collect(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
     candidate_ids = [candidate["diagram_id"] for candidate in candidates]
+    candidates_by_id = {
+        candidate["diagram_id"]: candidate for candidate in candidates
+    }
     available = {}
     for diagram in candidate_ids:
         path = LOG_DIR / diagram / "result.json"
         if path.exists():
-            available[diagram] = json.loads(path.read_text(encoding="utf-8"))
+            result = json.loads(path.read_text(encoding="utf-8"))
+            available[diagram] = {**result, **candidates_by_id[diagram]}
 
     previous_ids = [
         row["diagram_id"]
@@ -537,6 +695,28 @@ def command_process(args: argparse.Namespace) -> int:
     if args.id:
         wanted = set(args.id)
         candidates = [row for row in candidates if row["diagram_id"] in wanted]
+    if args.reason:
+        wanted_reasons = set(args.reason)
+        candidates = [
+            row
+            for row in candidates
+            if wanted_reasons.intersection(row.get("selection_reasons", []))
+        ]
+    if args.stale_schema:
+        stale_candidates = []
+        for candidate in candidates:
+            result_path = LOG_DIR / candidate["diagram_id"] / "result.json"
+            if not result_path.exists():
+                stale_candidates.append(candidate)
+                continue
+            result = json.loads(result_path.read_text(encoding="utf-8"))
+            if (
+                result.get("status") != "ok"
+                or result.get("extraction_schema_version")
+                != EXTRACTION_SCHEMA_VERSION
+            ):
+                stale_candidates.append(candidate)
+        candidates = stale_candidates
     if args.offset:
         candidates = candidates[args.offset :]
     if args.limit is not None:
@@ -546,7 +726,11 @@ def command_process(args: argparse.Namespace) -> int:
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as executor:
         futures = {
             executor.submit(
-                process_candidate, candidate, args.thinking, args.timeout_seconds
+                process_candidate,
+                candidate,
+                args.thinking,
+                args.timeout_seconds,
+                args.refresh or args.stale_schema,
             ): candidate["diagram_id"]
             for candidate in candidates
         }
@@ -597,7 +781,24 @@ def parse_args() -> argparse.Namespace:
     process.add_argument("--offset", type=int, default=0)
     process.add_argument("--id", action="append")
     process.add_argument(
-        "--thinking", choices=("off", "minimal", "low", "medium", "high", "max"), default="minimal"
+        "--reason",
+        action="append",
+        help="Only process candidates having this selection reason",
+    )
+    process.add_argument(
+        "--refresh",
+        action="store_true",
+        help="Replace cached results for the selected candidates",
+    )
+    process.add_argument(
+        "--stale-schema",
+        action="store_true",
+        help="Process only results that do not use the current extraction schema",
+    )
+    process.add_argument(
+        "--thinking",
+        choices=("off", "minimal", "low", "medium", "high", "max"),
+        default="minimal",
     )
     process.add_argument("--timeout-seconds", type=int, default=300)
     subparsers.add_parser("collect", help="Collect existing per-image results")

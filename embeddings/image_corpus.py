@@ -138,6 +138,10 @@ def diagram_metadata(analyses: Iterable[dict[str, Any]]) -> dict[str, dict[str, 
             continue
         metadata[source_image] = {
             "diagram_id": row.get("diagram_id"),
+            "diagram_extraction_schema_version": row.get(
+                "extraction_schema_version"
+            ),
+            "diagram_family": analysis.get("diagram_family"),
             "modeling_language": analysis.get("modeling_language"),
             "representation_type": analysis.get("representation_type"),
             "visual_summary": analysis.get("summary"),
@@ -241,6 +245,11 @@ def image_search_text(record: dict[str, Any]) -> str:
         parts.append(f"Visual analysis: {record['visual_summary']}")
     if record.get("representation_type"):
         parts.append(f"Representation type: {record['representation_type']}")
+    if record.get("diagram_family"):
+        parts.append(
+            "Diagram family: "
+            + str(record["diagram_family"]).replace("_", " ")
+        )
     if record.get("modeling_language"):
         parts.append(f"Modeling language: {record['modeling_language']}")
     if record.get("nearby_context"):

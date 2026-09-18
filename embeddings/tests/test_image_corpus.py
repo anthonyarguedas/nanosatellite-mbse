@@ -57,10 +57,12 @@ Figure 1. Electrical power architecture.
             analyses = [
                 {
                     "status": "ok",
+                    "extraction_schema_version": "diagram-analysis/v2",
                     "diagram_id": "review-0001--figure-001-12345678",
                     "source_image": "reports/report-0001/figure_001.png",
                     "analysis": {
                         "contains_target_diagram": True,
+                        "diagram_family": "sysml",
                         "modeling_language": "SysML",
                         "representation_type": "internal block diagram",
                         "summary": "The battery connects to a regulated power bus.",
@@ -73,10 +75,17 @@ Figure 1. Electrical power architecture.
         self.assertEqual(len(records), 2)
         self.assertEqual(records[0]["caption"], units[0]["text"])
         self.assertTrue(records[0]["is_mbse_diagram"])
+        self.assertEqual(records[0]["diagram_family"], "sysml")
+        self.assertEqual(
+            records[0]["diagram_extraction_schema_version"],
+            "diagram-analysis/v2",
+        )
         self.assertEqual(records[0]["modeling_language"], "SysML")
         self.assertFalse(records[1]["is_mbse_diagram"])
         self.assertEqual(records[1]["page_start"], 4)
-        self.assertIn("Electrical power architecture", image_search_text(records[0]))
+        search_text = image_search_text(records[0])
+        self.assertIn("Electrical power architecture", search_text)
+        self.assertIn("Diagram family: sysml", search_text)
 
     def test_image_reference_cannot_leave_repository(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

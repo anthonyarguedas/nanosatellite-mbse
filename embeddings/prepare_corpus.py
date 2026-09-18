@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Iterable, Iterator
 
 from diagram_corpus import build_diagram_chunks
+from diagram_pipeline import EXTRACTION_SCHEMA_VERSION
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -1034,7 +1035,7 @@ def build(args: argparse.Namespace) -> dict:
 
     exact_duplicates = [ids for ids in content_hashes.values() if len(ids) > 1]
     manifest = {
-        "schema_version": "slr1-embedding-corpus/v2",
+        "schema_version": "slr1-embedding-corpus/v3",
         "selection_rule": "listed in SLR/SLR1/included_reports.json",
         "selection_source": {
             "path": str(INCLUDED_REPORTS_PATH.relative_to(REPO_ROOT)),
@@ -1053,9 +1054,17 @@ def build(args: argparse.Namespace) -> dict:
         },
         "diagram_extraction": {
             "analyses_path": "data/diagram-analyses.jsonl",
-            "candidate_rule": "matching model or formal automata caption evidence, captioned images in Simulink sections, plus uncaptioned images from reports whose title names SysML, Capella, Arcadia, or Simulink",
+            "analysis_schema_version": EXTRACTION_SCHEMA_VERSION,
+            "candidate_rule": "matching model or formal diagram caption evidence, BIP report context, captioned images in Simulink sections, plus images from reports whose title names a target language or formalism",
             "acceptance_rule": "status is ok and contains_target_diagram is true",
-            "parts": ["overview", "elements", "relationships", "labels"],
+            "parts": [
+                "overview",
+                "elements",
+                "relationships",
+                "annotations",
+                "formal_content",
+                "labels",
+            ],
         },
         "counts": {
             "directly_included_records": len(reports) + len(missing),

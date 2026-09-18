@@ -44,7 +44,23 @@ class DiagramCorpusTests(unittest.TestCase):
             "formal_automata_term",
             selection_reasons("Figure 8. Three priced timed automata"),
         )
-        self.assertEqual(selection_reasons("Figure 9. Battery voltage plot"), [])
+        self.assertIn(
+            "bip_term",
+            selection_reasons("Figure 9. Mutual exclusion model in BIP"),
+        )
+        self.assertIn(
+            "fault_tree_term",
+            selection_reasons("Figure 10. EPS fault tree"),
+        )
+        self.assertIn(
+            "bayesian_network_term",
+            selection_reasons("Figure 11. Bayesian network model"),
+        )
+        self.assertIn(
+            "gsn_term",
+            selection_reasons("Figure 12. GSN assurance argument"),
+        )
+        self.assertEqual(selection_reasons("Figure 13. Battery voltage plot"), [])
 
     def test_pta_automata_are_candidates(self) -> None:
         candidate = next(
@@ -56,6 +72,16 @@ class DiagramCorpusTests(unittest.TestCase):
         self.assertIn("formal_automata_term", candidate["selection_reasons"])
         self.assertEqual(candidate["section"], "3.2. PTA modelling")
         self.assertIn("JobProvider automaton", candidate["caption_chunks"][0]["caption"])
+
+    def test_bip_report_context_selects_formal_architecture_diagrams(self) -> None:
+        candidate = next(
+            row
+            for row in build_candidates()
+            if row["diagram_id"] == "review-1315--figure-010-7c6b0d63"
+        )
+
+        self.assertIn("bip_in_report", candidate["selection_reasons"])
+        self.assertIn("Architecture diagram", candidate["caption_chunks"][0]["caption"])
 
     def test_simulink_section_context_selects_short_figure_captions(self) -> None:
         candidate = next(
@@ -85,15 +111,54 @@ class DiagramCorpusTests(unittest.TestCase):
 
     def test_json_response_accepts_fence(self) -> None:
         text = """```json
-{"contains_target_diagram": false, "elements": [], "relationships": [], "other_visible_labels": [], "uncertainties": []}
+{"contains_target_diagram": false, "elements": [], "relationships": [], "formal_or_executable_content": [], "other_visible_labels": [], "uncertainties": []}
 ```"""
         self.assertFalse(parse_json_response(text)["contains_target_diagram"])
+
+    def test_json_response_normalizes_optional_empty_links(self) -> None:
+        text = json.dumps(
+            {
+                "contains_target_diagram": True,
+                "elements": [],
+                "relationships": [
+                    {
+                        "source": "A",
+                        "target": "B",
+                        "name": None,
+                        "native_type": "transition",
+                        "semantic_class": "state_or_mode_transition",
+                        "direction": "source_to_target",
+                    }
+                ],
+                "formal_or_executable_content": [
+                    {
+                        "name": "x <= 2",
+                        "native_type": "invariant",
+                        "semantic_class": "constraint",
+                    }
+                ],
+                "other_visible_labels": [],
+                "uncertainties": [],
+            }
+        )
+
+        analysis = parse_json_response(text)
+
+        self.assertEqual(analysis["relationships"][0]["annotations"], [])
+        self.assertEqual(
+            analysis["formal_or_executable_content"][0]["linked_elements"], []
+        )
+        self.assertEqual(
+            analysis["formal_or_executable_content"][0]["linked_relationships"],
+            [],
+        )
 
     def test_visual_elements_become_searchable_chunks(self) -> None:
         row = {
             "diagram_id": "review-9999--figure-001-12345678",
             "report_id": "review-9999",
             "status": "ok",
+            "extraction_schema_version": "diagram-analysis/v2",
             "source_image": "reports/figure_001.png",
             "page_start": 4,
             "page_end": 4,
@@ -118,7 +183,32 @@ class DiagramCorpusTests(unittest.TestCase):
                         "eps_boundary": "inside",
                     }
                 ],
-                "relationships": [],
+                "relationships": [
+                    {
+                        "source": "Distribute Power",
+                        "target": "Regulate Power",
+                        "name": "power path",
+                        "native_type": "Functional Exchange",
+                        "semantic_class": "data_or_resource_flow_or_exchange",
+                        "direction": "source_to_target",
+                        "annotations": [
+                            {
+                                "name": "batteryLevel > minimum",
+                                "native_type": "guard",
+                                "semantic_class": "guard",
+                            }
+                        ],
+                    }
+                ],
+                "formal_or_executable_content": [
+                    {
+                        "name": "voltage >= 5",
+                        "native_type": "constraint",
+                        "semantic_class": "constraint",
+                        "linked_elements": ["Distribute Power"],
+                        "linked_relationships": [],
+                    }
+                ],
                 "other_visible_labels": [],
                 "uncertainties": [],
                 "confidence": 0.95,
@@ -137,11 +227,29 @@ class DiagramCorpusTests(unittest.TestCase):
                 {"review-9999": report}, analyses_path=path
             )
 
-        self.assertEqual(len(chunks), 2)
+        self.assertEqual(len(chunks), 5)
         element_chunk = chunks[1]
+        annotation_chunk = chunks[3]
+        formal_content_chunk = chunks[4]
         self.assertEqual(element_chunk["chunk_type"], "diagram")
+        self.assertEqual(
+            element_chunk["diagram_extraction_schema_version"],
+            "diagram-analysis/v2",
+        )
         self.assertIn('Model element "Distribute Power"', element_chunk["text"])
         self.assertIn("function or behavior", element_chunk["text"])
+        self.assertIn(
+            'Relationship annotation "batteryLevel > minimum"',
+            annotation_chunk["text"],
+        )
+        self.assertIn(
+            'Formal or executable content "voltage >= 5"',
+            formal_content_chunk["text"],
+        )
+        self.assertIn(
+            'Linked model elements: "Distribute Power"',
+            formal_content_chunk["text"],
+        )
         self.assertEqual(element_chunk["image_refs"], ["reports/figure_001.png"])
 
 

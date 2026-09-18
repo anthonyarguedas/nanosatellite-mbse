@@ -59,6 +59,8 @@ UV_CACHE_DIR=.cache/uv uv sync
 .venv/bin/python build_visual_index.py --batch-size 1
 ```
 
+`build_index.py` reuses vectors for chunks whose ID and embedding text are unchanged. Its tracked chunk-record sidecar allows reuse even when changed chunks are not a contiguous suffix.
+
 To refresh visual diagram extraction first:
 
 ```bash

@@ -9,10 +9,24 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from build_index import jsonl_prefix_sha256
+from build_index import chunk_embedding_key, jsonl_prefix_sha256
 
 
 class BuildIndexTests(unittest.TestCase):
+    def test_chunk_embedding_key_tracks_embedding_text(self) -> None:
+        first = chunk_embedding_key(
+            {"chunk_id": "chunk-1", "embedding_text": "first text"}
+        )
+        same = chunk_embedding_key(
+            {"chunk_id": "chunk-1", "embedding_text": "first text"}
+        )
+        changed = chunk_embedding_key(
+            {"chunk_id": "chunk-1", "embedding_text": "changed text"}
+        )
+
+        self.assertEqual(first, same)
+        self.assertNotEqual(first, changed)
+
     def test_jsonl_prefix_hash_matches_standalone_prefix(self) -> None:
         lines = [b'{"id": 1}\n', b'{"id": 2}\n', b'{"id": 3}\n']
         with tempfile.TemporaryDirectory() as directory:
