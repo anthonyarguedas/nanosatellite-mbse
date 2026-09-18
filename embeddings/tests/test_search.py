@@ -13,6 +13,7 @@ from search import (
     SearchService,
     bm25_scores,
     embed_questions,
+    exact_match_spans,
     included_report_citations,
     maxsim_scores,
     prepare_bm25,
@@ -155,6 +156,42 @@ class SearchTests(unittest.TestCase):
         scores = regex_scores(r"state\s+machine", chunks)
 
         self.assertEqual(scores.tolist(), [2.0, 0.0])
+
+    def test_exact_match_spans_match_whole_query_terms(self) -> None:
+        text = "Power, powered, and POWER subsystems."
+
+        spans = exact_match_spans(text, "power subsystem", "hybrid")
+
+        self.assertEqual([text[start:end] for start, end in spans], ["Power", "POWER"])
+
+    def test_exact_match_spans_use_the_regex_expression(self) -> None:
+        text = "State machine and state-machine."
+
+        spans = exact_match_spans(text, r"state[\s-]+machine", "regex")
+
+        self.assertEqual(
+            [text[start:end] for start, end in spans],
+            ["State machine", "state-machine"],
+        )
+
+    def test_exact_match_spans_skip_zero_width_regex_matches(self) -> None:
+        self.assertEqual(exact_match_spans("CubeSat", r"^", "regex"), [])
+
+    def test_search_adds_exact_matches_only_to_text_results(self) -> None:
+        service = SearchService()
+        service._search = lambda **_options: {
+            "question": "power",
+            "mode": "bm25",
+            "results": [
+                {"display_type": "text", "text": "Power subsystem."},
+                {"display_type": "image", "text": "Power diagram."},
+            ],
+        }
+
+        payload = service.search("power", mode="bm25")
+
+        self.assertEqual(payload["results"][0]["exact_match_spans"], [[0, 5]])
+        self.assertNotIn("exact_match_spans", payload["results"][1])
 
     def test_hybrid_search_skips_an_unavailable_visual_index(self) -> None:
         import numpy as np

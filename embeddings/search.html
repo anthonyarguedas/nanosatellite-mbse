@@ -4,6 +4,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SLR Search</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]],
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+        processEscapes: true,
+      },
+      options: {
+        enableMenu: false,
+      },
+      startup: {
+        typeset: false,
+        ready() {
+          MathJax.startup.defaultReady();
+          window.dispatchEvent(new Event("mathjax-ready"));
+        },
+      },
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
   <style>
     :root {
       color-scheme: dark;
@@ -13,6 +33,8 @@
       --muted: #969696;
       --text: #efefef;
       --strong: #ffffff;
+      --match-background: #e6d96a;
+      --match-text: #090909;
     }
 
     * {
@@ -403,6 +425,19 @@
       overflow-wrap: anywhere;
     }
 
+    .exact-match {
+      padding: 0 0.08em;
+      background: var(--match-background);
+      color: var(--match-text);
+    }
+
+    .chunk-text mjx-container[display="true"] {
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 4px 0;
+    }
+
     .image-link {
       display: block;
       margin: 18px 0;
@@ -560,6 +595,9 @@
     const indexRefresh = document.querySelector("#index-refresh");
     let requestNumber = 0;
     let indexRefreshTimer = null;
+    let mathGeneration = 0;
+    let requestedMathGeneration = -1;
+    let mathTypesetQueue = Promise.resolve();
 
     function selectedMode() {
       return document.querySelector('input[name="mode"]:checked').value;
@@ -584,6 +622,152 @@
         node.textContent = text;
       }
       return node;
+    }
+
+    function isEscaped(text, index) {
+      let backslashes = 0;
+      for (let position = index - 1; position >= 0 && text[position] === "\\"; position -= 1) {
+        backslashes += 1;
+      }
+      return backslashes % 2 === 1;
+    }
+
+    function findClosingDelimiter(text, delimiter, start) {
+      let position = start;
+      while (position < text.length) {
+        position = text.indexOf(delimiter, position);
+        if (position === -1) {
+          return -1;
+        }
+        const joinedDollar = delimiter === "$"
+          && (text[position - 1] === "$" || text[position + 1] === "$");
+        if (!isEscaped(text, position) && !joinedDollar) {
+          return position;
+        }
+        position += delimiter.length;
+      }
+      return -1;
+    }
+
+    function latexRanges(text) {
+      const delimiters = [
+        ["$$", "$$"],
+        ["\\[", "\\]"],
+        ["\\(", "\\)"],
+        ["$", "$"],
+      ];
+      const ranges = [];
+      let index = 0;
+      while (index < text.length) {
+        const delimiter = delimiters.find(([opening]) => {
+          if (!text.startsWith(opening, index) || isEscaped(text, index)) {
+            return false;
+          }
+          return opening !== "$"
+            || (text[index - 1] !== "$" && text[index + 1] !== "$");
+        });
+        if (!delimiter) {
+          index += 1;
+          continue;
+        }
+        const [opening, closing] = delimiter;
+        const closingIndex = findClosingDelimiter(
+          text,
+          closing,
+          index + opening.length
+        );
+        if (closingIndex === -1) {
+          index += opening.length;
+          continue;
+        }
+        const end = closingIndex + closing.length;
+        ranges.push([index, end]);
+        index = end;
+      }
+      return ranges;
+    }
+
+    function codeUnitMatchRanges(text, spans) {
+      const offsets = [0];
+      let codeUnits = 0;
+      for (const character of text) {
+        codeUnits += character.length;
+        offsets.push(codeUnits);
+      }
+      return (Array.isArray(spans) ? spans : [])
+        .filter((span) => Array.isArray(span)
+          && span.length === 2
+          && Number.isInteger(span[0])
+          && Number.isInteger(span[1])
+          && span[0] >= 0
+          && span[0] < span[1]
+          && span[1] < offsets.length)
+        .map(([start, end]) => [offsets[start], offsets[end]]);
+    }
+
+    function appendChunkText(node, text, spans) {
+      const math = latexRanges(text);
+      const matches = codeUnitMatchRanges(text, spans)
+        .filter(([start, end]) => !math.some(
+          ([mathStart, mathEnd]) => start < mathEnd && end > mathStart
+        ))
+        .sort((left, right) => left[0] - right[0]);
+      const merged = [];
+      matches.forEach(([start, end]) => {
+        const previous = merged[merged.length - 1];
+        if (previous && start <= previous[1]) {
+          previous[1] = Math.max(previous[1], end);
+        } else {
+          merged.push([start, end]);
+        }
+      });
+
+      let cursor = 0;
+      merged.forEach(([start, end]) => {
+        if (start > cursor) {
+          node.append(document.createTextNode(text.slice(cursor, start)));
+        }
+        node.append(element("mark", "exact-match", text.slice(start, end)));
+        cursor = end;
+      });
+      if (cursor < text.length) {
+        node.append(document.createTextNode(text.slice(cursor)));
+      }
+    }
+
+    function replaceResultNodes(...nodes) {
+      mathGeneration += 1;
+      if (typeof window.MathJax?.typesetClear === "function") {
+        window.MathJax.typesetClear([results]);
+      }
+      results.replaceChildren(...nodes);
+    }
+
+    function typesetResultMath() {
+      const mathJax = window.MathJax;
+      if (typeof mathJax?.typesetPromise !== "function") {
+        return;
+      }
+      const generation = mathGeneration;
+      if (requestedMathGeneration === generation) {
+        return;
+      }
+      requestedMathGeneration = generation;
+      mathTypesetQueue = mathTypesetQueue
+        .then(() => mathJax.startup?.promise)
+        .then(() => {
+          if (generation !== mathGeneration) {
+            return undefined;
+          }
+          const chunks = [...results.querySelectorAll(".chunk-text")];
+          return chunks.length ? mathJax.typesetPromise(chunks) : undefined;
+        })
+        .catch((error) => {
+          if (requestedMathGeneration === generation) {
+            requestedMathGeneration = -1;
+          }
+          console.warn("Math rendering failed.", error);
+        });
     }
 
     function formatNumber(value) {
@@ -858,7 +1042,9 @@
         item.append(imageLink);
       }
       if (result.text) {
-        item.append(element("p", "chunk-text", result.text));
+        const chunkText = element("div", "chunk-text");
+        appendChunkText(chunkText, result.text, result.exact_match_spans);
+        item.append(chunkText);
       }
 
       const footer = element("div", "result-footer");
@@ -871,7 +1057,7 @@
     }
 
     function showMessage(message, error = false) {
-      results.replaceChildren(element("li", error ? "empty error" : "empty", message));
+      replaceResultNodes(element("li", error ? "empty error" : "empty", message));
     }
 
     function render(payload) {
@@ -880,7 +1066,8 @@
         status.textContent = "0 chunks";
         return;
       }
-      results.replaceChildren(...payload.results.map(resultItem));
+      replaceResultNodes(...payload.results.map(resultItem));
+      typesetResultMath();
       const ranking = payload.reranked ? " · reranked" : "";
       const fallback = payload.visual_search_requested && !payload.visual_search
         ? " · visual index skipped"
@@ -893,6 +1080,8 @@
         ? "Regular expression, for example state\\s+machine"
         : "Search the corpus";
     }
+
+    window.addEventListener("mathjax-ready", typesetResultMath);
 
     indexRefresh.addEventListener("click", () => loadIndexStatus(true));
 

@@ -286,6 +286,27 @@ def regex_scores(pattern: str, chunks: list[dict]):
     return scores
 
 
+def exact_match_spans(text: str, question: str, mode: str) -> list[list[int]]:
+    """Return code point ranges for exact query matches in original text."""
+    if mode == "regex":
+        try:
+            expression = re.compile(question, re.IGNORECASE)
+        except re.error as error:
+            raise RegexSearchError(f"Invalid regular expression: {error}") from error
+        return [
+            [match.start(), match.end()]
+            for match in expression.finditer(text)
+            if match.end() > match.start()
+        ]
+
+    query_terms = set(tokenize(question))
+    return [
+        [match.start(), match.end()]
+        for match in TOKEN_RE.finditer(text)
+        if match.group(0).casefold() in query_terms
+    ]
+
+
 def reciprocal_rank_fusion(
     dense_scores, lexical_scores, depth: int = 1000, constant: int = 60
 ):
@@ -1144,7 +1165,7 @@ class SearchService:
             raise SearchError("The reranking depth must be at least 1.")
         mode = normalize_mode(mode)
         with self._search_lock:
-            return self._search(
+            payload = self._search(
                 question=question,
                 mode=mode,
                 top_k=top_k,
@@ -1154,6 +1175,12 @@ class SearchService:
                 rerank=rerank and mode == "hybrid",
                 rerank_depth=rerank_depth,
             )
+        for result in payload["results"]:
+            if result.get("display_type") == "text":
+                result["exact_match_spans"] = exact_match_spans(
+                    result.get("text", ""), question, mode
+                )
+        return payload
 
 
 def page_range(result: dict) -> str:
