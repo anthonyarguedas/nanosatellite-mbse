@@ -11,12 +11,14 @@ import mimetypes
 import os
 import re
 import shutil
+import sqlite3
 import sys
 import threading
 import time
 import webbrowser
 from collections import Counter
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
@@ -41,6 +43,8 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
 DATA_DIR = SCRIPT_DIR / "data"
 ARTIFACT_DIR = SCRIPT_DIR / "artifacts/qwen3-embedding-0.6b"
+JEV_ARTIFACT_DIR = SCRIPT_DIR / "artifacts/jev-1.13.0"
+JEV_INDEX_PATH = JEV_ARTIFACT_DIR / "noul-index.sqlite3"
 INCLUDED_REPORTS_PATH = REPO_ROOT / "SLR/SLR1/included_reports.json"
 GUI_PATH = SCRIPT_DIR / "search.html"
 TYPESAFE_ENV_PATH = SCRIPT_DIR / "api-key.env"
@@ -59,7 +63,15 @@ RERANKER_INSTRUCTION = (
     "and supporting evidence over incidental mentions."
 )
 RERANKERS = ("qwen", "jev")
+JEV_MODEL_ID = "jev-1.13.0"
 JEV_RERANKER_MODEL_ID = "jev-latest"
+JEV_SEARCH_QUESTION_ID = "matches_search_query"
+JEV_CONTENT_QUESTION_ID = "contains_meaningful_report_content"
+JEV_CONTENT_THRESHOLD = 0.3
+JEV_INDEX_SCHEMA_VERSION = 1
+JEV_SEARCH_WORKERS = 4
+JEV_REQUEST_TIMEOUT_SECONDS = 120.0
+JEV_MAX_RETRIES = 5
 JEV_RERANKER_QUESTION_ID = "directly_answers_query"
 JEV_RERANKER_QUESTION = {
     "type": "noul",
@@ -79,12 +91,34 @@ JEV_RERANKER_QUESTION = {
     },
 }
 JEV_RERANKER_WORKERS = 12
+JEV_CONTENT_QUESTION = {
+    "type": "noul",
+    "instructions": (
+        "Does `chunk` contain substantive report content that could serve as "
+        "evidence in a literature review?"
+    ),
+    "criteria": {
+        "true": (
+            "The chunk contains substantive claims, definitions, background, methods, "
+            "technical descriptions, data, results, discussion, conclusions, "
+            "limitations, equations, tables, or figure descriptions."
+        ),
+        "false": (
+            "The chunk consists primarily of front or back matter such as author names "
+            "and affiliations, venue or publication details, copyright or license text, "
+            "a biography, acknowledgments, a table of contents, a bare keyword list, "
+            "or bibliography/reference entries. Citations inside substantive prose do "
+            "not make that prose metadata."
+        ),
+    },
+}
 RERANK_FUSION_CONSTANT = 60
 RERANKER_RRF_WEIGHT = 3.0
 TOKEN_RE = re.compile(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)?")
 QUOTED_PHRASE_RE = re.compile(r'"([^"]+)"')
 REPORT_MARKDOWN_RE = re.compile(r"^(review|citation)-report-([0-9]+)\.md$")
-SEARCH_MODES = ("hybrid", "vector", "visual", "bm25", "regex")
+SEARCH_MODES = ("hybrid", "vector", "jev", "visual", "bm25", "regex")
+RERANKABLE_MODES = {"hybrid", "vector", "jev", "bm25", "regex"}
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
 SERVED_SUFFIXES = IMAGE_SUFFIXES | {".pdf"}
 
@@ -127,6 +161,346 @@ def typesafe_api_key() -> str | None:
             value = value[1:-1]
         values[name.strip()] = value
     return values.get("TYPESAFE_API_KEY") or values.get("TYPESAFE_AI_API_KEY") or None
+
+
+def json_sha256(value: Any) -> str:
+    encoded = json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+JEV_CONTENT_QUESTION_SHA256 = json_sha256(JEV_CONTENT_QUESTION)
+
+
+def jev_search_question(query: str) -> dict:
+    """Build the query specific Noul used for exhaustive Jev retrieval."""
+    return {
+        "type": "noul",
+        "instructions": {
+            "question": (
+                "Does `chunk` contain information that directly helps answer the "
+                "literature search query?"
+            ),
+            "literature_search_query": query,
+            "focus": (
+                "Prefer definitions, explanations, rationale, methods, findings, and "
+                "supporting evidence over a related term or incidental mention."
+            ),
+        },
+        "criteria": {
+            "true": (
+                "The chunk provides information that could be used in a direct, "
+                "answer to the query that is grounded in evidence."
+            ),
+            "false": (
+                "The chunk is irrelevant, merely topically similar, or mentions query "
+                "terms without information that helps answer the query."
+            ),
+        },
+    }
+
+
+def jev_chunk_state(chunk: dict) -> dict:
+    """Return only the report context that Jev needs to judge one chunk."""
+    return {
+        "chunk": {
+            "title": str(chunk.get("title") or ""),
+            "section": str(chunk.get("section") or ""),
+            "type": str(chunk.get("chunk_type") or ""),
+            "text": str(chunk.get("text") or ""),
+        }
+    }
+
+
+def jev_search_id(query: str) -> tuple[str, dict, str]:
+    question = jev_search_question(query)
+    question_sha256 = json_sha256(question)
+    search_id = json_sha256(
+        {
+            "schema": "slr1-jev-search/v1",
+            "model_id": JEV_MODEL_ID,
+            "question_sha256": question_sha256,
+        }
+    )
+    return search_id, question, question_sha256
+
+
+def response_noul(response: Any, question_id: str) -> float:
+    answers = getattr(response, "nouls", None)
+    if answers is None:
+        answers = getattr(response, "answers", None)
+    try:
+        value = float(answers[question_id].noul)
+    except (AttributeError, KeyError, TypeError, ValueError) as error:
+        raise RuntimeError(f"Jev did not return a Noul for {question_id!r}") from error
+    if not math.isfinite(value) or not 0 <= value <= 1:
+        raise RuntimeError(f"Jev returned an invalid Noul for {question_id!r}: {value}")
+    return value
+
+
+class JevSearchIndex:
+    """Persistent cache of chunk classifications and query-dependent Noul scores."""
+
+    def __init__(self, path: Path) -> None:
+        self.path = path
+        self.connection: sqlite3.Connection | None = None
+
+    def __enter__(self) -> JevSearchIndex:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        connection = sqlite3.connect(self.path, timeout=30)
+        connection.execute("PRAGMA journal_mode=WAL")
+        connection.execute("PRAGMA synchronous=NORMAL")
+        version = int(connection.execute("PRAGMA user_version").fetchone()[0])
+        if version not in {0, JEV_INDEX_SCHEMA_VERSION}:
+            connection.close()
+            raise SearchError(
+                f"Unsupported Jev index schema {version}. Remove {self.path} and retry."
+            )
+        connection.executescript(
+            """
+            CREATE TABLE IF NOT EXISTS metadata (
+                key TEXT PRIMARY KEY,
+                value TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS corpus_chunks (
+                chunk_id TEXT PRIMARY KEY,
+                state_sha256 TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS content_scores (
+                chunk_id TEXT NOT NULL,
+                state_sha256 TEXT NOT NULL,
+                model_id TEXT NOT NULL,
+                question_sha256 TEXT NOT NULL,
+                noul REAL NOT NULL,
+                scored_at TEXT NOT NULL,
+                PRIMARY KEY (chunk_id, state_sha256, model_id, question_sha256)
+            );
+            CREATE TABLE IF NOT EXISTS searches (
+                search_id TEXT PRIMARY KEY,
+                query_text TEXT NOT NULL,
+                model_id TEXT NOT NULL,
+                question_sha256 TEXT NOT NULL,
+                content_question_sha256 TEXT NOT NULL,
+                corpus_sha256 TEXT NOT NULL,
+                completed INTEGER NOT NULL DEFAULT 0,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS query_scores (
+                search_id TEXT NOT NULL,
+                chunk_id TEXT NOT NULL,
+                state_sha256 TEXT NOT NULL,
+                noul REAL NOT NULL,
+                scored_at TEXT NOT NULL,
+                PRIMARY KEY (search_id, chunk_id, state_sha256)
+            );
+            CREATE INDEX IF NOT EXISTS query_scores_search
+                ON query_scores (search_id);
+            """
+        )
+        connection.execute(f"PRAGMA user_version={JEV_INDEX_SCHEMA_VERSION}")
+        connection.commit()
+        self.connection = connection
+        return self
+
+    def __exit__(self, _type, _value, _traceback) -> None:
+        if self.connection is None:
+            return
+        try:
+            self.connection.commit()
+            self.connection.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+        finally:
+            self.connection.close()
+            self.connection = None
+
+    def _connection(self) -> sqlite3.Connection:
+        if self.connection is None:  # pragma: no cover - caller contract
+            raise RuntimeError("The Jev index is not open")
+        return self.connection
+
+    def _metadata(self) -> dict[str, str]:
+        return dict(self._connection().execute("SELECT key, value FROM metadata"))
+
+    def _set_metadata(self, values: dict[str, str]) -> None:
+        self._connection().executemany(
+            "INSERT OR REPLACE INTO metadata (key, value) VALUES (?, ?)",
+            values.items(),
+        )
+
+    def sync_corpus(
+        self,
+        chunk_states: list[tuple[str, str]],
+        corpus_sha256: str,
+    ) -> None:
+        connection = self._connection()
+        metadata = self._metadata()
+        expected_count = str(len(chunk_states))
+        state_snapshot_sha256 = json_sha256(chunk_states)
+        desired_metadata = {
+            "schema": "slr1-jev-noul-index/v1",
+            "model_id": JEV_MODEL_ID,
+            "content_question_sha256": JEV_CONTENT_QUESTION_SHA256,
+            "corpus_sha256": corpus_sha256,
+            "state_snapshot_sha256": state_snapshot_sha256,
+            "chunks": expected_count,
+        }
+        corpus_changed = (
+            metadata.get("corpus_sha256") != corpus_sha256
+            or metadata.get("state_snapshot_sha256") != state_snapshot_sha256
+            or metadata.get("chunks") != expected_count
+        )
+        metadata_changed = any(
+            metadata.get(key) != value for key, value in desired_metadata.items()
+        )
+        if corpus_changed:
+            connection.execute("DELETE FROM corpus_chunks")
+            connection.executemany(
+                "INSERT INTO corpus_chunks (chunk_id, state_sha256) VALUES (?, ?)",
+                chunk_states,
+            )
+        if metadata_changed:
+            desired_metadata["updated_at"] = datetime.now(timezone.utc).isoformat()
+            self._set_metadata(desired_metadata)
+        if corpus_changed or metadata_changed:
+            connection.commit()
+
+    def content_scores(self) -> dict[str, float]:
+        rows = self._connection().execute(
+            """
+            SELECT corpus_chunks.chunk_id, content_scores.noul
+            FROM corpus_chunks
+            JOIN content_scores
+              ON content_scores.chunk_id = corpus_chunks.chunk_id
+             AND content_scores.state_sha256 = corpus_chunks.state_sha256
+             AND content_scores.model_id = ?
+             AND content_scores.question_sha256 = ?
+            """,
+            (JEV_MODEL_ID, JEV_CONTENT_QUESTION_SHA256),
+        )
+        return {chunk_id: float(noul) for chunk_id, noul in rows}
+
+    def query_scores(self, search_id: str) -> dict[str, float]:
+        rows = self._connection().execute(
+            """
+            SELECT corpus_chunks.chunk_id, query_scores.noul
+            FROM corpus_chunks
+            JOIN query_scores
+              ON query_scores.chunk_id = corpus_chunks.chunk_id
+             AND query_scores.state_sha256 = corpus_chunks.state_sha256
+            WHERE query_scores.search_id = ?
+            """,
+            (search_id,),
+        )
+        return {chunk_id: float(noul) for chunk_id, noul in rows}
+
+    def begin_search(
+        self,
+        search_id: str,
+        query: str,
+        question_sha256: str,
+        corpus_sha256: str,
+    ) -> None:
+        connection = self._connection()
+        existing = connection.execute(
+            """
+            SELECT query_text, model_id, question_sha256,
+                   content_question_sha256, corpus_sha256
+            FROM searches WHERE search_id = ?
+            """,
+            (search_id,),
+        ).fetchone()
+        current = (
+            query,
+            JEV_MODEL_ID,
+            question_sha256,
+            JEV_CONTENT_QUESTION_SHA256,
+            corpus_sha256,
+        )
+        if existing == current:
+            return
+
+        now = datetime.now(timezone.utc).isoformat()
+        if existing is None:
+            connection.execute(
+                """
+                INSERT INTO searches (
+                    search_id, query_text, model_id, question_sha256,
+                    content_question_sha256, corpus_sha256, completed,
+                    created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?)
+                """,
+                (search_id, *current, now, now),
+            )
+        else:
+            connection.execute(
+                """
+                UPDATE searches
+                SET query_text = ?, model_id = ?, question_sha256 = ?,
+                    content_question_sha256 = ?, corpus_sha256 = ?, completed = 0,
+                    updated_at = ?
+                WHERE search_id = ?
+                """,
+                (*current, now, search_id),
+            )
+        connection.commit()
+
+    def save_evaluation(
+        self,
+        search_id: str,
+        chunk_id: str,
+        state_sha256: str,
+        query_noul: float | None,
+        content_noul: float | None,
+    ) -> None:
+        connection = self._connection()
+        now = datetime.now(timezone.utc).isoformat()
+        if content_noul is not None:
+            connection.execute(
+                """
+                INSERT OR REPLACE INTO content_scores (
+                    chunk_id, state_sha256, model_id, question_sha256,
+                    noul, scored_at
+                ) VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    chunk_id,
+                    state_sha256,
+                    JEV_MODEL_ID,
+                    JEV_CONTENT_QUESTION_SHA256,
+                    content_noul,
+                    now,
+                ),
+            )
+        if query_noul is not None:
+            connection.execute(
+                """
+                INSERT OR REPLACE INTO query_scores (
+                    search_id, chunk_id, state_sha256, noul, scored_at
+                ) VALUES (?, ?, ?, ?, ?)
+                """,
+                (search_id, chunk_id, state_sha256, query_noul, now),
+            )
+        connection.execute(
+            "UPDATE searches SET updated_at = ? WHERE search_id = ?",
+            (now, search_id),
+        )
+        connection.commit()
+
+    def complete_search(self, search_id: str) -> None:
+        connection = self._connection()
+        cursor = connection.execute(
+            """
+            UPDATE searches SET completed = 1, updated_at = ?
+            WHERE search_id = ? AND completed != 1
+            """,
+            (datetime.now(timezone.utc).isoformat(), search_id),
+        )
+        if cursor.rowcount:
+            connection.commit()
 
 
 def included_report_citations() -> dict[str, dict[str, str]]:
@@ -560,8 +934,14 @@ def file_url(path: Path, page: int | None = None) -> str:
 class SearchService:
     """Load text, visual, and reranking resources on demand."""
 
-    def __init__(self, device: str = "auto") -> None:
+    def __init__(
+        self,
+        device: str = "auto",
+        *,
+        jev_index_path: Path = JEV_INDEX_PATH,
+    ) -> None:
         self.device_requested = device
+        self.jev_index_path = jev_index_path
         self._chunks: list[dict] | None = None
         self._reports: dict[str, dict] | None = None
         self._bm25_data: tuple[list[list[str]], Counter[str], float] | None = None
@@ -611,6 +991,10 @@ class SearchService:
                 visual_build_state_path=VISUAL_BUILD_STATE_PATH,
                 visual_model_id=COLPALI_MODEL_ID,
                 visual_model_revision=COLPALI_MODEL_REVISION,
+                jev_index_path=self.jev_index_path,
+                jev_model_id=JEV_MODEL_ID,
+                jev_content_question_sha256=JEV_CONTENT_QUESTION_SHA256,
+                jev_content_threshold=JEV_CONTENT_THRESHOLD,
             )
             self._status_cached_at = now
             return self._status_cache
@@ -649,6 +1033,58 @@ class SearchService:
                 chunks, _ = self._load_corpus()
                 self._bm25_data = prepare_bm25(chunks)
         return self._bm25_data
+
+    def _jev_content_filter(self, chunks: list[dict]):
+        """Load complete cached Jev content scores for Qwen result filtering."""
+        import numpy as np
+
+        if not self.jev_index_path.exists():
+            raise SearchError(
+                "Qwen search requires the Jev content index. Run a Jev search first "
+                f"or restore {self.jev_index_path} with Git LFS."
+            )
+        states = [jev_chunk_state(chunk) for chunk in chunks]
+        state_sha256s = [json_sha256(state) for state in states]
+        chunk_states = [
+            (str(chunk["chunk_id"]), state_sha256)
+            for chunk, state_sha256 in zip(chunks, state_sha256s)
+        ]
+        try:
+            with JevSearchIndex(self.jev_index_path) as index:
+                index.sync_corpus(
+                    chunk_states,
+                    file_sha256(DATA_DIR / "chunks.jsonl"),
+                )
+                cached_content = index.content_scores()
+        except sqlite3.Error as error:
+            raise SearchError(f"Cannot read the Jev content index: {error}") from error
+
+        missing = [
+            str(chunk["chunk_id"])
+            for chunk in chunks
+            if str(chunk["chunk_id"]) not in cached_content
+        ]
+        if missing:
+            raise SearchError(
+                f"The Jev content index lacks {len(missing)} of {len(chunks)} chunks. "
+                "Run any Jev search to finish classifying the corpus."
+            )
+        scores = np.asarray(
+            [cached_content[str(chunk["chunk_id"])] for chunk in chunks],
+            dtype=np.float32,
+        )
+        if not np.isfinite(scores).all():  # pragma: no cover - cache invariant
+            raise SearchError("The Jev content index contains invalid Noul scores.")
+        eligible = scores >= JEV_CONTENT_THRESHOLD
+        eligible_count = int(np.count_nonzero(eligible))
+        return scores, eligible, {
+            "source": "jev_content_noul",
+            "model_id": JEV_MODEL_ID,
+            "threshold": JEV_CONTENT_THRESHOLD,
+            "classified_chunks": len(chunks),
+            "eligible_chunks": eligible_count,
+            "excluded_chunks": len(chunks) - eligible_count,
+        }
 
     def _dense_scores(self, question: str):
         import numpy as np
@@ -783,18 +1219,25 @@ class SearchService:
             api_key = typesafe_api_key()
             if api_key is None:
                 raise SearchError(
-                    "Jev reranking requires TYPESAFE_API_KEY or "
+                    "Jev search requires TYPESAFE_API_KEY or "
                     f"an API key in {TYPESAFE_ENV_PATH}."
                 )
             try:
-                from typesafe_sdk import TypeSafeClient
+                from typesafe_sdk import RetryPolicy, TypeSafeClient
             except ImportError as error:
                 raise SearchError(
-                    "Jev reranking requires typesafe-sdk. Run `uv sync` in embeddings."
+                    "Jev search requires typesafe-sdk. Run `uv sync` in embeddings."
                 ) from error
             self._jev_client = TypeSafeClient(
                 api_key=api_key,
                 model=JEV_RERANKER_MODEL_ID,
+                timeout=JEV_REQUEST_TIMEOUT_SECONDS,
+                retry=RetryPolicy(
+                    max_retries=JEV_MAX_RETRIES,
+                    backoff_initial=0.5,
+                    backoff_max=15.0,
+                    timeout=None,
+                ),
             )
         return self._jev_client
 
@@ -820,6 +1263,169 @@ class SearchService:
             raise RuntimeError("Jev reranker produced nonfinite scores")
         return scores
 
+    def _jev_search_scores(
+        self,
+        question: str,
+        chunks: list[dict],
+        *,
+        corpus_sha256: str | None = None,
+    ):
+        """Score every eligible chunk directly with a query specific Jev Noul."""
+        import numpy as np
+
+        if corpus_sha256 is None:
+            corpus_sha256 = file_sha256(DATA_DIR / "chunks.jsonl")
+        search_id, search_question, question_sha256 = jev_search_id(question)
+        states = [jev_chunk_state(chunk) for chunk in chunks]
+        state_sha256s = [json_sha256(state) for state in states]
+        chunk_states = [
+            (str(chunk["chunk_id"]), state_sha256)
+            for chunk, state_sha256 in zip(chunks, state_sha256s)
+        ]
+        query_values = np.full(len(chunks), -1.0, dtype=np.float32)
+        content_values = np.full(len(chunks), np.nan, dtype=np.float32)
+        tasks: list[tuple[int, bool, bool]] = []
+        query_cache_hits = 0
+
+        with JevSearchIndex(self.jev_index_path) as index:
+            index.sync_corpus(chunk_states, corpus_sha256)
+            index.begin_search(
+                search_id,
+                question,
+                question_sha256,
+                corpus_sha256,
+            )
+            cached_content = index.content_scores()
+            cached_queries = index.query_scores(search_id)
+
+            for row_index, chunk in enumerate(chunks):
+                chunk_id = str(chunk["chunk_id"])
+                content_noul = cached_content.get(chunk_id)
+                query_noul = cached_queries.get(chunk_id)
+                if content_noul is not None:
+                    content_values[row_index] = content_noul
+                if query_noul is not None:
+                    query_values[row_index] = query_noul
+
+                needs_content = content_noul is None
+                known_excluded = (
+                    content_noul is not None
+                    and content_noul < JEV_CONTENT_THRESHOLD
+                )
+                needs_query = query_noul is None and not known_excluded
+                if query_noul is not None and not known_excluded:
+                    query_cache_hits += 1
+                if needs_content or needs_query:
+                    tasks.append((row_index, needs_content, needs_query))
+
+            api_calls = 0
+            if tasks:
+                client = self._get_jev_client()
+
+                def evaluate(task: tuple[int, bool, bool]):
+                    row_index, needs_content, needs_query = task
+                    questions = {}
+                    if needs_content:
+                        questions[JEV_CONTENT_QUESTION_ID] = JEV_CONTENT_QUESTION
+                    if needs_query:
+                        questions[JEV_SEARCH_QUESTION_ID] = search_question
+                    response = client.system_one(
+                        state=states[row_index],
+                        questions=questions,
+                        model=JEV_MODEL_ID,
+                    )
+                    return {
+                        "content_noul": (
+                            response_noul(response, JEV_CONTENT_QUESTION_ID)
+                            if needs_content
+                            else None
+                        ),
+                        "query_noul": (
+                            response_noul(response, JEV_SEARCH_QUESTION_ID)
+                            if needs_query
+                            else None
+                        ),
+                    }
+
+                task_iterator = iter(tasks)
+                worker_count = min(JEV_SEARCH_WORKERS, len(tasks))
+                failure: Exception | None = None
+                with ThreadPoolExecutor(max_workers=worker_count) as pool:
+                    pending = {}
+                    for _ in range(worker_count):
+                        task = next(task_iterator, None)
+                        if task is None:
+                            break
+                        pending[pool.submit(evaluate, task)] = task
+
+                    while pending and failure is None:
+                        completed, _ = wait(pending, return_when=FIRST_COMPLETED)
+                        successful = 0
+                        for future in completed:
+                            task = pending.pop(future)
+                            try:
+                                answer = future.result()
+                            except Exception as error:  # API errors retain prior cache rows
+                                failure = error
+                                continue
+
+                            row_index, _, _ = task
+                            content_noul = answer["content_noul"]
+                            query_noul = answer["query_noul"]
+                            if content_noul is not None:
+                                content_values[row_index] = content_noul
+                            if query_noul is not None:
+                                query_values[row_index] = query_noul
+                            index.save_evaluation(
+                                search_id=search_id,
+                                chunk_id=str(chunks[row_index]["chunk_id"]),
+                                state_sha256=state_sha256s[row_index],
+                                query_noul=query_noul,
+                                content_noul=content_noul,
+                            )
+                            api_calls += 1
+                            successful += 1
+
+                        if failure is None:
+                            for _ in range(successful):
+                                task = next(task_iterator, None)
+                                if task is None:
+                                    break
+                                pending[pool.submit(evaluate, task)] = task
+                        else:
+                            for future in pending:
+                                future.cancel()
+
+                if failure is not None:
+                    raise SearchError(
+                        f"Jev search stopped after caching {api_calls} new chunk "
+                        f"evaluations: {failure}"
+                    ) from failure
+
+            if not np.isfinite(content_values).all():  # pragma: no cover - invariant
+                raise RuntimeError("Jev content classification is incomplete")
+            meaningful = content_values >= JEV_CONTENT_THRESHOLD
+            if np.any(query_values[meaningful] < 0):  # pragma: no cover - invariant
+                raise RuntimeError("Jev query scoring is incomplete")
+            index.complete_search(search_id)
+
+        with self._status_lock:
+            self._status_cache = None
+        meaningful_count = int(np.count_nonzero(meaningful))
+        stats = {
+            "model_id": JEV_MODEL_ID,
+            "index_path": str(self.jev_index_path),
+            "search_id": search_id,
+            "content_threshold": JEV_CONTENT_THRESHOLD,
+            "chunks": len(chunks),
+            "meaningful_chunks": meaningful_count,
+            "excluded_chunks": len(chunks) - meaningful_count,
+            "content_cache_hits": len(cached_content),
+            "query_cache_hits": query_cache_hits,
+            "api_calls": api_calls,
+        }
+        return query_values, content_values, stats
+
     def _result(
         self,
         chunk: dict,
@@ -829,6 +1435,8 @@ class SearchService:
         dense_score: float | None,
         bm25_score: float | None,
         regex_score: float | None,
+        jev_score: float | None = None,
+        meaningful_content_noul: float | None = None,
     ) -> dict:
         image = originating_image(chunk, report)
         display_type = "image" if image is not None else "text"
@@ -887,6 +1495,10 @@ class SearchService:
             result["bm25_score"] = bm25_score
         if regex_score is not None:
             result["regex_score"] = regex_score
+        if jev_score is not None:
+            result["jev_score"] = jev_score
+        if meaningful_content_noul is not None:
+            result["meaningful_content_noul"] = meaningful_content_noul
         return result
 
     def _image_result(
@@ -977,6 +1589,7 @@ class SearchService:
         report_id: str | None = None,
         positive_only: bool = False,
         images_only: bool = False,
+        allowed_rows: Any = None,
         constant: int = 60,
     ) -> None:
         import numpy as np
@@ -987,6 +1600,8 @@ class SearchService:
             raw_score = float(source_scores[int(row_index)])
             if positive_only and raw_score <= 0:
                 break
+            if allowed_rows is not None and not bool(allowed_rows[int(row_index)]):
+                continue
             chunk = chunks[int(row_index)]
             if report_id is not None and chunk["report_id"] != report_id:
                 continue
@@ -1094,7 +1709,8 @@ class SearchService:
                 score=float(candidate["final_score"]),
                 dense_score=raw_scores.get("dense"),
                 bm25_score=raw_scores.get("bm25"),
-                regex_score=None,
+                regex_score=raw_scores.get("regex"),
+                jev_score=raw_scores.get("jev"),
             )
             record = candidate.get("image_record")
             if record is not None:
@@ -1138,8 +1754,11 @@ class SearchService:
         include_visual: bool,
         rerank: bool,
         rerank_depth: int,
+        jev_scores: Any = None,
+        regex_match_scores: Any = None,
         reranker: str = "qwen",
         images_only: bool = False,
+        content_eligible: Any = None,
     ) -> tuple[list[dict], str | None, bool, list[str]]:
         candidates: dict[str, dict] = {}
         visual_device = None
@@ -1165,6 +1784,7 @@ class SearchService:
                 fusion_depth,
                 report_id=report_id,
                 images_only=images_only,
+                allowed_rows=content_eligible,
             )
         if lexical_scores is not None:
             self._add_chunk_ranking(
@@ -1177,6 +1797,32 @@ class SearchService:
                 report_id=report_id,
                 positive_only=True,
                 images_only=images_only,
+                allowed_rows=content_eligible,
+            )
+        if jev_scores is not None:
+            self._add_chunk_ranking(
+                candidates,
+                "jev",
+                jev_scores,
+                chunks,
+                reports,
+                fusion_depth,
+                report_id=report_id,
+                images_only=images_only,
+                allowed_rows=content_eligible,
+            )
+        if regex_match_scores is not None:
+            self._add_chunk_ranking(
+                candidates,
+                "regex",
+                regex_match_scores,
+                chunks,
+                reports,
+                fusion_depth,
+                report_id=report_id,
+                positive_only=True,
+                images_only=images_only,
+                allowed_rows=content_eligible,
             )
         if visual_scores is not None:
             self._add_visual_ranking(
@@ -1271,15 +1917,121 @@ class SearchService:
         dense_scores = None
         lexical_scores = None
         regex_match_scores = None
+        jev_content_scores = None
+        content_eligible = None
+        content_filter = None
         device = None
         visual_device = None
 
         if mode in {"vector", "hybrid"}:
+            (
+                jev_content_scores,
+                content_eligible,
+                content_filter,
+            ) = self._jev_content_filter(chunks)
             dense_scores, device = self._dense_scores(question)
         if mode in {"bm25", "hybrid"}:
             lexical_scores = bm25_scores(question, *self._get_bm25_data())
         if mode == "regex":
             regex_match_scores = regex_scores(question, chunks)
+        if mode == "jev":
+            jev_scores, content_scores, jev_index = self._jev_search_scores(
+                question,
+                chunks,
+            )
+            content_eligible = content_scores >= JEV_CONTENT_THRESHOLD
+            eligible_rows = np.flatnonzero(content_eligible)
+            if rerank:
+                results, _, _, warnings = self._hybrid_results(
+                    question=question,
+                    chunks=chunks,
+                    reports=reports,
+                    dense_scores=None,
+                    lexical_scores=None,
+                    top_k=top_k,
+                    max_per_report=max_per_report,
+                    report_id=report_id,
+                    fusion_depth=fusion_depth,
+                    include_visual=False,
+                    rerank=True,
+                    rerank_depth=rerank_depth,
+                    jev_scores=jev_scores,
+                    reranker=reranker,
+                    images_only=images_only,
+                    content_eligible=content_eligible,
+                )
+                scores_by_chunk = {
+                    str(chunk["chunk_id"]): float(content_scores[index])
+                    for index, chunk in enumerate(chunks)
+                }
+                for result in results:
+                    if result["chunk_id"] in scores_by_chunk:
+                        result["meaningful_content_noul"] = scores_by_chunk[
+                            result["chunk_id"]
+                        ]
+                return {
+                    "question": question,
+                    "mode": mode,
+                    "model": JEV_MODEL_ID,
+                    "score_type": "rank_fusion",
+                    "images_only": images_only,
+                    "reranker": reranker,
+                    "reranker_device": (
+                        self._reranker_device if reranker == "qwen" else None
+                    ),
+                    "reranker_weight": RERANKER_RRF_WEIGHT,
+                    "reranked": True,
+                    "warnings": warnings,
+                    "jev_index": jev_index,
+                    "results": results,
+                }
+            order = eligible_rows[
+                np.argsort(-jev_scores[eligible_rows], kind="stable")
+            ]
+            results = []
+            report_counts: Counter[str] = Counter()
+            for row_index in order:
+                chunk = chunks[int(row_index)]
+                chunk_report_id = chunk["report_id"]
+                if report_id is not None and chunk_report_id != report_id:
+                    continue
+                if images_only and originating_image(
+                    chunk, reports.get(chunk_report_id, {})
+                ) is None:
+                    continue
+                if (
+                    max_per_report is not None
+                    and report_counts[chunk_report_id] >= max_per_report
+                ):
+                    continue
+                report_counts[chunk_report_id] += 1
+                results.append(
+                    self._result(
+                        chunk=chunk,
+                        report=reports.get(chunk_report_id, {}),
+                        rank=len(results) + 1,
+                        score=float(jev_scores[int(row_index)]),
+                        dense_score=None,
+                        bm25_score=None,
+                        regex_score=None,
+                        jev_score=float(jev_scores[int(row_index)]),
+                        meaningful_content_noul=float(
+                            content_scores[int(row_index)]
+                        ),
+                    )
+                )
+                if len(results) >= top_k:
+                    break
+            return {
+                "question": question,
+                "mode": mode,
+                "model": JEV_MODEL_ID,
+                "score_type": "noul",
+                "images_only": images_only,
+                "reranked": False,
+                "jev_index": jev_index,
+                "results": results,
+            }
         if mode == "visual":
             visual_scores, records, visual_device = self._visual_scores(question)
             order = np.argsort(-visual_scores, kind="stable")
@@ -1332,7 +2084,18 @@ class SearchService:
                 rerank_depth=rerank_depth,
                 reranker=reranker,
                 images_only=images_only,
+                content_eligible=content_eligible,
             )
+            if jev_content_scores is not None:
+                scores_by_chunk = {
+                    str(chunk["chunk_id"]): float(jev_content_scores[index])
+                    for index, chunk in enumerate(chunks)
+                }
+                for result in results:
+                    if result["chunk_id"] in scores_by_chunk:
+                        result["meaningful_content_noul"] = scores_by_chunk[
+                            result["chunk_id"]
+                        ]
             return {
                 "question": question,
                 "mode": mode,
@@ -1348,6 +2111,42 @@ class SearchService:
                 "images_only": images_only,
                 "warnings": warnings,
                 "reranked": rerank,
+                "content_filter": content_filter,
+                "results": results,
+            }
+
+        if mode in {"bm25", "regex"} and rerank:
+            results, _, _, warnings = self._hybrid_results(
+                question=question,
+                chunks=chunks,
+                reports=reports,
+                dense_scores=None,
+                lexical_scores=lexical_scores if mode == "bm25" else None,
+                top_k=top_k,
+                max_per_report=max_per_report,
+                report_id=report_id,
+                fusion_depth=fusion_depth,
+                include_visual=False,
+                rerank=True,
+                rerank_depth=rerank_depth,
+                regex_match_scores=(
+                    regex_match_scores if mode == "regex" else None
+                ),
+                reranker=reranker,
+                images_only=images_only,
+            )
+            return {
+                "question": question,
+                "mode": mode,
+                "device": None,
+                "images_only": images_only,
+                "reranker": reranker,
+                "reranker_device": (
+                    self._reranker_device if reranker == "qwen" else None
+                ),
+                "reranker_weight": RERANKER_RRF_WEIGHT,
+                "warnings": warnings,
+                "reranked": True,
                 "results": results,
             }
 
@@ -1360,6 +2159,11 @@ class SearchService:
         )
         if mode in {"bm25", "regex"}:
             matching_rows = np.flatnonzero(final_scores > 0)
+            order = matching_rows[
+                np.argsort(-final_scores[matching_rows], kind="stable")
+            ]
+        elif mode == "vector":
+            matching_rows = np.flatnonzero(content_eligible)
             order = matching_rows[
                 np.argsort(-final_scores[matching_rows], kind="stable")
             ]
@@ -1404,6 +2208,11 @@ class SearchService:
                         if regex_match_scores is not None
                         else None
                     ),
+                    meaningful_content_noul=(
+                        float(jev_content_scores[int(row_index)])
+                        if jev_content_scores is not None
+                        else None
+                    ),
                 )
             )
             if len(results) >= top_k:
@@ -1414,6 +2223,7 @@ class SearchService:
             "device": device,
             "images_only": images_only,
             "reranked": False,
+            "content_filter": content_filter,
             "results": results,
         }
 
@@ -1462,7 +2272,7 @@ class SearchService:
                 max_per_report=None if report_id is not None else max_per_report,
                 fusion_depth=fusion_depth,
                 include_visual=include_visual,
-                rerank=rerank and mode in {"hybrid", "vector"},
+                rerank=rerank and mode in RERANKABLE_MODES,
                 rerank_depth=rerank_depth,
                 reranker=reranker,
                 images_only=images_only,
@@ -1734,7 +2544,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--mode",
-        choices=("hybrid", "vector", "dense", "visual", "bm25", "regex"),
+        choices=("hybrid", "vector", "dense", "jev", "visual", "bm25", "regex"),
         default="hybrid",
     )
     parser.add_argument("--device", default="auto")
@@ -1747,7 +2557,7 @@ def parse_args() -> argparse.Namespace:
         "--reranker",
         choices=RERANKERS,
         default="qwen",
-        help="Reranker for hybrid or vector search. Jev requires a TypeSafe key.",
+        help="Reranker for any text search mode. Jev requires a TypeSafe key.",
     )
     parser.add_argument(
         "--report",
@@ -1766,7 +2576,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--no-rerank",
         action="store_true",
-        help="Do not rerank hybrid or vector candidates.",
+        help="Do not rerank text search candidates.",
     )
     parser.add_argument("--excerpt-chars", type=int, default=500)
     parser.add_argument("--json", action="store_true")

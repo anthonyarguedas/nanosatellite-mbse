@@ -133,7 +133,7 @@
 
     .index-cards {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
       margin-top: 8px;
     }
@@ -648,6 +648,7 @@
             <div class="modes">
               <label class="mode"><input type="radio" name="mode" value="hybrid"><span>Hybrid</span></label>
               <label class="mode"><input type="radio" name="mode" value="vector" checked><span>Vector</span></label>
+              <label class="mode"><input type="radio" name="mode" value="jev"><span>Jev Noul</span></label>
               <label class="mode"><input type="radio" name="mode" value="bm25"><span>BM25</span></label>
               <label class="mode"><input type="radio" name="mode" value="regex"><span>Regex</span></label>
             </div>
@@ -729,7 +730,7 @@
     }
 
     function modeSupportsReranking(mode) {
-      return mode === "hybrid" || mode === "vector";
+      return ["hybrid", "vector", "jev", "bm25", "regex"].includes(mode);
     }
 
     function pageRange(result) {
@@ -997,6 +998,11 @@
       let metrics;
       if (kind === "text") {
         metrics = `${formatNumber(index.chunks_indexed)} / ${formatNumber(index.chunks_expected)} chunks`;
+      } else if (kind === "jev") {
+        metrics = `${formatNumber(index.chunks_classified)} / ${formatNumber(index.chunks_expected)} chunks classified`;
+        metrics += ` · ${formatNumber(index.meaningful_chunks)} meaningful`;
+        metrics += ` · ${formatNumber(index.cached_queries)} cached queries`;
+        metrics += ` · ${formatNumber(index.cached_scores)} Noul scores`;
       } else {
         const indexed = index.state === "building" || index.state === "partial"
           ? index.build_completed
@@ -1029,10 +1035,14 @@
     function renderIndexStatus(payload) {
       indexHealth.className = `index-health state-${payload.overall}`;
       corpusCount.textContent = `${formatNumber(payload.corpus.reports)} reports · ${formatNumber(payload.corpus.figures)} figures`;
-      indexCards.replaceChildren(
+      const cards = [
         indexCard("Text", payload.text, "text"),
-        indexCard("Visual", payload.visual, "visual")
-      );
+        indexCard("Visual", payload.visual, "visual"),
+      ];
+      if (payload.jev) {
+        cards.push(indexCard("Jev Noul", payload.jev, "jev"));
+      }
+      indexCards.replaceChildren(...cards);
       if (indexRefreshTimer) {
         clearTimeout(indexRefreshTimer);
         indexRefreshTimer = null;
@@ -1300,11 +1310,17 @@
       typesetResultMath();
       const rerankerName = payload.reranker === "jev" ? "Jev" : "Qwen";
       const ranking = payload.reranked ? ` · ${rerankerName} reranked` : "";
+      const jev = payload.mode === "jev" && payload.jev_index
+        ? ` · ${formatNumber(payload.jev_index.api_calls)} live · ${formatNumber(payload.jev_index.query_cache_hits)} cached`
+        : "";
+      const contentFilter = payload.content_filter
+        ? ` · ${formatNumber(payload.content_filter.excluded_chunks)} metadata chunks omitted`
+        : "";
       const imageFilter = payload.images_only ? " · images only" : "";
       const fallback = payload.visual_search_requested && !payload.visual_search
         ? " · visual index skipped"
         : "";
-      status.textContent = `${payload.results.length} ${payload.results.length === 1 ? "result" : "results"} · ${payload.mode}${ranking}${imageFilter}${fallback}${reportSuffix}`;
+      status.textContent = `${payload.results.length} ${payload.results.length === 1 ? "result" : "results"} · ${payload.mode}${ranking}${jev}${contentFilter}${imageFilter}${fallback}${reportSuffix}`;
     }
 
     function updateSearchControls() {
@@ -1347,7 +1363,9 @@
       const currentRequest = ++requestNumber;
       button.disabled = true;
       button.textContent = "Searching";
-      status.textContent = "Searching…";
+      status.textContent = selectedMode() === "jev"
+        ? "Scoring uncached chunks with Jev…"
+        : "Searching…";
       results.setAttribute("aria-busy", "true");
 
       try {

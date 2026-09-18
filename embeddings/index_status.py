@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import sqlite3
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -334,6 +335,122 @@ def inspect_visual_index(
     return status
 
 
+def inspect_jev_index(
+    chunks_path: Path,
+    index_path: Path,
+    model_id: str,
+    content_question_sha256: str,
+    content_threshold: float,
+) -> dict[str, Any]:
+    """Inspect the persistent Jev Noul cache without making an API request."""
+    status = {
+        "state": "missing",
+        "reasons": [],
+        "model_id": model_id,
+        "chunks_expected": 0,
+        "chunks_classified": 0,
+        "meaningful_chunks": 0,
+        "excluded_chunks": 0,
+        "cached_queries": 0,
+        "complete_queries": 0,
+        "cached_scores": 0,
+        "updated_at": None,
+    }
+    if not chunks_path.exists():
+        status["reasons"].append("The chunk corpus is missing.")
+        return status
+    with chunks_path.open("rb") as handle:
+        status["chunks_expected"] = sum(1 for line in handle if line.strip())
+    if not index_path.exists():
+        status["reasons"].append("No Jev searches have been cached yet.")
+        return status
+
+    try:
+        connection = sqlite3.connect(index_path, timeout=5)
+        try:
+            version = int(connection.execute("PRAGMA user_version").fetchone()[0])
+            if version != 1:
+                raise ValueError(f"unsupported schema version {version}")
+            metadata = dict(connection.execute("SELECT key, value FROM metadata"))
+            snapshot_count = int(
+                connection.execute("SELECT COUNT(*) FROM corpus_chunks").fetchone()[0]
+            )
+            classified, meaningful = connection.execute(
+                """
+                SELECT COUNT(*), COALESCE(SUM(content_scores.noul >= ?), 0)
+                FROM corpus_chunks
+                JOIN content_scores
+                  ON content_scores.chunk_id = corpus_chunks.chunk_id
+                 AND content_scores.state_sha256 = corpus_chunks.state_sha256
+                 AND content_scores.model_id = ?
+                 AND content_scores.question_sha256 = ?
+                """,
+                (content_threshold, model_id, content_question_sha256),
+            ).fetchone()
+            cached_queries, complete_queries, updated_at = connection.execute(
+                """
+                SELECT COUNT(*), COALESCE(SUM(completed), 0), MAX(updated_at)
+                FROM searches
+                WHERE model_id = ? AND content_question_sha256 = ?
+                """,
+                (model_id, content_question_sha256),
+            ).fetchone()
+            cached_scores = connection.execute(
+                """
+                SELECT COUNT(*)
+                FROM query_scores
+                JOIN searches USING (search_id)
+                WHERE searches.model_id = ?
+                  AND searches.content_question_sha256 = ?
+                """,
+                (model_id, content_question_sha256),
+            ).fetchone()[0]
+        finally:
+            connection.close()
+    except (OSError, ValueError, sqlite3.Error) as error:
+        status["state"] = "error"
+        status["reasons"].append(f"Cannot read the Jev index: {error}")
+        return status
+
+    status.update(
+        {
+            "chunks_classified": int(classified),
+            "meaningful_chunks": int(meaningful),
+            "excluded_chunks": int(classified) - int(meaningful),
+            "cached_queries": int(cached_queries),
+            "complete_queries": int(complete_queries),
+            "cached_scores": int(cached_scores),
+            "updated_at": updated_at or metadata.get("updated_at"),
+        }
+    )
+    reasons = status["reasons"]
+    stale = False
+    if metadata.get("model_id") != model_id:
+        reasons.append("The Jev model changed.")
+        stale = True
+    if metadata.get("content_question_sha256") != content_question_sha256:
+        reasons.append("The Jev content question changed.")
+        stale = True
+    if metadata.get("corpus_sha256") != file_sha256(chunks_path):
+        reasons.append("The chunk corpus changed after the last Jev search.")
+        stale = True
+    if snapshot_count != status["chunks_expected"]:
+        reasons.append("The Jev corpus snapshot has a different chunk count.")
+        stale = True
+    if status["chunks_classified"] != status["chunks_expected"]:
+        reasons.append(
+            f"{status['chunks_expected'] - status['chunks_classified']} chunks still "
+            "need content classification."
+        )
+    if stale:
+        status["state"] = "stale"
+    elif status["chunks_classified"] < status["chunks_expected"]:
+        status["state"] = "partial"
+    else:
+        status["state"] = "ready"
+    return status
+
+
 def inspect_indexes(
     *,
     repository_root: Path,
@@ -349,6 +466,10 @@ def inspect_indexes(
     visual_model_id: str,
     visual_model_revision: str,
     verify_image_hashes: bool = True,
+    jev_index_path: Path | None = None,
+    jev_model_id: str | None = None,
+    jev_content_question_sha256: str | None = None,
+    jev_content_threshold: float = 0.5,
 ) -> dict[str, Any]:
     reports_path = data_dir / "reports.jsonl"
     reports = read_jsonl(reports_path) if reports_path.exists() else []
@@ -375,6 +496,19 @@ def inspect_indexes(
     states = {text["state"], visual["state"]}
     priority = ("error", "stale", "building", "partial", "missing", "ready")
     overall = next(state for state in priority if state in states)
+    jev = None
+    if (
+        jev_index_path is not None
+        and jev_model_id is not None
+        and jev_content_question_sha256 is not None
+    ):
+        jev = inspect_jev_index(
+            chunks_path=data_dir / "chunks.jsonl",
+            index_path=jev_index_path,
+            model_id=jev_model_id,
+            content_question_sha256=jev_content_question_sha256,
+            content_threshold=jev_content_threshold,
+        )
     corpus = {
         "reports": len(reports),
         "figures": figure_sources["figures"],
@@ -385,7 +519,7 @@ def inspect_indexes(
         "invalid_figure_references": figure_sources["invalid_references"],
         "invalid_figure_reference_samples": figure_sources["invalid_reference_samples"],
     }
-    return {
+    payload = {
         "schema_version": "slr1-index-status/v1",
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "overall": overall,
@@ -393,3 +527,6 @@ def inspect_indexes(
         "text": text,
         "visual": visual,
     }
+    if jev is not None:
+        payload["jev"] = jev
+    return payload

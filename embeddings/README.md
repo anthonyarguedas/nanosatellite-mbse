@@ -1,36 +1,41 @@
 # SLR1 multimodal retrieval
 
-The corpus contains structure aware text chunks, dedicated mathematical equation chunks, every source image, and GPT-5.6-Luna extractions of SysML, Capella/Arcadia, Simulink, and formal diagrams from the 129 included reports. Qwen3 provides text embeddings, ColPali searches the source images directly, and Qwen3-Reranker orders the fused candidates by default. Jev is available as an API based reranker.
+The corpus contains structure aware text chunks, dedicated mathematical equation chunks, every source image, and GPT-5.6-Luna extractions of SysML, Capella/Arcadia, Simulink, and formal diagrams from the 129 included reports. Qwen3 provides text embeddings, ColPali searches the source images directly, and Qwen3-Reranker orders the fused candidates by default. Jev supports direct Noul scoring and API based reranking.
 
 ## Answer a question
-
-Use vector retrieval by default:
 
 ```bash
 cd embeddings
 echo "How is a CubeSat power budget verified?" \
-  | .venv/bin/python search.py --mode vector --top-k 12
+  | .venv/bin/python search.py --mode jev --top-k 12
 ```
 
-Available modes:
+Available modes, in descending order of observed performance:
 
-- `vector`: **recommended**. embeds the question with Qwen3, finds semantic matches, and optionally reranks the shortlist. `dense` remains an alias.
-- `hybrid`: fuses Qwen3 vector, BM25, and available ColPali visual ranks, then reranks the top 50 candidates with Qwen3-Reranker. This is the default. If the visual index is missing, stale, or still building, the search continues with Qwen3 and BM25 and reports that it skipped visual retrieval.
+- `jev`: **recommended**. sends each eligible chunk to Jev and ranks it by a query specific Noul probability. The query is part of the Noul instructions. This is direct semantic scoring, rather than an embedding or vector similarity search.
+- `vector`: **recommended**. embeds the question with Qwen3, omits chunks below the cached Jev content threshold, finds semantic matches, and optionally reranks the shortlist.
 - `visual`: matches the question directly against every report image with ColPali.
+- `hybrid`: filters text chunks with the cached Jev content Noul, fuses Qwen3 vector, BM25, and available ColPali visual ranks, then reranks the top 50 candidates with Qwen3-Reranker. This is the default. If the visual index is missing, stale, or still building, the search continues with Qwen3 and BM25 and reports that it skipped visual retrieval.
 - `bm25`: finds exact acronyms, tool names, numbers, and technical terms. Double-quoted terms receive an exact phrase bonus.
 - `regex`: finds case insensitive Python regular expression matches in the original chunk text.
 
-Use `--no-visual` for hybrid ablation runs. Use `--no-rerank` with hybrid or vector search. Change the candidate count with `--rerank-depth`. The final weighted rank fusion gives the reranker three times the weight of initial retrieval. Use `--images-only` to keep results linked to source images.
+Use `--no-visual` for hybrid ablation runs. Every text mode supports Qwen or Jev reranking. Use `--no-rerank` to keep its first stage order. Change the candidate count with `--rerank-depth`. The final weighted rank fusion gives the reranker three times the weight of initial retrieval. Use `--images-only` to keep results linked to source images.
 
-Select Jev after setting a TypeSafe API key:
+Set a TypeSafe API key to use direct Jev search or Jev reranking:
 
 ```bash
 export TYPESAFE_API_KEY="..."
 echo "How is a CubeSat power budget verified?" \
-  | .venv/bin/python search.py --reranker jev
+  | .venv/bin/python search.py --mode jev --top-k 12
+
+# Jev can also rerank a Qwen shortlist.
+echo "How is a CubeSat power budget verified?" \
+  | .venv/bin/python search.py --mode vector --reranker jev
 ```
 
-Jev sends the query and shortlisted candidate text to the TypeSafe API. Qwen remains the local default. Search also reads the ignored `api-key.env` file in this directory when environment variables are absent.
+Direct Jev search uses two Nouls. A fixed content Noul separates substantive report evidence from publication metadata, author and venue details, biographies, and reference lists. Chunks with a content Noul of at least `0.30` remain eligible. A query specific Noul scores relevance. The first search evaluates both questions for every chunk. Later searches skip chunks classified as metadata and send only substantive chunks that lack a cached score for that exact query. Repeating a query can run entirely from the cache.
+
+The shared cache is `artifacts/jev-1.13.0/noul-index.sqlite3`. It records raw Noul probabilities, so policy thresholds can change without new API calls. Qwen Vector and Hybrid searches require complete content scores from this index and never call Jev themselves. The file is configured for Git LFS. Add it with `git add artifacts/jev-1.13.0/noul-index.sqlite3` after a search. A direct search can make thousands of billable API requests when the cache is empty. Completed calls are committed as they return, so a failed or interrupted search resumes from its cached rows. Transient timeouts, connection failures, rate limits, and server errors are retried up to five times with no total retry budget. Each individual request retains a 120 second timeout. Search also reads the ignored `api-key.env` file in this directory when environment variables are absent.
 
 For broad questions, split the question into focused subquestions. Retrieve 10 to 20 chunks for each.
 
@@ -44,7 +49,7 @@ cd embeddings
 ```
 
 The GUI opens at `http://127.0.0.1:8765`.
-It defaults to Vector search and also provides Hybrid, BM25, and Regex methods. Choose Off, Qwen, or Jev reranking for Vector and Hybrid searches. The Images only filter replaces the standalone Visual method in the GUI. The index status panel reports text and visual index freshness, resumable build progress, unindexed figures, changed figures, and missing source files. Image results show the original file, its caption or Luna extraction when available, and a link to the source PDF.
+It defaults to Vector search and also provides Hybrid, Jev Noul, BM25, and Regex methods. Choose Off, Qwen, or Jev reranking for any method. The Images only filter replaces the standalone Visual method in the GUI. The index status panel reports text, visual, and Jev cache coverage. Image results show the original file, its caption or Luna extraction when available, and a link to the source PDF.
 
 Treat retrieved chunks as evidence candidates. Check important claims in the source Markdown.
 
