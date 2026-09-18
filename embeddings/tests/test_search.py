@@ -1,13 +1,20 @@
 from __future__ import annotations
 
+import os
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from search import (
+    GUI_PATH,
+    JEV_RERANKER_QUESTION,
+    JEV_RERANKER_QUESTION_ID,
     QUERY_PROMPT,
     SearchError,
     SearchService,
@@ -17,13 +24,26 @@ from search import (
     exact_match_spans,
     included_report_citations,
     maxsim_scores,
+    normalize_reranker,
     prepare_bm25,
     regex_scores,
+    reranked_rank_fusion_score,
     resolve_report_filter,
+    typesafe_api_key,
 )
 
 
 class SearchTests(unittest.TestCase):
+    def test_gui_defaults_to_vector_with_filter_and_reranker_controls(self) -> None:
+        html = GUI_PATH.read_text(encoding="utf-8")
+
+        self.assertIn('name="mode" value="vector" checked', html)
+        self.assertNotIn('name="mode" value="visual"', html)
+        self.assertIn('id="images-only" type="checkbox"', html)
+        self.assertIn('name="reranker" value="off"', html)
+        self.assertIn('name="reranker" value="qwen" checked', html)
+        self.assertIn('name="reranker" value="jev"', html)
+
     def test_questions_use_domain_retrieval_prompt(self) -> None:
         import numpy as np
 
@@ -185,6 +205,69 @@ class SearchTests(unittest.TestCase):
 
         np.testing.assert_allclose(scores, [2.0, 1.0])
 
+    def test_typesafe_key_can_come_from_local_env_file(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            env_path = Path(directory) / "api-key.env"
+            env_path.write_text("TYPESAFE_AI_API_KEY=local-test-key\n", encoding="utf-8")
+            with (
+                patch.dict(
+                    os.environ,
+                    {"TYPESAFE_API_KEY": "", "TYPESAFE_AI_API_KEY": ""},
+                ),
+                patch("search.TYPESAFE_ENV_PATH", env_path),
+            ):
+                self.assertEqual(typesafe_api_key(), "local-test-key")
+
+    def test_jev_reranker_uses_noul_probabilities_as_scores(self) -> None:
+        import numpy as np
+
+        class FakeClient:
+            def __init__(self):
+                self.requests = []
+
+            def system_one(self, *, state, questions):
+                self.requests.append((state, questions))
+                noul = 0.9 if "direct evidence" in state["candidate_document"] else 0.1
+                answer = SimpleNamespace(noul=noul)
+                return SimpleNamespace(nouls={JEV_RERANKER_QUESTION_ID: answer})
+
+        service = SearchService()
+        client = FakeClient()
+        service._jev_client = client
+
+        scores = service._jev_rerank_scores(
+            "How is the power budget verified?",
+            ["This gives direct evidence.", "This is an incidental mention."],
+        )
+
+        np.testing.assert_allclose(scores, [0.9, 0.1])
+        self.assertCountEqual(
+            [request[0]["candidate_document"] for request in client.requests],
+            ["This gives direct evidence.", "This is an incidental mention."],
+        )
+        for state, questions in client.requests:
+            self.assertEqual(state["query"], "How is the power budget verified?")
+            self.assertEqual(
+                questions, {JEV_RERANKER_QUESTION_ID: JEV_RERANKER_QUESTION}
+            )
+
+    def test_reranker_names_are_case_insensitive_and_validated(self) -> None:
+        self.assertEqual(normalize_reranker("JEV"), "jev")
+        with self.assertRaisesRegex(SearchError, "Unknown reranker"):
+            normalize_reranker("other")
+
+    def test_reranker_rank_has_greater_fusion_weight(self) -> None:
+        reranker_favorite = reranked_rank_fusion_score(
+            first_stage_rank=21,
+            reranker_rank=1,
+        )
+        retrieval_favorite = reranked_rank_fusion_score(
+            first_stage_rank=3,
+            reranker_rank=7,
+        )
+
+        self.assertGreater(reranker_favorite, retrieval_favorite)
+
     def test_quoted_phrase_adds_exact_sequence_bonus(self) -> None:
         chunks = [
             {"embedding_text": "The model can distribute power safely."},
@@ -304,6 +387,145 @@ class SearchTests(unittest.TestCase):
         )
 
         self.assertEqual(list(candidates), ["chunk:review-0002:chunk-00001"])
+
+    def test_vector_search_can_rerank_with_jev(self) -> None:
+        import numpy as np
+
+        service = SearchService()
+        service._load_corpus = lambda: ([], {})
+        service._dense_scores = lambda _question: (np.array([]), "cpu")
+        captured = {}
+
+        def candidate_results(**options):
+            captured.update(options)
+            return [], None, False, []
+
+        service._hybrid_results = candidate_results
+
+        payload = service._search(
+            question="CubeSat",
+            mode="vector",
+            top_k=5,
+            max_per_report=2,
+            fusion_depth=10,
+            include_visual=True,
+            rerank=True,
+            rerank_depth=5,
+            reranker="jev",
+            images_only=True,
+            report_id=None,
+        )
+
+        self.assertIsNone(captured["lexical_scores"])
+        self.assertFalse(captured["include_visual"])
+        self.assertEqual(captured["reranker"], "jev")
+        self.assertTrue(captured["images_only"])
+        self.assertTrue(payload["reranked"])
+        self.assertEqual(payload["reranker"], "jev")
+
+    def test_images_only_filters_fused_candidates(self) -> None:
+        import numpy as np
+
+        service = SearchService()
+        chunks = [
+            {
+                "chunk_id": "review-0001:chunk-00001",
+                "report_id": "review-0001",
+                "title": "Image evidence",
+                "section": "Results",
+                "page_start": 1,
+                "page_end": 1,
+                "chunk_type": "caption",
+                "text": "Diagram evidence.",
+                "embedding_text": "Diagram evidence.",
+                "has_image": True,
+            },
+            {
+                "chunk_id": "review-0002:chunk-00001",
+                "report_id": "review-0002",
+                "title": "Text evidence",
+                "section": "Results",
+                "page_start": 1,
+                "page_end": 1,
+                "chunk_type": "passage",
+                "text": "Text evidence.",
+                "embedding_text": "Text evidence.",
+                "has_image": False,
+            },
+        ]
+
+        def fake_image(chunk, _report=None):
+            return Path(__file__).resolve() if chunk["has_image"] else None
+
+        with patch("search.originating_image", side_effect=fake_image):
+            results, _, _, _ = service._hybrid_results(
+                question="evidence",
+                chunks=chunks,
+                reports={"review-0001": {}, "review-0002": {}},
+                dense_scores=np.array([1.0, 2.0]),
+                lexical_scores=None,
+                top_k=2,
+                max_per_report=2,
+                report_id=None,
+                fusion_depth=10,
+                include_visual=False,
+                rerank=False,
+                rerank_depth=10,
+                images_only=True,
+            )
+
+        self.assertEqual(
+            [result["chunk_id"] for result in results],
+            ["review-0001:chunk-00001"],
+        )
+        self.assertEqual(results[0]["display_type"], "image")
+
+    def test_hybrid_search_can_rerank_with_jev(self) -> None:
+        import numpy as np
+
+        service = SearchService()
+        captured = {}
+
+        def jev_scores(question, documents):
+            captured["question"] = question
+            captured["documents"] = documents
+            return np.array([0.87])
+
+        service._jev_rerank_scores = jev_scores
+        service._rerank_scores = lambda *_args: self.fail("Qwen reranker was used")
+        chunks = [
+            {
+                "chunk_id": "review-0001:chunk-00001",
+                "report_id": "review-0001",
+                "title": "Example",
+                "section": "Introduction",
+                "page_start": 1,
+                "page_end": 1,
+                "chunk_type": "passage",
+                "text": "CubeSat evidence.",
+                "embedding_text": "CubeSat evidence.",
+            }
+        ]
+
+        results, _, _, _ = service._hybrid_results(
+            question="CubeSat",
+            chunks=chunks,
+            reports={"review-0001": {}},
+            dense_scores=np.array([1.0]),
+            lexical_scores=np.array([0.0]),
+            top_k=1,
+            max_per_report=2,
+            report_id=None,
+            fusion_depth=10,
+            include_visual=False,
+            rerank=True,
+            rerank_depth=10,
+            reranker="jev",
+        )
+
+        self.assertEqual(captured["question"], "CubeSat")
+        self.assertEqual(captured["documents"], ["CubeSat evidence."])
+        self.assertAlmostEqual(results[0]["reranker_score"], 0.87, places=6)
 
     def test_hybrid_search_skips_an_unavailable_visual_index(self) -> None:
         import numpy as np

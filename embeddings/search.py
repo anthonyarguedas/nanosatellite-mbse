@@ -16,6 +16,7 @@ import threading
 import time
 import webbrowser
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
@@ -42,6 +43,7 @@ DATA_DIR = SCRIPT_DIR / "data"
 ARTIFACT_DIR = SCRIPT_DIR / "artifacts/qwen3-embedding-0.6b"
 INCLUDED_REPORTS_PATH = REPO_ROOT / "SLR/SLR1/included_reports.json"
 GUI_PATH = SCRIPT_DIR / "search.html"
+TYPESAFE_ENV_PATH = SCRIPT_DIR / "api-key.env"
 MODEL_ID = "Qwen/Qwen3-Embedding-0.6B"
 MODEL_REVISION = "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
 RERANKER_MODEL_ID = "Qwen/Qwen3-Reranker-0.6B"
@@ -56,6 +58,29 @@ RERANKER_INSTRUCTION = (
     "document directly answers it. Prefer definitions, explanations, rationale, "
     "and supporting evidence over incidental mentions."
 )
+RERANKERS = ("qwen", "jev")
+JEV_RERANKER_MODEL_ID = "jev-latest"
+JEV_RERANKER_QUESTION_ID = "directly_answers_query"
+JEV_RERANKER_QUESTION = {
+    "type": "noul",
+    "instructions": (
+        "Does `candidate_document` directly answer `query` for a literature review "
+        "about MBSE and nanosatellites?"
+    ),
+    "criteria": {
+        "true": (
+            "The candidate provides a definition, explanation, rationale, method, "
+            "result, or supporting evidence that directly helps answer the query."
+        ),
+        "false": (
+            "The candidate is irrelevant, only shares terms with the query, or "
+            "mentions the subject without information that helps answer it."
+        ),
+    },
+}
+JEV_RERANKER_WORKERS = 12
+RERANK_FUSION_CONSTANT = 60
+RERANKER_RRF_WEIGHT = 3.0
 TOKEN_RE = re.compile(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)?")
 QUOTED_PHRASE_RE = re.compile(r'"([^"]+)"')
 REPORT_MARKDOWN_RE = re.compile(r"^(review|citation)-report-([0-9]+)\.md$")
@@ -75,6 +100,33 @@ class RegexSearchError(SearchError):
 def read_jsonl(path: Path) -> list[dict]:
     with path.open(encoding="utf-8") as handle:
         return [json.loads(line) for line in handle if line.strip()]
+
+
+def typesafe_api_key() -> str | None:
+    """Read the TypeSafe key from the environment or the ignored local env file."""
+    for name in ("TYPESAFE_API_KEY", "TYPESAFE_AI_API_KEY"):
+        value = os.environ.get(name, "").strip()
+        if value:
+            return value
+    try:
+        lines = TYPESAFE_ENV_PATH.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return None
+    values: dict[str, str] = {}
+    for line in lines:
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("export "):
+            line = line.removeprefix("export ").strip()
+        name, separator, value = line.partition("=")
+        if not separator:
+            continue
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+            value = value[1:-1]
+        values[name.strip()] = value
+    return values.get("TYPESAFE_API_KEY") or values.get("TYPESAFE_AI_API_KEY") or None
 
 
 def included_report_citations() -> dict[str, dict[str, str]]:
@@ -417,6 +469,16 @@ def reciprocal_rank_fusion(
     return fused
 
 
+def reranked_rank_fusion_score(
+    first_stage_rank: int,
+    reranker_rank: int,
+) -> float:
+    """Combine retrieval and reranker ranks with the reranker weighted 3:1."""
+    return 1 / (RERANK_FUSION_CONSTANT + first_stage_rank) + RERANKER_RRF_WEIGHT / (
+        RERANK_FUSION_CONSTANT + reranker_rank
+    )
+
+
 def normalize_mode(mode: str) -> str:
     mode = mode.casefold()
     if mode == "dense":
@@ -425,6 +487,14 @@ def normalize_mode(mode: str) -> str:
         available = ", ".join(SEARCH_MODES)
         raise SearchError(f"Unknown search mode {mode!r}. Choose: {available}.")
     return mode
+
+
+def normalize_reranker(reranker: str) -> str:
+    reranker = reranker.casefold()
+    if reranker not in RERANKERS:
+        available = ", ".join(RERANKERS)
+        raise SearchError(f"Unknown reranker {reranker!r}. Choose: {available}.")
+    return reranker
 
 
 def repository_path(value: str) -> Path | None:
@@ -506,6 +576,7 @@ class SearchService:
         self._visual_device: str | None = None
         self._reranker: Any = None
         self._reranker_device: str | None = None
+        self._jev_client: Any = None
         self._status_cache: dict | None = None
         self._status_cached_at = 0.0
         self._corpus_lock = threading.Lock()
@@ -513,6 +584,7 @@ class SearchService:
         self._dense_lock = threading.Lock()
         self._visual_lock = threading.Lock()
         self._reranker_lock = threading.Lock()
+        self._jev_client_lock = threading.Lock()
         self._status_lock = threading.Lock()
         self._search_lock = threading.Lock()
 
@@ -704,6 +776,50 @@ class SearchService:
             raise RuntimeError("Qwen reranker produced nonfinite scores")
         return scores
 
+    def _get_jev_client(self):
+        with self._jev_client_lock:
+            if self._jev_client is not None:
+                return self._jev_client
+            api_key = typesafe_api_key()
+            if api_key is None:
+                raise SearchError(
+                    "Jev reranking requires TYPESAFE_API_KEY or "
+                    f"an API key in {TYPESAFE_ENV_PATH}."
+                )
+            try:
+                from typesafe_sdk import TypeSafeClient
+            except ImportError as error:
+                raise SearchError(
+                    "Jev reranking requires typesafe-sdk. Run `uv sync` in embeddings."
+                ) from error
+            self._jev_client = TypeSafeClient(
+                api_key=api_key,
+                model=JEV_RERANKER_MODEL_ID,
+            )
+        return self._jev_client
+
+    def _jev_rerank_scores(self, question: str, documents: list[str]):
+        import numpy as np
+
+        if not documents:
+            return np.empty(0, dtype=np.float32)
+        client = self._get_jev_client()
+
+        def score(document: str) -> float:
+            response = client.system_one(
+                state={"query": question, "candidate_document": document},
+                questions={JEV_RERANKER_QUESTION_ID: JEV_RERANKER_QUESTION},
+            )
+            return float(response.nouls[JEV_RERANKER_QUESTION_ID].noul)
+
+        with ThreadPoolExecutor(
+            max_workers=min(JEV_RERANKER_WORKERS, len(documents))
+        ) as pool:
+            scores = np.asarray(list(pool.map(score, documents)), dtype=np.float32)
+        if not np.isfinite(scores).all():
+            raise RuntimeError("Jev reranker produced nonfinite scores")
+        return scores
+
     def _result(
         self,
         chunk: dict,
@@ -860,6 +976,7 @@ class SearchService:
         depth: int,
         report_id: str | None = None,
         positive_only: bool = False,
+        images_only: bool = False,
         constant: int = 60,
     ) -> None:
         import numpy as np
@@ -874,6 +991,8 @@ class SearchService:
             if report_id is not None and chunk["report_id"] != report_id:
                 continue
             key, source_image = self._chunk_candidate_key(chunk, reports)
+            if images_only and source_image is None:
+                continue
             if key in seen:
                 continue
             seen.add(key)
@@ -1019,6 +1138,8 @@ class SearchService:
         include_visual: bool,
         rerank: bool,
         rerank_depth: int,
+        reranker: str = "qwen",
+        images_only: bool = False,
     ) -> tuple[list[dict], str | None, bool, list[str]]:
         candidates: dict[str, dict] = {}
         visual_device = None
@@ -1034,25 +1155,29 @@ class SearchService:
         else:
             visual_scores, records = None, []
 
-        self._add_chunk_ranking(
-            candidates,
-            "dense",
-            dense_scores,
-            chunks,
-            reports,
-            fusion_depth,
-            report_id=report_id,
-        )
-        self._add_chunk_ranking(
-            candidates,
-            "bm25",
-            lexical_scores,
-            chunks,
-            reports,
-            fusion_depth,
-            report_id=report_id,
-            positive_only=True,
-        )
+        if dense_scores is not None:
+            self._add_chunk_ranking(
+                candidates,
+                "dense",
+                dense_scores,
+                chunks,
+                reports,
+                fusion_depth,
+                report_id=report_id,
+                images_only=images_only,
+            )
+        if lexical_scores is not None:
+            self._add_chunk_ranking(
+                candidates,
+                "bm25",
+                lexical_scores,
+                chunks,
+                reports,
+                fusion_depth,
+                report_id=report_id,
+                positive_only=True,
+                images_only=images_only,
+            )
         if visual_scores is not None:
             self._add_visual_ranking(
                 candidates,
@@ -1063,7 +1188,14 @@ class SearchService:
             )
 
         first_stage = sorted(
-            candidates.values(), key=lambda candidate: -candidate["fusion_score"]
+            (
+                candidate
+                for candidate in candidates.values()
+                if not images_only
+                or candidate.get("source_image") is not None
+                or candidate.get("image_record") is not None
+            ),
+            key=lambda candidate: -candidate["fusion_score"],
         )
         for rank, candidate in enumerate(first_stage, start=1):
             candidate["first_stage_rank"] = rank
@@ -1072,9 +1204,11 @@ class SearchService:
         final_candidates = first_stage
         if rerank and first_stage:
             pool = first_stage[: max(top_k, rerank_depth)]
-            reranker_scores = self._rerank_scores(
-                question,
-                [self._candidate_text(candidate) for candidate in pool],
+            documents = [self._candidate_text(candidate) for candidate in pool]
+            reranker_scores = (
+                self._jev_rerank_scores(question, documents)
+                if reranker == "jev"
+                else self._rerank_scores(question, documents)
             )
             reranked = sorted(
                 zip(pool, reranker_scores),
@@ -1084,9 +1218,10 @@ class SearchService:
                 reranked, start=1
             ):
                 candidate["reranker_score"] = float(reranker_score)
-                candidate["final_score"] = 1 / (
-                    60 + candidate["first_stage_rank"]
-                ) + 1 / (60 + reranker_rank)
+                candidate["final_score"] = reranked_rank_fusion_score(
+                    candidate["first_stage_rank"],
+                    reranker_rank,
+                )
             final_candidates = sorted(
                 pool, key=lambda candidate: -candidate["final_score"]
             )
@@ -1127,6 +1262,8 @@ class SearchService:
         rerank: bool,
         rerank_depth: int,
         report_id: str | None,
+        reranker: str = "qwen",
+        images_only: bool = False,
     ) -> dict:
         import numpy as np
 
@@ -1174,11 +1311,12 @@ class SearchService:
                 "question": question,
                 "mode": mode,
                 "device": visual_device,
+                "images_only": True,
                 "reranked": False,
                 "results": results,
             }
 
-        if mode == "hybrid":
+        if mode == "hybrid" or (mode == "vector" and (rerank or images_only)):
             results, visual_device, visual_search, warnings = self._hybrid_results(
                 question=question,
                 chunks=chunks,
@@ -1189,18 +1327,25 @@ class SearchService:
                 max_per_report=max_per_report,
                 report_id=report_id,
                 fusion_depth=fusion_depth,
-                include_visual=include_visual,
+                include_visual=include_visual and mode == "hybrid",
                 rerank=rerank,
                 rerank_depth=rerank_depth,
+                reranker=reranker,
+                images_only=images_only,
             )
             return {
                 "question": question,
                 "mode": mode,
                 "device": device,
                 "visual_device": visual_device,
-                "reranker_device": self._reranker_device if rerank else None,
-                "visual_search_requested": include_visual,
+                "reranker": reranker if rerank else None,
+                "reranker_device": (
+                    self._reranker_device if rerank and reranker == "qwen" else None
+                ),
+                "reranker_weight": RERANKER_RRF_WEIGHT if rerank else None,
+                "visual_search_requested": include_visual and mode == "hybrid",
                 "visual_search": visual_search,
+                "images_only": images_only,
                 "warnings": warnings,
                 "reranked": rerank,
                 "results": results,
@@ -1227,6 +1372,10 @@ class SearchService:
             chunk = chunks[int(row_index)]
             chunk_report_id = chunk["report_id"]
             if report_id is not None and chunk_report_id != report_id:
+                continue
+            if images_only and originating_image(
+                chunk, reports.get(chunk_report_id, {})
+            ) is None:
                 continue
             if (
                 max_per_report is not None
@@ -1263,6 +1412,7 @@ class SearchService:
             "question": question,
             "mode": mode,
             "device": device,
+            "images_only": images_only,
             "reranked": False,
             "results": results,
         }
@@ -1278,6 +1428,8 @@ class SearchService:
         rerank: bool = True,
         rerank_depth: int = 50,
         report: str | None = None,
+        reranker: str = "qwen",
+        images_only: bool = False,
     ) -> dict:
         question = question.strip()
         if not question:
@@ -1291,6 +1443,7 @@ class SearchService:
         if rerank_depth < 1:
             raise SearchError("The reranking depth must be at least 1.")
         mode = normalize_mode(mode)
+        reranker = normalize_reranker(reranker)
         report_query = (report or "").strip()
         with self._search_lock:
             _, reports = self._load_corpus()
@@ -1309,8 +1462,10 @@ class SearchService:
                 max_per_report=None if report_id is not None else max_per_report,
                 fusion_depth=fusion_depth,
                 include_visual=include_visual,
-                rerank=rerank and mode == "hybrid",
+                rerank=rerank and mode in {"hybrid", "vector"},
                 rerank_depth=rerank_depth,
+                reranker=reranker,
+                images_only=images_only,
                 report_id=report_id,
             )
         payload["report_filter"] = (
@@ -1356,6 +1511,8 @@ def main(args: argparse.Namespace) -> int:
                 include_visual=not args.no_visual,
                 rerank=not args.no_rerank,
                 rerank_depth=args.rerank_depth,
+                reranker=args.reranker,
+                images_only=args.images_only,
                 report=args.report,
             )
             for question in questions
@@ -1414,6 +1571,8 @@ def make_gui_handler(
     *,
     include_visual: bool = True,
     rerank: bool = True,
+    reranker: str = "qwen",
+    images_only: bool = False,
     rerank_depth_default: int = 50,
     max_per_report_default: int = 2,
 ):
@@ -1459,6 +1618,10 @@ def make_gui_handler(
                     include_visual=query_boolean(parameters, "visual", include_visual),
                     rerank=query_boolean(parameters, "rerank", rerank),
                     rerank_depth=rerank_depth,
+                    reranker=parameters.get("reranker", [reranker])[0],
+                    images_only=query_boolean(
+                        parameters, "images_only", images_only
+                    ),
                     report=parameters.get("report", [""])[0],
                 )
             except SearchError as error:
@@ -1545,6 +1708,8 @@ def serve_gui(args: argparse.Namespace) -> int:
         service,
         include_visual=not args.no_visual,
         rerank=not args.no_rerank,
+        reranker=args.reranker,
+        images_only=args.images_only,
         rerank_depth_default=args.rerank_depth,
         max_per_report_default=args.max_per_report,
     )
@@ -1579,6 +1744,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--fusion-depth", type=int, default=1000)
     parser.add_argument("--rerank-depth", type=int, default=50)
     parser.add_argument(
+        "--reranker",
+        choices=RERANKERS,
+        default="qwen",
+        help="Reranker for hybrid or vector search. Jev requires a TypeSafe key.",
+    )
+    parser.add_argument(
         "--report",
         help="Restrict results by report code or a unique title search.",
     )
@@ -1588,9 +1759,14 @@ def parse_args() -> argparse.Namespace:
         help="Exclude ColPali image retrieval from hybrid search.",
     )
     parser.add_argument(
+        "--images-only",
+        action="store_true",
+        help="Return only results linked to source images.",
+    )
+    parser.add_argument(
         "--no-rerank",
         action="store_true",
-        help="Do not rerank hybrid candidates with Qwen3-Reranker.",
+        help="Do not rerank hybrid or vector candidates.",
     )
     parser.add_argument("--excerpt-chars", type=int, default=500)
     parser.add_argument("--json", action="store_true")

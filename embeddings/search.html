@@ -233,8 +233,9 @@
 
     .controls {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
-      gap: 24px;
+      gap: 16px 24px;
       align-items: end;
       margin-top: 16px;
     }
@@ -290,6 +291,15 @@
     .mode input:focus-visible + span {
       outline: 1px solid var(--strong);
       outline-offset: 2px;
+    }
+
+    fieldset:disabled legend,
+    .mode input:disabled + span {
+      opacity: 0.45;
+    }
+
+    .mode:has(input:disabled) {
+      cursor: not-allowed;
     }
 
     .slider-control {
@@ -636,11 +646,24 @@
           <fieldset>
             <legend>Method</legend>
             <div class="modes">
-              <label class="mode"><input type="radio" name="mode" value="hybrid" checked><span>Hybrid</span></label>
-              <label class="mode"><input type="radio" name="mode" value="vector"><span>Vector</span></label>
-              <label class="mode"><input type="radio" name="mode" value="visual"><span>Visual</span></label>
+              <label class="mode"><input type="radio" name="mode" value="hybrid"><span>Hybrid</span></label>
+              <label class="mode"><input type="radio" name="mode" value="vector" checked><span>Vector</span></label>
               <label class="mode"><input type="radio" name="mode" value="bm25"><span>BM25</span></label>
               <label class="mode"><input type="radio" name="mode" value="regex"><span>Regex</span></label>
+            </div>
+          </fieldset>
+          <fieldset id="reranker-control">
+            <legend>Reranker</legend>
+            <div class="modes">
+              <label class="mode"><input type="radio" name="reranker" value="off"><span>Off</span></label>
+              <label class="mode"><input type="radio" name="reranker" value="qwen" checked><span>Qwen</span></label>
+              <label class="mode"><input type="radio" name="reranker" value="jev"><span>Jev</span></label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Filter</legend>
+            <div class="modes">
+              <label class="mode"><input id="images-only" type="checkbox"><span>Images only</span></label>
             </div>
           </fieldset>
           <div class="slider-control">
@@ -687,6 +710,8 @@
     const reportOptions = document.querySelector("#report-options");
     const reportFilterStatus = document.querySelector("#report-filter-status");
     const reportClear = document.querySelector("#report-clear");
+    const rerankerControl = document.querySelector("#reranker-control");
+    const imagesOnly = document.querySelector("#images-only");
     let requestNumber = 0;
     let indexRefreshTimer = null;
     let mathGeneration = 0;
@@ -697,6 +722,14 @@
 
     function selectedMode() {
       return document.querySelector('input[name="mode"]:checked').value;
+    }
+
+    function selectedReranker() {
+      return document.querySelector('input[name="reranker"]:checked').value;
+    }
+
+    function modeSupportsReranking(mode) {
+      return mode === "hybrid" || mode === "vector";
     }
 
     function pageRange(result) {
@@ -1265,17 +1298,21 @@
       }
       replaceResultNodes(...payload.results.map(resultItem));
       typesetResultMath();
-      const ranking = payload.reranked ? " · reranked" : "";
+      const rerankerName = payload.reranker === "jev" ? "Jev" : "Qwen";
+      const ranking = payload.reranked ? ` · ${rerankerName} reranked` : "";
+      const imageFilter = payload.images_only ? " · images only" : "";
       const fallback = payload.visual_search_requested && !payload.visual_search
         ? " · visual index skipped"
         : "";
-      status.textContent = `${payload.results.length} ${payload.results.length === 1 ? "result" : "results"} · ${payload.mode}${ranking}${fallback}${reportSuffix}`;
+      status.textContent = `${payload.results.length} ${payload.results.length === 1 ? "result" : "results"} · ${payload.mode}${ranking}${imageFilter}${fallback}${reportSuffix}`;
     }
 
-    function updateModeHint() {
-      query.placeholder = selectedMode() === "regex"
+    function updateSearchControls() {
+      const mode = selectedMode();
+      query.placeholder = mode === "regex"
         ? "Regular expression, for example state\\s+machine"
         : "Search the corpus";
+      rerankerControl.disabled = !modeSupportsReranking(mode);
     }
 
     window.addEventListener("mathjax-ready", typesetResultMath);
@@ -1292,9 +1329,10 @@
     });
 
     document.querySelectorAll('input[name="mode"]').forEach((mode) => {
-      mode.addEventListener("change", updateModeHint);
+      mode.addEventListener("change", updateSearchControls);
     });
 
+    updateSearchControls();
     loadIndexStatus();
     loadReportOptions();
 
@@ -1313,11 +1351,19 @@
       results.setAttribute("aria-busy", "true");
 
       try {
+        const mode = selectedMode();
+        const reranker = selectedReranker();
+        const canRerank = modeSupportsReranking(mode);
         const parameters = new URLSearchParams({
           q: value,
-          mode: selectedMode(),
+          mode,
           top_k: topK.value,
+          images_only: imagesOnly.checked ? "1" : "0",
+          rerank: canRerank && reranker !== "off" ? "1" : "0",
         });
+        if (canRerank && reranker !== "off") {
+          parameters.set("reranker", reranker);
+        }
         const report = activeReportQuery();
         if (report) {
           parameters.set("report", report);
