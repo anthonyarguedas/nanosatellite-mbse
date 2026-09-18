@@ -85,8 +85,13 @@ def common_lines(row: dict[str, Any], analysis: dict[str, Any]) -> list[str]:
         for item in row.get("caption_chunks", [])
         if clean(item.get("caption"), "")
     ]
+    diagram_kind = (
+        "formal automaton"
+        if analysis.get("diagram_family") == "formal_automata"
+        else "MBSE model"
+    )
     lines = [
-        "Visually extracted MBSE model diagram.",
+        f"Visually extracted {diagram_kind} diagram.",
         f"Modeling language: {clean(analysis.get('modeling_language'))}.",
         f"Diagram family: {clean(analysis.get('diagram_family')).replace('_', ' ')}.",
         f"Representation name: {clean(analysis.get('representation_name'))}.",

@@ -1,6 +1,6 @@
 # SLR1 multimodal retrieval
 
-The corpus contains structure aware text chunks, dedicated mathematical equation chunks, every source image, and GPT-5.6-Luna extractions of SysML, Capella/Arcadia, and Simulink diagrams from the 129 included reports. Qwen3 provides text embeddings, ColPali searches the source images directly, and Qwen3-Reranker orders the fused candidates.
+The corpus contains structure aware text chunks, dedicated mathematical equation chunks, every source image, and GPT-5.6-Luna extractions of SysML, Capella/Arcadia, Simulink, and formal automata diagrams from the 129 included reports. Qwen3 provides text embeddings, ColPali searches the source images directly, and Qwen3-Reranker orders the fused candidates.
 
 ## Answer a question
 
@@ -59,8 +59,8 @@ To refresh visual diagram extraction first:
 .venv/bin/python build_visual_index.py --batch-size 1
 ```
 
-`diagram_pipeline.py` selects images from caption chunks that name SysML, Capella, Arcadia, Simulink, a native diagram type, or a model representation term. It also selects captioned images from sections that discuss Simulink, which catches figures whose short captions omit the tool name. Uncaptioned images are included when the report title names one of these modeling languages or tools. It runs one `gpt-5.6-luna` subagent per candidate image. Accepted visual extractions are stored in `data/diagram-analyses.jsonl` and split into overview, element, relationship, and visible label chunks.
+`diagram_pipeline.py` selects images from caption chunks that name SysML, Capella, Arcadia, Simulink, formal automata, a native diagram type, or a model representation term. It also selects captioned images from sections that discuss Simulink, which catches figures whose short captions omit the tool name. Uncaptioned images are included when the report title names one of these modeling languages or tools. It runs one `gpt-5.6-luna` subagent per candidate image. Accepted visual extractions are stored in `data/diagram-analyses.jsonl` and split into overview, element, relationship, and visible label chunks.
 
-`build_visual_index.py` independently discovers every image referenced by the included reports. It preserves the Luna metadata for accepted SysML, Capella/Arcadia, and Simulink diagrams and indexes all images with `vidore/colpali-v1.3-hf`. The first build downloads the model and encodes the full image corpus. It caches each completed image, so an interrupted build resumes on the next run. Later builds reuse unchanged image vectors.
+`build_visual_index.py` independently discovers every image referenced by the included reports. It preserves the Luna metadata for accepted SysML, Capella/Arcadia, Simulink, and formal automata diagrams and indexes all images with `vidore/colpali-v1.3-hf`. The first build downloads the model and encodes the full image corpus. It caches each completed image, so an interrupted build resumes on the next run. Later builds reuse unchanged image vectors.
 
 Add `--json` to `search.py` when passing results to another program.

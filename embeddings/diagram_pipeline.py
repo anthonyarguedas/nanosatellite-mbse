@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Find model-diagram images in caption chunks and extract them with Pi subagents."""
+"""Find model and formal diagram images and extract them with Pi subagents."""
 
 from __future__ import annotations
 
@@ -27,6 +27,13 @@ LANGUAGE_RE = re.compile(
     r"\b(?:SysML|Capella|Arcadia|Simulink)\b", re.IGNORECASE
 )
 SIMULINK_RE = re.compile(r"\bSimulink\b", re.IGNORECASE)
+FORMAL_AUTOMATA_RE = re.compile(
+    r"(?<![A-Za-z0-9])(?:PTA|PTAs|SPTA|SPTAs)(?![A-Za-z0-9])|"
+    r"\b(?:priced\s+timed\s+automata?|stochastic\s+timed\s+automata?|"
+    r"timed\s+automata?|UPPAAL(?:\s+(?:CORA|SMC|STRATEGO))?|"
+    r"automaton|automata)\b",
+    re.IGNORECASE,
+)
 SYSML_RE = re.compile(
     r"\b(?:BDD|IBD|UCD|block definition diagram|internal block diagram|"
     r"requirements? diagram|activity diagram|sequence diagram|"
@@ -57,14 +64,14 @@ PAGE_MARKER_RE = re.compile(r"<!--\s*PDF_PAGE:\s*([1-9][0-9]*)\s*-->")
 HEADING_RE = re.compile(r"^#{1,6}\s+(.+?)\s*$")
 
 
-EXTRACTION_INSTRUCTIONS = """You are extracting one candidate MBSE figure for search indexing. Inspect the attached image itself. Caption context may identify the language or representation type. Never report an element or relationship unless it is visible in the image.
+EXTRACTION_INSTRUCTIONS = """You are extracting one candidate model or formal diagram for search indexing. Inspect the attached image itself. Caption and section context may identify the language, formalism, tool, or representation type. Never report an element or relationship unless it is visible in the image.
 
-Decide whether the image contains an actual SysML diagram, Capella/Arcadia model diagram, or Simulink block diagram. Screenshots of model diagrams count. Caption context may establish that visible block and signal notation is Simulink. Exclude photos, plots, tables, ordinary flowcharts, methodology graphics, taxonomies, and prose even when their captions discuss a target modeling language or tool.
+Decide whether the image contains an actual SysML diagram, Capella/Arcadia model diagram, Simulink block diagram, or formal automata diagram. Formal automata include timed automata, priced timed automata (PTA), stochastic timed automata, and UPPAAL automata. Screenshots of target diagrams count. Caption context may establish that visible block and signal notation is Simulink or that visible state and transition notation is a formal automaton. Exclude photos, plots, tables, ordinary flowcharts, methodology graphics, taxonomies, and prose even when their captions discuss a target modeling language, formalism, or tool.
 
 Return exactly one valid JSON object without Markdown or commentary:
 {
   "contains_target_diagram": true,
-  "diagram_family": "sysml | capella_arcadia | simulink | mixed | uncertain | none",
+  "diagram_family": "sysml | capella_arcadia | simulink | formal_automata | mixed | uncertain | none",
   "modeling_language": "verbatim language or null",
   "representation_name": "visible title or caption name, or null",
   "representation_type": "native diagram type or null",
@@ -89,7 +96,7 @@ Return exactly one valid JSON object without Markdown or commentary:
   "confidence": 0.0
 }
 
-For a non-target figure, set contains_target_diagram to false and diagram_family to "none". For a figure containing more than one target family, use "mixed". Give a short visible-content summary and leave elements and relationships empty. Transcribe all legible model elements and named exchanges that matter for retrieval. Preserve wording and capitalization. Do not expand acronyms or invent hidden endpoints. Use "unknown" when the image does not establish an EPS boundary or logical/physical classification."""
+For a non-target figure, set contains_target_diagram to false and diagram_family to "none". For a figure containing more than one target family, use "mixed". Give a short visible-content summary and leave elements and relationships empty. Transcribe all legible model elements and named exchanges that matter for retrieval. For formal automata, record every legible location as an element with semantic_class "state_or_mode". Record every legible transition as a relationship with semantic_class "state_or_mode_transition". Put its complete visible guard, synchronization, assignment, and cost or rate annotation in the relationship name. Put location invariants and other standalone formal labels in other_visible_labels. Preserve wording and capitalization. Do not expand acronyms or invent hidden endpoints. Use "unknown" when the image does not establish an EPS boundary or logical/physical classification."""
 
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -117,6 +124,8 @@ def selection_reasons(text: str) -> list[str]:
     reasons = []
     if LANGUAGE_RE.search(text):
         reasons.append("language_name")
+    if FORMAL_AUTOMATA_RE.search(text):
+        reasons.append("formal_automata_term")
     if SYSML_RE.search(text):
         reasons.append("sysml_diagram_type")
     if ARCADIA_RE.search(text):
@@ -341,6 +350,7 @@ def candidate_prompt(candidate: dict[str, Any]) -> str:
         f"Candidate metadata:\n"
         f"- Report: {candidate['report_id']}\n"
         f"- Page: {candidate.get('page_start')}\n"
+        f"- Section: {candidate.get('section') or 'Document'}\n"
         f"- Caption evidence:\n{context}"
     )
     return f"{EXTRACTION_INSTRUCTIONS}\n\n{metadata}"

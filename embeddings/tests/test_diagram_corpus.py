@@ -40,7 +40,22 @@ class DiagramCorpusTests(unittest.TestCase):
             "language_name",
             selection_reasons("Figure 7. MATLAB/Simulink controller model"),
         )
-        self.assertEqual(selection_reasons("Figure 8. Battery voltage plot"), [])
+        self.assertIn(
+            "formal_automata_term",
+            selection_reasons("Figure 8. Three priced timed automata"),
+        )
+        self.assertEqual(selection_reasons("Figure 9. Battery voltage plot"), [])
+
+    def test_pta_automata_are_candidates(self) -> None:
+        candidate = next(
+            row
+            for row in build_candidates()
+            if row["diagram_id"] == "review-1303--figure-006-48bc6b7f"
+        )
+
+        self.assertIn("formal_automata_term", candidate["selection_reasons"])
+        self.assertEqual(candidate["section"], "3.2. PTA modelling")
+        self.assertIn("JobProvider automaton", candidate["caption_chunks"][0]["caption"])
 
     def test_simulink_section_context_selects_short_figure_captions(self) -> None:
         candidate = next(

@@ -1041,7 +1041,7 @@ def build(args: argparse.Namespace) -> dict:
             "sha256": hashlib.sha256(INCLUDED_REPORTS_PATH.read_bytes()).hexdigest(),
         },
         "chunking": {
-            "strategy": "section bounded paragraph groups, grouped atomic table rows, contextual captions, dedicated equations with captions or surrounding context, page context for uncaptioned images, and visually extracted model diagrams",
+            "strategy": "section bounded paragraph groups, grouped atomic table rows, contextual captions, dedicated equations with captions or surrounding context, page context for uncaptioned images, and visually extracted model and formal diagrams",
             "target_words": args.target_words,
             "max_words": args.max_words,
             "overlap_words": args.overlap_words,
@@ -1053,7 +1053,7 @@ def build(args: argparse.Namespace) -> dict:
         },
         "diagram_extraction": {
             "analyses_path": "data/diagram-analyses.jsonl",
-            "candidate_rule": "matching caption evidence, captioned images in Simulink sections, plus uncaptioned images from reports whose title names SysML, Capella, Arcadia, or Simulink",
+            "candidate_rule": "matching model or formal automata caption evidence, captioned images in Simulink sections, plus uncaptioned images from reports whose title names SysML, Capella, Arcadia, or Simulink",
             "acceptance_rule": "status is ok and contains_target_diagram is true",
             "parts": ["overview", "elements", "relationships", "labels"],
         },
