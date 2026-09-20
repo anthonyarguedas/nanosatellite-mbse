@@ -1,92 +1,59 @@
-# OOSEM Orchestration Plan for Nanosatellite EPS Digital Engineering
+# OOSEM Orchestration Plan for a Nanosatellite EPS Framework
 
-This project is an OOSEM architecture selection study for a socio-technical engineering environment.
+**Working title:** *An MBSE-Based Framework for the Design and Analysis of Nanosatellite Electrical Power Systems*
 
-Two framing decisions govern the work:
+This project applies OOSEM to the architecture of a socio-technical engineering framework. The working title does not narrow the planned lifecycle coverage.
 
-1. **The system of interest is the nanosatellite EPS digital engineering environment.** Its physical architecture contains modeling tools, analysis services, repositories, integration services, compute nodes, data stores, and operating procedures.
-2. **The nanosatellite EPS is the reference subject.** Its requirements, design, analyses, FMEA, test data, and telemetry exercise the environment.
+Three framing decisions govern the work:
 
-Buruso et al. present Requirements Management (RM), Model Development (MD), Simulation and Analysis (SA), Configuration Management (CM), and Collaboration and Communication (CC) as overlapping lifecycle processes. Figure 16 shows CM and CC spanning the lifecycle. They are modeled first as capabilities and activities. OOSEM then derives logical components and allocates them to physical components.
+1. **The system of interest is the nanosatellite EPS engineering framework.** Its physical architecture contains modeling tools, analysis services, repositories, integration mechanisms, compute nodes, data stores, and operating procedures.
+2. **Nanosatellite EPS engineering is the reference domain.** Parameterized requirements, designs, analyses, FMEA, test data, and telemetry scenarios exercise the proposed architecture without tying it to one mission.
+3. **The architecture study has three sprints, each ending with human review.** Sprint 1 defines the framework's measures, requirements, and use cases. Sprint 2 develops the logical architecture and physical alternatives. Sprint 3 evaluates alternatives and selects a preferred architecture. Framework construction and later OOSEM development activities remain in the overall roadmap beyond these three sprints.
 
-The final research claim is an evidence backed architecture selection. Operational proof across the full lifecycle remains future implementation and verification work.
+The primary users are university teams. Commercial teams are also in scope when they accept the same lightweight operating assumptions. Cloud dependence, real-time collaborative editing, and enterprise permissions management are outside the required scope. Asynchronous review and local operation remain relevant capabilities.
 
-## Original brain dump that inspired this plan
+Buruso et al. present Requirements Management (RM), Model Development (MD), Simulation and Analysis (SA), Configuration Management (CM), and Collaboration and Communication (CC) as overlapping lifecycle processes. Figure 16 shows CM and CC spanning the lifecycle. Model them first as capabilities and activities. OOSEM then derives logical components and allocates them to physical components.
 
-```
-There's one paper
-(SLR/SLR1/pdfs/psr-reports/psr-report
--0039.md,
-SLR/SLR1/pdfs/psr-reports/psr-report-
-0039_images) that makes this
-statement: "Despite the progress
-reflected in the literature, unifying
-MBSE tools and methods to consistenly
-support all lifecycle stages remains
-an unresolved challenge".
+The research addresses a reusable framework for nanosatellite EPS engineering. It does not seek merely to demonstrate a toolchain for one mission. The three-sprint study's claim is an evidence backed architecture selection with explicit uncertainty. Operational proof across the full lifecycle belongs to later implementation and verification.
 
-I want to take on this challenge,
-however, limiting it to the
-electrical power system of
-nanosatellites (instead of all
-subsystems of all space systems that
-the Buruso et al. review covers) for
-feasability.
+## Review contract and research priorities
 
-I thus want to apply OOSEM to this
-problem. I want to stop, for now,
-after selecting a candidate physical
-architecture. The Buruso et al.
-review provides several alternative
-components that all fit their
-proposed RM -> MD -> SA -> CM -> CC
-logical architecture, that I want to
-adopt.
-SLR/SLR1/pdfs/psr-reports/psr-report-
-0024.md is another review that covers
-digital twins more specifically. If I
-had propose a candidate, I would
-leverage SysML v2 for RM/MD, Python
-for MD/SA, Git for CM, and NVIDIA
-Omniverse for CM/CC. Of course, this
-is not a fully fledged candidate, but
-merely a list of tools that I'd like
-to see fully fledged out in a
-candidate PA. To continue enumerating
-assorted contributors to the
-candidate, I'd say the CSRM CubeSat
-model, automated FMEA. However, I
-don't yet understand all else that
-would be required to form a full
-candidate, let alone multiple.
+The primary human review artifact is one self-contained LaTeX report, with citations, narrative reasoning, SysML diagrams, and supporting tables and figures. The reader must be able to examine every important requirement, use case, architectural choice, and selection argument without opening auxiliary JSON or Markdown files.
 
-So, if you were in charge of applying
-OOSEM up to selecting a PA for this
-problem, and you had subagents
-(~/agent-tools/subagents/skills/subag
-ent/SKILL.md) to help you execute the
-speciic OOSEM tasks and model in
-SysML v2, and compile it into a
-self-contained LaTeX report,
+Requirements and use case definition form a major research workstream, comparable in effort and importance to developing all three candidate architectures. Allocate substantial research, synthesis, modeling, and independent review effort before candidate synthesis. Revisit this work when evidence exposes gaps.
 
-what are the numbered steps you would
-take to get there?
-```
+The evidence base includes Buruso et al. and the author's corpus of 129 papers, many focused on CubeSats, EPS, and MBSE. The author began an SLR under `SLR/SLR1/protocol.md`, then stopped after judging that it would likely reproduce Buruso et al.'s insights for a narrower population. Its contribution to this study is the collected, chunked, embedded, searchable corpus exposed through `embeddings/search.py`. Describe this history accurately. Do not present the abandoned review as a completed SLR or imply that all protocol steps were completed.
+
+Use corpus mining to discover themes, requirements, use cases, standard scenarios, and existing partial frameworks. Follow retrieval and clustering with source reading and cited narrative synthesis. The report should explain how relevant papers contribute, where their approaches stop, and which parts can be reused or extended.
+
+All non-SysML graphics must be monochrome and tightly packed while retaining legible labels. Use shapes, line styles, hatching, and direct labels where distinctions are needed.
 
 ## Initial candidate ingredients
 
-The initial proposal mixes several architectural levels:
-
 | Ingredient | Architectural role | Decisions still needed |
 |---|---|---|
-| SysML v2 | Modeling language | Authoring tool, semantic validator, repository, API, model ownership, interchange mechanism |
-| Python | Programming and analysis language | Runtime, packages, orchestration, schemas, environment locking, result publication |
-| Git | Configuration mechanism | Hosting, workflow, CI, large artifact storage, release manifests, access control |
-| NVIDIA Omniverse | Platform family | Nucleus, Kit, USD, connectors, hosting, GPU needs, source authority, collaboration role |
-| CSRM | Reusable model content | Exact version, availability, licence, SysML v1 to v2 transformation, tailoring and validation |
+| SysML v2 | Modeling language | Authoring tool, semantic validator, model ownership, repository, interchange mechanism |
+| Python | Programming and analysis language | Runtime, packages, orchestration, schemas, result publication |
+| Git | Configuration mechanism | Local workflow, artifact storage, baseline and change practices |
+| NVIDIA Omniverse | Platform family | Relevant components, USD, connectors, local deployment, GPU needs, source authority, review value |
+| CSRM | Reusable model content | Availability, provenance, licence, SysML v1 to v2 transformation, tailoring and validation |
 | Automated FMEA | Required capability | Failure library, extraction rules, propagation model, criticality method, validation, human approval |
 
-A complete candidate must add deployment nodes, data ownership, interface contracts, orchestration, artifact storage, security, recovery, operating procedures, and configuration baseline semantics.
+A complete candidate adds deployment nodes, data ownership, interface contracts, orchestration, artifact storage, proportionate security and recovery, operating procedures, and configuration baseline semantics. Complexity must be justified by user needs.
+
+## Three-sprint structure
+
+| Sprint | Steps | Reviewable outcome |
+|---|---|---|
+| **1. Define the framework** | 1–22 | Corpus synthesis, stakeholders, measures, mission-independent scenarios, use cases, and black-box requirements. Complete the tailored MCR and SRR. Stop before logical architecture definition. |
+| **2. Develop architectural alternatives** | 23–32 | Logical architecture and at least three comparable physical candidates, with walkthroughs, assumptions, and planned feasibility tests. Review these work products in preparation for SDR. |
+| **3. Evaluate and select** | 33–39 | Trade analysis, sensitivity, preferred architecture or conditional recommendation, and completed tailored SDR. |
+
+At each sprint boundary, compile the cumulative self-contained LaTeX report with the completed work products and native SysML views. Pause for human review before starting the next sprint. Sprint 1 includes steps 17–22 so its requirements baseline includes black-box requirements rather than only high-level needs. Later architecture trace links remain explicitly pending until their sprint.
+
+Measures and scoring anchors are established in Sprint 1. Sprint 2 uses them to develop comparable candidates. Sprint 3 formalizes the analysis cases and evaluates the candidates without changing criteria to favor a candidate. Any necessary requirements or criteria revision returns for human review.
+
+All three sprints remain design work. Implementation and integration experiments require a separate decision after this study.
 
 # Numbered execution plan
 
@@ -94,130 +61,131 @@ A complete candidate must add deployment nodes, data ownership, interface contra
 
 ### 1. State the architecture decision question
 
-Use a question such as:
+Use:
 
-> Which physical architecture best enables a traceable, reproducible, and affordable digital thread for nanosatellite EPS engineering across concept, design, assembly and test, and operations?
+> Which physical architecture best enables a traceable, reproducible, affordable, and reusable framework for nanosatellite EPS engineering across concept, design, assembly and test, and operations?
 
-Define the intended lifecycle stages and the nanosatellite class. Define whether the result targets university teams, commercial teams, or both.
+Target university teams and commercial teams willing to use the same lightweight framework. Define the nanosatellite domain and lifecycle coverage. Require operation without cloud services. Do not make enterprise collaboration or permissions management acceptance criteria.
 
 ### 2. Define the system boundary
 
 Create separate namespaces for:
 
-- `EnvironmentSOI`
-- `EPSReferenceCase`
+- `FrameworkSOI`
+- `EPSReferenceDomain`
 - `PhysicalCandidates`
 - `Analyses`
 - `Traceability`
 - `Evidence`
 - `Views`
 
-Environment components satisfy environment requirements. EPS components satisfy EPS requirements. Tool components do not satisfy spacecraft power requirements.
+Framework components satisfy framework requirements. EPS components satisfy EPS requirements. Tool components do not satisfy spacecraft power requirements.
 
-### 3. Tailor OOSEM and record the tailoring
+### 3. Tailor OOSEM and define the sprint boundary
 
-Include:
+Allocate OOSEM activities across the three sprints:
 
-- Setup model
-- Analyze stakeholder needs
-- Analyze system requirements
-- Define logical architecture
-- Synthesize candidate physical architecture
-- Optimize and evaluate alternatives
-- Manage requirements traceability
-- Conduct technical reviews
+- **Sprint 1:** Setup model, analyze stakeholder needs, and analyze system requirements, including measures and use cases.
+- **Sprint 2:** Define logical architecture and synthesize candidate physical architectures.
+- **Sprint 3:** Optimize and evaluate alternatives and select the preferred architecture.
+- **Every sprint:** Manage requirements traceability and conduct technical reviews appropriate to the completed work.
 
-Exclude after selection:
+Retain in the later roadmap:
 
 - Develop database
-- Develop hardware
+- Develop hardware where applicable
 - Develop software
 - Develop operator procedures
 - Integrate and verify system
 
-Treat the OOSEM geometric model task as conditional. A traditional CAD model of the engineering environment adds little value. A SysML to USD geometry correspondence may still be needed to evaluate Omniverse.
+All three sprints stop short of building the framework or candidate integration prototypes. Research scripts, SysML study models, diagrams, and report generation support the design study. They do not implement the proposed framework.
 
-### 4. Define review gates and exit criteria
+Treat the OOSEM geometric model task as conditional. A traditional CAD model of the framework adds little value. A proposed SysML to USD correspondence may still matter when assessing Omniverse.
 
-Use:
+### 4. Use NASA technical reviews and tailored exit criteria
 
-- **G0:** Scope and tailoring approved
-- **G1:** Stakeholder needs and measures approved
-- **G2:** Black-box requirements approved
-- **G3:** Logical architecture approved
-- **G4:** Candidate architectures complete and comparable
-- **G5:** Preferred architecture selected
+Use NASA review names and purposes, with the NASA Systems Engineering Handbook and applicable NASA review guidance as the source. Buruso et al. also acknowledge NASA lifecycle reviews. Cite the relevant sources in the report.
 
-A failed gate returns work to the relevant OOSEM activity.
+Use this provisional mapping, then confirm the detailed entry and success criteria against NASA guidance:
 
-### 5. Create an evidence ledger
+- **Mission Concept Review (MCR):** Review the framework purpose, intended users, scope, stakeholder needs, concept of use, and OOSEM tailoring.
+- **System Requirements Review (SRR):** Review the framework requirements, use cases, measures, verification approach, and supporting evidence.
+- **System Definition Review (SDR):** Review the logical definition, comparable physical alternatives, trade results, and preferred architecture.
 
-For every literature or vendor claim, record:
+Explain tailoring for a university framework study. These are study reviews using NASA guidance, without a claim of formal NASA approval. Logical architecture and candidate completeness checks feed SDR. They do not introduce a second set of invented gates.
 
-- Claim identifier
-- Source and page
-- Direct quotation or extracted evidence
-- Applicability to nanosatellite EPS
-- Limitations
-- Linked requirement or criterion
-- Review status
+Do not claim PDR or CDR maturity merely because a physical architecture has been selected. Retain later applicable NASA reviews in the development roadmap. A failed review returns work to the relevant OOSEM activity.
 
-Use Buruso et al. to form the design space. Verify tool capabilities through primary papers, current documentation, and feasibility tests.
+Distinguish reviews of this framework study from the mission lifecycle reviews that the future framework must help its users prepare for.
 
-The digital twin review concerns space robotics. Its coupling, synchronization, assurance, and lifecycle principles transfer well. Its tool findings require EPS specific confirmation.
+### 5. Develop a cited narrative evidence synthesis
+
+Use LaTeX prose as the authoritative review format. For each substantive claim, explain the source contribution, applicability to nanosatellite EPS, limitations, and consequence for a need, requirement, use case, or architectural criterion. Use bibliography citations with page or section locators where appropriate.
+
+Organize the synthesis around engineering problems and lifecycle continuity. Discuss existing frameworks and environments, including approaches that cover only some lifecycle stages. Explain complementary contributions, conflicting findings, and remaining gaps. Give relevant studies enough attention to make their contribution reviewable.
+
+Use Buruso et al. to establish the broader gap and design space. Use the 129-paper corpus to deepen domain evidence. Verify product claims through primary papers and current documentation. The space robotics digital twin review can inform coupling, synchronization, assurance, and lifecycle principles. Its tool findings need EPS specific confirmation.
+
+Plan corpus mining as follows:
+
+1. Inspect corpus coverage and available embeddings. Establish the unit of analysis and distinguish papers from chunks and multiple reports of one study.
+2. Combine targeted searches through `embeddings/search.py` with exploratory clustering of available embeddings. Add a small analysis script if needed. Do not assume the search interface already provides clustering.
+3. Inspect representative, boundary, and outlier papers. Label themes from source content and search for evidence that challenges the emerging interpretation.
+4. Produce cluster plots, theme frequencies, lifecycle coverage summaries, and other statistical analyses when they answer a research question. Report denominators and avoid giving long papers extra weight merely because they contain more chunks.
+5. Explain preprocessing, embedding and clustering choices, parameter sensitivity, ambiguous assignments, and projection limitations in the report. A two-dimensional cluster plot is an exploratory view rather than proof of distinct research categories.
+6. Translate source supported findings into proposed needs and use cases. Distinguish reported practice, author recommendations, and this study's engineering judgments.
+
+Corpus frequency is evidence of coverage within this collection. It is not a direct measure of stakeholder priority or prevalence across the whole field. Preserve rare but important assurance needs. Document retrieval and corpus limitations.
+
+Internal working data are permitted. No separate evidence ledger is required for human review. Put the complete decision-relevant reasoning in the report and its appendices.
 
 ### 6. Establish modeling and reporting conventions
 
-Define:
+Define naming and identifiers, units, requirement patterns, rationale, candidate naming, viewpoints, and required views.
 
-- Naming and identifier rules
-- Units and quantity conventions
-- Requirement patterns
-- Evidence and rationale metadata
-- Candidate naming
-- Viewpoints and required views
-- Generated artifact policy
-- Configuration item policy
+Explicitly map the OOSEM baseline's SysML v1 work products to SysML v2 concepts. Cover requirements, behavior, structure, interfaces, allocations, variation, analysis, verification, and views. Document semantic differences and work products that need adaptation. OOSEM predates SysML v2, and OOSEM guidance for v2 remains under development. Do not assume a diagram-for-diagram translation.
 
-Create a mapping from OOSEM's SysML v1 work products to SysML v2 concepts. Use requirement definitions and usages, actions, states, parts, ports, connections, variations, analysis cases, verification cases, viewpoints, and views.
+Follow the NASA Systems Engineering Handbook guidance for writing requirements. Cite that guidance and state its use. Explain any deviations rather than reproducing an elaborate requirement-writing method.
 
-### 7. Create the reproducible project skeleton
+Use native SysML views in the report. Apply the monochrome, compact graphic convention to corpus plots and all other non-SysML figures.
 
-Establish:
+### 7. Create a lightweight study structure
 
-- SysML v2 source tree
-- Python package and tests
-- Evidence ledger
-- Candidate and criteria data
-- LaTeX report
+Maintain:
+
+- SysML v2 sources
+- LaTeX report and bibliography
 - Generated figures and tables
-- CI workflow
-- Tool and dependency locks
-- Release manifest
+- Small research and report scripts where useful
+- Inputs and results needed to understand and rerun the study's analyses
 
-Run the Syside `doctor` check at this point. Every model merge should later pass `check`, `inspect`, and native `render`.
+Do not require dependency locks, release manifests, a CI workflow, or a Python test suite for this design study. Record essential commands and tool versions in a short report appendix. Check calculations in proportion to their influence on the decision.
 
-## B. Establish the EPS reference case
+Validate SysML syntax and semantics and render the required native views. A focused suite of model checks may be useful. Apply the SysML tooling skill when modeling starts.
 
-### 8. Select a bounded EPS reference mission
+Distinguish study tooling from the proposed framework. Candidate architectures may include automated tests, configuration manifests, and stronger reproducibility mechanisms where their requirements justify them.
 
-Choose one explicit mission class, such as a 3U or 6U low Earth orbit nanosatellite. Document:
+## B. Establish the mission-independent EPS reference domain
+
+### 8. Define a parameterized EPS domain
+
+Describe reusable variation points for:
 
 - Orbit and eclipse profile
 - Attitude assumptions
 - Solar array configuration
 - Battery configuration
-- PCDU and bus architecture
+- Power conditioning and distribution architecture
 - Nominal and peak loads
 - Operating modes
 - Degradation assumptions
-- Telemetry availability
+- Test data and telemetry availability
 
-Add at least one variation case so the environment is not optimized for a single fixed design.
+Use parameterized examples and bounded ranges with cited rationale. Evaluate more than one configuration so the framework supports reuse. Avoid adopting one mission's choices as general requirements. Reference BIRDS-4 only if a concrete mission example becomes necessary, and identify its illustrative role.
 
 ### 9. Define standard EPS benchmark scenarios
 
-Include:
+Use corpus evidence to ground scenarios such as:
 
 - Nominal sunlit operation
 - Worst case eclipse
@@ -229,24 +197,26 @@ Include:
 - AIT measurement import
 - Delayed or incomplete telemetry replay
 
-### 10. Assess and adapt CSRM
+Specify inputs, outputs, assumptions, and expected engineering decisions. Mine recurring scenario families from the corpus and explain their selection in prose. These are reusable architecture evaluation scenarios, with execution deferred where it would require building the framework.
 
-Determine:
+### 10. Assess CSRM availability and plan adaptation
 
-- Whether the actual model is available
-- Its licence and provenance
-- Its modeling language and tool dependencies
-- Which EPS elements can be reused
-- Which semantics would be lost during SysML v2 transformation
-- How local extensions remain separate from the source library
+Assign a CSRM sub-orchestrator two focused investigations:
 
-Preserve the source CSRM package. Create a versioned EPS specialization or adaptation package. Validate every transformed relationship.
+- Locate the original CSRM distribution, versions, licence, provenance, and tool dependencies.
+- Search the corpus for the thesis that reportedly reconstructed CSRM and published a repository. Follow its source references and compare the reconstruction with the original where available.
+
+Treat both availability and the reported repository as questions to verify. Distinguish an original distribution, a reconstruction, and a local adaptation.
+
+Assess reusable EPS elements, transformation risks, and separation of local extensions from source content. Specify the proposed SysML v2 adaptation and relationship checks. Preserve source provenance. Full migration and integration belong to development after the three-sprint study.
+
+Report findings and reuse recommendations in the LaTeX narrative. A repository link alone is insufficient evidence of semantic equivalence or permission to reuse.
 
 ## C. Analyze stakeholder needs
 
-### 11. Characterize the current engineering environment
+### 11. Characterize current engineering practice
 
-Model the current workflow only to the level needed to expose problems. Capture:
+Use the corpus to describe current frameworks and workflows at the level needed to explain problems:
 
 - Documents and spreadsheets
 - Existing models and analysis scripts
@@ -256,6 +226,8 @@ Model the current workflow only to the level needed to expose problems. Capture:
 - Test and telemetry handling
 - Repeated data entry
 - Broken or missing trace links
+
+Separate observed practices from inferred problems. Identify useful existing solutions and the lifecycle boundaries they reach.
 
 ### 12. Perform causal analysis
 
@@ -271,460 +243,333 @@ Analyze causes of lifecycle fragmentation, such as:
 - Phase local digital twins
 - Missing interface contracts
 
+Explain evidence and uncertainty for each causal interpretation. Avoid inferring causation from cluster membership or frequency alone.
+
 ### 13. Identify stakeholders and define the future domain
 
-Include at least:
+Include systems, EPS, requirements, analysis, reliability, AIT, and operations engineers, alongside configuration managers, reviewers, project managers, suppliers, and independent reproducers.
 
-- Systems engineer
-- EPS engineer
-- Requirements engineer
-- Analysis engineer
-- Reliability and safety engineer
-- AIT engineer
-- Operations engineer
-- Configuration manager
-- Reviewer
-- Project manager
-- Supplier
-- Independent reproducer
+Model roles separately from headcount. A university team member may hold several roles. Capture concerns, learning needs, resource limits, and required views.
 
-Capture their concerns and required views.
+### 14. Specify mission requirements for the framework
 
-### 14. Specify mission requirements for the environment
+Here, OOSEM mission requirements express the framework's purpose. They are independent of a particular spacecraft mission.
 
-Examples include:
+Develop and justify needs such as:
 
 - Preserve traceability across lifecycle stages.
 - Reproduce an EPS analysis from an approved baseline.
 - Propagate requirement and configuration changes.
+- Help users assess requirement quality and completeness.
+- Help users verify model syntax, semantics, consistency, and traceability.
 - Generate reviewable FMEA candidates from the system model.
 - Maintain distinct as-designed, as-analyzed, as-built, as-tested, and as-operated configurations.
-- Support controlled multidisciplinary review.
+- Support controlled multidisciplinary review without requiring simultaneous editing.
 - Produce a self-contained technical baseline.
 
-### 15. Define enterprise use cases
+Develop these through iterative corpus synthesis and stakeholder reasoning. For each proposed requirement, provide cited rationale, applicability, priority, assumptions, and a proposed verification approach. Clearly identify requirements that arise from the study's scope decisions.
+
+### 15. Define framework use cases
 
 Core use cases should include:
 
 - Reuse and specialize the EPS reference model
-- Capture and change a requirement
+- Capture, assess, and change a requirement
+- Check a model's correctness and consistency
 - Create an EPS design
 - Execute power and energy analyses
 - Generate and review an FMEA
 - Compare EPS design variants
 - Process a controlled change
 - Create and restore a baseline
-- Review a model collaboratively
+- Review a model asynchronously
 - Import test or telemetry data
 - Recalibrate an analysis model
 - Generate a technical report
 
+Decompose **Create an EPS design** to cover solar array sizing, battery pack sizing, power conditioning and distribution choices, controller selection such as MPPT, and interfaces and constraints. CSRM tailoring supplies reusable model content and variation points for this use case. Link sizing and selection decisions to analysis and variant comparison.
+
+Separate verification of requirements and models from V&V of the modeled EPS. Specify which checks can be automated, which are advisory, and which require engineering judgment. Automated checks cannot guarantee that a model is an adequate representation of the intended system.
+
+For every use case, define actors, trigger, preconditions, main and alternative flows, outputs, failure paths, and links to needs and requirements. Use corpus themes to discover missing cases. Provide full reviewable descriptions in the report or its appendices.
+
 ### 16. Define measures of effectiveness
 
-Organize them under:
+Organize measures under:
 
 - **Continuity:** lifecycle and trace coverage
 - **Trustworthiness:** semantic correctness, provenance, uncertainty, reproducibility
 - **Efficiency:** elapsed time, manual steps, analysis runtime
+- **Automation:** supported transitions between lifecycle activities, manual handoffs, automatic trace and consistency checks, and required human intervention
 - **Adoptability:** cost, training, administration, portability
-- **Interoperability:** data loss, API coverage, adapter effort
-- **Collaboration:** review time, conflict handling, decision closure
+- **Interoperability:** data loss, interface coverage, adapter effort
+- **Review:** review effort, conflict handling, decision closure
 
-Set targets before seeing candidate scores.
+Assess automation beyond individual analysis scripts. Compare how methods and frameworks transfer artifacts between lifecycle activities. Establish the baseline from evidence rather than assuming all MBSE methods offer the same automation.
+
+Set targets and scoring anchors before candidate scoring. Throughout the study, distinguish measured study properties from literature supported estimates and unverified predictions.
 
 ## D. Analyze black-box requirements
 
 ### 17. Define lifecycle scenarios and the system context
 
-Use several end-to-end scenarios:
+Use end-to-end scenarios:
 
 1. Requirement change to model update to analysis to decision
-2. Failure identification to FMEA to mitigation to verification case
-3. Change request to impact analysis to approved baseline
-4. Test or telemetry data to calibration to updated analysis
-5. Architecture review to visualization to signed decision report
+2. Requirement or model quality issue to diagnostic to correction to review
+3. Failure identification to FMEA to mitigation to verification case
+4. Change request to impact analysis to approved baseline
+5. Test or telemetry data to calibration to updated analysis
+6. Architecture review to visualization to decision report
 
-Include nominal, stressing, alternative, and failure paths.
+Include nominal, stressing, alternative, and failure paths. Relate outputs to applicable NASA mission reviews without making any one mission the reference architecture.
 
 ### 18. Specify black-box behavior and interfaces
 
-Define what the environment must do without naming products. Specify:
+Define what the framework must do without naming products. Specify inputs and outputs, external actors, model and data exchanges, required services, timing and quality constraints, local data protection, and recovery behavior.
 
-- Inputs and outputs
-- External actors
-- Model and data exchanges
-- Required services
-- Timing and quality constraints
-- Security boundaries
-- Recovery behavior
+Keep requirements proportionate to university teams. Enterprise identity management and cloud operation are outside the mandatory scope.
 
-### 19. Define environment states
+### 19. Define framework states
 
-Useful states include:
+Useful states include Initialized, In work, Under analysis, Under review, Baselined, Released, Superseded, Degraded, and Recovering.
 
-- Initialized
-- In work
-- Under analysis
-- Under review
-- Baselined
-- Released
-- Superseded
-- Degraded
-- Recovering
-
-Define permitted transitions and approval conditions.
+Define permitted transitions and approval conditions. Lightweight human review can provide approval without a dedicated permissions platform.
 
 ### 20. Analyze variation and design constraints
 
-Consider variation in:
+Consider mission and satellite size, team size, asynchronous distributed work, connectivity, tool versions, supplier participation, model fidelity, digital twin coupling, and data sensitivity.
 
-- Mission and satellite size
-- Team size
-- Local or distributed development
-- Connectivity
-- Tool versions
-- Supplier participation
-- Model fidelity
-- Digital twin coupling
-- Data sensitivity
-
-Treat SysML v2, Python, Git, and Omniverse as candidate choices unless the research question explicitly fixes them. A fixed choice becomes a validated design constraint and narrows the study claim.
+Treat SysML v2, Python, Git, and Omniverse as candidate ingredients unless explicitly fixed by a validated study constraint. A fixed choice narrows the study claim. Cloud independence is a scope constraint. Local repositories and locally hosted services remain options.
 
 ### 21. Analyze potential failures at two levels
 
-**Environment failures:**
+**Framework failures:** malformed or ambiguous requirements, incorrect model relationships, stale traces, unit mismatch, schema drift, nonreproducible analysis, edit conflicts, lost provenance, failed synchronization, corrupted baselines, unintended changes, and telemetry delay or loss.
 
-- Stale trace
-- Unit mismatch
-- Schema drift
-- Nonreproducible analysis
-- Concurrent edit conflict
-- Lost provenance
-- Failed synchronization
-- Corrupted baseline
-- Unauthorized change
-- Telemetry delay or loss
+**EPS failures used as benchmark inputs:** solar string open circuit, battery degradation, converter failure, sensor bias, switch stuck open or closed, and unexpected load growth.
 
-**EPS failures used as benchmark inputs:**
-
-- Solar string open circuit
-- Battery degradation
-- Converter failure
-- Sensor bias
-- Switch stuck open or closed
-- Unexpected load growth
-
-Keep the two analyses distinct.
+Keep framework assurance distinct from EPS assurance. Include detection and review of requirements and modeling errors before downstream system V&V.
 
 ### 22. Baseline requirements and close traceability gaps
 
-Maintain this environment trace:
+Maintain this framework trace:
 
-> Need -> mission requirement -> use case -> scenario -> black-box requirement -> logical behavior -> logical component -> candidate physical component -> analysis evidence -> decision
+> Need -> framework mission requirement -> use case -> scenario -> black-box requirement -> logical behavior -> logical component -> candidate physical component -> analysis evidence -> decision
 
-Conduct the G2 technical review before defining tool allocations.
+Provide readable traceability tables alongside the rationale in the report. At the end of Sprint 1, complete the trace through black-box requirements. Mark downstream architecture and decision links as pending work for Sprints 2 and 3. Conduct the tailored SRR and require substantive review of evidence coverage, measures, requirement quality, use case completeness, and unresolved stakeholder assumptions.
+
+Compile the Sprint 1 LaTeX report and pause for human review. Do not begin logical architecture definition until this baseline is approved. Requirements work must not become a short preliminary task overshadowed by tool selection.
 
 ## E. Define the logical architecture
 
-### 23. Derive logical behavior from the scenarios
+### 23. Derive logical behavior from scenarios
 
-Allocate actions such as:
-
-- Manage requirements
-- Author and query models
-- Execute analyses
-- Generate safety analyses
-- Transform and exchange data
-- Validate artifacts
-- Manage variants and baselines
-- Review and publish results
-- Ingest lifecycle data
-- Generate evidence and reports
+Allocate actions such as managing requirements, checking requirement quality, authoring and querying models, checking model consistency, executing analyses, generating safety analyses, exchanging data, managing variants and baselines, reviewing results, ingesting lifecycle data, and generating reports.
 
 ### 24. Derive the logical decomposition
 
-RM, MD, SA, CM, and CC provide a useful starting taxonomy. The decomposition will probably require an explicit integration capability:
+RM, MD, SA, CM, and CC provide a starting taxonomy. Evaluate an explicit integration capability:
 
 - Requirements and Traceability Service
 - Model and Knowledge Service
 - Analysis and Assurance Service
 - Configuration and Provenance Service
-- Collaboration and Presentation Service
+- Review and Presentation Service
 - Integration and Orchestration Service
 
-CM and CC remain cross-cutting. The integration service may be a component or an explicitly allocated responsibility with owned interfaces.
+CM and CC remain cross-cutting. Integration may be a component or an allocated responsibility with owned interfaces. Logical services need not become separate deployed services.
 
 ### 25. Define logical interactions and contracts
 
-Model flows for:
+Model flows for requirements and rationale, stable identifiers, parameter sets and units, analysis requests and results, diagnostics, FMEA records, baseline descriptions, review decisions, test and telemetry data, visualization data, and report evidence.
 
-- Requirements and rationale
-- Model elements and stable identifiers
-- Parameter sets and units
-- Analysis requests and results
-- FMEA records
-- Configuration manifests
-- Review comments and decisions
-- Test and telemetry data
-- Visualization data
-- Report evidence
-
-Specify invariants such as immutable analysis inputs and traceable transformations.
+Specify invariants such as preserved analysis inputs and traceable transformations. Make ownership and error handling explicit.
 
 ### 26. Specify logical components and review the baseline
 
-Define inputs, outputs, operations, persistent data, quality properties, and failure behavior for every component. Complete G3 before naming tools.
+Define inputs, outputs, operations, persistent data, quality properties, and failure behavior for every component. Review the logical baseline before naming tools. Carry findings into SDR preparation.
 
 ## F. Synthesize physical alternatives
 
 ### 27. Define partitioning criteria and the design space
 
-Include these decision dimensions:
+Include model authority, SysML v2 implementation, file or API integration, analysis execution, artifact storage, configuration strategy, asynchronous review, local deployment, proportionate security, CSRM reuse, FMEA implementation, digital twin coupling, synchronization, automation, and reporting.
 
-- Model authority topology
-- SysML v2 implementation
-- File, API, or event based integration
-- Analysis execution model
-- Data and artifact storage
-- Configuration strategy
-- Collaboration platform
-- Hosting topology
-- Security and identity
-- CSRM reuse mechanism
-- FMEA implementation
-- Digital twin coupling
-- Synchronization policy
-- Report and evidence generation
+### 28. Screen candidate components using available evidence
 
-### 28. Feasibility-screen candidate components
+Check documented semantics, API maturity, stable identifiers, queries, merge behavior, formats, automation, licensing, operating systems, GPU and storage needs, recovery, and current maintenance.
 
-Verify actual capabilities through documentation and small tests. Check:
+Verify claims using primary documentation and available published demonstrations. Record evidence dates and unresolved questions. Defer integration experiments until after the three-sprint design study.
 
-- SysML v2 conformance
-- API maturity
-- Stable identifiers
-- Query capability
-- Merge behavior
-- Supported formats
-- Automation
-- Licensing
-- Operating systems
-- GPU and storage needs
-- Backup and recovery
-- Current maintenance status
-
-Omniverse appearing in a review does not establish its suitability for EPS configuration management. Verify Nucleus, Kit, USD, and connector behavior directly.
+Omniverse appearing in a review does not establish its suitability for EPS configuration management. Assess relevant components and local deployment options directly. Remove unnecessary components rather than forcing them into a candidate.
 
 ### 29. Create at least three coherent candidate families
 
 | Candidate | Architecture concept |
 |---|---|
-| **A. Text and Git centered workbench** | Textual SysML v2, Python packages, Git and CI, controlled artifact storage, generated USD views, Omniverse for release review |
-| **B. Model repository centered environment** | SysML v2 repository and API as model authority, Python workers, metadata or graph store, Git for code, controlled collaboration views |
-| **C. Federated lifecycle environment** | Separate model, analysis, FMEA, telemetry, configuration, and visualization services connected through contracts, identifiers, and an event or workflow service |
+| **A. Text and Git centered workbench** | Textual SysML v2, Python analyses, local Git, controlled artifact storage, generated review views, optional Omniverse visualization |
+| **B. Model repository centered framework** | Locally hosted SysML v2 repository and API as model authority, Python workers, metadata store, Git for code, asynchronous review views |
+| **C. Federated lifecycle framework** | Locally deployable model, analysis, FMEA, telemetry, configuration, and visualization components connected through contracts, identifiers, and workflow orchestration |
 
-The proposed stack is the seed for Candidate A. A COTS or managed suite can serve as a fourth control candidate if licences and current SysML v2 support permit it.
+The proposed stack seeds Candidate A. Candidates must differ in architecture and satisfy the same scope constraints. A locally deployable COTS suite can be a fourth comparison if cost, licence, and current SysML v2 support permit it. Explain any administrative burden introduced by repositories or federation.
 
 ### 30. Complete every candidate physical architecture
 
-Each candidate must specify:
+Specify named products and relevant versions, licences, logical allocations, deployment nodes, software components, data stores, schemas, interfaces, failure handling, artifact authority, local protection, backup, recovery, migration, operating procedures, costs, and residual risks.
 
-- Named products and versions
-- Licences
-- Logical-to-physical allocations
-- Authoring, server, CI, storage, analysis, GPU, and test nodes
-- Software components and layers
-- Data stores and schemas
-- Interfaces, direction, protocol, and failure handling
-- Source authority for every artifact class
-- Security zones and roles
-- Backup, recovery, and migration
-- Operating procedures
-- Cost and resource properties
-- Residual assumptions and risks
-
-Define a release manifest that binds model revision, code revision, data version, analysis environment, CSRM version, FMEA library, results, and Omniverse scene.
+Describe how each candidate binds model, code, data, analysis configuration, reusable libraries, and results into a recoverable baseline. A manifest or test suite may be part of the future framework when justified. It is not mandatory infrastructure for this study.
 
 ### 31. Make digital twin choices explicit
 
-For each candidate define:
+For each candidate define the twin subject, intended decision, coupling level, model type, fidelity, uncertainty, deployment, synchronization, telemetry quality, authority, and degraded behavior.
 
-- Twin subject
-- Intended decision
-- Offline model, shadow, bidirectional twin, or predictive twin
-- Physics, data, or hybrid model
-- Fidelity and uncertainty
-- Ground or hybrid deployment
-- Batch, event, or continuous synchronization
-- Telemetry quality and provenance
-- Advisory or command authority
-- Degraded behavior
+An offline model and replay shadow provide initial comparison points. Bidirectional command paths require separate justification and carry a larger assurance burden.
 
-An offline model and replay shadow provide sensible initial comparison points. A bidirectional command path adds a much larger assurance burden.
+### 32. Conduct equivalent architecture walkthroughs and plan feasibility tests
 
-### 32. Build equivalent feasibility slices
-
-Build only enough of each candidate to measure architecture risk:
+Apply the same standard scenarios to all candidates. Trace inputs, responsibilities, interfaces, outputs, manual work, and failure handling for:
 
 - CSRM to SysML v2 EPS specialization
+- Requirement and model quality checks
 - Requirement change propagated to analysis and report
-- Eclipse and load trade executed in Python
-- Automated FMEA compared with expert review
-- Baseline reconstructed from a clean checkout
-- Omniverse or alternative review view generated
+- Solar array and battery sizing and controller selection
+- Eclipse and load trades
+- Automated FMEA with human review
+- Baseline reconstruction
+- Review view generation
 - Telemetry replay with stale and missing data
 
-These are engineering analysis prototypes. They are not implementation of the selected environment.
+Use existing evidence and engineering estimates to assess risks. Define later experiments, expected observations, and pass criteria. Do not build candidate feasibility slices during this three-sprint study. Mark untested integrations explicitly and reduce confidence accordingly.
+
+Compile the cumulative Sprint 2 LaTeX report and pause for human review of the logical architecture and comparable candidates before scoring and selection.
 
 ## G. Evaluate and select
 
-### 33. Freeze the analysis objectives and decision model
+### 33. Establish analysis objectives and the decision model
 
-Use OOSEM's sequence:
+Use OOSEM's sequence: identify analyses, define analysis context, specify analysis relationships, and perform engineering analysis.
 
-1. Identify analyses
-2. Define analysis context
-3. Specify analysis relationships
-4. Perform engineering analysis
-
-In SysML v2, represent candidates as variants and define analysis cases that bind candidate properties to criteria.
+Represent candidates as variants and define analysis cases binding candidate properties to criteria. Approve the criteria before scoring. Track evidence maturity alongside every consequential estimate.
 
 ### 34. Evaluate hard constraints first
 
-Examples include:
+Examples include required modeling semantics, local operation, affordable licensing, baseline recovery design, provenance preservation, explicit treatment of semantic loss, and FMEA traceability.
 
-- Required SysML v2 semantics work
-- Mandatory artifacts are version controlled
-- A baseline can be reconstructed
-- Analysis inputs and results retain provenance
-- No silent semantic loss occurs
-- FMEA output traces to source elements
-- Required access controls exist
+Distinguish demonstrated compliance, documented support, and unresolved feasibility. Unknown compliance cannot be silently counted as a pass. Define when an unresolved issue prevents selection and when a conditional recommendation is acceptable.
 
 ### 35. Compare feasible candidates quantitatively
 
-Measure:
+Assess trace coverage, change impact support, requirement and model checking, reproducibility design, semantic loss risk, CSRM migration effort, FMEA coverage and review effort, analysis capability, lifecycle automation, review effort, configuration completeness, setup and administration, cost, vendor dependence, and telemetry handling.
 
-- Trace coverage
-- Seeded change impact detection
-- Reproducibility
-- Semantic loss
-- CSRM migration effort
-- FMEA completeness and review effort
-- EPS analysis fidelity and uncertainty
-- Collaboration performance
-- Configuration audit completeness
-- Setup and administration effort
-- Cost and vendor dependence
-- Telemetry freshness and dropout tolerance
+Use measured model coverage where available. Use bounded estimates for implementation effort and operational performance. Do not report runtime, fidelity, or integration reliability as measured without supporting results.
 
 ### 36. Perform trade and sensitivity analysis
 
-Use:
+Use hard constraint filtering, Pareto analysis where useful, approved multi-attribute scoring, weight sensitivity, uncertainty analysis, evidence maturity, and residual risk comparison.
 
-- Hard constraint filtering
-- Pareto analysis
-- Approved multi-attribute utility or scoring
-- Weight sensitivity
-- Uncertainty analysis
-- Evidence maturity assessment
-- Residual risk comparison
-
-A weak or unstable ranking returns to candidate synthesis. The study may conclude that no current candidate is feasible.
+A weak or unstable ranking returns to candidate synthesis or requirements clarification. The study may conclude that evidence is insufficient to select a feasible candidate. Identify the later test most likely to resolve a consequential uncertainty.
 
 ### 37. Select the preferred physical architecture
 
-Freeze the candidate evidence before the decision. Have the decision authority:
+Have the decision authority review the candidate evidence, select or conditionally recommend a candidate, record rationale and rejected alternatives, consider sensitivity and uncertainty, and accept or reject residual risks.
 
-- Select the candidate
-- Record the rationale
-- Record rejected alternatives
-- Record sensitivity and uncertainty
-- Accept or reject residual risks
-- Link the decision to the applicable allocations and trade results
-
-Preserve every rejected candidate in the model.
+Link the decision to allocations and trade results. Preserve all candidates in the model. Do not force a definitive selection when the evidence supports only a conditional recommendation.
 
 ### 38. Conduct an independent technical and traceability review
 
-Require:
+Review SysML syntax and semantics, allocations, trace gaps, calculations, selection claims, native views, and OOSEM tailoring. Check that every substantive argument is readable in the report.
 
-- Valid SysML v2 syntax and semantics
-- Complete logical-to-physical allocations
-- No unexplained trace gaps
-- Reproducible analysis
-- Evidence for every selection claim
-- Native architecture views
-- Explicit waivers for tailored OOSEM products
+Complete the tailored SDR using the NASA criteria established in step 4. Record unmet criteria and resulting limitations. Human approval of the final report concludes Sprint 3. Proceeding to framework development requires a separate authorization.
 
-### 39. Compile the self-contained LaTeX report and stop
+### 39. Compile the self-contained LaTeX report and pause
 
-Generate the report from controlled artifacts. Include:
+Include:
 
-1. Problem and scope
-2. Literature evidence
-3. OOSEM tailoring
-4. Stakeholders and measures
-5. Black-box requirements
-6. Logical architecture
-7. Candidate physical architectures
-8. Feasibility experiments
-9. Trade method and sensitivity
-10. Preferred architecture
-11. Residual risks and limitations
-12. Reproduction instructions
+1. Problem, intended users, scope, and working title
+2. Review history and corpus methods
+3. Cited narrative literature synthesis, cluster plots, and relevant statistics
+4. OOSEM tailoring, SysML v1 to v2 mapping, and NASA review approach
+5. Stakeholders, needs, and measures
+6. Complete use cases and black-box requirements with rationale
+7. Logical architecture
+8. Three or more candidate physical architectures
+9. Architecture walkthroughs, evidence maturity, and planned feasibility tests
+10. Trade method, results, and sensitivity
+11. Preferred architecture or conditional recommendation
+12. Residual risks, limitations, and later OOSEM roadmap
+13. Concise instructions for rerunning study analyses and rebuilding the report
 
-Package:
+Supply the PDF, LaTeX sources, bibliography, SysML sources, native views, and supporting scripts and inputs. Embed decision-relevant tables and traceability in the report or its appendices. Auxiliary artifacts support reuse and execution. They are not additional mandatory reading.
 
-- PDF and LaTeX sources
-- Bibliography
-- SysML v2 sources
-- Native Syside views and manifests
-- Python code, locks, tests, and inputs
-- Evidence ledger
-- Traceability matrices
-- Trade results
-- Tool versions
-- SHA-256 manifest
+Require a successful report build with documented prerequisites. No clean network-free rebuild, lock files, CI pipeline, or checksum release manifest is required for any of the three design sprints.
 
-Require a clean, network-free rebuild. Stop before procurement, implementation, deployment, training, integration, or operational verification.
+Pause before framework construction, integration prototypes, procurement, deployment, training, and operational verification. Retain later development and verification activities in the roadmap for review after Sprint 3.
 
 # Subagent organization
 
-| Subagent | Responsibility |
+| Subagent or team | Responsibility |
 |---|---|
-| Evidence curator | Verify claims, pages, primary sources, and tool documentation |
-| OOSEM auditor | Maintain tailoring matrix, work products, and gate criteria |
-| EPS and CSRM specialist | Define benchmark mission and validate CSRM reuse |
-| Needs and requirements modeler | Build stakeholder, scenario, and black-box packages |
-| Logical architect | Build behavior, logical structure, and contracts |
-| Candidate A, B, and C architects | Model independent candidates against the same locked requirements |
-| Analysis and FMEA engineer | Build EPS analyses, FMEA automation, and benchmark tests |
-| Trade analyst | Run hard filters, scoring, Pareto, and sensitivity analyses |
-| Independent model auditor | Run Syside validation and traceability checks |
-| Report integrator | Generate tables, views, bibliography, and final LaTeX package |
+| Corpus research sub-orchestrator | Coordinate retrieval, clustering, coverage analysis, and source verification |
+| Narrative synthesis authors | Explain contributions, limitations, partial frameworks, and implications in cited LaTeX prose |
+| OOSEM and NASA review auditor | Maintain tailoring, work product mapping, and source grounded review criteria |
+| EPS domain specialist | Define mission-independent variation points and standard scenarios |
+| CSRM sub-orchestrator and investigators | Investigate original distribution and thesis reconstruction in parallel, then recommend reuse |
+| Needs and requirements team | Develop and independently review stakeholders, needs, requirements, use cases, and assurance scenarios |
+| Logical architect | Derive behavior, logical structure, and contracts |
+| Candidate A, B, and C architects | Develop independent candidates against the same approved requirements |
+| Analysis and assurance specialist | Assess EPS analysis, requirement and model checking, FMEA, and future test plans |
+| Trade analyst | Run filters, scoring, sensitivity, and uncertainty analysis |
+| Independent model auditor | Validate SysML and check traceability and allocations |
+| Report integrator | Integrate narrative, bibliography, views, plots, and tables into one reviewable report |
 
-Enforce four rules:
+Resource the corpus and requirements teams at a scale comparable to the three candidate teams combined. Their output is a core research contribution.
 
-1. Each mutating agent works in an isolated Git worktree.
-2. Each model package has one writer.
-3. Candidate architects receive the same frozen requirements and criteria.
-4. No agent approves its own work. The orchestrator merges only reviewed commits.
+Use these coordination rules:
 
-Subagent output remains draft material until a human or independent agent verifies it against the source and model.
+1. Give concurrent writers separate files or Git worktrees where needed.
+2. Give each model package one writer.
+3. Give candidate architects the same approved requirements, scenarios, and criteria.
+4. Independently review source interpretations, requirements, models, and trade results.
+5. Require each team to contribute report-ready prose and figures. A collection of working notes is insufficient.
 
-# Definition of done
+Subagent output remains draft until checked against sources and models. Keep coordination lightweight. The human reviews the integrated LaTeX report and its diagrams.
 
-The project reaches its stopping point when:
+# Definitions of done
 
-- At least three complete physical candidates exist.
-- Every viable candidate allocates every required logical capability.
-- The SysML v2 model passes syntax and semantic validation.
-- Required native views render successfully.
-- Traceability gaps are closed or explicitly waived.
-- Trade results rebuild from controlled inputs.
-- Sensitivity analysis supports a stable decision.
-- The selection authority signs the rationale and residual risks.
-- The self-contained report rebuilds from the released source bundle.
+## Sprint 1: Measures, requirements, and use cases
 
-This scope produces a defensible selected architecture for lifecycle-spanning nanosatellite EPS engineering. It also leaves a clean starting baseline for later implementation and verification.
+- The report accurately explains the abandoned SLR and use of the 129-paper corpus.
+- Cited narrative synthesis and justified corpus analyses support stakeholders, needs, standard scenarios, requirements, and use cases.
+- Measures have definitions, targets or justified provisional targets, and scoring anchors.
+- Framework mission requirements, black-box requirements, and complete use cases receive independent review and are fully readable in the report.
+- Requirement and model quality checking are covered alongside EPS V&V support.
+- The framework remains mission-independent and appropriate for university teams.
+- Traceability through black-box requirements is complete or gaps are explicitly accepted. Architecture links are marked as future work.
+- Applicable SysML checks pass and required views render.
+- Tailored MCR and SRR findings and unresolved assumptions are explicit.
+- The Sprint 1 LaTeX report builds and is ready for exhaustive human review.
+- Work pauses before logical architecture definition.
+
+## Sprint 2: Logical architecture and physical alternatives
+
+- The approved Sprint 1 baseline guides the architecture work.
+- Logical behavior, components, interactions, and contracts are defined.
+- At least three complete physical candidates exist against common requirements.
+- Each viable candidate allocates every required logical capability.
+- Equivalent walkthroughs expose assumptions, automation, manual work, and integration risks.
+- Future feasibility tests are specified without building integration prototypes.
+- SysML checks pass, required views render, and architecture traceability is reviewed.
+- The cumulative LaTeX report is ready for human review before candidate evaluation and selection.
+
+## Sprint 3: Evaluation and selection
+
+- Hard constraints, quantitative comparison, sensitivity, and evidence maturity are assessed consistently.
+- Trade calculations can be rerun from supplied inputs.
+- The decision or conditional recommendation is supported by evidence and explicit uncertainty.
+- Traceability through the decision is complete or gaps are explicitly accepted.
+- Tailored SDR findings and unmet criteria are explicit.
+- The final self-contained LaTeX report builds and is ready for exhaustive human review.
+- Later OOSEM development and verification activities remain visible in the roadmap.
+- No framework implementation or candidate integration prototype has been built as part of these three sprints.
+
+The three sprints produce a defensible architecture study for a reusable, lifecycle-spanning nanosatellite EPS framework. Human review controls progression between sprints and any later move to implementation.
