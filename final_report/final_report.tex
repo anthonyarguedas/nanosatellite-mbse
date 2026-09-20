@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper]{report}
+\documentclass[11pt,a4paper]{article}
 \usepackage[margin=24mm]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -58,11 +58,25 @@ The secondary objectives of this project are to characterize the needs, requirem
 The problem statement and objectives delimit the project from a project management perspective, and were written prior to applying a formal systems engineering approach to the framework itself.
 The lifecycle of the framework, which crucially must be distinguished from the lifecycle of its EPS system of interest, follows the Object-Oriented Systems Engineering Methdology (OOSEM) \cite{friedenthal2014practical}, and its model will be formalized in the Systems Modeling Language version 2 (SysML v2). Whether the embedded EPS lifecycle also applies OOSEM or SysML in some capacity is a framework design decision.
 
+\section{Theory}
+\subsection{OOSEM and the Vee Lifecycle}
+OOSEM is a top down, scenario-driven MBSE method that uses SysML to analyze, specify, design, and support the verification of systems. Its primary output is an integrated system model with consistent views of behavior, structure, properties, and requirements traceability. Its specification and design activities progress from stakeholder needs and black-box system requirements to logical and physical architectures. Engineering analysis, trade studies, and traceability span these activities. The activities are tailored and iterated rather than executed as fixed sequential phases \citep{friedenthal2014practical}.
+
+OOSEM operates within a broader system development lifecycle organized similarly to a Vee. The left side progressively specifies and designs the system from the system-of-systems level through system and intermediate element levels to components. Component development then implements hardware, software, databases, and operational procedures. The right side integrates these products and verifies each assembled level against the requirements and test cases defined at its corresponding level on the left. Management spans the full process. The process is recursive because the same specification, design, integration, and verification logic can be applied at each level of the system hierarchy. It is also iterative across conceptual, preliminary, and detailed design phases \citep{friedenthal2014practical}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/oosem-system-development-process.jpg}
+    \caption{System development process that provides the Vee lifecycle context for OOSEM. Reproduced from \citet[Fig.~17.1]{friedenthal2014practical}.}
+    \label{fig:oosem-system-development-process}
+\end{figure}
+
 \section{Solution}
-This section presents the framework as the system of interest and follows the OOSEM development structure. OOSEM is a top down, scenario-driven method that is applied iteratively and recursively at each relevant system level \citep{friedenthal2014practical}.
 
 \subsection{Manage System Development}
 In OOSEM, this process plans and controls the technical work. It selects and tailors the lifecycle approach, monitors cost, schedule, performance, and risk, and manages changes to the technical baseline. This section records the framework scope, plan, reviews, decisions, and baseline changes.
+
+The project proposal was written before the literature-based specification of the framework began. Its objectives, deliverables, and indicators therefore form the project management baseline and provide criteria for tracking the work. The OOSEM activities that follow will derive stakeholder needs, system requirements, and architecture separately from the literature, with the academic community represented in that literature as the principal stakeholder population. ÉTS provides the immediate project context and an intended application setting. The functional decomposition proposed before this analysis remains a provisional concept and carries no architectural authority until it is supported or revised through the OOSEM activities.
 
 \subsection{Specify and Design System}
 OOSEM implements this process on the left side of the Vee. It analyzes requirements, defines the architecture, specifies the next level of design, and produces test cases that support subsequent integration and verification \citep{friedenthal2014practical}.
@@ -91,11 +105,11 @@ This cross cutting activity maintains links from mission needs through system an
 \subsubsection{Support System Integration and Verification}
 This activity prepares the right side of the Vee by defining test cases, verification procedures, environments, and criteria. Executable and analytical models support early, virtual integration and verification before physical implementation.
 
-\subsubsection{Develop Enabling Systems}
-This activity addresses systems required to develop, verify, install, operate, and support the system of interest. For this framework, it includes the supporting data, tools, procedures, and verification environment needed to apply and sustain it.
-
 \section{Results}
 This section reports the realization and verification evidence for the framework components. In OOSEM, component development refines the specification received from the next higher level, then designs, implements, analyzes, and verifies each component \citep{friedenthal2014practical}.
+
+\subsection{Develop Enabling Systems}
+This activity addresses systems required to develop, verify, install, operate, and support the system of interest. For this framework, it includes the supporting data, tools, procedures, and verification environment needed to apply and sustain it.
 
 \subsection{Develop Database}
 This section reports the design and verification of the data resources that support the framework. It covers the data model, provenance, storage, access, and quality controls needed to make evidence traceable and reusable.
