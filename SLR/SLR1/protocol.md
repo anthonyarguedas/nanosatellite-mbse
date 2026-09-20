@@ -1,7 +1,8 @@
-# Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems
+# [ABANDONED] Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems
 
-- **Common evidence cutoff:** 2026-08-24
+- **Note**: This SLR has been **abandoned**. It's only purpose now is a traceability archive for the chunks used in `embeddings/search.py`.
 - **Final included reports:** `SLR/SLR1/included_reports.json`
+- **Common evidence cutoff:** 2026-08-24
 
 ## Review type and terminology
 
@@ -176,3 +177,5 @@ External repositories, evolving models, and author-provided artifacts are not in
 | Secondary studies | Exclude secondary studies. |
 | Abstract-only or non-research material | Exclude posters or abstracts without full papers; thesis or dissertation metadata and abstract stubs without the completed substantial report; proposals and prospectuses; undergraduate, bachelor's, or non-degree projects; advertisements; and non-scholarly web material. |
 | Retrieval status | Scientific eligibility does not depend on open access. If the report is not obtained after the required retrieval attempts, including a restricted or embargoed thesis, record `not_retrieved`. Do not silently exclude it for scientific reasons. |
+
+Some hand-picked reports may be included as Route C even if excluded as per the above criteria.

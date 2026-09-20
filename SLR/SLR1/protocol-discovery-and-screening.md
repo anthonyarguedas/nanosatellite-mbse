@@ -1,5 +1,7 @@
 # Protocol for a Systematic Review and Evidence Map of Model-Based Systems Engineering for Nanosatellite Electrical Power Systems — Discovery and screening
 
+- **Note**: This SLR has been **abandoned**. It's only purpose now is a traceability archive for the chunks in `embeddings/search.py`.
+
 ## Information sources
 
 - **Scopus:** bibliographic database.
@@ -29,6 +31,14 @@ Use two complementary streams because an EPS thread inside a wider spacecraft mo
 - **Stream B — embedded-thread recall:** Population × MBSE/system-model concepts and conservative artifact or tailoring expansions, without requiring an EPS term. Every Stream B candidate must be checked at full text for an eligible EPS thread.
 
 The 13 direct query families are Scopus, Web of Science Core Collection, IEEE Xplore, Engineering Village, Wiley Online Library, Springer Nature Link, Advanced Technologies & Aerospace Index, PQDT Global, OATD, AIAA ARC, IAF Digital Library, NASA Technical Reports Server (NTRS), and arXiv. Engineering Village covers two databases, Compendex and Inspec.
+
+#### Post-hoc report inclusion: Route C
+
+A post-hoc inclusion category was added for reports that cover phases of the MBSE lifecycle that could be applied to nanosatellite EPS.
+This route extends the population to all small satellites as long as the content is applicable to nanosatellite EPS.
+It does not require EPS content.
+
+Route C candidates are included manually. Only hand-picked candidates have been screened for this route.
 
 #### Population and EPS blocks
 
@@ -171,6 +181,9 @@ Assign one source-located `screening_decision`, which is initialized to `none` b
 - `exclude_secondary_study`;
 - `full_text_needed`; or
 - `not_retrieved`.
+
+For post-hoc, hand-picked reports:
+- `include_route_C_MBSE_lifecycle`
 
 Do not require an EPS or power term in a Stream B title or abstract. Embedded threads may be absent from metadata. If nanosatellite MBSE is plausible, retrieve the full text and resolve uncertainty there.
 

@@ -1,8 +1,6 @@
 # Supporting protocol for identifying and assessing prior secondary reviews
 
-> **Main review protocol:** [1 — Scope and definitions](protocol.md) · [2 — Discovery and screening](protocol-discovery-and-screening.md) · [3 — Extraction](protocol-extraction.md) · [4 — Synthesis](protocol-synthesis.md)
->
-> This is a bounded supporting search used to establish the need for the main systematic review. It is not a tertiary review and does not answer RQ1–RQ3 from secondary-review findings.
+- **Note**: This SLR has been **abandoned**. It's only purpose now is a traceability archive for the chunks in `embeddings/search.py`.
 
 ## Purpose and relationship to the main review
 
