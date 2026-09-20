@@ -116,9 +116,10 @@ RERANK_FUSION_CONSTANT = 60
 RERANKER_RRF_WEIGHT = 3.0
 TOKEN_RE = re.compile(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)?")
 QUOTED_PHRASE_RE = re.compile(r'"([^"]+)"')
-REPORT_MARKDOWN_RE = re.compile(r"^(review|citation)-report-([0-9]+)\.md$")
+REPORT_MARKDOWN_RE = re.compile(r"^([a-z][a-z0-9_]*)-report-([0-9]+)\.md$")
 SEARCH_MODES = ("hybrid", "vector", "jev", "visual", "bm25", "regex")
 RERANKABLE_MODES = {"hybrid", "vector", "jev", "bm25", "regex"}
+REVIEW_FILTERS = ("include", "exclude", "only")
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
 SERVED_SUFFIXES = IMAGE_SUFFIXES | {".pdf"}
 
@@ -871,6 +872,24 @@ def normalize_reranker(reranker: str) -> str:
     return reranker
 
 
+def normalize_review_filter(value: str) -> str:
+    value = value.casefold()
+    if value not in REVIEW_FILTERS:
+        available = ", ".join(REVIEW_FILTERS)
+        raise SearchError(f"Unknown review filter {value!r}. Choose: {available}.")
+    return value
+
+
+def review_filter_allows(report: dict, review_filter: str) -> bool:
+    """Return whether a report passes the publication-type review filter."""
+    is_review = str(report.get("publication_type") or "").casefold() == "review"
+    if review_filter == "exclude":
+        return not is_review
+    if review_filter == "only":
+        return is_review
+    return True
+
+
 def repository_path(value: str) -> Path | None:
     """Return an existing repository file without allowing path traversal."""
     path = Path(value)
@@ -893,6 +912,10 @@ def originating_pdf(source_path: str) -> Path | None:
     direct_match = source.with_suffix(".pdf")
     if direct_match.is_file():
         return direct_match
+
+    nested_match = source.parent / f"{source.stem}_images" / f"{source.stem}.pdf"
+    if nested_match.is_file():
+        return nested_match
 
     try:
         pdfs = sorted(
@@ -1590,6 +1613,7 @@ class SearchService:
         positive_only: bool = False,
         images_only: bool = False,
         allowed_rows: Any = None,
+        allowed_report_ids: set[str] | None = None,
         constant: int = 60,
     ) -> None:
         import numpy as np
@@ -1604,6 +1628,11 @@ class SearchService:
                 continue
             chunk = chunks[int(row_index)]
             if report_id is not None and chunk["report_id"] != report_id:
+                continue
+            if (
+                allowed_report_ids is not None
+                and chunk["report_id"] not in allowed_report_ids
+            ):
                 continue
             key, source_image = self._chunk_candidate_key(chunk, reports)
             if images_only and source_image is None:
@@ -1646,6 +1675,7 @@ class SearchService:
         records: list[dict],
         depth: int,
         report_id: str | None = None,
+        allowed_report_ids: set[str] | None = None,
         constant: int = 60,
     ) -> None:
         import numpy as np
@@ -1654,6 +1684,11 @@ class SearchService:
         for row_index in np.argsort(-visual_scores, kind="stable"):
             record = records[int(row_index)]
             if report_id is not None and record["report_id"] != report_id:
+                continue
+            if (
+                allowed_report_ids is not None
+                and record["report_id"] not in allowed_report_ids
+            ):
                 continue
             rank += 1
             if rank > depth:
@@ -1759,6 +1794,7 @@ class SearchService:
         reranker: str = "qwen",
         images_only: bool = False,
         content_eligible: Any = None,
+        allowed_report_ids: set[str] | None = None,
     ) -> tuple[list[dict], str | None, bool, list[str]]:
         candidates: dict[str, dict] = {}
         visual_device = None
@@ -1785,6 +1821,7 @@ class SearchService:
                 report_id=report_id,
                 images_only=images_only,
                 allowed_rows=content_eligible,
+                allowed_report_ids=allowed_report_ids,
             )
         if lexical_scores is not None:
             self._add_chunk_ranking(
@@ -1798,6 +1835,7 @@ class SearchService:
                 positive_only=True,
                 images_only=images_only,
                 allowed_rows=content_eligible,
+                allowed_report_ids=allowed_report_ids,
             )
         if jev_scores is not None:
             self._add_chunk_ranking(
@@ -1810,6 +1848,7 @@ class SearchService:
                 report_id=report_id,
                 images_only=images_only,
                 allowed_rows=content_eligible,
+                allowed_report_ids=allowed_report_ids,
             )
         if regex_match_scores is not None:
             self._add_chunk_ranking(
@@ -1823,6 +1862,7 @@ class SearchService:
                 positive_only=True,
                 images_only=images_only,
                 allowed_rows=content_eligible,
+                allowed_report_ids=allowed_report_ids,
             )
         if visual_scores is not None:
             self._add_visual_ranking(
@@ -1831,6 +1871,7 @@ class SearchService:
                 records,
                 fusion_depth,
                 report_id=report_id,
+                allowed_report_ids=allowed_report_ids,
             )
 
         first_stage = sorted(
@@ -1910,10 +1951,16 @@ class SearchService:
         report_id: str | None,
         reranker: str = "qwen",
         images_only: bool = False,
+        review_filter: str = "include",
     ) -> dict:
         import numpy as np
 
         chunks, reports = self._load_corpus()
+        allowed_report_ids = {
+            report_id
+            for report_id, report in reports.items()
+            if review_filter_allows(report, review_filter)
+        }
         dense_scores = None
         lexical_scores = None
         regex_match_scores = None
@@ -1959,6 +2006,7 @@ class SearchService:
                     reranker=reranker,
                     images_only=images_only,
                     content_eligible=content_eligible,
+                    allowed_report_ids=allowed_report_ids,
                 )
                 scores_by_chunk = {
                     str(chunk["chunk_id"]): float(content_scores[index])
@@ -1994,6 +2042,8 @@ class SearchService:
                 chunk = chunks[int(row_index)]
                 chunk_report_id = chunk["report_id"]
                 if report_id is not None and chunk_report_id != report_id:
+                    continue
+                if chunk_report_id not in allowed_report_ids:
                     continue
                 if images_only and originating_image(
                     chunk, reports.get(chunk_report_id, {})
@@ -2042,6 +2092,8 @@ class SearchService:
                 record_report_id = record["report_id"]
                 if report_id is not None and record_report_id != report_id:
                     continue
+                if record_report_id not in allowed_report_ids:
+                    continue
                 if (
                     max_per_report is not None
                     and report_counts[record_report_id] >= max_per_report
@@ -2085,6 +2137,7 @@ class SearchService:
                 reranker=reranker,
                 images_only=images_only,
                 content_eligible=content_eligible,
+                allowed_report_ids=allowed_report_ids,
             )
             if jev_content_scores is not None:
                 scores_by_chunk = {
@@ -2134,6 +2187,7 @@ class SearchService:
                 ),
                 reranker=reranker,
                 images_only=images_only,
+                allowed_report_ids=allowed_report_ids,
             )
             return {
                 "question": question,
@@ -2176,6 +2230,8 @@ class SearchService:
             chunk = chunks[int(row_index)]
             chunk_report_id = chunk["report_id"]
             if report_id is not None and chunk_report_id != report_id:
+                continue
+            if chunk_report_id not in allowed_report_ids:
                 continue
             if images_only and originating_image(
                 chunk, reports.get(chunk_report_id, {})
@@ -2240,6 +2296,7 @@ class SearchService:
         report: str | None = None,
         reranker: str = "qwen",
         images_only: bool = False,
+        reviews: str = "include",
     ) -> dict:
         question = question.strip()
         if not question:
@@ -2254,6 +2311,7 @@ class SearchService:
             raise SearchError("The reranking depth must be at least 1.")
         mode = normalize_mode(mode)
         reranker = normalize_reranker(reranker)
+        review_filter = normalize_review_filter(reviews)
         report_query = (report or "").strip()
         with self._search_lock:
             _, reports = self._load_corpus()
@@ -2276,8 +2334,10 @@ class SearchService:
                 rerank_depth=rerank_depth,
                 reranker=reranker,
                 images_only=images_only,
+                review_filter=review_filter,
                 report_id=report_id,
             )
+        payload["reviews"] = review_filter
         payload["report_filter"] = (
             report_summary(selected_report) if selected_report is not None else None
         )
@@ -2323,6 +2383,7 @@ def main(args: argparse.Namespace) -> int:
                 rerank_depth=args.rerank_depth,
                 reranker=args.reranker,
                 images_only=args.images_only,
+                reviews=args.reviews,
                 report=args.report,
             )
             for question in questions
@@ -2383,6 +2444,7 @@ def make_gui_handler(
     rerank: bool = True,
     reranker: str = "qwen",
     images_only: bool = False,
+    reviews: str = "include",
     rerank_depth_default: int = 50,
     max_per_report_default: int = 2,
 ):
@@ -2432,6 +2494,7 @@ def make_gui_handler(
                     images_only=query_boolean(
                         parameters, "images_only", images_only
                     ),
+                    reviews=parameters.get("reviews", [reviews])[0],
                     report=parameters.get("report", [""])[0],
                 )
             except SearchError as error:
@@ -2520,6 +2583,7 @@ def serve_gui(args: argparse.Namespace) -> int:
         rerank=not args.no_rerank,
         reranker=args.reranker,
         images_only=args.images_only,
+        reviews=args.reviews,
         rerank_depth_default=args.rerank_depth,
         max_per_report_default=args.max_per_report,
     )
@@ -2562,6 +2626,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--report",
         help="Restrict results by report code or a unique title search.",
+    )
+    parser.add_argument(
+        "--reviews",
+        choices=REVIEW_FILTERS,
+        default="include",
+        help="Include reviews, exclude reviews, or search reviews only.",
     )
     parser.add_argument(
         "--no-visual",

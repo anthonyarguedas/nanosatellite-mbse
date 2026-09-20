@@ -667,6 +667,14 @@
               <label class="mode"><input id="images-only" type="checkbox"><span>Images only</span></label>
             </div>
           </fieldset>
+          <fieldset>
+            <legend>Reviews</legend>
+            <div class="modes">
+              <label class="mode"><input type="radio" name="reviews" value="include" checked><span>Include</span></label>
+              <label class="mode"><input type="radio" name="reviews" value="exclude"><span>Exclude</span></label>
+              <label class="mode"><input type="radio" name="reviews" value="only"><span>Only</span></label>
+            </div>
+          </fieldset>
           <div class="slider-control">
             <label class="slider-label" for="top-k">Chunks <output id="top-k-value" for="top-k">12</output></label>
             <input id="top-k" name="top_k" type="range" min="1" max="50" value="12">
@@ -727,6 +735,10 @@
 
     function selectedReranker() {
       return document.querySelector('input[name="reranker"]:checked').value;
+    }
+
+    function selectedReviews() {
+      return document.querySelector('input[name="reviews"]:checked').value;
     }
 
     function modeSupportsReranking(mode) {
@@ -1112,6 +1124,7 @@
     function bibtexEntryType(publicationType) {
       const entryTypes = {
         journal_article: "article",
+        review: "article",
         conference_paper: "inproceedings",
         thesis_or_dissertation: "techreport",
         workshop_presentation: "unpublished",
@@ -1128,6 +1141,7 @@
     function bibtexVenueField(publicationType) {
       const venueFields = {
         journal_article: "journal",
+        review: "journal",
         conference_paper: "booktitle",
         thesis_or_dissertation: "institution",
         workshop_presentation: "note",
@@ -1317,10 +1331,15 @@
         ? ` · ${formatNumber(payload.content_filter.excluded_chunks)} metadata chunks omitted`
         : "";
       const imageFilter = payload.images_only ? " · images only" : "";
+      const reviewFilter = payload.reviews === "exclude"
+        ? " · reviews excluded"
+        : payload.reviews === "only"
+          ? " · reviews only"
+          : "";
       const fallback = payload.visual_search_requested && !payload.visual_search
         ? " · visual index skipped"
         : "";
-      status.textContent = `${payload.results.length} ${payload.results.length === 1 ? "result" : "results"} · ${payload.mode}${ranking}${jev}${contentFilter}${imageFilter}${fallback}${reportSuffix}`;
+      status.textContent = `${payload.results.length} ${payload.results.length === 1 ? "result" : "results"} · ${payload.mode}${ranking}${jev}${contentFilter}${imageFilter}${reviewFilter}${fallback}${reportSuffix}`;
     }
 
     function updateSearchControls() {
@@ -1377,6 +1396,7 @@
           mode,
           top_k: topK.value,
           images_only: imagesOnly.checked ? "1" : "0",
+          reviews: selectedReviews(),
           rerank: canRerank && reranker !== "off" ? "1" : "0",
         });
         if (canRerank && reranker !== "off") {

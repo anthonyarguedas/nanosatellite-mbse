@@ -33,6 +33,12 @@ class PrepareCorpusTests(unittest.TestCase):
         }
 
         self.assertEqual(actual, selected)
+        self.assertIn("handpicked-0001", actual)
+        self.assertIn("handpicked-0002", actual)
+        self.assertIn("handpicked-0003", actual)
+        self.assertIn("psr-0024", actual)
+        self.assertIn("psr-0039", actual)
+        self.assertIn("psr-0092", actual)
 
     def test_page_and_section_provenance(self) -> None:
         markdown = """---

@@ -24,7 +24,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
 DATA_DIR = SCRIPT_DIR / "data"
 INCLUDED_REPORTS_PATH = REPO_ROOT / "SLR/SLR1/included_reports.json"
-REPORT_MARKDOWN_RE = re.compile(r"^(review|citation)-report-([0-9]+)\.md$")
+REPORT_MARKDOWN_RE = re.compile(r"^([a-z][a-z0-9_]*)-report-([0-9]+)\.md$")
 PAGE_RE = re.compile(r"<!--\s*PDF_PAGE:\s*([1-9][0-9]*)\s*-->")
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
 IMAGE_RE = re.compile(r"!\[([^]]*)]\(([^)]+)\)")
@@ -909,47 +909,99 @@ def included_report_sources() -> dict[str, Path]:
     return sources
 
 
+def candidate_records_by_report_id() -> dict[str, dict]:
+    """Load screening metadata when an included report has a candidate record."""
+    configurations = [
+        (
+            "review",
+            REPO_ROOT / "SLR/SLR1/review-candidates.json",
+            "review-candidate-",
+        ),
+        (
+            "citation",
+            REPO_ROOT / "SLR/SLR1/citation-candidates.json",
+            "citation-candidate-",
+        ),
+        (
+            "psr",
+            REPO_ROOT / "SLR/SLR1/psr-candidates.json",
+            "psr-candidate-",
+        ),
+    ]
+    candidates: dict[str, dict] = {}
+    for namespace, json_path, id_prefix in configurations:
+        source_data = json.loads(json_path.read_text(encoding="utf-8"))
+        for candidate in source_data["records"]:
+            candidate_id = str(candidate.get("candidate_id") or "")
+            if not candidate_id.startswith(id_prefix):
+                continue
+            suffix = candidate_id.removeprefix(id_prefix)
+            if not suffix.isdigit():
+                continue
+            report_id = f"{namespace}-{suffix}"
+            if report_id in candidates:
+                raise ValueError(f"Duplicate candidate report ID: {report_id}")
+            candidates[report_id] = candidate
+    return candidates
+
+
+def included_publication_year(record: dict) -> int | None:
+    """Derive a publication year from an included-record date."""
+    match = re.search(r"(?:19|20)[0-9]{2}", str(record.get("date") or ""))
+    return int(match.group(0)) if match else None
+
+
 def expected_sources() -> Iterator[tuple[dict, Path | None, str]]:
     selected_sources = included_report_sources()
-    unmatched_report_ids = set(selected_sources)
-    configurations = [
-        {
-            "namespace": "review",
-            "json_path": REPO_ROOT / "SLR/SLR1/review-candidates.json",
-            "id_prefix": "review-candidate-",
-        },
-        {
-            "namespace": "citation",
-            "json_path": REPO_ROOT / "SLR/SLR1/citation-candidates.json",
-            "id_prefix": "citation-candidate-",
-        },
-    ]
-    for config in configurations:
-        source_data = json.loads(config["json_path"].read_text(encoding="utf-8"))
-        for candidate in source_data["records"]:
-            suffix = candidate["candidate_id"].removeprefix(config["id_prefix"])
-            report_id = f"{config['namespace']}-{suffix}"
-            source_path = selected_sources.get(report_id)
-            if source_path is None:
-                continue
-            unmatched_report_ids.remove(report_id)
-            path = source_path if source_path.is_file() else None
-            source_kind = "preferred_markdown" if path is not None else "missing"
-            report = {
-                "report_id": report_id,
-                "namespace": config["namespace"],
-                "screening_record_id": candidate["candidate_id"],
-                "screening_decision": candidate.get("screening_decision"),
-                "title": candidate.get("title") or candidate["candidate_id"],
-                "authors": candidate.get("authors") or [],
-                "publication_year": candidate.get("publication_year"),
-                "doi": candidate.get("doi") or None,
-            }
-            yield report, path, source_kind
+    candidates = candidate_records_by_report_id()
+    records = json.loads(INCLUDED_REPORTS_PATH.read_text(encoding="utf-8"))
 
-    if unmatched_report_ids:
-        identifiers = ", ".join(sorted(unmatched_report_ids))
-        raise ValueError(f"Included reports lack candidate records: {identifiers}")
+    included_by_report_id: dict[str, dict] = {}
+    for record in records:
+        source_value = str(record["full_text_markdown"])
+        match = REPORT_MARKDOWN_RE.fullmatch(Path(source_value).name)
+        if match is None:  # pragma: no cover - checked by included_report_sources
+            raise ValueError(f"Cannot derive a report ID from {source_value}")
+        report_id = "-".join(match.groups())
+        included_by_report_id[report_id] = record
+
+    ordered_report_ids = [
+        report_id for report_id in candidates if report_id in selected_sources
+    ]
+    ordered_report_ids.extend(
+        report_id for report_id in selected_sources if report_id not in candidates
+    )
+
+    for report_id in ordered_report_ids:
+        source_path = selected_sources[report_id]
+        namespace, suffix = report_id.rsplit("-", 1)
+        included = included_by_report_id[report_id]
+        candidate = candidates.get(report_id, {})
+        screening_record_id = candidate.get("candidate_id") or (
+            f"{namespace}-candidate-{suffix}"
+        )
+        title = candidate.get("title") or included.get("title")
+        if not isinstance(title, str) or not title.strip():
+            raise ValueError(f"Included report {report_id} lacks a title")
+        authors = candidate.get("authors") or included.get("authors") or []
+        if not isinstance(authors, list):
+            raise ValueError(f"Included report {report_id} authors must be a list")
+
+        path = source_path if source_path.is_file() else None
+        source_kind = "preferred_markdown" if path is not None else "missing"
+        report = {
+            "report_id": report_id,
+            "namespace": namespace,
+            "screening_record_id": screening_record_id,
+            "screening_decision": candidate.get("screening_decision")
+            or included.get("screening_decision"),
+            "title": title.strip(),
+            "authors": authors,
+            "publication_year": candidate.get("publication_year")
+            or included_publication_year(included),
+            "doi": candidate.get("doi") or included.get("doi") or None,
+        }
+        yield report, path, source_kind
 
 
 def build(args: argparse.Namespace) -> dict:

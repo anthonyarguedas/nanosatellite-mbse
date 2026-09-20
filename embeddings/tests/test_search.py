@@ -37,10 +37,12 @@ from search import (
     maxsim_scores,
     normalize_mode,
     normalize_reranker,
+    normalize_review_filter,
     prepare_bm25,
     regex_scores,
     reranked_rank_fusion_score,
     resolve_report_filter,
+    review_filter_allows,
     typesafe_api_key,
 )
 from index_status import inspect_jev_index
@@ -54,6 +56,10 @@ class SearchTests(unittest.TestCase):
         self.assertIn('name="mode" value="jev"', html)
         self.assertNotIn('name="mode" value="visual"', html)
         self.assertIn('id="images-only" type="checkbox"', html)
+        self.assertIn('name="reviews" value="include" checked', html)
+        self.assertIn('name="reviews" value="exclude"', html)
+        self.assertIn('name="reviews" value="only"', html)
+        self.assertIn('review: "article"', html)
         self.assertIn('name="reranker" value="off"', html)
         self.assertIn('name="reranker" value="qwen" checked', html)
         self.assertIn('name="reranker" value="jev"', html)
@@ -552,6 +558,92 @@ class SearchTests(unittest.TestCase):
         self.assertEqual(normalize_reranker("JEV"), "jev")
         with self.assertRaisesRegex(SearchError, "Unknown reranker"):
             normalize_reranker("other")
+
+    def test_review_filters_are_case_insensitive_and_validated(self) -> None:
+        self.assertEqual(normalize_review_filter("ONLY"), "only")
+        self.assertTrue(review_filter_allows({"publication_type": "review"}, "include"))
+        self.assertFalse(
+            review_filter_allows({"publication_type": "review"}, "exclude")
+        )
+        self.assertTrue(review_filter_allows({"publication_type": "review"}, "only"))
+        self.assertFalse(
+            review_filter_allows({"publication_type": "journal_article"}, "only")
+        )
+        with self.assertRaisesRegex(SearchError, "Unknown review filter"):
+            normalize_review_filter("other")
+
+    def test_bm25_can_exclude_reviews_or_search_reviews_only(self) -> None:
+        import numpy as np
+
+        chunks = [
+            {
+                "chunk_id": "review-0001:chunk-00001",
+                "report_id": "review-0001",
+                "title": "Secondary study",
+                "section": "Results",
+                "page_start": 1,
+                "page_end": 1,
+                "chunk_type": "passage",
+                "text": "MBSE evidence in a review.",
+                "embedding_text": "MBSE evidence in a review.",
+            },
+            {
+                "chunk_id": "review-0002:chunk-00001",
+                "report_id": "review-0002",
+                "title": "Primary study",
+                "section": "Results",
+                "page_start": 1,
+                "page_end": 1,
+                "chunk_type": "passage",
+                "text": "MBSE evidence in an article.",
+                "embedding_text": "MBSE evidence in an article.",
+            },
+        ]
+        reports = {
+            "review-0001": {"publication_type": "review"},
+            "review-0002": {"publication_type": "journal_article"},
+        }
+        service = SearchService()
+        service._load_corpus = lambda: (chunks, reports)
+        service._get_bm25_data = lambda: ()
+
+        with patch(
+            "search.bm25_scores",
+            return_value=np.array([2.0, 1.0], dtype=np.float32),
+        ):
+            reviews_only = service._search(
+                question="MBSE",
+                mode="bm25",
+                top_k=2,
+                max_per_report=2,
+                fusion_depth=10,
+                include_visual=False,
+                rerank=False,
+                rerank_depth=5,
+                report_id=None,
+                review_filter="only",
+            )
+            reviews_excluded = service._search(
+                question="MBSE",
+                mode="bm25",
+                top_k=2,
+                max_per_report=2,
+                fusion_depth=10,
+                include_visual=False,
+                rerank=False,
+                rerank_depth=5,
+                report_id=None,
+                review_filter="exclude",
+            )
+
+        self.assertEqual(
+            [result["report_id"] for result in reviews_only["results"]],
+            ["review-0001"],
+        )
+        self.assertEqual(
+            [result["report_id"] for result in reviews_excluded["results"]],
+            ["review-0002"],
+        )
 
     def test_reranker_rank_has_greater_fusion_weight(self) -> None:
         reranker_favorite = reranked_rank_fusion_score(
