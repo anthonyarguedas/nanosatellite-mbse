@@ -59,27 +59,61 @@ The problem statement and objectives delimit the project from a project manageme
 The lifecycle of the framework, which crucially must be distinguished from the lifecycle of its EPS system of interest, follows the Object-Oriented Systems Engineering Methdology (OOSEM) \cite{friedenthal2014practical}, and its model will be formalized in the Systems Modeling Language version 2 (SysML v2). Whether the embedded EPS lifecycle also applies OOSEM or SysML in some capacity is a framework design decision.
 
 \section{Solution}
-The following subsections are derived from OOSEM activities, and cover the results of the tasks within each activity.
+This section presents the framework as the system of interest and follows the OOSEM development structure. OOSEM is a top down, scenario-driven method that is applied iteratively and recursively at each relevant system level \citep{friedenthal2014practical}.
 
-\subsection{Manage system development}
-\subsubsection{Conduct technical review}
-\subsubsection{Update technical baseline}
-\subsubsection{Update plan}
+\subsection{Manage System Development}
+In OOSEM, this process plans and controls the technical work. It selects and tailors the lifecycle approach, monitors cost, schedule, performance, and risk, and manages changes to the technical baseline. This section records the framework scope, plan, reviews, decisions, and baseline changes.
 
-\subsection{Specify and design system}
-\subsubsection{Setup model}
+\subsection{Specify and Design System}
+OOSEM implements this process on the left side of the Vee. It analyzes requirements, defines the architecture, specifies the next level of design, and produces test cases that support subsequent integration and verification \citep{friedenthal2014practical}.
+
+\subsubsection{Set Up Model}
+This activity establishes the prerequisites for model development. It defines the modeling purpose, conventions, terminology, package structure, viewpoints, and validation practices that make the framework model consistent and navigable.
+
+\subsubsection{Analyze Stakeholder Needs}
+This activity characterizes the current operational domain, identifies stakeholder problems and their causes, and defines mission needs, measures of effectiveness, and the intended future domain. It establishes why the framework is needed and what successful use must achieve.
+
+\subsubsection{Analyze System Requirements}
+This activity specifies the framework as a black box. It derives requirements from stakeholder needs and defines mission scenarios, system context, interfaces, behavior, performance, states, failures, and design constraints.
+
+\subsubsection{Define Logical Architecture}
+This activity decomposes the framework into logical components and defines how they interact to satisfy the system requirements. The logical architecture remains independent of a particular implementation technology.
+
+\subsubsection{Synthesize Candidate Physical Architectures}
+This activity maps logical components to realizable hardware, software, data, and procedure components. It defines partitioning criteria, interfaces, deployment choices, and candidate variants that can realize the logical architecture.
+
+\subsubsection{Optimize and Evaluate Alternatives}
+This cross cutting activity evaluates candidate designs through analysis and trade studies against the measures of effectiveness. Its results guide architecture choices, requirement values, and design refinements throughout the process.
+
+\subsubsection{Manage Requirements Traceability}
+This cross cutting activity maintains links from mission needs through system and component requirements to design and verification elements. It exposes coverage gaps, supports change impact analysis, and preserves the rationale for framework decisions.
+
+\subsubsection{Support System Integration and Verification}
+This activity prepares the right side of the Vee by defining test cases, verification procedures, environments, and criteria. Executable and analytical models support early, virtual integration and verification before physical implementation.
+
+\subsubsection{Develop Enabling Systems}
+This activity addresses systems required to develop, verify, install, operate, and support the system of interest. For this framework, it includes the supporting data, tools, procedures, and verification environment needed to apply and sustain it.
 
 \section{Results}
-The following subsections are derived from OOSEM activities or tasks, and cover the results of the OOSEM or engineering tasks within each OOSEM activity or task.
+This section reports the realization and verification evidence for the framework components. In OOSEM, component development refines the specification received from the next higher level, then designs, implements, analyzes, and verifies each component \citep{friedenthal2014practical}.
 
-\subsection{Develop database}
-\subsection{Develop hardware}
-\subsection{Develop operator procedures}
-\subsection{Develop software}
-\subsection{Integrate and verify system}
+\subsection{Develop Database}
+This section reports the design and verification of the data resources that support the framework. It covers the data model, provenance, storage, access, and quality controls needed to make evidence traceable and reusable.
+
+\subsection{Develop Hardware}
+This section reports any hardware needed to execute or evaluate the framework. OOSEM treats such work as component development that refines allocated requirements into an implemented and verified hardware design.
+
+\subsection{Develop Operational Procedures}
+This section reports the procedures needed to apply, operate, maintain, and support the framework. OOSEM treats procedures as implementation elements that require their own requirements, design, validation, and verification.
+
+\subsection{Develop Software}
+This section reports the software components that implement framework functions. It traces their design and implementation to allocated requirements and records the analysis and tests used to verify them.
+
+\subsection{Integrate and Verify System}
+This process integrates the implemented components and verifies that the resulting framework satisfies its requirements. It uses planned methods such as inspection, demonstration, analysis, and testing, then records the evidence and verification verdicts \citep{friedenthal2014practical}.
 
 \section{References}
-\bibliographystyle{plain} 
+\bibliographystyle{plainnat}
 \bibliography{references}
 
 \end{document}
