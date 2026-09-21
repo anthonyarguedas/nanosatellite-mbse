@@ -30,6 +30,9 @@ package FrameworkCriticalProperties {
 
     item def 'Framework Evaluation Manifest' {
         item baseline : 'Baseline Reference';
+        attribute 'candidate architecture identifiers' : String;
+        attribute 'candidate comparison model elements' : String;
+        attribute 'OOSEM source baseline revision' : String;
         attribute 'designated evidence chains' : String;
         attribute 'designated external artifacts' : String;
         attribute 'designated reference analyses' : String;
@@ -45,11 +48,14 @@ package FrameworkCriticalProperties {
         assert constraint { 'required contrasting case count' == 2 }
 
         doc
-        /* The manifest is fixed before candidate framework results are observed. It identifies the
-         * designated evidence chains, external requirement sets, EPS models, analysis results, the
-         * controlled baseline, result-specific tolerances, the discrepancy criticality rule, the
-         * common core, the two required cases, all measurement boundaries, and the utility anchors
-         * and mapping rules used after Pareto comparison.
+        /* The manifest is fixed before candidate framework results are observed. It identifies each
+         * candidate architecture, its common SysML v2 comparison-model elements under MC-01, the
+         * immutable OOSEM source revision under MC-02, the designated evidence chains, external
+         * requirement sets, EPS models, analysis results, the controlled evaluation baseline,
+         * result-specific tolerances, the discrepancy criticality rule, the common core, the two
+         * required cases, all measurement boundaries, and the utility anchors and mapping rules used
+         * after Pareto comparison. MC-01 and MC-02 control study artifacts and are not candidate
+         * implementation requirements.
          */
     }
 

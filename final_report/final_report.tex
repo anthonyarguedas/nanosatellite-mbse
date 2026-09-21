@@ -66,7 +66,7 @@ Within the five-phase structure synthesized by \citet{buruso2026modelbased}, thi
 The secondary objectives of this project are: to characterize the needs, requirements, interfaces and technical criteria of nanosatellite EPS; to select the operational flow of modeling, analysis, and evidence management of the MBSE framework; to model a generic EPS architecture with functions, logical and physical components, interfaces, modes and states, and requirements; to structure early EPS verification and validation within the EPS framework; to evaluate the framework on two contrasting EPS case studies.
 
 The problem statement and objectives delimit the project from a project management perspective, and were written prior to applying a formal systems engineering approach to the framework itself.
-The lifecycle of the framework, which crucially must be distinguished from the lifecycle of its EPS system of interest, follows the Object-Oriented Systems Engineering Methodology (OOSEM) \cite{friedenthal2014practical}, and its model will be formalized in the Systems Modeling Language version 2 (SysML v2). Whether the embedded EPS lifecycle also applies OOSEM or SysML in some capacity is a framework design decision.
+The lifecycle of the framework, which crucially must be distinguished from the lifecycle of its EPS system of interest, follows the Object-Oriented Systems Engineering Methodology (OOSEM) \cite{friedenthal2014practical}. The OOSEM study model and common candidate descriptions are formalized in the Systems Modeling Language version 2 (SysML v2). Candidate implementations and native artifacts remain free to use other methods, languages, formats, and tools.
 
 \section{Theory}
 \subsection{OOSEM and the Vee Lifecycle}
@@ -105,8 +105,8 @@ A "detailed" design implies modeling down to the physical component level \cite{
 This is justified by the fact that the project is carried out by a single person, and thus the extra modeling and analysis effort of progressing through the phases would be considerable.
 While phase iteration does provide a broader and deeper understanding of the problem and its potential solution, it was deemed that the literature-grounded requirements elicitation approach adopted serves the same purpose.
 
-Furthermore, it was decided to model the stakeholder needs, system requirements, logical architecture, and physical architecture candidates in SysML v2, a text-based modeling language, and to track them in a version-controlled repository together with the LaTeX source of the present report.
-Thus, an iteration was defined as any commit (edit) applied to the model or report files, and any high-impact iterations are discussed in the relevant report sections for traceability, with a compilation and discussion in Section \ref{subsubsection:manage-requirements-traceability}.
+Furthermore, it was decided to describe the stakeholder needs, system requirements, logical architecture, and every candidate physical architecture in SysML v2 at a common abstraction, and to track this comparison model with the LaTeX report source in a version-controlled repository. This is a control on the OOSEM study and its descriptive artifacts. It does not require candidate solutions or their native engineering artifacts to use SysML v2, the project repository, or any particular configuration mechanism.
+Thus, an iteration was defined as any commit (edit) applied to the comparison model or report files, and any high-impact iterations are discussed in the relevant report sections for traceability, with a compilation and discussion in Section \ref{subsubsection:manage-requirements-traceability}.
 
 There will be no review gates applied within OOSEM, again because the project is carried out by a single person with the academic community in the role of a stakeholder, with deterministically logged and reviewable iterations.
 However, the assessment of the objective deliverables against their indicators and the clearing of deadlines provide valuable gates for project management.
@@ -116,6 +116,18 @@ OOSEM implements this process on the left side of the Vee. It analyzes requireme
 
 \subsubsection{Set Up Model}
 This activity establishes the prerequisites for model development. It defines the modeling purpose, conventions, terminology, package structure, viewpoints, and validation practices that make the framework model consistent and navigable \cite{friedenthal2014practical}.
+
+\paragraph{Project modeling controls.}
+Figure~\ref{fig:project-modeling-controls} formalizes two controls on this OOSEM application. MC-01 requires every candidate admitted to comparison to have a conformant textual SysML v2 description at the same abstraction and evidence granularity. The description records nodes, physical components, interfaces, procedures, and logical-to-physical allocations. A candidate may use Capella, Valispace, Nanospace, Python, proprietary formats, or any other native implementation technology. MC-01 standardizes the comparison representation rather than the solution.
+
+MC-02 controls only the project artifacts produced while applying OOSEM. The SysML v2 comparison model and this report share a version-controlled repository, and each reported study baseline identifies an immutable revision from which both can be reconstructed. Candidate solutions may use different repositories and configuration mechanisms. MC-01 and MC-02 therefore do not refine the framework system requirements, do not enter the G-00 solution-feasibility conjunction, and are not allocated to candidate physical components.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/project-modeling-controls.tex}}
+    \caption{Project modeling controls applied to the OOSEM comparison model and report rather than to candidate implementations.}
+    \label{fig:project-modeling-controls}
+\end{figure}
 
 \subsubsection{Analyze Stakeholder Needs}
 \label{subsubsection:analyze-stakeholder-needs}
@@ -413,7 +425,7 @@ OOSEM identifies black-box measures of performance that contribute to enterprise
 
 The evidence establishes the required measurement concerns. Requirements and configuration management need unambiguous definitions, controlled baselines, complete traceability, and change impact analysis \citep[Sec.~4.4]{buruso2026modelbased}. Decision-support models need explicit scope, assumptions, uncertainty, provenance, validation criteria, and configuration governance \citep[Secs.~8.4--8.6 and Table~13]{rostamnia2026digitaltwin}. Technical demonstrations also need measured evidence that permits comparison among approaches \citep[Sec.~6.2]{rojasramirez2022comparative}. These reviews do not report defensible population targets for elapsed hours, person-hours, direct cost, or discrepancy-detection performance. The benefit frequencies from \citet[Sec.~4.7 and Table~3]{vizitiu2025optimizing} and the topic proportions from \citet[Table~4]{akundi2022textmining} measure recurrence and research attention. They support measure selection and salience weighting, but do not define requirement thresholds.
 
-A Framework Evaluation Manifest fixes the evaluation scope before candidate framework results are observed. Only decisions, chains, external artifacts, analyses, results, and changes identified there by unique identifier are \emph{designated} and enter the reported measures. An \emph{external artifact} is a requirement set, EPS model, or analysis result produced by an RM, MD, or SA capability outside the framework boundary. Its source record identifies the artifact, producer, producing capability, and source revision. A \emph{controlled evidence baseline} is an immutable repository revision with its referenced artifacts, inputs, dependencies, environment, and approval state. A change creates a new baseline. Each \emph{declared tolerance} records a result-specific acceptance interval, comparison rule, units, and precision before execution. The manifest also fixes the criticality rule, common core, two contrasting cases, timing and effort rules, cost boundary, utility mappings, and blinded consistency test set.
+A Framework Evaluation Manifest fixes the evaluation scope before candidate framework results are observed. It identifies each candidate architecture, the SysML v2 elements that describe it under MC-01, and the immutable OOSEM source revision controlled under MC-02. These entries establish study reproducibility and common representation. They are not candidate implementation properties. Only decisions, chains, external artifacts, analyses, results, and changes identified in the manifest by unique identifier are \emph{designated} and enter the reported measures. An \emph{external artifact} is a requirement set, EPS model, or analysis result produced by an RM, MD, or SA capability outside the framework boundary. Its source record identifies the artifact, producer, producing capability, and source revision. A \emph{controlled evidence baseline} is an immutable repository revision with its referenced artifacts, inputs, dependencies, environment, and approval state. A change creates a new baseline. Each \emph{declared tolerance} records a result-specific acceptance interval, comparison rule, units, and precision before execution. The manifest also fixes the criticality rule, common core, two contrasting cases, timing and effort rules, cost boundary, utility mappings, and blinded consistency test set.
 
 An \emph{accepted external artifact} has passed the common transfer checks and has an Artifact Registration Record that preserves its source record, controlled evidence baseline, provenance, applicable traces, and acceptance status. A rejected artifact retains its discrepancies and cannot replace controlled content or participate in a valid chain. A \emph{valid evidence chain} contains every applicable relation from its source need or requirement through design elements, assumptions and inputs, analysis result, and verification criterion. Each externally produced endpoint has an accepted registration, each endpoint resolves to the controlled evidence baseline, and each relation has the declared semantics. A discrepancy is \emph{critical} when it can invalidate a mandatory requirement or reported decision, corrupt controlled evidence, or prevent reproduction. The \emph{common core} is the identified generic EPS model, information definitions, workflow, and verification rules applied unchanged to both cases. Cases use declared parameters and approved extensions and mappings. Each accepted tailored model resolves to the generic model baseline and its approved case configuration baseline. A change outcome is \emph{correct} when its impact set matches the adjudicated reference, all affected evidence is regenerated, and the resulting chain is valid with no unresolved critical discrepancy.
 
@@ -445,19 +457,10 @@ The acceptance MOPs implement the noncompensable mission rules. Valid trace cove
 
 A failed correctness condition prevents a favorable time or effort value from compensating for an invalid result. Raw MOPs, counts, and uncertainty remain visible. Utility anchors are calibrated using the common baseline and declared feasible bounds, then fixed in the manifest before candidate results are examined. Pareto comparison precedes weighted scoring.
 
-\paragraph{Validated system design constraints.}
-OOSEM treats a design constraint as an imposed restriction on how the solution may be realized and calls for validating it before incorporation into the architecture \citep[Sec.~17.3.3]{friedenthal2014practical}. The constraint review separated project-imposed implementation choices from mission requirements, evaluation criteria, process tailoring, and choices that remain open to candidate architectures. Only the two constraints in Figure~\ref{fig:framework-design-constraints} impose a realization technology or configuration mechanism.
+\paragraph{System design constraint review.}
+OOSEM treats a design constraint as an imposed restriction on how the solution may be realized and calls for validating it before incorporation into the architecture \citep[Sec.~17.3.3]{friedenthal2014practical}. The review retained no project-imposed realization constraint. The earlier SysML v2 and repository choices were reclassified as MC-01 and MC-02 because they govern the OOSEM comparison model and report rather than candidate implementations. They are defined in Set Up Model and excluded from SYS-00 and the G-00 solution-feasibility gate.
 
-\begin{figure}[H]
-    \centering
-    \resizebox{\linewidth}{!}{\input{figures/framework-design-constraints.tex}}
-    \caption{Validated project-imposed design constraints for the framework.}
-    \label{fig:framework-design-constraints}
-\end{figure}
-
-DC-01 and DC-02 originate in the project technical baseline. DC-01 requires an authoritative textual SysML v2 model, verified by source inspection and successful parsing and semantic validation. DC-02 requires the model and report source to share a version-controlled repository and each evaluation baseline to identify an immutable revision. Verification reconstructs the designated model and report from that revision. Configuration continuity, artifact versioning, and provenance support DC-02, while the specific version-control product remains open \citep[Sec.~4.4]{buruso2026modelbased} \citep[Secs.~8.4--8.6 and Table~13]{rostamnia2026digitaltwin}.
-
-The remaining candidates are classified elsewhere. The two contrasting cases and unchanged common core remain mission acceptance requirement G-04 and MOP-04--MOP-05. Lightweight adoption, effort, and cost remain comparative MOPs and MOEs because the review provides no hard resource ceiling for CubeSat and university missions \citep[Sec.~5.1 and Table~5]{buruso2026modelbased}. Single-person execution, entry at detailed design, and the absence of formal review gates remain project lifecycle tailoring in Manage System Development. Named products, formats, and protocols remain candidate physical architecture choices. The reviews favor context-driven selection, modularity, explicit interfaces, and verified transfers \citep[Sec.~5.1]{buruso2026modelbased} \citep[Table~13]{rostamnia2026digitaltwin} \citep[Sec.~4.2.3]{rojasramirez2022comparative}.
+The two contrasting cases and unchanged common core remain mission acceptance requirement G-04 and MOP-04--MOP-05. Lightweight adoption, effort, and cost remain comparative MOPs and MOEs because the review provides no hard resource ceiling for CubeSat and university missions \citep[Sec.~5.1 and Table~5]{buruso2026modelbased}. Single-person execution, entry at detailed design, and the absence of formal review gates remain project lifecycle tailoring in Manage System Development. Candidate modeling languages, products, formats, repositories, and protocols remain physical architecture choices. The reviews favor context-driven selection, modularity, explicit interfaces, and verified transfers \citep[Sec.~5.1]{buruso2026modelbased} \citep[Table~13]{rostamnia2026digitaltwin} \citep[Sec.~4.2.3]{rojasramirez2022comparative}.
 
 \paragraph{Complete black-box system specification.}
 The preceding analyses are consolidated in the system definition in Figure~\ref{fig:framework-black-box-specification}. The specified framework inherits the six service functions, six typed boundary ports, eleven MOPs, and its operational control state machine. It adds a required record-set reference and two externally declared resource characteristics. The record set includes Artifact Registration Records alongside controlled model, evidence, configuration, transfer, assessment, verdict, and review records. It states which information must remain controlled and retrievable without selecting an internal repository, file format, or deployment. The resource characteristics state the minimum execution environment and runtime dependencies without imposing a product.
@@ -488,7 +491,7 @@ ST-03 dispatches the five remaining request types to ST-04 through ST-08 and inv
 Recovery requires a verified corrected request or an Evidence Chain Request against corrected records. The latter enters ST-10 Recovering and runs F-01 as a controlled revalidation. Only available records with accepted external artifacts and a valid chain return to ST-03. Residual gaps or rejected artifacts return to ST-09. INT-07 remains an entry condition for every request event, and an INT-08 transfer rejection leaves the state, baseline, controlled content, and source revisions unchanged. These rules are formalized by transitions T-01--T-27 and operational control requirements CTL-01--CTL-06.
 
 \paragraph{Derived mandatory system requirements.}
-Figure~\ref{fig:framework-system-requirements} organizes 59 derived leaf requirements and the two retained design constraints under SYS-00. FUN-23 is the added black-box obligation to register each designated external requirement, model, and result revision as accepted or rejected. The category requirements are organizational parents rather than additional acceptance obligations. All 61 leaves are mandatory, so each candidate framework physical architecture must receive a passing verdict for every leaf before the G-00 eligibility rule permits comparison ranking.
+Figure~\ref{fig:framework-system-requirements} organizes 59 derived leaf requirements under SYS-00. FUN-23 is the added black-box obligation to register each designated external requirement, model, and result revision as accepted or rejected. The category requirements are organizational parents rather than additional acceptance obligations. All 59 leaves are mandatory, so each candidate framework physical architecture must receive a passing verdict for every leaf before the G-00 eligibility rule permits comparison ranking. MC-01 separately requires a common SysML v2 description before the study can compare that candidate.
 
 \begin{figure}[H]
     \centering
@@ -605,7 +608,7 @@ Each derived leaf carries SysML v2 \texttt{BlackBoxRequirementTrace} metadata. T
 \end{longtable}
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.07\linewidth} >{\raggedright\arraybackslash}p{0.52\linewidth} >{\raggedright\arraybackslash}p{0.19\linewidth} >{\raggedright\arraybackslash}p{0.08\linewidth}}
-    \caption{Atomic quality, resource, and retained design requirements.}\label{tab:framework-quality-resource-requirements}\\
+    \caption{Atomic quality and resource requirements.}\label{tab:framework-quality-resource-requirements}\\
     \toprule
     \textbf{ID} & \textbf{Normative black-box obligation} & \textbf{Scenario / mission trace or source} & \textbf{Method} \\
     \midrule
@@ -621,8 +624,6 @@ Each derived leaf carries SysML v2 \texttt{BlackBoxRequirementTrace} metadata. T
     QLT-05 & Declare each EPS model's role, distinguish common core and generic model identifiers from approved adaptations, and link each tailored model to its generic model and approved case configuration baselines. & SC-01, SC-02 / G-01, G-03, G-04 & I, T \\
     RES-01 & Declare minimum computing, storage, network, service, license, tool, and procedure prerequisites for each controlled baseline. & SC-02 / G-04 & I \\
     RES-02 & Permit independent reconstruction of a designated baseline from a clean environment using only controlled declarations and procedures. & SC-02, SC-03 / G-02, G-04 & D, T \\
-    DC-01 & Maintain the authoritative system model as conformant textual SysML v2 source. & Project technical baseline & I, T \\
-    DC-02 & Control model and report text in one repository and identify each evaluation baseline by an immutable revision. & Project technical baseline & I, D \\
     \bottomrule
 \end{longtable}
 \normalsize
@@ -632,13 +633,13 @@ No maximum hour, person-hour, cost, or consistency-effectiveness threshold is ad
 \subsubsection{Define Logical Architecture}
 
 \paragraph{Logical architecture baseline.}
-The controlled input comprises the six mission scenarios and service functions, 23 service subfunctions, six typed boundary interfaces, the controlled record set, operational state machine SM-01, eleven MOPs, and sixty-one mandatory leaves comprising 59 derived requirements and two retained design constraints. The logical specialization preserves this complete black-box specification while leaving products, formats, protocols, deployment nodes, and physical components open.
+The controlled input comprises the six mission scenarios and service functions, 23 service subfunctions, six typed boundary interfaces, the controlled record set, operational state machine SM-01, eleven MOPs, and 59 mandatory system requirement leaves. The logical specialization preserves this complete black-box specification while leaving products, native modeling languages, formats, repositories, protocols, deployment nodes, and physical components open. MC-01 governs only the SysML v2 comparison description of each candidate.
 
 \paragraph{Architecture evidence basis.}
 The existing requirement traces make the accepted black-box baseline the primary evidence for decomposition. The cited reviews reinforce logical responsibilities for explicit interfaces, shared semantics, verified transfers, configuration and provenance control, lifecycle continuity, modularity, resource fit, and measurable outcomes \citep[Secs.~4.4 and 5.1 and Table~5]{buruso2026modelbased} \citep[Secs.~8.4--8.6 and Table~13]{rostamnia2026digitaltwin} \citep[Sec.~4.2.3]{rojasramirez2022comparative} \citep[Sec.~4.7 and Table~3]{vizitiu2025optimizing}. This step introduces no additional mandatory constraint.
 
 \paragraph{Logical decomposition.}
-OOSEM organizes the decomposition around external interface, application, and infrastructure responsibilities \citep[Sec.~17.3.4]{friedenthal2014practical}. Figure~\ref{fig:framework-logical-decomposition} records the resulting parts in the authoritative SysML v2 model. The six interface components correspond to IF-01--IF-06. Six service managers realize the service families F-01--F-06. Interaction analysis assigns the shared action F-03.2, \emph{Coordinate Controlled Analysis}, to a seventh application component, the Controlled Analysis Coordinator. F-03, F-04, and F-05 invoke this component. The allocation avoids duplicating the same analysis-control responsibility while preserving every black-box action type and boundary exchange.
+OOSEM organizes the decomposition around external interface, application, and infrastructure responsibilities \citep[Sec.~17.3.4]{friedenthal2014practical}. Figure~\ref{fig:framework-logical-decomposition} records the resulting parts in the authoritative SysML v2 OOSEM study model. The six interface components correspond to IF-01--IF-06. Six service managers realize the service families F-01--F-06. Interaction analysis assigns the shared action F-03.2, \emph{Coordinate Controlled Analysis}, to a seventh application component, the Controlled Analysis Coordinator. F-03, F-04, and F-05 invoke this component. The allocation avoids duplicating the same analysis-control responsibility while preserving every black-box action type and boundary exchange.
 
 \begin{figure}[H]
     \centering
@@ -650,7 +651,7 @@ OOSEM organizes the decomposition around external interface, application, and in
 \paragraph{Logical service interactions.}
 Each logical activity refines one black-box service and retains its typed inputs, outputs, and subfunction types. Interface managers mediate IF-01--IF-06. Service managers perform the applicable F-01--F-06 subfunctions. The shared coordinator performs F-03.2. Transfer assurance, baseline control, workflow control, evidence and provenance, and measurement managers provide the internal responsibilities required by the existing black-box specification. The outcome branches expose a controlled success or discrepancy path. They introduce no technology, protocol, deployment, or new mandatory requirement.
 
-Figures~\ref{fig:logical-scenario-maintain-evidence}--\ref{fig:logical-scenario-review-justification} show the six logical activities. The activity partitions group the allocated logical components. Solid actions form the nominal path. Dashed actions record the corresponding discrepancy path. The authoritative SysML v2 activities retain every detailed action allocation and typed exchange.
+Figures~\ref{fig:logical-scenario-maintain-evidence}--\ref{fig:logical-scenario-review-justification} show the six logical activities. The activity partitions group the allocated logical components. Solid actions form the nominal path. Dashed actions record the corresponding discrepancy path. The authoritative SysML v2 OOSEM study activities retain every detailed action allocation and typed exchange.
 
 \begin{figure}[H]
     \centering
@@ -692,6 +693,18 @@ Figures~\ref{fig:logical-scenario-maintain-evidence}--\ref{fig:logical-scenario-
     \resizebox{\linewidth}{!}{\input{figures/logical-scenario-review-justification.tex}}
     \caption{LA-SC-06 logical interaction for reviewing an early design justification. The reviewer retains outcome authority through IF-03.}
     \label{fig:logical-scenario-review-justification}
+\end{figure}
+
+\paragraph{Logical internal block architecture.}
+Figure~\ref{fig:framework-logical-interconnections} is the filtered report view of LA-01. The six inherited black-box ports connect only to their corresponding interface managers. Those managers route the typed IF-01--IF-06 exchanges to the service managers that use them. The Evidence and Provenance Manager mediates logical custody. The Controlled Analysis Coordinator is the sole route from the three analysis-consuming services to IF-05. The Design Review Manager invokes the Analysis Reproduction Manager for selected review reproduction.
+
+Workflow control, baseline and configuration control, evidence and provenance, and measurement each have a logical store reference. These stores partition access to the inherited controlled record set. They do not select a repository, schema, or deployment. The authoritative SysML v2 IBD records every connector instance, item flow, and store reference. The six activity diagrams above remain the readable service-specific interaction views \citep[Sec.~17.3.4]{friedenthal2014practical}.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/framework-logical-interconnections.tex}}
+    \caption{Filtered logical internal block diagram for the Nanosatellite EPS Engineering Framework. Every inherited boundary port connects to one interface manager. The SysML v2 model records the complete typed connector set and logical store access.}
+    \label{fig:framework-logical-interconnections}
 \end{figure}
 
 \subsubsection{Synthesize Candidate Physical Architectures}

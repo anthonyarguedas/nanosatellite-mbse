@@ -87,7 +87,7 @@ package StakeholderViewpoints {
         expose FrameworkBlackBoxSpecification::'Specified Nanosatellite EPS Engineering Framework';
         expose FrameworkOperationalState::*;
         expose FrameworkSystemRequirements::*;
-        expose FrameworkDesignConstraints::*;
+        expose ProjectModelingControls::*;
     }
 
     view 'Framework Research View' : GeneralView {
@@ -102,7 +102,7 @@ package StakeholderViewpoints {
         expose FrameworkBlackBoxSpecification::*;
         expose FrameworkOperationalState::*;
         expose FrameworkSystemRequirements::*;
-        expose FrameworkDesignConstraints::*;
+        expose ProjectModelingControls::*;
     }
 
     view 'Framework Independent Review View' : GeneralView {
@@ -121,6 +121,6 @@ package StakeholderViewpoints {
         expose FrameworkBlackBoxSpecification::'Specified Nanosatellite EPS Engineering Framework';
         expose FrameworkOperationalState::*;
         expose FrameworkSystemRequirements::*;
-        expose FrameworkDesignConstraints::*;
+        expose ProjectModelingControls::*;
     }
 } // package StakeholderViewpoints

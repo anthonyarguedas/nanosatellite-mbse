@@ -1,0 +1,117 @@
+\begin{tikzpicture}[
+  >=Latex,
+  font=\sffamily,
+  flow/.style={-{Latex[length=1.8mm,width=1.2mm]},line width=0.55pt},
+  bidirectional/.style={<->,line width=0.55pt},
+  boundary/.style={
+    draw,rounded corners=1pt,align=center,text width=2.2cm,
+    minimum height=0.76cm,inner sep=2pt,fill=blue!3,font=\tiny
+  },
+  application/.style={
+    draw,rounded corners=1pt,align=center,text width=2.7cm,
+    minimum height=0.92cm,inner sep=3pt,fill=white,font=\tiny
+  },
+  infrastructure/.style={
+    draw,rounded corners=1pt,align=center,text width=3.0cm,
+    minimum height=0.86cm,inner sep=3pt,fill=gray!10,font=\tiny
+  },
+  store/.style={
+    draw,align=center,text width=2.75cm,minimum height=0.52cm,
+    inner sep=2pt,fill=green!5,font=\tiny
+  },
+  port/.style={
+    draw,align=center,text width=2.3cm,minimum height=0.43cm,
+    inner sep=1pt,fill=white,font=\tiny
+  },
+  note/.style={fill=white,inner sep=1pt,font=\tiny,align=center}
+]
+  \draw (0,0) rectangle (20,15.6);
+  \node[anchor=west,font=\bfseries] at (0.25,15.25)
+    {ibd [LA-01] Logical Framework Internal Block Architecture (filtered view)};
+  \draw (0,14.9) -- (20,14.9);
+
+  % Inherited boundary ports and their corresponding interface managers.
+  \node[port] (if01) at (1.65,14.25) {missionApplication\\IF-01};
+  \node[port] (if02) at (4.85,14.25) {researchGovernance\\IF-02};
+  \node[port] (if03) at (8.05,14.25) {independentReview\\IF-03};
+  \node[port] (if04) at (11.25,14.25) {modelControl\\IF-04};
+  \node[port] (if05) at (14.45,14.25) {analysisExecution\\IF-05};
+  \node[port] (if06) at (17.65,14.25) {evidenceCustody\\IF-06};
+
+  \node[boundary] (lif01) at (1.65,12.85) {\textbf{LIF-01}\\Mission Application\\Interface Manager};
+  \node[boundary] (lif02) at (4.85,12.85) {\textbf{LIF-02}\\Research Governance\\Interface Manager};
+  \node[boundary] (lif03) at (8.05,12.85) {\textbf{LIF-03}\\Independent Review\\Interface Manager};
+  \node[boundary] (lif04) at (11.25,12.85) {\textbf{LIF-04}\\Model Control\\Interface Manager};
+  \node[boundary] (lif05) at (14.45,12.85) {\textbf{LIF-05}\\Analysis Execution\\Interface Manager};
+  \node[boundary] (lif06) at (17.65,12.85) {\textbf{LIF-06}\\Evidence Custody\\Interface Manager};
+
+  \draw[flow] (if01) -- (lif01);
+  \draw[flow] (if02) -- (lif02);
+  \draw[flow] (if03) -- (lif03);
+  \draw[flow] (if04) -- (lif04);
+  \draw[flow] (if05) -- (lif05);
+  \draw[flow] (if06) -- (lif06);
+
+  % Application components.
+  \node[application] (ecm) at (2.4,9.8) {\textbf{LAP-01}\\Evidence Chain Manager\\\textit{F-01}};
+  \node[application] (ccm) at (6.1,9.8) {\textbf{LAP-02}\\Case Configuration Manager\\\textit{F-02}};
+  \node[application] (arm) at (9.8,9.8) {\textbf{LAP-03}\\Analysis Reproduction Manager\\\textit{F-03}};
+  \node[application] (cac) at (14.2,9.8) {\textbf{LAP-07}\\Controlled Analysis Coordinator\\\textit{F-03.2}};
+  \node[application] (dcam) at (2.4,7.3) {\textbf{LAP-04}\\Design Change Assessment Manager\\\textit{F-04}};
+  \node[application] (cem) at (6.1,7.3) {\textbf{LAP-05}\\Candidate Evaluation Manager\\\textit{F-05}};
+  \node[application] (drm) at (9.8,7.3) {\textbf{LAP-06}\\Design Review Manager\\\textit{F-06}};
+
+  \draw[flow,blue!65!black] (lif01.south) |- node[note,pos=0.22] {IF-01 requests,\\packages, and status} (ecm.north);
+  \draw[flow,blue!65!black] (lif01.south) |- (ccm.north);
+  \draw[flow,blue!65!black] (lif01.south) |- (dcam.north);
+  \draw[flow,blue!65!black] (lif01.south) |- (cem.north);
+  \draw[flow,blue!65!black] (lif01.south) |- (drm.north);
+  \draw[flow,blue!65!black] (lif02.south) |- node[note,pos=0.20] {IF-02 decisions,\\protocol, and results} (ccm.north);
+  \draw[flow,blue!65!black] (lif02.south) |- (cem.north);
+  \draw[flow,blue!65!black] (lif03.south) |- node[note,pos=0.22] {IF-03 reproduction\\and review} (arm.north);
+  \draw[flow,blue!65!black] (lif03.south) |- (drm.north);
+  \draw[flow,blue!65!black] (lif04.south) |- node[note,pos=0.25] {IF-04 models, common core,\\registrations, and revisions} (ecm.north);
+  \draw[flow,blue!65!black] (lif04.south) |- (ccm.north);
+  \draw[flow,blue!65!black] (lif04.south) |- (dcam.north);
+  \draw[flow,blue!65!black] (lif04.south) |- (cem.north);
+  \draw[bidirectional,blue!65!black] (lif05.south) -- node[note,right] {IF-05 execution\\request and result} (cac.north);
+  \draw[bidirectional,blue!65!black] (lif06.south) |- node[note,pos=0.28] {IF-06 retained\\evidence and packages} (11.0,5.35);
+
+  % Shared controlled-analysis and selected-reproduction connections.
+  \draw[bidirectional] (arm.east) -- node[note,above] {request / result} (cac.west);
+  \draw[bidirectional] (dcam.east) |- (cac.south west);
+  \draw[bidirectional] (cem.east) |- (cac.south);
+  \draw[bidirectional] (drm.east) |- node[note,pos=0.72] {selected review\\reproduction} (arm.south east);
+
+  % Infrastructure components and logical stores.
+  \node[infrastructure] (workflow) at (2.4,4.55) {\textbf{LIN-01}\\Workflow Control Manager};
+  \node[infrastructure] (baseline) at (6.4,4.55) {\textbf{LIN-03}\\Baseline and Configuration Manager};
+  \node[infrastructure] (evidence) at (10.8,4.55) {\textbf{LIN-04}\\Evidence and Provenance Manager};
+  \node[infrastructure] (measurement) at (15.3,4.55) {\textbf{LIN-05}\\Evaluation Measurement Manager};
+  \node[infrastructure] (transfer) at (17.65,7.3) {\textbf{LIN-02}\\Transfer Assurance Manager};
+
+  \node[store] (workflowstore) at (2.4,2.95) {\guillemotleft logical store\guillemotright\\Workflow State Store};
+  \node[store] (baselinestore) at (6.4,2.95) {\guillemotleft logical store\guillemotright\\Baseline and Configuration Store};
+  \node[store] (evidencestore) at (10.8,2.95) {\guillemotleft logical store\guillemotright\\Evidence and Provenance Store};
+  \node[store] (measurementstore) at (15.3,2.95) {\guillemotleft logical store\guillemotright\\Measurement Store};
+
+  \draw[flow,densely dashed] (workflow) -- (workflowstore);
+  \draw[flow,densely dashed] (baseline) -- (baselinestore);
+  \draw[flow,densely dashed] (evidence) -- (evidencestore);
+  \draw[flow,densely dashed] (measurement) -- (measurementstore);
+
+  % Shared internal service connectors, grouped only for report readability.
+  \draw[bidirectional,gray!70] (2.4,5.5) -- node[note,above] {typed outcome and\\control records} (2.4,6.72);
+  \draw[bidirectional,gray!70] (6.1,5.5) -- node[note,above] {baseline and\\configuration records} (6.1,6.72);
+  \draw[bidirectional,gray!70] (9.8,5.5) -- node[note,above] {controlled model, evidence,\\and provenance records} (9.8,6.72);
+  \draw[flow,gray!70] (15.3,5.5) -- node[note,right] {MOP records} (15.3,7.25);
+
+  \draw[bidirectional,gray!70] (workflow.east) -- (baseline.west);
+  \draw[bidirectional,gray!70] (baseline.east) -- (evidence.west);
+  \draw[bidirectional,gray!70] (evidence.east) -- (measurement.west);
+  \draw[bidirectional,gray!70] (transfer.south) -- node[note,right] {transfer verification} (measurement.north east);
+
+  \node[draw,align=left,text width=18.1cm,inner sep=4pt,font=\tiny,fill=white] at (10,1.15) {
+    \textbf{View rule.} Boundary ports remain inherited from the black-box framework and connect only to their matching interface manager. The blue routes summarize the service-specific connectors. Gray routes summarize the shared workflow, baseline, evidence, provenance, and measurement connector families. The authoritative SysML v2 IBD records every individual connector, typed item flow, and store reference.
+  };
+\end{tikzpicture}

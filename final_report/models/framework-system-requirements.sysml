@@ -27,8 +27,9 @@ package FrameworkSystemRequirements {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
         /* Every candidate framework realization shall satisfy all functional, operational control,
-         * interface, store, performance, quality, resource-declaration, and project-imposed design
-         * requirements in this specification.
+         * interface, store, performance, quality, and resource-declaration requirements in this
+         * specification. Project controls on the OOSEM comparison model are defined separately and
+         * do not constrain candidate implementation.
          */
         require constraint statement {
             doc
@@ -1784,10 +1785,6 @@ package FrameworkSystemRequirements {
     #refinement dependency
         'Execution Resource Requirements'
         to 'Framework Black-Box System Requirements';
-    #refinement dependency
-        FrameworkDesignConstraints::'Project-Imposed Framework Design Constraints'
-        to 'Framework Black-Box System Requirements';
-
     #refinement dependency 'Scope Designated Evidence Chain' to 'Functional Requirements';
     #refinement dependency 'Validate Evidence Chain' to 'Functional Requirements';
     #refinement dependency 'Issue Evidence Chain Assessment' to 'Functional Requirements';

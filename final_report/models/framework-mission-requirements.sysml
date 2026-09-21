@@ -17,7 +17,8 @@ package FrameworkMissionRequirements {
         doc
         /* A candidate framework physical architecture enters comparison ranking only after it
          * satisfies G-01 through G-04 and every mandatory system requirement. This eligibility
-         * conjunction is the evaluation rule adopted by this study.
+         * conjunction evaluates the solution. MC-01 separately governs whether the OOSEM study has
+         * a common SysML v2 description suitable for applying this rule and comparing results.
          */
 
         require constraint statement {

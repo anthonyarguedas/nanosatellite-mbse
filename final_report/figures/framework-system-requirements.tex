@@ -14,11 +14,11 @@
   \node[root] (sys) at (8.5,8.15) {
     \guillemotleft requirement\guillemotright\quad
     \textbf{SYS-00 Framework Black-Box System Requirements}\\
-    Every candidate framework realization shall satisfy all 59 derived leaf requirements and both
-    retained project-imposed design constraints.
+    Every candidate framework realization shall satisfy all 59 derived mandatory leaf requirements.
+    Project controls on the comparison model remain outside this solution hierarchy.
   };
 
-  \node[category] (fun) at (1.05,3.45) {
+  \node[category,text width=1.8cm] (fun) at (1.25,3.45) {
     \guillemotleft requirement\guillemotright\\[2pt]
     \textbf{FUN-00}\\
     \textbf{Functional}\\[4pt]
@@ -26,7 +26,7 @@
     23 leaves\\[5pt]
     Scenario service behavior
   };
-  \node[category] (ctl) at (3.18,3.45) {
+  \node[category,text width=1.8cm] (ctl) at (3.67,3.45) {
     \guillemotleft requirement\guillemotright\\[2pt]
     \textbf{CTL-00}\\
     \textbf{Control}\\[4pt]
@@ -34,7 +34,7 @@
     6 leaves\\[5pt]
     States, guards, and recovery
   };
-  \node[category] (int) at (5.31,3.45) {
+  \node[category,text width=1.8cm] (int) at (6.08,3.45) {
     \guillemotleft requirement\guillemotright\\[2pt]
     \textbf{INT-00}\\
     \textbf{Interfaces}\\[4pt]
@@ -42,7 +42,7 @@
     8 leaves\\[5pt]
     Typed contracts and transfer integrity
   };
-  \node[category] (sto) at (7.44,3.45) {
+  \node[category,text width=1.8cm] (sto) at (8.5,3.45) {
     \guillemotleft requirement\guillemotright\\[2pt]
     \textbf{STO-00}\\
     \textbf{Stores}\\[4pt]
@@ -50,7 +50,7 @@
     4 leaves\\[5pt]
     Retention and immutability
   };
-  \node[category] (per) at (9.57,3.45) {
+  \node[category,text width=1.8cm] (per) at (10.92,3.45) {
     \guillemotleft requirement\guillemotright\\[2pt]
     \textbf{PER-00}\\
     \textbf{Performance}\\[4pt]
@@ -58,7 +58,7 @@
     11 leaves\\[5pt]
     Gates and comparative measures
   };
-  \node[category] (qlt) at (11.70,3.45) {
+  \node[category,text width=1.8cm] (qlt) at (13.33,3.45) {
     \guillemotleft requirement\guillemotright\\[2pt]
     \textbf{QLT-00}\\
     \textbf{Quality}\\[4pt]
@@ -66,7 +66,7 @@
     5 leaves\\[5pt]
     Integrity and transparency
   };
-  \node[category] (res) at (13.83,3.45) {
+  \node[category,text width=1.8cm] (res) at (15.75,3.45) {
     \guillemotleft requirement\guillemotright\\[2pt]
     \textbf{RES-00}\\
     \textbf{Resources}\\[4pt]
@@ -74,19 +74,11 @@
     2 leaves\\[5pt]
     Declared environment
   };
-  \node[category] (dc) at (15.95,3.45) {
-    \guillemotleft design constraint\guillemotright\\[2pt]
-    \textbf{DC-00}\\
-    \textbf{Project constraints}\\[4pt]
-    DC-01--DC-02\\
-    2 constraints\\[5pt]
-    SysML v2 and version control
-  };
 
   \draw[dashed] (0.75,6.25) -- (16.25,6.25);
   \draw[refine] (8.5,6.25) -- node[right,font=\tiny]
     {\guillemotleft refine\guillemotright} (sys.south);
-  \foreach \n in {fun,ctl,int,sto,per,qlt,res,dc} {
+  \foreach \n in {fun,ctl,int,sto,per,qlt,res} {
     \draw[refine] (\n.north) -- (\n.north |- 0,6.25);
   }
 \end{tikzpicture}
