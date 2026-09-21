@@ -399,6 +399,64 @@ The interface contracts respond directly to the review evidence. Fragmented tool
 
 The common transfer contract therefore requires each receiving endpoint to return a Transfer Verification Record. It states whether the source and configuration are identified, the payload is structurally complete, its identifiers, quantities, units, and meanings are compatible, provenance is preserved, and the transfer is accepted. Any rejection retains an explicit discrepancy and leaves controlled content unchanged. This contract defines externally observable semantics while leaving transport protocols, file formats, APIs, and products as later design choices.
 
+\paragraph{Critical system properties and common measurement protocol.}
+OOSEM identifies black-box measures of performance that contribute to enterprise measures of effectiveness \citep[Sec.~17.3.3]{friedenthal2014practical}. Figure~\ref{fig:framework-critical-properties} defines five MOPs that determine mission acceptance and six MOPs that bind directly to the six enterprise MOEs. The measured framework specializes the system-of-interest definition only by adding externally observable value properties. It does not expose an internal design. Human-effort properties measure participant interaction with the framework under one controlled protocol, rather than assigning that effort to an internal component.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/framework-critical-properties.tex}}
+    \caption{Critical black-box properties, mission acceptance indicators, and their bindings to enterprise measures of effectiveness.}
+    \label{fig:framework-critical-properties}
+\end{figure}
+
+The evidence establishes the required measurement concerns. Requirements and configuration management need unambiguous definitions, controlled baselines, complete traceability, and change impact analysis \citep[Sec.~4.4]{buruso2026modelbased}. Decision-support models need explicit scope, assumptions, uncertainty, provenance, validation criteria, and configuration governance \citep[Secs.~8.4--8.6 and Table~13]{rostamnia2026digitaltwin}. Technical demonstrations also need measured evidence that permits comparison among approaches \citep[Sec.~6.2]{rojasramirez2022comparative}. These reviews do not report defensible population targets for elapsed hours, person-hours, direct cost, or discrepancy-detection performance. The benefit frequencies from \citet[Sec.~4.7 and Table~3]{vizitiu2025optimizing} and the topic proportions from \citet[Table~4]{akundi2022textmining} measure recurrence and research attention. They support measure selection and salience weighting, but do not define requirement thresholds.
+
+A Framework Evaluation Manifest fixes the evaluation scope before candidate framework results are observed. Only decisions, chains, analyses, results, and changes identified there by unique identifier are \emph{designated} and enter the reported measures. A \emph{controlled baseline} is an immutable repository revision with its referenced model, inputs, dependencies, environment, and approval state. A change creates a new baseline. Each \emph{declared tolerance} records a result-specific acceptance interval, comparison rule, units, and precision before execution. The manifest also fixes the criticality rule, common core, two contrasting cases, timing and effort rules, cost boundary, utility mappings, and blinded consistency test set.
+
+A \emph{valid evidence chain} contains every applicable relation from its source need or requirement through design elements, assumptions and inputs, analysis result, and verification criterion. Each endpoint resolves to the controlled baseline and each relation has the declared semantics. A discrepancy is \emph{critical} when it can invalidate a mandatory requirement or reported decision, corrupt controlled evidence, or prevent reproduction. The \emph{common core} is the identified model, information definitions, workflow, and verification rules applied unchanged to both cases. Cases use declared parameters and approved extensions and mappings. A change outcome is \emph{correct} when its impact set matches the adjudicated reference, all affected evidence is regenerated, and the resulting chain is valid with no unresolved critical discrepancy.
+
+The acceptance MOPs implement the noncompensable mission rules. Valid trace coverage is $100N_v/N_a$, where $N_v$ is the number of valid required trace relations and $N_a>0$ is the number applicable to all designated chains. Reproduction success is $100N_s/N_d$, where $N_s$ is the number of designated analyses that execute and reproduce every declared result within tolerance and $N_d>0$ is the number designated. G-01 requires 100\% valid trace coverage. G-02 requires 100\% reproduction success. G-03 requires zero open critical discrepancies at the verdict time. G-04 requires both contrasting cases to complete and requires zero undeclared adaptations.
+
+\begin{table}[H]
+    \centering
+    \scriptsize
+    \caption{Black-box MOP measurement rules and uses.}
+    \label{tab:framework-mop-protocols}
+    \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.27\linewidth} X >{\raggedright\arraybackslash}p{0.22\linewidth}}
+        \toprule
+        \textbf{Property} & \textbf{Measurement rule} & \textbf{Use} \\
+        \midrule
+        MOP-01 Valid trace coverage (\%) & Count valid required relations across the designated chains and divide by all applicable required relations. The evaluation oracle checks endpoint resolution, baseline identity, and relation semantics. & G-01 gate, target 100\%. \\
+        MOP-02 Reference-analysis reproduction success (\%) & Execute every designated analysis from its controlled baseline. A success requires completion and conformance of every declared result to its own tolerance. & G-02 gate, target 100\%. \\
+        MOP-03 Open critical discrepancy count & Count critical discrepancies without an accepted resolution at the evaluation verdict. A missed seeded critical discrepancy remains open during adjudication. & G-03 gate, target zero. \\
+        MOP-04 Completed contrasting case count & Count cases that use the declared common core, complete the reference workflow, and produce all mandatory evidence. & G-04 gate, target two. \\
+        MOP-05 Undeclared adaptation count & Compare every case parameter, extension, and mapping used at execution against the approved case configuration. & G-04 gate, target zero. \\
+        MOP-06 Correct change turnaround time (h) & Measure wall-clock time from acceptance of a valid SC-04 request against a named baseline to issue of the correct reviewable package. & Lower is better. Rank only a correct outcome. \\
+        MOP-07 Case adaptation effort (person-h) & Sum active participant time from the SC-02 case request to acceptance of its complete controlled configuration. Exclude waiting and unattended execution. & Lower is better. Rank only an accepted configuration. \\
+        MOP-08 Independent reproduction effort (person-h) & Sum active reviewer time from receipt of a complete SC-03 reproduction package to issue of the reproduction verdict. & Lower is better. Rank only a successful reproduction. \\
+        MOP-09 Framework adoption effort (person-h) & From the declared clean starting environment, sum active participant time to establish the minimum environment and complete the reference workflow correctly. & Lower is better. \\
+        MOP-10 Direct framework cost (CAD) & Sum incremental license, required service, and computing charges over the declared evaluation period. Exclude labor and pre-existing general infrastructure to avoid double counting. & Lower is better. \\
+        MOP-11 Consistency assurance effectiveness (\%) & On a blinded set of seeded discrepancies and clean controls, calculate $100(2TP)/(2TP+FP+FN)$. A true positive must identify both the discrepancy and its affected artifact. & Higher is better. Preserve TP, FP, and FN with the score. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+A failed correctness condition prevents a favorable time or effort value from compensating for an invalid result. Raw MOPs, counts, and uncertainty remain visible. Utility anchors are calibrated using the common baseline and declared feasible bounds, then fixed in the manifest before candidate results are examined. Pareto comparison precedes weighted scoring.
+
+\paragraph{Validated system design constraints.}
+OOSEM treats a design constraint as an imposed restriction on how the solution may be realized and calls for validating it before incorporation into the architecture \citep[Sec.~17.3.3]{friedenthal2014practical}. The constraint review separated project-imposed implementation choices from mission requirements, evaluation criteria, process tailoring, and choices that remain open to candidate architectures. Only the two constraints in Figure~\ref{fig:framework-design-constraints} impose a realization technology or configuration mechanism.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/framework-design-constraints.tex}}
+    \caption{Validated project-imposed design constraints for the framework.}
+    \label{fig:framework-design-constraints}
+\end{figure}
+
+DC-01 and DC-02 originate in the project technical baseline. DC-01 requires an authoritative textual SysML v2 model, verified by source inspection and successful parsing and semantic validation. DC-02 requires the model and report source to share a version-controlled repository and each evaluation baseline to identify an immutable revision. Verification reconstructs the designated model and report from that revision. Configuration continuity, artifact versioning, and provenance support DC-02, while the specific version-control product remains open \citep[Sec.~4.4]{buruso2026modelbased} \citep[Secs.~8.4--8.6 and Table~13]{rostamnia2026digitaltwin}.
+
+The remaining candidates are classified elsewhere. The two contrasting cases and unchanged common core remain mission acceptance requirement G-04 and MOP-04--MOP-05. Lightweight adoption, effort, and cost remain comparative MOPs and MOEs because the review provides no hard resource ceiling for CubeSat and university missions \citep[Sec.~5.1 and Table~5]{buruso2026modelbased}. Single-person execution, entry at detailed design, and the absence of formal review gates remain project lifecycle tailoring in Manage System Development. Named products, formats, and protocols remain candidate physical architecture choices. The reviews favor context-driven selection, modularity, explicit interfaces, and verified transfers \citep[Sec.~5.1]{buruso2026modelbased} \citep[Table~13]{rostamnia2026digitaltwin} \citep[Sec.~4.2.3]{rojasramirez2022comparative}.
+
 \subsubsection{Define Logical Architecture}
 This activity decomposes the framework into logical components and defines how they interact to satisfy the system requirements. The logical architecture remains independent of a particular implementation technology \cite{friedenthal2014practical}.
 

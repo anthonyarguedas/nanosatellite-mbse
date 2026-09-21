@@ -46,43 +46,49 @@ package FrameworkEffectivenessParametrics {
         in moe : Hours;
         out utility : Utility;
         doc
-        /* The mapping is fixed before alternatives are scored. Its anchors and shape are calibrated
-         * from the common as-is baseline and declared bounds during system requirements analysis. */
+        /* The mapping, anchors, and shape are calibrated from the common baseline and declared
+         * feasible bounds, recorded in the evaluation manifest, and fixed before candidate results
+         * are observed. A change time is admissible only for a correct outcome. */
     }
 
     constraint def 'Case Adaptation Utility Mapping' {
         in moe : PersonHours;
         out utility : Utility;
         doc
-        /* The mapping is fixed before alternatives are scored. */
+        /* The mapping is recorded in the evaluation manifest and fixed before candidate results are
+         * observed. Adaptation effort is admissible only for an accepted case configuration. */
     }
 
     constraint def 'Independent Reproduction Utility Mapping' {
         in moe : PersonHours;
         out utility : Utility;
         doc
-        /* The mapping is fixed before alternatives are scored. */
+        /* The mapping is recorded in the evaluation manifest and fixed before candidate results are
+         * observed. Reproduction effort is admissible only for a successful reproduction. */
     }
 
     constraint def 'Framework Adoption Utility Mapping' {
         in moe : PersonHours;
         out utility : Utility;
         doc
-        /* The mapping is fixed before alternatives are scored. */
+        /* The mapping is recorded in the evaluation manifest and fixed before candidate results are
+         * observed. Adoption effort is admissible only after correct reference-workflow completion. */
     }
 
     constraint def 'Direct Cost Utility Mapping' {
         in moe : CAD;
         out utility : Utility;
         doc
-        /* The mapping is fixed before alternatives are scored. */
+        /* The mapping and cost boundary are recorded in the evaluation manifest and fixed before
+         * candidate results are observed. */
     }
 
     constraint def 'Consistency Assurance Utility Mapping' {
         in moe : Percent;
         out utility : Utility;
         doc
-        /* The mapping is fixed before alternatives are scored. */
+        /* The mapping and blinded test-set identifier are recorded in the evaluation manifest and
+         * fixed before candidate results are observed. */
     }
 
     constraint def 'Framework Comparison Equation' {

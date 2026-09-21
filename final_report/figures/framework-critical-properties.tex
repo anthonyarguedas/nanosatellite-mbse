@@ -1,0 +1,101 @@
+\begin{tikzpicture}[
+  >=Latex,
+  font=\sffamily,
+  line width=0.7pt,
+  manifest/.style={
+    draw,
+    rounded corners=2pt,
+    align=left,
+    text width=14.9cm,
+    minimum height=1.55cm,
+    inner sep=6pt,
+    fill=gray!5,
+    font=\scriptsize
+  },
+  propertybox/.style={
+    draw,
+    align=left,
+    text width=7.1cm,
+    minimum height=3.65cm,
+    inner sep=6pt,
+    fill=blue!4,
+    font=\scriptsize
+  },
+  constraintbox/.style={
+    draw,
+    rounded corners=2pt,
+    align=left,
+    text width=7.1cm,
+    minimum height=3.65cm,
+    inner sep=6pt,
+    fill=white,
+    font=\scriptsize
+  },
+  bind/.style={-{Latex[length=2.2mm,width=1.5mm]}},
+  refine/.style={dashed,-{Latex[length=2.2mm,width=1.5mm]}}
+]
+  \draw (0,0) rectangle (17,13.7);
+  \node[anchor=west,font=\bfseries] at (0.25,13.35)
+    {par [analysis] Framework Critical Properties [Black-Box Measurement Model]};
+  \draw (0,13.0) -- (17,13.0);
+
+  \node[manifest] (manifest) at (8.5,11.85) {
+    \textbf{manifest : Framework Evaluation Manifest}\\[-1pt]
+    Controlled baseline, designated chains and analyses, result tolerances, criticality rule,
+    common core, two contrasting cases, timing and effort rules, cost boundary, utility mappings,
+    and blinded consistency test set. The manifest is fixed before candidate results are observed.
+  };
+
+  \node[propertybox] (acceptance) at (4.25,8.35) {
+    \centering\guillemotleft system of interest\guillemotright\\[-1pt]
+    \textbf{Acceptance MOPs}\\[2pt]
+    \raggedright
+    \textbf{MOP-01} valid trace coverage : Percent\\
+    \textbf{MOP-02} reference-analysis reproduction success : Percent\\
+    \textbf{MOP-03} open critical discrepancy count : Count\\
+    \textbf{MOP-04} completed contrasting case count : Count\\
+    \textbf{MOP-05} undeclared adaptation count : Count
+  };
+
+  \node[constraintbox] (gates) at (12.75,8.35) {
+    \centering\guillemotleft constraint\guillemotright\\[-1pt]
+    \textbf{Mission acceptance indicator rule}\\[2pt]
+    \raggedright
+    G-01 satisfied $\Leftrightarrow$ MOP-01 $=100\%$\\
+    G-02 satisfied $\Leftrightarrow$ MOP-02 $=100\%$\\
+    G-03 satisfied $\Leftrightarrow$ MOP-03 $=0$\\
+    G-04 satisfied $\Leftrightarrow$ MOP-04 $=2$ and MOP-05 $=0$\\[2pt]
+    All five conditions are noncompensable eligibility gates.
+  };
+
+  \node[propertybox,minimum height=4.25cm] (ranking) at (4.25,3.4) {
+    \centering\guillemotleft system of interest\guillemotright\\[-1pt]
+    \textbf{Ranking MOPs}\\[2pt]
+    \raggedright
+    \textbf{MOP-06} correct change turnaround time : Hours\\
+    \textbf{MOP-07} case adaptation effort : PersonHours\\
+    \textbf{MOP-08} independent reproduction effort : PersonHours\\
+    \textbf{MOP-09} framework adoption effort : PersonHours\\
+    \textbf{MOP-10} direct framework cost : CAD\\
+    \textbf{MOP-11} consistency assurance effectiveness : Percent
+  };
+
+  \node[constraintbox,minimum height=4.25cm] (bindings) at (12.75,3.4) {
+    \centering\guillemotleft constraint\guillemotright\\[-1pt]
+    \textbf{System MOP to enterprise MOE bindings}\\[2pt]
+    \raggedright
+    MOP-06 through MOP-11 bind one-to-one to the six enterprise MOEs.\\[3pt]
+    $\displaystyle \mathrm{MOP\mbox{-}11}=100\,
+      \frac{2TP}{2TP+FP+FN}$\\[3pt]
+    Time and effort values enter ranking only after their associated outcome passes its correctness
+    criterion. Raw values and uncertainty remain visible before utility normalization.
+  };
+
+  \draw[bind] (manifest.south -| acceptance.north) -- (acceptance.north);
+  \draw[bind] (manifest.south -| gates.north) -- (gates.north);
+  \draw[refine] (acceptance.east) -- node[above,font=\scriptsize]
+    {\guillemotleft refine\guillemotright} (gates.west);
+  \draw[bind] (acceptance.south) -- (ranking.north);
+  \draw[bind] (ranking.east) -- node[above,font=\scriptsize]
+    {\guillemotleft bind\guillemotright} (bindings.west);
+\end{tikzpicture}

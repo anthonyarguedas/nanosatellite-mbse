@@ -83,6 +83,8 @@ package StakeholderViewpoints {
         expose FrameworkMissionRequirements::'Complete Contrasting Evaluation Cases';
         expose FrameworkEffectivenessParametrics
                 ::'Academic Nanosatellite EPS Development Enterprise';
+        expose FrameworkCriticalProperties::'Measured Nanosatellite EPS Engineering Framework';
+        expose FrameworkDesignConstraints::*;
     }
 
     view 'Framework Research View' : GeneralView {
@@ -93,6 +95,8 @@ package StakeholderViewpoints {
         expose ToBeOperationalDomain::'Compare Candidate EPS Architectures';
         expose FrameworkMissionRequirements::*;
         expose FrameworkEffectivenessParametrics::*;
+        expose FrameworkCriticalProperties::*;
+        expose FrameworkDesignConstraints::*;
     }
 
     view 'Framework Independent Review View' : GeneralView {
@@ -106,5 +110,8 @@ package StakeholderViewpoints {
         expose FrameworkMissionRequirements::'Reproduce Reference Analyses';
         expose FrameworkMissionRequirements::'Resolve Critical Evidence Inconsistencies';
         expose FrameworkMissionRequirements::'Framework Candidate Eligibility';
+        expose FrameworkCriticalProperties::'Framework Evaluation Manifest';
+        expose FrameworkCriticalProperties::'Measured Nanosatellite EPS Engineering Framework';
+        expose FrameworkDesignConstraints::*;
     }
 } // package StakeholderViewpoints
