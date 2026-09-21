@@ -36,7 +36,9 @@ Potential benefits include lower documentation effort and development cost, bett
 
 However, \cite{buruso2026modelbased}, in their review on model-based systems engineering for space systems, Buruso et al. state:
 
-"Despite the progress reflected in the literature, unifying MBSE tools and methods to consistently support all lifecycle stage[s] remains an unresolved challenge."
+\begin{quote}
+Despite the progress reflected in the literature, unifying MBSE tools and methods to consistently support all lifecycle stage[s] remains an unresolved challenge.
+\end{quote}
 
 Such an MBSE unification covering the entire space system lifecycle is of interest to the Department of Aerospace Engineering at the École de technologie supérieure in Montréal, Canada, where this project takes place.
 Dr. Jesús González Llorente, PhD., academic advisor of this project at the ÉTS, pursues a line of research concerned with on reliable space systems, and has authored multiple academic publications targeting the design and validation of nanosatellite electrical power systems.
@@ -44,16 +46,20 @@ With plans to submit a proposal for the 2026 edition of the Canadian Space Agenc
 
 The particular problem addressed by this project is:
 
-"During the early lifecycle phases of nanosatellite electrical power systems, the evidence that supports decisions on architecture, behavior, and interfaces tends to be dispersed across requirements, power budgets, partial models, and unconnected simulations. This fragmentation reduces the traceability and reproducibility of the EPS design, and hinders its justification prior to performing physical verification and validation."
+\begin{quote}
+During the early lifecycle phases of nanosatellite electrical power systems, the evidence that supports decisions on architecture, behavior, and interfaces tends to be dispersed across requirements, power budgets, partial models, and unconnected simulations. This fragmentation reduces the traceability and reproducibility of the EPS design, and hinders its justification prior to performing physical verification and validation.
+\end{quote}
 
 The main objective is:
 
-"To develop a model-based systems engineering framework oriented at the early justification of nanosatellite electrical power systems through traceable and reproducible evidence."
+\begin{quote}
+To develop a model-based systems engineering framework oriented at the early justification of nanosatellite electrical power systems through traceable and reproducible evidence.
+\end{quote}
 
 An MBSE framework is defined following Buruso et al. \cite{buruso2026modelbased} as as the integration of MBSE methods, MBSE languages, and MSBE tools within and throughout the relevant lifecycle phases.
 As part of a research project, the framework is not limited to the needs of nanosatellite EPS developed at ÉTS, but instead aims to be mission-independent as a contribution to the broader academic community.
 
-The secondary objectives of this project are to characterize the needs, requirements, interfaces and technical criteria of nanosatellite EPS; to select the operational flow of modeling, analysis, and evidence managament of the MBSE framework; to model a generic EPS architecture with functions, logical and physical components, interfaces, modes and states, and requirements; to structure early EPS verification and validation within the EPS framework; to evaluate the framework on two contrasting EPS case studies.
+The secondary objectives of this project are: to characterize the needs, requirements, interfaces and technical criteria of nanosatellite EPS; to select the operational flow of modeling, analysis, and evidence managament of the MBSE framework; to model a generic EPS architecture with functions, logical and physical components, interfaces, modes and states, and requirements; to structure early EPS verification and validation within the EPS framework; to evaluate the framework on two contrasting EPS case studies.
 
 The problem statement and objectives delimit the project from a project management perspective, and were written prior to applying a formal systems engineering approach to the framework itself.
 The lifecycle of the framework, which crucially must be distinguished from the lifecycle of its EPS system of interest, follows the Object-Oriented Systems Engineering Methdology (OOSEM) \cite{friedenthal2014practical}, and its model will be formalized in the Systems Modeling Language version 2 (SysML v2). Whether the embedded EPS lifecycle also applies OOSEM or SysML in some capacity is a framework design decision.
@@ -67,43 +73,57 @@ OOSEM operates within a broader system development lifecycle organized similarly
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{figures/oosem-system-development-process.jpg}
-    \caption{System development process that provides the Vee lifecycle context for OOSEM. Reproduced from \citet[Fig.~17.1]{friedenthal2014practical}.}
+    \caption{System development process for OOSEM that conforms to a Vee lifecycle. Reproduced from \citet[Fig.~17.1]{friedenthal2014practical}.}
     \label{fig:oosem-system-development-process}
 \end{figure}
 
 \section{Solution}
 
 \subsection{Manage System Development}
-In OOSEM, this process plans and controls the technical work. It selects and tailors the lifecycle approach, monitors cost, schedule, performance, and risk, and manages changes to the technical baseline. This section records the framework scope, plan, reviews, decisions, and baseline changes.
+In OOSEM, this process plans and controls the technical work. It selects and tailors the lifecycle approach, monitors cost, schedule, performance, and risk, and manages changes to the technical baseline. This section records the framework scope, plan, reviews, decisions, and baseline changes \cite{friedenthal2014practical}.
 
-The project proposal was written before the literature-based specification of the framework began. Its objectives, deliverables, and indicators therefore form the project management baseline and provide criteria for tracking the work. The OOSEM activities that follow will derive stakeholder needs, system requirements, and architecture separately from the literature, with the academic community represented in that literature as the principal stakeholder population. ÉTS provides the immediate project context and an intended application setting. The functional decomposition proposed before this analysis remains a provisional concept and carries no architectural authority until it is supported or revised through the OOSEM activities.
+% proposal = anteproyecto
+The project proposal was naturally written before the literature-based specification of the framework began. Said proposal defined objectives, deliverables, indicators, and deadlines that form the project management baseline and provide criteria for tracking the work.
+The assessment of the objective deliverables against their indicators will be carried out separately from the framework integration and verification that happens within OOSEM (Section \ref{subsection:integrate-and-verify-system}),
+recognizing that the systems engineering process takes place within a cost and time budget.
+% I will add the deliverables, indicators, and deadlines when the Solution section is complete. I will also add a subsection to the Results section for the indicator assessments.
+
+The OOSEM activities that follow derive stakeholder needs, system requirements, measures, and architecture separately from the literature, with the academic community represented in that literature as a stakeholder population. Thus, the detailed framework models presented here may not match the functional decomposition or solution outline presented in the proposal. ÉTS provides the immediate project context and an intended application setting, most importantly by influencing the selection of the two case studies, but does not impose requirements for the framework that can be developed via OOSEM.
+
+With regards to the lifecycle approach of the framework, it was chosen to start from the detailed design phase, skipping the conceptual and preliminary phases.
+A "detailed" design implies modeling down to the physical component level \cite{friedenthal2014practical}.
+This is justified by the fact that the project is carried out by a single person, and thus the extra modeling an analysis effort of progressing through the phases would be considerable.
+While phase iteration does provide a broader and deeper understanding of the problem and its potential solution, it was deemed that the literature-grounded requirements ellicitation approach adopted serves the same purpose.
+
+Furthermore, it was decided to model the stakeholder needs, system requirements, logical architecture, and physical architecture candidates in SysML v2, a text-based modeling language, and to track them in a version-controlled repository together with the LaTeX source of the present report.
+Thus, an iteration was defined as any commit (edit) applied to the model or report files, and any high-impact iterations are discussed in the relevant report sections for traceability, with a compilation and discussion in Section \ref{subsubsection:manage-requirements-traceability}.
 
 \subsection{Specify and Design System}
 OOSEM implements this process on the left side of the Vee. It analyzes requirements, defines the architecture, specifies the next level of design, and produces test cases that support subsequent integration and verification \citep{friedenthal2014practical}.
 
 \subsubsection{Set Up Model}
-This activity establishes the prerequisites for model development. It defines the modeling purpose, conventions, terminology, package structure, viewpoints, and validation practices that make the framework model consistent and navigable.
+This activity establishes the prerequisites for model development. It defines the modeling purpose, conventions, terminology, package structure, viewpoints, and validation practices that make the framework model consistent and navigable \cite{friedenthal2014practical}.
 
 \subsubsection{Analyze Stakeholder Needs}
-This activity characterizes the current operational domain, identifies stakeholder problems and their causes, and defines mission needs, measures of effectiveness, and the intended future domain. It establishes why the framework is needed and what successful use must achieve.
+This activity characterizes the current operational domain, identifies stakeholder problems and their causes, and defines mission needs, measures of effectiveness, and the intended future domain. It establishes why the framework is needed and what successful use must achieve \cite{friedenthal2014practical}.
 
 \subsubsection{Analyze System Requirements}
-This activity specifies the framework as a black box. It derives requirements from stakeholder needs and defines mission scenarios, system context, interfaces, behavior, performance, states, failures, and design constraints.
+This activity specifies the framework as a black box. It derives requirements from stakeholder needs and defines mission scenarios, system context, interfaces, behavior, performance, states, failures, and design constraints \cite{friedenthal2014practical}.
 
 \subsubsection{Define Logical Architecture}
-This activity decomposes the framework into logical components and defines how they interact to satisfy the system requirements. The logical architecture remains independent of a particular implementation technology.
+This activity decomposes the framework into logical components and defines how they interact to satisfy the system requirements. The logical architecture remains independent of a particular implementation technology \cite{friedenthal2014practical}.
 
 \subsubsection{Synthesize Candidate Physical Architectures}
-This activity maps logical components to realizable hardware, software, data, and procedure components. It defines partitioning criteria, interfaces, deployment choices, and candidate variants that can realize the logical architecture.
+This activity maps logical components to realizable hardware, software, data, and procedure components. It defines partitioning criteria, interfaces, deployment choices, and candidate variants that can realize the logical architecture \cite{friedenthal2014practical}.
 
 \subsubsection{Optimize and Evaluate Alternatives}
-This cross cutting activity evaluates candidate designs through analysis and trade studies against the measures of effectiveness. Its results guide architecture choices, requirement values, and design refinements throughout the process.
+This cross cutting activity evaluates candidate designs through analysis and trade studies against the measures of effectiveness. Its results guide architecture choices, requirement values, and design refinements throughout the process \cite{friedenthal2014practical}.
 
 \subsubsection{Manage Requirements Traceability}
-This cross cutting activity maintains links from mission needs through system and component requirements to design and verification elements. It exposes coverage gaps, supports change impact analysis, and preserves the rationale for framework decisions.
+This cross cutting activity maintains links from mission needs through system and component requirements to design and verification elements. It exposes coverage gaps, supports change impact analysis, and preserves the rationale for framework decisions \cite{friedenthal2014practical}.
 
 \subsubsection{Support System Integration and Verification}
-This activity prepares the right side of the Vee by defining test cases, verification procedures, environments, and criteria. Executable and analytical models support early, virtual integration and verification before physical implementation.
+This activity prepares the right side of the Vee by defining test cases, verification procedures, environments, and criteria. Executable and analytical models support early, virtual integration and verification before physical implementation \cite{friedenthal2014practical}.
 
 \section{Results}
 This section reports the realization and verification evidence for the framework components. In OOSEM, component development refines the specification received from the next higher level, then designs, implements, analyzes, and verifies each component \citep{friedenthal2014practical}.
@@ -124,6 +144,7 @@ This section reports the procedures needed to apply, operate, maintain, and supp
 This section reports the software components that implement framework functions. It traces their design and implementation to allocated requirements and records the analysis and tests used to verify them.
 
 \subsection{Integrate and Verify System}
+\label{subsection:integrate-and-verify-system}
 This process integrates the implemented components and verifies that the resulting framework satisfies its requirements. It uses planned methods such as inspection, demonstration, analysis, and testing, then records the evidence and verification verdicts \citep{friedenthal2014practical}.
 
 \section{References}
