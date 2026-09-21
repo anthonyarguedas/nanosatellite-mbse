@@ -755,10 +755,76 @@ The model assigns no component-specific MOP target, physical property, or resour
 \normalsize
 
 \subsubsection{Synthesize Candidate Physical Architectures}
-This activity maps logical components to realizable hardware, software, data, and procedure components. It defines partitioning criteria, interfaces, deployment choices, and candidate variants that can realize the logical architecture \cite{friedenthal2014practical}.
+This activity maps logical components to realizable hardware, software, persistent data, and procedure components. It first distributes logical responsibilities among nodes, then allocates them to physical components and records the rationale for important alternatives \citep[Sec.~17.3.5]{friedenthal2014practical}. Each candidate below places the 18 logical components in exactly one of three logical nodes and identifies its minimum physical inventory. These software centered alternatives make spatial layout irrelevant. The synthesis omits a geometric model and retains computing and network footprints as resource declarations.
+
+\begin{table}[H]
+    \centering
+    \scriptsize
+    \caption{Candidate framework physical architectures.}
+    \label{tab:framework-physical-candidates}
+    \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.16\linewidth} >{\raggedright\arraybackslash}p{0.47\linewidth} X}
+        \toprule
+        \textbf{Candidate} & \textbf{Physical concept} & \textbf{Principal elaboration risk} \\
+        \midrule
+        COMET centered & COMET clients and server, an Excel analysis client, reusable CubeSat template and catalogue data, and a separate integration and assurance runner \citep{deutsch2022comet}. & The COMET exchange API is unverified. Excel and the split model authority complicate reconstruction. \\
+        CSRM digital thread & A CSRM derived SysML v2 gateway, a controlled Python analysis runner, and an Omniverse and Isaac surface for collaborative and battery aware simulation \citep{kaslow2019csrm,luccisano2024formalization,rostamnia2026digitaltwin}. & The combined stack awaits end to end validation. Its mappings, GPU environment, and simulation services add substantial integration work. \\
+        Lightweight Git and YAML & A browser and Python service over versioned YAML records, generated engineering views, and a model and analysis integration runner \citep{kanavouras2024lightweight,chiu2023sealion}. & The source implementation is an early prototype. The formal model adapter and complete assurance workflow require development. \\
+        Nanospace centered & A browser client, Nanospace service and Neo4j database, plus a Python bridge to the system model and discipline tools \citep{cordero2022nanospace,luccisano2024formalization}. & The demonstrated parser is specific to Gaphor and SysML v1. Immutable baseline and evidence controls remain additions. \\
+        Valispace centered & The hosted Valispace project, component, requirement, analysis, scripting, and test services with a Python bridge to a Capella architecture master \citep{campioli2025integration}. & Licensed access and opaque hosting affect cost and independent review. Reproduction and evidence custody remain additions. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+All five candidates have an MC-01 textual SysML v2 comparison description. Each maps every logical responsibility to a physical mechanism or explicit development item. The screen finds these mappings compatible with G-01--G-04 and the 59 mandatory leaves. They receive a conditional architecture pass for down selection. This pass sets modeling priority. G-00 eligibility still requires complete logical-to-physical allocations and verified requirement verdicts.
 
 \subsubsection{Optimize and Evaluate Alternatives}
-This cross cutting activity evaluates candidate designs through analysis and trade studies against the measures of effectiveness. Its results guide architecture choices, requirement values, and design refinements throughout the process \cite{friedenthal2014practical}.
+This cross cutting activity evaluates candidate designs through analysis and trade studies against the measures of effectiveness. Its results guide architecture choices, requirement values, and design refinements throughout the process \citep[Sec.~17.3.6]{friedenthal2014practical}.
+
+\paragraph{Planning comparison.}
+The comparison applies the MOP definitions in Table~\ref{tab:framework-mop-protocols} to one small academic team during a 12-month pilot with one correct change, one contrasting case adaptation, one successful independent reproduction, and adoption from a clean environment. Direct cost includes incremental licenses, required services, and computing. It excludes labor and existing general infrastructure. Proposed candidate elements are assumed implemented at their minimum scope. A common prototype test remains pending. Estimates reflect deployment complexity, tool maturity, baseline support, interface maturity, and proposed assurance logic. The ranges cover license, hosting, adapter, and learning uncertainty.
+
+The utility calculation uses fixed upper screening bounds of 16~h for CCT, 40~person-h for CAE, 16~person-h for IRE, 240~person-h for FAE, and CAD~20,000 for DFC. For these lower-is-better measures, $U_i=\operatorname{clip}_{[0,1]}(1-x_i/b_i)$. For CAS, $U_{\mathrm{CAS}}=x_{\mathrm{CAS}}/100$. These bounds define comparison utilities only. G-00 retains the acceptance rules for MOP-01--MOP-05. The literature weights from Table~\ref{tab:framework-literature-weights} produce $S_{\mathrm{lit}}$. The arithmetic mean of the six utilities produces the equal-weight sensitivity case $S_{\mathrm{eq}}$.
+
+\begin{table}[H]
+    \centering
+    \scriptsize
+    \setlength{\tabcolsep}{3.2pt}
+    \caption{Estimated candidate MOPs and aggregate utilities. Each MOP cell gives point estimate [range].}
+    \label{tab:framework-candidate-comparison}
+    \resizebox{\linewidth}{!}{%
+    \begin{tabular}{@{}lrrrrrrrr@{}}
+        \toprule
+        \textbf{Candidate} & \shortstack{\textbf{CCT}\\\textbf{(h)}} & \shortstack{\textbf{CAE}\\\textbf{(person-h)}} & \shortstack{\textbf{IRE}\\\textbf{(person-h)}} & \shortstack{\textbf{FAE}\\\textbf{(person-h)}} & \shortstack{\textbf{DFC}\\\textbf{(CAD)}} & \shortstack{\textbf{CAS}\\\textbf{(\%)}} & $\boldsymbol{S_{\mathrm{lit}}}$ & $\boldsymbol{S_{\mathrm{eq}}}$ \\
+        \midrule
+        COMET centered & $6\ [4\text{--}10]$ & $12\ [8\text{--}20]$ & $7\ [4\text{--}12]$ & $96\ [64\text{--}144]$ & $1200\ [300\text{--}3000]$ & $78\ [65\text{--}88]$ & 0.70 & 0.70 \\
+        CSRM digital thread & $8\ [5\text{--}14]$ & $20\ [12\text{--}32]$ & $9\ [5\text{--}15]$ & $220\ [140\text{--}320]$ & $6000\ [2000\text{--}15000]$ & $90\ [75\text{--}97]$ & 0.53 & 0.52 \\
+        \textbf{Lightweight Git and YAML} & $\mathbf{4\ [3\text{--}7]}$ & $\mathbf{10\ [7\text{--}16]}$ & $\mathbf{4\ [2\text{--}7]}$ & $\mathbf{64\ [40\text{--}104]}$ & $\mathbf{500\ [0\text{--}1800]}$ & $\mathbf{84\ [72\text{--}92]}$ & \textbf{0.80} & \textbf{0.80} \\
+        Nanospace centered & $6\ [4\text{--}10]$ & $14\ [9\text{--}22]$ & $6\ [3\text{--}10]$ & $104\ [72\text{--}160]$ & $800\ [0\text{--}2500]$ & $80\ [68\text{--}90]$ & 0.71 & 0.70 \\
+        Valispace centered & $4\ [3\text{--}7]$ & $10\ [7\text{--}16]$ & $5\ [3\text{--}8]$ & $56\ [32\text{--}88]$ & $12000\ [6000\text{--}20000]$ & $88\ [78\text{--}95]$ & 0.69 & 0.71 \\
+        \bottomrule
+    \end{tabular}}
+\end{table}
+
+At the point estimates, the Git and YAML candidate Pareto-dominates COMET and Nanospace. The remaining Pareto set contains Git and YAML, Valispace, and the CSRM digital thread because Valispace retains an adoption and assurance advantage and the custom digital thread retains the highest projected assurance. The literature-weighted and equal-weight calculations both rank Git and YAML first. The estimate ranges overlap, so this is a planning selection whose values must be replaced by prototype observations.
+
+\paragraph{Selected architecture.}
+The Lightweight Git and YAML architecture is selected for full modeling. Its native records are readable by people and software. Git gives baseline identity, differences, authorship, and release history through common tooling. The browser, generated views, and Python API keep participant access simple. The integration runner keeps the external system model, analysis tools, and evidence repository authoritative at the declared boundary. This combination gives the strongest estimated balance of reconstruction effort, adoption effort, direct cost, and assurance for an academic team. Figures~\ref{fig:git-yaml-logical-nodes} and~\ref{fig:git-yaml-physical-architecture} are filtered SysML v1 TikZ views of the selected candidate baseline. The textual SysML v2 comparison model remains authoritative.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/git-yaml-candidate-node-logical.tex}}
+    \caption{Filtered logical node distribution of the selected Lightweight Git and YAML architecture. The three nodes partition participant access and review, versioned engineering records and workflow, and model, analysis, and assurance integration.}
+    \label{fig:git-yaml-logical-nodes}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/git-yaml-candidate-physical.tex}}
+    \caption{Filtered minimum physical architecture of the selected Lightweight Git and YAML candidate. The baseline contains the browser client, operating procedures, engineering data service, and model and analysis integration runner.}
+    \label{fig:git-yaml-physical-architecture}
+\end{figure}
+
+Full elaboration will allocate every logical component and requirement to the browser client, Git and YAML service, integration runner, persistent records, and operating procedures. It will prioritize stable schemas and identities, the formal model adapter, transfer checks, protected evidence releases, reviewer findings, and clean-environment reconstruction. Selection remains conditional on verification of the G-00 eligibility conjunction and every mandatory system requirement.
 
 \subsubsection{Manage Requirements Traceability}
 \label{subsubsection:manage-requirements-traceability}

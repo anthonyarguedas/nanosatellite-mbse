@@ -1,0 +1,160 @@
+\begin{tikzpicture}[
+  font=\sffamily,
+  line width=0.7pt,
+  nodepanel/.style={
+    draw=blue!45!black,
+    rounded corners=2pt,
+    fill=blue!2
+  },
+  nodeheader/.style={
+    draw=blue!45!black,
+    rounded corners=2pt,
+    fill=blue!14,
+    align=center,
+    minimum height=1.0cm,
+    inner sep=4pt,
+    font=\scriptsize
+  },
+  physicalpart/.style={
+    draw,
+    rounded corners=1.5pt,
+    align=left,
+    text width=6.85cm,
+    minimum height=0.88cm,
+    inner sep=3pt,
+    font=\tiny
+  },
+  service/.style={physicalpart,draw=gray!65!black,fill=gray!10},
+  software/.style={physicalpart,draw=blue!55!black,fill=blue!6},
+  data/.style={physicalpart,draw=green!45!black,fill=green!8},
+  procedure/.style={physicalpart,draw=orange!65!black,fill=orange!10,align=center,text width=3.25cm,minimum height=1.0cm},
+  legendbox/.style={draw,rounded corners=1pt,minimum width=0.42cm,minimum height=0.24cm,inner sep=0pt}
+]
+  % SysML-style diagram frame.
+  \draw[draw=black!75] (0,0) rectangle (17,20.5);
+  \node[anchor=west,font=\bfseries\small] at (0.25,20.15)
+    {bdd [part def] Lightweight Git and YAML Candidate Physical Framework [GY-PA-00]};
+  \draw[draw=black!75] (0,19.8) -- (17,19.8);
+
+  % Physical node and procedure containers.
+  \path[nodepanel] (0.35,14.25) rectangle (8.25,19.45);
+  \path[nodepanel] (8.55,14.25) rectangle (16.65,19.45);
+  \path[nodepanel] (0.35,1.35) rectangle (8.25,13.90);
+  \path[nodepanel] (8.55,1.35) rectangle (16.65,13.90);
+
+  \node[nodeheader,text width=7.15cm] at (4.30,18.78) {
+    \guillemotleft physical node\guillemotright\\[-1pt]
+    \textbf{\textless GY-PN-01\textgreater\ Browser Client}
+  };
+  \node[nodeheader,text width=7.35cm] at (12.60,18.78) {
+    \guillemotleft procedures\guillemotright\\[-1pt]
+    \textbf{\textless GY-PC-01\textgreater\ Candidate Operating Procedures}
+  };
+  \node[nodeheader,text width=7.15cm] at (4.30,13.22) {
+    \guillemotleft physical node\guillemotright\\[-1pt]
+    \textbf{\textless GY-PN-02\textgreater\ Git and YAML}\\[-1pt]
+    \textbf{Engineering Data Service}
+  };
+  \node[nodeheader,text width=7.35cm] at (12.60,13.22) {
+    \guillemotleft physical node\guillemotright\\[-1pt]
+    \textbf{\textless GY-PN-03\textgreater\ Model and Analysis}\\[-1pt]
+    \textbf{Integration Runner}
+  };
+
+  % Browser client components.
+  \node[service] at (4.30,17.25) {
+    \textit{\guillemotleft service\guillemotright}\quad\textbf{Participant Browser Host}
+  };
+  \node[software] at (4.30,16.10) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{Modern Web Browser}
+  };
+  \node[software] at (4.30,14.95) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{Nuxt and Tailwind Engineering Interface}
+  };
+
+  % Operating procedures.
+  \node[procedure] at (10.60,17.20) {
+    \textbf{Branch, Review, Merge, and Release}
+  };
+  \node[procedure] at (14.60,17.20) {
+    \textbf{Controlled Analysis and Reproduction}
+  };
+  \node[procedure] at (10.60,15.70) {
+    \textbf{Generated View and Finding Review}
+  };
+  \node[procedure] at (14.60,15.70) {
+    \textbf{External Artifact Import and Acceptance}
+  };
+  \node[procedure,text width=7.20cm] at (12.60,14.65) {
+    \textbf{Evidence Release, Export, and Restore}
+  };
+
+  % Engineering data service components.
+  \node[service] at (4.30,11.82) {
+    \textit{\guillemotleft service\guillemotright}\quad\textbf{Engineering Data Service Host}
+  };
+  \node[software] at (4.30,10.64) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{Python Engineering Data Backend}
+  };
+  \node[software] at (4.30,9.46) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{Engineering Data REST API}
+  };
+  \node[software] at (4.30,8.28) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{Git Version Control Service}
+  };
+  \node[data] at (4.30,7.10) {
+    \textit{\guillemotleft data\guillemotright}\quad\textbf{YAML Engineering Record Set}
+  };
+  \node[data] at (4.30,5.92) {
+    \textit{\guillemotleft data\guillemotright}\quad\textbf{Record Schema and Workflow Definitions}
+  };
+  \node[software] at (4.30,4.74) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{Docs as Code Generator}
+  };
+  \node[data] at (4.30,3.56) {
+    \textit{\guillemotleft data\guillemotright}\quad\textbf{Generated Engineering View Set}
+  };
+  \node[software] at (4.30,2.38) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{Issue and Notification Integration}
+  };
+
+  % Integration runner components.
+  \node[service] at (12.60,11.82) {
+    \textit{\guillemotleft service\guillemotright}\quad\textbf{Integration Runner Host}
+  };
+  \node[software] at (12.60,10.64) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{External Model Record Adapter}
+  };
+  \node[software] at (12.60,9.46) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{External Analysis Tool Adapter}
+  };
+  \node[software] at (12.60,8.28) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{Evidence Repository Adapter}
+  };
+  \node[software] at (12.60,7.10) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{YAML Schema and Stable Identity Validator}
+  };
+  \node[software] at (12.60,5.92) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{Transfer and Consistency Checker}
+  };
+  \node[software] at (12.60,4.74) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{Dependency and Change Impact Analyzer}
+  };
+  \node[software,minimum height=1.02cm] at (12.60,3.50) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{Reproducible Analysis Packager}\\[-1pt]
+    \hspace{0.4cm}\textit{output: \guillemotleft data\guillemotright\ Reproducible Analysis Package}
+  };
+  \node[software] at (12.60,2.26) {
+    \textit{\guillemotleft software\guillemotright}\quad\textbf{Evaluation Manifest Runner}
+  };
+
+  % Physical-kind legend.
+  \node[legendbox,fill=gray!10,draw=gray!65!black] at (2.30,0.62) {};
+  \node[anchor=west,font=\tiny] at (2.60,0.62) {hardware or service};
+  \node[legendbox,fill=blue!6,draw=blue!55!black] at (6.50,0.62) {};
+  \node[anchor=west,font=\tiny] at (6.80,0.62) {software};
+  \node[legendbox,fill=green!8,draw=green!45!black] at (9.50,0.62) {};
+  \node[anchor=west,font=\tiny] at (9.80,0.62) {persistent data};
+  \node[legendbox,fill=orange!10,draw=orange!65!black] at (13.10,0.62) {};
+  \node[anchor=west,font=\tiny] at (13.40,0.62) {procedure};
+\end{tikzpicture}
