@@ -1,0 +1,123 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Author:  Pablo Alvarado
+%
+% Escuela de Ingeniería Electrónica
+% Instituto Tecnológico de Costa Rica
+%
+% Tesis de Licenciatura
+% 
+% Phone:   +506 550 2106
+% Fax:     +506 591 6629
+% email:   palvarado@ietec.org
+%
+% $Id: main.tex 1513 2010-08-15 01:25:24Z palvarado $
+%
+%Versión modificada por Yeiner Arias para uso en
+%la Escuela de Ingeniería Mecatrónica
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt,twoside,letterpaper]{book}
+
+\usepackage[utf8]{inputenc}
+\usepackage{ifthen}                     % provide if-then-else operators
+
+% --------------------------------------------------------------------------
+% Global variables required in document formatting
+% --------------------------------------------------------------------------
+
+\newboolean{bookmode}                  
+\setboolean{bookmode}{true}
+
+\newboolean{draftmode}                  
+\setboolean{draftmode}{false}
+
+% GENERAL AUTHOR, TITLE AND KEYWORDS
+\newcommand{\scriptAuthor}{Nombre Apellido}
+\newcommand{\scriptTitle}{An MBSE-Based Framework for the Design and Analysis of Nanosatellite Electrical Power Systems} 
+\newcommand{\scriptKeywords}{palabras, clave, ...}
+
+\newcommand{\boxeditorial}{%
+}
+
+\newcommand{\pdfAuthor}{\scriptAuthor}
+\newcommand{\pdfTitle}{\scriptTitle} 
+\newcommand{\pdfKeywords}{\scriptKeywords}
+
+% --------------------------------------------------------------------------
+
+% include all packages and define all required general macros
+\input{macros}
+\allowdisplaybreaks[3]
+
+% --------------------------------------------------------------------------
+\begin{document}
+  \graphicspath{{./}{./fig/}}
+
+  \pagenumbering{alph}
+  \renewcommand{\tablename}{Tabla}
+  \renewcommand{\listtablename}{\'Indice de tablas}
+  \renewcommand{\examplesolution}{Solución}
+  \pagestyle{empty}
+
+  \include{titlepage}
+  \include{disclaimer}
+  \include{resumen}
+  \include{dedicatoria}
+  \include{agradecimientos}
+
+  %----------------------------------------------------------------------------
+  \frontmatter
+  %----------------------------------------------------------------------------
+  \pagestyle{fancy}
+
+  \pdfbookmark[1]{Indice General}{Indice General}
+  \parskip0ex
+
+  \tableofcontents
+  \cleardoublepage
+
+  \phantomsection
+  \addcontentsline{toc}{chapter}{Lista de figuras}
+  \listoffigures
+  \cleardoublepage
+
+  \phantomsection
+  \addcontentsline{toc}{chapter}{Lista de tablas}
+  \listoftables
+  \cleardoublepage
+
+\ifdraft{%
+  \listoftodo
+}{%
+}
+
+  \include{notation}    % símbolos o fórmulas matemáticas
+  \include{glosario}    % opcional; renombrar para evitar conflicto con abreviaciones
+
+  \parskip1.3ex
+
+  %----------------------------------------------------------------------------
+  \mainmatter
+  %----------------------------------------------------------------------------
+
+  \graphicspath{{./}{./fig/}}
+
+  \include{intro}
+  \include{teoria}
+  \include{solucion}
+  \include{resultados}
+  \include{conclusiones}
+
+  %----------------------------------------------------------------------------
+  \bibliographystyle{IEEEtranN}
+  \bibliography{literatura}
+
+  %----------------------------------------------------------------------------
+  \appendix
+  \include{apendice}
+
+  %----------------------------------------------------------------------------
+  \backmatter
+  \printindex
+
+\end{document}
