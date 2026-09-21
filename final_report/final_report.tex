@@ -74,8 +74,8 @@ OOSEM operates within a broader system development lifecycle organized similarly
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\linewidth]{figures/oosem-system-development-process.jpg}
-    \caption{System development process for OOSEM that conforms to a Vee lifecycle. Reproduced from \citet[Fig.~17.1]{friedenthal2014practical}.}
+    \resizebox{\linewidth}{!}{\input{figures/oosem-system-development-process.tex}}
+    \caption{System development process for OOSEM redrawn in a SysML v1 style with an explicit Vee lifecycle. Adapted from \citet[Fig.~17.1]{friedenthal2014practical}.}
     \label{fig:oosem-system-development-process}
 \end{figure}
 
@@ -285,6 +285,8 @@ The requirement hierarchy preserves traceability from these requirements to the 
 
 \subsubsection{Analyze System Requirements}
 This activity specifies the framework as a black box. It derives requirements from stakeholder needs and defines mission scenarios, system context, interfaces, behavior, performance, states, failures, and design constraints \cite{friedenthal2014practical}.
+
+The baseline for this activity treats the Nanosatellite EPS Engineering Framework as the system of interest. Candidate EPS architectures are objects evaluated by the framework, whereas candidate framework physical architectures are alternative realizations evaluated later. Its inputs are the G-00 eligibility rule, mission requirements G-01--G-04, the six enterprise use cases, the to-be domain actors and resources, and the six MOEs established above. Each derived system requirement will trace to these inputs and to their supporting review evidence.
 
 \subsubsection{Define Logical Architecture}
 This activity decomposes the framework into logical components and defines how they interact to satisfy the system requirements. The logical architecture remains independent of a particular implementation technology \cite{friedenthal2014practical}.
