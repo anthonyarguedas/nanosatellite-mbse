@@ -707,6 +707,53 @@ Workflow control, baseline and configuration control, evidence and provenance, a
     \label{fig:framework-logical-interconnections}
 \end{figure}
 
+\paragraph{Logical component specifications and requirement allocation.}
+OOSEM specifies each logical component through operations, ports, stores, properties, and requirement traceability \citep[Sec.~17.3.4]{friedenthal2014practical}. The specification package specializes all 18 LA-00 component definitions. Each specialized component inherits the ports and logical-store references already defined by the decomposition. It adds the actions allocated in the logical activities. Figure~\ref{fig:framework-logical-component-specifications} gives the compact specification view.
+
+Each local LCR requirement has its specified logical component as subject and refines the relevant black-box requirement category. Direct SysML \texttt{allocate} relationships map every system requirement leaf to a responsible operation, inherited boundary port, or logical-store reference. The shared allocations are deliberate. CTL-06 requires both workflow control and baseline control. STO-01 requires both baseline and evidence custody. RES-02 requires controlled declarations and retained reconstruction evidence.
+
+The model assigns no component-specific MOP target, physical property, or resource budget. The reviews establish no justified values for such allocations. LIN-05 therefore records the inherited system MOP observations, uncertainty, and correctness gates. A later analysis may derive component budgets without changing this logical baseline.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/framework-logical-component-specifications.tex}}
+    \caption{Logical component specification view. Each component specializes its LA-00 type, inherits its typed ports and logical-store references, and records its operations and allocated system requirements.}
+    \label{fig:framework-logical-component-specifications}
+\end{figure}
+
+\scriptsize
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.22\linewidth} >{\raggedright\arraybackslash}p{0.50\linewidth} >{\raggedright\arraybackslash}p{0.18\linewidth}}
+    \caption{Direct system-requirement allocations to logical component features.}\label{tab:logical-component-requirement-allocation}\\
+    \toprule
+    \textbf{Component specification} & \textbf{Allocated operation, port, or store feature} & \textbf{System requirement leaves} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{Component specification} & \textbf{Allocated operation, port, or store feature} & \textbf{System requirement leaves} \\
+    \midrule
+    \endhead
+    LCS-LIF-01 / LCR-LIF-01 & Mission Application boundary port, receive and publish IF-01 exchanges. & INT-01 \\
+    LCS-LIF-02 / LCR-LIF-02 & Research Governance boundary port, receive and publish IF-02 exchanges. & INT-02 \\
+    LCS-LIF-03 / LCR-LIF-03 & Independent Review boundary port, receive and publish IF-03 exchanges. & INT-03 \\
+    LCS-LIF-04 / LCR-LIF-04 & Model Control boundary port, receive controlled records, publish controlled updates. & INT-04 \\
+    LCS-LIF-05 / LCR-LIF-05 & Analysis Execution boundary port, submit request, receive correlated result. & INT-05 \\
+    LCS-LIF-06 / LCR-LIF-06 & Evidence Custody boundary port, retrieve retained evidence, submit controlled records. & INT-06 \\
+    LCS-LAP-01 / LCR-LAP-01 & F-01.0 register artifacts, F-01.1 scope, F-01.2 validate, and F-01.3 issue assessment. & FUN-23, FUN-01--03 \\
+    LCS-LAP-02 / LCR-LAP-02 & F-02.1 capture, F-02.2 validate, and F-02.3 issue case configuration. & FUN-04--06 \\
+    LCS-LAP-03 / LCR-LAP-03 & F-03.1 prepare package, F-03.3 evaluate result, and F-03.4 issue verdict. & FUN-07, FUN-09--10 \\
+    LCS-LAP-07 / LCR-LAP-07 & F-03.2 coordinate controlled analysis. & FUN-08 \\
+    LCS-LAP-04 / LCR-LAP-04 & F-04.1 validate request, F-04.2 analyze impact, F-04.3 validate evidence, and F-04.4 assemble package. & FUN-11--14 \\
+    LCS-LAP-05 / LCR-LAP-05 & F-05.1 validate basis, F-05.2 determine feasibility, F-05.3 compare candidates, and F-05.4 issue package. & FUN-15--18 \\
+    LCS-LAP-06 / LCR-LAP-06 & F-06.1 assemble review package, F-06.2 coordinate reproduction, F-06.3 manage findings, and F-06.4 issue status. & FUN-19--22 \\
+    LCS-LIN-01 / LCR-LIN-01 & Establish context, dispatch verified request, apply outcome guard, record exceptional outcome, recover, and preserve context. & CTL-01--06, QLT-02 \\
+    LCS-LIN-02 / LCR-LIN-02 & Verify boundary transfer and preserve rejected-transfer record. & INT-07--08 \\
+    LCS-LIN-03 / LCR-LIN-03 & Baseline and Configuration Store, control case configuration, preserve baseline identity, declare environment, and assemble reconstruction declaration. & CTL-06, STO-01, STO-04, QLT-05, RES-01--02 \\
+    LCS-LIN-04 / LCR-LIN-04 & Evidence and Provenance Store, retain records, preserve provenance and decision context, and supply reconstruction evidence. & STO-01--03, QLT-01, QLT-03, RES-02 \\
+    LCS-LIN-05 / LCR-LIN-05 & Measurement Store, record the eleven MOP observations, and gate comparative credit on correctness. & PER-01--11, QLT-04 \\
+    \bottomrule
+\end{longtable}
+\normalsize
+
 \subsubsection{Synthesize Candidate Physical Architectures}
 This activity maps logical components to realizable hardware, software, data, and procedure components. It defines partitioning criteria, interfaces, deployment choices, and candidate variants that can realize the logical architecture \cite{friedenthal2014practical}.
 
