@@ -32,9 +32,9 @@ package FrameworkBlackBoxSpecification {
         :> 'Measured Nanosatellite EPS Engineering Framework' {
         doc
         /* Complete OOSEM black-box definition. Inherited features provide six boundary service
-         * functions, six typed ports, and eleven measures of performance. The features below add
-         * required stores and externally declared execution-resource characteristics. Internal
-         * components remain unspecified.
+         * functions, six typed ports, eleven measures of performance, and the operational control
+         * state machine. The features below add required stores and externally declared execution
+         * resource characteristics. Internal components remain unspecified.
          */
 
         ref #requiredStore item requiredRecords : 'Controlled Framework Record Set';

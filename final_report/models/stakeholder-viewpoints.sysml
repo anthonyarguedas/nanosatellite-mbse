@@ -85,6 +85,7 @@ package StakeholderViewpoints {
                 ::'Academic Nanosatellite EPS Development Enterprise';
         expose FrameworkCriticalProperties::'Measured Nanosatellite EPS Engineering Framework';
         expose FrameworkBlackBoxSpecification::'Specified Nanosatellite EPS Engineering Framework';
+        expose FrameworkOperationalState::*;
         expose FrameworkSystemRequirements::*;
         expose FrameworkDesignConstraints::*;
     }
@@ -99,6 +100,7 @@ package StakeholderViewpoints {
         expose FrameworkEffectivenessParametrics::*;
         expose FrameworkCriticalProperties::*;
         expose FrameworkBlackBoxSpecification::*;
+        expose FrameworkOperationalState::*;
         expose FrameworkSystemRequirements::*;
         expose FrameworkDesignConstraints::*;
     }
@@ -117,6 +119,7 @@ package StakeholderViewpoints {
         expose FrameworkCriticalProperties::'Framework Evaluation Manifest';
         expose FrameworkCriticalProperties::'Measured Nanosatellite EPS Engineering Framework';
         expose FrameworkBlackBoxSpecification::'Specified Nanosatellite EPS Engineering Framework';
+        expose FrameworkOperationalState::*;
         expose FrameworkSystemRequirements::*;
         expose FrameworkDesignConstraints::*;
     }

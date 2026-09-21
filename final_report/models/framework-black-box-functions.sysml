@@ -160,11 +160,19 @@ package FrameworkExchangeDefinitions {
     }
 
     item def 'Change Evidence Package' {
+        attribute correct : Boolean;
+        item requestAssessment : 'Change Request Assessment';
+        item revision : 'Change Revision Package';
         item impact : 'Change Impact Assessment';
         item results : 'Analysis Result Package';
         item chainAssessment : 'Evidence Chain Assessment';
         item 'verification' : 'Verification Evidence';
         item discrepancies : 'Discrepancy Set';
+        doc
+        /* Correct is true only when the request is assessable, the authorized revision has a new
+         * baseline identity, and every affected result, verification item, trace, and discrepancy
+         * passes its predeclared check.
+         */
     }
 
     item def 'Candidate Comparison Request' {
@@ -205,12 +213,18 @@ package FrameworkExchangeDefinitions {
     }
 
     item def 'Candidate Comparison Package' {
+        attribute complete : Boolean;
+        item basisAssessment : 'Comparison Basis Assessment';
         item protocol : 'Comparison Protocol';
         item rawResults : 'Analysis Result Package';
         item feasibility : 'Candidate Feasibility Assessment';
         item comparison : 'Candidate Comparison Assessment';
         item sensitivityAndUncertainty : 'Sensitivity and Uncertainty Assessment';
         item discrepancies : 'Discrepancy Set';
+        doc
+        /* Complete is true only when the common basis is compatible, all requested candidate
+         * analyses complete, and every mandatory package element is present.
+         */
     }
 
     item def 'Design Review Request' {
@@ -254,8 +268,13 @@ package FrameworkExchangeDefinitions {
     }
 
     item def 'Review Status' {
+        attribute packageComplete : Boolean;
         item reviewOutcome : 'Review Outcome';
         item discrepancies : 'Discrepancy Set';
+        doc
+        /* Package complete restates the review-package completeness verdict at the terminal
+         * boundary. Critical-finding resolution remains controlled by the reviewer outcome.
+         */
     }
 } // package FrameworkExchangeDefinitions
 

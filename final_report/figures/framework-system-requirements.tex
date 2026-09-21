@@ -3,7 +3,7 @@
   font=\sffamily,
   line width=0.7pt,
   root/.style={draw,align=left,text width=14.8cm,minimum height=1.45cm,inner sep=6pt,fill=blue!4,font=\scriptsize},
-  category/.style={draw,align=center,text width=1.85cm,minimum height=4.55cm,inner sep=4pt,fill=white,font=\tiny},
+  category/.style={draw,align=center,text width=1.58cm,minimum height=4.55cm,inner sep=3pt,fill=white,font=\tiny},
   refine/.style={dashed,-{Latex[length=2.0mm,width=1.4mm]}}
 ]
   \draw (0,0) rectangle (17,10.0);
@@ -14,71 +14,79 @@
   \node[root] (sys) at (8.5,8.15) {
     \guillemotleft requirement\guillemotright\quad
     \textbf{SYS-00 Framework Black-Box System Requirements}\\
-    Every candidate framework realization shall satisfy all 52 derived leaf requirements and both
+    Every candidate framework realization shall satisfy all 58 derived leaf requirements and both
     retained project-imposed design constraints.
   };
 
-  \node[category] (fun) at (1.3,3.45) {
+  \node[category] (fun) at (1.05,3.45) {
     \guillemotleft requirement\guillemotright\\[2pt]
     \textbf{FUN-00}\\
     \textbf{Functional}\\[4pt]
     FUN-01--FUN-22\\
-    22 leaf requirements\\[5pt]
-    Scenario-derived service behavior
+    22 leaves\\[5pt]
+    Scenario service behavior
   };
-  \node[category] (int) at (3.70,3.45) {
+  \node[category] (ctl) at (3.18,3.45) {
+    \guillemotleft requirement\guillemotright\\[2pt]
+    \textbf{CTL-00}\\
+    \textbf{Control}\\[4pt]
+    CTL-01--CTL-06\\
+    6 leaves\\[5pt]
+    States, guards, and recovery
+  };
+  \node[category] (int) at (5.31,3.45) {
     \guillemotleft requirement\guillemotright\\[2pt]
     \textbf{INT-00}\\
     \textbf{Interfaces}\\[4pt]
     INT-01--INT-08\\
-    8 leaf requirements\\[5pt]
+    8 leaves\\[5pt]
     Typed contracts and transfer integrity
   };
-  \node[category] (sto) at (6.10,3.45) {
+  \node[category] (sto) at (7.44,3.45) {
     \guillemotleft requirement\guillemotright\\[2pt]
     \textbf{STO-00}\\
     \textbf{Stores}\\[4pt]
     STO-01--STO-04\\
-    4 leaf requirements\\[5pt]
-    Retention, retrieval, and immutability
+    4 leaves\\[5pt]
+    Retention and immutability
   };
-  \node[category] (per) at (8.50,3.45) {
+  \node[category] (per) at (9.57,3.45) {
     \guillemotleft requirement\guillemotright\\[2pt]
     \textbf{PER-00}\\
     \textbf{Performance}\\[4pt]
     PER-01--PER-11\\
-    11 leaf requirements\\[5pt]
-    Acceptance gates and comparative measures
+    11 leaves\\[5pt]
+    Gates and comparative measures
   };
-  \node[category] (qlt) at (10.90,3.45) {
+  \node[category] (qlt) at (11.70,3.45) {
     \guillemotleft requirement\guillemotright\\[2pt]
     \textbf{QLT-00}\\
     \textbf{Quality}\\[4pt]
     QLT-01--QLT-05\\
-    5 leaf requirements\\[5pt]
-    Integrity and decision transparency
+    5 leaves\\[5pt]
+    Integrity and transparency
   };
-  \node[category] (res) at (13.30,3.45) {
+  \node[category] (res) at (13.83,3.45) {
     \guillemotleft requirement\guillemotright\\[2pt]
     \textbf{RES-00}\\
     \textbf{Resources}\\[4pt]
     RES-01--RES-02\\
-    2 leaf requirements\\[5pt]
-    Declared and reconstructable environment
+    2 leaves\\[5pt]
+    Declared environment
   };
-  \node[category] (dc) at (15.70,3.45) {
+  \node[category] (dc) at (15.95,3.45) {
     \guillemotleft design constraint\guillemotright\\[2pt]
     \textbf{DC-00}\\
     \textbf{Project constraints}\\[4pt]
     DC-01--DC-02\\
-    2 leaf constraints\\[5pt]
-    Textual SysML v2 and version control
+    2 constraints\\[5pt]
+    SysML v2 and version control
   };
 
-  \draw[dashed] (0.9,6.25) -- (16.1,6.25);
+  \draw[dashed] (0.75,6.25) -- (16.25,6.25);
   \draw[refine] (8.5,6.25) -- node[right,font=\tiny]
     {\guillemotleft refine\guillemotright} (sys.south);
-  \foreach \n in {fun,int,sto,per,qlt,res,dc} {
+  \foreach \n in {fun,ctl,int,sto,per,qlt,res,dc} {
     \draw[refine] (\n.north) -- (\n.north |- 0,6.25);
   }
 \end{tikzpicture}

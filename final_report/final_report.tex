@@ -458,19 +458,35 @@ DC-01 and DC-02 originate in the project technical baseline. DC-01 requires an a
 The remaining candidates are classified elsewhere. The two contrasting cases and unchanged common core remain mission acceptance requirement G-04 and MOP-04--MOP-05. Lightweight adoption, effort, and cost remain comparative MOPs and MOEs because the review provides no hard resource ceiling for CubeSat and university missions \citep[Sec.~5.1 and Table~5]{buruso2026modelbased}. Single-person execution, entry at detailed design, and the absence of formal review gates remain project lifecycle tailoring in Manage System Development. Named products, formats, and protocols remain candidate physical architecture choices. The reviews favor context-driven selection, modularity, explicit interfaces, and verified transfers \citep[Sec.~5.1]{buruso2026modelbased} \citep[Table~13]{rostamnia2026digitaltwin} \citep[Sec.~4.2.3]{rojasramirez2022comparative}.
 
 \paragraph{Complete black-box system specification.}
-The preceding analyses are consolidated in the system definition in Figure~\ref{fig:framework-black-box-specification}. The specified framework inherits the six service functions, six typed boundary ports, and eleven MOPs. It adds a required record-set reference and two externally declared resource characteristics. The record set states which information must remain controlled and retrievable without selecting an internal repository, file format, or deployment. The resource characteristics state the minimum execution environment and runtime dependencies without imposing a product.
+The preceding analyses are consolidated in the system definition in Figure~\ref{fig:framework-black-box-specification}. The specified framework inherits the six service functions, six typed boundary ports, eleven MOPs, and its operational control state machine. It adds a required record-set reference and two externally declared resource characteristics. The record set states which information must remain controlled and retrievable without selecting an internal repository, file format, or deployment. The resource characteristics state the minimum execution environment and runtime dependencies without imposing a product.
 
 \begin{figure}[H]
     \centering
     \resizebox{\linewidth}{!}{\input{figures/framework-black-box-specification.tex}}
-    \caption{Complete black-box system definition of the framework. Functions, ports, stores, properties, and resource declarations are externally observable features. No internal component is specified.}
+    \caption{Complete black-box system definition of the framework. Functions, ports, stores, properties, state behavior, and resource declarations are externally observable features. No internal component is specified.}
     \label{fig:framework-black-box-specification}
 \end{figure}
 
 The framework has no mission-evidenced mass, volume, or power allocation at this abstraction. Its realizations may distribute software, data, and procedures across different computing resources. RES-01 and RES-02 therefore require a declared and reconstructable execution footprint. Direct cost and adoption effort remain measured comparison properties. Concrete computing, storage, and network allocations belong to candidate physical architectures.
 
+\paragraph{System state behavior.}
+OOSEM uses the system state machine to integrate scenario actions and specify when the black-box functions may execute \citep[Sec.~17.3.3]{friedenthal2014practical}. SM-01 in Figure~\ref{fig:framework-operational-state} applies this control to one selected EPS case and baseline context. Separate occurrences may control separate contexts, so this model leaves implementation concurrency and throughput open.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/framework-operational-state.tex}}
+    \caption{Black-box operational control states, service invocations, outcome guards, and recovery paths. Grouped arrows summarize equivalent typed transitions recorded individually in the SysML v2 model.}
+    \label{fig:framework-operational-state}
+\end{figure}
+
+The context starts in ST-01 Unconfigured. An accepted Case Configuration Request invokes F-02 in ST-02 Configuring. A ready Configuration Status establishes ST-03 Controlled Baseline Ready. This state asserts that the selected context has a complete, compatible, approved configuration and an immutable baseline. A non-ready status enters ST-09 Discrepancy Open while preserving any prior accepted baseline.
+
+ST-03 dispatches the five remaining request types to ST-04 through ST-08 and invokes F-01, F-03, F-04, F-05, or F-06 respectively. Return to ST-03 requires the corresponding typed outcome guard: available and valid evidence, successful reproduction, a correct change package, a complete comparison package, or a complete review package with all critical findings resolved. The complement of each guard enters ST-09. Review outcome authority remains with the reviewer. A successful change identifies a new baseline before ST-03 is re-entered, while the target baseline remains immutable.
+
+Recovery requires a verified corrected request or an Evidence Chain Request against corrected records. The latter enters ST-10 Recovering and runs F-01 as a controlled revalidation. Only an available valid chain returns to ST-03. Residual gaps return to ST-09. INT-07 remains an entry condition for every request event, and an INT-08 transfer rejection leaves the state and controlled content unchanged. These rules are formalized by transitions T-01--T-27 and operational control requirements CTL-01--CTL-06.
+
 \paragraph{Derived mandatory system requirements.}
-Figure~\ref{fig:framework-system-requirements} organizes 52 derived leaf requirements and the two retained design constraints under SYS-00. The category requirements are organizational parents rather than additional acceptance obligations. All 54 leaves are mandatory, so each candidate framework physical architecture must receive a passing verdict for every leaf before the G-00 eligibility rule permits comparison ranking.
+Figure~\ref{fig:framework-system-requirements} organizes 58 derived leaf requirements and the two retained design constraints under SYS-00. The category requirements are organizational parents rather than additional acceptance obligations. All 60 leaves are mandatory, so each candidate framework physical architecture must receive a passing verdict for every leaf before the G-00 eligibility rule permits comparison ranking.
 
 \begin{figure}[H]
     \centering
@@ -505,15 +521,34 @@ Each derived leaf carries SysML v2 \texttt{BlackBoxRequirementTrace} metadata. T
     FUN-11 & Accept a design-change request for analysis only when it identifies the change and an available immutable target baseline. & SC-04 / G-01, G-03 & T \\
     FUN-12 & Identify the requirements, interfaces, assumptions, analyses, verification evidence, traces, and coverage gaps affected by a change. & SC-04 / G-01, G-03 & A, T \\
     FUN-13 & Validate every regenerated result, verification item, trace relation, and discrepancy against the revised baseline. & SC-04 / G-01, G-03 & T \\
-    FUN-14 & Issue a change package containing the request assessment, impact, revision, raw results, chain assessment, verification, and discrepancies. & SC-04 / G-01, G-03 & I, D \\
+    FUN-14 & Issue a change package containing correctness status, request assessment, impact, revision, raw results, chain assessment, verification, and discrepancies. & SC-04 / G-01, G-03 & I, D \\
     FUN-15 & Confirm at least two identified EPS candidates and one common controlled comparison basis before execution. & SC-05 / G-01, G-03 & I, T \\
     FUN-16 & Classify each EPS candidate against every mandatory EPS requirement and constraint before ranking. & SC-05 / G-01 & A, T \\
     FUN-17 & Compare only feasible EPS candidates using raw MOPs, Pareto relations, and a scoring rule fixed before results are observed. & SC-05 / G-01 & A, T \\
-    FUN-18 & Issue a comparison package containing the protocol, raw results, feasibility, Pareto relations, scores, sensitivity, uncertainty, and discrepancies. & SC-05 / G-01, G-03 & I \\
+    FUN-18 & Issue a comparison package containing completeness status, basis assessment, protocol, raw results, feasibility, Pareto relations, scores, sensitivity, uncertainty, and discrepancies. & SC-05 / G-01, G-03 & I \\
     FUN-19 & Assemble each named claim, controlled model, trace, assumption, raw result, uncertainty, verification item, discrepancy, and reproduction instruction needed for review. & SC-06 / G-01, G-03 & I, T \\
     FUN-20 & Apply the common controlled reproduction protocol when a reviewer designates an analysis for reproduction. & SC-03, SC-06 / G-02, G-03 & D, T \\
     FUN-21 & Link every review finding to its claim, evidence, disposition, reproduction verdict, trace, and current discrepancy status. & SC-06 / G-01, G-03 & I, T \\
     FUN-22 & Issue and retain review status reflecting package completeness, dispositions, reproduction evidence, reviewer outcome, and open critical findings. & SC-06 / G-01, G-03 & T \\
+    \bottomrule
+\end{longtable}
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.07\linewidth} >{\raggedright\arraybackslash}p{0.52\linewidth} >{\raggedright\arraybackslash}p{0.19\linewidth} >{\raggedright\arraybackslash}p{0.08\linewidth}}
+    \caption{Atomic operational control requirements derived from the system state machine.}\label{tab:framework-control-requirements}\\
+    \toprule
+    \textbf{ID} & \textbf{Normative black-box obligation} & \textbf{Scenario / mission trace} & \textbf{Method} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{ID} & \textbf{Normative black-box obligation} & \textbf{Scenario / mission trace} & \textbf{Method} \\
+    \midrule
+    \endhead
+    CTL-01 & Enter Controlled Baseline Ready only after an accepted case configuration identifies an immutable baseline. & SC-02 / G-01, G-04 & T \\
+    CTL-02 & Dispatch each verified request from the ready state to its declared service state and function, while rejected transfers leave state unchanged. & SC-01--SC-06 / G-01--G-04 & T \\
+    CTL-03 & Return an active service context to ready only when its typed terminal outcome satisfies every applicable acceptance guard. & SC-01, SC-03--SC-06 / G-01--G-03 & T \\
+    CTL-04 & Enter Discrepancy Open for every non-ready, unavailable, invalid, failed, incorrect, incomplete, or unresolved terminal outcome and retain its status. & SC-01--SC-06 / G-03 & I, T \\
+    CTL-05 & Recover through a verified corrected request or controlled evidence-chain revalidation, and return to ready only after valid revalidation. & SC-01--SC-06 / G-01, G-03 & T \\
+    CTL-06 & Preserve selected context and baseline identity across every transition, and create a distinct successor baseline for an accepted change. & SC-01--SC-06 / G-01--G-04 & I, T \\
     \bottomrule
 \end{longtable}
 

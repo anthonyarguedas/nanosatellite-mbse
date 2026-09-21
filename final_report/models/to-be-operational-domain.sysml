@@ -88,6 +88,9 @@ package ToBeOperationalDomain {
             : FrameworkBlackBoxFunctions::'Compare Candidate EPS Architectures';
         perform action supportEarlyDesignReview
             : FrameworkBlackBoxFunctions::'Support Early Design Review';
+
+        exhibit state operationalControl
+            : FrameworkOperationalState::'Framework Operational Control';
     }
 
     concern def 'Early EPS Design Justification' {

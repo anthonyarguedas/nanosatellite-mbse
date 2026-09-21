@@ -26,9 +26,9 @@ package FrameworkSystemRequirements {
     requirement <'SYS-00'> 'Framework Black-Box System Requirements' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* Every candidate framework realization shall satisfy all functional, interface, store,
-         * performance, quality, resource-declaration, and project-imposed design requirements in
-         * this specification.
+        /* Every candidate framework realization shall satisfy all functional, operational control,
+         * interface, store, performance, quality, resource-declaration, and project-imposed design
+         * requirements in this specification.
          */
         require constraint statement {
             doc
@@ -43,6 +43,18 @@ package FrameworkSystemRequirements {
         require constraint statement {
             doc
             /* FUN-01 through FUN-22 are satisfied. */
+        }
+    }
+
+    requirement <'CTL-00'> 'Operational Control Requirements' {
+        subject framework : 'Specified Nanosatellite EPS Engineering Framework';
+        doc
+        /* The framework shall control service invocation, outcomes, discrepancies, and recovery as
+         * specified by SM-01 Framework Operational Control.
+         */
+        require constraint statement {
+            doc
+            /* CTL-01 through CTL-06 are satisfied. */
         }
     }
 
@@ -419,9 +431,9 @@ package FrameworkSystemRequirements {
     requirement <'FUN-14'> 'Assemble Change Evidence Package' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* The framework shall issue a Change Evidence Package containing the request assessment,
-         * impact set, authorized revision, raw analysis results, chain assessment, verification
-         * evidence, and unresolved discrepancies.
+        /* The framework shall issue a Change Evidence Package containing an explicit correctness
+         * status, the request assessment, impact set, authorized revision, raw analysis results,
+         * chain assessment, verification evidence, and unresolved discrepancies.
          */
         require constraint statement {
             doc
@@ -439,7 +451,7 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "F-04.4 Assemble Change Evidence Package";
         verificationMethod = (VerificationMethodKind::inspect, VerificationMethodKind::demo);
         acceptanceCriterion =
-            "Each SC-04 terminal path emits a retained package with the exact controlled inputs, outputs, evidence, and discrepancy status.";
+            "Each SC-04 terminal path emits a retained package with the exact controlled inputs, outputs, evidence, correctness status, and discrepancies.";
     }
 
     requirement <'FUN-15'> 'Validate Candidate Comparison Basis' {
@@ -518,9 +530,9 @@ package FrameworkSystemRequirements {
     requirement <'FUN-18'> 'Issue Candidate Comparison Package' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* The framework shall issue a Candidate Comparison Package containing the fixed protocol,
-         * raw results, feasibility verdicts, Pareto relations, declared scores, sensitivity,
-         * uncertainty, and discrepancies.
+        /* The framework shall issue a Candidate Comparison Package containing an explicit
+         * completeness status, basis assessment, fixed protocol, raw results, feasibility verdicts,
+         * Pareto relations, declared scores, sensitivity, uncertainty, and discrepancies.
          */
         require constraint statement {
             doc
@@ -538,7 +550,7 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "F-05.4 Issue Candidate Comparison";
         verificationMethod = VerificationMethodKind::inspect;
         acceptanceCriterion =
-            "Every required protocol, evidence, result, uncertainty, and discrepancy field is present and resolves to the controlled candidate baselines.";
+            "The completeness status matches package inspection, and every required protocol, evidence, result, uncertainty, and discrepancy field resolves to the controlled candidate baselines.";
     }
 
     requirement <'FUN-19'> 'Assemble Early Design Review Package' {
@@ -646,6 +658,209 @@ package FrameworkSystemRequirements {
         verificationMethod = VerificationMethodKind::test;
         acceptanceCriterion =
             "The published status matches the reviewer outcome and remains non-accepted whenever the package is incomplete or a critical finding remains open.";
+    }
+
+    // Operational control requirements derived from all six mission scenarios.
+    requirement <'CTL-01'> 'Establish Controlled Context Before Operational Work' {
+        subject framework : 'Specified Nanosatellite EPS Engineering Framework';
+        doc
+        /* For each selected work context, the framework shall transition from ST-01 Unconfigured to
+         * ST-02 Configuring only on an accepted Case Configuration Request, and shall enter ST-03
+         * Controlled Baseline Ready only when the resulting Configuration Status is ready and its
+         * Controlled Case Configuration identifies an immutable baseline.
+         */
+        require constraint statement {
+            doc
+            /* Operational work begins only from an accepted controlled case baseline. */
+        }
+    }
+    @BlackBoxRequirementTrace {
+        sourceScenario = FrameworkMissionScenarios::'Configure Framework for EPS Case Scenario';
+        parentMissionRequirement = (
+            FrameworkMissionRequirements::'Complete and Valid Evidence Chains',
+            FrameworkMissionRequirements::'Complete Contrasting Evaluation Cases'
+        );
+        rationale = "The other five scenario families depend on an identified controlled context.";
+        specifiedFeatureIdentifier =
+            "SM-01 states ST-01 through ST-03 and transitions T-01 through T-03";
+        verificationMethod = VerificationMethodKind::test;
+        acceptanceCriterion =
+            "Initial, complete, incomplete, incompatible, and unapproved configuration fixtures enter exactly the states selected by T-01 through T-03, and ST-03 always resolves to the expected immutable baseline.";
+    }
+
+    requirement <'CTL-02'> 'Dispatch Verified Requests to Their Service States' {
+        subject framework : 'Specified Nanosatellite EPS Engineering Framework';
+        doc
+        /* In ST-03 Controlled Baseline Ready, the framework shall dispatch each accepted Evidence
+         * Chain, Reproduction, Design Change, Candidate Comparison, and Design Review Request to
+         * ST-04 through ST-08 respectively, and shall invoke F-01, F-03, F-04, F-05, or F-06 for the
+         * same selected work context. A new accepted Case Configuration Request shall invoke F-02 in
+         * ST-02. A rejected boundary transfer shall leave the current state unchanged.
+         */
+        require constraint statement {
+            doc
+            /* Each verified request selects exactly its declared service state and function. */
+        }
+    }
+    @BlackBoxRequirementTrace {
+        sourceScenario = (
+            FrameworkMissionScenarios::'Maintain EPS Evidence Chain Scenario',
+            FrameworkMissionScenarios::'Configure Framework for EPS Case Scenario',
+            FrameworkMissionScenarios::'Reproduce Analysis Scenario',
+            FrameworkMissionScenarios::'Assess Design Change Scenario',
+            FrameworkMissionScenarios::'Compare Candidate EPS Architectures Scenario',
+            FrameworkMissionScenarios::'Review Early Design Justification Scenario'
+        );
+        parentMissionRequirement = (
+            FrameworkMissionRequirements::'Complete and Valid Evidence Chains',
+            FrameworkMissionRequirements::'Reproduce Reference Analyses',
+            FrameworkMissionRequirements::'Resolve Critical Evidence Inconsistencies',
+            FrameworkMissionRequirements::'Complete Contrasting Evaluation Cases'
+        );
+        rationale =
+            "The state machine integrates the six scenario functions without changing their black-box boundaries.";
+        specifiedFeatureIdentifier = "SM-01 transitions T-04 through T-09";
+        verificationMethod = VerificationMethodKind::test;
+        acceptanceCriterion =
+            "Each accepted request fixture enters its mapped state and invokes its mapped service for the same context, while every rejected-transfer fixture leaves state and controlled content unchanged.";
+    }
+
+    requirement <'CTL-03'> 'Return to Ready Only After an Accepted Outcome' {
+        subject framework : 'Specified Nanosatellite EPS Engineering Framework';
+        doc
+        /* From ST-04 through ST-08, the framework shall return the selected context to ST-03 only
+         * when the typed terminal outcome is respectively an available valid Evidence Chain
+         * Assessment, a successful Reproduction Verdict, a correct Change Evidence Package, a
+         * complete Candidate Comparison Package, or a complete Review Status with all critical
+         * findings resolved.
+         */
+        require constraint statement {
+            doc
+            /* Every nominal transition satisfies its typed outcome guard. */
+        }
+    }
+    @BlackBoxRequirementTrace {
+        sourceScenario = (
+            FrameworkMissionScenarios::'Maintain EPS Evidence Chain Scenario',
+            FrameworkMissionScenarios::'Reproduce Analysis Scenario',
+            FrameworkMissionScenarios::'Assess Design Change Scenario',
+            FrameworkMissionScenarios::'Compare Candidate EPS Architectures Scenario',
+            FrameworkMissionScenarios::'Review Early Design Justification Scenario'
+        );
+        parentMissionRequirement = (
+            FrameworkMissionRequirements::'Complete and Valid Evidence Chains',
+            FrameworkMissionRequirements::'Reproduce Reference Analyses',
+            FrameworkMissionRequirements::'Resolve Critical Evidence Inconsistencies'
+        );
+        rationale =
+            "A ready label must never conceal an incomplete, failed, or unresolved service outcome.";
+        specifiedFeatureIdentifier = "SM-01 transitions T-10, T-12, T-14, T-16, and T-18";
+        verificationMethod = VerificationMethodKind::test;
+        acceptanceCriterion =
+            "Boundary-value fixtures for every nominal outcome enter ST-03 exactly when all applicable guard terms are true.";
+    }
+
+    requirement <'CTL-04'> 'Enter Discrepancy State on Exceptional Outcome' {
+        subject framework : 'Specified Nanosatellite EPS Engineering Framework';
+        doc
+        /* From ST-02 and ST-04 through ST-08, the framework shall enter ST-09 Discrepancy Open when
+         * configuration is non-ready, evidence is unavailable or invalid, reproduction fails, a
+         * change package is incorrect, a comparison package is incomplete, or review evidence is
+         * incomplete or has unresolved critical findings. The triggering status and discrepancies
+         * shall remain retained and visible.
+         */
+        require constraint statement {
+            doc
+            /* Every exceptional terminal outcome produces one explicit discrepancy state. */
+        }
+    }
+    @BlackBoxRequirementTrace {
+        sourceScenario = (
+            FrameworkMissionScenarios::'Maintain EPS Evidence Chain Scenario',
+            FrameworkMissionScenarios::'Configure Framework for EPS Case Scenario',
+            FrameworkMissionScenarios::'Reproduce Analysis Scenario',
+            FrameworkMissionScenarios::'Assess Design Change Scenario',
+            FrameworkMissionScenarios::'Compare Candidate EPS Architectures Scenario',
+            FrameworkMissionScenarios::'Review Early Design Justification Scenario'
+        );
+        parentMissionRequirement =
+            FrameworkMissionRequirements::'Resolve Critical Evidence Inconsistencies';
+        rationale = "Every scenario defines an exceptional path whose status must remain visible.";
+        specifiedFeatureIdentifier = "SM-01 transitions T-03, T-11, T-13, T-15, T-17, and T-19";
+        verificationMethod = (VerificationMethodKind::inspect, VerificationMethodKind::test);
+        acceptanceCriterion =
+            "Each seeded exceptional outcome enters ST-09, retains the oracle status and discrepancies, and emits no contradictory ready or successful status.";
+    }
+
+    requirement <'CTL-05'> 'Recover Through Controlled Retry and Revalidation' {
+        subject framework : 'Specified Nanosatellite EPS Engineering Framework';
+        doc
+        /* From ST-09 Discrepancy Open, the framework shall accept only a verified corrected service
+         * request or an Evidence Chain Request for controlled revalidation. Revalidation shall enter
+         * ST-10 Recovering and return to ST-03 only when all required records are available and the
+         * corrected chain is valid. A deficient recovery shall return to ST-09 with its residual
+         * discrepancies.
+         */
+        require constraint statement {
+            doc
+            /* Recovery is explicit, controlled, and evidence gated. */
+        }
+    }
+    @BlackBoxRequirementTrace {
+        sourceScenario = (
+            FrameworkMissionScenarios::'Maintain EPS Evidence Chain Scenario',
+            FrameworkMissionScenarios::'Configure Framework for EPS Case Scenario',
+            FrameworkMissionScenarios::'Reproduce Analysis Scenario',
+            FrameworkMissionScenarios::'Assess Design Change Scenario',
+            FrameworkMissionScenarios::'Compare Candidate EPS Architectures Scenario',
+            FrameworkMissionScenarios::'Review Early Design Justification Scenario'
+        );
+        parentMissionRequirement = (
+            FrameworkMissionRequirements::'Complete and Valid Evidence Chains',
+            FrameworkMissionRequirements::'Resolve Critical Evidence Inconsistencies'
+        );
+        rationale =
+            "A discrepancy closes only after a corrected controlled request passes its applicable outcome guard.";
+        specifiedFeatureIdentifier = "SM-01 transitions T-20 through T-27";
+        verificationMethod = VerificationMethodKind::test;
+        acceptanceCriterion =
+            "Corrected, unchanged, and partially corrected fixtures follow the declared retry state. The evidence recovery route reaches ST-03 only after fully valid revalidation, and each service retry remains subject to CTL-03.";
+    }
+
+    requirement <'CTL-06'> 'Preserve Baseline Identity Across Control Transitions' {
+        subject framework : 'Specified Nanosatellite EPS Engineering Framework';
+        doc
+        /* Every SM-01 transition shall preserve the selected context and baseline identity. A
+         * successful controlled change shall assign a distinct successor baseline before ST-03 is
+         * re-entered, while the target baseline remains immutable and retrievable. Failed work and
+         * recovery attempts shall not overwrite either baseline.
+         */
+        require constraint statement {
+            doc
+            /* State change never destroys or silently changes controlled baseline identity. */
+        }
+    }
+    @BlackBoxRequirementTrace {
+        sourceScenario = (
+            FrameworkMissionScenarios::'Maintain EPS Evidence Chain Scenario',
+            FrameworkMissionScenarios::'Configure Framework for EPS Case Scenario',
+            FrameworkMissionScenarios::'Reproduce Analysis Scenario',
+            FrameworkMissionScenarios::'Assess Design Change Scenario',
+            FrameworkMissionScenarios::'Compare Candidate EPS Architectures Scenario',
+            FrameworkMissionScenarios::'Review Early Design Justification Scenario'
+        );
+        parentMissionRequirement = (
+            FrameworkMissionRequirements::'Complete and Valid Evidence Chains',
+            FrameworkMissionRequirements::'Reproduce Reference Analyses',
+            FrameworkMissionRequirements::'Resolve Critical Evidence Inconsistencies',
+            FrameworkMissionRequirements::'Complete Contrasting Evaluation Cases'
+        );
+        rationale =
+            "Every scenario depends on stable context and baseline identity across its control transitions.";
+        specifiedFeatureIdentifier = "SM-01 all states and transitions, STO-04";
+        verificationMethod = (VerificationMethodKind::inspect, VerificationMethodKind::test);
+        acceptanceCriterion =
+            "Observed transition traces preserve the selected context and baseline, accepted changes create the oracle successor identifier, and overwrite attempts leave all prior baselines unchanged and retrievable.";
     }
 
     // Typed interface requirements.
@@ -1496,6 +1711,9 @@ package FrameworkSystemRequirements {
         'Framework Black-Box System Requirements'
         to FrameworkMissionRequirements::'Candidate Framework Eligibility';
     #refinement dependency 'Functional Requirements' to 'Framework Black-Box System Requirements';
+    #refinement dependency
+        'Operational Control Requirements'
+        to 'Framework Black-Box System Requirements';
     #refinement dependency 'Interface Requirements' to 'Framework Black-Box System Requirements';
     #refinement dependency 'Store Requirements' to 'Framework Black-Box System Requirements';
     #refinement dependency
@@ -1531,6 +1749,25 @@ package FrameworkSystemRequirements {
     #refinement dependency 'Coordinate Selected Review Reproduction' to 'Functional Requirements';
     #refinement dependency 'Manage Review Findings' to 'Functional Requirements';
     #refinement dependency 'Issue Early Design Review Status' to 'Functional Requirements';
+
+    #refinement dependency
+        'Establish Controlled Context Before Operational Work'
+        to 'Operational Control Requirements';
+    #refinement dependency
+        'Dispatch Verified Requests to Their Service States'
+        to 'Operational Control Requirements';
+    #refinement dependency
+        'Return to Ready Only After an Accepted Outcome'
+        to 'Operational Control Requirements';
+    #refinement dependency
+        'Enter Discrepancy State on Exceptional Outcome'
+        to 'Operational Control Requirements';
+    #refinement dependency
+        'Recover Through Controlled Retry and Revalidation'
+        to 'Operational Control Requirements';
+    #refinement dependency
+        'Preserve Baseline Identity Across Control Transitions'
+        to 'Operational Control Requirements';
 
     #refinement dependency 'Mission Application Interface Contract' to 'Interface Requirements';
     #refinement dependency 'Research Governance Interface Contract' to 'Interface Requirements';
