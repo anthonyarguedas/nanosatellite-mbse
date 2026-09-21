@@ -7,7 +7,7 @@
 \usepackage{enumitem,pdflscape,float,caption,xurl}
 \usepackage[round,authoryear]{natbib}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
 \usepackage[hidelinks]{hyperref}
 
 \title{An MBSE-Based Framework for the Design and Analysis of Nanosatellite Electrical Power Systems}
@@ -190,7 +190,25 @@ where each $U_i$ maps its MOE to a utility between zero and one. The weights are
 The sets of designated decisions, reference analyses, consistency checks, and the change scenario will be baselined before framework evaluation. This prevents the evaluation from redefining its denominator after observing the results.
 
 \paragraph{Intended to-be domain.}
-In the intended domain, the Academic Nanosatellite EPS Development Enterprise contains the academic mission team and the framework as its system of interest. The framework coordinates the versioned system model, analysis tools, and evidence repository. Reviewers interact with the enterprise as external actors. At mission level, the enterprise use cases are to maintain an EPS evidence chain, reproduce an analysis, assess a design change, compare candidate EPS architectures, and review an early design justification. These use cases refine the mission need and provide the starting point for the black-box analysis in the following activity.
+In the intended domain, the Academic Nanosatellite EPS Development Enterprise contains the academic mission team and the framework as its system of interest. The framework coordinates the versioned system model, analysis tools, and evidence repository. Reviewers interact with the enterprise as external actors. Figure~\ref{fig:to-be-operational-domain} represents this hierarchy as a SysML block definition diagram.
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/to-be-operational-domain.tex}}
+    \caption{To-be operational domain for early nanosatellite EPS design justification. Nested blocks indicate enterprise composition. The framework coordinates the three enterprise resources without asserting an internal architecture. Reviewers remain external to the enterprise.}
+    \label{fig:to-be-operational-domain}
+\end{figure}
+
+At mission level, the enterprise use cases are to maintain an EPS evidence chain, reproduce an analysis, assess a design change, compare candidate EPS architectures, and review an early design justification. Figure~\ref{fig:enterprise-use-cases} depicts the use cases and the reviewer's associations. The mission team remains part of the enterprise, so it does not appear as an external actor.
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/enterprise-use-cases.tex}}
+    \caption{Enterprise use cases for early EPS design justification. The reviewer participates directly in analysis reproduction and early design justification review. The other use cases describe capabilities performed within the enterprise.}
+    \label{fig:enterprise-use-cases}
+\end{figure}
+
+These use cases refine the mission need and provide the starting point for the black-box analysis in the following activity.
 
 \subsubsection{Analyze System Requirements}
 This activity specifies the framework as a black box. It derives requirements from stakeholder needs and defines mission scenarios, system context, interfaces, behavior, performance, states, failures, and design constraints \cite{friedenthal2014practical}.
