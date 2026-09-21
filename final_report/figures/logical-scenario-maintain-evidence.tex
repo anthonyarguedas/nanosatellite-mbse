@@ -1,0 +1,73 @@
+\begin{tikzpicture}[
+  >=Latex,
+  font=\sffamily,
+  flow/.style={-{Latex[length=2mm,width=1.4mm]},line width=0.65pt},
+  action/.style={draw,rounded corners=2pt,align=center,text width=3.45cm,
+    minimum height=0.62cm,inner sep=2pt,fill=white,font=\scriptsize},
+  interface/.style={action,fill=blue!3},
+  shared/.style={action,fill=gray!10},
+  evidence/.style={action,fill=green!5},
+  exception/.style={shared,dashed},
+  decision/.style={diamond,draw,aspect=1.65,inner sep=1pt,minimum width=0.52cm,
+    minimum height=0.42cm,fill=white},
+  guard/.style={fill=white,inner sep=1pt,font=\tiny}
+]
+  \draw (0,0) rectangle (17,14.0);
+  \node[anchor=west,font=\bfseries] at (0.25,13.65)
+    {act [LA-SC-01] Maintain EPS Evidence Chain Logically};
+  \draw (0,13.3) -- (17,13.3);
+  \draw (0,12.55) -- (17,12.55);
+  \foreach \x in {4.25,8.5,12.75} {\draw (\x,0) -- (\x,13.3);}
+  \node[font=\bfseries\scriptsize,align=center] at (2.125,12.92)
+    {Boundary interface\\components};
+  \node[font=\bfseries\scriptsize,align=center] at (6.375,12.92)
+    {Evidence Chain\\Manager [LAP-01]};
+  \node[font=\bfseries\scriptsize,align=center] at (10.625,12.92)
+    {Shared assurance, baseline,\\and workflow components};
+  \node[font=\bfseries\scriptsize,align=center] at (14.875,12.92)
+    {Evidence custody and\\provenance components};
+
+  \node[circle,fill=black,minimum size=5pt,inner sep=0pt] (start) at (2.125,11.75) {};
+  \node[interface] (request) at (2.125,10.85)
+    {[LIF-01] Receive evidence-chain request};
+  \node[shared] (verify) at (10.625,10.85)
+    {[LIN-02] Verify model and evidence transfers};
+  \node[shared] (baseline) at (10.625,9.65)
+    {[LIN-03] Resolve evidence baseline and source revisions};
+  \node[action] (scope) at (6.375,8.45)
+    {Scope designated evidence chain\\\textit{F-01.1}};
+  \node[action] (register) at (6.375,7.25)
+    {Register external artifacts\\\textit{F-01.0}};
+  \node[action] (validate) at (6.375,6.05)
+    {Validate designated evidence chain\\\textit{F-01.2}};
+  \node[decision] (accepted) at (10.625,5.0) {};
+  \node[font=\tiny,anchor=west] at (11.0,5.0) {accepted and valid?};
+  \node[shared] (authorize) at (10.625,3.95)
+    {[LIN-01] Authorize evidence outcome};
+  \node[exception] (discrepancy) at (10.625,2.85)
+    {[LIN-01] Record evidence discrepancy};
+  \node[decision] (merge) at (10.625,1.85) {};
+  \node[action] (issue) at (6.375,1.85)
+    {Issue evidence-chain assessment\\\textit{F-01.3}};
+  \node[evidence] (retain) at (14.875,1.0)
+    {[LIF-06, LIN-04] Retain registrations and assessment};
+  \node[interface] (publish) at (2.125,1.0)
+    {[LIF-01] Publish evidence assessment};
+  \node[circle,draw,double,minimum size=7pt,inner sep=0pt] (final) at (2.125,0.25) {};
+
+  \draw[flow] (start) -- (request);
+  \draw[flow] (request) -- (verify);
+  \draw[flow] (verify) -- (baseline);
+  \draw[flow] (baseline) -| (scope);
+  \draw[flow] (scope) -- (register);
+  \draw[flow] (register) -- (validate);
+  \draw[flow] (validate) -| (accepted);
+  \draw[flow] (accepted) -- node[guard,left]{yes} (authorize);
+  \draw[flow] (accepted) -- node[guard,right]{no} (discrepancy);
+  \draw[flow] (authorize) -- (merge);
+  \draw[flow] (discrepancy) -- (merge);
+  \draw[flow] (merge) -- (issue);
+  \draw[flow] (issue) -| (retain);
+  \draw[flow] (retain) -- (publish);
+  \draw[flow] (publish) -- (final);
+\end{tikzpicture}

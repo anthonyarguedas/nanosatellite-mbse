@@ -77,7 +77,8 @@ package FrameworkLogicalDecomposition {
         /* Mediates IF-06 traffic with the Evidence Repository. */
     }
 
-    // Application components initially correspond one-to-one with the six black-box services.
+    // Service managers realize the six black-box services. The reusable F-03.2 analysis-control
+    // action is assigned separately because it is also invoked by F-04 and F-05.
     part def <'LAP-01'> 'Evidence Chain Manager' :> 'Application Component' {
         doc
         /* Registers externally produced requirement, model, and result revisions, scopes and
@@ -93,6 +94,13 @@ package FrameworkLogicalDecomposition {
     part def <'LAP-03'> 'Analysis Reproduction Manager' :> 'Application Component' {
         doc
         /* Prepares controlled reproduction packages, evaluates results, and issues verdicts. */
+    }
+
+    part def <'LAP-07'> 'Controlled Analysis Coordinator' :> 'Application Component' {
+        doc
+        /* Coordinates the shared controlled-analysis action used by reproduction, change assessment,
+         * and candidate evaluation without selecting an analysis tool or execution technology.
+         */
     }
 
     part def <'LAP-04'> 'Design Change Assessment Manager' :> 'Application Component' {
@@ -167,6 +175,7 @@ package FrameworkLogicalDecomposition {
         part evidenceChainManager : 'Evidence Chain Manager';
         part caseConfigurationManager : 'Case Configuration Manager';
         part analysisReproductionManager : 'Analysis Reproduction Manager';
+        part controlledAnalysisCoordinator : 'Controlled Analysis Coordinator';
         part designChangeAssessmentManager : 'Design Change Assessment Manager';
         part candidateEvaluationManager : 'Candidate Evaluation Manager';
         part designReviewManager : 'Design Review Manager';
