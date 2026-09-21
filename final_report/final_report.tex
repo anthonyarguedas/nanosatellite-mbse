@@ -147,49 +147,104 @@ Enable the academic nanosatellite community to justify early EPS design decision
 
 This statement narrows the general literature needs to the project problem while retaining their causes. It defines the framework's mission independently of the detailed functions or tools that may realize it.
 
-\paragraph{Measures of effectiveness.}
-OOSEM represents measures of effectiveness as mission-level value properties of the enterprise responsible for satisfying the mission need. It binds them to an objective function used to compare and optimize candidate solutions \citep[Sec.~17.3.2]{friedenthal2014practical}. Figure~\ref{fig:framework-effectiveness-parametric} applies the same pattern to the Academic Nanosatellite EPS Development Enterprise. The selected measures operationalize the stakeholder values reported by \citet{buruso2026modelbased} and \citet{vizitiu2025optimizing}, together with the repeatability and assurance concerns synthesized by \citet{rostamnia2026digitaltwin}.
+\paragraph{Mission acceptance requirements.}
+OOSEM defines mission requirements and MOEs during stakeholder needs analysis, then derives the system properties and requirements that contribute to them during system requirements analysis \citep[Secs.~17.3.2--17.3.3]{friedenthal2014practical}. %Section~8.11 models a trade study with common MOE properties, candidate-specific values or distributions, an objective function, and one score for each alternative \citep[Sec.~8.11]{friedenthal2014practical}.
+Requirement satisfaction and comparison ranking therefore serve separate purposes in this study. The selected mission requirements and measures operationalize the stakeholder values reported by \citet{buruso2026modelbased} and \citet{vizitiu2025optimizing}, together with the repeatability and assurance concerns synthesized by \citet{rostamnia2026digitaltwin}. The requirements establish minimum mission success, while the MOEs distinguish among alternatives that achieve that minimum. A candidate framework physical architecture is feasible only after it satisfies the following noncompensable mission requirements and every mandatory system requirement produced by the next activity:
+
+\begin{enumerate}[label=\textbf{G-0\arabic*:},leftmargin=*,itemsep=2pt]
+    \item Every EPS design decision designated for evaluation has a complete and valid evidence chain.
+    \item Every designated reference analysis executes from its controlled baseline and reproduces its reported result within the declared tolerance.
+    \item The evaluation baseline contains no unresolved discrepancy classified as critical.
+    \item Both contrasting EPS cases complete with the common core information model and workflow, and every approved case-specific adaptation is declared.
+\end{enumerate}
+
+Figure~\ref{fig:framework-acceptance-requirements} captures these statements as mission-level requirements. The terms \emph{designated}, \emph{valid}, \emph{controlled baseline}, \emph{declared tolerance}, \emph{critical}, and \emph{common core} state the required decision boundaries without prescribing a solution. System requirements analysis must give them verifiable meanings before candidate architectures are evaluated. Trace coverage, reproduction success, unresolved critical discrepancies, and case completion provide satisfaction evidence for these requirements.
+
+G-01 retains the literature concern with requirements traceability, artifact continuity, and alignment between MBSE products and mission decisions. G-02 and G-03 address reproducibility, error reduction, configuration integrity, data quality, and semantic consistency. G-04 addresses flexibility, reuse, resource fit, and the recurring absence of general frameworks that transfer across applications \citep[Sec.~5.1 and Table~5]{buruso2026modelbased} \citep[Sec.~4.7 and Table~3]{vizitiu2025optimizing} \citep[Secs.~8.4--8.6 and Table~13]{rostamnia2026digitaltwin}. The literature supports including these concerns. Their noncompensability follows from the mission need and the evaluation rule adopted in this study.
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/framework-acceptance-requirements.tex}}
+    \caption{Mission-level acceptance requirements that determine whether a candidate framework physical architecture is eligible for comparison ranking.}
+    \label{fig:framework-acceptance-requirements}
+\end{figure}
+
+\paragraph{Measures of effectiveness for feasible alternatives.}
+OOSEM represents MOEs as mission-level value properties of the enterprise responsible for satisfying the mission need \citep[Sec.~17.3.2]{friedenthal2014practical}. The common properties in Figure~\ref{fig:framework-effectiveness-parametric} apply to every feasible framework alternative. Correct change turnaround and case adaptation operationalize time reduction and flexibility. Independent reproduction and consistency assurance operationalize traceability, error reduction, data quality, and assurance. Framework adoption effort and direct cost operationalize the reported burdens of training, tool selection, customization, integration, and resource mismatch \citep[Sec.~4.7 and Table~3]{vizitiu2025optimizing} \citep[Sec.~5.1 and Table~5]{buruso2026modelbased} \citep[Sec.~6.2]{rojasramirez2022comparative} \citep[Secs.~8.4--8.6]{rostamnia2026digitaltwin}.
+% Candidate-specific values or value distributions are introduced later through the common analysis context described in Section~8.11 of the OOSEM reference.
 
 \begin{figure}[htbp]
     \centering
     \resizebox{\linewidth}{!}{\input{figures/framework-effectiveness-parametric.tex}}
-    \caption{Top-level parametric representation of framework effectiveness and its binding to the measures of effectiveness.}
+    \caption{Literature-grounded mission-level comparison model and its binding to the measures of effectiveness used to rank feasible framework alternatives.}
     \label{fig:framework-effectiveness-parametric}
 \end{figure}
 
-The objective function has the form
+The comparison score has the form
 \begin{equation}
-    E_{\mathrm{framework}}
-    = w_{\mathrm{TC}}U_{\mathrm{TC}}
-    + w_{\mathrm{AR}}U_{\mathrm{AR}}
-    + w_{\mathrm{EC}}U_{\mathrm{EC}}
-    + w_{\mathrm{CP}}U_{\mathrm{CP}}
-    + w_{\mathrm{CRT}}U_{\mathrm{CRT}},
-    \qquad \sum_i w_i = 1,
+    \begin{aligned}
+        S_{\mathrm{framework}}
+        &= w_{\mathrm{CCT}}U_{\mathrm{CCT}}
+        + w_{\mathrm{CAE}}U_{\mathrm{CAE}}
+        + w_{\mathrm{IRE}}U_{\mathrm{IRE}} \\
+        &\quad + w_{\mathrm{FAE}}U_{\mathrm{FAE}}
+        + w_{\mathrm{DFC}}U_{\mathrm{DFC}}
+        + w_{\mathrm{CAS}}U_{\mathrm{CAS}}, \\
+        \sum_i w_i &= 1.
+    \end{aligned}
 \end{equation}
-where each $U_i$ maps its MOE to a utility between zero and one. The weights are explicit decision parameters and will be fixed before candidate architectures are scored. The aggregate supports comparison, while every individual target remains an acceptance criterion so that a high value for one MOE cannot conceal failure in another.
+where each $U_i$ normalizes one MOE to a value between zero and one under the common evaluation protocol. This equation is applied only to feasible alternatives. The weights are framework-level literature-salience parameters derived from community evidence. They do not represent preferences elicited for a particular mission.
+% Their evidence mapping and normalization rule are fixed before candidate results are observed and applied unchanged to both evaluation cases.
 
 \begin{table}[H]
     \centering
     \small
-    \caption{Operational definitions and initial targets for the framework measures of effectiveness.}
+    \caption{Literature-grounded measures for ranking feasible framework alternatives.}
     \label{tab:framework-moes}
-    \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.23\linewidth} X >{\raggedright\arraybackslash}p{0.23\linewidth}}
+    \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.25\linewidth} X >{\raggedright\arraybackslash}p{0.14\linewidth}}
         \toprule
-        \textbf{MOE} & \textbf{Operational definition} & \textbf{Initial target} \\
+        \textbf{MOE} & \textbf{Mission-level meaning} & \textbf{Direction} \\
         \midrule
-        Traceability coverage (\%) & Percentage of designated key design decisions connected to their source need or requirement, design elements, assumptions and input configuration, analysis result, and verification criterion. & 100\% of designated decisions. \\
-        Analysis reproducibility (\%) & Percentage of designated reference analyses that can be executed from the versioned repository and reproduce the reported result within an analysis-specific tolerance. & 100\% of designated analyses. \\
-        Evidence consistency (\%) & Percentage of defined cross-artifact consistency checks that pass without an unresolved discrepancy among requirements, model properties, interfaces, budgets, and analysis inputs. & 100\% of defined checks, with no unresolved discrepancy. \\
-        Cross-case portability (\%) & Percentage of evaluation cases completed with the same core information model and workflow. Case-specific parameters and mappings remain permitted. & 100\% of the two case studies. \\
-        Change response time (h) & Elapsed time required to identify affected evidence, update it, and regenerate the reviewable evidence package for a predefined change scenario. & Less than the measured as-is time for the same scenario. \\
+        Correct change turnaround time (h) & Elapsed enterprise time to identify affected evidence, apply a representative controlled change, and issue a correct reviewable evidence package. & Lower is better. \\
+        Case adaptation effort (person-h) & Human effort needed to apply the common framework core to a contrasting EPS context while declaring its approved parameters, extensions, and mappings. & Lower is better. \\
+        Independent reproduction effort (person-h) & Human effort needed by an independent reproducer to reconstruct and execute a designated analysis from its controlled baseline. & Lower is better. \\
+        Framework adoption effort (person-h) & Human effort needed by a university team to establish the declared minimum environment and complete the reference workflow. & Lower is better. \\
+        Direct framework cost (CAD) & Direct licenses, required services, and computing costs over a declared evaluation period. & Lower is better. \\
+        Consistency assurance effectiveness (\%) & Ability to expose cross-artifact discrepancies while limiting false findings under a controlled evaluation. & Higher is better. \\
         \bottomrule
     \end{tabularx}
 \end{table}
 
-The explicit measures also address the observation by \citet[Sec.~6.2]{rojasramirez2022comparative} that many MBSE demonstrations report limited measured evidence of added value. They make the framework's claimed value assessable in the present project.
+The topic model by \citet[Table~4]{akundi2022textmining}, based on 2,380 MBSE abstracts, provides a quantitative community-level basis for a literature-salience weighting scenario. The relevant topic shares are 15.81\% for systems architecting and management, 15.02\% for requirements specification and analysis, 19.72\% for implementation and practical considerations, 11.53\% for system assurance, and 20.79\% for modeling-language-driven specification and verification. Table~\ref{tab:framework-literature-weights} maps those themes to the six MOEs and normalizes their combined 82.87\% share. The 17.09\% manufacturing and production topic is excluded because that application domain lies outside the six framework evaluation concerns. The implementation and practical-considerations share is divided equally between case adaptation and framework adoption because the source does not distinguish their relative salience.
 
-The sets of designated decisions, reference analyses, consistency checks, and the change scenario will be baselined before framework evaluation. This prevents the evaluation from redefining its denominator after observing the results.
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Literature-salience weights for the aggregate framework comparison.}
+    \label{tab:framework-literature-weights}
+    \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.28\linewidth} X >{\raggedleft\arraybackslash}p{0.12\linewidth}}
+        \toprule
+        \textbf{MOE} & \textbf{Mapped topic from \citet[Table~4]{akundi2022textmining}} & \textbf{Weight} \\
+        \midrule
+        Correct change turnaround time & T2: Requirements specification, representation, and analysis & 0.1812 \\
+        Case adaptation effort & One half of T3: Implementation and practical considerations & 0.1190 \\
+        Independent reproduction effort & T6: Modeling-language-driven system specification and verification & 0.2509 \\
+        Framework adoption effort & One half of T3: Implementation and practical considerations & 0.1190 \\
+        Direct framework cost & T1: Systems architecting and management, including optimization and cost & 0.1908 \\
+        Consistency assurance effectiveness & T5: System assurance & 0.1391 \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+The benefit frequencies reported by \citet[Sec.~4.7 and Table~3]{vizitiu2025optimizing} provide an independent check on the measure selection and directions. Across 81 studies, efficiency appeared in 45.7\%, traceability and error reduction each appeared in 16.0\%, time reduction appeared in 9.9\%, and flexibility appeared in 6.2\%. These findings reinforce the inclusion of effort, change, adaptation, and assurance measures.
+
+The topic proportions measure research attention rather than cardinal utility or effect size. Raw MOE results and uncertainty therefore remain visible, and Pareto comparison precedes aggregate ranking. An equal-weight aggregate provides a reference against which the literature-salience ranking is compared.
+% Utility anchors and curve shapes will be established from the common as-is baseline and declared evaluation bounds during system requirements analysis, then fixed before candidate scores are calculated. The same rules will apply to both case studies, preserving the mission-independent scope.
+
+These measures also address the observation by \citet[Sec.~6.2]{rojasramirez2022comparative} that many MBSE demonstrations report limited measured evidence of added value. At this stage, the SysML model formalizes the common MOE names, quantity types, literature-salience weights, comparison equation, mission acceptance requirements, and eligibility conjunction. It deliberately leaves candidate values, utility mappings, and satisfaction results unset.
+
+% Flowdown to system requirements analysis.
+% The next activity should select mission scenarios that exercise each acceptance requirement and ranking MOE. It should derive the framework's externally observable functions, critical measures of performance, and analysis constraints from those scenarios. It should also distinguish elapsed time, human effort, and direct cost, and require a correct result before any speed or effort value receives comparison credit. This guidance remains at mission level and does not select a toolchain, repository structure, automation strategy, or candidate physical architecture.
 
 \paragraph{Intended to-be domain.}
 In the intended domain, the Academic Nanosatellite EPS Development Enterprise contains the academic mission team and the framework as its system of interest. The framework coordinates the versioned system model, analysis tools, and evidence repository. Reviewers interact with the enterprise as external actors. Figure~\ref{fig:to-be-operational-domain} represents this hierarchy as a SysML block definition diagram.
@@ -201,7 +256,7 @@ In the intended domain, the Academic Nanosatellite EPS Development Enterprise co
     \label{fig:to-be-operational-domain}
 \end{figure}
 
-At mission level, the enterprise use cases are to maintain an EPS evidence chain, reproduce an analysis, assess a design change, compare candidate EPS architectures, and review an early design justification. Figure~\ref{fig:enterprise-use-cases} depicts the use cases and the reviewer's associations. The mission team remains part of the enterprise, so it does not appear as an external actor.
+At mission level, the enterprise use cases are to maintain an EPS evidence chain, configure the framework for an EPS case, reproduce an analysis, assess a design change, compare candidate EPS architectures, and review an early design justification. Figure~\ref{fig:enterprise-use-cases} depicts the use cases and the reviewer's associations. The mission team remains part of the enterprise, so it does not appear as an external actor.
 
 \begin{figure}[htbp]
     \centering

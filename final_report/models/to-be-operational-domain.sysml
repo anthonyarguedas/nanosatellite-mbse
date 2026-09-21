@@ -62,6 +62,15 @@ package ToBeOperationalDomain {
         }
     }
 
+    use case def 'Configure Framework for an EPS Case' {
+        subject enterprise : 'Academic Nanosatellite EPS Development Enterprise';
+        objective {
+            doc
+            /* Establish the declared environment, common information model, workflow, case parameters,
+             * extensions, and mappings needed to apply the framework to a selected EPS context. */
+        }
+    }
+
     use case def 'Reproduce an Analysis' {
         subject enterprise : 'Academic Nanosatellite EPS Development Enterprise';
         actor reviewer : Reviewer;
@@ -99,6 +108,7 @@ package ToBeOperationalDomain {
     }
 
     #refinement dependency 'Maintain EPS Evidence Chain' to earlyEPSDesignJustification;
+    #refinement dependency 'Configure Framework for an EPS Case' to earlyEPSDesignJustification;
     #refinement dependency 'Reproduce an Analysis' to earlyEPSDesignJustification;
     #refinement dependency 'Assess a Design Change' to earlyEPSDesignJustification;
     #refinement dependency 'Compare Candidate EPS Architectures' to earlyEPSDesignJustification;
