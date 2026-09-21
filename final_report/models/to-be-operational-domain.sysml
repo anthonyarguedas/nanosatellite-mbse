@@ -1,13 +1,18 @@
 // SysML v2 representation of the intended to-be operational domain.
 package ToBeOperationalDomain {
-    private import FrameworkEffectivenessParametrics::'Academic Nanosatellite EPS Development Enterprise';
-    private import ModelingMetadata::refinement;
+    private import FrameworkEffectivenessParametrics
+            ::'Academic Nanosatellite EPS Development Enterprise';
 
     metadata def systemOfInterest;
 
     part def 'Academic Mission Team' {
         doc
         /* The team applies the enterprise capability to a nanosatellite EPS study. */
+    }
+
+    part def 'Academic Researcher' {
+        doc
+        /* The researcher evaluates, compares, and extends framework methods and analyses. */
     }
 
     part def Reviewer {
@@ -33,7 +38,8 @@ package ToBeOperationalDomain {
     part def 'Nanosatellite EPS Engineering Framework' {
         doc
         /* The system of interest coordinates these enterprise resources. This abstraction does not
-         * select a deployment, toolchain, or internal architecture. */
+         * select a deployment, toolchain, or internal architecture.
+         */
 
         ref part systemModel : 'Versioned System Model';
         ref part analysisTools : 'Analysis Tools';
@@ -43,12 +49,14 @@ package ToBeOperationalDomain {
     concern def 'Early EPS Design Justification' {
         subject enterprise : 'Academic Nanosatellite EPS Development Enterprise';
         stakeholder missionTeam : 'Academic Mission Team';
+        stakeholder researcher : 'Academic Researcher';
         stakeholder reviewer : Reviewer;
         doc
         /* Enable the academic nanosatellite community to justify early EPS design decisions by
          * maintaining a traceable, reproducible, consistent, and reusable evidence chain from
          * stakeholder needs and requirements through architecture, assumptions, analyses, and
-         * verification results across contrasting mission contexts. */
+         * verification results across contrasting mission contexts.
+         */
     }
 
     concern earlyEPSDesignJustification : 'Early EPS Design Justification';
@@ -58,7 +66,8 @@ package ToBeOperationalDomain {
         objective {
             doc
             /* Maintain linked, versioned evidence from needs and requirements through architecture,
-             * assumptions, analyses, and verification results. */
+             * assumptions, analyses, and verification results.
+             */
         }
     }
 
@@ -67,7 +76,8 @@ package ToBeOperationalDomain {
         objective {
             doc
             /* Establish the declared environment, common information model, workflow, case parameters,
-             * extensions, and mappings needed to apply the framework to a selected EPS context. */
+             * extensions, and mappings needed to apply the framework to a selected EPS context.
+             */
         }
     }
 
@@ -77,7 +87,8 @@ package ToBeOperationalDomain {
         objective {
             doc
             /* Re-execute a designated analysis from its recorded configuration and compare its output
-             * against the reported result. */
+             * against the reported result.
+             */
         }
     }
 
@@ -86,7 +97,8 @@ package ToBeOperationalDomain {
         objective {
             doc
             /* Identify affected evidence, update the controlled configuration, and regenerate a
-             * reviewable evidence package. */
+             * reviewable evidence package.
+             */
         }
     }
 
@@ -107,21 +119,15 @@ package ToBeOperationalDomain {
         }
     }
 
-    #refinement dependency 'Maintain EPS Evidence Chain' to earlyEPSDesignJustification;
-    #refinement dependency 'Configure Framework for an EPS Case' to earlyEPSDesignJustification;
-    #refinement dependency 'Reproduce an Analysis' to earlyEPSDesignJustification;
-    #refinement dependency 'Assess a Design Change' to earlyEPSDesignJustification;
-    #refinement dependency 'Compare Candidate EPS Architectures' to earlyEPSDesignJustification;
-    #refinement dependency 'Review an Early Design Justification' to earlyEPSDesignJustification;
-
     part 'To-be Operational Domain' {
         part enterprise : 'Academic Nanosatellite EPS Development Enterprise' {
             part missionTeam : 'Academic Mission Team';
+            part researcher : 'Academic Researcher';
             #systemOfInterest part framework : 'Nanosatellite EPS Engineering Framework';
             part systemModel : 'Versioned System Model';
             part analysisTools : 'Analysis Tools';
             part evidenceRepository : 'Evidence Repository';
         }
-        part reviewer : Reviewer[0..*];
+        part reviewer : Reviewer [0..*];
     }
-}
+} // package ToBeOperationalDomain

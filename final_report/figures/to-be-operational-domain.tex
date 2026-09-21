@@ -41,31 +41,36 @@
     {\guillemotleft block\guillemotright\\[-1pt]
      \textbf{enterprise : Academic Nanosatellite EPS Development Enterprise}};
 
-  \node[block] (team) at (3.05,5.9)
+  \node[block] (team) at (3.05,6.65)
     {\guillemotleft part\guillemotright\\
-     \textbf{mission team : Academic Mission Team}};
+     \textbf{mission team :}\\
+     \textbf{Academic Mission Team}};
+  \node[block] (researcher) at (3.05,4.45)
+    {\guillemotleft part\guillemotright\\
+     \textbf{researcher :}\\
+     \textbf{Academic Researcher}};
   \node[framework] (framework) at (8.75,5.9)
     {\guillemotleft system of interest\guillemotright\\
      \textbf{framework : Nanosatellite EPS Engineering Framework}};
 
-  \node[resource] (model) at (2.9,2.1)
+  \node[resource] (model) at (2.9,1.95)
     {\guillemotleft part\guillemotright\\
      \textbf{system model : Versioned System Model}};
-  \node[resource] (tools) at (6.7,2.1)
+  \node[resource] (tools) at (6.7,1.95)
     {\guillemotleft part\guillemotright\\
      \textbf{analysis tools : Analysis Tools}};
-  \node[resource] (repository) at (10.5,2.1)
+  \node[resource] (repository) at (10.5,1.95)
     {\guillemotleft part\guillemotright\\
      \textbf{evidence repository : Evidence Repository}};
 
   % The framework references and coordinates enterprise resources without
   % defining its internal architecture.
-  \draw[coordination] (framework.south) -- (8.75,3.85);
-  \node[anchor=west,fill=white,inner sep=1.5pt] at (8.87,4.45) {\footnotesize coordinates};
-  \draw (2.9,3.85) -- (10.5,3.85);
-  \draw[coordination] (2.9,3.85) -- (model.north);
-  \draw[coordination] (6.7,3.85) -- (tools.north);
-  \draw[coordination] (10.5,3.85) -- (repository.north);
+  \draw[coordination] (framework.south) -- (8.75,3.25);
+  \node[anchor=west,fill=white,inner sep=1.5pt] at (8.87,4.15) {\footnotesize coordinates};
+  \draw (2.9,3.25) -- (10.5,3.25);
+  \draw[coordination] (2.9,3.25) -- (model.north);
+  \draw[coordination] (6.7,3.25) -- (tools.north);
+  \draw[coordination] (10.5,3.25) -- (repository.north);
 
   % External reviewer within the operational domain.
   \node[block] (reviewer) at (14.85,5.9)

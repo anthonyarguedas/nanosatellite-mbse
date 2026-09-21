@@ -120,12 +120,30 @@ This activity establishes the prerequisites for model development. It defines th
 This activity characterizes the current operational domain, identifies stakeholder problems and their causes, and defines mission needs, measures of effectiveness, and the intended future domain. It establishes why the framework is needed and what successful use must achieve \citep{friedenthal2014practical}.
 
 \paragraph{Stakeholder and evidence basis.}
-The stakeholder population is the academic community concerned with nanosatellite EPS development and MBSE research. Relevant stakeholder groups within this population include university mission teams that apply the framework, researchers who develop methods and analyses, and reviewers who assess or reproduce reported results. Their concerns motivate corresponding application, research, and independent review viewpoints in the framework model. The systematic literature reviews cited below serve as aggregated evidence of the concerns and values expressed by this population. The resulting synthesis is a literature based stakeholder analysis rather than a collection of requirements from one mission or institution.
+The stakeholder population is the academic community concerned with nanosatellite EPS development and MBSE research. The framework model represents three stakeholder roles. The Academic Mission Team applies the framework to an EPS study. The Academic Researcher evaluates and extends its methods and analyses. The Reviewer independently assesses or reproduces reported results. The review literature cited below provides aggregated evidence for their concerns. The viewpoints represent literature-grounded concern sets.
 
 The review by \citet[Sec.~5.1 and Table~5]{buruso2026modelbased} identifies fragmented toolchains, weak interoperability, resource mismatch for small missions, incomplete lifecycle coverage, and weak alignment between MBSE artifacts and mission objectives. The broader review by \citet[Sec.~4.7 and Table~3]{vizitiu2025optimizing} identifies efficiency, collaboration, comprehensiveness, traceability, error reduction, time reduction, and flexibility as recurring sources of stakeholder value. The digital twin review by \citet[Secs.~8.4--8.6 and Tables~8--13]{rostamnia2026digitaltwin} adds evidence concerning phase-local models, data quality, synchronization, model uncertainty, interoperability, and validation maturity. This work has a space robotics scope yet provides data, model, and assurance concerns that also apply to evidence-producing digital models.
 
+These sources support three distinct perspectives. The application concern combines workflow usability, collaboration, lifecycle coverage, interoperability, resource fit, adoption effort, and cost \citep{buruso2026modelbased,vizitiu2025optimizing,rojasramirez2022comparative}. The research concern combines explicit methods and assumptions, reusable case adaptations, uncertainty, raw results, and measured evidence \citep{buruso2026modelbased,rostamnia2026digitaltwin,rojasramirez2022comparative,akundi2022textmining}. The independent review concern combines controlled baselines, provenance, traceability, verification evidence, discrepancy status, and reproducibility \citep{buruso2026modelbased,rostamnia2026digitaltwin,rojasramirez2022comparative}. In the solution model, each concern identifies its stakeholder role, each viewpoint frames that concern, and each concrete view asserts conformance to its viewpoint. Table~\ref{tab:framework-stakeholder-viewpoints} states the corresponding model selection rule.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Literature-grounded stakeholder viewpoints and model selection rules.}
+    \label{tab:framework-stakeholder-viewpoints}
+    \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.18\linewidth} >{\raggedright\arraybackslash}p{0.28\linewidth} X}
+        \toprule
+        \textbf{Viewpoint and stakeholder} & \textbf{Concern} & \textbf{Selected model information} \\
+        \midrule
+        Application, Academic Mission Team & Apply the framework within university mission constraints with a usable workflow and declared adaptations. & Operational domain, enterprise use cases, mission requirements, framework resources, adaptation points, and effort, cost, and assurance measures. \\
+        Research, Academic Researcher & Evaluate, compare, and extend the framework through explicit and reusable evidence. & Sources and rationale, requirements, methods, assumptions, case configurations, raw measure results, analyses, uncertainty, and limitations. \\
+        Independent review, Reviewer & Assess claims from a controlled baseline and reproduce designated analyses. & Provenance, configuration, requirement and evidence traces, verification criteria and results, discrepancies, assumptions, uncertainty, and reproduction instructions. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
 \paragraph{As-is domain and causal analysis.}
-The as-is operational domain includes academic mission teams and reviewers, the engineering, modeling, analysis, and repository systems they use, and the artifacts exchanged among them. These artifacts include requirements, architecture models, power budgets, assumptions, analysis scripts, and simulation results. The elements exist today, but their information flows often depend on manual transfer and local conventions. This creates several causes of the evidence fragmentation stated in the Introduction.
+The as-is operational domain includes academic mission teams, researchers, and reviewers, the engineering, modeling, analysis, and repository systems they use, and the artifacts exchanged among them. These artifacts include requirements, architecture models, power budgets, assumptions, analysis scripts, and simulation results. The elements exist today, but their information flows often depend on manual transfer and local conventions. This creates several causes of the evidence fragmentation stated in the Introduction.
 
 The fishbone diagram in Figure~\ref{fig:stakeholder-causal-analysis} is an external causal analysis aid rather than a formal OOSEM model. However, such a diagram may be referenced from a SysML model's Parametrics package, or formalized later through a tailored profile when required \citep[Sec.~17.3.2]{friedenthal2014practical}. The method, resource, toolchain, and governance branches of the fishbone synthesize the review by \citet{buruso2026modelbased}. The validation and data branches also use the findings of \citet{rostamnia2026digitaltwin}. The artifact branch restates the project problem at a more detailed level. The resource and toolchain branches also reflect the comparative space-sector review by \citet{rojasramirez2022comparative}. It identifies training and licensing costs, usability, manual data transfer, and transfer verification as practical constraints on MBSE adoption. These findings reinforce the existing causes of limited resource fit and weakened evidence continuity.
 
@@ -149,18 +167,9 @@ This statement narrows the general literature needs to the project problem while
 
 \paragraph{Mission acceptance requirements.}
 OOSEM defines mission requirements and MOEs during stakeholder needs analysis, then derives the system properties and requirements that contribute to them during system requirements analysis \citep[Secs.~17.3.2--17.3.3]{friedenthal2014practical}. %Section~8.11 models a trade study with common MOE properties, candidate-specific values or distributions, an objective function, and one score for each alternative \citep[Sec.~8.11]{friedenthal2014practical}.
-Requirement satisfaction and comparison ranking therefore serve separate purposes in this study. The selected mission requirements and measures operationalize the stakeholder values reported by \citet{buruso2026modelbased} and \citet{vizitiu2025optimizing}, together with the repeatability and assurance concerns synthesized by \citet{rostamnia2026digitaltwin}. The requirements establish minimum mission success, while the MOEs distinguish among alternatives that achieve that minimum. A candidate framework physical architecture is feasible only after it satisfies the following noncompensable mission requirements and every mandatory system requirement produced by the next activity:
+The selected mission requirements and measures operationalize the stakeholder values reported by \citet{buruso2026modelbased} and \citet{vizitiu2025optimizing}, together with the repeatability and assurance concerns synthesized by \citet{rostamnia2026digitaltwin}. The requirements establish minimum mission success, while the MOEs distinguish among alternatives that achieve that minimum. A candidate framework physical architecture is feasible only after it satisfies the noncompensable mission requirements captured in Figure~\ref{fig:framework-acceptance-requirements} and every mandatory system requirement produced by the next activity. System requirements analysis must give the terms he terms \emph{designated}, \emph{valid}, \emph{controlled baseline}, \emph{declared tolerance}, \emph{critical}, and \emph{common core} verifiable meanings before candidate architectures are evaluated. Trace coverage, reproduction success, unresolved critical discrepancies, and case completion provide satisfaction evidence for these requirements.
 
-\begin{enumerate}[label=\textbf{G-0\arabic*:},leftmargin=*,itemsep=2pt]
-    \item Every EPS design decision designated for evaluation has a complete and valid evidence chain.
-    \item Every designated reference analysis executes from its controlled baseline and reproduces its reported result within the declared tolerance.
-    \item The evaluation baseline contains no unresolved discrepancy classified as critical.
-    \item Both contrasting EPS cases complete with the common core information model and workflow, and every approved case-specific adaptation is declared.
-\end{enumerate}
-
-Figure~\ref{fig:framework-acceptance-requirements} captures these statements as mission-level requirements. The terms \emph{designated}, \emph{valid}, \emph{controlled baseline}, \emph{declared tolerance}, \emph{critical}, and \emph{common core} state the required decision boundaries without prescribing a solution. System requirements analysis must give them verifiable meanings before candidate architectures are evaluated. Trace coverage, reproduction success, unresolved critical discrepancies, and case completion provide satisfaction evidence for these requirements.
-
-G-01 retains the literature concern with requirements traceability, artifact continuity, and alignment between MBSE products and mission decisions. G-02 and G-03 address reproducibility, error reduction, configuration integrity, data quality, and semantic consistency. G-04 addresses flexibility, reuse, resource fit, and the recurring absence of general frameworks that transfer across applications \citep[Sec.~5.1 and Table~5]{buruso2026modelbased} \citep[Sec.~4.7 and Table~3]{vizitiu2025optimizing} \citep[Secs.~8.4--8.6 and Table~13]{rostamnia2026digitaltwin}. The literature supports including these concerns. Their noncompensability follows from the mission need and the evaluation rule adopted in this study.
+G-01 retains the literature concern with requirements traceability, artifact continuity, and alignment between MBSE products and mission decisions. G-02 and G-03 address reproducibility, error reduction, configuration integrity, data quality, and semantic consistency. G-04 addresses flexibility, reuse, resource fit, and the recurring absence of general frameworks that transfer across applications \citep[Sec.~5.1 and Table~5]{buruso2026modelbased} \citep[Sec.~4.7 and Table~3]{vizitiu2025optimizing} \citep[Secs.~8.4--8.6 and Table~13]{rostamnia2026digitaltwin}. The literature supports including these concerns.
 
 \begin{figure}[htbp]
     \centering
@@ -238,25 +247,23 @@ The topic model by \citet[Table~4]{akundi2022textmining}, based on 2,380 MBSE ab
 
 The benefit frequencies reported by \citet[Sec.~4.7 and Table~3]{vizitiu2025optimizing} provide an independent check on the measure selection and directions. Across 81 studies, efficiency appeared in 45.7\%, traceability and error reduction each appeared in 16.0\%, time reduction appeared in 9.9\%, and flexibility appeared in 6.2\%. These findings reinforce the inclusion of effort, change, adaptation, and assurance measures.
 
-The topic proportions measure research attention rather than cardinal utility or effect size. Raw MOE results and uncertainty therefore remain visible, and Pareto comparison precedes aggregate ranking. An equal-weight aggregate provides a reference against which the literature-salience ranking is compared.
-% Utility anchors and curve shapes will be established from the common as-is baseline and declared evaluation bounds during system requirements analysis, then fixed before candidate scores are calculated. The same rules will apply to both case studies, preserving the mission-independent scope.
-
-These measures also address the observation by \citet[Sec.~6.2]{rojasramirez2022comparative} that many MBSE demonstrations report limited measured evidence of added value. At this stage, the SysML model formalizes the common MOE names, quantity types, literature-salience weights, comparison equation, mission acceptance requirements, and eligibility conjunction. It deliberately leaves candidate values, utility mappings, and satisfaction results unset.
+The topic proportions measure research attention rather than cardinal utility or effect size. Raw MOE results and uncertainty will therefore remain visible during candidate comparisons, and Pareto comparison will precede aggregate ranking. An equal-weight aggregate will provide a reference against which the literature-salience ranking is compared. These measures also address the observation by \citet[Sec.~6.2]{rojasramirez2022comparative} that many MBSE demonstrations report limited measured evidence of added value.
 
 % Flowdown to system requirements analysis.
+% At this stage, the SysML model formalizes the common MOE names, quantity types, literature-salience weights, comparison equation, mission acceptance requirements, and eligibility conjunction.
 % The next activity should select mission scenarios that exercise each acceptance requirement and ranking MOE. It should derive the framework's externally observable functions, critical measures of performance, and analysis constraints from those scenarios. It should also distinguish elapsed time, human effort, and direct cost, and require a correct result before any speed or effort value receives comparison credit. This guidance remains at mission level and does not select a toolchain, repository structure, automation strategy, or candidate physical architecture.
 
 \paragraph{Intended to-be domain.}
-In the intended domain, the Academic Nanosatellite EPS Development Enterprise contains the academic mission team and the framework as its system of interest. The framework coordinates the versioned system model, analysis tools, and evidence repository. Reviewers interact with the enterprise as external actors. Figure~\ref{fig:to-be-operational-domain} represents this hierarchy as a SysML block definition diagram.
+In the intended domain, the Academic Nanosatellite EPS Development Enterprise contains the academic mission team, the academic researcher, and the framework as its system of interest. The framework coordinates the versioned system model, analysis tools, and evidence repository. Reviewers interact with the enterprise as external actors. Figure~\ref{fig:to-be-operational-domain} represents this hierarchy as a SysML block definition diagram.
 
 \begin{figure}[htbp]
     \centering
     \resizebox{\linewidth}{!}{\input{figures/to-be-operational-domain.tex}}
-    \caption{To-be operational domain for early nanosatellite EPS design justification. Nested blocks indicate enterprise composition. The framework coordinates the three enterprise resources without asserting an internal architecture. Reviewers remain external to the enterprise.}
+    \caption{To-be operational domain for early nanosatellite EPS design justification. Nested blocks indicate enterprise composition. The framework coordinates the three enterprise resources without asserting an internal architecture. The mission team and researcher belong to the enterprise. Reviewers remain external.}
     \label{fig:to-be-operational-domain}
 \end{figure}
 
-At mission level, the enterprise use cases are to maintain an EPS evidence chain, configure the framework for an EPS case, reproduce an analysis, assess a design change, compare candidate EPS architectures, and review an early design justification. Figure~\ref{fig:enterprise-use-cases} depicts the use cases and the reviewer's associations. The mission team remains part of the enterprise, so it does not appear as an external actor.
+At mission level, the enterprise use cases are to maintain an EPS evidence chain, configure the framework for an EPS case, reproduce an analysis, assess a design change, compare candidate EPS architectures, and review an early design justification. Figure~\ref{fig:enterprise-use-cases} depicts the use cases and the reviewer's associations. The mission team and researcher belong to the enterprise, so they do not appear as external actors.
 
 \begin{figure}[htbp]
     \centering
@@ -265,7 +272,16 @@ At mission level, the enterprise use cases are to maintain an EPS evidence chain
     \label{fig:enterprise-use-cases}
 \end{figure}
 
-These use cases refine the mission need and provide the starting point for the black-box analysis in the following activity.
+Each enterprise use case refines the mission requirements that establish its objective. Figure~\ref{fig:enterprise-use-case-refinements} presents the refinement dependencies recorded in the SysML v2 model. Each dependency points from the refining use case to the refined mission requirement.
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/enterprise-use-case-refinements.tex}}
+    \caption{Refinement dependencies from enterprise use cases to mission requirements.}
+    \label{fig:enterprise-use-case-refinements}
+\end{figure}
+
+The requirement hierarchy preserves traceability from these requirements to the top-level mission concern. The use cases provide the starting point for the black-box analysis in the following activity.
 
 \subsubsection{Analyze System Requirements}
 This activity specifies the framework as a black box. It derives requirements from stakeholder needs and defines mission scenarios, system context, interfaces, behavior, performance, states, failures, and design constraints \cite{friedenthal2014practical}.

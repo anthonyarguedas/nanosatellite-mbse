@@ -1,8 +1,15 @@
 // Mission-level acceptance requirements established during Analyze Stakeholder Needs.
 package FrameworkMissionRequirements {
     private import ScalarValues::Boolean;
-    private import FrameworkEffectivenessParametrics::'Academic Nanosatellite EPS Development Enterprise';
+    private import FrameworkEffectivenessParametrics
+            ::'Academic Nanosatellite EPS Development Enterprise';
     private import ToBeOperationalDomain::earlyEPSDesignJustification;
+    private import ToBeOperationalDomain::'Maintain EPS Evidence Chain';
+    private import ToBeOperationalDomain::'Configure Framework for an EPS Case';
+    private import ToBeOperationalDomain::'Reproduce an Analysis';
+    private import ToBeOperationalDomain::'Assess a Design Change';
+    private import ToBeOperationalDomain::'Compare Candidate EPS Architectures';
+    private import ToBeOperationalDomain::'Review an Early Design Justification';
     private import ModelingMetadata::refinement;
 
     requirement <'G-00'> 'Candidate Framework Eligibility' {
@@ -10,7 +17,8 @@ package FrameworkMissionRequirements {
         doc
         /* A candidate framework physical architecture enters comparison ranking only after it
          * satisfies G-01 through G-04 and every mandatory system requirement. This eligibility
-         * conjunction is the evaluation rule adopted by this study. */
+         * conjunction is the evaluation rule adopted by this study.
+         */
 
         require constraint statement {
             doc
@@ -25,7 +33,8 @@ package FrameworkMissionRequirements {
          * evidence chain from its source need or requirement through the applicable design elements,
          * assumptions and input configuration, analysis result, and verification criterion.
          * Evidence basis: buruso2026modelbased Sec. 5.1 and Table 5;
-         * vizitiu2025optimizing Sec. 4.7 and Table 3; rostamnia2026digitaltwin Table 13. */
+         * vizitiu2025optimizing Sec. 4.7 and Table 3; rostamnia2026digitaltwin Table 13.
+         */
 
         require constraint statement {
             doc
@@ -39,7 +48,8 @@ package FrameworkMissionRequirements {
         /* Every reference analysis designated for framework evaluation can be executed from its
          * controlled baseline and reproduces its reported result within the declared tolerance.
          * Evidence basis: rostamnia2026digitaltwin Secs. 8.4-8.6;
-         * rojasramirez2022comparative Sec. 6.2. */
+         * rojasramirez2022comparative Sec. 6.2.
+         */
 
         require constraint statement {
             doc
@@ -53,7 +63,8 @@ package FrameworkMissionRequirements {
         /* A framework evaluation baseline has no unresolved discrepancy classified as critical among
          * its requirements, model properties, interfaces, budgets, assumptions, and analysis inputs.
          * Evidence basis: vizitiu2025optimizing Sec. 4.7 and Table 3;
-         * buruso2026modelbased Sec. 5.1 and Table 5; rostamnia2026digitaltwin Table 13. */
+         * buruso2026modelbased Sec. 5.1 and Table 5; rostamnia2026digitaltwin Table 13.
+         */
 
         require constraint statement {
             doc
@@ -67,7 +78,8 @@ package FrameworkMissionRequirements {
         /* The framework completes both selected contrasting EPS evaluation cases with the common core
          * information model and workflow, while identifying every approved case-specific parameter,
          * extension, and mapping. Evidence basis: buruso2026modelbased Sec. 5.1 and Table 5;
-         * vizitiu2025optimizing Sec. 4.7 and Table 3; rostamnia2026digitaltwin Sec. 8.4. */
+         * vizitiu2025optimizing Sec. 4.7 and Table 3; rostamnia2026digitaltwin Sec. 8.4.
+         */
 
         require constraint statement {
             doc
@@ -76,10 +88,34 @@ package FrameworkMissionRequirements {
     }
 
     #refinement dependency 'Candidate Framework Eligibility' to earlyEPSDesignJustification;
-    #refinement dependency 'Complete and Valid Evidence Chains' to 'Candidate Framework Eligibility';
+    #refinement dependency
+        'Complete and Valid Evidence Chains'
+        to 'Candidate Framework Eligibility';
     #refinement dependency 'Reproduce Reference Analyses' to 'Candidate Framework Eligibility';
-    #refinement dependency 'Resolve Critical Evidence Inconsistencies' to 'Candidate Framework Eligibility';
-    #refinement dependency 'Complete Contrasting Evaluation Cases' to 'Candidate Framework Eligibility';
+    #refinement dependency
+        'Resolve Critical Evidence Inconsistencies'
+        to 'Candidate Framework Eligibility';
+    #refinement dependency
+        'Complete Contrasting Evaluation Cases'
+        to 'Candidate Framework Eligibility';
+
+    // Enterprise use cases refine the mission requirements that establish their objectives.
+    #refinement dependency 'Maintain EPS Evidence Chain' to 'Complete and Valid Evidence Chains';
+    #refinement dependency
+        'Configure Framework for an EPS Case'
+        to 'Complete Contrasting Evaluation Cases';
+    #refinement dependency 'Reproduce an Analysis' to 'Reproduce Reference Analyses';
+    #refinement dependency 'Assess a Design Change' to 'Complete and Valid Evidence Chains';
+    #refinement dependency 'Assess a Design Change' to 'Resolve Critical Evidence Inconsistencies';
+    #refinement dependency
+        'Compare Candidate EPS Architectures'
+        to 'Complete and Valid Evidence Chains';
+    #refinement dependency
+        'Review an Early Design Justification'
+        to 'Complete and Valid Evidence Chains';
+    #refinement dependency
+        'Review an Early Design Justification'
+        to 'Resolve Critical Evidence Inconsistencies';
 
     constraint def 'Candidate Eligibility Rule' {
         in 'G-01 satisfied' : Boolean;
@@ -90,8 +126,12 @@ package FrameworkMissionRequirements {
         out eligible : Boolean;
 
         constraint {
-            eligible == ('G-01 satisfied' and 'G-02 satisfied' and 'G-03 satisfied' and
-                'G-04 satisfied' and 'mandatory system requirements satisfied')
+            eligible ==
+            ('G-01 satisfied' and
+                'G-02 satisfied' and
+                'G-03 satisfied' and
+                'G-04 satisfied' and
+                'mandatory system requirements satisfied')
         }
     }
 
@@ -108,8 +148,9 @@ package FrameworkMissionRequirements {
             in 'G-02 satisfied' = 'G-02 satisfied';
             in 'G-03 satisfied' = 'G-03 satisfied';
             in 'G-04 satisfied' = 'G-04 satisfied';
-            in 'mandatory system requirements satisfied' = 'mandatory system requirements satisfied';
+            in 'mandatory system requirements satisfied' =
+                'mandatory system requirements satisfied';
             out eligible = eligible;
         }
     }
-}
+} // package FrameworkMissionRequirements
