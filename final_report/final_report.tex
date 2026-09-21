@@ -6,6 +6,8 @@
 \usepackage{amsmath,amssymb,graphicx,booktabs,longtable,tabularx,array,multirow}
 \usepackage{enumitem,pdflscape,float,caption,xurl}
 \usepackage[round,authoryear]{natbib}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
 \usepackage[hidelinks]{hyperref}
 
 \title{An MBSE-Based Framework for the Design and Analysis of Nanosatellite Electrical Power Systems}
@@ -108,7 +110,81 @@ OOSEM implements this process on the left side of the Vee. It analyzes requireme
 This activity establishes the prerequisites for model development. It defines the modeling purpose, conventions, terminology, package structure, viewpoints, and validation practices that make the framework model consistent and navigable \cite{friedenthal2014practical}.
 
 \subsubsection{Analyze Stakeholder Needs}
-This activity characterizes the current operational domain, identifies stakeholder problems and their causes, and defines mission needs, measures of effectiveness, and the intended future domain. It establishes why the framework is needed and what successful use must achieve \cite{friedenthal2014practical}.
+\label{subsubsection:analyze-stakeholder-needs}
+This activity characterizes the current operational domain, identifies stakeholder problems and their causes, and defines mission needs, measures of effectiveness, and the intended future domain. It establishes why the framework is needed and what successful use must achieve \citep{friedenthal2014practical}.
+
+\paragraph{Stakeholder and evidence basis.}
+The stakeholder population is the academic community concerned with nanosatellite EPS development and MBSE research. Relevant viewpoints within this population include university mission teams that apply the framework, researchers who develop methods and analyses, and reviewers who assess or reproduce reported results. The systematic literature reviews serve as aggregated evidence of the concerns and values expressed by this population. The resulting synthesis is a literature based stakeholder analysis rather than a collection of requirements from one mission or institution.
+
+The review by \citet[Sec.~5.1 and Table~5]{buruso2026modelbased} identifies fragmented toolchains, weak interoperability, resource mismatch for small missions, incomplete lifecycle coverage, and weak alignment between MBSE artifacts and mission objectives. The broader review by \citet[Sec.~4.7 and Table~3]{vizitiu2025optimizing} identifies efficiency, collaboration, comprehensiveness, traceability, error reduction, time reduction, and flexibility as recurring sources of stakeholder value. The digital twin review by \citet[Secs.~8.4--8.6 and Tables~8--13]{rostamnia2026digitaltwin} adds evidence concerning phase-local models, data quality, synchronization, model uncertainty, interoperability, and validation maturity. Its narrower space robotics scope is used only for the data, model, and assurance concerns that also apply to evidence-producing digital models.
+
+\paragraph{As-is domain and causal analysis.}
+The current operational domain contains an academic mission team, requirements, architecture models, power budgets, assumptions, analysis scripts, simulation results, engineering tools, repositories, and reviewers. These elements exist today, but their information flows often depend on manual transfer and local conventions. This creates several causes of the evidence fragmentation stated in the Introduction.
+
+OOSEM uses a fishbone diagram as an external causal analysis artifact rather than as a SysML diagram. The artifact may be referenced from the model's Parametrics package, or formalized later through a tailored profile when required \citep[Sec.~17.3.2]{friedenthal2014practical}. Figure~\ref{fig:stakeholder-causal-analysis} follows this treatment. The method, resource, toolchain, and governance branches synthesize the review by \citet{buruso2026modelbased}. The validation and data branches also use the findings of \citet{rostamnia2026digitaltwin}. The separate-artifact branch restates the project problem at a more detailed level.
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/stakeholder-causal-analysis.tex}}
+    \caption{Causal analysis of fragmented early EPS evidence from the perspective of the academic community.}
+    \label{fig:stakeholder-causal-analysis}
+\end{figure}
+
+The causes reinforce one another. Separate artifacts require tool transfers. Tool transfers weaken consistency and provenance when configuration control is incomplete. Weak alignment with decision objectives then makes it difficult to determine whether the available models and results constitute sufficient evidence. Resource constraints amplify each mechanism because university teams have limited capacity for custom integration and repeated manual review.
+
+\paragraph{Mission need.}
+The causal analysis yields the following top-level mission need for the framework:
+
+\begin{quote}
+Enable the academic nanosatellite community to justify early EPS design decisions by maintaining a traceable, reproducible, consistent, and reusable evidence chain from stakeholder needs and requirements through architecture, assumptions, analyses, and verification results across contrasting mission contexts.
+\end{quote}
+
+This statement narrows the general literature needs to the project problem while retaining their causes. It defines the framework's mission independently of the detailed functions or tools that may realize it.
+
+\paragraph{Measures of effectiveness.}
+OOSEM represents measures of effectiveness as mission-level value properties of the enterprise responsible for satisfying the mission need. It binds them to an objective function used to compare and optimize candidate solutions \citep[Sec.~17.3.2]{friedenthal2014practical}. Figure~\ref{fig:framework-effectiveness-parametric} applies the same pattern to the Academic Nanosatellite EPS Development Enterprise. The selected measures operationalize the stakeholder values reported by \citet{buruso2026modelbased} and \citet{vizitiu2025optimizing}, together with the repeatability and assurance concerns synthesized by \citet{rostamnia2026digitaltwin}.
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/framework-effectiveness-parametric.tex}}
+    \caption{Top-level parametric representation of framework effectiveness and its binding to the measures of effectiveness.}
+    \label{fig:framework-effectiveness-parametric}
+\end{figure}
+
+The objective function has the form
+\begin{equation}
+    E_{\mathrm{framework}}
+    = w_{\mathrm{TC}}U_{\mathrm{TC}}
+    + w_{\mathrm{AR}}U_{\mathrm{AR}}
+    + w_{\mathrm{EC}}U_{\mathrm{EC}}
+    + w_{\mathrm{CP}}U_{\mathrm{CP}}
+    + w_{\mathrm{CRT}}U_{\mathrm{CRT}},
+    \qquad \sum_i w_i = 1,
+\end{equation}
+where each $U_i$ maps its MOE to a utility between zero and one. The weights are explicit decision parameters and will be fixed before candidate architectures are scored. The aggregate supports comparison, while every individual target remains an acceptance criterion so that a high value for one MOE cannot conceal failure in another.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Operational definitions and initial targets for the framework measures of effectiveness.}
+    \label{tab:framework-moes}
+    \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.23\linewidth} X >{\raggedright\arraybackslash}p{0.23\linewidth}}
+        \toprule
+        \textbf{MOE} & \textbf{Operational definition} & \textbf{Initial target} \\
+        \midrule
+        Traceability coverage (\%) & Percentage of designated key design decisions connected to their source need or requirement, design elements, assumptions and input configuration, analysis result, and verification criterion. & 100\% of designated decisions. \\
+        Analysis reproducibility (\%) & Percentage of designated reference analyses that can be executed from the versioned repository and reproduce the reported result within an analysis-specific tolerance. & 100\% of designated analyses. \\
+        Evidence consistency (\%) & Percentage of defined cross-artifact consistency checks that pass without an unresolved discrepancy among requirements, model properties, interfaces, budgets, and analysis inputs. & 100\% of defined checks, with no unresolved discrepancy. \\
+        Cross-case portability (\%) & Percentage of evaluation cases completed with the same core information model and workflow. Case-specific parameters and mappings remain permitted. & 100\% of the two case studies. \\
+        Change response time (h) & Elapsed time required to identify affected evidence, update it, and regenerate the reviewable evidence package for a predefined change scenario. & Less than the measured as-is time for the same scenario. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+The sets of designated decisions, reference analyses, consistency checks, and the change scenario will be baselined before framework evaluation. This prevents the evaluation from redefining its denominator after observing the results.
+
+\paragraph{Intended to-be domain.}
+In the intended domain, the framework becomes the coordinating element among the academic team, the versioned system model, analysis tools, evidence repository, and reviewer. At mission level, the enterprise use cases are to maintain an EPS evidence chain, reproduce an analysis, assess a design change, compare candidate EPS architectures, and review an early design justification. These use cases refine the mission need and provide the starting point for the black-box analysis in the following activity.
 
 \subsubsection{Analyze System Requirements}
 This activity specifies the framework as a black box. It derives requirements from stakeholder needs and defines mission scenarios, system context, interfaces, behavior, performance, states, failures, and design constraints \cite{friedenthal2014practical}.
@@ -123,6 +199,7 @@ This activity maps logical components to realizable hardware, software, data, an
 This cross cutting activity evaluates candidate designs through analysis and trade studies against the measures of effectiveness. Its results guide architecture choices, requirement values, and design refinements throughout the process \cite{friedenthal2014practical}.
 
 \subsubsection{Manage Requirements Traceability}
+\label{subsubsection:manage-requirements-traceability}
 This cross cutting activity maintains links from mission needs through system and component requirements to design and verification elements. It exposes coverage gaps, supports change impact analysis, and preserves the rationale for framework decisions \cite{friedenthal2014practical}.
 
 \subsubsection{Support System Integration and Verification}

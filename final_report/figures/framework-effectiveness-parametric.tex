@@ -1,0 +1,62 @@
+\begin{tikzpicture}[
+  font=\sffamily,
+  line width=0.7pt,
+  moe/.style={
+    draw,
+    align=center,
+    text width=2.45cm,
+    minimum height=1.25cm,
+    inner sep=4pt,
+    fill=white
+  },
+  port/.style={draw,minimum width=0.18cm,minimum height=0.18cm,inner sep=0pt,fill=white}
+]
+  % Parametric diagram frame and heading.
+  \draw (0,0) rectangle (17,10);
+  \node[anchor=west,font=\bfseries] at (0.25,9.65)
+    {par [block] Framework Effectiveness Analysis [Framework Effectiveness Analysis]};
+  \draw (0,9.3) -- (17,9.3);
+
+  % Objective value and objective function constraint property.
+  \node[draw,font=\bfseries,minimum width=5.9cm,minimum height=0.75cm]
+    (effectiveness) at (8.5,8.55) {framework effectiveness : Real};
+
+  \node[draw,rounded corners=7pt,align=center,minimum width=15.1cm,minimum height=2.35cm]
+    (objective) at (8.5,6.55)
+    {\guillemotleft constraint\guillemotright\\
+     \guillemotleft objectiveFunction\guillemotright\\
+     \textbf{effectiveness eq : Framework Effectiveness Equation}\\[2pt]
+     \{framework effectiveness = weighted sum of MOE utilities\}};
+
+  \draw (effectiveness.south) -- (8.5,7.73);
+  \node[port] at (8.5,7.73) {};
+
+  % Operational enterprise that owns the mission-level MOE properties.
+  \draw (0.7,0.65) rectangle (16.3,4.95);
+  \draw (0.7,4.05) -- (16.3,4.05);
+  \node[align=center] at (8.5,4.50)
+    {\guillemotleft block\guillemotright\\[-1pt]
+     \textbf{enterprise : Academic Nanosatellite EPS Development Enterprise}};
+
+  \node[moe] (tc) at (2.25,2.25)
+    {\guillemotleft moe\guillemotright\\
+     \textbf{traceability coverage : Percent}};
+  \node[moe] (ar) at (5.40,2.25)
+    {\guillemotleft moe\guillemotright\\
+     \textbf{analysis reproducibility : Percent}};
+  \node[moe] (ec) at (8.55,2.25)
+    {\guillemotleft moe\guillemotright\\
+     \textbf{evidence consistency : Percent}};
+  \node[moe] (cp) at (11.70,2.25)
+    {\guillemotleft moe\guillemotright\\
+     \textbf{cross-case portability : Percent}};
+  \node[moe] (crt) at (14.85,2.25)
+    {\guillemotleft moe\guillemotright\\
+     \textbf{change response time : Hours}};
+
+  % Binding connectors between enterprise MOEs and the objective function.
+  \foreach \nodeName/\x in {tc/2.25,ar/5.40,ec/8.55,cp/11.70,crt/14.85}{
+    \draw (\nodeName.north) -- (\x,5.38);
+    \node[port] at (\x,5.38) {};
+  }
+\end{tikzpicture}
