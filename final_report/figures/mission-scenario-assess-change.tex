@@ -1,0 +1,76 @@
+\begin{tikzpicture}[
+  >=Latex,
+  font=\sffamily,
+  flow/.style={-{Latex[length=2mm,width=1.4mm]},line width=0.65pt},
+  action/.style={draw,rounded corners=2pt,align=center,text width=2.75cm,
+    minimum height=0.62cm,inner sep=2pt,fill=white,font=\scriptsize},
+  exception/.style={action,dashed},
+  decision/.style={diamond,draw,aspect=1.7,inner sep=1pt,minimum width=0.55cm,
+    minimum height=0.42cm,fill=white},
+  guard/.style={fill=white,inner sep=1pt,font=\tiny},
+  bar/.style={draw,fill=black,minimum width=1.0cm,minimum height=0.08cm,inner sep=0pt}
+]
+  \fill[blue!4] (3.0,-0.7) rectangle (10.0,17.0);
+  \draw (0,-0.7) rectangle (20,18.0);
+  \node[anchor=west,font=\bfseries] at (0.25,17.65)
+    {act [SC-04] Assess a Design Change};
+  \draw (0,17.25) -- (20,17.25);
+  \foreach \x in {3.0,10.0,13.3,16.6} {\draw (\x,-0.7) -- (\x,17.25);}
+  \node[font=\bfseries\scriptsize] at (1.5,16.82) {Mission Team};
+  \node[font=\bfseries\scriptsize] at (6.5,16.82) {Framework};
+  \node[font=\bfseries\scriptsize,align=center] at (11.65,16.82) {Versioned\\System Model};
+  \node[font=\bfseries\scriptsize] at (14.95,16.82) {Analysis Tools};
+  \node[font=\bfseries\scriptsize,align=center] at (18.3,16.82) {Evidence\\Repository};
+  \draw (0,16.4) -- (20,16.4);
+
+  \node[circle,fill=black,minimum size=5pt,inner sep=0pt] (start) at (1.5,15.95) {};
+  \node[action] (submit) at (1.5,15.1) {Submit change request\\and target baseline};
+  \node[action] (validate) at (6.5,14.05) {Validate request and\\baseline identity};
+  \node[decision] (available) at (6.5,13.15) {};
+  \node[font=\tiny,anchor=west] at (6.9,13.15) {baseline available?};
+  \node[bar] (fork) at (5.0,12.15) {};
+  \node[exception] (unassessable) at (8.15,12.15) {Report unassessable\\change};
+  \node[action] (traces) at (11.65,11.2) {Supply dependency\\and trace records};
+  \node[action] (prior) at (18.3,11.2) {Supply prior evidence\\and configuration};
+  \node[bar] (join) at (6.5,10.25) {};
+  \node[action] (identify) at (6.5,9.25) {Identify affected requirements,\\interfaces, assumptions,\\analyses, and verification};
+  \node[action] (impact) at (6.5,8.1) {Present impact set\\and coverage gaps};
+  \node[action] (authorize) at (1.5,7.05) {Authorize scope and\\submit revisions};
+  \node[action] (coordinate) at (6.5,6.0) {Coordinate affected\\checks and analyses};
+  \node[action] (execute) at (14.95,5.0) {Execute affected analyses\\and return results};
+  \node[action] (chain) at (6.5,4.05) {Validate regenerated\\evidence chain};
+  \node[decision] (consistent) at (6.5,3.2) {};
+  \node[font=\tiny,anchor=west] at (6.9,3.2) {evidence consistent?};
+  \node[action] (package) at (4.8,2.25) {Prepare correct\\review package};
+  \node[exception] (discrepancy) at (8.2,2.25) {Report unresolved\\change discrepancies};
+  \node[decision] (outcome) at (6.5,1.45) {};
+  \node[font=\tiny,anchor=west] at (6.9,1.45) {outcome prepared};
+  \node[action] (retain) at (18.3,0.78) {Retain change record\\and evidence package};
+  \node[action] (receive) at (1.5,0.42) {Receive change outcome};
+  \node[circle,draw,double,minimum size=7pt,inner sep=0pt] (final) at (1.5,-0.42) {};
+
+  \draw[flow] (start) -- (submit);
+  \draw[flow] (submit) -- (validate);
+  \draw[flow] (validate) -- (available);
+  \draw[flow] (available) -- node[guard,left]{available} (fork);
+  \draw[flow] (available) -- node[guard,right]{unavailable} (unassessable);
+  \draw[flow] (fork) -| (traces);
+  \draw[flow] (fork) -| (prior);
+  \draw[flow] (traces) |- (join);
+  \draw[flow] (prior) |- (join);
+  \draw[flow] (join) -- (identify);
+  \draw[flow] (identify) -- (impact);
+  \draw[flow] (impact) -- (authorize);
+  \draw[flow] (authorize) -- (coordinate);
+  \draw[flow] (coordinate) -- (execute);
+  \draw[flow] (execute) -- (chain);
+  \draw[flow] (chain) -- (consistent);
+  \draw[flow] (consistent) -- node[guard,left]{consistent} (package);
+  \draw[flow] (consistent) -- node[guard,right]{inconsistent} (discrepancy);
+  \draw[flow] (package) |- (outcome);
+  \draw[flow] (discrepancy) |- (outcome);
+  \draw[flow] (unassessable.east) -- ++(0.55,0) |- (outcome.east);
+  \draw[flow] (outcome) -| (retain);
+  \draw[flow] (retain) |- (receive);
+  \draw[flow] (receive) -- (final);
+\end{tikzpicture}

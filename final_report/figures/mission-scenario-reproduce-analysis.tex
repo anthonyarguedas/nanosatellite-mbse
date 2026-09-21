@@ -1,0 +1,78 @@
+\begin{tikzpicture}[
+  >=Latex,
+  font=\sffamily,
+  flow/.style={-{Latex[length=2mm,width=1.4mm]},line width=0.65pt},
+  action/.style={draw,rounded corners=2pt,align=center,text width=2.7cm,
+    minimum height=0.62cm,inner sep=2pt,fill=white,font=\scriptsize},
+  exception/.style={action,dashed},
+  decision/.style={diamond,draw,aspect=1.7,inner sep=1pt,minimum width=0.55cm,
+    minimum height=0.42cm,fill=white},
+  guard/.style={fill=white,inner sep=1pt,font=\tiny},
+  bar/.style={draw,fill=black,minimum width=1.0cm,minimum height=0.08cm,inner sep=0pt}
+]
+  \fill[blue!4] (3.0,-0.65) rectangle (10.0,16.3);
+  \draw (0,-0.65) rectangle (20,17.3);
+  \node[anchor=west,font=\bfseries] at (0.25,16.95)
+    {act [SC-03] Reproduce an Analysis};
+  \draw (0,16.55) -- (20,16.55);
+  \foreach \x in {3.0,10.0,13.3,16.6} {\draw (\x,-0.65) -- (\x,16.55);}
+  \node[font=\bfseries\scriptsize] at (1.5,16.12) {Reviewer};
+  \node[font=\bfseries\scriptsize] at (6.5,16.12) {Framework};
+  \node[font=\bfseries\scriptsize,align=center] at (11.65,16.12) {Versioned\\System Model};
+  \node[font=\bfseries\scriptsize] at (14.95,16.12) {Analysis Tools};
+  \node[font=\bfseries\scriptsize,align=center] at (18.3,16.12) {Evidence\\Repository};
+  \draw (0,15.7) -- (20,15.7);
+
+  \node[circle,fill=black,minimum size=5pt,inner sep=0pt] (start) at (1.5,15.25) {};
+  \node[action] (request) at (1.5,14.4) {Request designated\\analysis reproduction};
+  \node[action] (identify) at (6.5,13.35) {Identify baseline, reported\\result, and tolerance};
+  \node[bar] (fork) at (6.5,12.45) {};
+  \node[action] (model) at (11.65,11.5) {Supply controlled model\\and configuration};
+  \node[action] (inputs) at (18.3,11.5) {Supply inputs, dependencies,\\and reported result};
+  \node[bar] (join) at (6.5,10.55) {};
+  \node[action] (check) at (6.5,9.65) {Check reproduction package};
+  \node[decision] (complete) at (6.5,8.8) {};
+  \node[font=\tiny,anchor=west] at (6.9,8.8) {package complete?};
+  \node[action] (submit) at (4.85,7.75) {Submit controlled execution};
+  \node[exception] (missing) at (8.2,7.75) {Report missing\\reproduction evidence};
+  \node[action] (execute) at (14.95,6.75) {Execute analysis and\\return raw results};
+  \node[decision] (executed) at (6.5,5.75) {};
+  \node[font=\tiny,anchor=west] at (6.9,5.75) {execution completed?};
+  \node[action] (compare) at (4.85,4.75) {Compare reproduced and\\reported results};
+  \node[exception] (failure) at (8.2,4.75) {Report execution failure};
+  \node[decision] (tolerance) at (4.85,3.8) {};
+  \node[font=\tiny,anchor=west] at (5.25,3.8) {within tolerance?};
+  \node[action] (success) at (4.7,2.8) {Record reproduction\\success};
+  \node[exception] (discrepancy) at (8.05,2.8) {Record result\\discrepancy};
+  \node[decision] (verdict) at (6.5,1.9) {};
+  \node[font=\tiny,anchor=west] at (6.9,1.9) {verdict prepared};
+  \node[action] (retain) at (18.3,1.1) {Retain reproduction\\package};
+  \node[action] (receive) at (1.5,0.4) {Receive verdict\\and evidence};
+  \node[circle,draw,double,minimum size=7pt,inner sep=0pt] (final) at (1.5,-0.35) {};
+
+  \draw[flow] (start) -- (request);
+  \draw[flow] (request) -- (identify);
+  \draw[flow] (identify) -- (fork);
+  \draw[flow] (fork) -| (model);
+  \draw[flow] (fork) -| (inputs);
+  \draw[flow] (model) |- (join);
+  \draw[flow] (inputs) |- (join);
+  \draw[flow] (join) -- (check);
+  \draw[flow] (check) -- (complete);
+  \draw[flow] (complete) -- node[guard,left]{complete} (submit);
+  \draw[flow] (complete) -- node[guard,right]{incomplete} (missing);
+  \draw[flow] (submit) -- (execute);
+  \draw[flow] (execute) -- (executed);
+  \draw[flow] (executed) -- node[guard,left]{completed} (compare);
+  \draw[flow] (executed) -- node[guard,right]{failed} (failure);
+  \draw[flow] (compare) -- (tolerance);
+  \draw[flow] (tolerance) -- node[guard,left]{within} (success);
+  \draw[flow] (tolerance) -| node[guard,near start,above]{outside} (discrepancy);
+  \draw[flow] (success) |- (verdict);
+  \draw[flow] (discrepancy) |- (verdict);
+  \draw[flow] (failure.east) -- ++(0.45,0) |- (verdict.east);
+  \draw[flow] (missing.east) -- ++(0.75,0) |- (verdict.east);
+  \draw[flow] (verdict) -| (retain);
+  \draw[flow] (retain) |- (receive);
+  \draw[flow] (receive) -- (final);
+\end{tikzpicture}
