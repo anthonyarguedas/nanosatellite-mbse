@@ -333,6 +333,37 @@ Figures~\ref{fig:scenario-maintain-evidence}--\ref{fig:scenario-review-justifica
     \label{fig:scenario-review-justification}
 \end{figure}
 
+\paragraph{Black-box functions and typed exchanges.}
+Every scenario action allocated to the framework is typed by a reusable SysML v2 action definition. Actions that report nominal and exceptional outcomes share the function that produces the corresponding assessment or status. The framework performs the six service functions in Figure~\ref{fig:framework-black-box-functions}. Their 22 subfunctions preserve the finer scenario responsibilities. This functional hierarchy specifies externally observable behavior without selecting internal components.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/framework-black-box-functions.tex}}
+    \caption{Black-box service functions, typed exchanges, and functional decomposition of the framework.}
+    \label{fig:framework-black-box-functions}
+\end{figure}
+
+The function inputs and outputs are typed so that later context interfaces can reuse one boundary vocabulary \citep[Sec.~17.3.3]{friedenthal2014practical}. Controlled Model Records contain requirements, interfaces, a baseline reference, and trace and provenance records. Retained Evidence Records contain assumptions, analysis inputs and raw results, discrepancies, verification evidence, and their provenance. The remaining aggregate types in Table~\ref{tab:framework-exchange-types} distinguish requests, controlled analysis traffic, assessments, and decision packages. These definitions preserve the literature concerns with configuration integrity, explicit assumptions, data quality, transfer verification, and reviewable measured evidence \citep{buruso2026modelbased,rostamnia2026digitaltwin,rojasramirez2022comparative}.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Typed black-box exchange families.}
+    \label{tab:framework-exchange-types}
+    \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.17\linewidth} >{\raggedright\arraybackslash}p{0.33\linewidth} X}
+        \toprule
+        \textbf{Family} & \textbf{Principal item types} & \textbf{Required semantics} \\
+        \midrule
+        Requests & Evidence Chain, Case Configuration, Reproduction, Design Change, Candidate Comparison, and Design Review Requests & Identify the requested work, applicable baseline or case, designated decision or analysis, and requesting context. \\
+        Controlled model & Controlled Model Records; Candidate Model Package & Carry requirements, interfaces, configuration identity, candidate identity, and trace and provenance records. \\
+        Configuration and evidence & Common Core Package; Case Configuration Draft; Controlled Case Configuration; Retained Evidence Records; Change Revision Package & Carry workflow and environment declarations, parameters, extensions, mappings, assumptions, analysis inputs and results, discrepancies, and verification evidence. \\
+        Analysis interaction & Analysis Execution Request; Analysis Result Package; Comparison Protocol; Sensitivity and Uncertainty Assessment & Carry the controlled baseline, inputs, assumptions, requested analysis, execution status, raw results, uncertainty, and common comparison rules. \\
+        Assessments & Evidence Chain, Case Configuration, Reproduction Package, Change Impact, Comparison Basis, and Candidate Feasibility Assessments & State availability, completeness, compatibility, validity, affected evidence, feasibility, and identified gaps without hiding discrepancies. \\
+        Decision and review & Reproduction Verdict; Change Evidence Package; Candidate Comparison Package; Review Package; Review Findings; Finding Disposition; Review Outcome; Review Status & Preserve results, criteria, uncertainty, discrepancies, finding dispositions, verification evidence, and the resulting status or verdict. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
 \subsubsection{Define Logical Architecture}
 This activity decomposes the framework into logical components and defines how they interact to satisfy the system requirements. The logical architecture remains independent of a particular implementation technology \cite{friedenthal2014practical}.
 

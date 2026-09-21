@@ -44,6 +44,19 @@ package ToBeOperationalDomain {
         ref part systemModel : 'Versioned System Model';
         ref part analysisTools : 'Analysis Tools';
         ref part evidenceRepository : 'Evidence Repository';
+
+        perform action maintainEvidenceChain
+            : FrameworkBlackBoxFunctions::'Maintain Evidence Chain';
+        perform action configureFrameworkForCase
+            : FrameworkBlackBoxFunctions::'Configure Framework for EPS Case';
+        perform action reproduceDesignatedAnalysis
+            : FrameworkBlackBoxFunctions::'Reproduce Designated Analysis';
+        perform action assessControlledDesignChange
+            : FrameworkBlackBoxFunctions::'Assess Controlled Design Change';
+        perform action compareCandidateArchitectures
+            : FrameworkBlackBoxFunctions::'Compare Candidate EPS Architectures';
+        perform action supportEarlyDesignReview
+            : FrameworkBlackBoxFunctions::'Support Early Design Review';
     }
 
     concern def 'Early EPS Design Justification' {
