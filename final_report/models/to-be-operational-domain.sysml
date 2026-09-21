@@ -8,31 +8,49 @@ package ToBeOperationalDomain {
     part def 'Academic Mission Team' {
         doc
         /* The team applies the enterprise capability to a nanosatellite EPS study. */
+
+        port frameworkApplication
+            : FrameworkBoundaryInterfaces::'Mission Application Port';
     }
 
     part def 'Academic Researcher' {
         doc
         /* The researcher evaluates, compares, and extends framework methods and analyses. */
+
+        port frameworkResearch
+            : FrameworkBoundaryInterfaces::'Research Governance Port';
     }
 
     part def Reviewer {
         doc
         /* An independent reviewer may inspect a justification or reproduce an analysis. */
+
+        port frameworkReview
+            : FrameworkBoundaryInterfaces::'Independent Review Port';
     }
 
     part def 'Versioned System Model' {
         doc
         /* Controlled models, requirements, architecture, interfaces, assumptions, and configurations. */
+
+        port frameworkControl
+            : FrameworkBoundaryInterfaces::'Model Control Port';
     }
 
     part def 'Analysis Tools' {
         doc
         /* Tools that execute or support EPS analyses. No specific implementation is selected here. */
+
+        port frameworkExecution
+            : FrameworkBoundaryInterfaces::'Analysis Execution Port';
     }
 
     part def 'Evidence Repository' {
         doc
         /* Retained analysis inputs, results, verification evidence, and reviewable evidence packages. */
+
+        port frameworkCustody
+            : FrameworkBoundaryInterfaces::'Evidence Custody Port';
     }
 
     part def 'Nanosatellite EPS Engineering Framework' {
@@ -44,6 +62,19 @@ package ToBeOperationalDomain {
         ref part systemModel : 'Versioned System Model';
         ref part analysisTools : 'Analysis Tools';
         ref part evidenceRepository : 'Evidence Repository';
+
+        port missionApplication
+            : FrameworkBoundaryInterfaces::'Mission Application Port';
+        port researchGovernance
+            : FrameworkBoundaryInterfaces::'Research Governance Port';
+        port independentReview
+            : FrameworkBoundaryInterfaces::'Independent Review Port';
+        port modelControl
+            : FrameworkBoundaryInterfaces::'Model Control Port';
+        port analysisExecution
+            : FrameworkBoundaryInterfaces::'Analysis Execution Port';
+        port evidenceCustody
+            : FrameworkBoundaryInterfaces::'Evidence Custody Port';
 
         perform action maintainEvidenceChain
             : FrameworkBlackBoxFunctions::'Maintain Evidence Chain';

@@ -504,6 +504,7 @@ package FrameworkBlackBoxFunctions {
         in item returnedResults : 'Analysis Result Package';
         in item sensitivityAndUncertainty : 'Sensitivity and Uncertainty Assessment';
         out item executionRequest : 'Analysis Execution Request';
+        out item result : 'Analysis Result Package';
         out item comparisonPackage : 'Candidate Comparison Package';
 
         action validateBasis : 'Validate Comparison Basis';
@@ -529,6 +530,7 @@ package FrameworkBlackBoxFunctions {
         flow compareCandidates.comparison to issueComparison.comparison;
         bind issueComparison.sensitivityAndUncertainty = sensitivityAndUncertainty;
         bind executionRequest = coordinateAnalysis.submittedRequest;
+        bind result = coordinateAnalysis.acceptedResult;
         bind comparisonPackage = issueComparison.comparisonPackage;
     }
 
@@ -567,6 +569,7 @@ package FrameworkBlackBoxFunctions {
         in item disposition : 'Finding Disposition';
         in item outcome : 'Review Outcome';
         out item reviewPackage : 'Review Package';
+        out item issuedFindings : 'Review Findings';
         out item reproduction : 'Reproduction Verdict';
         out item status : 'Review Status';
 
@@ -586,6 +589,7 @@ package FrameworkBlackBoxFunctions {
         flow manageFindings.linkedFindings to issueStatus.linkedFindings;
         bind issueStatus.outcome = outcome;
         bind reviewPackage = assemblePackage.reviewPackage;
+        bind issuedFindings = findings;
         bind reproduction = coordinateReproduction.verdict;
         bind status = issueStatus.status;
     }

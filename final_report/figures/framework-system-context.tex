@@ -1,0 +1,133 @@
+\begin{tikzpicture}[
+  >=Latex,
+  font=\sffamily,
+  line width=0.7pt,
+  external/.style={
+    draw,
+    align=center,
+    text width=3.25cm,
+    minimum height=1.15cm,
+    inner sep=4pt,
+    fill=white,
+    font=\footnotesize
+  },
+  framework/.style={
+    draw,
+    align=center,
+    text width=4.8cm,
+    minimum height=6.8cm,
+    inner sep=7pt,
+    fill=blue!4
+  },
+  port/.style={
+    draw,
+    rectangle,
+    minimum width=0.18cm,
+    minimum height=0.18cm,
+    inner sep=0pt,
+    fill=white
+  },
+  contextflow/.style={<->},
+  interfacelabel/.style={
+    align=center,
+    text width=2.15cm,
+    fill=white,
+    inner sep=1.5pt,
+    font=\scriptsize
+  },
+  note/.style={
+    draw,
+    rounded corners=2pt,
+    align=left,
+    text width=13.8cm,
+    inner sep=5pt,
+    fill=gray!5,
+    font=\scriptsize
+  }
+]
+  % Internal block diagram frame and heading.
+  \draw (0,0) rectangle (17,12.2);
+  \node[anchor=west,font=\bfseries] at (0.25,11.85)
+    {ibd [part] Framework System Context [Black-Box Interfaces]};
+  \draw (0,11.5) -- (17,11.5);
+
+  % The framework is the only element inside the system boundary.
+  \node[framework] (framework) at (8.5,7.05) {
+    \guillemotleft system of interest\guillemotright\\[2pt]
+    \textbf{framework :}\\
+    \textbf{Nanosatellite EPS}\\
+    \textbf{Engineering Framework}\\[5pt]
+    \footnotesize Black-box boundary\\
+    \footnotesize Internal components remain unspecified
+  };
+
+  % Human participants.
+  \node[external] (team) at (2.15,9.55) {
+    \guillemotleft part\guillemotright\\
+    \textbf{mission team :}\\
+    \textbf{Academic Mission Team}
+  };
+  \node[external] (researcher) at (2.15,7.05) {
+    \guillemotleft part\guillemotright\\
+    \textbf{researcher :}\\
+    \textbf{Academic Researcher}
+  };
+  \node[external] (reviewer) at (2.15,4.55) {
+    \guillemotleft part\guillemotright\\
+    \textbf{reviewer : Reviewer}\\[-1pt]
+    \scriptsize External to enterprise
+  };
+
+  % External enterprise resources.
+  \node[external] (model) at (14.85,9.55) {
+    \guillemotleft part\guillemotright\\
+    \textbf{system model :}\\
+    \textbf{Versioned System Model}
+  };
+  \node[external] (tools) at (14.85,7.05) {
+    \guillemotleft part\guillemotright\\
+    \textbf{analysis tools :}\\
+    \textbf{Analysis Tools}
+  };
+  \node[external] (repository) at (14.85,4.55) {
+    \guillemotleft part\guillemotright\\
+    \textbf{evidence repository :}\\
+    \textbf{Evidence Repository}
+  };
+
+  % Explicit boundary ports.
+  \node[port] at (team.east) {};
+  \node[port] at (researcher.east) {};
+  \node[port] at (reviewer.east) {};
+  \node[port] at (model.west) {};
+  \node[port] at (tools.west) {};
+  \node[port] at (repository.west) {};
+  \node[port] at (framework.west |- team) {};
+  \node[port] at (framework.west |- researcher) {};
+  \node[port] at (framework.west |- reviewer) {};
+  \node[port] at (framework.east |- model) {};
+  \node[port] at (framework.east |- tools) {};
+  \node[port] at (framework.east |- repository) {};
+
+  % Typed, bidirectional interface usages. Flow directions are defined in the
+  % authoritative SysML v2 interface definitions.
+  \draw[contextflow] (team.east) -- node[interfacelabel]
+    {\textbf{IF-01}\\Mission application} (framework.west |- team);
+  \draw[contextflow] (researcher.east) -- node[interfacelabel]
+    {\textbf{IF-02}\\Research governance} (framework.west |- researcher);
+  \draw[contextflow] (reviewer.east) -- node[interfacelabel]
+    {\textbf{IF-03}\\Independent review} (framework.west |- reviewer);
+  \draw[contextflow] (framework.east |- model) -- node[interfacelabel]
+    {\textbf{IF-04}\\Model control} (model.west);
+  \draw[contextflow] (framework.east |- tools) -- node[interfacelabel]
+    {\textbf{IF-05}\\Analysis execution} (tools.west);
+  \draw[contextflow] (framework.east |- repository) -- node[interfacelabel]
+    {\textbf{IF-06}\\Evidence custody} (repository.west);
+
+  \node[note] at (8.5,1.45) {
+    \textbf{Common transfer contract.} Each receiving endpoint returns a Transfer Verification
+    Record stating source and configuration identification, structural completeness, semantic
+    compatibility, provenance preservation, acceptance, and any discrepancy. A rejected transfer
+    remains explicit and does not silently replace controlled content.
+  };
+\end{tikzpicture}

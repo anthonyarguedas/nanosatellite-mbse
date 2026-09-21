@@ -364,6 +364,41 @@ The function inputs and outputs are typed so that later context interfaces can r
     \end{tabularx}
 \end{table}
 
+\paragraph{System context and interfaces.}
+The system context places only the Nanosatellite EPS Engineering Framework inside the system boundary. The academic mission team, academic researcher, reviewer, versioned system model, analysis tools, and evidence repository interact with it as external participants or resources. The mission team, researcher, versioned model, analysis tools, and evidence repository remain within the wider enterprise defined during stakeholder needs analysis. The reviewer remains external to that enterprise. Figure~\ref{fig:framework-system-context} marks the framework boundary while preserving this enterprise membership.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/framework-system-context.tex}}
+    \caption{Black-box system context and six typed interface families. Bidirectional arrows summarize the item-flow directions formalized in the SysML v2 model.}
+    \label{fig:framework-system-context}
+\end{figure}
+
+Each connector is an instance of a SysML v2 interface definition whose ends bind explicit ports on the framework and the external participant. Table~\ref{tab:framework-context-interfaces} summarizes the directed item flows. The model routes every input and output of the six black-box service functions to an external source or recipient. It also routes accepted configurations and evidence packages to the resources responsible for their control or retention.
+
+\begin{table}[H]
+    \centering
+    \scriptsize
+    \caption{Black-box framework interfaces and principal directed exchanges.}
+    \label{tab:framework-context-interfaces}
+    \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.11\linewidth} >{\raggedright\arraybackslash}p{0.16\linewidth} X X}
+        \toprule
+        \textbf{Interface} & \textbf{External endpoint} & \textbf{Items entering the framework} & \textbf{Items leaving the framework} \\
+        \midrule
+        IF-01 Mission application & Academic Mission Team & Evidence Chain, Case Configuration, Design Change, Candidate Comparison, and Design Review Requests; Change Revision Package; Finding Disposition & Evidence Chain Scope and Assessment; configuration draft, controlled configuration, and status; Change Impact and Evidence Package; Candidate Comparison Package; Review Findings and Status \\
+        IF-02 Research governance & Academic Researcher & Adaptation Decision; Comparison Protocol; Sensitivity and Uncertainty Assessment & Case Configuration Draft; Analysis Result Package; Candidate Comparison Package \\
+        IF-03 Independent review & Reviewer & Reproduction Request; Review Findings; Review Outcome & reproduced Analysis Result Package; Reproduction Verdict; Review Package; Review Status \\
+        IF-04 Model control & Versioned System Model & Controlled Model Records; Common Core Package; Candidate Model Package & controlled case configuration; accepted change revision \\
+        IF-05 Analysis execution & Analysis Tools & Analysis Result Package & Analysis Execution Request \\
+        IF-06 Evidence custody & Evidence Repository & Retained Evidence Records & Evidence Chain Assessment; controlled case configuration and status; analysis result and Reproduction Verdict; change, comparison, and review packages; Review Status \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+The interface contracts respond directly to the review evidence. Fragmented toolchains and inconsistent data structures expose manual transformations to semantic misalignment, information loss, and weakened traceability \citep[Sec.~5.1 and Table~5]{buruso2026modelbased}. Explicit interface contracts, shared semantics, configuration management, data provenance, and integration-level verification address corresponding model, data, and interoperability risks \citep[Secs.~8.4--8.6 and Table~13]{rostamnia2026digitaltwin}. Manual translations and automated tool transfers both require checks that the expected data arrived and retained its quality \citep[Sec.~4.2.3]{rojasramirez2022comparative}.
+
+The common transfer contract therefore requires each receiving endpoint to return a Transfer Verification Record. It states whether the source and configuration are identified, the payload is structurally complete, its identifiers, quantities, units, and meanings are compatible, provenance is preserved, and the transfer is accepted. Any rejection retains an explicit discrepancy and leaves controlled content unchanged. This contract defines externally observable semantics while leaving transport protocols, file formats, APIs, and products as later design choices.
+
 \subsubsection{Define Logical Architecture}
 This activity decomposes the framework into logical components and defines how they interact to satisfy the system requirements. The logical architecture remains independent of a particular implementation technology \cite{friedenthal2014practical}.
 

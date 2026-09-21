@@ -69,6 +69,7 @@ package StakeholderViewpoints {
     view 'Framework Application View' : GeneralView {
         satisfy requirement applicationViewpoint : 'Framework Application Viewpoint';
         expose ToBeOperationalDomain::'To-be Operational Domain';
+        expose FrameworkSystemContext::'Framework System Context';
         expose ToBeOperationalDomain::'Maintain EPS Evidence Chain';
         expose ToBeOperationalDomain::'Configure Framework for an EPS Case';
         expose ToBeOperationalDomain::'Reproduce an Analysis';
@@ -87,6 +88,7 @@ package StakeholderViewpoints {
     view 'Framework Research View' : GeneralView {
         satisfy requirement researchViewpoint : 'Framework Research Viewpoint';
         expose ToBeOperationalDomain::earlyEPSDesignJustification;
+        expose FrameworkSystemContext::'Framework System Context';
         expose ToBeOperationalDomain::'Configure Framework for an EPS Case';
         expose ToBeOperationalDomain::'Compare Candidate EPS Architectures';
         expose FrameworkMissionRequirements::*;
@@ -96,6 +98,7 @@ package StakeholderViewpoints {
     view 'Framework Independent Review View' : GeneralView {
         satisfy requirement independentReviewViewpoint : 'Framework Independent Review Viewpoint';
         expose ToBeOperationalDomain::'To-be Operational Domain';
+        expose FrameworkSystemContext::'Framework System Context';
         expose ToBeOperationalDomain::'Reproduce an Analysis';
         expose ToBeOperationalDomain::'Assess a Design Change';
         expose ToBeOperationalDomain::'Review an Early Design Justification';
