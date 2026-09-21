@@ -21,10 +21,11 @@
   resource/.style={
     draw,
     align=center,
-    text width=2.75cm,
-    minimum height=1.15cm,
-    inner sep=5pt,
-    fill=white
+    text width=3.1cm,
+    minimum height=1.35cm,
+    inner sep=4pt,
+    fill=white,
+    font=\scriptsize
   },
   coordination/.style={-{Latex[length=2.4mm,width=1.7mm]}}
 ]
@@ -53,19 +54,23 @@
     {\guillemotleft system of interest\guillemotright\\
      \textbf{framework : Nanosatellite EPS Engineering Framework}};
 
-  \node[resource] (model) at (2.9,1.95)
+  \node[resource] (model) at (2.9,1.65)
     {\guillemotleft part\guillemotright\\
-     \textbf{system model : Versioned System Model}};
-  \node[resource] (tools) at (6.7,1.95)
+     \textbf{system model :}\\
+     \textbf{Versioned}\\
+     \textbf{System Model}};
+  \node[resource] (tools) at (6.7,1.65)
     {\guillemotleft part\guillemotright\\
-     \textbf{analysis tools : Analysis Tools}};
-  \node[resource] (repository) at (10.5,1.95)
+     \textbf{analysis tools :}\\
+     \textbf{Analysis Tools}};
+  \node[resource] (repository) at (10.5,1.65)
     {\guillemotleft part\guillemotright\\
-     \textbf{evidence repository : Evidence Repository}};
+     \textbf{evidence repository :}\\
+     \textbf{Evidence Repository}};
 
   % The framework references and coordinates enterprise resources without
   % defining its internal architecture.
-  \draw[coordination] (framework.south) -- (8.75,3.25);
+  \draw (framework.south) -- (8.75,3.25);
   \node[anchor=west,fill=white,inner sep=1.5pt] at (8.87,4.15) {\footnotesize coordinates};
   \draw (2.9,3.25) -- (10.5,3.25);
   \draw[coordination] (2.9,3.25) -- (model.north);
