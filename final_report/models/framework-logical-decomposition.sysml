@@ -80,7 +80,9 @@ package FrameworkLogicalDecomposition {
     // Application components initially correspond one-to-one with the six black-box services.
     part def <'LAP-01'> 'Evidence Chain Manager' :> 'Application Component' {
         doc
-        /* Scopes and validates designated evidence chains and issues their assessments. */
+        /* Registers externally produced requirement, model, and result revisions, scopes and
+         * validates designated evidence chains, and issues their assessments.
+         */
     }
 
     part def <'LAP-02'> 'Case Configuration Manager' :> 'Application Component' {
@@ -118,22 +120,25 @@ package FrameworkLogicalDecomposition {
 
     part def <'LIN-02'> 'Transfer Assurance Manager' :> 'Infrastructure Component' {
         doc
-        /* Checks source and configuration identity, structural completeness, semantic
-         * compatibility, and provenance before any boundary transfer is accepted.
+        /* Checks producer, source revision, configuration and evidence-baseline identity,
+         * structural completeness, semantic compatibility, provenance, and applicable traces before
+         * any boundary transfer is accepted.
          */
     }
 
     part def <'LIN-03'> 'Baseline and Configuration Manager' :> 'Infrastructure Component' {
         doc
-        /* Controls the common core, case configurations, immutable baseline identities, approved
-         * adaptations, and distinct successor revisions.
+        /* Controls the common core and generic-model identity, case configurations, immutable
+         * evidence-baseline and external source-revision identities, approved adaptations, and
+         * distinct successor revisions.
          */
     }
 
     part def <'LIN-04'> 'Evidence and Provenance Manager' :> 'Infrastructure Component' {
         doc
-        /* Retains and retrieves the required model, evidence, assessment, verdict, package,
-         * discrepancy, trace, and provenance records by item and baseline identity.
+        /* Retains and retrieves required artifact registrations, model and evidence revisions,
+         * assessments, verdicts, packages, discrepancies, traces, and provenance by artifact,
+         * source-revision, and evidence-baseline identity.
          */
     }
 

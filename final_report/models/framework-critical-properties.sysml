@@ -31,6 +31,7 @@ package FrameworkCriticalProperties {
     item def 'Framework Evaluation Manifest' {
         item baseline : 'Baseline Reference';
         attribute 'designated evidence chains' : String;
+        attribute 'designated external artifacts' : String;
         attribute 'designated reference analyses' : String;
         attribute 'declared result tolerances' : String;
         attribute 'criticality rule' : String;
@@ -44,10 +45,11 @@ package FrameworkCriticalProperties {
         assert constraint { 'required contrasting case count' == 2 }
 
         doc
-        /* The manifest is fixed before candidate framework results are observed. It identifies what
-         * is designated, the controlled baseline, result-specific tolerances, the discrepancy
-         * criticality rule, the common core, the two required cases, all measurement boundaries, and
-         * the utility anchors and mapping rules used after Pareto comparison.
+        /* The manifest is fixed before candidate framework results are observed. It identifies the
+         * designated evidence chains, external requirement sets, EPS models, analysis results, the
+         * controlled baseline, result-specific tolerances, the discrepancy criticality rule, the
+         * common core, the two required cases, all measurement boundaries, and the utility anchors
+         * and mapping rules used after Pareto comparison.
          */
     }
 
@@ -57,7 +59,9 @@ package FrameworkCriticalProperties {
             doc
             /* Valid required trace relations divided by all applicable required trace relations for
              * the designated evidence chains. A relation is valid only when both ends resolve to the
-             * controlled baseline and the relation has the required semantics.
+             * controlled baseline, each externally produced endpoint has an accepted registration
+             * preserving producer, source revision, and provenance, and the relation has the required
+             * semantics.
              */
         }
         #mop attribute <'MOP-02'> 'reference analysis reproduction success' : Percent {

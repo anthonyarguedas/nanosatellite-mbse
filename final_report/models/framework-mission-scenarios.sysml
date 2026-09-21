@@ -16,32 +16,39 @@ package FrameworkMissionScenarios {
 
     action <'SC-01'> 'Maintain EPS Evidence Chain Scenario' {
         attribute 'records available' : Boolean;
+        attribute 'external artifacts accepted' : Boolean;
         attribute 'chain valid' : Boolean;
         doc
-        /* Trigger: the mission team designates a decision or artifact change for control.
-         * Preconditions: the request names a baseline and identifies the designated item.
-         * Success: the chain assessment and its controlled status are retained.
-         * Alternatives: missing links produce explicit gaps and unavailable records prevent a
-         * valid-chain status.
+        /* Trigger: the mission team designates a decision or externally produced artifact revision
+         * for evidence control. Preconditions: the request names an evidence baseline and the
+         * designated requirement set, tailored EPS model, or analysis result. Success: each artifact
+         * source revision is registered, the complete chain is valid, and the assessment is retained.
+         * Alternatives: unavailable records, rejected artifacts, and trace gaps remain explicit and
+         * leave prior controlled content unchanged.
          */
 
         first start;
-        then 'Submit designated decision or artifact';
-        action 'Submit designated decision or artifact';
+        then 'Submit designated decision or external artifact';
+        action 'Submit designated decision or external artifact';
         then 'Establish affected chain scope';
         action 'Establish affected chain scope' : 'Scope Evidence Chain';
-        then fork 'Collect controlled records';
-            then 'Supply controlled model records';
-            then 'Supply retained evidence records';
-        action 'Supply controlled model records';
+        then fork 'Collect externally produced records';
+            then 'Supply requirement set and EPS model revisions';
+            then 'Supply analysis result and retained evidence revisions';
+        action 'Supply requirement set and EPS model revisions';
         then 'Records collected';
-        action 'Supply retained evidence records';
+        action 'Supply analysis result and retained evidence revisions';
         then 'Records collected';
         join 'Records collected';
         then decide 'Records available?';
-            if 'records available' then 'Check links, versions, and provenance';
+            if 'records available' then 'Verify and register external artifact revisions';
             if not 'records available' then 'Report unavailable records';
-        action 'Check links, versions, and provenance' : 'Validate Evidence Chain';
+        action 'Verify and register external artifact revisions'
+            : 'Register External Engineering Artifacts';
+        then decide 'External artifacts accepted?';
+            if 'external artifacts accepted' then 'Check links, baselines, versions, and provenance';
+            if not 'external artifacts accepted' then 'Report rejected artifacts and preserve baseline';
+        action 'Check links, baselines, versions, and provenance' : 'Validate Evidence Chain';
         then decide 'Chain valid?';
             if 'chain valid' then 'Register valid chain status';
             if not 'chain valid' then 'Report evidence gaps';
@@ -49,34 +56,54 @@ package FrameworkMissionScenarios {
         then 'Assessment prepared';
         action 'Report evidence gaps' : 'Issue Evidence Chain Assessment';
         then 'Assessment prepared';
+        action 'Report rejected artifacts and preserve baseline'
+            : 'Issue Evidence Chain Assessment';
+        then 'Assessment prepared';
         action 'Report unavailable records' : 'Issue Evidence Chain Assessment';
         then 'Assessment prepared';
         merge 'Assessment prepared';
-        then 'Retain chain assessment';
-        action 'Retain chain assessment';
-        then 'Receive chain status';
-        action 'Receive chain status';
+        then 'Retain registrations and chain assessment';
+        action 'Retain registrations and chain assessment';
+        then 'Receive chain and artifact status';
+        action 'Receive chain and artifact status';
         then done;
     }
 
     part 'SC-01 Performers' {
         part missionTeam : 'Academic Mission Team' {
-            perform 'Maintain EPS Evidence Chain Scenario'.'Submit designated decision or artifact';
-            perform 'Maintain EPS Evidence Chain Scenario'.'Receive chain status';
+            perform
+                'Maintain EPS Evidence Chain Scenario'
+                        .'Submit designated decision or external artifact';
+            perform
+                'Maintain EPS Evidence Chain Scenario'.'Receive chain and artifact status';
         }
         part framework : 'Nanosatellite EPS Engineering Framework' {
             perform 'Maintain EPS Evidence Chain Scenario'.'Establish affected chain scope';
-            perform 'Maintain EPS Evidence Chain Scenario'.'Check links, versions, and provenance';
+            perform
+                'Maintain EPS Evidence Chain Scenario'
+                        .'Verify and register external artifact revisions';
+            perform
+                'Maintain EPS Evidence Chain Scenario'
+                        .'Check links, baselines, versions, and provenance';
             perform 'Maintain EPS Evidence Chain Scenario'.'Register valid chain status';
             perform 'Maintain EPS Evidence Chain Scenario'.'Report evidence gaps';
+            perform
+                'Maintain EPS Evidence Chain Scenario'
+                        .'Report rejected artifacts and preserve baseline';
             perform 'Maintain EPS Evidence Chain Scenario'.'Report unavailable records';
         }
         part systemModel : 'Versioned System Model' {
-            perform 'Maintain EPS Evidence Chain Scenario'.'Supply controlled model records';
+            perform
+                'Maintain EPS Evidence Chain Scenario'
+                        .'Supply requirement set and EPS model revisions';
         }
         part evidenceRepository : 'Evidence Repository' {
-            perform 'Maintain EPS Evidence Chain Scenario'.'Supply retained evidence records';
-            perform 'Maintain EPS Evidence Chain Scenario'.'Retain chain assessment';
+            perform
+                'Maintain EPS Evidence Chain Scenario'
+                        .'Supply analysis result and retained evidence revisions';
+            perform
+                'Maintain EPS Evidence Chain Scenario'
+                        .'Retain registrations and chain assessment';
         }
     }
 
@@ -85,17 +112,18 @@ package FrameworkMissionScenarios {
         attribute 'adaptation accepted' : Boolean;
         doc
         /* Trigger: the mission team selects an EPS case for framework application.
-         * Preconditions: the case objective, starting environment, and intended common-core revision
-         * are identified.
-         * Success: a controlled case configuration declares all parameters, extensions, mappings,
-         * and assumptions. Alternatives remain visibly incomplete or unavailable.
+         * Preconditions: the case objective, starting environment, and intended common-core and
+         * generic EPS model revisions are identified.
+         * Success: a controlled case configuration identifies the generic model baseline and declares
+         * all parameters, extensions, mappings, and assumptions for external model tailoring.
+         * Alternatives remain visibly incomplete or unavailable.
          */
 
         first start;
         then 'Declare EPS case, intended analyses, and starting environment';
         action 'Declare EPS case, intended analyses, and starting environment';
-        then 'Supply common core, workflow, and minimum environment declaration';
-        action 'Supply common core, workflow, and minimum environment declaration';
+        then 'Supply generic model, common core, workflow, and minimum environment declaration';
+        action 'Supply generic model, common core, workflow, and minimum environment declaration';
         then decide 'Common core available?';
             if 'common core available' then 'Establish declared minimum environment';
             if not 'common core available' then 'Report unavailable common core';
@@ -157,7 +185,7 @@ package FrameworkMissionScenarios {
         part systemModel : 'Versioned System Model' {
             perform
                 'Configure Framework for EPS Case Scenario'
-                        .'Supply common core, workflow, and minimum environment declaration';
+                        .'Supply generic model, common core, workflow, and minimum environment declaration';
         }
         part evidenceRepository : 'Evidence Repository' {
             perform 'Configure Framework for EPS Case Scenario'.'Retain case configuration status';

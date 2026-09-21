@@ -31,14 +31,17 @@ package FrameworkMissionRequirements {
         doc
         /* Every EPS design decision designated for framework evaluation has a complete and valid
          * evidence chain from its source need or requirement through the applicable design elements,
-         * assumptions and input configuration, analysis result, and verification criterion.
+         * assumptions and input configuration, analysis result, and verification criterion. Each
+         * designated requirement set, tailored EPS model, and analysis result produced by an external
+         * engineering capability enters that chain only with its producer, source revision, controlled
+         * evidence baseline, provenance, and applicable trace relations identified and preserved.
          * Evidence basis: buruso2026modelbased Sec. 5.1 and Table 5;
          * vizitiu2025optimizing Sec. 4.7 and Table 3; rostamnia2026digitaltwin Table 13.
          */
 
         require constraint statement {
             doc
-            /* Every designated decision has a complete and valid evidence chain. */
+            /* Every designated decision and accepted external artifact has a complete and valid evidence chain. */
         }
     }
 
@@ -62,13 +65,16 @@ package FrameworkMissionRequirements {
         doc
         /* A framework evaluation baseline has no unresolved discrepancy classified as critical among
          * its requirements, model properties, interfaces, budgets, assumptions, and analysis inputs.
+         * An unavailable, incomplete, incompatible, or untraceable external artifact is rejected
+         * without changing controlled content, and its validation discrepancies are retained and
+         * returned through the applicable interface.
          * Evidence basis: vizitiu2025optimizing Sec. 4.7 and Table 3;
          * buruso2026modelbased Sec. 5.1 and Table 5; rostamnia2026digitaltwin Table 13.
          */
 
         require constraint statement {
             doc
-            /* No critical evidence inconsistency remains unresolved. */
+            /* No critical evidence inconsistency remains unresolved, and no discrepancy from a rejected artifact is hidden. */
         }
     }
 

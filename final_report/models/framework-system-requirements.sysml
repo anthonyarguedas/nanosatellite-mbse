@@ -42,7 +42,7 @@ package FrameworkSystemRequirements {
         /* The framework shall perform every required black-box service function. */
         require constraint statement {
             doc
-            /* FUN-01 through FUN-22 are satisfied. */
+            /* FUN-01 through FUN-23 are satisfied. */
         }
     }
 
@@ -108,12 +108,13 @@ package FrameworkSystemRequirements {
         }
     }
 
-    // Functional requirements derived from the 22 scenario-allocated subfunctions.
+    // Functional requirements derived from the 23 scenario-allocated subfunctions.
     requirement <'FUN-01'> 'Scope Designated Evidence Chain' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* Given a valid Evidence Chain Request, the framework shall identify the named baseline and
-         * every applicable relation and endpoint in the designated evidence chain.
+        /* Given a valid Evidence Chain Request, the framework shall identify the named evidence
+         * baseline, every designated external artifact revision, and every applicable relation and
+         * endpoint in the evidence chain.
          */
         require constraint statement {
             doc
@@ -128,14 +129,15 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "F-01.1 Scope Evidence Chain";
         verificationMethod = (VerificationMethodKind::demo, VerificationMethodKind::test);
         acceptanceCriterion =
-            "For a controlled fixture, the scope contains the oracle baseline, relations, and endpoints.";
+            "For a controlled fixture, the scope contains the oracle baseline, designated external artifact revisions, relations, and endpoints.";
     }
 
     requirement <'FUN-02'> 'Validate Evidence Chain' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* The framework shall evaluate each scoped chain for record availability, endpoint
-         * resolution, baseline identity, required relation semantics, and unresolved discrepancies.
+        /* The framework shall evaluate each scoped chain for record availability, accepted artifact
+         * registration, producer and source-revision identity, endpoint resolution, baseline identity,
+         * provenance preservation, required relation semantics, and unresolved discrepancies.
          */
         require constraint statement {
             doc
@@ -153,14 +155,15 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "F-01.2 Validate Evidence Chain";
         verificationMethod = (VerificationMethodKind::analyze, VerificationMethodKind::test);
         acceptanceCriterion =
-            "Complete, incomplete, unavailable, and inconsistent fixtures receive the corresponding assessment and discrepancies.";
+            "Complete, incomplete, unavailable, rejected-artifact, and inconsistent fixtures receive the corresponding assessment, registration status, and discrepancies.";
     }
 
     requirement <'FUN-03'> 'Issue Evidence Chain Assessment' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* The framework shall issue an Evidence Chain Assessment that states availability and
-         * validity and identifies every detected gap or discrepancy.
+        /* The framework shall issue an Evidence Chain Assessment that states record availability,
+         * external-artifact acceptance, and chain validity and includes every Artifact Registration
+         * Record and detected gap or discrepancy.
          */
         require constraint statement {
             doc
@@ -177,15 +180,15 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "F-01.3 Issue Evidence Chain Assessment";
         verificationMethod = VerificationMethodKind::demo;
         acceptanceCriterion =
-            "Each nominal and exceptional SC-01 path emits and retains one assessment with the expected status and discrepancies.";
+            "Each nominal and exceptional SC-01 path emits and retains one assessment with the expected availability, artifact-acceptance, chain-validity, registration, and discrepancy content.";
     }
 
     requirement <'FUN-04'> 'Capture Case Configuration' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* For each requested EPS case, the framework shall capture the common-core revision,
-         * environment, direct-cost basis, parameters, extensions, mappings, and assumptions in a
-         * Case Configuration Draft.
+        /* For each requested EPS case, the framework shall capture the common-core and generic EPS
+         * model revisions, environment, direct-cost basis, parameters, extensions, mappings, and
+         * assumptions in a Case Configuration Draft.
          */
         require constraint statement {
             doc
@@ -200,14 +203,15 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "F-02.1 Capture Case Configuration";
         verificationMethod = (VerificationMethodKind::inspect, VerificationMethodKind::demo);
         acceptanceCriterion =
-            "A configured fixture contains the expected common-core revision and every required environment, cost, adaptation, and assumption field.";
+            "A configured fixture contains the expected common-core and generic-model revisions and every required environment, cost, adaptation, and assumption field.";
     }
 
     requirement <'FUN-05'> 'Validate Case Configuration' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
         /* The framework shall assess each Case Configuration Draft for completeness, semantic
-         * compatibility with the common core, and approval of every declared adaptation.
+         * compatibility with the common core and identified generic EPS model, and approval of every
+         * declared adaptation that an external MD capability may apply.
          */
         require constraint statement {
             doc
@@ -225,7 +229,7 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "F-02.2 Validate Case Configuration";
         verificationMethod = VerificationMethodKind::test;
         acceptanceCriterion =
-            "Known complete, incomplete, incompatible, and unapproved drafts receive the oracle assessment and discrepancy set.";
+            "Known complete, missing-generic-model, incompatible, and unapproved drafts receive the oracle assessment and discrepancy set.";
     }
 
     requirement <'FUN-06'> 'Issue Controlled Case Configuration' {
@@ -254,9 +258,9 @@ package FrameworkSystemRequirements {
     requirement <'FUN-07'> 'Prepare Reproduction Package' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* The framework shall assemble and assess the named baseline, model, inputs, assumptions,
-         * dependencies, environment, reported results, and predeclared tolerances required to
-         * reproduce a designated analysis.
+        /* The framework shall assemble and assess the named baseline, source-identified model,
+         * inputs, assumptions, dependencies, environment, reported result revision, and predeclared
+         * tolerances required to reproduce a designated analysis.
          */
         require constraint statement {
             doc
@@ -279,7 +283,8 @@ package FrameworkSystemRequirements {
         doc
         /* The framework shall submit each accepted Analysis Execution Request to the analysis
          * interface and return the corresponding raw Analysis Result Package without changing its
-         * baseline identity, inputs, assumptions, status, or results.
+         * producer, source revision, evidence-baseline identity, inputs, assumptions, status, or
+         * results. Result acceptance remains subject to the common transfer contract.
          */
         require constraint statement {
             doc
@@ -300,7 +305,7 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "F-03.2 Coordinate Controlled Analysis";
         verificationMethod = (VerificationMethodKind::demo, VerificationMethodKind::test);
         acceptanceCriterion =
-            "Each submitted request and returned raw result preserve the oracle correlation, baseline, inputs, assumptions, status, and payload.";
+            "Each submitted request and returned raw result preserve the oracle correlation, producer, source revision, evidence baseline, inputs, assumptions, status, and payload, while an invalid result is rejected under INT-08.";
     }
 
     requirement <'FUN-09'> 'Evaluate Reproduced Result' {
@@ -660,6 +665,34 @@ package FrameworkSystemRequirements {
             "The published status matches the reviewer outcome and remains non-accepted whenever the package is incomplete or a critical finding remains open.";
     }
 
+    requirement <'FUN-23'> 'Register External Engineering Artifacts' {
+        subject framework : 'Specified Nanosatellite EPS Engineering Framework';
+        doc
+        /* For every designated externally produced Requirement Set, EPS Model Artifact, and Analysis
+         * Result Package, the framework shall issue an Artifact Registration Record that preserves
+         * the artifact and producer identifiers, producing capability, source revision, controlled
+         * evidence baseline, provenance, applicable traces, acceptance status, and discrepancies.
+         * Only an accepted registration may be used in a valid evidence chain.
+         */
+        require constraint statement {
+            doc
+            /* Every designated external artifact has one complete accepted or rejected registration. */
+        }
+    }
+    @BlackBoxRequirementTrace {
+        sourceScenario = FrameworkMissionScenarios::'Maintain EPS Evidence Chain Scenario';
+        parentMissionRequirement = (
+            FrameworkMissionRequirements::'Complete and Valid Evidence Chains',
+            FrameworkMissionRequirements::'Resolve Critical Evidence Inconsistencies'
+        );
+        rationale =
+            "G-01 requires source-controlled external endpoints and G-03 requires explicit non-destructive rejection.";
+        specifiedFeatureIdentifier = "F-01.0 Register External Engineering Artifacts";
+        verificationMethod = (VerificationMethodKind::inspect, VerificationMethodKind::test);
+        acceptanceCriterion =
+            "Valid requirement, tailored-model, and analysis-result fixtures receive complete accepted registrations. Missing-source, wrong-baseline, provenance-loss, trace-loss, and undeclared-tailoring fixtures receive rejected registrations with oracle discrepancies and leave controlled content unchanged.";
+    }
+
     // Operational control requirements derived from all six mission scenarios.
     requirement <'CTL-01'> 'Establish Controlled Context Before Operational Work' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
@@ -729,8 +762,9 @@ package FrameworkSystemRequirements {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
         /* From ST-04 through ST-08, the framework shall return the selected context to ST-03 only
-         * when the typed terminal outcome is respectively an available valid Evidence Chain
-         * Assessment, a successful Reproduction Verdict, a correct Change Evidence Package, a
+         * when the typed terminal outcome is respectively an available Evidence Chain Assessment
+         * with all external artifacts accepted and the chain valid, a successful Reproduction
+         * Verdict, a correct Change Evidence Package, a
          * complete Candidate Comparison Package, or a complete Review Status with all critical
          * findings resolved.
          */
@@ -764,8 +798,9 @@ package FrameworkSystemRequirements {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
         /* From ST-02 and ST-04 through ST-08, the framework shall enter ST-09 Discrepancy Open when
-         * configuration is non-ready, evidence is unavailable or invalid, reproduction fails, a
-         * change package is incorrect, a comparison package is incomplete, or review evidence is
+         * configuration is non-ready, evidence is unavailable, an external artifact is rejected,
+         * the evidence chain is invalid, reproduction fails, a change package is incorrect, a
+         * comparison package is incomplete, or review evidence is
          * incomplete or has unresolved critical findings. The triggering status and discrepancies
          * shall remain retained and visible.
          */
@@ -797,8 +832,9 @@ package FrameworkSystemRequirements {
         doc
         /* From ST-09 Discrepancy Open, the framework shall accept only a verified corrected service
          * request or an Evidence Chain Request for controlled revalidation. Revalidation shall enter
-         * ST-10 Recovering and return to ST-03 only when all required records are available and the
-         * corrected chain is valid. A deficient recovery shall return to ST-09 with its residual
+         * ST-10 Recovering and return to ST-03 only when all required records are available, every
+         * designated external artifact is accepted, and the corrected chain is valid. A deficient
+         * recovery shall return to ST-09 with its residual
          * discrepancies.
          */
         require constraint statement {
@@ -830,10 +866,11 @@ package FrameworkSystemRequirements {
     requirement <'CTL-06'> 'Preserve Baseline Identity Across Control Transitions' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* Every SM-01 transition shall preserve the selected context and baseline identity. A
-         * successful controlled change shall assign a distinct successor baseline before ST-03 is
-         * re-entered, while the target baseline remains immutable and retrievable. Failed work and
-         * recovery attempts shall not overwrite either baseline.
+        /* Every SM-01 transition shall preserve the selected context and evidence-baseline identity,
+         * together with each external artifact's producer and source revision. A successful
+         * controlled change shall assign a distinct successor baseline before ST-03 is re-entered,
+         * while the target baseline remains immutable and retrievable. Rejected artifacts, failed
+         * work, and recovery attempts shall not overwrite either baseline or any source revision.
          */
         require constraint statement {
             doc
@@ -860,7 +897,7 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "SM-01 all states and transitions, STO-04";
         verificationMethod = (VerificationMethodKind::inspect, VerificationMethodKind::test);
         acceptanceCriterion =
-            "Observed transition traces preserve the selected context and baseline, accepted changes create the oracle successor identifier, and overwrite attempts leave all prior baselines unchanged and retrievable.";
+            "Observed transition traces preserve context, evidence baseline, producer, and source revision. Accepted changes create the oracle successor identifier, and rejected-artifact or overwrite attempts leave all prior baselines and source revisions unchanged and retrievable.";
     }
 
     // Typed interface requirements.
@@ -960,8 +997,9 @@ package FrameworkSystemRequirements {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
         /* The framework shall exchange model-control information only through IF-04 using its
-         * defined item types and directions, receiving controlled model, common-core, and candidate
-         * records and returning accepted case configurations and authorized revisions.
+         * defined item types and directions, receiving externally authored requirement sets, generic
+         * and tailored EPS models, common-core and candidate records with source revisions, and
+         * returning artifact registrations, accepted case configurations, and authorized revisions.
          */
         require constraint statement {
             doc
@@ -980,21 +1018,23 @@ package FrameworkSystemRequirements {
         parentMissionRequirement = (
             FrameworkMissionRequirements::'Complete and Valid Evidence Chains',
             FrameworkMissionRequirements::'Reproduce Reference Analyses',
+            FrameworkMissionRequirements::'Resolve Critical Evidence Inconsistencies',
             FrameworkMissionRequirements::'Complete Contrasting Evaluation Cases'
         );
         rationale =
-            "Every service depends on controlled model identity without selecting a model repository implementation.";
+            "Every service depends on controlled model identity and explicit artifact acceptance without selecting a model repository implementation.";
         specifiedFeatureIdentifier = "IF-04 Model Control Interface";
         verificationMethod = (VerificationMethodKind::inspect, VerificationMethodKind::test);
         acceptanceCriterion =
-            "Interface inspection and six scenario tests show only declared IF-04 item types and preserve baseline identity in both directions.";
+            "Interface inspection and six scenario tests show only declared IF-04 item types and preserve producer, source-revision, generic-model, case-configuration, and evidence-baseline identity in their declared directions.";
     }
 
     requirement <'INT-05'> 'Analysis Execution Interface Contract' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* The framework shall submit Analysis Execution Requests and receive corresponding raw
-         * Analysis Result Packages only through IF-05 using their defined item types and directions.
+        /* The framework shall submit Analysis Execution Requests and receive corresponding raw,
+         * source-identified, evidence-baselined Analysis Result Packages only through IF-05 using
+         * their defined item types and directions.
          */
         require constraint statement {
             doc
@@ -1017,15 +1057,16 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "IF-05 Analysis Execution Interface";
         verificationMethod = (VerificationMethodKind::inspect, VerificationMethodKind::test);
         acceptanceCriterion =
-            "Interface inspection and SC-03 through SC-05 tests show request-result correlation and only declared IF-05 item types and directions.";
+            "Interface inspection and SC-03 through SC-05 tests show request-result correlation, producer and source-revision identity, evidence-baseline identity, and only declared IF-05 item types and directions.";
     }
 
     requirement <'INT-06'> 'Evidence Custody Interface Contract' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* The framework shall retrieve retained evidence and submit accepted assessments,
-         * configurations, results, verdicts, change packages, comparisons, review packages, and
-         * statuses only through IF-06 using their defined item types and directions.
+        /* The framework shall retrieve retained evidence and submit artifact registrations,
+         * accepted assessments, configurations, results, verdicts, change packages, comparisons,
+         * review packages, and statuses only through IF-06 using their defined item types and
+         * directions.
          */
         require constraint statement {
             doc
@@ -1052,15 +1093,17 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "IF-06 Evidence Custody Interface";
         verificationMethod = (VerificationMethodKind::inspect, VerificationMethodKind::test);
         acceptanceCriterion =
-            "Interface inspection and six scenario tests show only declared IF-06 items, directions, identifiers, and baseline references.";
+            "Interface inspection and six scenario tests show only declared IF-06 items and directions, with artifact registrations, identifiers, source revisions, and evidence-baseline references preserved.";
     }
 
     requirement <'INT-07'> 'Verify Boundary Transfer Before Acceptance' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* Before accepting any incoming boundary item, the framework shall verify source identity,
+        /* Before accepting any incoming boundary item, the framework shall verify source and
          * configuration identity, structural completeness, identifier and quantity compatibility,
-         * units and semantic compatibility, and provenance preservation.
+         * units and semantic compatibility, and provenance preservation. For an externally produced
+         * engineering artifact, the framework shall additionally verify producer and source-revision
+         * identity, evidence-baseline identity, and preservation of applicable trace relations.
          */
         require constraint statement {
             doc
@@ -1085,15 +1128,15 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "Transfer Verification Record on IF-01 through IF-06";
         verificationMethod = VerificationMethodKind::test;
         acceptanceCriterion =
-            "A transfer is accepted exactly when all declared checks pass, including unit and semantic checks for typed quantities.";
+            "A transfer is accepted exactly when all declared checks pass. Engineering-artifact fixtures additionally require the oracle producer, source revision, evidence baseline, provenance, and applicable traces.";
     }
 
     requirement <'INT-08'> 'Preserve Controlled Content After Rejected Transfer' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* When a boundary transfer is rejected, the framework shall leave controlled content
-         * unchanged and issue and retain a Transfer Verification Record containing every detected
-         * discrepancy.
+        /* When a boundary transfer is rejected, the framework shall leave controlled content and
+         * prior source revisions unchanged and issue, return, and retain a Transfer Verification
+         * Record containing every detected discrepancy.
          */
         require constraint statement {
             doc
@@ -1116,16 +1159,18 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "Transfer Verification Record on IF-01 through IF-06";
         verificationMethod = VerificationMethodKind::test;
         acceptanceCriterion =
-            "Each seeded rejected transfer preserves the pre-transfer controlled content and produces a retained record with the oracle discrepancies.";
+            "Each seeded rejected transfer preserves the pre-transfer baseline, controlled content, and source revisions and returns and retains a record with the oracle discrepancies.";
     }
 
     // Required black-box stores.
     requirement <'STO-01'> 'Retain Controlled Model and Case Records' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* The framework shall cause every accepted controlled model record, common-core package,
-         * case configuration, and authorized change revision to be retained with its unique
-         * identifier, immutable baseline reference, approval state, and provenance.
+        /* The framework shall cause every accepted externally authored requirement set, generic or
+         * tailored EPS model, controlled model record, common-core package, case configuration,
+         * Artifact Registration Record, and authorized change revision to be retained with its
+         * producer, source revision, unique identifier, immutable evidence-baseline reference,
+         * approval state, applicable traces, and provenance.
          */
         require constraint statement {
             doc
@@ -1142,22 +1187,25 @@ package FrameworkSystemRequirements {
         );
         parentMissionRequirement = (
             FrameworkMissionRequirements::'Complete and Valid Evidence Chains',
+            FrameworkMissionRequirements::'Resolve Critical Evidence Inconsistencies',
             FrameworkMissionRequirements::'Complete Contrasting Evaluation Cases'
         );
-        rationale = "Controlled model and case identity anchors traceability and case reuse.";
+        rationale =
+            "Controlled model, registration, and case identity anchor traceability, explicit discrepancy status, and case reuse.";
         specifiedFeatureIdentifier =
-            "requiredRecords.modelRecords and requiredRecords.caseConfigurations";
+            "requiredRecords.modelRecords, requiredRecords.artifactRegistrations, and requiredRecords.caseConfigurations";
         verificationMethod = (VerificationMethodKind::inspect, VerificationMethodKind::demo);
         acceptanceCriterion =
-            "Every accepted fixture is retrievable with the same identifier, baseline, approval state, and provenance.";
+            "Every accepted requirement and model fixture and its registration are retrievable with the same producer, source revision, identifier, evidence baseline, approval state, traces, and provenance.";
     }
 
     requirement <'STO-02'> 'Retain Raw Analysis Evidence' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* The framework shall cause the assumptions, controlled inputs, runtime dependencies, raw
-         * results, execution status, declared uncertainty, and verification evidence for every
-         * designated analysis to be retained for the evaluation period.
+        /* The framework shall cause the producer, source revision, evidence baseline, assumptions,
+         * controlled inputs, runtime dependencies, raw results, execution status, declared
+         * uncertainty, Artifact Registration Record, and verification evidence for every designated
+         * analysis to be retained for the evaluation period.
          */
         require constraint statement {
             doc
@@ -1174,22 +1222,23 @@ package FrameworkSystemRequirements {
         );
         parentMissionRequirement = (
             FrameworkMissionRequirements::'Complete and Valid Evidence Chains',
-            FrameworkMissionRequirements::'Reproduce Reference Analyses'
+            FrameworkMissionRequirements::'Reproduce Reference Analyses',
+            FrameworkMissionRequirements::'Resolve Critical Evidence Inconsistencies'
         );
         rationale =
-            "Raw evidence and declared uncertainty are necessary for independent reproduction and review.";
+            "Raw evidence, artifact registration, declared uncertainty, and explicit discrepancy status are necessary for independent reproduction and review.";
         specifiedFeatureIdentifier = "requiredRecords.evidenceRecords";
         verificationMethod = (VerificationMethodKind::inspect, VerificationMethodKind::demo);
         acceptanceCriterion =
-            "All designated analysis fixtures remain retrievable with their complete raw inputs, assumptions, dependencies, outputs, status, uncertainty, and verification evidence.";
+            "All designated analysis fixtures remain retrievable with their producer, source revision, evidence baseline, registration, raw inputs, assumptions, dependencies, outputs, status, uncertainty, and verification evidence.";
     }
 
     requirement <'STO-03'> 'Retain Assessments, Verdicts, and Review Records' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* The framework shall cause every issued assessment, verdict, change package, comparison
-         * package, review package, review status, transfer verification, and associated discrepancy
-         * to be retained for the evaluation period.
+        /* The framework shall cause every issued Artifact Registration Record, assessment, verdict,
+         * change package, comparison package, review package, review status, transfer verification,
+         * and associated discrepancy to be retained for the evaluation period.
          */
         require constraint statement {
             doc
@@ -1220,9 +1269,10 @@ package FrameworkSystemRequirements {
     requirement <'STO-04'> 'Retrieve Immutable Baseline Records' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
-        /* The framework shall preserve immutable baseline identity by retrieving required records
-         * through unique item and baseline identifiers, preventing overwrite of accepted baselines,
-         * and assigning a new baseline identifier to each accepted change.
+        /* The framework shall preserve immutable evidence-baseline and external source-revision
+         * identity by retrieving required records through unique artifact, source-revision, and
+         * baseline identifiers, preventing overwrite of accepted baselines and source revisions, and
+         * assigning a new baseline identifier to each accepted change.
          */
         require constraint statement {
             doc
@@ -1246,7 +1296,7 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "requiredRecords and Baseline Reference";
         verificationMethod = VerificationMethodKind::test;
         acceptanceCriterion =
-            "Queries return only the named baseline, overwrite attempts fail visibly, and an accepted change creates a distinct retrievable baseline.";
+            "Queries return only the named artifact revision and evidence baseline, overwrite attempts fail visibly, and an accepted change creates a distinct retrievable baseline while preserving every prior source revision.";
     }
 
     // Acceptance and comparative MOP requirements.
@@ -1254,8 +1304,9 @@ package FrameworkSystemRequirements {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
         /* At the evaluation verdict, the framework shall achieve 100 percent valid trace coverage
-         * over all applicable relations in every evidence chain designated by the fixed Framework
-         * Evaluation Manifest.
+         * over all applicable relations in every evidence chain and external artifact designated by
+         * the fixed Framework Evaluation Manifest. A relation is valid only when each external
+         * endpoint has an accepted registration with preserved source revision and provenance.
          */
         require constraint statement {
             doc
@@ -1270,7 +1321,7 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "MOP-01 valid trace coverage";
         verificationMethod = (VerificationMethodKind::analyze, VerificationMethodKind::test);
         acceptanceCriterion =
-            "The independently recounted valid relation count equals the applicable relation count and the reported coverage equals 100 percent.";
+            "The independently recounted valid relation count equals the applicable relation count, every external endpoint registration is accepted and resolves to its source revision and evidence baseline, and reported coverage equals 100 percent.";
     }
 
     requirement <'PER-02'> 'Reproduce Every Designated Reference Analysis' {
@@ -1510,8 +1561,8 @@ package FrameworkSystemRequirements {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
         /* Every controlled output issued by the framework shall identify its source request,
-         * producing function, applicable item identifiers, controlled baseline, and trace and
-         * provenance records.
+         * producing function, applicable item and producer identifiers, external source revision,
+         * controlled evidence baseline, and trace and provenance records.
          */
         require constraint statement {
             doc
@@ -1536,15 +1587,15 @@ package FrameworkSystemRequirements {
         specifiedFeatureIdentifier = "All F-01 through F-06 controlled outputs";
         verificationMethod = VerificationMethodKind::inspect;
         acceptanceCriterion =
-            "A sample from every output type resolves to one source request, producing function, item identity, baseline, and provenance chain.";
+            "A sample from every output type resolves to one source request, producing function, item and producer identity, external source revision, evidence baseline, and provenance chain.";
     }
 
     requirement <'QLT-02'> 'Expose Exceptional Outcomes' {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
         /* The framework shall represent every missing, unavailable, incomplete, incompatible,
-         * failed, out-of-tolerance, rejected, or unresolved outcome with an explicit status that is
-         * never valid, ready, successful, feasible, resolved, or accepted.
+         * unversioned, untraceable, failed, out-of-tolerance, rejected, or unresolved outcome with an
+         * explicit status that is never valid, ready, successful, feasible, resolved, or accepted.
          */
         require constraint statement {
             doc
@@ -1633,7 +1684,10 @@ package FrameworkSystemRequirements {
         subject framework : 'Specified Nanosatellite EPS Engineering Framework';
         doc
         /* Every controlled case configuration and case evidence package shall distinguish the
-         * unchanged common-core identifier from each approved case parameter, extension, and mapping.
+         * unchanged common-core and generic-model identifiers from each approved case parameter,
+         * extension, and mapping. Each EPS Model Artifact shall declare its model role. Each accepted
+         * tailored model shall resolve to that generic-model baseline and the applicable approved
+         * case-configuration baseline.
          */
         require constraint statement {
             doc
@@ -1641,15 +1695,22 @@ package FrameworkSystemRequirements {
         }
     }
     @BlackBoxRequirementTrace {
-        sourceScenario = FrameworkMissionScenarios::'Configure Framework for EPS Case Scenario';
-        parentMissionRequirement =
-            FrameworkMissionRequirements::'Complete Contrasting Evaluation Cases';
+        sourceScenario = (
+            FrameworkMissionScenarios::'Maintain EPS Evidence Chain Scenario',
+            FrameworkMissionScenarios::'Configure Framework for EPS Case Scenario'
+        );
+        parentMissionRequirement = (
+            FrameworkMissionRequirements::'Complete and Valid Evidence Chains',
+            FrameworkMissionRequirements::'Resolve Critical Evidence Inconsistencies',
+            FrameworkMissionRequirements::'Complete Contrasting Evaluation Cases'
+        );
         rationale =
-            "The reuse claim in G-04 depends on an auditable boundary between common and case-specific content.";
-        specifiedFeatureIdentifier = "F-02 outputs and requiredRecords.caseConfigurations";
+            "G-01 and G-03 require a valid registered tailored-model endpoint, while the reuse claim in G-04 depends on an auditable boundary between common and case-specific content.";
+        specifiedFeatureIdentifier =
+            "F-01.0 registrations, F-02 outputs, and requiredRecords.caseConfigurations";
         verificationMethod = (VerificationMethodKind::inspect, VerificationMethodKind::test);
         acceptanceCriterion =
-            "For both cases, every executed element is classified as the named common core or one approved parameter, extension, or mapping.";
+            "For both cases, every executed element is classified as the named common core or one approved adaptation, every EPS model declares the oracle role, and each tailored-model fixture resolves to the oracle generic-model and approved case-configuration baselines.";
     }
 
     // Externally declared realization-resource characteristics.
@@ -1749,6 +1810,7 @@ package FrameworkSystemRequirements {
     #refinement dependency 'Coordinate Selected Review Reproduction' to 'Functional Requirements';
     #refinement dependency 'Manage Review Findings' to 'Functional Requirements';
     #refinement dependency 'Issue Early Design Review Status' to 'Functional Requirements';
+    #refinement dependency 'Register External Engineering Artifacts' to 'Functional Requirements';
 
     #refinement dependency
         'Establish Controlled Context Before Operational Work'

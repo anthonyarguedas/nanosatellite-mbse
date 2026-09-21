@@ -14,15 +14,19 @@ package FrameworkBoundaryInterfaces {
 
     item def 'Transfer Verification Record' {
         attribute sourceIdentified : Boolean;
+        attribute sourceRevisionIdentified : Boolean;
         attribute configurationIdentified : Boolean;
         attribute structurallyComplete : Boolean;
         attribute semanticallyCompatible : Boolean;
         attribute provenancePreserved : Boolean;
+        attribute applicableTracesPreserved : Boolean;
         attribute accepted : Boolean;
         item discrepancies : 'Discrepancy Set';
         doc
-        /* A receiving endpoint returns this record for a boundary transfer. A rejected transfer
-         * remains visible with its discrepancies and does not silently replace controlled content.
+        /* A receiving endpoint returns this record for a boundary transfer. For an engineering
+         * artifact, acceptance also requires its producer, source revision, evidence baseline,
+         * provenance, and applicable traces. A rejected transfer remains visible with its
+         * discrepancies and does not silently replace controlled content.
          */
     }
 
@@ -73,6 +77,7 @@ package FrameworkBoundaryInterfaces {
         inout item controlledModelRecords : 'Controlled Model Records';
         inout item commonCorePackage : 'Common Core Package';
         inout item candidateModelPackage : 'Candidate Model Package';
+        inout item artifactRegistrations : 'Artifact Registration Set';
         inout item controlledCaseConfiguration : 'Controlled Case Configuration';
         inout item acceptedChangeRevision : 'Change Revision Package';
     }
@@ -86,6 +91,7 @@ package FrameworkBoundaryInterfaces {
     port def 'Evidence Custody Port' {
         inout item transferVerification : 'Transfer Verification Record';
         inout item retainedEvidenceRecords : 'Retained Evidence Records';
+        inout item artifactRegistrations : 'Artifact Registration Set';
         inout item evidenceChainAssessment : 'Evidence Chain Assessment';
         inout item controlledCaseConfiguration : 'Controlled Case Configuration';
         inout item configurationStatus : 'Configuration Status';
@@ -160,6 +166,7 @@ package FrameworkBoundaryInterfaces {
         flow systemModel.controlledModelRecords to framework.controlledModelRecords;
         flow systemModel.commonCorePackage to framework.commonCorePackage;
         flow systemModel.candidateModelPackage to framework.candidateModelPackage;
+        flow framework.artifactRegistrations to systemModel.artifactRegistrations;
         flow framework.controlledCaseConfiguration to systemModel.controlledCaseConfiguration;
         flow framework.acceptedChangeRevision to systemModel.acceptedChangeRevision;
     }
@@ -181,6 +188,7 @@ package FrameworkBoundaryInterfaces {
         flow repository.transferVerification to framework.transferVerification;
         flow framework.transferVerification to repository.transferVerification;
         flow repository.retainedEvidenceRecords to framework.retainedEvidenceRecords;
+        flow framework.artifactRegistrations to repository.artifactRegistrations;
         flow framework.evidenceChainAssessment to repository.evidenceChainAssessment;
         flow framework.controlledCaseConfiguration to repository.controlledCaseConfiguration;
         flow framework.configurationStatus to repository.configurationStatus;

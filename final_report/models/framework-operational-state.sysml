@@ -14,9 +14,10 @@ package FrameworkOperationalState {
         doc
         /* The framework establishes a controlled case baseline before accepting evidence,
          * reproduction, change, comparison, or review work for that context. Each active service
-         * state invokes the corresponding black-box function. A successful typed outcome returns
-         * the context to Controlled Baseline Ready. Every deficient, failed, incompatible, or
-         * unresolved outcome enters Discrepancy Open. Recovery requires controlled revalidation.
+         * state invokes the corresponding black-box function. Evidence work registers designated
+         * external artifact revisions before chain validation. A successful typed outcome returns
+         * the context to Controlled Baseline Ready. Every rejected, deficient, failed, incompatible,
+         * or unresolved outcome enters Discrepancy Open. Recovery requires controlled revalidation.
          */
 
         transition initializeControl first start then Unconfigured;
@@ -46,7 +47,9 @@ package FrameworkOperationalState {
 
         state <'ST-04'> 'Assessing Evidence' {
             doc
-            /* F-01 scopes and validates one designated evidence chain and issues its assessment. */
+            /* F-01 registers externally produced requirement, model, and result revisions, then
+             * scopes and validates one designated evidence chain and issues its assessment.
+             */
             do action assessEvidence : 'Maintain Evidence Chain';
         }
 
@@ -145,13 +148,21 @@ package FrameworkOperationalState {
         transition <'T-10'> evidenceAccepted
             first 'Assessing Evidence'
             accept validEvidence : 'Evidence Chain Assessment'
-            if validEvidence.recordsAvailable and validEvidence.chainValid
+            if (
+                validEvidence.recordsAvailable and
+                validEvidence.externalArtifactsAccepted and
+                validEvidence.chainValid
+            )
                 then 'Controlled Baseline Ready';
 
         transition <'T-11'> evidenceDeficient
             first 'Assessing Evidence'
             accept deficientEvidence : 'Evidence Chain Assessment'
-            if not deficientEvidence.recordsAvailable or not deficientEvidence.chainValid
+            if (
+                not deficientEvidence.recordsAvailable or
+                not deficientEvidence.externalArtifactsAccepted or
+                not deficientEvidence.chainValid
+            )
                 then 'Discrepancy Open';
 
         transition <'T-12'> reproductionAccepted
@@ -235,13 +246,21 @@ package FrameworkOperationalState {
         transition <'T-26'> recoveryAccepted
             first Recovering
             accept validRecovery : 'Evidence Chain Assessment'
-            if validRecovery.recordsAvailable and validRecovery.chainValid
+            if (
+                validRecovery.recordsAvailable and
+                validRecovery.externalArtifactsAccepted and
+                validRecovery.chainValid
+            )
                 then 'Controlled Baseline Ready';
 
         transition <'T-27'> recoveryDeficient
             first Recovering
             accept deficientRecovery : 'Evidence Chain Assessment'
-            if not deficientRecovery.recordsAvailable or not deficientRecovery.chainValid
+            if (
+                not deficientRecovery.recordsAvailable or
+                not deficientRecovery.externalArtifactsAccepted or
+                not deficientRecovery.chainValid
+            )
                 then 'Discrepancy Open';
     }
 } // package FrameworkOperationalState

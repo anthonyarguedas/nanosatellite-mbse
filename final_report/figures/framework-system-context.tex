@@ -34,19 +34,10 @@
     fill=white,
     inner sep=1.5pt,
     font=\scriptsize
-  },
-  note/.style={
-    draw,
-    rounded corners=2pt,
-    align=left,
-    text width=13.8cm,
-    inner sep=5pt,
-    fill=gray!5,
-    font=\scriptsize
   }
 ]
   % Internal block diagram frame and heading.
-  \draw (0,0) rectangle (17,12.2);
+  \draw (0,3.0) rectangle (17,12.2);
   \node[anchor=west,font=\bfseries] at (0.25,11.85)
     {ibd [part] Framework System Context [Black-Box Interfaces]};
   \draw (0,11.5) -- (17,11.5);
@@ -82,12 +73,14 @@
   \node[external] (model) at (14.85,9.55) {
     \guillemotleft part\guillemotright\\
     \textbf{system model :}\\
-    \textbf{Versioned System Model}
+    \textbf{Versioned System Model}\\[-1pt]
+    \scriptsize RM and MD boundary
   };
   \node[external] (tools) at (14.85,7.05) {
     \guillemotleft part\guillemotright\\
     \textbf{analysis tools :}\\
-    \textbf{Analysis Tools}
+    \textbf{Analysis Tools}\\[-1pt]
+    \scriptsize SA boundary
   };
   \node[external] (repository) at (14.85,4.55) {
     \guillemotleft part\guillemotright\\
@@ -124,10 +117,4 @@
   \draw[contextflow] (framework.east |- repository) -- node[interfacelabel]
     {\textbf{IF-06}\\Evidence custody} (repository.west);
 
-  \node[note] at (8.5,1.45) {
-    \textbf{Common transfer contract.} Each receiving endpoint returns a Transfer Verification
-    Record stating source and configuration identification, structural completeness, semantic
-    compatibility, provenance preservation, acceptance, and any discrepancy. A rejected transfer
-    remains explicit and does not silently replace controlled content.
-  };
 \end{tikzpicture}

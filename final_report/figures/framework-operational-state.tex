@@ -70,7 +70,7 @@
   % active service state in the authoritative SysML v2 state machine.
   \draw[transition] (16.45,7.1) -- (16.72,7.1) -- (16.72,9.0) --
     node[label text,right,pos=0.55]
-      {T-10, T-12, T-14, T-16, T-18:\\accepted outcome}
+      {T-10, T-12, T-14, T-16, T-18:\\accepted outcome (T-10 also requires\\all external artifacts accepted)}
     (ready.east);
 
   \node[wide state,fill=red!4] (discrepancy) at (5.2,2.65)
@@ -102,12 +102,12 @@
     node[label text,right,pos=0.63] {T-26: valid}
     (ready.south east);
   \draw[exception] (recovering.south) to[out=-90,in=-90,looseness=1.2]
-    node[label text,below] {T-27: unavailable or invalid} (discrepancy.south);
+    node[label text,below] {T-27: unavailable, rejected, or invalid} (discrepancy.south);
 
   \node[anchor=west,font=\tiny,align=left,text width=15.9cm] at (0.55,0.75) {
     Each occurrence controls one selected case and baseline context. Separate occurrences may proceed
     concurrently. Grouped arrows summarize equivalent typed transitions. The authoritative model
     records initialization, all 27 identified transitions, and their guards. Rejected transfers
-    preserve state and content.
+    preserve state, baseline, controlled content, and external source revisions.
   };
 \end{tikzpicture}

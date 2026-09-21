@@ -21,7 +21,7 @@
   },
   derive/.style={dashed,-{Latex[length=2.2mm,width=1.5mm]}}
 ]
-  \draw (0,0) rectangle (17,8.4);
+  \draw (0,-1.0) rectangle (17,8.4);
   \node[anchor=west,font=\bfseries] at (0.25,8.05)
     {req [package] Framework Mission Requirements [Acceptance Requirements]};
   \draw (0,7.7) -- (17,7.7);
@@ -31,22 +31,22 @@
      \textbf{Candidate framework eligibility}\\[-1pt]
      \footnotesize A candidate framework physical architecture shall enter comparison ranking only after it satisfies G-01 through G-04 and every mandatory system requirement.};
 
-  \node[requirement] (g1) at (2.25,2.85)
+  \node[requirement] (g1) at (2.25,2.35)
     {\guillemotleft requirement\guillemotright\\
      \textbf{G-01 Complete and valid evidence chains}\\[-1pt]
-     \footnotesize Every designated EPS decision has the required valid evidence chain.};
+     \scriptsize Every accepted external requirement, model, or result preserves source revision, baseline, provenance, and traces in a valid decision chain.};
   \node[requirement] (g2) at (6.42,2.85)
     {\guillemotleft requirement\guillemotright\\
      \textbf{G-02 Reproduce reference analyses}\\[-1pt]
-     \footnotesize Every designated analysis reproduces from its controlled baseline within its declared tolerance.};
+     \scriptsize Every designated analysis reproduces from its controlled baseline within its declared tolerance.};
   \node[requirement] (g3) at (10.58,2.85)
     {\guillemotleft requirement\guillemotright\\
      \textbf{G-03 Resolve critical inconsistencies}\\[-1pt]
-     \footnotesize No discrepancy classified as critical remains unresolved in the evaluation baseline.};
+     \scriptsize No critical discrepancy remains unresolved. Rejected artifacts preserve prior content and return retained discrepancies.};
   \node[requirement] (g4) at (14.75,2.85)
     {\guillemotleft requirement\guillemotright\\
      \textbf{G-04 Complete contrasting cases}\\[-1pt]
-     \footnotesize Both selected cases complete with every approved case adaptation declared.};
+     \scriptsize Both selected cases complete with every approved case adaptation declared.};
 
   \foreach \gate in {g1,g2,g3,g4}{
     \draw[derive] (\gate.north) -- (\gate.north |- eligible.south);

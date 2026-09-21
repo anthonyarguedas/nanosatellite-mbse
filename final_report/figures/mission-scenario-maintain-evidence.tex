@@ -2,7 +2,7 @@
   >=Latex,
   font=\sffamily,
   flow/.style={-{Latex[length=2mm,width=1.4mm]},line width=0.65pt},
-  action/.style={draw,rounded corners=2pt,align=center,text width=2.8cm,
+  action/.style={draw,rounded corners=2pt,align=center,text width=3.0cm,
     minimum height=0.62cm,inner sep=2pt,fill=white,font=\scriptsize},
   exception/.style={action,dashed},
   decision/.style={diamond,draw,aspect=1.7,inner sep=1pt,minimum width=0.55cm,
@@ -10,38 +10,42 @@
   guard/.style={fill=white,inner sep=1pt,font=\tiny},
   bar/.style={draw,fill=black,minimum width=1.0cm,minimum height=0.08cm,inner sep=0pt}
 ]
-  \fill[blue!4] (3.3,0) rectangle (10.0,13.8);
-  \draw (0,0) rectangle (18,14.8);
-  \node[anchor=west,font=\bfseries] at (0.25,14.45)
+  \fill[blue!4] (3.3,0) rectangle (10.0,15.35);
+  \draw (0,0) rectangle (18,16.35);
+  \node[anchor=west,font=\bfseries] at (0.25,16.0)
     {act [SC-01] Maintain EPS Evidence Chain};
-  \draw (0,14.05) -- (18,14.05);
-  \foreach \x in {3.3,10.0,14.0} {\draw (\x,0) -- (\x,14.05);}
-  \node[font=\bfseries\scriptsize] at (1.65,13.62) {Academic Mission Team};
-  \node[font=\bfseries\scriptsize] at (6.65,13.62) {Framework};
-  \node[font=\bfseries\scriptsize,align=center] at (12.0,13.62) {Versioned\\System Model};
-  \node[font=\bfseries\scriptsize,align=center] at (16.0,13.62) {Evidence\\Repository};
-  \draw (0,13.2) -- (18,13.2);
+  \draw (0,15.6) -- (18,15.6);
+  \foreach \x in {3.3,10.0,14.0} {\draw (\x,0) -- (\x,15.6);}
+  \node[font=\bfseries\scriptsize] at (1.65,15.15) {Academic Mission Team};
+  \node[font=\bfseries\scriptsize] at (6.65,15.15) {Framework};
+  \node[font=\bfseries\scriptsize,align=center] at (12.0,15.15) {Versioned\\System Model};
+  \node[font=\bfseries\scriptsize,align=center] at (16.0,15.15) {Evidence\\Repository};
+  \draw (0,14.7) -- (18,14.7);
 
-  \node[circle,fill=black,minimum size=5pt,inner sep=0pt] (start) at (1.65,12.75) {};
-  \node[action] (submit) at (1.65,11.85) {Submit designated\\decision or artifact};
-  \node[action] (scope) at (6.65,10.75) {Establish affected\\chain scope};
-  \node[bar] (fork) at (6.65,9.85) {};
-  \node[action] (model) at (12.0,8.9) {Supply controlled\\model records};
-  \node[action] (evidence) at (16.0,8.9) {Supply retained\\evidence records};
-  \node[bar] (join) at (6.65,7.95) {};
-  \node[decision] (available) at (6.65,7.15) {};
-  \node[font=\tiny,anchor=west] at (7.05,7.15) {records available?};
-  \node[action] (check) at (5.0,6.1) {Check links, versions,\\and provenance};
-  \node[exception] (unavailable) at (8.35,6.1) {Report unavailable\\records};
-  \node[decision] (valid) at (5.0,5.15) {};
-  \node[font=\tiny,anchor=west] at (5.4,5.15) {chain valid?};
-  \node[action] (register) at (4.8,4.15) {Register valid\\chain status};
-  \node[exception] (gaps) at (8.15,4.15) {Report evidence\\gaps};
-  \node[decision] (prepared) at (6.65,3.15) {};
-  \node[font=\tiny,anchor=west] at (7.05,3.15) {assessment prepared};
-  \node[action] (retain) at (16.0,2.2) {Retain chain\\assessment};
-  \node[action] (receive) at (1.65,1.15) {Receive chain status};
-  \node[circle,draw,double,minimum size=7pt,inner sep=0pt] (final) at (1.65,0.4) {};
+  \node[circle,fill=black,minimum size=5pt,inner sep=0pt] (start) at (1.65,14.3) {};
+  \node[action] (submit) at (1.65,13.45) {Submit designated decision\\or external artifact};
+  \node[action] (scope) at (6.65,12.45) {Establish affected\\chain scope};
+  \node[bar] (fork) at (6.65,11.55) {};
+  \node[action] (model) at (12.0,10.55) {Supply requirement set and\\EPS model revisions};
+  \node[action] (evidence) at (16.0,10.55) {Supply analysis result and\\retained evidence revisions};
+  \node[bar] (join) at (6.65,9.6) {};
+  \node[decision] (available) at (6.65,8.85) {};
+  \node[font=\tiny,anchor=west] at (7.05,8.85) {records available?};
+  \node[action] (register) at (5.0,7.85) {Verify and register external\\artifact revisions};
+  \node[exception] (unavailable) at (8.6,7.85) {Report unavailable\\records};
+  \node[decision] (accepted) at (5.0,6.85) {};
+  \node[font=\tiny,anchor=west] at (5.4,6.85) {artifacts accepted?};
+  \node[action] (check) at (4.8,5.8) {Check links, baselines,\\versions, and provenance};
+  \node[exception] (rejected) at (8.45,5.8) {Report rejected artifacts\\and preserve baseline};
+  \node[decision] (valid) at (4.8,4.8) {};
+  \node[font=\tiny,anchor=west] at (5.2,4.8) {chain valid?};
+  \node[action] (status) at (4.55,3.8) {Register valid\\chain status};
+  \node[exception] (gaps) at (8.0,3.8) {Report evidence\\gaps};
+  \node[decision] (prepared) at (6.65,2.85) {};
+  \node[font=\tiny,anchor=west] at (7.05,2.85) {assessment prepared};
+  \node[action] (retain) at (16.0,1.9) {Retain registrations and\\chain assessment};
+  \node[action] (receive) at (1.65,0.95) {Receive chain and\\artifact status};
+  \node[circle,draw,double,minimum size=7pt,inner sep=0pt] (final) at (1.65,0.25) {};
 
   \draw[flow] (start) -- (submit);
   \draw[flow] (submit) -- (scope);
@@ -51,14 +55,18 @@
   \draw[flow] (model) |- (join);
   \draw[flow] (evidence) |- (join);
   \draw[flow] (join) -- (available);
-  \draw[flow] (available) -- node[guard,left]{available} (check);
+  \draw[flow] (available) -- node[guard,left]{available} (register);
   \draw[flow] (available) -- node[guard,right]{unavailable} (unavailable);
+  \draw[flow] (register) -- (accepted);
+  \draw[flow] (accepted) -- node[guard,left]{accepted} (check);
+  \draw[flow] (accepted) -| node[guard,near start,above]{rejected} (rejected);
   \draw[flow] (check) -- (valid);
-  \draw[flow] (valid) -- node[guard,left]{valid} (register);
+  \draw[flow] (valid) -- node[guard,left]{valid} (status);
   \draw[flow] (valid) -| node[guard,near start,above]{gap} (gaps);
-  \draw[flow] (register) |- (prepared);
+  \draw[flow] (status) |- (prepared);
   \draw[flow] (gaps) |- (prepared);
-  \draw[flow] (unavailable.east) -- ++(0.45,0) |- (prepared.east);
+  \draw[flow] (rejected.east) -- ++(0.35,0) |- (prepared.east);
+  \draw[flow] (unavailable.east) -- ++(0.55,0) |- (prepared.east);
   \draw[flow] (prepared) -| (retain);
   \draw[flow] (retain) |- (receive);
   \draw[flow] (receive) -- (final);

@@ -31,7 +31,11 @@ package ToBeOperationalDomain {
 
     part def 'Versioned System Model' {
         doc
-        /* Controlled models, requirements, architecture, interfaces, assumptions, and configurations. */
+        /* Boundary resource populated by external requirements-management and model-development
+         * methods and tools. It supplies controlled requirement sets, generic and tailored EPS
+         * models, architecture, interfaces, source revisions, traces, and configurations without
+         * assigning their authoring responsibility to the framework.
+         */
 
         port frameworkControl
             : FrameworkBoundaryInterfaces::'Model Control Port';
@@ -39,7 +43,9 @@ package ToBeOperationalDomain {
 
     part def 'Analysis Tools' {
         doc
-        /* Tools that execute or support EPS analyses. No specific implementation is selected here. */
+        /* External simulation-and-analysis methods and tools that execute controlled EPS analyses
+         * and produce identified, versioned result packages. No specific implementation is selected.
+         */
 
         port frameworkExecution
             : FrameworkBoundaryInterfaces::'Analysis Execution Port';
@@ -47,7 +53,9 @@ package ToBeOperationalDomain {
 
     part def 'Evidence Repository' {
         doc
-        /* Retained analysis inputs, results, verification evidence, and reviewable evidence packages. */
+        /* Retained artifact-registration records, analysis inputs and results, verification evidence,
+         * discrepancies, and reviewable evidence packages organized by controlled evidence baseline.
+         */
 
         port frameworkCustody
             : FrameworkBoundaryInterfaces::'Evidence Custody Port';
@@ -55,8 +63,11 @@ package ToBeOperationalDomain {
 
     part def 'Nanosatellite EPS Engineering Framework' {
         doc
-        /* The system of interest coordinates these enterprise resources. This abstraction does not
-         * select a deployment, toolchain, or internal architecture.
+        /* The system of interest directly realizes configuration management and collaboration and
+         * communication. It coordinates externally authored requirements, models, and analysis
+         * results through typed interfaces without performing requirements elicitation, model
+         * tailoring, or domain analysis. This abstraction does not select a deployment, toolchain,
+         * or internal architecture.
          */
 
         ref part systemModel : 'Versioned System Model';
@@ -112,8 +123,10 @@ package ToBeOperationalDomain {
         subject enterprise : 'Academic Nanosatellite EPS Development Enterprise';
         objective {
             doc
-            /* Maintain linked, versioned evidence from needs and requirements through architecture,
-             * assumptions, analyses, and verification results.
+            /* Accept or reject designated externally produced requirement sets, tailored EPS models,
+             * and analysis results through verified transfers, register each accepted source revision
+             * against its controlled evidence baseline, and maintain linked evidence from needs and
+             * requirements through architecture, assumptions, analyses, and verification results.
              */
         }
     }
@@ -122,8 +135,10 @@ package ToBeOperationalDomain {
         subject enterprise : 'Academic Nanosatellite EPS Development Enterprise';
         objective {
             doc
-            /* Establish the declared environment, common information model, workflow, case parameters,
-             * extensions, and mappings needed to apply the framework to a selected EPS context.
+            /* Establish the declared environment, generic EPS model revision, common information
+             * model, workflow, and approved case parameters, extensions, and mappings needed to apply
+             * the framework to a selected EPS context. External model-development capabilities apply
+             * those adaptations to produce the tailored model.
              */
         }
     }

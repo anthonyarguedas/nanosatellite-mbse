@@ -13,23 +13,70 @@ package FrameworkExchangeDefinitions {
         attribute revision : String;
     }
 
-    item def 'Requirement Set';
+    item def 'Artifact Source Record' {
+        attribute artifactIdentifier : String;
+        attribute producerIdentifier : String;
+        attribute producingCapability : String;
+        attribute sourceRevision : String;
+        doc
+        /* Identity assigned by the external RM, MD, or SA capability that produced the artifact.
+         * The framework preserves this record and does not assume artifact-authoring responsibility.
+         */
+    }
+
+    item def 'Requirement Set' {
+        item source : 'Artifact Source Record';
+    }
+
+    item def 'EPS Model Artifact' {
+        item source : 'Artifact Source Record';
+        attribute modelRole : String;
+        item genericModelBaseline : 'Baseline Reference' [0..1];
+        item caseConfigurationBaseline : 'Baseline Reference' [0..1];
+        doc
+        /* A generic, tailored, or candidate EPS model produced by an external MD capability. The
+         * modelRole makes that status explicit. A tailored model identifies both its generic-model
+         * baseline and approved case-configuration baseline.
+         */
+    }
+
     item def 'Interface Set';
     item def 'Assumption Set';
     item def 'Workflow Definition';
     item def 'Analysis Input Package';
-
-    item def 'Analysis Result Package' {
-        doc
-        /* Raw results, execution status, and declared uncertainty from a controlled execution. */
-    }
-
     item def 'Discrepancy Set';
     item def 'Verification Evidence';
     item def 'Trace and Provenance Records';
 
+    item def 'Analysis Result Package' {
+        item source : 'Artifact Source Record';
+        item evidenceBaseline : 'Baseline Reference';
+        doc
+        /* Raw results, execution status, and declared uncertainty produced by an external SA
+         * capability from the identified controlled evidence baseline.
+         */
+    }
+
+    item def 'Artifact Registration Record' {
+        item source : 'Artifact Source Record' [0..1];
+        item evidenceBaseline : 'Baseline Reference' [0..1];
+        item traces : 'Trace and Provenance Records' [0..1];
+        attribute accepted : Boolean;
+        item discrepancies : 'Discrepancy Set';
+        doc
+        /* Records whether one external artifact revision was accepted into the cross-phase evidence
+         * chain. Source, baseline, or trace fields may be absent only on a rejected malformed input.
+         * Rejection preserves the prior controlled content and retains every discrepancy.
+         */
+    }
+
+    item def 'Artifact Registration Set' {
+        item records : 'Artifact Registration Record' [0..*];
+    }
+
     item def 'Controlled Model Records' {
         item requirements : 'Requirement Set';
+        item epsModel : 'EPS Model Artifact';
         item interfaces : 'Interface Set';
         item configuration : 'Baseline Reference';
         item traces : 'Trace and Provenance Records';
@@ -39,6 +86,7 @@ package FrameworkExchangeDefinitions {
         item assumptions : 'Assumption Set';
         item analysisInputs : 'Analysis Input Package';
         item analysisResults : 'Analysis Result Package';
+        item artifactRegistrations : 'Artifact Registration Set';
         item discrepancies : 'Discrepancy Set';
         item 'verification' : 'Verification Evidence';
         item traces : 'Trace and Provenance Records';
@@ -56,7 +104,9 @@ package FrameworkExchangeDefinitions {
 
     item def 'Evidence Chain Assessment' {
         attribute recordsAvailable : Boolean;
+        attribute externalArtifactsAccepted : Boolean;
         attribute chainValid : Boolean;
+        item registrations : 'Artifact Registration Set';
         item discrepancies : 'Discrepancy Set';
     }
 
@@ -68,6 +118,7 @@ package FrameworkExchangeDefinitions {
 
     item def 'Common Core Package' {
         item baseline : 'Baseline Reference';
+        item genericEPSModel : 'EPS Model Artifact';
         item workflow : 'Workflow Definition';
         attribute minimumEnvironment : String;
     }
@@ -78,6 +129,7 @@ package FrameworkExchangeDefinitions {
     }
 
     item def 'Case Configuration Draft' {
+        item genericModelBaseline : 'Baseline Reference';
         attribute environment : String;
         attribute directCostBasis : String;
         attribute parameters : String;
@@ -287,6 +339,17 @@ package FrameworkBlackBoxFunctions {
      * model defines observable inputs and outputs only. It does not select internal components.
      */
 
+    action def <'F-01.0'> 'Register External Engineering Artifacts' {
+        in item modelRecords : 'Controlled Model Records';
+        in item evidenceRecords : 'Retained Evidence Records';
+        out item registrations : 'Artifact Registration Set';
+        doc
+        /* Records acceptance or rejection of the externally produced requirement set, EPS model,
+         * and analysis result revisions against the named evidence baseline while preserving their
+         * producer identity, source revision, provenance, traces, and discrepancies.
+         */
+    }
+
     action def <'F-01.1'> 'Scope Evidence Chain' {
         in item request : 'Evidence Chain Request';
         out item scope : 'Evidence Chain Scope';
@@ -296,6 +359,7 @@ package FrameworkBlackBoxFunctions {
         in item scope : 'Evidence Chain Scope';
         in item modelRecords : 'Controlled Model Records';
         in item evidenceRecords : 'Retained Evidence Records';
+        in item registrations : 'Artifact Registration Set';
         out item assessment : 'Evidence Chain Assessment';
     }
 
@@ -308,18 +372,24 @@ package FrameworkBlackBoxFunctions {
         in item request : 'Evidence Chain Request';
         in item modelRecords : 'Controlled Model Records';
         in item evidenceRecords : 'Retained Evidence Records';
+        out item registrations : 'Artifact Registration Set';
         out item scope : 'Evidence Chain Scope';
         out item assessment : 'Evidence Chain Assessment';
 
+        action registerExternalArtifacts : 'Register External Engineering Artifacts';
         action scopeEvidenceChain : 'Scope Evidence Chain';
         action validateEvidenceChain : 'Validate Evidence Chain';
         action issueAssessment : 'Issue Evidence Chain Assessment';
 
+        bind registerExternalArtifacts.modelRecords = modelRecords;
+        bind registerExternalArtifacts.evidenceRecords = evidenceRecords;
+        bind registrations = registerExternalArtifacts.registrations;
         bind scopeEvidenceChain.request = request;
         bind scope = scopeEvidenceChain.scope;
         flow scopeEvidenceChain.scope to validateEvidenceChain.scope;
         bind validateEvidenceChain.modelRecords = modelRecords;
         bind validateEvidenceChain.evidenceRecords = evidenceRecords;
+        flow registerExternalArtifacts.registrations to validateEvidenceChain.registrations;
         flow validateEvidenceChain.assessment to issueAssessment.assessment;
         bind assessment = issueAssessment.issuedAssessment;
     }

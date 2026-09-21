@@ -18,6 +18,7 @@ package FrameworkBlackBoxSpecification {
         item evidenceRecords : 'Retained Evidence Records' [0..*];
         item caseConfigurations : 'Controlled Case Configuration' [0..*];
         item evaluationManifest : 'Framework Evaluation Manifest';
+        item artifactRegistrations : 'Artifact Registration Record' [0..*];
         item chainAssessments : 'Evidence Chain Assessment' [0..*];
         item reproductionVerdicts : 'Reproduction Verdict' [0..*];
         item changePackages : 'Change Evidence Package' [0..*];
@@ -33,8 +34,10 @@ package FrameworkBlackBoxSpecification {
         doc
         /* Complete OOSEM black-box definition. Inherited features provide six boundary service
          * functions, six typed ports, eleven measures of performance, and the operational control
-         * state machine. The features below add required stores and externally declared execution
-         * resource characteristics. Internal components remain unspecified.
+         * state machine. The F-01 service includes external-artifact registration as a cross-phase
+         * configuration-management responsibility. The features below add required stores and
+         * externally declared execution resource characteristics. Internal components remain
+         * unspecified.
          */
 
         ref #requiredStore item requiredRecords : 'Controlled Framework Record Set';
