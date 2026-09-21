@@ -627,7 +627,22 @@ Each derived leaf carries SysML v2 \texttt{BlackBoxRequirementTrace} metadata. T
 No maximum hour, person-hour, cost, or consistency-effectiveness threshold is added for PER-06--PER-11 because the cited reviews do not provide defensible population values. These requirements instead make the measurement protocol and correctness gates mandatory. Candidate results will provide the empirical values used for Pareto comparison, utility calibration, and sensitivity analysis.
 
 \subsubsection{Define Logical Architecture}
-This activity decomposes the framework into logical components and defines how they interact to satisfy the system requirements. The logical architecture remains independent of a particular implementation technology \cite{friedenthal2014practical}.
+
+\paragraph{Logical architecture baseline.}
+The controlled input comprises the six mission scenarios and service functions, 22 service subfunctions, six typed boundary interfaces, the controlled record set, operational state machine SM-01, eleven MOPs, and sixty mandatory leaves comprising 58 derived requirements and two retained design constraints. The logical specialization preserves this complete black-box specification while leaving products, formats, protocols, deployment nodes, and physical components open.
+
+\paragraph{Architecture evidence basis.}
+The existing requirement traces make the accepted black-box baseline the primary evidence for decomposition. The cited reviews reinforce logical responsibilities for explicit interfaces, shared semantics, verified transfers, configuration and provenance control, lifecycle continuity, modularity, resource fit, and measurable outcomes \citep[Secs.~4.4 and 5.1 and Table~5]{buruso2026modelbased} \citep[Secs.~8.4--8.6 and Table~13]{rostamnia2026digitaltwin} \citep[Sec.~4.2.3]{rojasramirez2022comparative} \citep[Sec.~4.7 and Table~3]{vizitiu2025optimizing}. This step introduces no additional mandatory constraint.
+
+\paragraph{Logical decomposition.}
+OOSEM organizes the initial decomposition around external interface, application, and infrastructure responsibilities \citep[Sec.~17.3.4]{friedenthal2014practical}. Figure~\ref{fig:framework-logical-decomposition} records the resulting parts in the authoritative SysML v2 model. Later interaction analysis may repartition these parts before their specifications are completed.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\linewidth}{!}{\input{figures/framework-logical-decomposition.tex}}
+    \caption{Initial logical decomposition of the Nanosatellite EPS Engineering Framework. The six external interface components correspond to IF-01--IF-06, the six application components correspond to F-01--F-06, and the infrastructure components provide shared control, assurance, configuration, evidence, provenance, and measurement responsibilities.}
+    \label{fig:framework-logical-decomposition}
+\end{figure}
 
 \subsubsection{Synthesize Candidate Physical Architectures}
 This activity maps logical components to realizable hardware, software, data, and procedure components. It defines partitioning criteria, interfaces, deployment choices, and candidate variants that can realize the logical architecture \cite{friedenthal2014practical}.

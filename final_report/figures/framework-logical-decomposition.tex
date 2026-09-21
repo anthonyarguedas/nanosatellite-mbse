@@ -1,0 +1,144 @@
+\begin{tikzpicture}[
+  >=Latex,
+  font=\sffamily,
+  line width=0.7pt,
+  parent/.style={
+    draw,
+    align=center,
+    text width=8.2cm,
+    minimum height=1.05cm,
+    inner sep=5pt,
+    fill=gray!8,
+    font=\scriptsize
+  },
+  category/.style={draw,fill=blue!3},
+  logicalpart/.style={
+    draw,
+    rounded corners=1.5pt,
+    align=center,
+    text width=4.55cm,
+    minimum height=1.05cm,
+    inner sep=3pt,
+    fill=white,
+    font=\tiny
+  },
+  infrastructurepart/.style={
+    draw,
+    rounded corners=1.5pt,
+    align=center,
+    text width=4.55cm,
+    minimum height=1.30cm,
+    inner sep=3pt,
+    fill=white,
+    font=\tiny
+  }
+]
+  \draw (0,0) rectangle (17,14.25);
+  \node[anchor=west,font=\bfseries] at (0.25,13.9)
+    {bdd [part def] Framework Logical Decomposition [LA-00]};
+  \draw (0,13.55) -- (17,13.55);
+
+  \node[parent] (blackbox) at (8.5,12.85) {
+    \guillemotleft part def\guillemotright\\[-1pt]
+    \textbf{Specified Nanosatellite EPS Engineering Framework}\\
+    \textit{complete inherited black-box specification}
+  };
+
+  \draw[fill=blue!5] (0.25,0.25) rectangle (16.75,11.35);
+  \node[anchor=north,align=center,text width=15.8cm,font=\scriptsize] (logical) at (8.5,11.15) {
+    \guillemotleft part def\guillemotright\\[-1pt]
+    \textbf{\textless LA-00\textgreater\ Logical Nanosatellite EPS Engineering Framework}\\
+    \textit{specializes the specified framework and adds the following logical parts}
+  };
+  \draw (0.25,10.05) -- (16.75,10.05);
+  \draw[-{Triangle[open,length=3.0mm,width=3.2mm]}] (8.5,11.35) --
+    node[right,font=\tiny,fill=white,inner sep=1pt] {specializes} (blackbox.south);
+
+  \draw[category] (0.45,0.45) rectangle (5.55,9.80);
+  \draw[category] (5.95,0.45) rectangle (11.05,9.80);
+  \draw[category] (11.45,0.45) rectangle (16.55,9.80);
+
+  \node[align=center,font=\scriptsize] at (3.0,9.38) {
+    \guillemotleft logical\guillemotright\\
+    \textbf{External interface components}
+  };
+  \node[align=center,font=\scriptsize] at (8.5,9.38) {
+    \guillemotleft logical\guillemotright\\
+    \textbf{Application components}
+  };
+  \node[align=center,font=\scriptsize] at (14.0,9.38) {
+    \guillemotleft logical\guillemotright\\
+    \textbf{Infrastructure components}
+  };
+
+  \node[logicalpart] at (3.0,8.45) {
+    missionApplicationInterface :\\
+    \textbf{\textless LIF-01\textgreater\ Mission Application Interface Manager}
+  };
+  \node[logicalpart] at (3.0,7.05) {
+    researchGovernanceInterface :\\
+    \textbf{\textless LIF-02\textgreater\ Research Governance Interface Manager}
+  };
+  \node[logicalpart] at (3.0,5.65) {
+    independentReviewInterface :\\
+    \textbf{\textless LIF-03\textgreater\ Independent Review Interface Manager}
+  };
+  \node[logicalpart] at (3.0,4.25) {
+    modelControlInterface :\\
+    \textbf{\textless LIF-04\textgreater\ Model Control Interface Manager}
+  };
+  \node[logicalpart] at (3.0,2.85) {
+    analysisExecutionInterface :\\
+    \textbf{\textless LIF-05\textgreater\ Analysis Execution Interface Manager}
+  };
+  \node[logicalpart] at (3.0,1.45) {
+    evidenceCustodyInterface :\\
+    \textbf{\textless LIF-06\textgreater\ Evidence Custody Interface Manager}
+  };
+
+  \node[logicalpart] at (8.5,8.45) {
+    evidenceChainManager :\\
+    \textbf{\textless LAP-01\textgreater\ Evidence Chain Manager}
+  };
+  \node[logicalpart] at (8.5,7.05) {
+    caseConfigurationManager :\\
+    \textbf{\textless LAP-02\textgreater\ Case Configuration Manager}
+  };
+  \node[logicalpart] at (8.5,5.65) {
+    analysisReproductionManager :\\
+    \textbf{\textless LAP-03\textgreater\ Analysis Reproduction Manager}
+  };
+  \node[logicalpart] at (8.5,4.25) {
+    designChangeAssessmentManager :\\
+    \textbf{\textless LAP-04\textgreater\ Design Change Assessment Manager}
+  };
+  \node[logicalpart] at (8.5,2.85) {
+    candidateEvaluationManager :\\
+    \textbf{\textless LAP-05\textgreater\ Candidate Evaluation Manager}
+  };
+  \node[logicalpart] at (8.5,1.45) {
+    designReviewManager :\\
+    \textbf{\textless LAP-06\textgreater\ Design Review Manager}
+  };
+
+  \node[infrastructurepart] at (14.0,8.25) {
+    workflowControlManager :\\
+    \textbf{\textless LIN-01\textgreater\ Workflow Control Manager}
+  };
+  \node[infrastructurepart] at (14.0,6.50) {
+    transferAssuranceManager :\\
+    \textbf{\textless LIN-02\textgreater\ Transfer Assurance Manager}
+  };
+  \node[infrastructurepart] at (14.0,4.75) {
+    baselineAndConfigurationManager :\\
+    \textbf{\textless LIN-03\textgreater\ Baseline and Configuration Manager}
+  };
+  \node[infrastructurepart] at (14.0,3.00) {
+    evidenceAndProvenanceManager :\\
+    \textbf{\textless LIN-04\textgreater\ Evidence and Provenance Manager}
+  };
+  \node[infrastructurepart] at (14.0,1.25) {
+    evaluationMeasurementManager :\\
+    \textbf{\textless LIN-05\textgreater\ Evaluation Measurement Manager}
+  };
+\end{tikzpicture}
