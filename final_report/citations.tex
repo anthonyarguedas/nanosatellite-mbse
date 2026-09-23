@@ -1,0 +1,142 @@
+\begin{quote}
+Information associated with the components is stored in parameters and calculations. The engineers
+set a parameter such as maximum power by providing a value and a unit. Provided calculations make use
+of these parameters to e.g. let Virtual Satellite automatically calculate the average power consumption
+of a component. By convention there are parameters with a special meaning such as the parameter
+unit_quantity. This parameter denes how often the component is built into the spacecraft, whereas
+mode_duration and duty_cycle represent the time a spacecraft remains in a specic system mode and
+how much of that time a component is active. The parameter unit_active is important for calculating the
+power consumptions in case of redundancies, when not all components are turned on at the same time.
+[6] Visualizing the inputs and outputs of such calculations similar to UML block/interface diagrams was
+successfully shown in previous work [14]. A language called ICML was proposed to model signals and
+messages in the frame of interfaces [7].
+
+The Open Concurrent Design Tool (OCDT) is developed by the European Space Agency (ESA). It is
+developed for the use in CE and in ESA's Concurrent Design Facility (CDF) in particular. It provides a
+CDM called Space Engineering Information Model (SEIM) including capabilities for structural decom-
+position as well as storing information in parameters. A set of recommended parameters is dened under
+the name Space Engineering Reference Data Library (SERDL). Calculations are done in external tools
+such as Microsoft Excel. They can exchange information with the data-model by a generic REST API.
+[9, 3]
+Virtual Spacecraft Design (VSD) is another tool developed by ESA. It is designed for introducing
+MBSE into later project phases. It provides capabilities for hierarchical breakdown and structuring of
+the system, as well as adding components. On top of that, it oers conguration control mechanisms.
+[4] Information is stored in predened objects such as state machines or interfaces. Designing functional
+electrical architecture is well supported by VSD. It allows dening InterfaceEnds on components and
+Interfaces connecting the InterfaceEnds. Individual information can be stored in engineering categories.
+[13]
+SysML provides functionality to model block-diagrams together with ports and interfaces. Blocks
+within a block-diagram can be dened once and then reused and nested into other blocks, thus allowing
+a hierarchical decomposition. The blocks can communicate to other blocks through ports. There are
+dierent types of ports such as standard ports and ow ports. [12] Standard ports can either provide
+or consume a service. Signals and data ows should be modeled using ow ports. There is no clear cut
+denition when to use which one. [15]
+
+Virtual Satellite 4 is the latest development. It is intended to support the whole lifecycle of a space-
+craft. Since it is impossible to foresee all upcoming requirements on a data-model, it allows extending
+the data-model along the lifecycle. The Generic System Engineering Language (GSEL) allows dening
+new concepts for such a CDM extension. Concepts are activated when needed. A concept may contain
+new structural elements for decomposition, new parameters to store information and calculations to
+process them. The parameters are dened using an extended version of engineering categories. [5] These
+categories are similar to the type-object and dynamic-template pattern [8, 11]. Engineers can dene a
+category together with properties. These categories can then be instantiated on individual components
+at run-time, where the engineers can now dene the value of the properties [13]. Based on an Eclipse
+and EMF infrastructure, new concepts can be shipped with additional implemented functionality and
+installed as new plug-ins [5].
+\cite{review-1277}
+\end{quote}
+
+\begin{quote}
+At CNES, PASO (Orbital Systems Architecture
+Plateau) is leading space systems preliminary
+phases and aims at formulating missions needs
+and pre-sizing systems in order to conclude on
+their feasibility. This process is conducted
+accordingly to the principles of concurrent
+engineering, thus involving all systems
+architects and thematic experts from the very
+beginning of the projects.
+The objective of this paper is to describe the
+approach through the prism of an electrical
+architect, that contributes to needs analysis,
+realization of power budgets, system sizing and
+energetic simulations through a specific use
+case. All this is achieved thanks to a precise
+workflow involving multiple digital tools, with
+continuity and interoperability made possible
+between engineers and their tools by the
+standardization of formats and files.
+
+As an electrical architect specifically, the
+objective of any project preliminary phase
+would be:
+- To define preliminary power budgets,
+- To pre-size solar panels and batteries,
+- To perform technological trade-offs,
+- To simulate the on-board power usage.
+Power simulations are a very good way to
+compare technologies efficiently (solar cells
+and battery cells for instance) and to refine the
+power subsystem sizing. In order to be able to
+perform energy balance simulations, several
+elements are needed:
+- A model of the power sub-system:
+battery and solar generator assemblies,
+power bus topology, type of
+architecture, regulators, etc.
+- All energy flows that leads the solar
+generator to generate power: solar flux,
+earth albedo flux, earth infrared flux.
+- A power profile: the system power
+consumption over time.
+The model is defined in the Opalis software. It
+is a proprietary but open tool developed by
+CNES that allows performing power
+simulations. The tool includes precise
+modelling of electrical architectures including
+batteries, solar panels, regulators and bus
+topologies by taking into account the specific
+features of each element such as losses,
+temperature impacts, etc. Such parameters can
+all be specified in the model tab of the tool.
+
+The power profile is generated using IDM-CIC
+by adding the IDM-Power plugin to it. This
+plugin allows to allocate the power
+consumptions described in the IDM-CIC power
+budget to system modes. It then allows to obtain
+a temporal view of the system’s power
+consumption.
+
+0) Preliminary work:
+a. Defining every sub-system and
+their constituting pieces of
+equipment in IDM-CIC.
+b. Defining the orbital scenario
+using Simu-CIC.
+1) Attributing a consumed/dissipated
+power to each piece of equipment in
+order to obtain the global power budget
+of the system (including margins).
+2) Converting the power budget into a
+power profile (system power
+consumption over time) using IDM-
+Power plugin.
+3) Importing power profile into the power
+simulation software (Opalis).
+4) Converting ephemeris into energy flows
+(solar flux, earth infrared flux, earth
+albedo flux) using the Flows Manager
+plugin.
+5) Defining the simulation model
+Running energy balance simulations
+using Opalis
+\cite{review-0289}
+\end{quote}
+
+% Requirement
+\begin{quote}
+If left buried in the database of a model, the information is of little value. To be able to view or analyze the
+information, reports are built.
+\cite{review-1438}
+\end{quote}
