@@ -1,6 +1,6 @@
 # Nogrady CubeSat model in SysML v2
 
-This directory contains a SysML v2 transcription of the Papyrus model from Sean Nogrady's thesis repository.
+This directory contains a SysML v2 transcription of the Papyrus model from Sean Nogrady's thesis repository. The [official CSRM XMI transcription](../official-csrm-sysmlv2/README.md) uses the OMG and INCOSE distribution directly.
 
 Source commit: `3fcde82462dd4988601262ae490a490df2c03281`
 
