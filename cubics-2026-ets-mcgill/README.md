@@ -4,7 +4,7 @@
 
 [Native tree SVG](rendered/tree/domain-structure.svg) · [SysML v2 model](domain.sysml) · [Alternate nested view](rendered/domain/domain-structure.svg) · [Focused open decisions view](rendered/open-decisions/domain-structure.svg)
 
-Additional native organigrams: [ÉTS AIT units, staff, and equipment](ait/rendered/ets-tree/ets-ait-domain-structure.png) · [McGill AIT units, staff, and equipment](ait/rendered/mcgill-tree/mcgill-ait-domain-structure.png). [Institutional evidence](ait/README.md).
+Additional native faculty organigrams: [ÉTS AIT units, staff, and equipment](ait/rendered/ets-tree/ets-ait-domain-structure.png) · [McGill AIT facilities, staff, and equipment](ait/rendered/mcgill-tree/mcgill-ait-domain-structure.png). [Separate student club views and sources](ait/README.md). [Color coded CSRM subsystem and potential contact overlays](ait/README.md#csrm-subsystem-contact-overlays).
 
 This is a **proposal concept**, not evidence of a partnership, grant award, licence, appointed PI, selected payload, or secured facilities. The `openDecisions` records are work to close before an application can claim capability. Each has **one point-of-contact role** with multiplicity `[1]` in the model. A person must still accept each role. ÉTS would be the sole applicant and grant signatory. The appointed ÉTS PI would be responsible for project outcomes and regulatory compliance throughout the mission. A McGill Co-I and students may carry out work without assuming that accountability [1].
 
@@ -55,4 +55,4 @@ Validated with Syside Modeler 0.10.3: zero syntax or semantic diagnostics. Valid
 4. [ÉTS, Satellite and Space Research Center (CSSR)](https://cssr.etsmtl.ca/).
 5. [ISED, CPC-2-6-02 (April 2026), §§5.1.4, 5.1.6, 5.1.8 and 8.1](https://ised-isde.canada.ca/site/spectrum-management-telecommunications/en/learn-more/key-documents/procedures/client-procedures-circulars-cpc/cpc-2-6-02-licensing-space-stations) and [ISED, 2026 Space Debris Mitigation decision, D5, D10–D11, D15–D16](https://ised-isde.canada.ca/site/spectrum-management-telecommunications/en/learn-more/key-documents/consultations/decision-changes-licensing-requirements-and-conditions-licence-space-debris-mitigation).
 6. [MARMOTSat](https://www.marmotsat.ca/), University of Victoria CUBICS project and student mission example.
-7. Local [`csrm-diagrams/`](../csrm-diagrams/) mission, space, CubeSat subsystem, ground, and ground subsystem figures.
+7. Local CSRM reference figures for the [space segment](ait/reference/csrm-space-segment.png) and [ground segment](ait/reference/csrm-ground-segment.png).

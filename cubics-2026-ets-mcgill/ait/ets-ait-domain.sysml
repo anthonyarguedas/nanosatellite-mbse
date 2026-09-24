@@ -41,6 +41,51 @@ package ETSAITDomain {
         attribute potentialContact : ScalarValues::Boolean = true;
     }
 
+    // ÉTS identifies Professor Gonzalez Llorente with aerospace engineering,
+    // CubeSat electrical power research, onboard AI, and space qualification.
+    part def 'Jesus David Gonzalez Llorente' {
+        attribute position : ScalarValues::String = "Professor, Department of Aerospace Engineering";
+        attribute potentialConcerns : ScalarValues::String = "CubeSat power systems, onboard AI, space component tests";
+        attribute potentialContact : ScalarValues::Boolean = true;
+    }
+
+    // RockÉTS publishes these names and positions on its board roster.
+    part def 'Mélanie Fressard' {
+        attribute position : ScalarValues::String = "Capitaine";
+        attribute potentialConcerns : ScalarValues::String = "club coordination, student continuity";
+        attribute potentialContact : ScalarValues::Boolean = true;
+    }
+    part def 'Maëlle Marinier' {
+        attribute position : ScalarValues::String = "Directrice du département de payload";
+        attribute potentialConcerns : ScalarValues::String = "payload prototypes, instrument tests";
+        attribute potentialContact : ScalarValues::Boolean = true;
+    }
+    part def 'Audrey Provencher' {
+        attribute position : ScalarValues::String = "Directrice du département des communications et de la logistique";
+        attribute potentialConcerns : ScalarValues::String = "test logistics, club communications";
+        attribute potentialContact : ScalarValues::Boolean = true;
+    }
+    part def 'Olivier Nolin' {
+        attribute position : ScalarValues::String = "Directeur du département propulsion";
+        attribute potentialConcerns : ScalarValues::String = "propulsion prototypes, safety tests";
+        attribute potentialContact : ScalarValues::Boolean = true;
+    }
+    part def 'Samuel Laplante' {
+        attribute position : ScalarValues::String = "Directeur du département d'avionique";
+        attribute potentialConcerns : ScalarValues::String = "avionics boards, telemetry tests";
+        attribute potentialContact : ScalarValues::Boolean = true;
+    }
+    part def 'Paul Arnautovich' {
+        attribute position : ScalarValues::String = "Directeur du département d'aérostructure";
+        attribute potentialConcerns : ScalarValues::String = "structure fabrication, fit checks";
+        attribute potentialContact : ScalarValues::Boolean = true;
+    }
+    part def 'Raphaël Tremblay' {
+        attribute position : ScalarValues::String = "Trésorier";
+        attribute potentialConcerns : ScalarValues::String = "club procurement, cost tracking";
+        attribute potentialContact : ScalarValues::Boolean = true;
+    }
+
     // CSSR's public team page gives these LASSENA titles under "Our Team".
     part def 'CSSR Space Research Center' {
         ref part 'LASSENA director' : 'René Jr Landry';
@@ -93,9 +138,48 @@ package ETSAITDomain {
     part def 'PEO603 Firing Furnace';
     part def '800MBA MEMS Mask Aligner';
 
-    part def 'ÉTS AIT Institutional Domain' {
+    // RockÉTS board departments and its documented rocket avionics system.
+    // Anirniq is rocket hardware. This model makes no satellite flight claim.
+    part def 'RockÉTS Club' {
+        ref part captain : 'Mélanie Fressard';
+        ref part treasurer : 'Raphaël Tremblay';
+        part payload : 'RockÉTS Payload Department';
+        part avionics : 'RockÉTS Avionics Department';
+        part aerostructure : 'RockÉTS Aerostructure Department';
+        part propulsion : 'RockÉTS Propulsion Department';
+        part communications : 'RockÉTS Communications and Logistics';
+    }
+    part def 'RockÉTS Payload Department' {
+        ref part director : 'Maëlle Marinier';
+    }
+    part def 'RockÉTS Avionics Department' {
+        ref part director : 'Samuel Laplante';
+        part anirniq : 'Anirniq Rocket Avionics';
+    }
+    part def 'RockÉTS Aerostructure Department' {
+        ref part director : 'Paul Arnautovich';
+    }
+    part def 'RockÉTS Propulsion Department' {
+        ref part director : 'Olivier Nolin';
+    }
+    part def 'RockÉTS Communications and Logistics' {
+        ref part director : 'Audrey Provencher';
+    }
+    part def 'Anirniq Rocket Avionics' {
+        part cots : 'Commercial GPS and Altimeter';
+        part modularBoards : 'Student Built Avionics Boards';
+    }
+    part def 'Commercial GPS and Altimeter';
+    part def 'Student Built Avionics Boards';
+
+    part def 'ÉTS Aerospace Engineering Faculty' {
+        ref part 'small satellite research' : 'Jesus David Gonzalez Llorente';
+    }
+
+    part def 'ÉTS AIT Faculty Domain' {
         part cssr : 'CSSR Space Research Center';
         part lacime : 'LaCIME';
         part ltcc : 'LTCC at ÉTS Laboratory';
+        part aerospace : 'ÉTS Aerospace Engineering Faculty';
     }
 }
