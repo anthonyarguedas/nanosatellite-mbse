@@ -1,0 +1,397 @@
+    // All seventeen technical measure classes and fourteen corrected Refine links.
+    package '2 - Technical Measures' {
+        package '2.1 - Technical Measures - Specifications and Requirements - Population' {
+            package '2.1.1 MOE' {
+                package '2.1.1.2 MOE Requirements' {
+                    requirement <'1'> 'MoeA Requirement' {
+                        doc /*Shall statement*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1639418195867_474428_56840";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1615816651776_286275_2453";
+                            sourceSummary = "";
+                            sourceId = "1";
+                        }
+                        ref refinedSpecs : Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.1 MOE'::'2.1.1.1 MOE Specifications'::'MoeA Specification' [1] {
+                            @CSRMv1Metadata::ReifiedRefineTargets {
+                                sourceRefineIds = "[\"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640979107726_954282_59123\"]";
+                                targetSourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636387510572_262637_55801";
+                            }
+                        }
+                        assert constraint refineValidation : CSRMMeasureValidation::'moeRequirement Refined' {
+                            in ref matchingRefineTargets = refinedSpecs;
+                        }
+                        // No matching measure property satisfies this requirement in the source.
+                        assert constraint moeSatisfyValidation : CSRMMeasureValidation::'moeRequirement Satisfy by MoE Param' {
+                            in attribute matchingMoESatisfiers : CSRMNativeMeasures::MoE [0];
+                        }
+                    }
+                    requirement <'2'> 'MoeB Requirement' {
+                        doc /*Shall statement*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640890459085_928753_58061";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1615816651776_286275_2453";
+                            sourceSummary = "";
+                            sourceId = "2";
+                        }
+                        ref refinedSpecs : Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.1 MOE'::'2.1.1.1 MOE Specifications'::'MoeB Specification' [1] {
+                            @CSRMv1Metadata::ReifiedRefineTargets {
+                                sourceRefineIds = "[\"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640890511416_885986_58069\", \"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641060126355_872138_58393\"]";
+                                targetSourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640890405896_924459_58049";
+                            }
+                        }
+                        assert constraint refineValidation : CSRMMeasureValidation::'moeRequirement Refined' {
+                            in ref matchingRefineTargets = refinedSpecs;
+                        }
+                        // No matching measure property satisfies this requirement in the source.
+                        assert constraint moeSatisfyValidation : CSRMMeasureValidation::'moeRequirement Satisfy by MoE Param' {
+                            in attribute matchingMoESatisfiers : CSRMNativeMeasures::MoE [0];
+                        }
+                    }
+                }
+                package '2.1.1.1 MOE Specifications' {
+                    part def 'MoeA Specification' {
+                        comment /*Technical measure description*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636387510572_262637_55801";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_18_5_2_3880181_1510191588135_243878_66132";
+                            sourceSummary = "The system shall exhibit the property \"MOE Name\" that has a minimum of x and maximum of y,";
+                            sourceId = "";
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.1 MOE'::'2.1.1.2 MOE Requirements'::'MoeA Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.1 MOE'::'2.1.1.1 MOE Specifications'::'MoeA Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640979107726_954282_59123";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636387510572_262637_55801";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1639418195867_474428_56840";
+                            isRefine = true;
+                        }
+                    }
+                    part def 'MoeB Specification' {
+                        comment /*Technical measure description*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640890405896_924459_58049";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_18_5_2_3880181_1510191588135_243878_66132";
+                            sourceSummary = "";
+                            sourceId = "";
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.1 MOE'::'2.1.1.2 MOE Requirements'::'MoeB Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.1 MOE'::'2.1.1.1 MOE Specifications'::'MoeB Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640890511416_885986_58069";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640890405896_924459_58049";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640890459085_928753_58061";
+                            isRefine = true;
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.1 MOE'::'2.1.1.2 MOE Requirements'::'MoeB Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.1 MOE'::'2.1.1.1 MOE Specifications'::'MoeB Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641060126355_872138_58393";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640890405896_924459_58049";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640890459085_928753_58061";
+                            isRefine = true;
+                        }
+                    }
+                }
+            }
+            package '2.1.2 MOP' {
+                package '2.1.2.2 MOP Requirements' {
+                    requirement <'1'> 'MopA Requirement' {
+                        doc /*Shall statement*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1639426059464_157765_57068";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1615816615229_751396_2399";
+                            sourceSummary = "";
+                            sourceId = "1";
+                        }
+                        ref refinedSpecs : Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.2 MOP'::'2.1.2.1 MOP Specifications'::'MopA Specification' [1] {
+                            @CSRMv1Metadata::ReifiedRefineTargets {
+                                sourceRefineIds = "[\"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640978847584_874961_58974\"]";
+                                targetSourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636387510635_112212_55836";
+                            }
+                        }
+                        assert constraint refineValidation : CSRMMeasureValidation::'mopRequirement Refined' {
+                            in ref matchingRefineTargets = refinedSpecs;
+                        }
+                        // No matching measure property satisfies this requirement in the source.
+                        assert constraint mopSatisfyValidation : CSRMMeasureValidation::'mopRequirement Satisfy by MoP Param' {
+                            in attribute matchingMoPSatisfiers : CSRMNativeMeasures::MoP [0];
+                        }
+                    }
+                    requirement <'2'> 'MopB Requirement' {
+                        doc /*<html><body>Shall statement	</body></html>*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641086218348_651267_58530";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1615816615229_751396_2399";
+                            sourceSummary = "";
+                            sourceId = "2";
+                        }
+                        ref refinedSpecs : Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.2 MOP'::'2.1.2.1 MOP Specifications'::'MopB Specification' [1] {
+                            @CSRMv1Metadata::ReifiedRefineTargets {
+                                sourceRefineIds = "[\"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641086280177_84502_58538\", \"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641088135761_443324_59290\"]";
+                                targetSourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641086056782_808571_58519";
+                            }
+                        }
+                        assert constraint refineValidation : CSRMMeasureValidation::'mopRequirement Refined' {
+                            in ref matchingRefineTargets = refinedSpecs;
+                        }
+                        // No matching measure property satisfies this requirement in the source.
+                        assert constraint mopSatisfyValidation : CSRMMeasureValidation::'mopRequirement Satisfy by MoP Param' {
+                            in attribute matchingMoPSatisfiers : CSRMNativeMeasures::MoP [0];
+                        }
+                    }
+                }
+                package '2.1.2.1 MOP Specifications' {
+                    part def 'MopA Specification' {
+                        comment /*Technical measure description*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636387510635_112212_55836";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_18_5_2_3880181_1510191588135_300770_66133";
+                            sourceSummary = "";
+                            sourceId = "";
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.2 MOP'::'2.1.2.2 MOP Requirements'::'MopA Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.2 MOP'::'2.1.2.1 MOP Specifications'::'MopA Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640978847584_874961_58974";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636387510635_112212_55836";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1639426059464_157765_57068";
+                            isRefine = true;
+                        }
+                    }
+                    part def 'MopB Specification' {
+                        comment /*Technical measure description*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641086056782_808571_58519";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_18_5_2_3880181_1510191588135_300770_66133";
+                            sourceSummary = "";
+                            sourceId = "";
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.2 MOP'::'2.1.2.2 MOP Requirements'::'MopB Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.2 MOP'::'2.1.2.1 MOP Specifications'::'MopB Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641086280177_84502_58538";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641086056782_808571_58519";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641086218348_651267_58530";
+                            isRefine = true;
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.2 MOP'::'2.1.2.2 MOP Requirements'::'MopB Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.2 MOP'::'2.1.2.1 MOP Specifications'::'MopB Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641088135761_443324_59290";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641086056782_808571_58519";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641086218348_651267_58530";
+                            isRefine = true;
+                        }
+                    }
+                }
+            }
+            package '2.1.4 KPP' {
+                package '2.1.4.2 KPP Requirements' {
+                    requirement <'1'> 'KppA Requirement' {
+                        doc /*Shall statement*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1639427668110_10024_57317";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1615816671041_264736_2480";
+                            sourceSummary = "";
+                            sourceId = "1";
+                        }
+                        ref refinedSpecs : Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.4 KPP'::'2.1.4.1 KPP Specifications'::'KppA Specification' [1] {
+                            @CSRMv1Metadata::ReifiedRefineTargets {
+                                sourceRefineIds = "[\"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640976917863_158146_58516\", \"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640977336098_259821_58559\", \"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640977591277_247213_58579\"]";
+                                targetSourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636392204795_245336_57575";
+                            }
+                        }
+                        assert constraint refineValidation : CSRMMeasureValidation::'kppRequirement Refined' {
+                            in ref matchingRefineTargets = refinedSpecs;
+                        }
+                        // No matching measure property satisfies this requirement in the source.
+                        assert constraint kppSatisfyValidation : CSRMMeasureValidation::'kppRequirement Satisfy & kpp stereotype' {
+                            in attribute matchingKppSatisfiers : CSRMNativeMeasures::KPP [0];
+                        }
+                    }
+                    requirement <'2'> 'KppB Requirement' {
+                        doc /*Shall statement*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641050628893_142701_58897";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1615816671041_264736_2480";
+                            sourceSummary = "";
+                            sourceId = "2";
+                        }
+                        ref refinedSpecs : Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.4 KPP'::'2.1.4.1 KPP Specifications'::'KppB Specification' [1] {
+                            @CSRMv1Metadata::ReifiedRefineTargets {
+                                sourceRefineIds = "[\"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641137036932_313325_58832\", \"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641258322639_376832_58601\"]";
+                                targetSourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641136932885_191193_58826";
+                            }
+                        }
+                        assert constraint refineValidation : CSRMMeasureValidation::'kppRequirement Refined' {
+                            in ref matchingRefineTargets = refinedSpecs;
+                        }
+                        // No matching measure property satisfies this requirement in the source.
+                        assert constraint kppSatisfyValidation : CSRMMeasureValidation::'kppRequirement Satisfy & kpp stereotype' {
+                            in attribute matchingKppSatisfiers : CSRMNativeMeasures::KPP [0];
+                        }
+                    }
+                }
+                package '2.1.4.1 KPP Specifications' {
+                    part def 'KppA Specification' {
+                        comment /*Technical measure description*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636392204795_245336_57575";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1603550607909_173509_14549";
+                            sourceSummary = "";
+                            sourceId = "";
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.4 KPP'::'2.1.4.2 KPP Requirements'::'KppA Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.4 KPP'::'2.1.4.1 KPP Specifications'::'KppA Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640976917863_158146_58516";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636392204795_245336_57575";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1639427668110_10024_57317";
+                            isRefine = true;
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.4 KPP'::'2.1.4.2 KPP Requirements'::'KppA Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.4 KPP'::'2.1.4.1 KPP Specifications'::'KppA Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640977336098_259821_58559";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636392204795_245336_57575";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1639427668110_10024_57317";
+                            isRefine = true;
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.4 KPP'::'2.1.4.2 KPP Requirements'::'KppA Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.4 KPP'::'2.1.4.1 KPP Specifications'::'KppA Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640977591277_247213_58579";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636392204795_245336_57575";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1639427668110_10024_57317";
+                            isRefine = true;
+                        }
+                    }
+                    part def 'KppB Specification' {
+                        comment /*Technical measure description*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641136932885_191193_58826";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1603550607909_173509_14549";
+                            sourceSummary = "";
+                            sourceId = "";
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.4 KPP'::'2.1.4.2 KPP Requirements'::'KppB Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.4 KPP'::'2.1.4.1 KPP Specifications'::'KppB Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641137036932_313325_58832";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641136932885_191193_58826";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641050628893_142701_58897";
+                            isRefine = true;
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.4 KPP'::'2.1.4.2 KPP Requirements'::'KppB Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.4 KPP'::'2.1.4.1 KPP Specifications'::'KppB Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641258322639_376832_58601";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641136932885_191193_58826";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641050628893_142701_58897";
+                            isRefine = true;
+                        }
+                    }
+                }
+                part def 'KppB Spedification' {
+                    @CSRMv1Metadata::ConvertedClassSource {
+                        sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641052437130_31307_59249";
+                        stereotypeRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1603550607909_173509_14549";
+                        sourceSummary = "";
+                        sourceId = "";
+                    }
+                }
+            }
+            package '2.1.3 TPM' {
+                package '2.1.3.2 TPM Requirements' {
+                    requirement <'1'> 'TpmA Requirement' {
+                        doc /*Shall statement*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1639426915951_819149_57198";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1615816634530_574230_2426";
+                            sourceSummary = "";
+                            sourceId = "1";
+                        }
+                        ref refinedSpecs : Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.3 TPM'::'2.1.3.1 TPM Specifications'::'TpmA Specification' [1] {
+                            @CSRMv1Metadata::ReifiedRefineTargets {
+                                sourceRefineIds = "[\"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640978118184_715139_58750\"]";
+                                targetSourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636387510681_890687_55869";
+                            }
+                        }
+                        assert constraint refineValidation : CSRMMeasureValidation::'tpmRequirement Refined' {
+                            in ref matchingRefineTargets = refinedSpecs;
+                        }
+                        // No matching measure property satisfies this requirement in the source.
+                        assert constraint tpmSatisfyValidation : CSRMMeasureValidation::'tpmRequirement Satisfy by TPM Param1' {
+                            in attribute matchingTPMSatisfiers : CSRMNativeMeasures::TPM [0];
+                        }
+                    }
+                    requirement <'2'> 'TpmB Requirement' {
+                        doc /*Shall statement*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641056363739_293120_58627";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1615816634530_574230_2426";
+                            sourceSummary = "";
+                            sourceId = "2";
+                        }
+                        ref refinedSpecs : Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.3 TPM'::'2.1.3.1 TPM Specifications'::'TpmB Specification' [1] {
+                            @CSRMv1Metadata::ReifiedRefineTargets {
+                                sourceRefineIds = "[\"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641087141570_487929_58678\", \"CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641239239391_918252_59491\"]";
+                                targetSourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641086922717_230247_58652";
+                            }
+                        }
+                        assert constraint refineValidation : CSRMMeasureValidation::'tpmRequirement Refined' {
+                            in ref matchingRefineTargets = refinedSpecs;
+                        }
+                        // No matching measure property satisfies this requirement in the source.
+                        assert constraint tpmSatisfyValidation : CSRMMeasureValidation::'tpmRequirement Satisfy by TPM Param1' {
+                            in attribute matchingTPMSatisfiers : CSRMNativeMeasures::TPM [0];
+                        }
+                    }
+                }
+                package '2.1.3.1 TPM Specifications' {
+                    part def 'TpmA Specification' {
+                        comment /*Technical measure description*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636387510681_890687_55869";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_18_5_2_3880181_1510191588135_601405_66134";
+                            sourceSummary = "";
+                            sourceId = "";
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.3 TPM'::'2.1.3.2 TPM Requirements'::'TpmA Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.3 TPM'::'2.1.3.1 TPM Specifications'::'TpmA Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1640978118184_715139_58750";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1636387510681_890687_55869";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1639426915951_819149_57198";
+                            isRefine = true;
+                        }
+                    }
+                    part def 'TpmB Specification' {
+                        comment /*Technical measure description*/
+                        @CSRMv1Metadata::ConvertedClassSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641086922717_230247_58652";
+                            stereotypeRef = "CSRM-Profile2.mdzip#_18_5_2_3880181_1510191588135_601405_66134";
+                            sourceSummary = "";
+                            sourceId = "";
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.3 TPM'::'2.1.3.2 TPM Requirements'::'TpmB Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.3 TPM'::'2.1.3.1 TPM Specifications'::'TpmB Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641087141570_487929_58678";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641086922717_230247_58652";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641056363739_293120_58627";
+                            isRefine = true;
+                        }
+                    }
+                    dependency from Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.3 TPM'::'2.1.3.2 TPM Requirements'::'TpmB Requirement' to Data::'2 - Technical Measures'::'2.1 - Technical Measures - Specifications and Requirements - Population'::'2.1.3 TPM'::'2.1.3.1 TPM Specifications'::'TpmB Specification' {
+                        @CSRMv1Metadata::CorrectedRefineSource {
+                            sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641239239391_918252_59491";
+                            originalClientRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641086922717_230247_58652";
+                            originalSupplierRef = "CSRM - 2025-11-18.mdzip#_19_0_2_3880181_1641056363739_293120_58627";
+                            isRefine = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
