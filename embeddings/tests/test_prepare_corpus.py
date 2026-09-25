@@ -36,6 +36,7 @@ class PrepareCorpusTests(unittest.TestCase):
         self.assertIn("handpicked-0001", actual)
         self.assertIn("handpicked-0002", actual)
         self.assertIn("handpicked-0003", actual)
+        self.assertIn("handpicked-0004", actual)
         self.assertIn("psr-0024", actual)
         self.assertIn("psr-0039", actual)
         self.assertIn("psr-0092", actual)

@@ -1,6 +1,6 @@
 # SLR1 multimodal retrieval
 
-The corpus contains structure aware text chunks, dedicated mathematical equation chunks, every source image, and GPT-5.6-Luna extractions of SysML, Capella/Arcadia, Simulink, and formal diagrams from the 139 included reports. Qwen3 provides text embeddings, ColPali searches the source images directly, and Qwen3-Reranker orders the fused candidates by default. Jev supports direct Noul scoring and API based reranking.
+The corpus contains structure aware text chunks, dedicated mathematical equation chunks, every source image, and GPT-5.6-Luna extractions of SysML, Capella/Arcadia, Simulink, and formal diagrams from the 140 included reports. Qwen3 provides text embeddings, ColPali searches the source images directly, and Qwen3-Reranker orders the fused candidates by default. Jev supports direct Noul scoring and API based reranking.
 
 ## Answer a question
 
