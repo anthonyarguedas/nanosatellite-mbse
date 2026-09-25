@@ -37,3 +37,59 @@ has five tiers for digital twins (measure = tier coverage?)
 The blind spot is that this doesn't allow to compare against approaches that don't
 use MBSE or digital twins (hence why my original problem, which the jury didn't
 like, touches on evidence dispersal)
+
+## My response to the jury 
+
+Mis sinceras disculpas por la pobre presentación realizada durante la predefensa.
+
+En retrospectiva creo que mi principal problema fue usar diagramas en la presentación. Puesto que no expliqué el formato de estos diagramas, aportaron lo mismo que una diapositiva vacía. Para el informe final solo incluiré diagramas informales como uno de bloques si realmente aportan legibilidad, a confirmar con mi asesor. Los requerimientos, funciones, y métricas del marco se comunicarán a través de prosa y tablas únicamente.
+
+Síntesis del problema
+
+El grupo de investigación ASCEND de la ÉTS ha dedicado un estimado de 3 meses a una iteración de un diseño de EPS para CubeSat, sin alcanzar justificación temprana. Este desempeño no alcanza la meta para la iniciativa CUBICS, que corresponde a un periodo de iteración de diseño de EPS de 1 semana culminando en justificación temprana bajo requerimientos de EPS en evolución.
+
+Entregable final
+
+Es tomar el proceso manual de diseño de un EPS, documentarlo, generalizarlo y automatizar las decisiones de verificación y validación en un marco MBSE. A partir de ahora llamaré herramienta al marco.
+
+Esa herramienta se valida con dos casos de estudio, y por ende se producen dos diseños de EPS.
+
+Dudo que el cliente vaya a adoptar alguno de los diseños de EPS producidos, porque el proyecto CUBICS está apenas iniciando. Su intención es producir otros a futuro con la herramienta, con un periodo de iteración rápido.
+
+Los entregables de los objetivos específicos listan las contribuciones de investigación. Estas contribuciones no son para el cliente solamente, sino para toda la comunidad académica que trabaja con EPS de nanosatélites.
+
+1. Matriz de necesidades, restricciones, interfaces y criterios técnicos del EPS. (Justifica lo que la herramienta considera como un EPS con la literatura. Mi trabajo depende de matrices que otros han publicado.)
+
+2. Flujo operativo de modelado, análisis y gestión de evidencia del marco MBSE. (Flujo que automatiza la herramienta.)
+
+3. Modelo de la arquitectura genérica del EPS con funciones, componentes lógicos, interfaces, modos de operación y restricciones. (Un “plano" de lo que es un EPS, más completo que los existentes para su uso en ASCEND.)
+
+4. Paquete de verificación temprana del EPS. (Catálogo de análisis automatizados.)
+
+5. Informe técnico de evaluación comparativa del marco MBSE. (Principal instrumento para que ASCEND decida si la herramienta cumple sus necesidades.)
+
+Validación
+
+El tiempo de iteración medido para cada caso de estudio es una métrica a verificar. La nueva formulación del problema lo hace evidente.
+
+Agradezco el comentario sobre la estadística. Las iteraciones serán repetidas por más de una persona, aunque no he confirmado los detalles pues depende de la disponibilidad de otros.
+
+El paquete de verificación temprana (objetivo 4) define cuáles pruebas se aplicar a un EPS según varios criterios. Si la herramienta ejecuta todas las pruebas aplicables ha generado evidencia de validación temprana, y ese es el segundo criterio de importancia para el cliente.
+
+Que la herramienta genere evidencia de validación temprana para ambos casos de estudio únicamente a través de sus funciones propias (sin modificación directa de la herramienta) es el tercero. Esto muestra que la herramienta es suficientemente adaptable para ser usada a futuro. El entregable del Objetivo 1 justifica con la literatura que este resultado realmente significa adaptabilidad, y no solo ajuste a los dos casos de estudio para aprobar la validación.
+
+Formalmente cada caso de uso de la herramienta tiene sus métricas de aceptación y su escenario de verificación. Las anteriores son las métricas de la herramienta como un todo.
+
+Metodología de diseño de ingeniería
+
+La metodología de diseño de ingeniería que aplico es Object-Oriented Systems Engineering Method (OOSEM).
+Sus etapas principales, y sus equivalentes del libro Diseño y desarrollo de productos de Ulrich y Eppinger entre paréntesis, son las siguientes:
+
+- Análisis de las necesidades de las partes interesadas (Identificación de las necesidades del cliente)
+- Análisis de requerimientos del sistema (Especificaciones del producto)
+- Definición de la arquitectura lógica (Especificaciones del producto y Generación de conceptos)
+- Síntesis de arquitecturas físicas candidatas (Generación de conceptos y Selección del concepto)
+
+Por qué es un proyecto de mecatrónica
+
+Admito que a nivel tecnológico el marco no es más que software. El conocimiento sobre sistemas de potencia eléctrica, sobre el software de vuelo que monitorea al EPS, sobre simulación, etc. que está embebido en la herramienta es el aporte mecatrónico.

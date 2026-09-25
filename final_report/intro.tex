@@ -10,46 +10,36 @@
 \label{chp:intro}
 
 We are said to be living in a \textit{New Space} era, where access to space is open to more countries, companies, universities, and people than ever.
-This democratization of space has been driven by progressively decreasing barriers to entry for space systems development and space launches in terms of economic cost, time horizon, and technological feasibility.
+This democratization of space has been driven by progressively decreasing barriers to entry for space systems development and space launches in terms of time horizon, technological feasibility, and economic cost.
 The factors at play include reusable launch platforms, standardization of space system and payload architectures, the integration of commercial-off-the-shelf (COTS) components, and the adoption of more efficient and effective design and development approaches.
 
 The CubeSat format within the nanosatellite class is a prime example of architecture standardization.
 These systems consist of modular units of 10-by-10-by-10 centimeter cubes at around 1.33 kilograms, which have been proven to be integratable at up to 16 units \cite{kulu_nanosats_database} and have supported a plethora of scientific and commercial payloads ranging from orbital laboratories to internet network nodes.
+This reusability and predictability allows CubeSat missions to achieve lead times well bwlow the multi-year timelines of the traditional space sector.
+The Spie Satelles 3U mission, for example, reported a 5-month period between the first discussion of stakeholder objectives and launch, aided by concurrent engineering (CE) of the various mission components, lean design processes, and reuse of existing subsystems.
 
-Unfortunately, CubeSat missions historically suffer from a high failure rate.
-Their electrical power systems (EPS) are a common point of unrecoverable failure, yet causes can be traced back to a lack of expertise, coordination, or consistency in the systems engineering teams behind the mission, often based at universities that are new entracts to the sector as opposed to incumbents with space heritage.
+Unfortunately, CubeSats historically suffer from a high failure rate, and thus not only fall short of fulfilling mission needs but become a worrying source of space debris at the crowded low earth orbits that they usually launch to.
+The causes can be traced back to a lack of expertise, coordination, or consistency in the systems engineering teams behind the mission, often based at universities that are new entrants to the sector as opposed to incumbents with space heritage, or, at a technical level, attributed to electrical power systems (EPS) as a centralized point of unrecoverable failure.
 
-Buruso et al. describe model-based systems engineering (MBSE) as the use of a shared system model across engineering disciplines and throughout the system lifecycle, from identifying stakeholder needs to development and operations \cite{buruso2026modelbased}.
-Such models can capture functional, logical, and physical architectures at different levels of design detail.
-They can also support simulation, comparison of candidate solutions, and data exchange across tools and engineering roles \cite{buruso2026modelbased}.
-Potential benefits include lower documentation effort and development cost, better system understanding and collaboration, earlier fault detection, and reduced technical risk \cite{buruso2026modelbased}.
+Achieving fast CubeSat lead times while assuring a reliable EPS is of great interest to the (ASCEND) research group at the École de technologie supérieure in Montréal, Canada, where this project takes place.
+Dr. Jesús González Llorente, ASCEND lead an academic advisor of this project, pursues a line of research concerned with on reliable space systems, and has authored multiple academic publications targeting the design and validation of nanosatellite electrical power systems.
 
-However, \cite{buruso2026modelbased}, in their review on model-based systems engineering for space systems, Buruso et al. state:
-
-\begin{quote}
-Despite the progress reflected in the literature, unifying MBSE tools and methods to consistently support all lifecycle stage[s] remains an unresolved challenge.
-\end{quote}
-
-Such an MBSE unification covering the entire space system lifecycle is of interest to the Department of Aerospace Engineering at the École de technologie supérieure in Montréal, Canada, where this project takes place.
-Dr. Jesús González Llorente, PhD., academic advisor of this project at the ÉTS, pursues a line of research concerned with on reliable space systems, and has authored multiple academic publications targeting the design and validation of nanosatellite electrical power systems.
-With plans to submit a proposal for the 2026 edition of the Canadian Space Agency's CubeSat Initiative in Canada for STEM (CUBICS), the focus of Dr. González Llorente is placed not only on producing a validated EPS design but on adopting a complete MBSE framework as the foundation for ÉTS's CubeSat ambitions.
-
-The particular problem addressed by this project is:
+ASCEND is pursuing participation in a CubeSat Initiative in Canada for STEM (CUBICS) project co-developed across two universities and involving diverse engineering teams,
+with a technology demonstration proposal in the works.
+This type of proposal requires a wide and deep exploration of demonstration concepts, that to be feasible within the CUBICS time budget of 3 years will require early validation and rapid iteration of technolgy candidates.
+The current project is intended as a precedent for that large-scale ambition, covering the electrical power subsystem in its lifecycle phases prior to commissiong or developing hardware (early phases), and is founded in the experience gained in previous EPS design efforts at ASCEND. Therefore, the particular problem addressed by this project is:
 
 \begin{quote}
-During the early lifecycle phases of nanosatellite electrical power systems, the evidence that supports decisions on architecture, behavior, and interfaces tends to be dispersed across requirements, power budgets, partial models, and unconnected simulations. This fragmentation reduces the traceability and reproducibility of the EPS design, and hinders its justification prior to performing physical verification and validation.
+The ASCEND research group at ÉTS has dedicated an estimated 3 months to one iteration of one CubeSat EPS design, without reaching early justification. This falls short of target for the CUBICS initative, which is a 1 week EPS iteration period culminating in early justification under evolving EPS requirements.
 \end{quote}
 
-The main objective is:
+The main objective of this project is:
 
 \begin{quote}
 To develop a model-based systems engineering framework oriented at the early justification of nanosatellite electrical power systems through traceable and reproducible evidence.
 \end{quote}
 
-An MBSE framework is defined following Buruso et al. \cite{buruso2026modelbased} as the integration of MBSE methods, MBSE languages, and MBSE tools within and throughout the relevant lifecycle phases.
-As part of a research project, the framework is not limited to the needs of nanosatellite EPS developed at ÉTS, but instead aims to be mission-independent as a contribution to the broader academic community.
+An MBSE framework is defined following Buruso et al. \cite{buruso2026modelbased} as the integration of MBSE methods, MBSE languages, and MBSE tools within and throughout the relevant lifecycle phases. The secondary objectives of this project are: to characterize the needs, requirements, interfaces and technical criteria of nanosatellite EPS; to select the operational flow of modeling, analysis, and evidence management of the MBSE framework; to model a generic EPS architecture with functions, logical and physical components, interfaces, modes and states, and requirements; to structure early EPS verification and validation within the EPS framework; to evaluate the framework on two contrasting EPS case studies.
 
-The secondary objectives of this project are: to characterize the needs, requirements, interfaces and technical criteria of nanosatellite EPS; to select the operational flow of modeling, analysis, and evidence management of the MBSE framework; to model a generic EPS architecture with functions, logical and physical components, interfaces, modes and states, and requirements; to structure early EPS verification and validation within the EPS framework; to evaluate the framework on two contrasting EPS case studies.
-
-The problem statement and objectives delimit the project from a project management perspective, and were written prior to applying a formal systems engineering approach to the framework itself.
-The lifecycle of the framework, which crucially must be distinguished from the lifecycle of its EPS system of interest, follows the Object-Oriented Systems Engineering Methodology (OOSEM) \cite{friedenthal2014practical}. The OOSEM study model and common candidate descriptions are formalized in the Systems Modeling Language version 2 (SysML v2). Candidate implementations and native artifacts remain free to use other methods, languages, formats, and tools.
+The objectives delimit the project from a research perspective, and were written prior to fully applying a formal systems engineering approach to the problem.
+The lifecycle of the framework, which crucially must be distinguished from the lifecycle of its EPS system of interest, follows the Object-Oriented Systems Engineering Methodology (OOSEM) \cite{friedenthal2014practical}. The engineering process is formalized by using the Systems Modeling Language version 2 (SysML v2) to represent requirements and their solution. Candidate solutions remain free to implement other methods, languages, formats, and tools as part of their behavior.
