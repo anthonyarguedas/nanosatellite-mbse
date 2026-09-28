@@ -2,81 +2,38 @@
 \label{ch:solucion}
 
 \subsection{Manage System Development}
-In OOSEM, this process plans and controls the technical work. It selects and tailors the lifecycle approach, monitors cost, schedule, performance, and risk, and manages changes to the technical baseline. This section records the framework scope, plan, reviews, decisions, and baseline changes \cite{friedenthal2014practical}.
+In OOSEM, this activity plans and controls the engineering design process. It selects and tailors the lifecycle approach, monitors cost, schedule, performance, and risk \cite{friedenthal2014practical}.
 
 % proposal = anteproyecto
-A project proposal was naturally written before the literature-based specification of the framework began. Said proposal defined objectives, deliverables, indicators, and deadlines that form the project management baseline and provide criteria for tracking the work.
-The assessment of the objective deliverables against their indicators will be carried out separately from the framework integration and verification that happens within OOSEM (Section \ref{subsection:integrate-and-verify-system}),
-recognizing that the systems engineering process takes place within a cost and time budget.
+A project proposal was written before a complete understanding of the stakeholders' needs was achieved. Said proposal defined objectives, deliverables, indicators, and deadlines that form the research contribution baseline, without specifying the framework itself.
+The assessment of the objective deliverables against their indicators and deadlines will be carried out separately from the framework integration and verification that happens within OOSEM (Section \ref{subsection:integrate-and-verify-system}).
 % I will add the deliverables, indicators, and deadlines when the Solution section is complete. I will also add a subsection to the Results section for the indicator assessments.
 
-The OOSEM activities that follow derive stakeholder needs, system requirements, measures, and architecture separately from the literature, with the academic community represented in that literature as a stakeholder population. Thus, the detailed framework models presented here may not match the causal analysis, functional decomposition or solution outline presented in the proposal. ÉTS provides the immediate project context and an intended application setting, most importantly by influencing the selection of the two case studies, but does not impose requirements for the framework that can be developed via OOSEM.
-
-%With regards to the lifecycle approach of the framework, it was chosen to start from the detailed design phase, skipping the conceptual and preliminary phases.
-%A "detailed" design implies modeling down to the physical component level \cite{friedenthal2014practical}.
-%This is justified by the fact that the project is carried out by a single person, and thus the extra modeling and analysis effort of progressing through the phases would be considerable.
-%While phase iteration does provide a broader and deeper understanding of the problem and its potential solution, it was deemed that the literature-grounded requirements elicitation approach adopted serves the same purpose.
-
-%There will be no review gates applied within OOSEM, again because the project is carried out by a single person with the academic community in the role of a stakeholder, with deterministically logged and reviewable iterations.
-%However, the assessment of the objective deliverables against their indicators and the clearing of deadlines provide valuable gates for project management.
+The OOSEM activities that follow derive stakeholder needs, system requirements, measures, and architecture from direct communication with the stakeholders at ASCEND.
+At the request of the research group, certain stakeholder needs, system requirements, and use cases were ellicited from a literature review and then adjudicated to the stakeholders with their approval, given that they desire to develop capabilities in line with the academic state of the art. Multiple review gates were performed along the lifecycle of the framework. Their influence on the final solution will be discussed briefly where applicable.
 
 \subsection{Specify and Design System}
-OOSEM implements this process on the left side of the Vee. It analyzes requirements, defines the architecture, specifies the next level of design, and produces test cases that support subsequent integration and verification \citep{friedenthal2014practical}.
+OOSEM implements system specification and design within the broader development process. It analyzes requirements, defines the architecture, specifies the next level of design, and produces test cases that support subsequent integration and verification \citep{friedenthal2014practical}.
 
-%\subsubsection{Set Up Model}
-%This activity establishes the prerequisites for model development. It defines the modeling purpose, conventions, terminology, package structure, viewpoints, and validation practices that make the framework model consistent and navigable \cite{friedenthal2014practical}.
-%This is not something that readers care about.
-% it was decided to describe the stakeholder needs, system requirements, logical architecture, and every candidate physical architecture in SysML v2 at a common abstraction, and to track this comparison model with the LaTeX report source in a version-controlled repository. This is a control on the OOSEM study and its descriptive artifacts. It does not require candidate solutions or their native engineering artifacts to use SysML v2, the project repository, or any particular configuration mechanism.
-%Thus, an iteration was defined as any commit (edit) applied to the comparison model or report files, and any high-impact iterations are discussed in the relevant report sections for traceability, with a compilation and discussion in Section \ref{subsubsection:manage-requirements-traceability}.
+% \subsubsection{Set Up Model}
+% Based on feedback from the stakeholders, only the framework structure, interfaces, functions and use cases will be communicated via SysML v2 diagrams. They will be kept readable.
+% Requirements, measures, verification activities, or more verbose content will be presented only using prose and tables.
 
 \subsubsection{Analyze Stakeholder Needs}
 \label{subsubsection:analyze-stakeholder-needs}
 This activity characterizes the current operational domain, identifies stakeholder problems and their causes, and defines mission needs, measures of effectiveness, and the intended future domain. It establishes why the framework is needed and what successful use must achieve \citep{friedenthal2014practical}.
 
-\paragraph{Stakeholder and evidence basis.}
-The stakeholder population is the academic community concerned with nanosatellite EPS development using an MBSE approach, including but not limited to CubeSat practicioners and researchers at ÉTS. As such, stakeholder roles, needs, and MBSE framework use cases will all be derived from published literature, not from individual experiences, interviews, or on-site observations.
-Such an approach to stakeholder undertanding makes the designed framework mission- or implementation-independent.
-
-However, extracting needs from a few publications, even if widely cited, can introduce bias.
-This was countered by eliciting from review papers whenever possible, which by definition synthesize multiple contexts, and from a corpus of 129 papers constructed through academic database queries for a nanosatellite population and MBSE implementation, filtered in via full-text screening if they present meaningful EPS content.
-The 129-paper corpus was converted converted to plain text with annotations to track page provenance, chunked into up to 800-character passages, converted to a vector representation using an embeddings model, and structured into a queryable vector index.
-
-To write this stakeholder needs analysis, the vector index was queried for the top 12 most similar chunks with respect to query.
-If all 12 chunks were deemed to be relevant to the query by manual inspection, more chunks were queried at up to 50, then up to a 100 results, which were then analyzed numerically. The implemented analysis is described whenever used.
-If not, the 11 or less relevant chunks were synthetized manually into prose, a table, or a SysML v2 model.
-In both cases, the originating sources are cited in this report.
-
-% 0529 is a potential PA candidate
-\cite{review-0529} proposes an approach to CubeSat Mission Design that is both Concurrent and Model-based.
-They state that such an approach has been adopted at a CubeSat Concurrent Design Facility, with roles including Project Manager, Systems Engineer, Mission Analyst, EPS Engineer, and a Risk and Cost Engineer.
-The Project Manager is given an issue tracker software as a tool; the Systems Engineer has a Data Exchange System, a spreadsheet for sizing, budgeting, and change tracking; and the EPS Engineer has a database of commercial-off-the-shelf (COTS) components and their physical, functional, environmental, and power properties.
-\cite{review-1277} also names a Power Engineer within concurrent engineering (CE), whereas \cite{review-0289} generalizes CE participation to "all systems architects and thematic experts", a pattern seen also in \cite{review-1155}. % 0289 potential PA candidate, V&V example
-Importantly, \cite{review-1438} acknowledges that in a small satellite project a single person may cover multiple roles, working under tight time and budget constraints.
-Thus, four stakeholders are to be considered: Project Manager, Systems Engineer, EPS Engineer, and Other Subsystem Engineer. These stakeholders are said to be part of a Nanosatellite Mission Team enterprise within a Nanosatellite Mission domain.
-
-The problems that these stakeholders encounter motivate the conception of the framework.
-Such problems are found in mission-independent terms as the gaps of literature reviews. The review by \citet[Sec.~5.1 and Table~5]{buruso2026modelbased} identifies fragmented toolchains, weak interoperability, resource mismatch for small missions, incomplete lifecycle coverage, and weak alignment between MBSE artifacts and mission objectives. The broader review by \citet[Sec.~4.7 and Table~3]{vizitiu2025optimizing} identifies efficiency, collaboration, comprehensiveness, traceability, error reduction, time reduction, and flexibility as recurring sources of stakeholder value. The digital twin review by \citet[Secs.~8.4--8.6 and Tables~8--13]{rostamnia2026digitaltwin} adds evidence concerning phase-local models, data quality, synchronization, model uncertainty, interoperability, and validation maturity. This work has a space robotics scope yet provides data, model, and assurance concerns that also apply to evidence-producing digital models.
-
-These sources support three distinct perspectives. The application concern combines workflow usability, collaboration, lifecycle coverage, interoperability, resource fit, adoption effort, and cost \citep{buruso2026modelbased,vizitiu2025optimizing,rojasramirez2022comparative}. The research concern combines explicit methods and assumptions, reusable case adaptations, uncertainty, raw results, and measured evidence \citep{buruso2026modelbased,rostamnia2026digitaltwin,rojasramirez2022comparative,akundi2022textmining}. The independent review concern combines controlled baselines, provenance, traceability, verification evidence, discrepancy status, and reproducibility \citep{buruso2026modelbased,rostamnia2026digitaltwin,rojasramirez2022comparative}. In the solution model, each concern identifies its stakeholder role, each viewpoint frames that concern, and each concrete view asserts conformance to its viewpoint. Table~\ref{tab:framework-stakeholder-viewpoints} states the corresponding model selection rule.
-
-\begin{table}[H]
-    \centering
-    \small
-    \caption{Literature-grounded stakeholder viewpoints and model selection rules.}
-    \label{tab:framework-stakeholder-viewpoints}
-    \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.18\linewidth} >{\raggedright\arraybackslash}p{0.28\linewidth} X}
-        \toprule
-        \textbf{Viewpoint and stakeholder} & \textbf{Concern} & \textbf{Selected model information} \\
-        \midrule
-        Application, Academic Mission Team & Apply the framework within university mission constraints with a usable workflow and declared adaptations. & Operational domain, enterprise use cases, mission requirements, framework resources, adaptation points, and effort, cost, and assurance measures. \\
-        Research, Academic Researcher & Evaluate, compare, and extend the framework through explicit and reusable evidence. & Sources and rationale, requirements, methods, assumptions, case configurations, raw measure results, analyses, uncertainty, and limitations. \\
-        Independent review, Reviewer & Assess claims from a controlled baseline and reproduce designated analyses. & Provenance, configuration, requirement and evidence traces, verification criteria and results, discrepancies, assumptions, uncertainty, and reproduction instructions. \\
-        \bottomrule
-    \end{tabularx}
-\end{table}
-
 \paragraph{As-is domain and causal analysis.}
-The as-is operational domain includes academic mission teams, researchers, and reviewers, the engineering, modeling, analysis, and repository systems they use, and the artifacts exchanged among them. These artifacts include requirements, architecture models, power budgets, assumptions, analysis scripts, and simulation results. The elements exist today, but their information flows often depend on manual transfer and local conventions. This creates several causes of the evidence fragmentation stated in the Introduction.
+The stakeholders are the members of the ASCEND research team involved in the EPS design process. The stakeholder roles identified are: Project Manager, Systems Engineer, EPS Engineer, Non-EPS Engineer, Testing Facility Technician. The Non-EPS Engineer is concerned with any other mission segment or subsystem apart from the EPS. This team structure is visible in the literature \cite{review-0529, review-1277, review-1155}, often working concurrently, and is generalized by \cite{review-0289} as "all systems architects and thematic experts".
+Importantly, \cite{review-1438} acknowledges that in a small satellite project a single person may cover multiple roles, working under tight time and budget constraints.
+% 0289 potential PA candidate, V&V example
+
+The fact that a 1-week iteration period on an EPS design culminating in early validation and under evolving requirements cannot be achieved is the core problem experienced by the stakeholders.
+Plausible causes for this problem were found in mission-independent terms as the gaps of literature reviews. The review by \citet[Sec.~5.1 and Table~5]{buruso2026modelbased} identifies fragmented toolchains, resource mismatch for small missions, incomplete lifecycle coverage, and weak alignment between MBSE artifacts and mission objectives. The broader review by \citet[Sec.~4.7 and Table~3]{vizitiu2025optimizing} identifies efficiency, collaboration, comprehensiveness, traceability, error reduction, time reduction, and flexibility as recurring sources of stakeholder value. A wider digital twin review by \citet[Secs.~8.4--8.6 and Tables~8--13]{rostamnia2026digitaltwin} adds evidence concerning lifecycle phase-specific models, data quality, synchronization, model uncertainty, interoperability, and validation maturity.
+
+These sources support three distinct perspectives. The application concern combines workflow usability, collaboration, lifecycle coverage, interoperability, resource fit, adoption effort, and cost \citep{buruso2026modelbased,vizitiu2025optimizing,rojasramirez2022comparative}. The research concern combines explicit methods and assumptions, reusable case adaptations, uncertainty, raw results, and measured evidence \citep{buruso2026modelbased,rostamnia2026digitaltwin,rojasramirez2022comparative,akundi2022textmining}. The independent review concern combines controlled baselines, provenance, traceability, verification evidence, discrepancy status, and reproducibility \citep{buruso2026modelbased,rostamnia2026digitaltwin,rojasramirez2022comparative}. In the solution model, each concern identifies its stakeholder role, each viewpoint frames that concern, and each concrete view asserts conformance to its viewpoint.
+
+The as-is operational domain includes the ASCEND team, the engineering, modeling, analysis, and repository systems they use, and the artifacts exchanged among them. These artifacts include requirements, architecture models, assumptions and parameters, verification and validation scripts, and analysis or simulation results. The elements exist today, but their information flows often depend on manual transfer and local conventions. This creates several causes of the evidence fragmentation stated in the Introduction.
 
 The fishbone diagram in Figure~\ref{fig:stakeholder-causal-analysis} is an external causal analysis aid rather than a formal OOSEM model. However, such a diagram may be referenced from a SysML model's Parametrics package, or formalized later through a tailored profile when required \citep[Sec.~17.3.2]{friedenthal2014practical}. The method, resource, toolchain, and governance branches of the fishbone synthesize the review by \citet{buruso2026modelbased}. The validation and data branches also use the findings of \citet{rostamnia2026digitaltwin}. The artifact branch restates the project problem at a more detailed level. The resource and toolchain branches also reflect the comparative space-sector review by \citet{rojasramirez2022comparative}. It identifies training and licensing costs, usability, manual data transfer, and transfer verification as practical constraints on MBSE adoption. These findings reinforce the existing causes of limited resource fit and weakened evidence continuity.
 
@@ -750,4 +707,4 @@ Full elaboration will allocate every logical component and requirement to the br
 This cross cutting activity maintains links from mission needs through system and component requirements to design and verification elements. It exposes coverage gaps, supports change impact analysis, and preserves the rationale for framework decisions \cite{friedenthal2014practical}.
 
 \subsubsection{Support System Integration and Verification}
-This activity prepares the right side of the Vee by defining test cases, verification procedures, environments, and criteria. Executable and analytical models support early, virtual integration and verification before physical implementation \cite{friedenthal2014practical}.
+This activity supports system integration and verification by defining test cases, verification procedures, environments, and criteria. Executable and analytical models support early, virtual integration and verification before physical implementation \cite{friedenthal2014practical}.

@@ -1,84 +1,72 @@
-# Post-Mortem Analysis of the 2026-09-21 Presentation
-
-On 2026-09-21 I presented my progress on this final report to a jury.
-
-The feedback was negative overall. Thankfully, it was a formative evaluation and has no impact on my grade. I have a chance to the reposition the project, make it more ambitious, and pass the course. I have 50% of the time left.
-I am writing down what happened and what my proposed solutions are so I can move forward.
-
-Any uncommitted changes were made after the presentation.
-
-| Feedback | Answer |
-|--|--|
-| SysML diagrams communicate almost nothing to people unfamiliar with the syntax. | Present SysML diagrams only for the as-is/to-be domain, black box interfaces, logical architecture structure and its interfaces, physical architecture candidates structure and its interfaces. Fishbone digrams can be used for causal analysis. Requirements, measures, and verification and validation activities are to be presented in tables. |
-| The project problam is not understandable. | I agree that it reads more like a cause. Normally, these projects take place in industry where an engineer arrives at a production company and is told "the production of this process is down N%" or "this process costs $N above budget". I am at a university where there is an objective "submit a CUBICS 2026 proposal" but not a problem that isn't "there is no proposal or CubeSat yet". I was explicitly advised by the jury not to write "X doesn't exist" as the problem. Creating that "X" would have to arise from the analysis of the problem down to "X" as a solution. I agree, this is how engineering design should operate, think about the problem first and the solution after. What do I know that could lead me to formulate a problem? Well, this is were I need guidance. I know that ÉTS has laboratories where they could test the CubeSat, they have a student CubeSat club that could design and build it, and that the payload requirements and design might come from a partner institution (McGill). That is the as-is domain. The to-be domain would be the same but the club would have access to my framework and to the CubeSat itself. In this case framework = method + language + tools. I am not going to invent an MBSE method or a language, I am mostly going to develop a tool that uses the language and enforces and automates the method. |
-| The framework doesn't add value over just choosing some languages or tools and following a method manually. | This is were I need to make the requirements more ambitious. Cover all lifecycle phases (requirements management, model development. simulation and analysis, configuration management, colaboration and communication). Add tools to automatically evaluate conflicts when a requirement is changed. Make SysML v2 more user friendly. Offer multiple EPS candidates when the logical architecture is sufficiently defined, for example by browsing a COTS database. Automate panel and battery sizing, Aid in linking thermal, weight, size, power parameters to the MBSE model. Automate the creation of executable simulation models from the SysML, leveraging the embedded parameters, with a list of the essential tests one click away (power budgeting, irradiance tests). Automate the creation of digital twins from the SysML, I can even think of very cutting-edge uses cases like connecting them to tools like Isaac Sim for high-fidelity simulation that now is also power-aware. A very cool use case would be changing a parameter in SysML and seing Isaac reflect the change. Analyze the impact on interfaces (e.g. power connectors) when requirements are changed. Maybe I would have to establish coverage of each EPS lifecycle phase as a comparison criterion, plus training curve and cost that can favor my automated solution over just following a CubeSat handbook. |
-| Communication with the client is unclear. | My academic advisor at ÉTS doesn't have exact requirements yet. For the CUBICS proposal he only has to propose a scientific objective, a capabilities development objective (most missions say something along the lines of training students to become highly qualified personnel via hands-on experiences), and work breakdown structure to prove the mission has enough human resources. Then CSA gives the money and real engineering work can start. So, he told me to ellicit requirements from a literature review. I did, and I took it quite far I believe. However, the jury didn't like that. My solution for now is that the advisor agrees with the requirements I extracted from the literature, so I will disclose the review but attribute the requirements to him. I will conduct interviews with the CubeSat club to see if I can get some requirements from them. |
-| This is basically a software project. | True. The candidate that won was really tame. My proposed candidate got beat in terms of cost. This is a failure on my part to reflect full lifecycle coverage in the comparison metrics. With the current metrics I was competing against Git. From the view of the jury I was competing against established engineering design methdologies and MATLAB. I have to set the metrics so the value of combining both is more evident. The jury also wants this to feel more like a mechatronics project. This point is related to the next one so I will continue there. |
-| It is unclear what the client will receive from this project. | The client will receive an EPS generator, if you will, plus two EPS generated with it during validation. One of the case studies could be modeled after the CUBICS proposal so it can be useful later on its own. However, the "EPS generator" (the framework) is the main contribution, because since it follows MBSE it can be used for the actual CubeSat development. As the mission progresses so will the EPS requirements, and the tool will reduce the time it takes to get the EPS up-to-date and define its physical architecture. I can't change the project title or objectives at this point, so I can't put the EPS themselves as a core deliverable (the one in the title, although it is still present on the objective 5). The deliverables are the characterization of EPS needs, requirements, interfaces, which is basically the literature review that I was doing. I will still deliver the traces from these elements to the papers that originated them since it is still valuable for future research projects. The second objective deliverable is the workflow, which in this case will be automated via the framework. An EPS designer might know how to size panels and batteries, but if the tools automatically states what other analyses and simulations to run next, that's better than doing it all manually. Third objective deliverable is the generic EPS model. I plan to just convert CSRM to SysML v2. Fourth objective is the V&V characterization. Again, compiling a lists of test that need to be applied to the EPS AND automating them is of value. Fifth deliverable is the two EPS themselves, which is the most evidently mechatronics deliverable. However, what confused the jury is that the core problem isn't related to the EPS like you'd expect, but to the EPS generator. So, the requirements and proposed tests they were seeing were for the generator. The EPS requirements and tests for will embedded into the tool in a way that's mission-independent, and will only be specialized during the two case studies. I think this system-of-systems approach is confusing the jury. Maybe I have two recursively apply the methodology? I am very confused about this. The jury would have been much more comfortable if my project was just designing an EPS for the CUBICS mission. However, the client is more interested in the EPS generator, specially since it can be later developed into a whole-CubeSat generator. |
-
-Overall, I will trade academic claims to generality (arising from requirements and measures extracted from the literature) for assuring the jury that the requirements come from a tangible client, even if I had to help said client come up with its own requirements. The academic advisor agrees with this, even if the publication impact of the framework is diminished. The problem is that the jury sees little value in anything other than the client-tailored mechatronics contribution.
-
-Time is ticking so for this second round of requirements ellicitation I will move quickly from the operational domain to measures of effectiveness, to stakeholder needs.
-At system levels I only introduce interfaces and list system requirements. Then I define the logical components and their interfaces, and assign requirments to each. No behavioral modeling. For the PAs again I only model structure, interfaces, and physical requirements. This is not fully-leveraged MBSE but the jury doesn't care about that.
-
-This is my last chance to re-orient my project to please both.
-
-From the preliminary discussions we've had, the advisor agrees that some
-implementation of digital twins is valuable, although he thinks I likely won't
-have enough time to automate CAD designs of the EPS like I proposed to, with
-thermal, weight, material parameters (inspired by the 3D PCBs that Fusion 360
-creates automatically).
-
-SLR/SLR1/pdfs/psr-reports/psr-report-0039.md introduces five MBSE lifecycle phases
-(measure = phase coverage?) while
-SLR/SLR1/pdfs/handpicked-reports/handpicked-report-0001/handpicked-report-0001.md
-has five tiers for digital twins (measure = tier coverage?)
-
-The blind spot is that this doesn't allow to compare against approaches that don't
-use MBSE or digital twins (hence why my original problem, which the jury didn't
-like, touches on evidence dispersal)
-
 ## My response to the jury 
 
-Mis sinceras disculpas por la pobre presentación realizada durante la predefensa.
+Agradezco la retroalimentación brindada durante la predefensa, a partir de la cual les presento las generalidades de mi proyecto de forma más clara.
 
-En retrospectiva creo que mi principal problema fue usar diagramas en la presentación. Puesto que no expliqué el formato de estos diagramas, aportaron lo mismo que una diapositiva vacía. Para el informe final solo incluiré diagramas informales como uno de bloques si realmente aportan legibilidad, a confirmar con mi asesor. Los requerimientos, funciones, y métricas del marco se comunicarán a través de prosa y tablas únicamente.
 
-Síntesis del problema
 
-El grupo de investigación ASCEND de la ÉTS ha dedicado un estimado de 3 meses a una iteración de un diseño de EPS para CubeSat, sin alcanzar justificación temprana. Este desempeño no alcanza la meta para la iniciativa CUBICS, que corresponde a un periodo de iteración de diseño de EPS de 1 semana culminando en justificación temprana bajo requerimientos de EPS en evolución.
+Síntesis del problema y justificación
+
+La fragmentación de evidencia en las etapas tempranas de diseño de sistemas de potencia eléctrica para nanosatélites, dificulta establecer la trazabilidad entre una necesidad o requisito, las decisiones de arquitectura asociadas y la evidencia analítica que las sustenta. Asimismo, dificulta reproducir los análisis y detectar inconsistencias antes de avanzar hacia etapas de verificación y validación física.
+ 
+El proyecto se justifica por la limitada integración en la evidencia existente sobre el uso de ingeniería de sistemas basada en modelos (MBSE) en el diseño de sistemas de potencia eléctrica (EPS) de nanosatélites. Aunque la literatura reporta beneficios en trazabilidad, consistencia e integración, son pocos los trabajos específicos para EPS y la evidencia que respalda dichos beneficios es limitada. Por ello surge la necesidad de un marco que integre requisitos, arquitectura, análisis y verificación temprana mediante evidencia trazable y reproducible, favoreciendo la justificación de decisiones de diseño y la detección temprana de inconsistencias.
 
 Entregable final
 
-Es tomar el proceso manual de diseño de un EPS, documentarlo, generalizarlo y automatizar las decisiones de verificación y validación en un marco MBSE. A partir de ahora llamaré herramienta al marco.
+Obj.
 
-Esa herramienta se valida con dos casos de estudio, y por ende se producen dos diseños de EPS.
+Objetivo
 
-Dudo que el cliente vaya a adoptar alguno de los diseños de EPS producidos, porque el proyecto CUBICS está apenas iniciando. Su intención es producir otros a futuro con la herramienta, con un periodo de iteración rápido.
+Entregable
 
-Los entregables de los objetivos específicos listan las contribuciones de investigación. Estas contribuciones no son para el cliente solamente, sino para toda la comunidad académica que trabaja con EPS de nanosatélites.
+Indicador
 
-1. Matriz de necesidades, restricciones, interfaces y criterios técnicos del EPS. (Justifica lo que la herramienta considera como un EPS con la literatura. Mi trabajo depende de matrices que otros han publicado.)
+1
 
-2. Flujo operativo de modelado, análisis y gestión de evidencia del marco MBSE. (Flujo que automatiza la herramienta.)
+Caracterizar necesidades, restricciones, interfaces y criterios técnicos del EPS de nanosatélites.
 
-3. Modelo de la arquitectura genérica del EPS con funciones, componentes lógicos, interfaces, modos de operación y restricciones. (Un “plano" de lo que es un EPS, más completo que los existentes para su uso en ASCEND.)
+Matriz trazable de caracterización del EPS, que consolide necesidades, restricciones, interfaces y criterios técnicos, indicando fuente o justificación y su relación con los elementos que deberá contemplar el marco.
 
-4. Paquete de verificación temprana del EPS. (Catálogo de análisis automatizados.)
+100 % de los elementos incorporados a la caracterización cuentan con fuente o justificación trazable y clasificación.
 
-5. Informe técnico de evaluación comparativa del marco MBSE. (Principal instrumento para que ASCEND decida si la herramienta cumple sus necesidades.)
+2
+
+Definir el flujo operativo de modelado, análisis y gestión de evidencia del marco MBSE mediante la evaluación y selección justificada de métodos, lenguajes y herramientas aplicables.
+
+Flujo operativo definido y justificado del marco MBSE, incluyendo fases con actividades, entradas, salidas, herramientas/interfaces y mecanismos para conservar trazabilidad y reproducibilidad de la evidencia.
+
+100 % de las fases requeridas para implementar el flujo cuentan con alternativas evaluadas y una decisión documentada, incluyendo criterio y justificación de selección.
+
+3
+
+Modelar la arquitectura genérica del EPS con funciones, componentes lógicos, interfaces, modos de operación y restricciones.
+
+Modelo MBSE de arquitectura genérica del EPS, independiente de una misión particular y trazable hacia los requisitos seleccionados.
+
+100 % de los requisitos seleccionados están vinculados con uno o más elementos de la arquitectura, y la cobertura del modelo genérico se contrasta con dos casos de estudio, uno tradicional basado en BIRDS-4 y otro de alta autonomía.
+
+4
+
+Caracterizar la verificación temprana de requisitos del EPS dentro del marco MBSE.
+
+Matriz de verificación temprana, compuesto por requisitos seleccionados, métodos de verificación, criterios de aceptación, evidencia requerida y mecanismos para registrar resultados.
+
+100 % de los requisitos seleccionados para verificación cuentan con método, criterio de aceptación y evidencia asociada, manteniendo trazabilidad de requisito a método a resultado.
+
+5
+
+Evaluar el marco MBSE en dos casos de estudio contrastantes de EPS.
+
+Informe de evaluación del marco mediante dos casos contrastantes, uno tradicional basado en BIRDS-4 y otro de alta autonomía, incluyendo resultados de aceptación y desempeño.
+
+Los 2 casos se completan utilizando el mismo núcleo del marco, con evidencia trazable y reproducible y sin modifcaciones post hoc. Además se reportan las medidas de aceptación y desempeño definidas para la evaluación.
+
 
 Validación
 
-El tiempo de iteración medido para cada caso de estudio es una métrica a verificar. La nueva formulación del problema lo hace evidente.
+Se verificará que el marco implementado satisfaga los requisitos establecidos para su funcionamiento. Esto incluye, entre otros aspectos, mantener cadenas válidas de evidencia, reproducir los análisis de EPS, identificar y gestionar discrepancias críticas y completar los dos casos de estudio sin introducir modificaciones post hoc al marco.
+El cumplimiento de requisitos está asociado a métricas cuantitativas. Entre ellas se contemplan el tiempo requerido para procesar correctamente un cambio, el esfuerzo (tiempo dedicado por una persona) requerido para adaptar el marco a un caso particular, el esfuerzo necesario para reproducir independientemente un análisis, el esfuerzo de adopción, el costo directo de utilización y la efectividad para detectar inconsistencias (comparado a una persona cualificada).
 
-Agradezco el comentario sobre la estadística. Las iteraciones serán repetidas por más de una persona, aunque no he confirmado los detalles pues depende de la disponibilidad de otros.
-
-El paquete de verificación temprana (objetivo 4) define cuáles pruebas se aplicar a un EPS según varios criterios. Si la herramienta ejecuta todas las pruebas aplicables ha generado evidencia de validación temprana, y ese es el segundo criterio de importancia para el cliente.
-
-Que la herramienta genere evidencia de validación temprana para ambos casos de estudio únicamente a través de sus funciones propias (sin modificación directa de la herramienta) es el tercero. Esto muestra que la herramienta es suficientemente adaptable para ser usada a futuro. El entregable del Objetivo 1 justifica con la literatura que este resultado realmente significa adaptabilidad, y no solo ajuste a los dos casos de estudio para aprobar la validación.
-
-Formalmente cada caso de uso de la herramienta tiene sus métricas de aceptación y su escenario de verificación. Las anteriores son las métricas de la herramienta como un todo.
+Los dos casos de estudio permitirán comprobar si un mismo núcleo del marco puede aplicarse a configuraciones de EPS contrastantes manteniendo la trazabilidad y reproducibilidad de la evidencia.
 
 Metodología de diseño de ingeniería
 
@@ -92,4 +80,6 @@ Sus etapas principales, y sus equivalentes del libro Diseño y desarrollo de pro
 
 Por qué es un proyecto de mecatrónica
 
-Admito que a nivel tecnológico el marco no es más que software. El conocimiento sobre sistemas de potencia eléctrica, sobre el software de vuelo que monitorea al EPS, sobre simulación, etc. que está embebido en la herramienta es el aporte mecatrónico.
+Aunque la implementación tecnológica del marco contiene una componente importante de software, el proyecto no se limita al desarrollo de una aplicación informática. El objeto de ingeniería sobre el cual opera el marco es el sistema de potencia eléctrica de un nanosatélite. Su representación y análisis requieren integrar aspectos propios de distintas áreas de Mecatrónica: sistemas eléctricos y electrónicos de potencia, adquisición y monitoreo de variables, interfaces entre subsistemas, modos y estados de operación, modelado y simulación, control y automatización, y herramientas computacionales para integrar y verificar información de ingeniería.
+
+Quedo atento en caso de que deseen confirmar el correo como recibido o como aprobado, o si desean externar otra retroalimentación.
