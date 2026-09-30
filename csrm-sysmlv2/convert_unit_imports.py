@@ -206,7 +206,7 @@ def generate_libraries(libraries, refs):
     return result
 
 
-def generate_model(groups, root_imports, dependencies, libraries, technical_fragment="", architecture_fragment="", customization_fragment="", duplicate_fragment=""):
+def generate_model(groups, root_imports, dependencies, libraries, technical_fragment="", architecture_fragment="", customization_fragment="", duplicate_fragment="", concern_fragment=""):
     lines = [
         "// Partial conversion. See README.md for the stop point and unconverted content.",
         "package Data {",
@@ -243,7 +243,12 @@ def generate_model(groups, root_imports, dependencies, libraries, technical_frag
         lines.extend(technical_fragment.rstrip().splitlines())
     if architecture_fragment:
         lines.extend(architecture_fragment.rstrip().splitlines())
-    lines.extend(duplicate_fragment.rstrip().splitlines())
+    duplicate_lines = duplicate_fragment.rstrip().splitlines()
+    if not duplicate_lines or duplicate_lines[-1] != "    }":
+        raise ValueError("Duplicate fragment must end by closing Derived Properties")
+    lines.extend(duplicate_lines[:-1])
+    lines.extend(concern_fragment.rstrip().splitlines())
+    lines.append("    }")
     lines.append("}")
     return "\n".join(lines) + "\n"
 
@@ -271,7 +276,8 @@ def main():
     architecture = architecture_file.read_text() if architecture_file.exists() else ""
     customizations = (output / "cameo-customizations.fragment").read_text()
     duplicates = (output / "duplicate-navigation.fragment").read_text()
-    (output / "model.sysml").write_text(generate_model(groups, root_imports, dependencies, libraries, fragment, architecture, customizations, duplicates))
+    concerns = (output / "concernof-navigation.fragment").read_text()
+    (output / "model.sysml").write_text(generate_model(groups, root_imports, dependencies, libraries, fragment, architecture, customizations, duplicates, concerns))
     (output / "iso80000.sysml").write_text(rendered[ARCHIVES[0]])
     (output / "iso80000-extension.sysml").write_text(rendered[ARCHIVES[1]])
     print(f"Converted {len(groups)} unit categories, {len(root_imports)} package imports, {len(dependencies)} dependencies, {sum(len(items) for _, items in groups)} element imports, {len(all_refs)} ValueTypes")

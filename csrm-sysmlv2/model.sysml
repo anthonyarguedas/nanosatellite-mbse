@@ -2706,5 +2706,90 @@ package Data {
                     useAsNode = true;
                 }
             }
+            // Customization definitions with native direct ConcernOf navigation.
+            item def 'Group Customization' {
+                @CSRMRelationshipNavigation::CustomizationSource {
+                    sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706295_163251_42450";
+                    applicationRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706296_811630_42451";
+                    sourceTargetRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1601670079259_950763_14594";
+                    convertedOwnedProperties = 2;
+                }
+                // Filtered native input, unbound because no source ConcernOf link exists.
+                ref directConcernOfLinks : KerML::Dependency [0..*] {
+                    @CSRMRelationshipNavigation::SourceRelationshipInput {
+                        sourceRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1619643905008_952641_430";
+                        sourceCustomizationRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706295_163251_42450";
+                        sourceTargetStereotypeRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1601670079259_950763_14594";
+                        relationKind = "ConcernOf";
+                        direction = "DIRECT";
+                        sourceLinkCount = 0;
+                        isSourceFeature = false;
+                        bindingContract = "Only ConcernOf dependencies with this customization target element as client and a Stakeholder supplier";
+                    }
+                }
+                private derived ref Stakeholders : KerML::Element [0..*] = CSRMRelationshipNavigation::ConcernOfSuppliers(directConcernOfLinks) {
+                    @CSRMRelationshipNavigation::DerivedPropertySource {
+                        sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706298_14887_42454";
+                        applicationRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706298_444769_42455";
+                        sourceTypeRef = "http://www.omg.org/spec/UML/20131001/UML.xmi#Element";
+                        sourceRelationRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1619643905008_952641_430";
+                        sourceDirection = "DIRECT";
+                    }
+                }
+                private metadata Traceability : CSRMRelationshipNavigation::PropertyGroupSource {
+                    sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706300_435355_42458";
+                    applicationRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706300_316227_42459";
+                    qualifierRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706307_593960_42472";
+                    qualifierName = "Other";
+                    showGroupInDependencyMatrix = true;
+                    showGroupInElementSpecification = true;
+                    showGroupInGoTo = true;
+                    showGroupInQuickProperties = true;
+                    showGroupInRelationMap = true;
+                    useAsNode = true;
+                }
+            }
+            item def 'StakeholderConcern Customization' {
+                @CSRMRelationshipNavigation::CustomizationSource {
+                    sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706312_242716_42488";
+                    applicationRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706313_423248_42489";
+                    sourceTargetRef = "CSRM-Profile2.mdzip#_18_5_1_3880181_1505404258412_328388_57518";
+                    convertedOwnedProperties = 2;
+                }
+                // Filtered native input, unbound because no source ConcernOf link exists.
+                ref directConcernOfLinks : KerML::Dependency [0..*] {
+                    @CSRMRelationshipNavigation::SourceRelationshipInput {
+                        sourceRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1619643905008_952641_430";
+                        sourceCustomizationRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706312_242716_42488";
+                        sourceTargetStereotypeRef = "CSRM-Profile2.mdzip#_18_5_1_3880181_1505404258412_328388_57518";
+                        relationKind = "ConcernOf";
+                        direction = "DIRECT";
+                        sourceLinkCount = 0;
+                        isSourceFeature = false;
+                        bindingContract = "Only ConcernOf dependencies with this customization target element as client and a Stakeholder supplier";
+                    }
+                }
+                private derived ref Stakeholders : KerML::Element [0..*] = CSRMRelationshipNavigation::ConcernOfSuppliers(directConcernOfLinks) {
+                    @CSRMRelationshipNavigation::DerivedPropertySource {
+                        sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706314_573878_42492";
+                        applicationRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706314_476351_42493";
+                        sourceTypeRef = "http://www.omg.org/spec/UML/20131001/UML.xmi#Element";
+                        sourceRelationRef = "CSRM-Profile2.mdzip#_19_0_3_2b0010b_1619643905008_952641_430";
+                        sourceDirection = "DIRECT";
+                    }
+                }
+                private metadata Traceability : CSRMRelationshipNavigation::PropertyGroupSource {
+                    sourceRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706316_385499_42496";
+                    applicationRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706317_244545_42497";
+                    qualifierRef = "CSRM - 2025-11-18.mdzip#_19_0_3_2b0010b_1619729706324_939172_42510";
+                    qualifierName = "Other";
+                    showGroupInDependencyMatrix = true;
+                    showGroupInElementSpecification = true;
+                    showGroupInGoTo = true;
+                    showGroupInQuickProperties = true;
+                    showGroupInRelationMap = true;
+                    useAsNode = true;
+                }
+            }
     }
 }
