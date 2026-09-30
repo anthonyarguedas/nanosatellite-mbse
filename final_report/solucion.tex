@@ -2,7 +2,8 @@
 \label{ch:solucion}
 
 The OOSEM activities that follow are concerned with specifying and designing the framework. They derive stakeholder needs, system requirements, measures, and architecture from direct communication with the stakeholders at ASCEND. Each level of abstraction (mission requirements, system requirements, logical architecture, physical architecture) specifies the next level of design, and produces test cases that support subsequent integration and verification \citep{friedenthal2014practical}.
-At the request of the research group, certain stakeholder needs, system requirements, and use cases were ellicited from a literature review and then adjudicated to the stakeholders with their approval, given that they desire to develop capabilities in line with the academic state of the art. Multiple review gates were performed along the lifecycle of the framework. Their influence on the final solution will be discussed briefly where applicable.
+At the request of the research group, certain stakeholder needs, system requirements, and use cases were ellicited from a literature review and then adjudicated to the stakeholders with their approval, given that they desire to develop capabilities in line with the academic state of the art.
+%Multiple review gates were performed along the lifecycle of the framework. Their influence on the final solution will be discussed briefly where applicable.
 
 % Based on feedback from the stakeholders, only the framework structure, interfaces, functions and use cases will be communicated via SysML v2 diagrams. They will be kept readable.
 % Requirements, measures, verification activities, or more verbose content will be presented only using prose and tables.
@@ -16,32 +17,105 @@ The stakeholders are the members of the ASCEND research team involved in the EPS
 Importantly, \cite{review-1438} acknowledges that in a small satellite project a single person may cover multiple roles, working under tight time and budget constraints.
 % 0289 potential PA candidate, V&V example
 
-Evidence fragmentation resulting in low reproducibility of analyses and low capability to detect EPS design issues early is the core problem faced by the stakeholders.
-Plausible causes for this problem were found in mission-independent terms as the gaps of literature reviews. The review by \citet[Sec.~5.1 and Table~5]{buruso2026modelbased} identifies fragmented toolchains, resource mismatch for small missions, incomplete lifecycle coverage, and weak alignment between MBSE artifacts and mission objectives. The broader review by \citet[Sec.~4.7 and Table~3]{vizitiu2025optimizing} identifies efficiency, collaboration, comprehensiveness, traceability, error reduction, time reduction, and flexibility as recurring sources of stakeholder value. A wider digital twin review by \citet[Secs.~8.4--8.6 and Tables~8--13]{rostamnia2026digitaltwin} adds evidence concerning lifecycle phase-specific models, data quality, synchronization, model uncertainty, interoperability, and validation maturity.
+% Problem statement from intro.tex
+Evidence fragmentation resulting in low reproducibility of analyses and low capability to detect EPS design issues early is the initial problem that motivated this project.
+However, the methodology OOSEM
+proposes stakeholder analysis as an examination of the limitations of the existing EPS engineering systems and workflows from each stakeholder's perspective.
+The concerns below incorporate feedback from ASCEND members and findings from the literature review.
+Causal analysis is used to identify contributing factors and improvement opportunities, derive mission requirements, and establish measures of effectiveness that can quantify the value of a potential solution.
 
-These sources support three distinct perspectives. The application concern combines workflow usability, collaboration, lifecycle coverage, interoperability, resource fit, adoption effort, and cost \citep{buruso2026modelbased,vizitiu2025optimizing,rojasramirez2022comparative}. The research concern combines explicit methods and assumptions, reusable case adaptations, uncertainty, raw results, and measured evidence \citep{buruso2026modelbased,rostamnia2026digitaltwin,rojasramirez2022comparative,akundi2022textmining}. The independent review concern combines controlled baselines, provenance, traceability, verification evidence, discrepancy status, and reproducibility \citep{buruso2026modelbased,rostamnia2026digitaltwin,rojasramirez2022comparative}. In the solution model, each concern identifies its stakeholder role, each viewpoint frames that concern, and each concrete view asserts conformance to its viewpoint.
+% Indentation is a temporary means to encode causality relations
+% Effort is person-time
 
-The as-is operational domain includes the ASCEND team, the engineering, modeling, analysis, and repository systems they use, and the artifacts exchanged among them. These artifacts include requirements, architecture models, assumptions and parameters, verification and validation scripts, and analysis or simulation results. The elements exist today, but their information flows often depend on manual transfer and local conventions. This creates several causes of the evidence fragmentation stated in the Introduction.
+The Project Manager is concerned with:
+\begin{itemize}
+\item the high effort and cost to maintain verifiable requirements;
+    \item the high effort to learn to write verifiable requirements;
+    \item the high cost of requirements management tools used in the industry as a barrier to adoption, and;
+\item the high effort to keep financial cost budgets and estimates up to date;
+    \item the high effort to keep bills of materials up to date;
+        \item the amount and complexity of candidate physical architectures compared;
+        \item the amount of requirement and design changes;
+\end{itemize}
 
-The fishbone diagram in Figure~\ref{fig:stakeholder-causal-analysis} is an external causal analysis aid rather than a formal OOSEM model. However, such a diagram may be referenced from a SysML model's Parametrics package, or formalized later through a tailored profile when required \citep[Sec.~17.3.2]{friedenthal2014practical}. The method, resource, toolchain, and governance branches of the fishbone synthesize the review by \citet{buruso2026modelbased}. The validation and data branches also use the findings of \citet{rostamnia2026digitaltwin}. The artifact branch restates the project problem at a more detailed level. The resource and toolchain branches also reflect the comparative space-sector review by \citet{rojasramirez2022comparative}. It identifies training and licensing costs, usability, manual data transfer, and transfer verification as practical constraints on MBSE adoption. These findings reinforce the existing causes of limited resource fit and weakened evidence continuity.
+The Systems Engineer is concerned with:
+\begin{itemize}
+\item the high effort to maintain traceability from requirements to design decisions;
+    \item (C-SE-1-1) the high effort to learn how to use tools for requirements to design traceability;
+        \item the high effort to learn how to use MBSE tools;
+\item the high effort to communicate effectively requirement verification and validation evidence to stakeholders;
+    \item the high effort to communicate effectively the requirements to design to verification evidence traces to stakeholders;
+\item the high effort to maintain EPS requirements up to date when the designs of other subsystems change;
+    \item the amount of other subsystem design changes;
+        \item the amount of verification gates failed by other subsystem designs;
+    \item C-EPS-1
+    \item the high effort to define pass/fail criteria for EPS requirements;
+        \item the high effort to translate the behavior and thermal and power characteristics of other subsystems into EPS requirement parameters;
+            \item the high effort to determine the thermal and power characteristics of subsystem components;
+            \item the large amount of possible representations of component behavior relevant to power consumption like duty cycles and operation modes;
+            \item the large amount of possible methods to convert behavior and thermal and power characteristics into EPS requirement parameters, including power budgeting;
+                \item the large amount of applicable standards;
+                \item the large amount of methods published in the academic literature;
+    \item the high effort to define verification activities for EPS requirements;
+        \item the large amount of applicable standards;
+        \item the large amount of potential verification activities published in the academic literature;
+        \item the high effort to specify testing conditions and equipment, how they interact with the device under test, and the procedure to generate verification evidence in a format understandable by testing facility technicians;
+            \item the large amount of variables that can be included in verification evidence to increase the translateability of evidence to an updated design in case of a failure;
+\item the high effort to maintain power requirements for non-EPS subsystems up to date when the EPS design changes;
+    \item the amount of EPS design changes;
+        \item the amount of verification gates failed by the EPS designs;
+\item the low reliability, availability, and maintainability (RAM) of CubeSat designs;
+    \item the insufficient coverage of RAM variables in CubeSat and subsystem requirements;
+    \item the high effort to verify requirements related to RAM variables;
+        \item the high cost and effort to obtain evidence to verify requirements related to RAM variables;
+            \item the proportion of requirements related to RAM variables that are verified via demonstration or testing instead of inspection or analysis;
+            \item the high effort to perform RAM analyses on CubeSat and subsystem designs;
+                \item the high effort to generate RAM analysis models of the CubeSat and subsystem designs;
+\end{itemize}
 
-\begin{figure}[htbp]
-    \centering
-    \resizebox{\linewidth}{!}{\input{figures/stakeholder-causal-analysis.tex}}
-    \caption{Causal analysis of fragmented early EPS evidence from the perspective of the academic community.}
-    \label{fig:stakeholder-causal-analysis}
-\end{figure}
+The EPS Engineer is concerned with:
+\begin{itemize}
+\item (C-EPS-1) the high cost and effort to verify the EPS design after EPS requirements change;
+    \item the high cost and effort to obtain evidence to verify EPS designs and compare candidate EPS physical architectures;
+        \item the high effort to verify candidate COTS for EPS designs;
+\item the high effort to maintain traceability from EPS requirements to EPS design decisions;
+    \item (C-SE-1-1)
+\item the high effort to translate the verification evidence of failed gates into an updated EPS design;
+    \item the amount of variables relevant to EPS design included in verification evidence, which normally include only the inputs and outputs of the EPS as a black box;
+    \item the high effort to maintain traceability from verification evidence to EPS design decisions;
+\item the high effort to maintain EPS component requirements up to date when EPS designs change;
+    \item the amount of EPS design changes;
+        \item the amount of verification gates failed by the EPS designs;
+    \item C-EPS-1
+    \item the high effort to define pass/fail criteria for EPS component requirements;
+        \item the high effort to determine the measurable variables of EPS components;
+        \item the high effort to determine the allowable ranges of the relevant measurable variables of all EPS components;
+    \item the high effort to define verification activities for EPS component requirements;
+        \item the large amount of applicable standards;
+        \item the large amount of potential verification activities published in the academic literature;
+        \item the high effort to specify testing conditions and equipment, how they interact with the device under test, and the procedure to generate verification evidence in a format understandable by testing facility technicians;
+            \item the large amount of variables that can be included in verification evidence to increase the translateability of evidence to an updated component choice or design in case of a failure;
+        \item the high effort to specify inspection, analysis, and demonstration conditions, how they interact with the component under test, and the procedure to generate verification evidence;
+            \item the large amount of variables that can be included in verification evidence to increase the translateability of evidence to an updated component choice or design in case of a failure;
+            \item compatibility of specialized EPS engineering tools, like CAD and electrical simulators, with inspection, demonstration, and analysis procedures;
+\end{itemize}
 
-The causes reinforce one another. Separate artifacts require tool transfers. Tool transfers weaken consistency and provenance when configuration control is incomplete. Weak alignment with decision objectives then makes it difficult to determine whether the available models and results constitute sufficient evidence. Resource constraints amplify each mechanism because university teams have limited capacity for custom integration and repeated manual review.
+The Non-EPS Engineer is concerned with:
+\begin{itemize}
+\item the high cost and effort to verify a subsystem design;
+    \item the high cost and effort to verify the power requirements of a subsystem design;
+\end{itemize}
 
-\subsection{Mission need.}
-The causal analysis yields the following top-level mission need for the framework:
-
-\begin{quote}
-Enable the academic nanosatellite community to justify early EPS design decisions by maintaining a traceable, reproducible, consistent, and reusable evidence chain from stakeholder needs and requirements through architecture, assumptions, analyses, and verification results across contrasting mission contexts.
-\end{quote}
-
-This statement narrows the general literature needs to the project problem while retaining their causes. It defines the framework's mission independently of the detailed functions or tools that may realize it.
+The Testing Facility Technician is concerned with:
+\begin{itemize}
+\item the high effort to assess the feasibility and safety of a proposed verification activity that takes place in the testing facilities;
+    \item (C-TFT-1-1) the small amount of information about the procedure to generate verification evidence tipically included in a verification activity proposal;
+    \item the small amount of safety-relevant information about the device under test tipically included in a verification activity proposal;
+    \item the small amount of information about the interfaces between testing equipment and the device under test tipically included in a verification activity proposal;
+\item the high effort to generate verification evidence;
+    \item the amount of variables included in the verification evidence;
+    \item the complexity of the evidence generation procedures;
+\end{itemize}
 
 \section{Analyze System Requirements}
 This activity specifies the framework as a black box. It derives requirements from stakeholder needs and defines mission scenarios, system context, interfaces, behavior, performance, states, failures, and design constraints \cite{friedenthal2014practical}.
