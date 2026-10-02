@@ -1,143 +1,105 @@
-# Valispace centered candidate: OOSEM steps 6 and 7
+# PA-VS: Capella and Valispace with controlled analysis and evidence
 
-## Scope
+This note supersedes the earlier steps 6 and 7 handoff. The source problem and concerns are baseline `b826d9915407bbd861d8d39b2558048f3d534bdc`.
 
-This is a deliberately small candidate model. It performs:
+The complete evidence, inventory, authority rules and planned allocations are in `valispace.json`. The SysML comparison source is `../sysml/candidates/valispace.sysml`.
 
-- Step 6: define the candidate logical node distribution.
-- Step 7: define the minimum physical nodes and components.
+All 40 framework leaves use the same nine logical capabilities and planned V01–V40 objectives. Intended allocation is distinct from implementation and verified satisfaction. Costs, adoption effort, correctness and model validity remain empirical questions.
 
-It does not yet assert logical to physical allocations, requirement satisfaction, or measured performance. Those belong to the following synthesis and evaluation steps.
+## Decision status
 
-The candidate preserves the system boundary in `final_report/final_report.tex`. The Versioned System Model, Analysis Tools, and Evidence Repository remain external to the framework. Valispace acts as the central collaborative engineering data and workflow environment. A Python integration service connects it to the external architecture model and the other resources.
+Conditionally selected for detailed design. Explicit analyst reuse-first priority. No stakeholder preference or measured optimum asserted.
 
-The implementation follows the main literature example, which uses Capella as the architecture master and Valispace as the requirements, engineering data, budget, and trade study environment. This candidate is described separately in textual SysML v2 under MC-01 so that it can be compared at the same abstraction as the other candidates. The SysML v2 comparison description does not require the candidate implementation or its native artifacts to use SysML v2.
+## Responsibility nodes
 
-## Evidence basis
+| ID | Node |
+|---|---|
+| VS-LN-ENG | Shared engineering and review |
+| VS-LN-ARCH | Architecture and interfaces |
+| VS-LN-ANALYSIS | Analysis and verification coordination |
+| VS-LN-ASSURANCE | Configuration and evidence assurance |
 
-The evidence was located with `embeddings/search.py` and checked in the source Markdown.
+These are responsibility partitions. They do not imply a separate computer or executable for each node.
 
-| ID | Extracted evidence | Source |
-|---|---|---|
-| VS-E01 | Valispace is a browser based platform built around a consistent engineering database. It supports remote access, notifications, formulas, dependencies, and an API for import, export, and automation. | Deiana, *Integrating Data-Driven and Model-Based Systems Engineering for End-to-End Small-Satellite Design* (2025), PDF pp. 33 to 35, `citation-4690`. |
-| VS-E02 | The reported platform exposes Project, Components, Requirements, Analyses, Scripting, and Tests modules. The Components module manages a product tree, properties, modes, and trade studies. The Scripting module runs Python or Octave calculations. | Deiana (2025), PDF pp. 36 to 37, `citation-4690`. |
-| VS-E03 | The literature configuration makes Capella the architecture master and Valispace the supporting requirements, engineering data, budget, and trade study environment. Python scripts use Python for Capella and the Valispace REST API to synchronize them. | Campioli, Deiana, and Corpino, *Integrating Concurrent Engineering with Data-Driven and Model-Based Systems Engineering for End-to-End Small-Satellite Design* (2025), PDF p. 3, `review-0356`. Deiana (2025), PDF pp. 47 to 55, `citation-4690`. |
-| VS-E04 | The Python bridge compares component hierarchies, reports discrepancies, and can restore missing Valispace components from the architecture master while preserving parent and child relationships. | Deiana (2025), PDF pp. 50, 55, and 79 to 80, `citation-4690`. Campioli et al. (2025), PDF pp. 6 to 7, `review-0356`. |
-| VS-E05 | A CubeSat project used Valispace as a requirements hub connected to mission tools. The authors selected it for integration, requirements tracking, spacecraft budgets, and requirement linked test procedures. | Ivanov, *Spacecraft digital engineering: the tale of “digital twins” and lessons learned* (2023), PDF pp. 5 and 9, `review-0793`. |
-| VS-E06 | A source comparison rates Valispace strongly for requirements and engineering data, while reporting weak support for functional analysis, architecture, ConOps, and modes and states. Another comparison reports no SysML diagram support and identifies licensed access as a concern for external procedure performers. | Deiana (2025), PDF pp. 46 to 47, `citation-4690`. Latserus et al., *Model-based approach for requirements management connection with verification procedures applied to space systems* (2020), PDF pp. 5 to 6, `citation-0569`. |
-| VS-E07 | The reported integration consists of several scripts. The thesis identifies their fragmented operation and proposes a future user interface to reduce training and execution effort. | Deiana (2025), PDF pp. 90 to 91, `citation-4690`. |
+## Named physical inventory
 
-Evidence classifications used below:
+| ID | Realization |
+|---|---|
+| VS-PC-WEB | Valispace engineering service |
+| VS-PC-CAPELLA | Capella architecture environment |
+| VS-PC-BRIDGE | Controlled Python integration workflow |
+| VS-PC-RUNNER | Controlled analysis launcher and result importer |
+| VS-PC-FSW | Common flight/ground definition and assurance package |
+| VS-PC-ARCHIVE | Controlled artifact store and export/import utility |
+| VS-PC-CASE | Case engineering records |
+| VS-PC-CONTRACT | Exchange and baseline contracts |
+| VS-PC-MODELS | Analysis and credibility packages |
+| VS-PC-EVIDENCE | Released evidence records |
+| VS-PC-PROCEDURES | Framework operating procedures |
+| VS-PC-HOSTS | Existing engineering compute, network and storage |
+| VS-PC-GUIDANCE | Guidance and method catalogue |
+| VS-PC-GOVERNANCE | Valispace governance schema and trace-impact extension |
+| VS-PC-CHARACTERIZATION | Component, BOM and cost property package |
+| VS-PC-EPS-TEMPLATE | Generic Capella EPS template and case bindings |
+| VS-PC-SCENARIO | Time-indexed scenario composer and virtual test harness |
+| VS-PC-EPS-ENGINE | Integrated OpenModelica EPS analysis backend |
+| VS-PC-CREDIBILITY | Calibration, validity and residual assessment module |
+| VS-PC-OBSERVATION | Observation clock and channel-quality importer |
+| VS-PC-RAM | Capella-to-FMEA transformation and RAM coverage module |
+| VS-PC-VERIFICATION | Valispace verification specification and readiness module |
+| VS-PC-REVIEW | Baseline-linked review projection and feedback procedure |
+| VS-PC-EVALUATION | Adoption and frozen-core two-case evaluation package |
+| VS-HOST-VALI | Valispace service host |
+| VS-HOST-ENG | Engineering workstation |
+| VS-HOST-STORE | Managed evidence volume |
+| VS-HOST-SPECIALIST | Declared discipline service environment |
+| VS-HOST-FLIGHTBUILD | Flight software build and target evidence environment |
 
-- **Reported:** stated directly in a cited source.
-- **Inferred:** necessary architectural interpretation of reported behavior.
-- **Proposed:** added to make the literature configuration address this project's baseline.
-- **Unspecified:** required detail that the selected sources do not establish.
+Refer to the JSON for software/data/procedure facets, performers, execution/storage hosts, integrated dependencies, external services, maturity and unresolved checks.
 
-## Step 6: candidate logical node distribution
+## Planned requirement allocation
 
-The node distribution separates participant access, centralized engineering services, and integration assurance. It remains independent of detailed deployment technology.
-
-### VS-LN-01 Participant Access Node
-
-Purpose: mediate interactions with the Academic Mission Team, Academic Researcher, and Reviewer through a shared browser based environment.
-
-| Logical component | Placement rationale | Evidence status |
-|---|---|---|
-| LIF-01 Mission Application Interface Manager | Valispace provides browser based, stakeholder oriented access to common project data. | Reported and synthesized from VS-E01. |
-| LIF-02 Research Governance Interface Manager | The shared data, analysis, and trade study environment provides a plausible research interaction surface. | Inferred from VS-E01, VS-E02, and VS-E05. |
-| LIF-03 Independent Review Interface Manager | Reviews and test records can be exposed through the shared environment, subject to licensing and access controls. | Partial evidence from VS-E02, VS-E05, and VS-E06. |
-
-### VS-LN-02 Engineering Data and Workflow Node
-
-Purpose: coordinate the six framework services using the centralized product tree, requirements, engineering properties, analyses, test records, and workflow information.
-
-| Logical component | Placement rationale | Evidence status |
-|---|---|---|
-| LAP-01 Evidence Chain Manager | Central requirements, components, values, links, test records, and reports provide inputs for evidence chain management. | Partial evidence from VS-E01, VS-E02, and VS-E05. Complete chain semantics remain unverified. |
-| LAP-02 Case Configuration Manager | Product trees, component properties, modes, matrices, and reusable information support case configuration. | Reported and inferred from VS-E02. Baseline semantics remain unverified. |
-| LAP-03 Analysis Reproduction Manager | Stored analyses, scripts, parameters, and test procedures can package a reproduction attempt. | Partial evidence from VS-E02 and VS-E05. Independent reconstruction remains unverified. |
-| LAP-04 Design Change Assessment Manager | Connected properties, formulas, notifications, and synchronized hierarchies support change propagation and discrepancy reporting. | Reported and inferred from VS-E01 and VS-E04. |
-| LAP-05 Candidate Evaluation Manager | The Components and Analyses modules support budgets and trade studies over alternatives. | Reported in VS-E02 and VS-E05. |
-| LAP-06 Design Review Manager | Project information, analyses, reports, tests, and requirement status can support a review package and findings workflow. | Partial evidence from VS-E02 and VS-E05. |
-| LIN-01 Workflow Control Manager | The Project module and the platform workflow provide the natural shared control responsibility. | Reported and inferred from VS-E02. |
-| LIN-03 Baseline and Configuration Manager | The central database and hierarchy synchronization provide configuration inputs. Immutable baseline and source revision semantics remain unreported. | Partial evidence from VS-E01 and VS-E04. |
-| LIN-04 Evidence and Provenance Manager | The database, reports, tests, and requirement links provide retained records. Complete provenance and immutable evidence custody remain unreported. | Partial evidence from VS-E01, VS-E02, and VS-E05. |
-| LIN-05 Evaluation Measurement Manager | Properties, formulas, matrices, analyses, and trade studies provide the measurement mechanism. | Reported in VS-E01 and VS-E02. |
-
-### VS-LN-03 Integration and Assurance Node
-
-Purpose: mediate controlled exchanges with the external architecture model, analysis tools, and evidence repository. It also checks consistency before accepting transferred information.
-
-| Logical component | Placement rationale | Evidence status |
-|---|---|---|
-| LIF-04 Model Control Interface Manager | The literature uses Capella as an architecture master connected through Python scripts. | Reported in VS-E03 and VS-E04. |
-| LIF-05 Analysis Execution Interface Manager | Valispace exposes an API and has been connected to external mission tools. | Reported in VS-E01, VS-E03, and VS-E05. |
-| LIF-06 Evidence Custody Interface Manager | An adapter is required to exchange controlled packages with the external Evidence Repository. | Proposed. The selected sources do not establish this interface. |
-| LAP-07 Controlled Analysis Coordinator | The API bridge and scripting environment provide a natural location for controlled execution requests and returned results. | Inferred from VS-E02, VS-E03, and VS-E05. |
-| LIN-02 Transfer Assurance Manager | The reported bridge compares hierarchies and exposes discrepancies before restoring conformity. This candidate extends the same pattern to source identity, units, traces, provenance, and baseline checks. | Reported core pattern from VS-E04. Extended checks are proposed. |
-
-All 18 logical components from `FrameworkLogicalDecomposition` occur once across these three nodes.
-
-## Step 7: minimum physical nodes and components
-
-### VS-PN-01 Valispace Hosted Service Node
-
-The selected papers establish a web platform and consistent central database. They do not expose the vendor's detailed server or database deployment. The node therefore remains an opaque hosted environment.
-
-| Physical component | Kind | Evidence classification | Minimal responsibility |
+| Requirement | Logical responsibility | Intended physical realization | Planned verification |
 |---|---|---|---|
-| Valispace Web Interface | Software | Reported | Present stakeholder views and browser based access. |
-| Valispace Project Module | Software | Reported | Project overview, coordination, and workflow information. |
-| Valispace Components Module | Software | Reported | Product tree, components, properties, modes, and alternatives. |
-| Valispace Requirements Module | Software | Reported | Requirement hierarchy, links, and verification status. |
-| Valispace Analyses Module | Software | Reported | Reports, budgets, graphs, tables, and trade study results. |
-| Valispace Scripting Module | Software | Reported | Python or Octave calculations and simulations. |
-| Valispace Tests Module | Software | Reported | Verification procedures, attachments, tags, and status. |
-| Valispace Engineering Database | Persistent data | Reported at platform level | Store connected engineering values, requirements, component structures, and associated records. |
-| Valispace REST API Endpoint | Software interface | Reported | Provide authenticated CRUD access for integrations. |
-| Valispace Hosted Compute Infrastructure | Hardware or service | Inferred and unspecified | Host the web application and engineering database. Vendor deployment details remain open. |
+| FR-01 | L02 | VS-PC-WEB, VS-PC-GOVERNANCE, VS-PC-CASE, VS-PC-GUIDANCE | V01 |
+| FR-02 | L01, L09 | VS-PC-GUIDANCE, VS-PC-WEB, VS-PC-PROCEDURES, VS-PC-EVALUATION | V02 |
+| FR-03 | L01, L07 | VS-PC-GUIDANCE, VS-PC-VERIFICATION, VS-PC-CASE | V03 |
+| FR-04 | L02, L08 | VS-PC-GOVERNANCE, VS-PC-BRIDGE, VS-PC-CONTRACT, VS-PC-ARCHIVE | V04 |
+| FR-05 | L02, L08 | VS-PC-GOVERNANCE, VS-PC-BRIDGE, VS-PC-CONTRACT, VS-PC-CASE | V05 |
+| FR-06 | L02, L08 | VS-PC-GOVERNANCE, VS-PC-ARCHIVE, VS-PC-CONTRACT, VS-PC-PROCEDURES | V06 |
+| FR-07 | L08 | VS-PC-ARCHIVE, VS-PC-CONTRACT, VS-PC-BRIDGE, VS-PC-PROCEDURES | V07 |
+| FR-08 | L08 | VS-PC-BRIDGE, VS-PC-CONTRACT, VS-PC-ARCHIVE | V08 |
+| FR-09 | L08, L06 | VS-PC-CONTRACT, VS-PC-EVIDENCE, VS-PC-ARCHIVE, VS-PC-CREDIBILITY, VS-PC-OBSERVATION | V09 |
+| FR-10 | L05, L08, L09 | VS-PC-SCENARIO, VS-PC-RUNNER, VS-PC-ARCHIVE, VS-PC-MODELS, VS-PC-EVALUATION | V10 |
+| FR-11 | L02, L07, L09 | VS-PC-GOVERNANCE, VS-PC-VERIFICATION, VS-PC-REVIEW, VS-PC-EVIDENCE | V11 |
+| FR-12 | L04 | VS-PC-CHARACTERIZATION, VS-PC-WEB, VS-PC-CASE, VS-PC-BRIDGE | V12 |
+| FR-13 | L04 | VS-PC-CHARACTERIZATION, VS-PC-WEB, VS-PC-CASE | V13 |
+| FR-14 | L05, L04, L02 | VS-PC-SCENARIO, VS-PC-CHARACTERIZATION, VS-PC-GOVERNANCE, VS-PC-WEB, VS-PC-CREDIBILITY | V14 |
+| FR-15 | L03 | VS-PC-EPS-TEMPLATE, VS-PC-CAPELLA, VS-PC-CASE, VS-PC-WEB, VS-PC-CONTRACT | V15 |
+| FR-16 | L05, L03, L04 | VS-PC-SCENARIO, VS-PC-EPS-ENGINE, VS-PC-MODELS, VS-PC-CHARACTERIZATION, VS-PC-EPS-TEMPLATE | V16 |
+| FR-17 | L02, L04 | VS-PC-GOVERNANCE, VS-PC-CHARACTERIZATION, VS-PC-GUIDANCE, VS-PC-CASE | V17 |
+| FR-18 | L03, L05, L08 | VS-PC-BRIDGE, VS-PC-CONTRACT, VS-PC-RUNNER, VS-PC-CAPELLA, VS-PC-ARCHIVE | V18 |
+| FR-19 | L05, L07 | VS-PC-SCENARIO, VS-PC-EPS-ENGINE, VS-PC-VERIFICATION, VS-PC-MODELS, VS-PC-EVIDENCE | V19 |
+| FR-20 | L05, L06, L04 | VS-PC-EPS-ENGINE, VS-PC-SCENARIO, VS-PC-MODELS, VS-PC-CREDIBILITY, VS-PC-CHARACTERIZATION | V20 |
+| FR-21 | L06, L07 | VS-PC-CREDIBILITY, VS-PC-VERIFICATION, VS-PC-MODELS, VS-PC-EVIDENCE | V21 |
+| FR-22 | L06, L04, L02 | VS-PC-CREDIBILITY, VS-PC-OBSERVATION, VS-PC-CHARACTERIZATION, VS-PC-GOVERNANCE, VS-PC-MODELS | V22 |
+| FR-23 | L05, L06 | VS-PC-SCENARIO, VS-PC-CREDIBILITY, VS-PC-RUNNER, VS-PC-MODELS, VS-PC-OBSERVATION | V23 |
+| FR-24 | L05, L06, L07 | VS-PC-SCENARIO, VS-PC-EPS-ENGINE, VS-PC-CREDIBILITY, VS-PC-VERIFICATION, VS-PC-MODELS | V24 |
+| FR-25 | L06 | VS-PC-CREDIBILITY, VS-PC-OBSERVATION, VS-PC-MODELS, VS-PC-EVIDENCE | V25 |
+| FR-26 | L02, L04, L07 | VS-PC-GOVERNANCE, VS-PC-RAM, VS-PC-CHARACTERIZATION, VS-PC-VERIFICATION | V26 |
+| FR-27 | L04, L05, L08 | VS-PC-RAM, VS-PC-CAPELLA, VS-PC-CHARACTERIZATION, VS-PC-CONTRACT, VS-PC-MODELS | V27 |
+| FR-28 | L07 | VS-PC-VERIFICATION, VS-PC-WEB, VS-PC-CASE, VS-PC-EVIDENCE | V28 |
+| FR-29 | L07, L09 | VS-PC-VERIFICATION, VS-PC-REVIEW, VS-PC-ARCHIVE, VS-PC-PROCEDURES | V29 |
+| FR-30 | L07 | VS-PC-VERIFICATION, VS-PC-CASE, VS-PC-PROCEDURES, VS-PC-EVIDENCE | V30 |
+| FR-31 | L06, L08 | VS-PC-OBSERVATION, VS-PC-CONTRACT, VS-PC-EVIDENCE, VS-PC-ARCHIVE | V31 |
+| FR-32 | L06, L08 | VS-PC-OBSERVATION, VS-PC-CONTRACT, VS-PC-EVIDENCE, VS-PC-ARCHIVE | V32 |
+| FR-33 | L03 | VS-PC-FSW, VS-PC-CAPELLA, VS-PC-CONTRACT, VS-PC-CASE | V33 |
+| FR-34 | L03, L05 | VS-PC-FSW, VS-PC-RUNNER, VS-PC-CONTRACT, VS-PC-EVIDENCE | V34 |
+| FR-35 | L03, L05, L07 | VS-PC-FSW, VS-PC-SCENARIO, VS-PC-VERIFICATION, VS-PC-CAPELLA, VS-PC-EVIDENCE | V35 |
+| FR-36 | L03, L04, L05 | VS-PC-FSW, VS-PC-CHARACTERIZATION, VS-PC-SCENARIO, VS-PC-EVIDENCE, VS-PC-CONTRACT | V36 |
+| FR-37 | L09 | VS-PC-REVIEW, VS-PC-CAPELLA, VS-PC-WEB, VS-PC-CASE, VS-PC-CONTRACT | V37 |
+| FR-38 | L09, L02, L08 | VS-PC-REVIEW, VS-PC-GOVERNANCE, VS-PC-ARCHIVE, VS-PC-EVIDENCE, VS-PC-CONTRACT | V38 |
+| FR-39 | L09, L01, L08 | VS-PC-EVALUATION, VS-PC-GUIDANCE, VS-PC-PROCEDURES, VS-PC-CONTRACT, VS-PC-HOSTS | V39 |
+| FR-40 | L09, L01, L08 | VS-PC-EVALUATION, VS-PC-GUIDANCE, VS-PC-EPS-TEMPLATE, VS-PC-CASE, VS-PC-CONTRACT, VS-PC-ARCHIVE | V40 |
 
-### VS-PN-02 Python Integration Runner Node
-
-The literature directly supports a Python bridge, a Capella-side model adapter, and REST API integration. The remaining adapters are explicit additions required by the current framework boundary and system requirements.
-
-| Physical component | Kind | Evidence classification | Minimal responsibility |
-|---|---|---|---|
-| Python Integration Bridge | Software | Reported | Coordinate synchronization, transformation, comparison, discrepancy reporting, and controlled updates. |
-| Capella Architecture Model Adapter | Software | Reported | Use the Capella-side Python API and export scripts to supply architecture-model elements through IF-04. The separate SysML v2 comparison model describes this component without changing it. |
-| Analysis Tool Adapter | Software | Reported pattern, candidate specific implementation proposed | Issue controlled analysis requests and correlate returned results through IF-05. |
-| Evidence Repository Adapter | Software | Proposed | Register and retrieve controlled evidence packages through IF-06. |
-| Transfer and Consistency Checker | Software | Reported core, extended behavior proposed | Generalize product tree comparison to the complete transfer contract. |
-| Evaluation Manifest Runner | Software | Proposed | Apply the fixed framework evaluation manifest and retain raw observations. |
-| Integration Compute Host | Hardware or service | Inferred and unspecified | Execute the Python bridge and adapters in a declared reproducible environment. |
-
-### VS-PC-01 Candidate operating procedures
-
-| Physical component | Kind | Evidence classification | Minimal responsibility |
-|---|---|---|---|
-| Role and Access Administration Procedure | Procedure | Inferred | Establish users, licenses, permissions, and reviewer access. |
-| Model and Data Synchronization Procedure | Procedure | Reported pattern | Execute synchronization, inspect discrepancies, and authorize controlled updates. |
-| Baseline Release and Evidence Export Procedure | Procedure | Proposed | Bind Valispace records to the framework evidence baseline and export the package required for independent reconstruction. It does not use the OOSEM study repository unless the candidate independently selects that mechanism. |
-| Analysis Reproduction Procedure | Procedure | Proposed from reported scripting and test capabilities | Reconstruct the declared environment, execute the designated analysis, and issue its evidence package. |
-
-## Boundary and feasibility observations
-
-1. Valispace remains the central data and workflow platform. Capella remains the native architecture source in this literature-based implementation.
-2. The Python bridge is essential. The literature reports hierarchy comparison and repair between Capella and Valispace.
-3. The candidate's SysML v2 file is a common comparison description under MC-01. It is not a runtime component or native-artifact requirement.
-4. The selected sources do not establish immutable evidence baselines, complete provenance, clean environment reconstruction, or the report's complete transfer contract.
-5. Weak native SysML and architecture support does not make the candidate infeasible because SysML v2 applies to the comparison description. Architecture completeness still depends on Capella and the bridge.
-6. Licensed reviewer access is a known concern. The later feasibility step must test whether controlled review packages can be exported without giving every reviewer a Valispace authoring license.
-7. No detailed geometric model is needed for this software centered candidate at this stage. Hardware and hosted deployment remain abstract until they affect cost, reconstruction, security, or performance.
-
-## SysML artifact
-
-The corresponding simple model is:
-
-`final_report/models/framework-candidate-valispace.sysml`
-
-Generated views are available in SVG, PNG, and PDF:
-
-- `final_report/figures/sysml/valispace-candidate-node-logical-general.*`
-- `final_report/figures/sysml/valispace-candidate-physical-general.*`
+Each JSON allocation retains its realization mechanism, exact source locators and implementation gap. Framework verification, case EPS acceptance and project assessment have separate subjects.

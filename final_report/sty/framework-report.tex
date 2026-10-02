@@ -1,0 +1,34 @@
+% Presentation-only additions. The existing report macros remain unchanged.
+% enumitem defines a separate list type. No global itemize/enumerate changes.
+\usepackage{enumitem}
+\usepackage{needspace}
+\newlist{causes}{itemize}{5}
+\setlist[causes]{label=\textbullet,leftmargin=1.15em,labelsep=.35em,
+  itemsep=.20\baselineskip,parsep=0pt,topsep=.20\baselineskip,
+  partopsep=0pt,before={\raggedright\clubpenalty=10000\widowpenalty=10000}}
+% Five child levels are available. With the root paragraph this supports six
+% total causal levels. The baseline currently needs four child levels.
+\makeatletter
+\newcommand{\ConcernAnchor}[1]{%
+  \phantomsection
+  \begingroup\def\@currentlabel{#1}\label{concern:#1}\endgroup}
+\makeatother
+\newcommand{\ConcernId}[1]{\mbox{\textsf{#1}}}
+\newcommand{\ConcernRef}[1]{\hyperref[concern:#1]{\ConcernId{#1}}}
+\newcommand{\ConcernRole}[1]{\par\Needspace{7\baselineskip}\subsubsection*{#1}}
+\newcommand{\ConcernRoot}[2]{%
+  \par\addvspace{.7\baselineskip}\Needspace{4\baselineskip}%
+  \begingroup\raggedright
+  \ConcernAnchor{#1}\noindent\textbf{\ConcernId{#1}}\quad #2\par\endgroup}
+\newcommand{\ConcernCause}[2]{%
+  \item\ConcernAnchor{#1}{\small\textbf{\ConcernId{#1}}}\quad #2}
+\newcommand{\ConcernAliasLink}[1]{\space(see \ConcernRef{#1})}
+
+% Table recipes use exactly the available line width. Padding is included.
+\newlength{\ReportTableBodyWidth}
+\newcommand{\ReportTableSetup}[1]{%
+  \small
+  \setlength{\tabcolsep}{4pt}%
+  \setlength{\ReportTableBodyWidth}{\dimexpr\linewidth-#1\tabcolsep\relax}%
+  \renewcommand{\arraystretch}{1.15}}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}

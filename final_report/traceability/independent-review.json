@@ -1,0 +1,333 @@
+{
+  "schema_version": 1,
+  "baseline_head": "b826d9915407bbd861d8d39b2558048f3d534bdc",
+  "review_basis": [
+    "final_report/README.md",
+    "final_report/traceability/trade-study.json"
+  ],
+  "disposition": "Retain conditional PA-VS design direction. Correct findings before treating assembled specification and verification plan as complete.",
+  "new_baseline_proposed": false,
+  "selection_reopened_by_review": false,
+  "review_scope": {
+    "root": "/tmp/eps-oosem.wmUVTQ",
+    "trade": [
+      "trade/trade.md",
+      "trade/trade.json",
+      "trade/trade.tex",
+      "trade/review-findings.md"
+    ],
+    "reviewed_allocation_candidates": [
+      "PA-COM",
+      "PA-CDT",
+      "PA-VS"
+    ],
+    "reviewed_allocation_files": [
+      "comet/candidate-reviewed.json",
+      "comet/allocations.json",
+      "comet/allocations.md",
+      "custom/candidate-reviewed.json",
+      "custom/allocations.json",
+      "custom/allocations.md",
+      "valispace/candidate-reviewed.json",
+      "valispace/allocations.json",
+      "valispace/allocations.md"
+    ],
+    "first_turn_substitutes": [
+      "git-yaml/candidate.md",
+      "git-yaml/candidate.json",
+      "nanospace/candidate.md",
+      "nanospace/candidate.json"
+    ],
+    "common_files": [
+      "concerns/reviewed-baseline.json",
+      "concerns/concerns.json",
+      "concerns/needs.tex",
+      "concerns/requirements.tex",
+      "concerns/verification-ledger.md",
+      "concerns/baseline-addendum.md",
+      "architecture/architecture.md",
+      "architecture/logical-reviewed.json",
+      "architecture/logical-reviewed.tex",
+      "architecture/logical-reviewed-validation.json"
+    ],
+    "direct_source_checks": [
+      {
+        "path": "SLR/SLR1/pdfs/citation-reports/citation-report-4690/citation-report-4690.md",
+        "sections": [
+          "2.1",
+          "3.2",
+          "3.3",
+          "3.4"
+        ],
+        "physical_pdf_pages": [
+          [
+            34,
+            37
+          ],
+          [
+            47,
+            56
+          ]
+        ]
+      },
+      {
+        "path": "SLR/SLR1/pdfs/review-reports/review-report-0793/review-report-0793.md",
+        "sections": [
+          "4.1",
+          "4.4"
+        ],
+        "physical_pdf_pages": [
+          [
+            5,
+            7
+          ]
+        ]
+      },
+      {
+        "path": "csrm-sysmlv2/README.md",
+        "read": "complete"
+      },
+      {
+        "path": "csrm-sysmlv2/PENDING.md",
+        "read": "complete"
+      }
+    ],
+    "book_basis": "Complete first-turn Chapter 17 and Handbook Part One reading, with method/sources.json exact locators.",
+    "initial_inventory_time": "07:16:42",
+    "report_sections_present_at_initial_inventory": false,
+    "missing_artifacts_polled": false,
+    "pending_review": [
+      "Final report/sections assembly",
+      "Final PA-GY and PA-NS common-ID allocations",
+      "Native model and figure realization",
+      "Compiled final typography",
+      "Final bibliography integration"
+    ]
+  },
+  "severity_rule": {
+    "high": "Can permit an incorrect future requirement verdict",
+    "medium": "Specification, method-product or source-status inconsistency",
+    "low": "Presentation or copied-record defect"
+  },
+  "findings": [
+    {
+      "id": "MRV-01",
+      "severity": "high",
+      "title": "V18 permits a development gap in place of required exchange",
+      "locations": [
+        {
+          "file": "concerns/verification-ledger.md",
+          "section": "FR-18 row"
+        },
+        {
+          "file": "concerns/reviewed-baseline.json",
+          "section": "framework_requirements[FR-18].proposed_acceptance and verification_cases[V18]"
+        },
+        {
+          "file": "comet/allocations.json",
+          "section": "allocations[FR-18].verification_fixture_observation"
+        },
+        {
+          "file": "custom/allocations.json",
+          "section": "allocations[FR-18].planned_acceptance"
+        },
+        {
+          "file": "valispace/allocations.json",
+          "section": "allocations[FR-18].proposed_acceptance"
+        }
+      ],
+      "evidence": "FR-18 requires declared electrical, thermal, EMC and CAD exchanges. V18 says each discipline has a supported exchange or an explicit outstanding development item. That records a design gap but does not establish the mandatory exchange. EG-01 requires implemented requirement-specific verdicts.",
+      "suggested_minimal_fix": "For every profile required by the frozen minimum, require successful reference request/result exchange and semantic checks before V18 passes. A required missing profile leaves its obligation unverified or undetermined. Retain gap reporting and require reviewed disposition for reduced scope.",
+      "current_claim_limit": "No current passing implementation verdict was asserted. This is a prospective acceptance defect."
+    },
+    {
+      "id": "MRV-02",
+      "severity": "medium",
+      "title": "IF-03 implies a checked OpenModelica profile exists",
+      "locations": [
+        {
+          "file": "valispace/allocations.json",
+          "line": 365,
+          "section": "IF-03.owner_validation_failure_rule"
+        },
+        {
+          "file": "valispace/candidate-reviewed.json",
+          "line": 7518,
+          "section": "IF-03.owner_validation_failure_rule"
+        }
+      ],
+      "evidence": "The rule says 'Integrated OpenModelica has a checked local profile'. Candidate FR-16/18/20/23 records state profiles and tests are proposed. review-0793 Section 4.4, PDF page 7, concerns a separate ENOVIA/SIMULIA model and reports synchronization and library limits.",
+      "suggested_minimal_fix": "Say the proposed integrated backend requires a checked local profile and its implementation/verification are pending. Use proposed-status wording for external service profiles too."
+    },
+    {
+      "id": "MRV-03",
+      "severity": "medium",
+      "title": "No explicit black-box variation or imposed-constraint review",
+      "locations": [
+        {
+          "file": "concerns/requirements.tex",
+          "section": "Framework black-box specification"
+        },
+        {
+          "file": "concerns/reviewed-baseline.json",
+          "section": "black-box/control/evaluation products"
+        }
+      ],
+      "evidence": "Other black-box products are present, but expected requirements variation and imposed realization constraints are not recorded or explicitly tailored. Later PA risks do not close those black-box tasks. OOSEM 17.3.3, printed pages 453–454, physical PDF pages 461–462, identifies both activities.",
+      "suggested_minimal_fix": "Add a compact variation/constraint paragraph or table. Cover changing loads/modes, components, analysis/software profiles and later facility interfaces. Link to change isolation and declared adaptation. State no universal vendor, repository, hard budget or external-only RM/MD/SA restriction is evidenced. Distinguish the study's SysML v2 description rule from candidate implementation choices. Unknown likelihood stays unknown."
+    },
+    {
+      "id": "MRV-04",
+      "severity": "medium",
+      "title": "Qualitative verification field applicability remains inconsistent",
+      "locations": [
+        {
+          "file": "concerns/requirements.tex",
+          "section": "FR-28"
+        },
+        {
+          "file": "concerns/reviewed-baseline.json",
+          "section": "FR-28 and VerificationSpecification"
+        },
+        {
+          "file": "valispace/allocations.md",
+          "section": "FR-28"
+        }
+      ],
+      "evidence": "FR-28 lists quantities for every activity, while its PA-VS realization says quantities or applicable conditions and the record type accepts observable responses. FR-01 explicitly allows qualitative demonstrations. V28 includes inspection and demonstration.",
+      "suggested_minimal_fix": "Attach an explicit FR-28 field-applicability interpretation: quantities when applicable, observable conditions otherwise, rationale for inapplicable fields. Add a qualitative inspection/demonstration fixture to V28. No new leaf or owner is needed."
+    },
+    {
+      "id": "MRV-05",
+      "severity": "medium",
+      "title": "Observation/comparison and analytical-verdict inputs are implicit",
+      "locations": [
+        {
+          "file": "concerns/reviewed-baseline.json",
+          "section": "black_box_functions[F04/F06/F07]",
+          "lines": [
+            17582,
+            17701
+          ]
+        }
+      ],
+      "evidence": "F04 outputs ExpectedObservedComparison and covers FR-25 without an ObservationPackage input. F07 accepts ObservationPackage without that comparison output. F06 declares no RunPackage input for analytical-result admissibility. The logical L05/L06/L07 thread provides the intended flow, but the black-box signatures leave controlled input resolution implicit.",
+      "suggested_minimal_fix": "Declare observation and run-package inputs at the relevant service, or explicitly define exact package resolution from the baseline manifest. Preserve all eight function IDs and existing record types.",
+      "qualification": "This is an incomplete contract description. The logical architecture has not lost the observation flow."
+    },
+    {
+      "id": "MRV-06",
+      "severity": "low",
+      "title": "PA-VS named inventory column displays evidence lists",
+      "locations": [
+        {
+          "file": "valispace/allocations.md",
+          "section": "Minimum inventory refinements, VS-PC-GUIDANCE through VS-PC-EVALUATION"
+        }
+      ],
+      "evidence": "Named realization cells contain evidence-list strings or empty lists. Corresponding JSON component names are valid.",
+      "suggested_minimal_fix": "Render the component name field. Put evidence in a separate column if retained."
+    },
+    {
+      "id": "MRV-07",
+      "severity": "low",
+      "title": "Updated V01 fixture differs from allocation copies",
+      "locations": [
+        {
+          "file": "concerns/reviewed-baseline.json",
+          "section": "verification_cases[V01]"
+        },
+        {
+          "file": "concerns/verification-ledger.md",
+          "section": "FR-01 row"
+        },
+        {
+          "file": "architecture/logical-reviewed.json",
+          "section": "requirements[FR-01].proposed_acceptance"
+        },
+        {
+          "file": "comet/allocations.json",
+          "section": "allocations[FR-01]"
+        },
+        {
+          "file": "custom/allocations.json",
+          "section": "allocations[FR-01]"
+        },
+        {
+          "file": "valispace/allocations.json",
+          "section": "allocations[FR-01]"
+        }
+      ],
+      "evidence": "The reviewed V01 explicitly exercises quantitative and qualitative requirements and inapplicable-field rationale. Copies retain the older generic round-trip fixture despite corrected requirement wording.",
+      "suggested_minimal_fix": "Propagate the revised V01 fixture or reference one authoritative verification-case revision instead of copying text."
+    }
+  ],
+  "checks_satisfied": [
+    {
+      "id": "CHK-01",
+      "name": "Full concern and causal preservation",
+      "evidence": "144 concerns, 30 roots, 114 unchanged causal edges and seven unchanged aliases. Exact ID/text/source/citation/parent/reference fields match original register."
+    },
+    {
+      "id": "CHK-02",
+      "name": "End-to-end common coverage",
+      "evidence": "Every concern has direct FR and need traces. Every FR is covered by black-box functions and scenarios."
+    },
+    {
+      "id": "CHK-03",
+      "name": "Reviewed candidate allocation integrity",
+      "evidence": "All 120 COM/CDT/VS allocations match accepted primary/supporting L order. Physical IDs resolve. Embedded and separate allocations agree. V01–V40 are present and planned."
+    },
+    {
+      "id": "CHK-04",
+      "name": "Logical neutrality and method order",
+      "evidence": "Needs, black box, logical, candidate and trade stages are ordered coherently. Logical capabilities impose no vendor, GPU or executable count. Later allocation columns are trace overlays."
+    },
+    {
+      "id": "CHK-05",
+      "name": "RAM, credibility, software and technician mechanisms",
+      "evidence": "Named RAM transformations use explicit failure dependencies and expert references. Calibration/validation, raw data/masks, both software profiles, target evidence and safe handoff have specific proposed mechanisms. No achieved RAM or physical safety is inferred."
+    },
+    {
+      "id": "CHK-06",
+      "name": "Common system boundary and subjects",
+      "evidence": "All five lineages cover broader engineering responsibilities. Solver placement is declared. Framework assets, case artifacts, EPS acceptance, model adequacy, facility authority and project assessment remain distinct."
+    },
+    {
+      "id": "CHK-07",
+      "name": "Conditional selection and cost concern",
+      "evidence": "PA-VS is an analyst reuse-first choice. Native services and narrow bridge evidence support that priority. Cost/access/export/reconstruction can reverse selection. No invented budget or user preference appears."
+    },
+    {
+      "id": "CHK-08",
+      "name": "No fabricated performance or approval",
+      "evidence": "All empirical candidate MOEs/Pareto/utilities are pending. Evidence categories are not scores. No prototype pass, current cost/effort/accuracy, stakeholder approval or procurement authorization was found."
+    },
+    {
+      "id": "CHK-09",
+      "name": "Capella bridge evidence scope",
+      "evidence": "In-application runtime, name/parent matching, function-text import and mode-list transfer are limited appropriately. No demonstrated headless bridge or executable-transition preservation receives credit."
+    },
+    {
+      "id": "CHK-10",
+      "name": "CSRM runtime limits and custom technology preservation",
+      "evidence": "Source audits and syntax/semantic checks are separated from execution. Metadata units, unbound inputs, mirrored generated relations and empty-input predicates are not treated as runtime validity. Mandatory CPU core and activated OpenUSD/Omniverse/Isaac/FMI/EPS/battery path remain visible."
+    },
+    {
+      "id": "CHK-11",
+      "name": "Book citations",
+      "evidence": "Handbook Part One I.1–I.6/subsections and OOSEM 17.3.4/5/7/8 locators are appropriate. No nonexistent I.1.16 source is cited as read."
+    }
+  ],
+  "acknowledged_integration_holds": [
+    "Remap trade's provisional LC identifiers to final L01–L09 before publication, as selection-decision.md already requires.",
+    "Review final PA-GY/PA-NS common-ID allocations when assembled. Their absence at initial inventory is not a defect in the available first-turn research.",
+    "Check final concern narrative/causal hierarchy, all five candidate baselines, bibliography integration and exactly three native report diagrams after assembly."
+  ],
+  "limitations": [
+    "No final report assembly or compiled final figures were reviewed.",
+    "No implementation, numerical model, target software or physical safety was tested.",
+    "No source search, checkout edit, other-agent edit or new competing baseline was performed.",
+    "Severity describes document and planned-verification risks, not observed framework failures."
+  ]
+}
