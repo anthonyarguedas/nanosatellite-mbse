@@ -3,7 +3,6 @@
 
 The OOSEM activities that follow are concerned with specifying and designing the framework. They derive stakeholder needs, system requirements, measures, and architecture from direct communication with the stakeholders at ASCEND. Each level of abstraction (mission requirements, system requirements, logical architecture, physical architecture) specifies the next level of design, and produces test cases that support subsequent integration and verification \citep{friedenthal2014practical}.
 At the request of the research group, certain stakeholder needs, system requirements, and use cases were ellicited from a literature review and then adjudicated to the stakeholders with their approval, given that they desire to develop capabilities in line with the academic state of the art.
-%Multiple review gates were performed along the lifecycle of the framework. Their influence on the final solution will be discussed briefly where applicable.
 
 % Based on feedback from the stakeholders, only the framework structure, interfaces, functions and use cases will be communicated via SysML v2 diagrams. They will be kept readable.
 % Requirements, measures, verification activities, or more verbose content will be presented only using prose and tables.
@@ -24,11 +23,8 @@ proposes stakeholder analysis as an examination of the limitations of the existi
 The concerns below incorporate feedback from ASCEND members and findings from the literature review.
 Causal analysis is used to identify contributing factors and improvement opportunities, derive mission requirements, and establish measures of effectiveness that can quantify the value of a potential solution.
 
-% Indentation is a temporary means to encode causality relations
+% Indentation is a temporary means to encode causality relations, is invisible in the compiled PDF so must be changed
 % Effort is person-time
-% SIL/HIL and digital twin findings are expressed as candidate concerns.
-% Their causal links are inferred from the cited evidence and need stakeholder confirmation.
-% General battery management findings apply here to EPS battery behavior and control.
 
 The Project Manager is concerned with:
 \begin{itemize}
@@ -92,6 +88,14 @@ The Systems Engineer is concerned with:
     \item C-EPS-2
     \item the high effort to define model validity ranges and acceptable prediction errors for the intended verification decisions \citep[Sec.~6]{review-1251};
     \item the uncertainty in predictions outside the tested loads, temperatures, and battery aging states \citep[pp.~5 and~8--9]{handpicked-0001};
+\item (C-SE-3) the high effort to keep EPS hardware interfaces and flight software architecture consistent as the design changes \citep[Secs.~3--4]{review-0853};
+    \item the difference between physical component groupings and the functional groupings used by flight software \citep[Sec.~3]{review-0853};
+    \item the high effort to propagate EPS interface changes into software requirements and implementations \citep[Secs.~3--4]{review-0853};
+        \item the late discovery of interface mismatches when hardware and software modules are developed separately \citep[Sec.~3]{review-0853};
+    \item C-EPS-3
+\item the high effort to coordinate EPS control, telemetry collection, fault recovery, and spacecraft safe mode \citep[Sec.~V]{citation-0136};
+    \item the distribution of these responsibilities across separate flight software applications \citep[Sec.~V]{citation-0136};
+    \item the high effort to specify how EPS commands and telemetry relate to spacecraft mode changes and recovery actions \citep[Sec.~V]{citation-0136};
 \end{itemize}
 
 The EPS Engineer is concerned with:
@@ -140,6 +144,13 @@ The EPS Engineer is concerned with:
     \item the high effort to distinguish component faults from normal degradation and measurement error \citep[Sec.~6]{review-1251};
 \item the high effort to verify that battery charging and power management decisions are safe and effective \citep[pp.~2 and~6]{handpicked-0001};
     \item the gap between accurate battery behavior predictions and evidence that a control policy improves hardware performance \citep[p.~2]{handpicked-0001};
+\item (C-EPS-3) the high effort to maintain consistent EPS command, telemetry, event, and parameter definitions across models, flight software, and ground software \citep[Secs.~3--4]{review-0853};
+    \item the high effort to separately implement command, telemetry, event, and parameter definitions in the model export workflow described by \citet[Sec.~3]{review-0853};
+    \item the high effort to translate modeled EPS behavior into mission-specific software functions \citep[Sec.~3]{review-0853};
+\item the high effort to specify and verify EPS command execution conditions and expected effects \citep[Secs.~4--5]{review-0853};
+    \item the high effort to translate EPS behavior into command sequences and confirm their functional flow with the flight software team \citep[Sec.~5]{review-0853};
+\item the high effort to communicate EPS designs during technical reviews;
+    \item the high effort to generate readable, accurate, and informative graphical representations of EPS designs;
 \end{itemize}
 
 The Non-EPS Engineer is concerned with:
@@ -149,6 +160,17 @@ The Non-EPS Engineer is concerned with:
         \item the high effort to reproduce the subsystem's dynamic current demand during mission operations \citep[Sec.~8.1.7]{handpicked-0003};
         \item the high effort to verify subsystem behavior during EPS supply changes and protection events \citep[Secs.~8.1.6--8.1.7]{handpicked-0003};
     \item C-SE-2
+\item the high effort to integrate EPS services with flight software frameworks such as cFS and F-Prime \citep[Secs.~3--5]{review-0853}\citep[Sec.~III.B]{citation-0136};
+    \item C-SE-3
+    \item C-EPS-3
+    \item the high effort to map EPS interfaces onto framework-specific communication mechanisms \citep[Sec.~3]{review-0853};
+        \item the difference between typed component connections in F-Prime and publish-subscribe communication in cFS \citep[Sec.~3]{review-0853};
+    \item the high effort to configure and deploy the selected framework on the OBC processor and operating system \citep[Sec.~III.B]{citation-0136};
+        \item the high effort to learn framework configuration and integration tools \citep[Sec.~III.B]{citation-0136};
+        \item the uncertainty over compatibility between the selected framework version and the target operating system \citep[Sec.~III.B]{citation-0136};
+    \item the high effort to verify processor, memory, timing, and power budgets for EPS flight software functions \citep[Secs.~III.A.3, IV.A.1 and~VI.B--C]{citation-0136};
+        \item the processing and memory limits of the OBC \citep[Secs.~IV.A.1 and~VI.C]{citation-0136};
+        \item the interaction between operating system capabilities, processor performance, and power consumption \citep[Sec.~III.A.3]{citation-0136};
 \end{itemize}
 
 The Testing Facility Technician is concerned with:
@@ -168,10 +190,51 @@ The Testing Facility Technician is concerned with:
         \item the presence of invalid sensor values when components are inactive \citep[Sec.~4.2]{review-1251};
 \end{itemize}
 
+ASCEND is currently associated to a Rocketry Team and an Avionics Team of a student club.
+The Rocketry Team operates on requirements given by Rocketry Competition Organizers.
+The requirements are stated in terms of the target maximum height or maximum acceleration of the rocket.
+One competition imposed the requirement of launching and returning to ground an egg without breaking it, which can only be validated via demonstration.
+The Team Captains convert the requirements of a competition to atomic tasks.
+Tasks are performed by any club member and approved by senior members.
+The club performs the PDR, CDR, and FRR review gates.
+
+There is a large emphasis on technology reuse at the club, so most tasks are formulated as atomic edits to existing designs.
+Furthermore, most of the tasks for a particular competition involve development activities like PCB manufacturing, soldering, and assembly.
+One observed task involved adding a COTS to a PCB, which was specified in the task title. The task was broken down into subtasks, one of which required to connect a capacitor to the COTS, possibly prescribed by its datasheet.
+
+The competition requirements include the radio communications technologies allowed for rocket launch commands and telemetry.
+Thus, radio transceivers are some of the first COTS chosen for rocket designs.
+The egg mission also introduced a payload consisting of 1U unit with a mechanically damping material to protect the egg, and heat pumps to maintain its temperature within a range inspired by an incubator machine.
+
+Multiple lithium-ion cells were used to power the latest revision of the egg incubator payload.
+To size them, a power budget was generated by consulting the datasheets of the already chosen components and extracting "on" and "off" power consumption values, then estimating the duty cycle of each component for one launch.
+The duty cycle of telemetry components is estimated from the telemetry frequency requirements of the competition. For the rest of the components, it is conservatively assumed that they are always on.
+
+A PCB design was observed consisting of multiple boards connected perpendicularly via PCI to a backplane that was the size of a 1U face.
+Status indicator LEDs were observed for 3.3 and 5 volt buses.
+The power source of the payload is verified experimentally.
+The payload is fully assembled and set to provide telemetry at a realistic frequency while powered by the battery.
+It is then inserted into a temperature controlled environment like a refrigerator so the heat pumps can be observed under representative operation conditions, and left to operate until the battery power runs out.
+If the time from experiment start to power depletion is greater than the mission period, the power requirements are taken to be verified.
+In practice, the battery life is several times larger than the mission period.
+
+The demonstratable requirement to protect an egg has been related to the measurable variable of acceleration in the egg chamber. An IMU was placed inside this chamber, which is mechanically damped, and another in a rigid point of the payload chassis.
+The difference in acceleration between the two IMUs during realistic launches is analyzed to iterative on the damping design.
+Launches are recreated by manually dropping the payload from a representative height.
+The drop data, and naturally an inspection of the egg, is used to characterize the damping as "too soft" or "too hard".
+
+Maximum rocket height and maximum rocket acceleration requirements are verified at the design phase using the OpenRocket software.
+This software works with abstract representations of rocket components (nose, stages, etc.) can be parametrized, combined, and then simulated.
+Rocket height and acceleration requirements are taken to be verified based on the results of the simulatins, and only then does development start.
+
+The club reports that it takes about 2 months to onboard new members to the point where they can complete tasks.
+Separately, ASCEND researchers have spent 9 months on one iteration of an EPS design following a more traditional systems engineering approach, starting from requirements and currently advenced up to high-level design, with a power budget completed and battery and panel options compared but no component selections yet.
+
 \section{Analyze System Requirements}
 This activity specifies the framework as a black box. It derives requirements from stakeholder needs and defines mission scenarios, system context, interfaces, behavior, performance, states, failures, and design constraints \cite{friedenthal2014practical}.
 
 \section{Define Logical Architecture}
+% Must be inspired at least by El Hachimi et al. (2025) and the CubeSat Handbook Chapter 1.
 
 \section{Synthesize Candidate Physical Architectures}
 This activity maps logical components to realizable hardware, software, persistent data, and procedure components. It first distributes logical responsibilities among nodes, then allocates them to physical components and records the rationale for important alternatives \citep[Sec.~17.3.5]{friedenthal2014practical}.
