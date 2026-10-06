@@ -1,0 +1,66 @@
+# OOSEM terminology review
+
+## Basis and limits
+
+Read the book's `AGENTS.md`, manifest and relevant index entries, following `read-book/SKILL.md`. Read the converted sections 17.3.2, 17.3.3, 17.3.4, 17.3.7, 17.3.8 and 17.3.9, plus 17.3.5 (partitioning/node architecture) and 17.3.6 for the architecture/trade wording. Page numbers below are **physical PDF pages**, taken from the conversion's `PDF_PAGE` markers, not printed page numbers.
+
+The four questioned phrases are report shorthand, not named OOSEM concepts in these passages. This does **not** mean that every legitimate engineering term must occur literally in the book. For broader/project terminology, the source column gives a relevant comparison anchor, not invented provenance for the original phrase.
+
+## Findings and implemented wording
+
+| Existing phrase | Classification | Recommended wording | OOSEM section and physical PDF page | Rationale |
+|---|---|---|---|---|
+| Framework leaf; framework requirement leaves | Project-specific tree shorthand | System requirement for the EPS engineering framework; retain FR identifiers | 17.3.3, pp. 449, 455; 17.3.7, pp. 503–506 | Names the requirement level and system of interest, rather than its position in an undocumented tree. FR is explicitly a project prefix, not an extra OOSEM level. |
+| Observation protocol; critical-property protocols | Broader procedure wording used as a project grouping label | Planned MOE/MOP measurement and evaluation procedures | 17.3.2, p. 445; 17.3.3, pp. 454–455; contrast 17.3.8, pp. 507–508 | MOEs express stakeholder value; MOPs characterize critical system properties. Measuring/evaluating them is not automatically verification of an FR. V procedures remain separately specified, planned and not executed. |
+| Nominal service thread | Project compound using the established engineering word “nominal” | Primary path | 17.3.3, p. 449; nominal/off-nominal performance discussion, p. 458 | OOSEM explicitly considers primary and alternative use-case paths. SC03 can have a primary path triggered by a failed check; “nominal” would obscure that distinction. |
+| Exceptional outcome | Project column label using the established concept of exceptions | Failure/exception handling | 17.3.3, pp. 449, 458 | Existing cells summarize responses to missing data or failed checks, not complete exception scenarios. Use “failure/exception scenario” only for an actual scenario sequence. |
+| Logical capabilities; primary leaf allocation | Generic capability wording and project shorthand | Logical components; intended requirements responsibility/allocation | 17.3.4, p. 462; 17.3.7, pp. 505–506 | Logical components are implementation-independent abstractions. Assignment of responsibility is not evidence of completed requirements satisfaction. L names and allocations remain unchanged. |
+| Context; engineering exchange contracts | “System context” is book terminology; “contracts” is broader/project usage | System context; external interfaces and exchanged information | 17.3.3, pp. 453–455 | Context identifies the system boundary, external systems/users and their interfaces. Interface specifications and information types are clearer caption/column wording. |
+| Software/interface/evidence contract | Useful broader software/interface concept with project-specific evidence records | Interface specification in narrative; define retained contract as documented information, meaning, behavior and checks, including observations/timing for evidence capture | Comparison anchor: 17.3.3, pp. 452–455 | Not an OOSEM artifact name or legal agreement. Preserve the useful software semantics and controlled statements rather than forcing a misleading substitute. |
+| RAM/verification claim; affected-claim status | Broader assurance term with project assertion/status records | Technical assertion in narrative; define retained claim and its evidence/limitations | Comparison anchors: 17.3.3, p. 455; 17.3.8, p. 508 | An assertion is not a verified requirement or passed verdict. Controlled shall statements retain the original word verbatim. |
+| Noncompensable gates; failed gate | Trade-study eligibility concept with project identifiers/metaphorical shorthand | Mandatory eligibility criteria (EG); failed checks in workflow narrative | Comparison anchor: 17.3.6, pp. 496–498 | Explain that favorable results elsewhere cannot compensate for a failed criterion. Ordinary failed checks are not necessarily trade eligibility failures. EG identifiers and proposed status remain intact. |
+| Complete minima; minimum realization groups; source leverage; open burden | Project shorthand/metaphors | Complete minimum configurations; proposed implementation inventories; supporting source evidence; proposed work and uncertainty | Comparison anchors: 17.3.5, pp. 468–470; 17.3.6, p. 497 | Clearly distinguishes required proposed configurations from mechanisms supported by a source and still-unresolved implementation work. |
+| Core; frozen core | Broader reuse term whose precise scope is project-specific | Define the fixed set of framework definitions, methods and reusable assets; distinguish recorded case adaptations | Comparison anchor: variant designs, 17.3.5, pp. 476–479 | The book discusses common/variant designs, but does not supply this project's core definition. No change to the two-case reuse obligation. |
+| Fixture; reference adjudication | Broader testing terminology | Repeatable reference data set, example model or test configuration; approved reference results/comparison criteria | Comparison anchor: verification environment and expected response, 17.3.8, pp. 507–508 | A fixture need not mean physical mounting equipment. “Oracle” is absent from the scoped text and should not be introduced for reference results. |
+| Model credibility; replay | Useful broader modeling/reproducibility terms | Define model adequacy for its stated use and reconstruction/rerunning from a controlled baseline | Comparison anchor: executable-model verification, 17.3.8, p. 508 | These are not interchangeable with syntax checking, trace completeness, prediction accuracy or physical safety approval. Their specialist meanings remain useful beyond OOSEM. |
+| Pareto; utilities; anchors | Broader trade-study terminology; utility functions appear in the book | Briefly define the Pareto set; preference-based utility functions; reference values and sensitivity analysis | Utility/analysis anchor: 17.3.6, pp. 497–498 | Pareto terminology is retained as broader decision analysis, not attributed to these OOSEM passages. Preferences and measured results remain necessary; no empirical ranking is asserted. |
+
+Mission requirements, stakeholder needs, enterprise use cases, mission scenarios, black-box functions, MOEs/MOPs, logical components, system context, test cases, verification procedures and enabling systems remain appropriate anchors (17.3.2, pp. 439–440, 444–448; 17.3.3, pp. 449, 453–455; 17.3.4, p. 462; 17.3.8–17.3.9, pp. 507–511). Raw stakeholder needs remain valid; the visible requirement nomenclature remains MR.
+
+## Separate handoff to scenario/interface agents
+
+- Scenario captions: **mission scenarios**, **primary and alternative paths**, and **failure/exception handling**. Do not label every alternative path a failure. Use verb–object actions such as “Register change,” “Assess change impacts,” “Re-run analyses,” “Review evidence,” “Record unresolved findings” and “Prepare verification proposal.” Use **failed check**, not “failed gate.” Keep engineer decisions and facility authorization in the appropriate external roles.
+- Interface captions: **system context and external interfaces**; **exchanged information/types**, **responsible logical component**, and **interface checks**. Prefer “interface specification” or “evidence-capture specification” to unexplained “contract.” Label proposed exchanges as proposed; never imply that a defined interface has already been verified.
+- SC01–SC03 and IF-01–IF-06 row content and all figure includes were deliberately left unchanged for those agents. Only their headings/captions/column wording changed here.
+
+## Preservation and checks
+
+- All 11 MR and 40 FR shall rows remain byte-for-byte identical to the pre-review snapshot. No requirement/model/registry synchronization is needed for this pass.
+- Preserved identifiers, citations, labels/references, black-box function rows, logical component names, primary logical allocations and selected physical allocations. Only the FR glossary description changed relative to the inherited editorial version.
+- No changes to controlled as-is observations, models, JSON registries, diagrams/assets, macros, main, bibliography, audit tools or existing validation records. All empirical measure values and implementation verification remain pending.
+- `git diff --check`: passed. Protected-text/identifier comparison against the pre-review snapshot: passed.
+- `python3 final_report/tools/audit_report.py --log /tmp/oosem-terminology-build.GKyiWW/report/main.log`: passed (144 concerns, 30 roots, 40 FRs, 40 planned V cases, 200 candidate allocations, three existing figures; no missing citations or overfull boxes).
+- Temporary `latexmk -pdf` build plus nomenclature generation: passed, 74 pages, no undefined references/citations or overfull boxes. Existing hyperref bookmark-level warnings remain. Build products are outside the worktree. No framework verification was executed; no commit or push.
+
+## Reviewed follow-up: source of truth and outside audience
+
+The chapter now states that the report and accompanying SysML v2 files are the sole specification sources. Registry and external-review-note dependencies were removed rather than mechanically redirected. The report retains the OOSEM derivation, requirements, architectural distinctions, selection rationale, representative traces and planned verification, with plain-language candidate/deployment summaries. Detailed internal component lists stay in the models. No separate supporting records were used to infer design in this follow-up.
+
+Confirmed directly in the existing SysML files:
+
+| Formerly external-detail reference | Confirmed model source |
+|---|---|
+| Concerns, derivation and effectiveness | `sysml/01-concerns.sysml` (144 concerns and 114 causal links); `02-needs-context.sysml` (MR/MOE definitions and SC01–SC03 descriptions); `03-requirements.sysml` (40 FRs and derivation/source links) |
+| Boundary types, context and logical responsibility | `00-domain.sysml`, `06-system-context.sysml` and `04-logical.sysml` (interface/type declarations, component exchanges, primary/supporting allocations) |
+| Candidate components, allocations, deployment and maturity | All five `sysml/candidates/*.sysml` files, each allocating all 40 FRs; `valispace.sysml` also contains the four responsibility partitions, ownership/deployment descriptions and conditional selection context |
+| Planned verification | `05-verification.sysml` (V01–V40, subjects, FR links, methods and planned-check descriptions; explicitly not executed) |
+
+**Parent limitations:** MOP/EG/DC records and the formerly referenced complete ten-by-five trade matrix are not present in the current models; their necessary explanation remains in the report, with no fabricated model pointer. Named exchange types largely inherit generic artifact fields, rather than fully specifying payload schemas. V cases are planning descriptions, not complete executable fixtures/procedures with agreed acceptance values; the report no longer claims that all such detail is already specified. Source locators retain historical provenance. The parent removed comments that directed readers to separate design registries.
+
+**Resolved synchronization issue:** The parent aligned FR-01's model requirement body and source-text metadata with the report's “shall retain its rationale.” All 40 framework requirement statements now agree between report and model.
+
+Follow-up protected-text/identifier/allocation checks and `git diff --check` passed against the approved first-pass snapshot: all 51 MR/FR shall rows, 144 controlled concerns, complete scenario/boundary table blocks, citations, labels, figure inputs and logical/representative physical allocations are preserved. All out-of-scope files, including the models, are unchanged. The registry-based audit was deliberately not rerun. A temporary `latexmk -pdf` build with nomenclature generation passed (74 pages; no undefined references/citations or overfull boxes; existing hyperref bookmark warnings remain), at `/tmp/oosem-outside-build.Rjnb3T/report/main.pdf`. No assets were moved, no framework verification executed, and no commit or push during this agent's follow-up.
+
+## Integrated publication checks
+
+The parent moved section sources into `final_report/` and all figure assets into `final_report/fig/`. The scenario, external-interface and logical-responsibility tables were replaced by native model views. The report uses one enriched system-context figure. Logical responsibilities continue across three readable panels. Responsibility metadata, native colors, actor allocations and guarded scenario links are checked against Syside's semantic model. These checks establish publication and model consistency. Framework implementation verification remains pending.

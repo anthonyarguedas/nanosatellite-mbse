@@ -1,4 +1,5 @@
-// Controlled report model. Trace records are published in final_report/traceability/.
+// Proposed framework specifications and trace relationships.
+// Source locators retain historical provenance.
 package FrameworkConcerns {
 private import FrameworkDomain::*;
 concern <'C-PM-01'> C_PM_01 { subject enterprise : EngineeringEnterprise; stakeholder role : ProjectManager; doc /* the high effort and cost to maintain verifiable requirements; */ }

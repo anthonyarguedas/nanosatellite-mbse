@@ -1,8 +1,9 @@
-// Controlled report model. Trace records are published in final_report/traceability/.
+// Native views derived from the SysML v2 report model.
 package ReportViews {
 private import Views::*;
 view contextView {
 expose FrameworkContext::Context::*;
+filter not @SysML::InterfaceUsage;
 render asInterconnectionDiagram;
 }
 view logicalView {

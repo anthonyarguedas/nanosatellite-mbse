@@ -1,4 +1,5 @@
-// Controlled report model. Trace records are published in final_report/traceability/.
+// Proposed framework specifications and trace relationships.
+// Source locators retain historical provenance.
 package FrameworkLogical {
 private import FrameworkDomain::*;
 port def ControlPort { inout item record : EngineeringArtifact; }

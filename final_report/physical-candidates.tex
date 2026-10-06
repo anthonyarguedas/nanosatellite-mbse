@@ -1,0 +1,70 @@
+\section{Synthesize Candidate Physical Architectures}
+\label{section:synthesize-physical-architectures}
+
+OOSEM partitions functionality, data and control before allocating software, persistent data, procedures and hosts \citep[Sec.~17.3.5]{friedenthal2014practical}. The five alternatives implement the same proposed framework responsibilities but differ in authoring tools, collaboration, analysis integration and configuration control. Nodes express responsibility or execution partitions, not necessarily separate computers. Logical components may span nodes through controlled synchronization.
+
+\subsection{Partitioning criteria}
+{\small
+\setlength{\tabcolsep}{4pt}
+\setlength{\parskip}{0pt}
+\setlength{\LTpre}{0.4\baselineskip}
+\setlength{\LTpost}{0.4\baselineskip}
+\renewcommand{\arraystretch}{1.06}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.36\linewidth-0.72\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.64\linewidth-1.28\tabcolsep\relax}@{}}
+\caption{Concern-derived partitioning criteria.}\label{tab:framework-partitioning}\\
+\toprule
+\textbf{Criterion / MR} & \textbf{Consequence} \\
+\midrule
+\endfirsthead
+\caption[]{Concern-derived partitioning criteria. (continued).}\\
+\toprule
+\textbf{Criterion / MR} & \textbf{Consequence} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Authority/continuity / MR-02, MR-09 & Separate editable records from protected releases. One authority per field, reviewed transfers, recovery and historical replay. \\
+Collaboration/learning / MR-01, MR-10, MR-11 & Role-readable authoring/review. Declare skills, accounts, licenses, network and exports. \\
+Domain cohesion / MR-03, MR-04, MR-06, MR-08 & Bind quantities, prices, failure dependencies and software semantics to design occurrences. Isolate replaceable specialist methods. \\
+Update rate/resources / MR-04, MR-05 & Separate edits/synchronization from numerical stepping and later hardware loops. Declare CPU, storage and optional GPU profiles. \\
+Credibility/safety / MR-05, MR-07 & Separate execution, model adequacy and readiness. Begin with virtual fixtures/supplied data. Physical authority stays external. \\
+Isolation/increments / MR-02, MR-11 & Bound adapters and versions. Declare core/case changes. Verify minimum workflows before scenes or live-bench expansion. \\
+\end{longtable}
+}
+
+Framework computing needs no detailed geometric model here. EPS geometry remains a case artifact when illumination, accommodation or thermal decisions require it. Each proposed minimum configuration must realize all nine logical responsibilities and the forty framework requirements. Unsupported tool profiles remain gaps.
+
+\subsection{Candidate architectures and dependencies}
+
+Table~\ref{tab:framework-candidate-inventories} explains the five architectures and their significant dependencies. Node identifiers link the summary to the accompanying SysML v2 candidate models, which specify components, intended allocations and deployment responsibilities. All complete configurations remain proposed. Reported mechanisms support only parts of them.
+{\small
+\setlength{\tabcolsep}{4pt}
+\setlength{\parskip}{0pt}
+\setlength{\LTpre}{0.4\baselineskip}
+\setlength{\LTpost}{0.4\baselineskip}
+\renewcommand{\arraystretch}{1.06}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.15\linewidth-0.6\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.29\linewidth-1.16\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.56\linewidth-2.24\tabcolsep\relax}@{}}
+\caption{Five proposed candidate architectures, dependencies and limitations.}\label{tab:framework-candidate-inventories}\\
+\toprule
+\textbf{Candidate} & \textbf{Responsibility partitions and source basis} & \textbf{Tool choices, dependencies and open work} \\
+\midrule
+\endfirsthead
+\caption[]{Five proposed candidate architectures, dependencies and limitations. (continued).}\\
+\toprule
+\textbf{Candidate} & \textbf{Responsibility partitions and source basis} & \textbf{Tool choices, dependencies and open work} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+PA-COM / COMET and Excel & Participant review (COM-N1), study/reference (N2), assurance/evidence (N3) and engineering execution (N4). Reported tutorials, templates, catalogues and categorical budgets \citep[Secs.~3--5]{deutsch2022comet}. & The COMET server, desktop modeling client and Excel add-in support shared engineering records and budgets. Python extensions for change control, evidence assurance and specialist-tool coordination are proposed. API compatibility, Excel licensing, workbook settings, reconstruction and storage/backup require verification. Synchronization remains outside controller timing loops. \\
+PA-CDT / Native model and Python & Definition/configuration (CDT-LN1), analysis/assurance (LN2) and verification/review (LN3). CPU workspaces PN1/PN2 may share a host; PN3 is an optional scene workspace. CSRM provides a tailoring basis \citep[pp.~2--6]{kaslow2019csrm}. & A native SysML v2 EPS library/workbench, Git and Python form a local modeling and analysis environment. PyBaMM battery integration, FMI/FMU coupling, RAM and cFS/F-Prime checks are proposed. Native conversion is partial and combined execution remains incomplete. CPU resources, backup and clean independent replay must be established. \\
+PA-GY / Git and YAML & Definition (GY-N1), configuration control (N2), analysis/software (N3) and review/evidence (N4). The lightweight source approach excludes requirements, test and failure management \citep[Sec.~2.0.1]{kanavouras2024lightweight}. SeaLion supplies broader document patterns \citep{chiu2023sealion}. & Git controls YAML engineering definitions and reviewed releases. Python engineering rules, analysis integration and document generation require development: Git alone provides no engineering semantics. Editor/runtime, repository backup and solver/build access are dependencies. Browser authoring would be an optional addition. \\
+PA-NS / Nanospace and formalization & Browser/Gaphor authoring (NS-LN-A), shared coordination (B), integration (C) and release/publication (D). Collaboration \citep[Secs.~IV--V]{cordero2022nanospace} and Gaphor budget extraction \citep[Secs.~3--6]{luccisano2024formalization} are separate source mechanisms. & Nginx, a Java service and Neo4j host collaboration. Python coordinates model exchanges and checks. Numerical execution (NS-C07/NS-C29) and build evidence (NS-C33) use declared external services. Model--database--release consistency, maintained versions, access, backup and failure handling remain unverified. \\
+PA-VS / Capella and Valispace & Engineering/review (VS-LN-ENG), architecture (ARCH), analysis/verification (ANALYSIS) and configuration/evidence (ASSURANCE). Sources demonstrate limited tree, mode and budget transfers \citep[Secs.~3.1 and~4.3--4.4]{campioli2025integration}. & Capella and Valispace are joined through in-application Python, Excel and REST exchanges. Controlled change/release handling, dynamic EPS/battery analysis, RAM, cFS/F-Prime checks and safe verification planning are proposed extensions. OpenModelica is a proposed local analysis integration. Vendor access, exports, versions, storage/backup and reconstruction remain open. \\
+\end{longtable}
+}
+
+\paragraph{Custom scene scope and maturity.}
+PA-CDT retains OpenUSD, Omniverse Kit, Isaac and FMI. Its required CPU profile includes offline controller SIL, supplied-data replay and one versioned FMI/FMU coupling path. OpenUSD and Omniverse support decision-specific geometric views. Isaac adds motion/contact only when it affects EPS demand or generation. Scene coupling, timing and model applicability require verification. GPU, driver and Kit/Isaac dependencies apply only to this optional profile. Scenes establish no validated electrical, thermal, aging or EMC prediction. Physical controllers, live telemetry, HIL and autonomous control remain later external work.
+
+All candidates need sourced model data, qualified references and explicit RAM, calibration, software and safety methods, together with declared computing, access and backup arrangements. Their complete capabilities remain proposals, not demonstrations. Related source accounts are not independent replications.

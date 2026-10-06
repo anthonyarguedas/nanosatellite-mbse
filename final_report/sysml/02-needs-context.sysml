@@ -1,4 +1,5 @@
-// Controlled report model. Trace records are published in final_report/traceability/.
+// Proposed framework specifications and trace relationships.
+// Source locators retain historical provenance.
 package FrameworkNeeds {
 private import FrameworkDomain::*;
 requirement <'MN-01'> MN_01 { subject enterprise : EngineeringEnterprise; doc /* Enable engineers to learn requirement writing and maintain sourced, verifiable requirements with reusable templates and verification criteria. */ }
