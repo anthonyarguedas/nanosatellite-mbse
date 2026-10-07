@@ -1,239 +1,205 @@
 \section{Analyze System Requirements}
 \label{section:analyze-system-requirements}
 
-OOSEM specifies externally observable behavior before tool selection \citep[Sec.~17.3.3]{friedenthal2014practical}. The Handbook distinguishes user and engineering levels and calls for concise, identified, verifiable obligations \citep[Sec.~I.4.1]{aguado2021cubesatse}. Observable conditions support qualitative and demonstration-based requirements as well as numerical ones.
+OOSEM now specifies the future framework as a black box. The mission requirements describe accomplishments of the EPS engineering enterprise. The system requirements below describe the framework behavior that enables those accomplishments. Engineers supply the mission assumptions and retain approval of requirements, designs and changes. External software tools execute declared analyses and host software work. The framework coordinates that work, checks the exchanged information and preserves its justification \citep[Sec.~17.3.3]{friedenthal2014practical}.
 
-\subsection{Mission scenarios and black-box functions}
-Figures~\ref{fig:framework-sc01}--\ref{fig:framework-sc03} distinguish external actor actions from black-box framework functions. Each scenario is one continuous action flow, read from left to right through panels (a)--(c). An arrow leaving a panel's right edge continues at the same height on the next panel's left edge. Blue \texttt{FW} actions are framework functions. Amber actions name the responsible external actor. The scenarios specify planned behavior. Verification and physical work remain subject to separate approval and execution.
+The specification follows the model and software scope established in Section~\ref{subsection:eps-reference-lifecycle}. EPS hardware designs enter as models and component descriptions. Physical execution, facility participation and target hardware qualification have no place in these scenarios. Method and model recommendations are system behavior. Choosing their tool implementations belongs to architecture design.
 
-For SC01/UC01, engineers declare the case and allowed core adaptations, requirements and criteria. The framework binds sourced components, quantities and quotes to options and coordinates applicable analyses on a common basis. Missing data, prices, criteria or model evidence remain gaps. Unsupported checks leave associated claims undetermined. Reviewers retain their findings, engineers retain their disposition, and the framework preserves a reconstructable package, including partial evidence and open decisions.
+\subsection{Five mission scenarios}
+\label{subsection:framework-scenarios}
 
-\begin{figure}[!htbp]
+SC01--SC05 elaborate UC01--UC05. Each scenario produces engineering information that enables the next activity. SC05 also applies to reviews and changes within the other four scenarios. Figures~\ref{fig:framework-sc01}--\ref{fig:framework-sc05} are compact SysML summaries of the main interactions. Blue \texttt{FW} actions belong to the framework. Amber actions name the external human or tool performer. SE denotes the Systems Engineer and EPS denotes the EPS Engineer. The prose specifies coordinated tool work and alternative paths that the summaries omit.
+
+\paragraph{SC01: Establish a feasible EPS mission concept (UC01, MR-01 and 05).}
+The Systems Engineer agrees expectations and constraints with mission stakeholders, the EPS Engineer and Non-EPS Engineer. Their inputs define orbit, attitude, duration, environment, modes, load schedules and nominal/degraded ConOps. The framework recommends concept methods, configures candidate EPS representations and calculates initial power and energy budgets and array/battery sizing. A declared analysis tool returns model results, numerical settings and execution status. The framework compares feasibility and uncertainty on a common mission basis. Engineers then choose, revise or defer a concept. The resulting ConOps, assumptions, budgets and decision rationale support MCR preparation through SC05 \citep[Sec.~3.3]{nasa2016systems} \citep[Secs.~2--3]{handpicked-0003} \citep[Sec.~2]{review-0289}.
+
+Sparse data can justify a bounded estimate. Missing criteria, impossible energy balance or unsupported model effects leave the affected conclusion open. Failed or partial runs remain available. The framework requests revised inputs or further evidence instead of inventing a feasible concept.
+
+\begin{figure}[htbp]
 \centering
-{\small\colorbox[HTML]{DCEEF8}{\strut FW: framework}\quad\colorbox[HTML]{FFF0D6}{\strut Named actor: external}}
-\par\medskip
-\begin{minipage}{\linewidth}
-\raggedright
-\textbf{(a)}\par
-\includegraphics[width=0.781818\linewidth,trim=30bp 51.75bp 801.75bp 97.5bp,clip]{fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc01view.pdf}
-\par\medskip
-\textbf{(b)}\par
-\includegraphics[width=0.872727\linewidth,trim=352.5bp 51.75bp 441.75bp 97.5bp,clip]{fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc01view.pdf}
-\par\medskip
-\textbf{(c)}\par
-\includegraphics[width=\linewidth,trim=712.5bp 51.75bp 29.25bp 97.5bp,clip]{fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc01view.pdf}
-\end{minipage}
-\caption{SC01/UC01: compare options and retain engineer disposition. Framework functions and external engineer/reviewer actions remain distinct.}
+\includegraphics[width=\linewidth]{fig/sysml/lifecycle/09-scenarios-defined-view-scenarioviews-sc01view.pdf}
+\caption{SC01: mission definition, concept analysis and engineer selection.}
 \label{fig:framework-sc01}
 \end{figure}
 
-For SC02/UC02, a load, attitude, supply or software change is checked before registration. The framework identifies reciprocal impacts on requirements, models, the BOM, dictionaries and verification, revises affected records and reassesses claims. Incompatible transfers are rejected. A declined change also preserves the previous baseline. A reviewed, engineer-accepted change permits a successor, with regenerated, stale and unresolved evidence distinguished and unsupported targets and resource claims exposed.
+\paragraph{SC02: Define and validate EPS requirements and interfaces (UC02, MR-01, 02 and 05).}
+The Systems Engineer submits drafts and their spacecraft parents, mission scenarios, interfaces and current engineering question. Each edit or request triggers active checks. Deterministic checks address record completeness, responsible product, modal wording, units and declared limits. Semantic assessment flags probable duplicates, gaps and conflicts with affected text, cited rules or passages, corrective suggestions and uncertainty. Duplicate assessment considers level, subject, mode, conditions and quantity. Similar statements can be valid distinct requirements. Coverage refers to declared scenarios, functions, interfaces and risks. It cannot establish universal completeness.
 
-\begin{figure}[!htbp]
+The default writing criteria come from NASA Appendix C and an expert-approved project reference. The framework also recommends derivation and V\&V methods suited to the current stage, question, available inputs, model validity, resources and scope. It explains applicability, alternatives and rejection reasons. Engineers accept, modify, reject or defer suggestions with rationale. The framework applies authorized current decisions, derives and allocates requirements, and prepares their traces and criteria. Reviewers assess technical correctness, feasibility, verifiability and consistency with stakeholder expectations and ConOps. These results prepare SRR review through SC05 \citep[Sec.~4.2 and Appendix~C]{nasa2016systems}.
+
+A new edit invalidates affected guidance immediately. A delayed response for an earlier revision cannot become current guidance. Unavailable or unevaluated checks differ from a completed check with no finding. Probable findings require engineer assessment. No classifier, retrieval score or drafting check establishes technical conformity. Assistance quality and any reduction in engineering effort require later evaluation.
+
+\begin{figure}[htbp]
 \centering
-{\small\colorbox[HTML]{DCEEF8}{\strut FW: framework}\quad\colorbox[HTML]{FFF0D6}{\strut Named actor: external}}
-\par\medskip
-\begin{minipage}{\linewidth}
-\raggedright
-\textbf{(a)}\par
-\includegraphics[width=0.808219\linewidth,trim=30bp 58.5bp 653.25bp 97.5bp,clip]{fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc02view.pdf}
-\par\medskip
-\textbf{(b)}\par
-\includegraphics[width=\linewidth,trim=384bp 58.5bp 215.25bp 97.5bp,clip]{fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc02view.pdf}
-\par\medskip
-\textbf{(c)}\par
-\includegraphics[width=0.424658\linewidth,trim=822bp 58.5bp 29.25bp 97.5bp,clip]{fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc02view.pdf}
-\end{minipage}
-\caption{SC02/UC02: control a change. Framework checks do not replace external review or engineering acceptance.}
+\includegraphics[width=\linewidth]{fig/sysml/lifecycle/09-scenarios-defined-view-scenarioviews-sc02view.pdf}
+\caption{SC02: active requirement assistance and recorded engineer dispositions.}
 \label{fig:framework-sc02}
 \end{figure}
 
-For SC03/UC03, the framework retains failed-check inputs and diagnostic variables and checks data quality, timing and model applicability. Usable evidence supports proposed updates, affected-claim reassessment and a DUT/equipment, capture and safety proposal. Calibration and intended-use validation remain separate. Missing limits or interfaces, declined engineering endorsement or missing safety clearance block physical readiness. Engineering and safety reviews remain external. The facility alone authorizes later physical work. This scenario ends at the authorization decision, before equipment is operated.
+\paragraph{SC03: Justify the EPS preliminary design (UC03, MR-02, 03 and 05).}
+The EPS Engineer submits candidate architectures, modeled components, allocated requirements, resource limits and trade criteria. Non-EPS engineers agree the pointing, thermal and load assumptions. The framework refines budgets and sizing, generates candidate bills of materials and estimates mass, volume, acquisition cost and availability from sourced data. It recommends the analysis fidelity needed by the decision. External model tools execute time-dependent mission-load and EPS analyses and applicable RAM studies. The framework reports generation, demand, energy balance, bus and battery quantities, margins and uncertainty. Mandatory feasibility is assessed before preference ranking. Close alternatives and sensitivity remain visible. Engineers resolve subsystem incompatibilities and justify the preliminary design for MDR/SDR or PDR through SC05 \citep[Sec.~3.5 and~6.8]{nasa2016systems} \citep[Secs.~2--4]{review-0289} \citep[Secs.~3--4]{campioli2025integration}.
 
-\begin{figure}[!htbp]
+A transient shortage can invalidate a design whose average power budget appears acceptable. Missing prices or failure rates remain unknown. Electrical, thermal, geometry and applicable EMC effects require declared analysis profiles. Battery thermal or aging detail follows intended use and available credibility evidence. Fixed-temperature or lossless models expose their omissions. Numerical failure or use outside the validity domain leaves conclusions unsupported. Supplied data can support a proposed calibration, with independent model assessment kept separate. Engineers can decline that update. Remaining hardware evidence gaps stay external limitations \citep[Secs.~2--4]{review-0573} \citep[pp.~7--9]{handpicked-0001} \citep[Sec.~3.2]{review-0711}.
+
+\begin{figure}[htbp]
 \centering
-{\small\colorbox[HTML]{DCEEF8}{\strut FW: framework}\quad\colorbox[HTML]{FFF0D6}{\strut Named actor: external}}
-\par\medskip
-\begin{minipage}{\linewidth}
-\raggedright
-\textbf{(a)}\par
-\includegraphics[width=0.776683\linewidth,trim=30bp 53.25bp 827.25bp 97.5bp,clip]{fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc03view.pdf}
-\par\medskip
-\textbf{(b)}\par
-\includegraphics[width=0.747126\linewidth,trim=384.75bp 53.25bp 486bp 97.5bp,clip]{fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc03view.pdf}
-\par\medskip
-\textbf{(c)}\par
-\includegraphics[width=\linewidth,trim=726bp 53.25bp 29.25bp 97.5bp,clip]{fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc03view.pdf}
-\end{minipage}
-\caption{SC03/UC03: reconcile failure evidence and propose physical verification. Blue framework functions preserve evidence. Amber engineer, safety and facility actions retain external authority.}
+\includegraphics[width=\linewidth]{fig/sysml/lifecycle/09-scenarios-defined-view-scenarioviews-sc03view.pdf}
+\caption{SC03: candidate design evidence and justified engineer selection.}
 \label{fig:framework-sc03}
 \end{figure}
-\clearpage
-{\small
-\setlength{\tabcolsep}{4pt}
-\setlength{\parskip}{0pt}
-\setlength{\LTpre}{0.4\baselineskip}
-\setlength{\LTpost}{0.4\baselineskip}
-\renewcommand{\arraystretch}{1.06}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.14\linewidth-0.28\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.86\linewidth-1.72\tabcolsep\relax}@{}}
-\caption{Black-box framework functions.}\label{tab:framework-functions}\\
-\toprule
-\textbf{Function} & \textbf{Externally observable behavior} \\
-\midrule
-\endfirsthead
-\caption[]{Black-box framework functions. (continued).}\\
-\toprule
-\textbf{Function} & \textbf{Externally observable behavior} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
-F01 & Guide users and tailor a controlled case. \\
-F02 & Specify/revise requirements, criteria, decisions and dependencies. \\
-F03 & Characterize/compare options with BOM, cost, RAM and resources. \\
-F04 & Coordinate and reproduce analyses with declared applicability. \\
-F05 & Define, map and check hardware, flight and ground service contracts. \\
-F06 & Specify verification and assess safe later-execution readiness. \\
-F07 & Control evidence, assess impacts and reconcile supplied observations. \\
-F08 & Communicate justification and retain reviewed reusable lessons. \\
-\end{longtable}
-}
 
-These are framework engineering functions. EPS generation, charging, telemetry acquisition and recovery are behaviors of the engineered EPS, not of the framework. F04 compares expected results with supplied observations. F06 considers analysis results and the model's applicability before assessing evidence for later verification.
+\paragraph{SC04: Complete detailed EPS models and software (UC04, MR-02--05).}
+Engineers define detailed component/control models, interface specifications and the declared software design. The framework checks command guards, order, effects, rejection, protection, transitions and recovery. A model tool executes MIL with a simulated plant. Scoped CDR through SC05 establishes the authorized detailed design release before deliverable coding. The framework checks that release and coordinates coding, builds and SIL through the external host execution toolchain. SIL exercises the declared control/interface code with simulated EPS and subsystem products. Engineers select the integration profile. cFS and F-Prime are possible mappings for later candidate interfaces, with neither mandated here.
 
-Here, an interface or evidence \textit{contract} is a documented specification of exchanged information, its meaning, expected behavior, applicable checks and, for evidence capture, required observations and timing. A technical \textit{claim} is an assertion about a requirement, prediction or design property whose supporting evidence and limitations must be recorded. Neither term implies that verification has been completed.
+The framework compares applicable requirements and ConOps criteria and differences between corresponding MIL/SIL results. It preserves build failures, interface incompatibilities and failed behavior criteria. Unreleased or stale designs block coding. Missing credibility or unresolved critical findings prevent a readiness claim. Engineers approve the scoped products and submit released models/software, assessment evidence and integration configurations/procedures for end-of-C SIR through SC05 \citep[Sec.~3.6 and the Phase~C review paragraphs at the start of Sec.~3.7]{nasa2016systems}. Host execution establishes no target processor timing, memory or power qualification.
 
-\subsection{System context and external interfaces}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig/sysml/lifecycle/09-scenarios-defined-view-scenarioviews-sc04view.pdf}
+\caption{SC04: detailed design, approved host software work and model/software assessment.}
+\label{fig:framework-sc04}
+\end{figure}
+
+\paragraph{SC05: Maintain and review coherent phase baselines (UC05, MR-01--05).}
+The Systems Engineer requests a change or phase review for an exact baseline. The framework checks submitted replacements before registration and identifies reciprocal impacts on requirements, allocations, interfaces, budgets, models, software, plans, guidance and evidence. Engineers authorize or decline the change. An accepted change creates a distinct successor proposal and repeats affected assessments. A review without a change retrieves applicable current evidence. Independent reconstruction uses controlled dependencies and comparison rules fixed before replay. Failed, cancelled, partial and stale results retain their status.
+
+The framework prepares a coherent package against agreed scoped review criteria. Reviewers report findings. The designated technical review authority records acceptance, conditional progression or blocked progression against that baseline. Blocking findings prevent progression. Conditional decisions identify limits, closure actions, owners and dates. The framework records this decision separately from package preparation. Unauthorized or stale-baseline decisions change no progression status. Later edits reopen affected work while retaining the accepted predecessor \citep[Secs.~6.2--6.8]{nasa2016systems} \citep[Sec.~3.2]{review-0340}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig/sysml/lifecycle/09-scenarios-defined-view-scenarioviews-sc05view.pdf}
+\caption{SC05: review preparation and a separate authorized progression decision.}
+\label{fig:framework-sc05}
+\end{figure}
+
+\subsection{Black-box functions and external interfaces}
 \label{subsection:framework-context}
 
-Figure~\ref{fig:framework-context} specifies the vendor-independent system context. The framework retains baseline custody even when storage is external. Versioned interface profiles identify supported tools, mappings and limitations. Transfers retain their case/baseline, source revision, producer and provenance.
+Eight observable functions organize the specification. They describe engineering information and decisions. EPS energy generation, charging and protection are behaviors of the modeled product.
+\begin{description}
+\item[F01] Recommend applicable lifecycle activities, methods and models, with explained alternatives and prerequisites.
+\item[F02] Check requirement drafts actively, explain corrections, derive and allocate requirements, and retain engineer dispositions and traces.
+\item[F03] Calculate budgets and sizing, characterize modeled components and compare EPS concepts/designs within resources and uncertainty.
+\item[F04] Coordinate coupled simulation, applicable RAM, model credibility assessment and reproducible analysis.
+\item[F05] Specify/check detailed control and interfaces, coordinate approved host coding and MIL/SIL.
+\item[F06] Plan EPS phase-product V\&V and assess applicable results against requirements and stakeholder expectations.
+\item[F07] Control transfers, changes, guidance/evidence currency and coherent baselines after authorized decisions.
+\item[F08] Prepare readable views and review evidence, and retain reviewer findings and authorized review decisions.
+\end{description}
+\label{tab:framework-functions}
 
-\begin{figure}[H]
+Figure~\ref{fig:framework-context} places the future framework within the enterprise. The five active interfaces are vendor independent. Ports p01--p04 and p06 identify IF-01--04 and IF-06. The interface numbering leaves IF-05 unused. The connections identify the participating ports. The input and output directions are specified below. The \texttt{\^{}} prefix denotes inherited features. The following interface specifications define meaning, receiving checks and authority.
+
+\begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{fig/sysml/context/sysml-defined-view-reportviews-contextview.pdf}
-\caption{System context and typed input/output flows across the six external interfaces.}
+\includegraphics[width=\linewidth]{fig/sysml/lifecycle/07-report-views-defined-view-reportviews-contextview.pdf}
+\caption{Future framework context and its five typed external interfaces.}
 \label{fig:framework-context}
 \end{figure}
 
-\textbf{Legend.} The framework is the system black box. All other parts are external actors or resources. Filled arrowheads show transfer direction. Each input/output pair groups existing typed data. Ports \texttt{p01}--\texttt{p06} correspond to IF-01--IF-06. The \texttt{\^{}} prefix marks inherited features. Exact types, receiving checks and authority are specified in the SysML interface model.
+\begin{description}
+\item[IF-01: Engineering use.] Engineers and mission stakeholders submit expectations, mission definitions, requirement drafts, design inputs, change requests and decisions. Responses contain current assistance, budgets/trades, model assessments, impacts and review products. Identity, scope, context revision, record completeness and authority are checked before changes are applied. Incomplete drafts and unauthorized decisions retain explicit findings.
+\item[IF-02: Knowledge and supplied data.] Knowledge sources supply component descriptions, standards, methods/models, prices and existing reference data in response to source queries. Each contribution retains authority, locator, revision, units, applicability and limitations. Missing properties remain unknown. Conflicting sources remain distinct until an engineer resolves their applicability.
+\item[IF-03: Model analysis.] Model tools receive controlled analysis requests, plans and inputs. They return status, raw results, environment identity, runtime and diagnostics. The framework checks mappings, model validity, quantity/time meanings and numerical criteria. Failed or unsupported analyses support no unqualified conclusion. The tool performs model execution, while engineers approve the interpretation.
+\item[IF-04: Host software execution.] The host toolchain receives the approved detailed design, interface specification and coding/build/SIL request. It returns source/build products, logs, host configuration and simulated results. The framework checks release authority, revisions, selected profile and dependencies. Unreleased coding is blocked. Mapping and build failures remain visible.
+\item[IF-06: Technical review.] Reviewers receive a package for an identified baseline. They return findings. The designated authority returns the review decision. The framework checks exact baseline and success-criteria revisions and the decision role. Preparation grants no acceptance. Blocking and conditional findings retain their distinct consequences.
+\end{description}
 
-The following notes complement the exchanged data in the diagram. Incompatible transfers are rejected or quarantined before registration. Raw submissions, findings and the previous accepted baseline are retained.
+Transfers preserve identifier, subject/baseline, revision, producer and provenance. Incompatible raw submissions are retained with rejection findings. They leave controlled content unchanged. The native specification types the exchanged requirement, mission, design, analysis, software and review information. Detailed tool-specific schemas, transports and storage selections remain architecture choices.
 
-\begin{samepage}
-\begin{enumerate}
-\item \textbf{IF-01: Engineering use.} Project managers, systems engineers, EPS and non-EPS engineers authorize changes and decisions. L09 review and L02 governance check scope, identity and criteria. Incomplete submissions remain \emph{draft}. Responses also include guidance, impacts and BOM/cost justification.
-\item \textbf{IF-02: Knowledge and components.} Suppliers, standards owners and literature provide datasheets, quotes and methods. L01 guidance and L04 characterization check source, revision, units and applicability. Unsupported facts stay \emph{unknown}. Supplier qualification and source truth remain external.
-\item \textbf{IF-03: Discipline execution.} Electrical, thermal, EMC, CAD, orbit, attitude, battery and RAM tools or operators return environment identity and runtime with results. L05 analysis, L03 architecture/interfaces and L08 configuration check profiles and transfer integrity. Failed runs and unsupported or lossy mappings cannot support unqualified claims.
-\item \textbf{IF-04: Software engineering.} Flight and ground contributors and build environments exchange dictionaries, command/mode definitions and target profiles. L03 checks versions and typed-connection or message semantics. Missing implementation or target-resource evidence stays \emph{unresolved}. Mission functionality remains an engineered artifact. Flight qualification requires separate evidence.
-\item \textbf{IF-05: Facilities and evidence.} Technicians, safety authority and later instruments and DUTs exchange capture proposals, profiles and timestamped observations. L07 verification checks safety and procedure completeness. L06 credibility checks clocks, channels and validity. Incomplete readiness remains \emph{blocked}. Raw and invalid samples and masks are preserved. The facility alone authorizes physical work.
-\item \textbf{IF-06: Review and evaluation.} Reviewers, researchers and reproducers supply reference answers and findings. Packages include views, observations and dispositions. L09 review and L05 analysis identify the subject and comparison rule. Missing dependencies and contested findings remain explicit. Project assessment has separate authority.
-\end{enumerate}
-\end{samepage}
+\subsection{Control, variation and potential failures}
 
-\subsection{Expected variation and design constraints}
+Two controlled behaviors apply across the scenarios. A phase-baseline proposal progresses from \emph{draft} to \emph{prepared} only when review entrance criteria are met. Submission makes it \emph{under review}. A current authorized decision can make it \emph{accepted}, \emph{conditional} or \emph{progression blocked}. Editing creates a draft successor and preserves its predecessor. Closing conditions requires recorded evidence and a renewed authorized decision. These states describe the framework's management of EPS phase baselines, not acceptance of the present framework specification.
 
-Load schedules, operating modes, component selections, prices and failure assumptions can change. Solver versions, software mappings and later facility interfaces can also change. Their frequencies are unknown. Versioned profiles and explicit field ownership isolate these changes. The common core and allowed case adaptations are fixed before evaluation. A core change requires a successor baseline and both case reruns \citep[Sec.~17.3.3]{friedenthal2014practical}.
+Assistance is \emph{pending}, \emph{current} or \emph{stale} for an exact context revision. Receipt can make it current only for that same context. An edit marks it stale. Reassessment starts a new request. Only an authorized current disposition can apply a suggestion. Requirement text, source revisions, criteria and scope changes all affect currency.
 
-The current problem definition leaves vendor and repository choices open. It supplies no hard budget. Requirements, modeling and analysis may be framework capabilities or checked integrations. SysML v2 describes this OOSEM study. Candidate implementations retain their native languages and tools. Access, export rights and resource feasibility remain candidate verification obligations. Detailed payload schemas and tool profiles still require specification and checking before implementation.
+Expected variation includes mission orbits, attitude, modes, load schedules, EPS topology, components, prices, failure assumptions, fidelity, reference data, solver versions and software integration profiles. Change frequency is unknown. Versioned parameters, extensions and mappings expose these differences without fixing vendors or requiring any number of operational cases. Data rights, licensing and host resource limits constrain eligible methods and later tool choices. The two-case evaluation protocol appears under ``Research evaluation and bounded reuse'' in Section~\ref{section:integrate-and-verify-system}.
 
-\subsection{Control behavior and measures of performance}
+Framework failures include late or misleading assistance, missed impacts, incompatible transfers, interrupted execution, lost dependencies and mistaken review status. Their required responses preserve raw information and predecessor baselines, expose unassessed scope or failed checks, invalidate affected outputs and request corrective work. A run completing successfully, an analysis being reproducible, a model being credible and an EPS requirement being verified establish different properties. Section~\ref{section:integrate-and-verify-system} specifies planned framework verification and validation.
 
-A baseline is an identified, controlled set of design records, model and software revisions, and evidence for an EPS case. An accepted change creates a new baseline without erasing its predecessor. Incompatible information is rejected or set aside for review, and failed checks and affected evidence remain visible. Successful execution, trace completeness, model applicability and a verification verdict establish different properties. An unresolved critical finding prevents an affected technical assertion from being reported as fully supported. Issuing a new baseline alone does not establish that a change was completed correctly.
+\subsection{Measures of performance}
+\label{tab:framework-mop-protocols}
 
-Retain raw observations, sample/receipt times, active-unit/mode context and masks. Missing or inactive readings are not zero. Calibration creates a proposed parameter revision. Validation uses separately identified evidence. A physical verification proposal must identify DUT/equipment connections, operating and fault limits, hazards, isolation, abort/recovery actions and safety-review status. Readiness records whether these prerequisites are complete. The facility alone authorizes execution. A case-two core repair requires a new baseline and both reruns.
+The MOPs below measure framework properties that contribute to the enterprise MOEs. Performance limits require an agreed reference configuration, workload and intended-use rationale. The Systems Engineer owns resolution of open targets through agreement with experts and stakeholders. The resolution gate is the framework requirements baseline. A missing target prevents performance qualification. Achieved values remain unknown.
+\begin{description}
+\item[MOP-01] (MOE-01 and 04) Assistance delay in seconds from an edit/request to acknowledgement, first current finding/recommendation and completion. Report percentiles and limit exceedances, including unavailable service and edits during responses.
+\item[MOP-02] (MOE-02 and 03) Check agreement, semantic precision and recall against independent expert references, critical misses, false positives, abstention and explanation/source correctness. Assess recommendation eligibility and ranked alternatives separately.
+\item[MOP-03] (MOE-02 and 03) Budget/sizing and transfer agreement with independent engineering references under declared units and tolerances. Report numerical convergence, validity violations and runtime in seconds for the stated analysis workload.
+\item[MOP-04] (MOE-02 and 03) Impact-set precision/recall against reference changes and the number of stale or unauthorized outputs presented as current. Exercise concurrent edits, interrupted changes and all evidence statuses.
+\item[MOP-05] (MOE-03) Reconstruction success for applicable runs and raw-output agreement under result-specific rules fixed before replay, with missing dependencies and failures retained. Successful replay establishes reproducibility within those rules.
+\item[MOP-06] (MOE-03 and 04) View interpretation accuracy, package omissions and correct task completion and resource footprint under a declared host configuration. Learning/adaptation effort and dated direct usage cost remain enterprise MOE observations.
+\end{description}
 
-Measures of performance (MOPs) characterize critical framework properties that contribute to the matching MOEs. Numerical rules are profile-specific and remain open where unsupported. Table~\ref{tab:framework-mop-protocols} groups planned measurement and evaluation procedures for these properties. They support performance evaluation. Verification of framework requirements is specified separately by V01--V40. The task groups below explain what will be evaluated. Numerical targets and reference fixtures remain to be agreed before execution.
-{\small
-\setlength{\tabcolsep}{4pt}
-\setlength{\parskip}{0pt}
-\setlength{\LTpre}{0.4\baselineskip}
-\setlength{\LTpost}{0.4\baselineskip}
-\renewcommand{\arraystretch}{1.06}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.23\linewidth-0.46\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.77\linewidth-1.54\tabcolsep\relax}@{}}
-\caption{Planned MOP measurement and evaluation procedures. All numbers have the MOP- prefix.}\label{tab:framework-mop-protocols}\\
-\toprule
-\textbf{MOP group} & \textbf{Planned evaluation procedure} \\
-\midrule
-\endfirsthead
-\caption[]{Planned MOP measurement and evaluation procedures. All numbers have the MOP- prefix. (continued).}\\
-\toprule
-\textbf{MOP group} & \textbf{Planned evaluation procedure} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
-MOP-01, 03, 06, 08 & Qualified references for requirement quality, BOM/cost arithmetic, RAM transformations, both software mappings and command/recovery behavior. Preserve missing prices, rates and target evidence. \\
-MOP-02 & Blind discrepancy and clean fixtures for semantics, traces, impacts, stale and interrupted changes. Report TP, FP, FN by family and critical misses. \\
-MOP-04, 09 & Pin models, solvers, inputs, environment and criteria. Retain raw histories, coupling/runtime and independent replay under fixed result-specific tolerances. \\
-MOP-05, 07 & Exercise predictions within and outside the model's validity domain, calibration updates, noise, skew, gaps and inactive samples. Compare residuals/masks with references. Agree applicability and timing limits. \\
-MOP-07, 10, 11 & Technician/reviewer tasks, clean installation and two frozen-core cases. Retain omissions, errors, clarification, person-hours, footprint and dated direct-cost evidence. \\
-\end{longtable}
-}
+Independent expert assessment remains necessary for probable semantic findings and contextual recommendations. Later qualification separates reference construction from blind assessment, includes clean controls and unsupported conditions, and retains reviewer disagreement. Response speed alone gives no credit for an incorrect engineering outcome.
 
-\subsection{Verifiable system requirements for the framework}
+\subsection{Verifiable framework requirements}
 \label{subsection:framework-requirements}
 
-FR is the local identifier prefix for system requirements of the EPS engineering framework. All forty requirements and their parent mission requirements follow. I is inspection, A analysis, D demonstration and T test. V01--V40 are planned to verify the same-numbered FR. The accompanying SysML v2 model records these cases and methods. Section~\ref{section:integrate-and-verify-system} explains the integration increments and evidence needed. No case has been executed or passed. A not-applicable field requires rationale.
+Table~\ref{tab:framework-requirements} groups 41 framework requirements by capability and identifies their parent mission requirements. I, A, D and T denote inspection, analysis, demonstration and test of the future framework. Each row gives a planned method and concise check. Section~\ref{section:integrate-and-verify-system} details the planned verification procedures. Section~\ref{section:manage-requirements-traceability} explains specification consistency checks.
+
 {\small
 \setlength{\tabcolsep}{4pt}
 \setlength{\parskip}{0pt}
 \setlength{\LTpre}{0.4\baselineskip}
 \setlength{\LTpost}{0.4\baselineskip}
 \renewcommand{\arraystretch}{1.06}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.2\linewidth-0.8\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.68\linewidth-2.72\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.12\linewidth-0.48\tabcolsep\relax}@{}}
-\caption{Framework system requirements, mission derivation and planned verification.}\label{tab:framework-requirements}\\
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.13\linewidth-0.52\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.59\linewidth-2.36\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.28\linewidth-1.12\tabcolsep\relax}@{}}
+\caption{Current framework requirements, parent MR numbers and planned verification checks.}\label{tab:framework-requirements}\\
 \toprule
-\textbf{FR / parent MRs} & \textbf{System requirement} & \textbf{V / method} \\
+\textbf{FR / MRs} & \textbf{System requirement} & \textbf{Method / planned check} \\
 \midrule
 \endfirsthead
-\caption[]{Framework system requirements, mission derivation and planned verification. (continued).}\\
 \toprule
-\textbf{FR / parent MRs} & \textbf{System requirement} & \textbf{V / method} \\
+\textbf{FR / MRs} & \textbf{System requirement} & \textbf{Method / planned check} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-FR-01\par MR-01, MR-02 & The framework shall retain each requirement as an identified record with source need, parent, rationale, observable quantities or conditions and applicable units, owner, verification method, criterion, and resolution status. A not-applicable field shall retain its rationale. & V01\par I, T \\
-FR-02\par MR-01, MR-11 & The framework shall provide requirement and traceability templates, worked EPS examples, and a guided reference workflow that covers writing criteria, linking evidence, and interpreting gaps. & V02\par I, D \\
-FR-03\par MR-01, MR-07, MR-11 & The framework shall retain a source-linked catalogue of requirement derivation and verification methods, standards, and activity templates with applicability, tailoring rationale, and limitations. & V03\par I, D \\
-FR-04\par MR-02, MR-10 & The framework shall retrieve applicable links from needs and requirements to design decisions, model inputs, verification criteria and results, and retrieve the reverse paths. & V04\par T \\
-FR-05\par MR-02, MR-03, MR-08 & The framework shall identify the requirements, EPS and non-EPS allocations, BOMs, models, software definitions, procedures, and evidence affected by a designated change. & V05\par A, T \\
-FR-06\par MR-02, MR-05, MR-07 & The framework shall issue a successor baseline for an accepted change that retains its request and failed-gate context and marks affected evidence as regenerated, stale, or unresolved. & V06\par T \\
-FR-07\par MR-02, MR-09 & The framework shall retain identified, retrievable baselines of engineering records, case configuration, and evidence with revision history and distinct identities for accepted successors. & V07\par T \\
-FR-08\par MR-02, MR-09 & The framework shall check transferred identifiers, structure, quantities, units, polarity, time bases, interface meanings, and provenance against a declared contract and retain explicit rejection findings. & V08\par T \\
-FR-09\par MR-02, MR-05, MR-09 & The framework shall associate each result with its producer, method, requirement and decision, design and hardware configuration, software and model versions, parameter set, input data, environment, and raw output. & V09\par I, T \\
-FR-10\par MR-09 & The framework shall provide controlled instructions and dependencies to reconstruct and execute a designated analysis and compare its raw outputs using declared result-specific rules and tolerances. & V10\par D, T \\
-FR-11\par MR-02, MR-05, MR-10 & The framework shall report missing, rejected, stale, out-of-domain, failed, and unresolved evidence with its affected claim, criticality rationale, owner and disposition. & V11\par T \\
-FR-12\par MR-03 & The framework shall generate and revise a candidate-specific BOM from identified physical design items with assembly, quantities, part identifiers, variant and selection status, and source revision. & V12\par A, T \\
-FR-13\par MR-03 & The framework shall derive a revision-linked financial estimate from the BOM and declared additional cost categories while retaining price source, date, currency, quantity, estimate basis, uncertainty and missing data. & V13\par A, T \\
-FR-14\par MR-03, MR-04 & The framework shall produce a comparison of designated EPS architectures using a common requirement, assumption, evidence and criterion basis with feasibility status, raw measures, uncertainty and decision rationale. & V14\par A, T \\
-FR-15\par MR-04, MR-11 & The framework shall provide a configurable generic EPS representation covering requirements, functions, logical and physical elements, interfaces, modes and states, with case-specific parameter and extension records. & V15\par I, D \\
-FR-16\par MR-04, MR-05, MR-08 & The framework shall compose time-dependent subsystem demand, duty cycles, schedules and mode transitions with orbit, attitude, irradiance, eclipse, thermal conditions and EPS supply and protection behavior. & V16\par A, T \\
-FR-17\par MR-01, MR-02, MR-04 & The framework shall record how sourced component power and thermal characteristics and subsystem behavior become EPS or component requirement parameters, including units, uncertainties, allowable ranges and criterion decisions. & V17\par A, T \\
-FR-18\par MR-04, MR-07 & The framework shall exchange identified EPS component and design data with declared electrical, thermal, EMC and CAD analysis tools and retain model mappings, applicable outputs and unsupported checks. & V18\par D, T \\
-FR-19\par MR-04, MR-07 & The framework shall execute or coordinate declared virtual EPS and component verification scenarios for dynamic loads, supply changes, protection events, rare faults, and controller electrical and timing constraints. & V19\par D, T \\
-FR-20\par MR-05 & The framework shall integrate identified battery electrical, thermal and degradation models with mission loads and retain the states, health and lifetime outputs, assumptions and uncertainty supported by each model. & V20\par A, D \\
-FR-21\par MR-05, MR-09 & The framework shall associate each analytical verification claim with the model intended use, tested validity domain, calibration and validation evidence, uncertainty and acceptable prediction-error rule. & V21\par I, T \\
-FR-22\par MR-02, MR-05, MR-09 & The framework shall use supplied measurements to create an identified calibration or parameter-update record with data quality, prior and revised parameters, residuals and affected analyses. & V22\par A, T \\
-FR-23\par MR-05, MR-07, MR-08 & The framework shall record the selected model fidelity, execution environment, time step, measured or estimated runtime and interface delays for each declared SIL or HIL interaction profile. & V23\par I, T \\
-FR-24\par MR-05, MR-04 & The framework shall compare designated charging and power-management policies under declared load, thermal, health, electrical and timing conditions with safety constraints and policy-specific outcome evidence. & V24\par A, T \\
-FR-25\par MR-05, MR-04 & The framework shall compare time-correlated EPS telemetry with modeled expected behavior while retaining operating mode, model validity, degradation and sensor uncertainty, and alternative fault explanations. & V25\par A, T \\
-FR-26\par MR-06, MR-01 & The framework shall identify the RAM variables and failure assumptions applicable to designated EPS and spacecraft requirements and report their verification-method coverage and gaps. & V26\par I, T \\
-FR-27\par MR-06 & The framework shall generate a declared RAM analysis representation from identified functions, components and failure dependencies with traceable transformation rules and sourced or missing reliability data. & V27\par A, T \\
-FR-28\par MR-07, MR-01 & The framework shall retain each EPS or component verification activity with requirement, method, DUT baseline, applicable quantities or observable conditions, inputs, expected response, criterion, evidence variables and status. An inapplicable field shall retain its rationale. & V28\par I, T \\
-FR-29\par MR-07 & The framework shall produce a technician-readable verification proposal that specifies conditions, equipment and fixture identities, DUT connections, stimulus sequence, observations and evidence-generation procedure. & V29\par I, D \\
-FR-30\par MR-07, MR-04 & The framework shall include hazards, battery and electronics operating limits, fault-injection envelope, isolation, abort conditions and responsible safety-review status in each proposed physical verification activity. & V30\par I, T \\
-FR-31\par MR-07, MR-09 & The framework shall record the time base, sampling and synchronization rules and known measurement, calculation and output delays for applied stimuli, responses and telemetry. & V31\par A, T \\
-FR-32\par MR-07, MR-05, MR-09 & The framework shall check expected telemetry channels, units, timestamps, completeness and sensor validity conditions and preserve raw samples, invalid values and processing masks. & V32\par T \\
-FR-33\par MR-08, MR-02 & The framework shall retain revision-linked EPS command, telemetry, event and parameter definitions with identifiers, types, units, ranges and encodings mapped to hardware, functional software and ground dictionaries. & V33\par I, T \\
-FR-34\par MR-08 & The framework shall produce or coordinate checked mappings of the EPS software contract to declared cFS software-bus and F-Prime typed-connection profiles and identify behavior and implementation gaps. & V34\par D, T \\
-FR-35\par MR-08, MR-04 & The framework shall specify and check EPS command preconditions, order, expected effects, rejection and failure behavior, mode transitions and recovery responsibilities across EPS, telemetry, fault-management and safe-mode functions. & V35\par A, T \\
-FR-36\par MR-08, MR-05 & The framework shall retain a versioned OBC, operating-system, flight-framework and toolchain configuration with compatibility evidence and processor, memory, timing and power budget evidence for EPS functions. & V36\par I, A, T \\
-FR-37\par MR-10 & The framework shall produce filtered context, structure, interface and selected-design views from controlled EPS records with identifiers, units, legends and links to the represented baseline. & V37\par I, D \\
-FR-38\par MR-10, MR-02 & The framework shall assemble the designated requirement, decision, design, evidence, assumptions, uncertainty, validity limits, findings and dispositions into a baseline-linked review package. & V38\par I, D \\
-FR-39\par MR-11, MR-09 & The framework shall declare prerequisites, resource footprint, licenses, dependencies and learning instructions for its minimum workflow and record adoption, adaptation, change, reproduction and direct-cost observations under one evaluation protocol. & V39\par I, D \\
-FR-40\par MR-11 & The framework shall apply an identified common core to two predefined contrasting EPS cases using declared parameters, mappings and extensions and retain case outcomes and any core changes. & V40\par I, D, T \\
+\multicolumn{3}{@{}l}{\textbf{Requirements and explained assistance}} \\*
+FR-01\par MR-01, 02 & The framework shall retain each requirement with its identifier, revision, statement, product level, source and parent revisions, rationale, owner, conditions or quantities, applicable units, verification method, criterion and resolution status, including reasons for unresolved or inapplicable fields. & I,T\par Round-trip quantitative and qualitative records, including unresolved criteria. \\
+FR-02\par MR-02 & The framework shall check created or edited requirement drafts on each edit or request for declared deterministic quality errors, probable semantic duplicates, coverage gaps and source conflicts, returning affected text or records, the rule or cited passage, corrective suggestions or questions, uncertainty and assessment limits. & A,T\par Compare clean and seeded drafts with an independent expert reference, including valid similar requirements and missed defects. \\
+FR-03\par MR-01, 02, 03, 04, 05 & The framework shall recommend derivation, analysis, verification and validation methods or models on edits or requests using the current lifecycle stage, engineering question, requirements, available inputs, validity, resources and scope, with applicability conditions, rationale, cited sources, alternatives and rejection records. & A,T\par Use contextual queries whose eligible methods change with inputs, maturity or intended use. \\
+FR-04\par MR-02, 05 & The framework shall retrieve forward and reverse links among expectations, ConOps scenarios, requirements, function and element allocations, interfaces, decisions and applicable evidence, reporting missing or ambiguous endpoints and coverage against the declared reference set. & T\par Compare both query directions and coverage with a known relationship set. \\
+FR-17\par MR-02 & The framework shall produce proposed EPS and component requirement allocations from identified spacecraft requirements, scenarios and sourced design quantities using a declared derivation method, retaining parent links, units, assumptions, uncertainty and engineer dispositions. & A,T\par Recalculate an allocation and follow it to the parent and source quantities. \\
+FR-29\par MR-02, 05 & The framework shall retain the authorized engineer disposition of each requirement correction or method/model suggestion as accepted, modified, rejected or deferred, with rationale and the exact suggestion and context revisions. & I,T\par Exercise all dispositions and an unauthorized attempt to apply a suggestion. \\
+FR-30\par MR-02, 05 & The framework shall mark affected assistance stale when its requirement, mission, design, source, criterion or scope revision changes, prevent stale suggestions from being applied as current guidance and initiate reassessment for the new context. & T\par Edit during a delayed response and check that the old response cannot replace current guidance. \\
+FR-39\par MR-01, 02, 03, 04, 05 & The framework shall propose next engineering activities and repeated assessments from the declared phase, product maturity, dependencies, open findings and review criteria, identifying unmet prerequisites and the rationale for each proposal. & A,D\par Change maturity and blocking findings and inspect the revised activity proposals. \\
+FR-41\par MR-02, 05 & The framework shall acknowledge each assistance trigger and return a finding, recommendation or explicit pending/unavailable status within the engineer-approved interactive response limits, recording trigger, first-response and completion times for the current context. & T\par Measure response delay under the declared workload, including outage and superseded edits. \\
+\multicolumn{3}{@{}l}{\textbf{Mission concepts and preliminary design}} \\*
+FR-25\par MR-01, 02 & The framework shall retain mission expectations, constraints and nominal/degraded ConOps scenarios with orbit, attitude, duration, environmental conditions, subsystem modes, load schedules and transitions as revision-linked inputs to EPS requirements and analysis. & I,T\par Revise a degraded mode and trace its requirement and analysis inputs. \\
+FR-15\par MR-01, 03, 04 & The framework shall configure EPS design representations through identified parameters, component variants and extensions covering generation, storage, conversion, regulation, protection, distribution, control, interfaces and requirement allocations. & I,D\par Configure alternate EPS topologies and retain the distinct allocation and extension revisions. \\
+FR-12\par MR-03 & The framework shall generate and revise candidate-specific bills of materials from modeled design occurrences with assembly relationships, quantities, part and variant identifiers, source revisions and selection status. & A,T\par Compare quantities and substitutions with a reference assembly. \\
+FR-13\par MR-03 & The framework shall calculate revision-linked EPS mass, volume and acquisition-cost estimates from the bill of materials and declared additional categories, retaining sources, price dates, currencies, availability assumptions, uncertainty and unknown values. & A,T\par Recalculate after a substitution and preserve unknown prices and availability. \\
+FR-14\par MR-01, 03 & The framework shall compare designated EPS concepts and architectures on common requirements, mission assumptions and engineer-approved criteria, separating mandatory feasibility from preference ranking and reporting raw measures, margins, uncertainty, sensitivity, risks and selection rationale. & A,T\par Use infeasible and closely ranked alternatives with uncertain inputs. \\
+FR-20\par MR-01, 03 & The framework shall calculate preliminary generation, demand and energy budgets and array/battery sizing for the declared mission modes, including sourced efficiencies, duty cycles, eclipse duration, allowable battery operating limits, degradation assumptions and engineer-defined margins. & A,T\par Compare sizing and energy balance with independent calculations, including an infeasible eclipse case. \\
+\multicolumn{3}{@{}l}{\textbf{Simulation and model credibility}} \\*
+FR-16\par MR-03, 04 & The framework shall compose time-dependent subsystem loads, schedules and mode transitions with orbit, attitude, illumination, eclipse, thermal conditions and modeled EPS generation, storage, losses and protection to report power/energy balance, bus quantities and battery state within the declared model scope. & A,T\par Use a temporal shortage hidden by an average power budget and check coupling against a reference. \\
+FR-18\par MR-03, 04 & The framework shall exchange identified component and design models with declared electrical, thermal, applicable EMC and geometry analysis profiles, retaining input/output mappings, tool versions, units, supported effects and unsupported or lossy transfers. & D,T\par Exercise each required discipline profile and incompatible mappings. \\
+FR-21\par MR-03, 04, 05 & The framework shall associate each model-supported conclusion with intended use, selected fidelity, included and omitted mechanisms, numerical checks, validity domain, uncertainty, calibration evidence and independent assessment evidence or explicit gaps, with engineer-approved prediction-error rules. & I,T\par Attempt conclusions outside validity and with missing independent evidence. \\
+FR-22\par MR-03, 04, 05 & The framework shall propose identified model calibration or parameter revisions from quality-checked supplied reference data, retaining prior/revised values, data revisions, residuals, uncertainty and affected analyses separately from independent model assessment. & A,T\par Calibrate from supplied data, retain separate assessment data and decline an update. \\
+FR-23\par MR-03, 04 & The framework shall retain the fidelity, solver and coupling configuration, time step, convergence rules, execution environment, required resources and estimated/measured runtime for each analysis, MIL or SIL run, with unmet resource or numerical limits reported. & I,T\par Change the time step, solver and resource limits and inspect the run configuration and findings. \\
+FR-26\par MR-03, 05 & The framework shall identify reliability, availability and maintainability analyses applicable to the designated EPS requirements, ConOps and risks, retaining the chosen measures, failure/repair assumptions, method coverage and reasons for exclusions. & I,T\par Assess applicability with and without repair or redundancy assumptions. \\
+FR-27\par MR-03 & The framework shall generate the selected RAM analysis representation from identified functions, components and failure dependencies using declared transformation rules, preserving sourced or missing failure/repair data and uncertainty in the reported results. & A,T\par Compare transformations and results with a reference and leave missing rates unresolved. \\
+FR-31\par MR-03, 04, 05 & The framework shall retain scenario time bases, sample and receipt times, sampling, synchronization and known calculation/interface delays for simulated or supplied reference histories used in comparisons. & A,T\par Compare aligned and skewed histories with declared time tolerances. \\
+FR-32\par MR-03, 04, 05 & The framework shall check simulated and supplied reference histories for channel identity, units, timing, completeness and validity, preserving raw values, invalid samples, missing intervals and processing masks without treating missing or inactive readings as zero. & T\par Inject missing, inactive, invalid and wrong-unit data and compare masks. \\
+\multicolumn{3}{@{}l}{\textbf{Detailed interfaces and host software}} \\*
+FR-33\par MR-02, 04 & The framework shall retain revision-linked modeled EPS interfaces and command, telemetry, event and parameter definitions with endpoint ownership, identifiers, types, units, ranges, polarity, time/mode meaning and encodings. & I,T\par Round-trip interface definitions and reject inconsistent endpoint meanings. \\
+FR-34\par MR-04 & The framework shall produce or coordinate checked mappings of the EPS interface specification to the engineer-selected host software integration profile, identifying version compatibility, unsupported behavior and lossy translations. & D,T\par Check a selected profile and expose omitted or incompatible meanings. \\
+FR-35\par MR-04 & The framework shall specify and check modeled EPS command preconditions, order, effects, rejection/failure behavior, mode transitions, protection and recovery responsibilities against the declared control and interface requirements. & A,T\par Exercise nominal, rejected, protection and recovery sequences in simulated conditions. \\
+FR-36\par MR-04 & The framework shall coordinate coding and building of declared control/interface software through an external host execution toolchain only from an engineer-authorized detailed design release, retaining source/build revisions, dependencies, host configuration, logs and failures. & D,T\par Attempt an unreleased build and then build the released design, including a toolchain failure. \\
+FR-19\par MR-04 & The framework shall coordinate MIL assessment of modeled EPS control against the plant and mission scenarios for nominal operation, load/supply changes, mode transitions, selected faults, protection and recovery, retaining stimuli, expected/actual responses, criteria and failures. & D,T\par Run declared nominal and fault sequences with a simulated plant and retain failed criteria. \\
+FR-24\par MR-04 & The framework shall coordinate SIL assessment of the declared host-executed control/interface code with simulated EPS and subsystem products, reporting requirement/ConOps outcomes and differences from corresponding MIL results for the same scenarios and comparison rules. & A,T\par Use matching MIL/SIL inputs and a seeded code/interface discrepancy. \\
+\multicolumn{3}{@{}l}{\textbf{Evidence, controlled changes and reviews}} \\*
+FR-28\par MR-02, 04, 05 & The framework shall retain EPS phase-product verification and validation plans with distinct requirement and expectation/ConOps references, subject configuration, method, conditions, inputs, expected response, criteria, observations, applicability limits and planned/executed status. & I,T\par Distinguish planned activities from results and verification criteria from validation expectations. \\
+FR-05\par MR-05 & The framework shall identify reciprocal impacts of a proposed mission, requirement, component, interface, model or software change on EPS/non-EPS allocations, budgets, trades, plans, guidance and evidence, reporting unresolved dependencies and required reassessments. & A,T\par Compare the impact set of coupled load, pointing and interface changes with an expert reference. \\
+FR-06\par MR-05 & The framework shall issue a distinct successor baseline only for an authorized engineering change decision, preserving its predecessor, request, rationale, findings and dispositions and identifying regenerated, stale and unresolved products and evidence. & T\par Accept, decline and interrupt changes without erasing the predecessor. \\
+FR-07\par MR-05 & The framework shall retain retrievable phase baselines that resolve exact requirement, mission, design, model, software, interface and evidence revisions with revision history and the authorized decisions that control them. & I,T\par Reconstruct predecessor and successor manifests and all applicable products. \\
+FR-08\par MR-02, 03, 04, 05 & The framework shall check transferred identities, revisions, structure, quantities, units, polarity, time/mode meanings and provenance against the declared interface specification before registration, retaining incompatible raw submissions and findings without replacing controlled content. & T\par Inject identity, unit, sign and revision mismatches at each active interface. \\
+FR-09\par MR-03, 04, 05 & The framework shall associate each analysis or software result with its requirement/expectation, method, scenario, design/model/software/input revisions, parameters, producer, execution environment, raw outputs, logs and execution status, preserving failed, cancelled and partial runs. & I,T\par Trace successful, failed, cancelled and partial outputs to their configurations. \\
+FR-10\par MR-05 & The framework shall provide the controlled inputs, dependencies and instructions to reconstruct a designated analysis or MIL/SIL run and compare its raw outputs using result-specific rules and tolerances fixed before replay, retaining comparison failures and missing dependencies. & D,T\par Independently replay in the declared host environment and compare under fixed tolerances. \\
+FR-11\par MR-05 & The framework shall report missing, rejected, stale, failed, out-of-domain and unresolved evidence against the affected requirements, expectations and conclusions with criticality, owner and disposition, preventing unqualified current conformity claims from affected critical gaps. & T\par Seed every evidence status and attempt a current claim with a blocking gap. \\
+FR-37\par MR-01, 02, 03, 04, 05 & The framework shall generate filtered mission, requirement-allocation, design, interface and analysis views from controlled EPS records with baseline identification, readable units, legends and links to represented records. & I,D\par Compare views with their source baseline and follow represented record links. \\
+FR-38\par MR-05 & The framework shall assemble a phase-baseline review package against the designated MCR, SRR, MDR/SDR, PDR, scoped CDR or scoped SIR entrance and success criteria, including applicable coverage, decisions, design, evidence, model limits, risks, gaps and finding dispositions. & I,D\par Prepare phase-specific packages, including CDR design release and SIR released-product evidence. \\
+FR-42\par MR-05 & The framework shall record a technical review disposition only from the designated authorized review authority against the identified baseline and agreed scoped success criteria, distinguishing prepared, accepted, conditional and progression-blocked status with rationale, conditions, closure actions, owners and dates. & I,T\par Reject unauthorized or stale-baseline decisions and exercise blocking and conditional findings. \\
 \end{longtable}
 }
-
-Designated items and comparison rules are fixed before results. Baselines resolve exact revisions. A complete chain links needs, decisions, inputs, models, results and criteria. Model credibility is the adequacy of a model for its stated use, supported by validity-domain evidence, validation and uncertainty. Completeness, fit and replay establish different properties. None alone establishes technical truth or safety approval.

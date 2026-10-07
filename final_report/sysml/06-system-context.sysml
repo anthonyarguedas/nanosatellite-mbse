@@ -1,89 +1,88 @@
-// System context: framework, external actors, interfaces and typed input/output flows.
+// Framework boundary. Physical EPS designs are model inputs, not participants.
 package FrameworkContext {
     private import FrameworkDomain::*;
     private import BoundaryViews::*;
 
-    part def Users :> Engineers { port p : ~P01; }
-    part def Sources { port p : ~P02; }
-    part def Engines { port p : ~P03; }
-    part def Software {
-        port p : ~P04;
-        ref part flightArtifact : FlightSoftware [0..*];
-        ref part groundArtifact : GroundSoftware [0..*];
+    part def Users :> Engineers {
+        port p : ~EngineeringUsePort;
+        ref part systems : SystemsEngineer;
+        ref part eps : EPSEngineer;
+        ref part nonEps : NonEPSEngineer;
+        ref part manager : ProjectManager;
+        ref part stakeholders : MissionStakeholder [0..*];
     }
-    part def Facility {
-        port p : ~P05;
-        ref part technician : TestingFacilityTechnician [0..*];
-        ref part dut : EPSHardware [0..*];
-        doc /* Technician and physical DUT remain external. References identify
-             * possible roles, not asserted staffing or available hardware. */
+    part def Sources {
+        port p : ~KnowledgePort;
+        doc /* Literature, standards, component descriptions and supplied reference data. Source authority and supplier claims remain external. */
     }
-    part def Reviewers { port p : ~P06; }
+    part def Engines :> ToBe::ModelSoftwareAnalysisEnvironment {
+        port p : ~AnalysisPort;
+        doc /* Declared electrical, thermal, applicable EMC, geometry, orbit/attitude, battery or RAM model execution tools. No vendor is selected. */
+    }
+    part def Software :> ToBe::HostSoftwareDevelopmentEnvironment {
+        port p : ~HostSoftwarePort;
+        doc /* External host execution toolchain coordinates declared coding, builds and SIL. Engineer approval remains required. This is no target-hardware participant. */
+    }
+    part def Reviewers {
+        port p : ~TechnicalReviewPort;
+        ref part independent : IndependentReviewer;
+        ref part authority : TechnicalReviewAuthority;
+        doc /* A reviewer supplies findings. The designated authority decides progression. Role occupants may overlap while responsibilities remain distinct. */
+    }
 
     part def Context {
-        doc /* Every transfer retains identifier/source revision, case/baseline,
-             * producer, dependency revisions, quantity/unit/polarity meanings,
-             * time/mode interpretation, provenance and status under a declared
-             * versioned profile. Reject or quarantine incompatible transfers
-             * before registration; retain raw submissions, findings and the
-             * previously accepted baseline. Registration checks do not confer
-             * engineering decision, supplier qualification, facility safety
-             * authorization or project-assessment authority. */
-        part framework : Framework;
-        part engineers : Users;
-        part sources : Sources;
-        part tools : Engines;
-        alias engines for tools;
-        part software : Software;
-        part facility : Facility;
-        part reviewers : Reviewers;
+        ref part framework : ToBe::FutureFramework;
+        part 'Engineers and stakeholders' : Users;
+        alias engineers for 'Engineers and stakeholders';
+        part 'Knowledge and data sources' : Sources;
+        alias sources for 'Knowledge and data sources';
+        part 'Model analysis tools' : Engines;
+        alias tools for 'Model analysis tools';
+        alias engines for 'Model analysis tools';
+        part 'Host execution toolchain' : Software;
+        alias software for 'Host execution toolchain';
+        part 'Reviewers and authority' : Reviewers;
+        alias reviewers for 'Reviewers and authority';
 
-        interface IF01 : I01 connect engineers.p to framework.p01 {
-            flow needs of Submission01 from client.submission to framework.submission;
-            flow guidance of Response01 from framework.response to client.response;
+        interface IF01 : EngineeringUseInterface connect engineers.p to framework.p01 {
+            flow engineeringInputs of EngineeringSubmission from client.engineeringSubmission to framework.engineeringSubmission;
+            flow engineeringOutputs of EngineeringResponse from framework.engineeringResponse to client.engineeringResponse;
         }
-        interface IF02 : I02 connect sources.p to framework.p02 {
-            flow facts of Submission02 from client.submission to framework.submission;
-            flow registration of Response02 from framework.response to client.response;
+        interface IF02 : KnowledgeInterface connect sources.p to framework.p02 {
+            flow sourceData of SourceSubmission from client.sourceSubmission to framework.sourceSubmission;
+            flow sourceRequest of SourceQuery from framework.sourceQuery to client.sourceQuery;
         }
-        interface IF03 : I03 connect engines.p to framework.p03 {
-            flow inputs of Submission03 from framework.submission to client.submission;
-            flow plan of ScenarioAnalysisPlan from framework.executionPlan to client.executionPlan;
-            flow runContext of Response03 from client.response to framework.response;
-            flow results of RunPackage from client.rawResult to framework.rawResult;
+        interface IF03 : AnalysisInterface connect tools.p to framework.p03 {
+            flow analysisRequest of AnalysisRequest from framework.analysisRequest to client.analysisRequest;
+            flow analysisPlan of AnalysisPlan from framework.analysisPlan to client.analysisPlan;
+            flow analysisStatus of AnalysisResponse from client.analysisResponse to framework.analysisResponse;
+            flow analysisResult of AnalysisResult from client.analysisResult to framework.analysisResult;
         }
-        interface IF04 : I04 connect software.p to framework.p04 {
-            flow definitions of Submission04 from client.submission to framework.submission;
-            flow findings of Response04 from framework.response to client.response;
-            flow sharedContract of ArchitectureServiceContract from framework.sharedContract to client.sharedContract;
-            flow build of SoftwareArtifact from client.implementationArtifact to framework.implementationArtifact;
-            flow resources of RunPackage from client.resourceEvidence to framework.resourceEvidence;
+        interface IF04 : HostSoftwareInterface connect software.p to framework.p04 {
+            flow codingStatus of CodingResponse from client.codingResponse to framework.codingResponse;
+            flow codingRequest of CodingRequest from framework.codingRequest to client.codingRequest;
+            flow interfaceSpecification of EPSInterfaceSpecification from framework.interfaceSpecification to client.interfaceSpecification;
+            flow softwareProduct of HostSoftwareProduct from client.softwareProduct to framework.softwareProduct;
+            flow softwareResult of SoftwareRunResult from client.softwareResult to framework.softwareResult;
         }
-        interface IF05 : I05 connect facility.p to framework.p05 {
-            flow profiles of Submission05 from client.submission to framework.submission;
-            flow feedback of Response05 from framework.response to client.response;
-            flow procedure of VerificationSpecification from framework.plannedProcedure to client.plannedProcedure;
-            flow observations of ObservationPackage from client.suppliedObservations to framework.suppliedObservations;
-        }
-        interface IF06 : I06 connect reviewers.p to framework.p06 {
-            flow requests of Submission06 from client.submission to framework.submission;
-            flow reviewPackage of Response06 from framework.response to client.response;
+        interface IF06 : TechnicalReviewInterface connect reviewers.p to framework.p06 {
+            flow reviewFindingsDecisions of ReviewSubmission from client.reviewSubmission to framework.reviewSubmission;
+            flow reviewPackage of ReviewResponse from framework.reviewResponse to client.reviewResponse;
         }
 
-        // High-level bundles use the same source/receiving ports. The report
-        // exposes these summaries; each exact typed flow remains in its IF.
-        flow 'IF-01' of 'Needs/criteria' from engineers.p to framework.p01;
-        flow of 'Models/justification' from framework.p01 to engineers.p;
-        flow 'IF-02' of 'Facts/methods' from sources.p to framework.p02;
-        flow of 'Catalogue/assumptions' from framework.p02 to sources.p;
-        flow of 'Plans/inputs' from framework.p03 to engines.p;
-        flow 'IF-03' of 'Results/limits' from engines.p to framework.p03;
-        flow 'IF-04' of 'Definitions/builds/resources' from software.p to framework.p04;
-        flow of 'Contract/mappings' from framework.p04 to software.p;
-        flow 'IF-05' of 'Profiles/observations' from facility.p to framework.p05;
-        flow of 'Procedure/feedback' from framework.p05 to facility.p;
-        flow 'IF-06' of 'Requests/findings' from reviewers.p to framework.p06;
-        flow of 'Packages/replay' from framework.p06 to reviewers.p;
+        // Report summaries use the same directed port features and payload types.
+        flow 'IF-01 inputs' of EngineeringSubmission from engineers.p to framework.p01;
+        flow 'Guidance and products' of EngineeringResponse from framework.p01 to engineers.p;
+        flow 'IF-02 sources' of SourceSubmission from sources.p to framework.p02;
+        flow 'Source queries' of SourceQuery from framework.p02 to sources.p;
+        flow 'IF-03 requests' of AnalysisRequest from framework.p03 to tools.p;
+        flow 'Analysis results' of AnalysisResult from tools.p to framework.p03;
+        flow 'IF-04 coding and SIL' of CodingRequest from framework.p04 to software.p;
+        flow 'Builds and results' of SoftwareRunResult from software.p to framework.p04;
+        flow 'IF-06 packages' of ReviewResponse from framework.p06 to reviewers.p;
+        flow 'Findings and decisions' of ReviewSubmission from reviewers.p to framework.p06;
+        doc /* Five active versioned interfaces retain subject/context revisions and raw submissions. Receiving checks enforce identity, units, time/mode meaning, scope, source provenance and authorization before controlled registration. Incompatible information remains rejected or unresolved. IF-05 has no participant, port or flow in this context. */
     }
     part context : Context;
+    #sourceTrace dependency enterpriseBoundary from context to ToBe::domain::enterprise;
 }

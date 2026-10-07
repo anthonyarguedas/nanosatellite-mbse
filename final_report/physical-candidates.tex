@@ -1,70 +1,101 @@
 \section{Synthesize Candidate Physical Architectures}
 \label{section:synthesize-physical-architectures}
 
-OOSEM partitions functionality, data and control before allocating software, persistent data, procedures and hosts \citep[Sec.~17.3.5]{friedenthal2014practical}. The five alternatives implement the same proposed framework responsibilities but differ in authoring tools, collaboration, analysis integration and configuration control. Nodes express responsibility or execution partitions, not necessarily separate computers. Logical components may span nodes through controlled synchronization.
+The physical architecture identifies the software, persistent data, operating procedures and computing resources that realize the eight logical responsibilities. OOSEM first partitions responsibility, information and control across logical nodes. It then allocates them to physical components and hosts, with explicit interfaces and component specifications \citep[Sec.~17.3.5]{friedenthal2014practical}. This is the framework architecture. EPS arrays, batteries, converters and controllers remain engineered model/software products.
 
-\subsection{Partitioning criteria}
+\subsection{Partitioning and common scope}
+
+Three logical nodes group the current responsibilities. The \emph{engineering node} contains exchange, requirements, design, analysis, credibility and review (L01, L03--07). The \emph{assistance node} contains L02. The \emph{evidence node} contains configuration and currency (L08). These groups separate interactive drafting from long numerical work and separate editable working records from preserved releases. They describe responsibilities rather than a fixed number of computers.
+
 {\small
 \setlength{\tabcolsep}{4pt}
-\setlength{\parskip}{0pt}
-\setlength{\LTpre}{0.4\baselineskip}
-\setlength{\LTpost}{0.4\baselineskip}
 \renewcommand{\arraystretch}{1.06}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.36\linewidth-0.72\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.64\linewidth-1.28\tabcolsep\relax}@{}}
-\caption{Concern-derived partitioning criteria.}\label{tab:framework-partitioning}\\
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.70\linewidth-2\tabcolsep\relax}@{}}
+\caption{Physical partition decisions and their measures.}\label{tab:framework-partitioning}\\
 \toprule
-\textbf{Criterion / MR} & \textbf{Consequence} \\
+\textbf{Criterion} & \textbf{Consequence and current basis} \\
 \midrule
 \endfirsthead
-\caption[]{Concern-derived partitioning criteria. (continued).}\\
-\toprule
-\textbf{Criterion / MR} & \textbf{Consequence} \\
+\toprule \textbf{Criterion} & \textbf{Consequence and current basis} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-Authority/continuity / MR-02, MR-09 & Separate editable records from protected releases. One authority per field, reviewed transfers, recovery and historical replay. \\
-Collaboration/learning / MR-01, MR-10, MR-11 & Role-readable authoring/review. Declare skills, accounts, licenses, network and exports. \\
-Domain cohesion / MR-03, MR-04, MR-06, MR-08 & Bind quantities, prices, failure dependencies and software semantics to design occurrences. Isolate replaceable specialist methods. \\
-Update rate/resources / MR-04, MR-05 & Separate edits/synchronization from numerical stepping and later hardware loops. Declare CPU, storage and optional GPU profiles. \\
-Credibility/safety / MR-05, MR-07 & Separate execution, model adequacy and readiness. Begin with virtual fixtures/supplied data. Physical authority stays external. \\
-Isolation/increments / MR-02, MR-11 & Bound adapters and versions. Declare core/case changes. Verify minimum workflows before scenes or live-bench expansion. \\
+Meaning and authority & Keep requirement, design and evidence meanings with L03, L04 and L06--07. L08 preserves their exact revisions. Assign one owner per field. MR-02--05, MOE-02--03, MOP-03--05. \\
+Interactive response & Run assistance independently of numerical execution. Invalidate guidance immediately on edits. Record pending/unavailable work. MR-02 and 05, MOE-01 and 04, MOP-01--02 and 04. \\
+Replaceable analysis & Declare discipline, model, solver and host profiles at the analysis boundary. Verify every mandatory profile. Separate execution from credibility and EPS assessment. MR-03--04, MOE-02--03, MOP-03 and 05. \\
+Access and preservation & Keep private engineering inputs local by default. Preserve sources, raw results and released dependencies with backup/restore. Verify external access, exports and recovery. MR-05, MOE-03--04, MOP-04--06. \\
+Adoption and variation & Separate reusable rules, libraries and methods from mission inputs and model/software products. Compare correct-task effort and dated framework cost. MR-01--05, MOE-01 and 04, MOP-06. \\
 \end{longtable}
 }
 
-Framework computing needs no detailed geometric model here. EPS geometry remains a case artifact when illumination, accommodation or thermal decisions require it. Each proposed minimum configuration must realize all nine logical responsibilities and the forty framework requirements. Unsupported tool profiles remain gaps.
+Every complete candidate specifies the same 41 FRs, eight logical responsibilities, five scenarios and Pre-Phase A through adapted C tasks. Each includes active drafting assistance, explained contextual recommendations, EPS modeling, applicable discipline/RAM analysis, credibility, controlled changes and reviews. An external declared host toolchain codes, builds and executes SIL only after the exact current engineer-authorized detailed design/interface release. Generic computing hosts are framework infrastructure. Physical EPS realization, procurement, testing, PIL/HIL and flight readiness remain excluded.
 
-\subsection{Candidate architectures and dependencies}
+\subsection{Five coherent configurations}
 
-Table~\ref{tab:framework-candidate-inventories} explains the five architectures and their significant dependencies. Node identifiers link the summary to the accompanying SysML v2 candidate models, which specify components, intended allocations and deployment responsibilities. All complete configurations remain proposed. Reported mechanisms support only parts of them.
+Five configurations provide distinct authoring and collaboration arrangements. These are COMET and Excel (PA-COM), SysML and Python (PA-CDT), YAML and Git (PA-GY), Nanospace (PA-NS), and Capella and Valispace (PA-VS). Shared proposed assistance and analysis components make their scope comparable. Source-supported workflows establish reusable mechanisms. They establish neither complete EPS readiness nor implemented framework compliance.
+
 {\small
 \setlength{\tabcolsep}{4pt}
-\setlength{\parskip}{0pt}
-\setlength{\LTpre}{0.4\baselineskip}
-\setlength{\LTpost}{0.4\baselineskip}
-\renewcommand{\arraystretch}{1.06}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.15\linewidth-0.6\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.29\linewidth-1.16\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.56\linewidth-2.24\tabcolsep\relax}@{}}
-\caption{Five proposed candidate architectures, dependencies and limitations.}\label{tab:framework-candidate-inventories}\\
+\renewcommand{\arraystretch}{1.07}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.14\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.43\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.43\linewidth-2\tabcolsep\relax}@{}}
+\caption{Five complete candidate configurations. All additions require development and verification.}\label{tab:framework-candidate-inventories}\\
 \toprule
-\textbf{Candidate} & \textbf{Responsibility partitions and source basis} & \textbf{Tool choices, dependencies and open work} \\
+\textbf{Candidate} & \textbf{Configuration and reason to retain} & \textbf{Proposed additions and important limits} \\
 \midrule
 \endfirsthead
-\caption[]{Five proposed candidate architectures, dependencies and limitations. (continued).}\\
-\toprule
-\textbf{Candidate} & \textbf{Responsibility partitions and source basis} & \textbf{Tool choices, dependencies and open work} \\
+\toprule \textbf{Candidate} & \textbf{Configuration and reason to retain} & \textbf{Proposed additions and important limits} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-PA-COM / COMET and Excel & Participant review (COM-N1), study/reference (N2), assurance/evidence (N3) and engineering execution (N4). Reported tutorials, templates, catalogues and categorical budgets \citep[Secs.~3--5]{deutsch2022comet}. & The COMET server, desktop modeling client and Excel add-in support shared engineering records and budgets. Python extensions for change control, evidence assurance and specialist-tool coordination are proposed. API compatibility, Excel licensing, workbook settings, reconstruction and storage/backup require verification. Synchronization remains outside controller timing loops. \\
-PA-CDT / Native model and Python & Definition/configuration (CDT-LN1), analysis/assurance (LN2) and verification/review (LN3). CPU workspaces PN1/PN2 may share a host; PN3 is an optional scene workspace. CSRM provides a tailoring basis \citep[pp.~2--6]{kaslow2019csrm}. & A native SysML v2 EPS library/workbench, Git and Python form a local modeling and analysis environment. PyBaMM battery integration, FMI/FMU coupling, RAM and cFS/F-Prime checks are proposed. Native conversion is partial and combined execution remains incomplete. CPU resources, backup and clean independent replay must be established. \\
-PA-GY / Git and YAML & Definition (GY-N1), configuration control (N2), analysis/software (N3) and review/evidence (N4). The lightweight source approach excludes requirements, test and failure management \citep[Sec.~2.0.1]{kanavouras2024lightweight}. SeaLion supplies broader document patterns \citep{chiu2023sealion}. & Git controls YAML engineering definitions and reviewed releases. Python engineering rules, analysis integration and document generation require development: Git alone provides no engineering semantics. Editor/runtime, repository backup and solver/build access are dependencies. Browser authoring would be an optional addition. \\
-PA-NS / Nanospace and formalization & Browser/Gaphor authoring (NS-LN-A), shared coordination (B), integration (C) and release/publication (D). Collaboration \citep[Secs.~IV--V]{cordero2022nanospace} and Gaphor budget extraction \citep[Secs.~3--6]{luccisano2024formalization} are separate source mechanisms. & Nginx, a Java service and Neo4j host collaboration. Python coordinates model exchanges and checks. Numerical execution (NS-C07/NS-C29) and build evidence (NS-C33) use declared external services. Model--database--release consistency, maintained versions, access, backup and failure handling remain unverified. \\
-PA-VS / Capella and Valispace & Engineering/review (VS-LN-ENG), architecture (ARCH), analysis/verification (ANALYSIS) and configuration/evidence (ASSURANCE). Sources demonstrate limited tree, mode and budget transfers \citep[Secs.~3.1 and~4.3--4.4]{campioli2025integration}. & Capella and Valispace are joined through in-application Python, Excel and REST exchanges. Controlled change/release handling, dynamic EPS/battery analysis, RAM, cFS/F-Prime checks and safe verification planning are proposed extensions. OpenModelica is a proposed local analysis integration. Vendor access, exports, versions, storage/backup and reconstruction remain open. \\
+PA-COM & COMET server, desktop client and Excel add-in provide parameter ownership, catalogues and budget calculations. Retain this concurrent engineering arrangement \citep[Secs.~3--4]{deutsch2022comet}. & Python companion requirement/trace records, edit-linked assistance, analysis, credibility, reviews and Git/archive releases. COMET parameters are linked to requirement meaning. Current API/add-in compatibility, Excel rights and workbook reconstruction are unresolved. \\
+PA-CDT & Native SysML v2 authoring and views through Syside, Python engineering calculations, Git and a managed archive. Retain explicit local model authority and replaceable tools. CSRM supplies structural patterns \citep{kaslow2019csrm}. & A native EPS library, authoring assistance panel, analysis/profile mappings, impact checks and assessment services are proposed. CSRM is not a completed SysML v2 migration. Deployment licence, authoring API, quantities, capacity and clean reconstruction need proof. \\
+PA-GY & Typed YAML engineering definitions, Git review, an editor/Python assistance panel and generated views. Retain portable reviewable text \citep{kanavouras2024lightweight,chiu2023sealion}. & Develop engineering units/relationships, requirement allocation, assistance, analyses, credibility and authority controls. The lightweight source excludes requirement/test management. Git history supplies no technical approval. Contributor usability is unresolved. \\
+PA-NS & Nanospace browser/API parameter collaboration, declared native model authority, Python services and Git/archive releases. Retain concurrent sharing and dependency analysis \citep[Secs.~3--6]{review-0340}. & Add active browser assistance, requirement semantics, controlled exports and full analysis/assessment services. HyperTension/HDDL planning is an optional proposed adapter. Integrated planning is future work. Gaphor extraction is a separate tool-specific option \citep{luccisano2024formalization}. \\
+PA-VS & Capella/ARCADIA owns structure, allocations, modes and interface meanings. Valispace owns requirements, properties and budgets. Python for Capella and REST transfers connect them \citep[Secs.~3--4]{campioli2025integration}. & Add edit-linked assistance, stable-ID reviewed transfers, dynamic analysis, credibility and Git/archive releases. Demonstrated preliminary tree/mode/budget transfers support retention. Current service access, deletion/conflict handling, exports and reconstruction remain unresolved. \\
 \end{longtable}
 }
 
-\paragraph{Custom scene scope and maturity.}
-PA-CDT retains OpenUSD, Omniverse Kit, Isaac and FMI. Its required CPU profile includes offline controller SIL, supplied-data replay and one versioned FMI/FMU coupling path. OpenUSD and Omniverse support decision-specific geometric views. Isaac adds motion/contact only when it affects EPS demand or generation. Scene coupling, timing and model applicability require verification. GPU, driver and Kit/Isaac dependencies apply only to this optional profile. Scenes establish no validated electrical, thermal, aging or EMC prediction. Physical controllers, live telemetry, HIL and autonomous control remain later external work.
+Each candidate deploys its engineering services on a generic workstation and any declared authoring server, local assistance on an independently scheduled process, and identified releases/raw outputs on a managed archive. These roles can share hardware if access, response, numerical workload and recovery limits are met. Versions, CPU, memory, storage, network, operating system, licences and backup arrangements must be declared before deployment. No capacity or licence price is assumed.
 
-All candidates need sourced model data, qualified references and explicit RAM, calibration, software and safety methods, together with declared computing, access and backup arrangements. Their complete capabilities remain proposals, not demonstrations. Related source accounts are not independent replications.
+\subsection{Active assistance realization}
+\label{subsection:physical-assistance}
+
+The service retrieves relevant engineering sources, ranks candidate findings or methods, and prepares cited explanations for engineer assessment.
+
+Every candidate includes the following proposed Python service. Its attachment point is the COMET/Excel editor, native model workbench, YAML editor, Nanospace browser or Valispace/Capella workspace. An edit is acknowledged and invalidates affected current and pending guidance before delayed work starts. The service captures the exact requirement, mission, design, source, criterion and scope revisions.
+
+\paragraph{Rules, selection and ranking.}
+Versioned structural, quantity and wording rules check required fields, identifiers, parents, responsible product, modal wording, single obligations, units, inequalities and declared numerical limits. NASA Appendix C and an expert-approved project reference supply the default criteria \citep[Sec.~4.2 and Appendix~C]{nasa2016systems}. Broad semantic findings remain probable. For example, ``battery capacity: 200 W'' triggers a dimensional finding and a question about the intended quantity. It cannot justify inventing ``200 Wh''.
+
+Source selection preserves authority and citation metadata while selecting substantive passages, tables, equations and necessary context. BM25 retrieves candidate passages through lexical ranking against the query terms. Local \texttt{Qwen3-Embedding-0.6B} retrieves semantic candidates, and \texttt{Qwen3-Reranker-0.6B} scores query/passage pairs \citep{qwen3embedding,qwen3reranker}. Their proposed initial revisions are respectively \texttt{97b0c614be4d} and \texttt{e61197ed4502}. The native specification retains the full revisions. Tokenizer, prompts, library versions and input limits also require control. Separate content and contextual relevance rubrics require qualification. Necessary standards passages cannot disappear silently through a content filter.
+
+Pinned \texttt{jev-1.13.0} through TypeSafe SDK 0.6.0 is an alternative for substantive-content and current-question relevance scoring \citep{typesafe060}. Structured requirement-pair similarity/conflict questions are a proposed additional use. Existing passage reranking is pointwise. Noul scores return neither explanations nor corrections. Requested and returned model identities must agree with the qualified profile. A changing ``latest'' alias is excluded. Local Qwen/BM25 offers data locality and offline operation, with resource and domain-qualification costs. Jev offers an external scoring service, with unresolved access, privacy, cost, outage and qualification dependencies. Neither option demonstrates technical correctness.
+
+Method/model options first pass mandatory scope, purpose, input, fidelity, validity, resource and access checks. Unknown prerequisites remain unresolved. Only eligible options enter shortlist ranking. Duplicate candidates compare level, subject, mode, conditions, quantity and parent allocation. Similar statements can be valid separate requirements. Coverage uses a declared ConOps/function/interface/risk set. Corpus retrieval cutoffs and score-fusion weights supply no engineering acceptance limit. Project limits, ranking criteria and abstention rules require independent expert qualification against the current MOPs.
+
+\paragraph{Separate explanations and controlled use.}
+The explanation component combines identified rule templates, cited source excerpts and explicit comparisons of engineering context. It shows affected text, observed quantities, applicable conditions, legitimate differences, alternatives and rejection reasons. It proposes corrections or clarification questions. Conflicting source limits remain separate until an engineer resolves authority and applicability. This mechanism needs no text generator. Any later generator needs a pinned identity and separate source fidelity qualification.
+
+Insufficient context, decisive truncation, unsupported language, uncertain applicability, invalid scores or unavailable services produce flags or abstention. No eligible recommendation remains an explicit result. Unassessed scope differs from a completed check with no finding. Source text is evidence and cannot issue instructions to the framework. Engineers retain accepted, modified, rejected and deferred dispositions. Currency is checked against the latest revisions before display and again before authorized application.
+
+Remote processing requires approved data rights, minimized payloads and declared retention. Private inputs remain local by default. Request count, concurrency, spend, retries and total response time are bounded by the approved workload/profile. Outage leaves deterministic checks available. A separately qualified local profile may supply semantic results. Otherwise that assessment is unavailable. Caches retain question, source/context, rule/rubric, requested/returned model and qualification revisions. Superseded entries remain historical and cannot become current advice. No current API price or availability is asserted.
+
+\subsection{EPS analysis tools and model fidelity}
+
+Engineers need progressively refined sizing, time-dependent energy analysis and battery assessment. The tools below support those decisions through a common mission and design basis.
+
+The configurations share a controlled analysis boundary. A proposed CPU starting profile combines transparent Python sizing/budget equations, time-dependent EPS/control models informed by Casado, and PyBaMM when battery electrochemical, thermal or aging detail is justified. Orbit, attitude, illumination, load and mode histories use the same controlled mission/design basis. Casado's published model structures are transferred as design information. A host numerical implementation is proposed, with no reuse of its executing HIL equipment \citep[Secs.~2--4]{review-0573}.
+
+Boan's tool chain is an alternative complete preliminary analysis profile: IDM-CIC defines the system/geometry and budgets, Simu-CIC generates scenario ephemerides, IDM-Power forms temporal demand, Flows Manager converts ephemerides into incident fluxes, and Opalis models generation/storage/distribution and energy balance. Their linked inputs and outputs explain how the profile integrates, rather than forming a list of disconnected tools. The paper calls the tools non-compulsory and Opalis proprietary but open. Current access and transfer compatibility remain unknown \citep[Secs.~2--4]{review-0289}.
+
+GREATCUBE+ is an optional concept-seeding profile. Its empirical, analytical/COTS and numerical placement levels supply progressively refined starting designs. Those outputs require source checks and mission adaptation before entering L04. It excludes price/availability from component trade-offs, uses limited heritage correlations and treats downstream electrical simulation as future work. It supplies no EPS acquisition or framework cost result \citep[Secs.~2--4]{review-0711}.
+
+Gateau's dependency graph/DSM and curated HDDL/HyperTension methods can refine activity recommendations from prerequisites and impacts. Its planning demonstration is separate from Nanospace integration and returns a valid plan rather than an optimum. Campioli's tree/mode/budget transfers support PA-VS interfaces. Its broader AIV/T extension remains prospective \citep[Secs.~3--6]{review-0340} \citep[Sec.~6]{campioli2025integration}.
+
+Zhu supports a conditional PyBaMM SPM/DFN and thermal/calibration profile using supplied data. PhysicsNeMo surrogates require suitable training data, independent assessment, uncertainty and intended-use justification. Omniverse/OpenUSD is an optional geometry view only when illumination, accommodation or thermal decisions need it. No mandatory 3D, Isaac, autonomous control or live feedback is inherited. Geometry supplies no electrical fidelity \citep[pp.~7--9]{handpicked-0001}.
+
+Electrical, thermal and every applicable EMC/geometry profile require verified mappings, units, time bases, numerical checks, supported effects and independent reference evidence. A declared specialist tool or transparent analysis is selected for each required question. No source establishes a complete EMC implementation here. Averaged or lossless converters cannot support switching-spectrum/loss claims. Casado omits PV degradation, fixes battery temperature/SOH and simplifies loads. These limits require explicit restrictions or verified extensions. Missing mandatory discipline capability blocks the affected complete-use claim.
+
+RAM transformations retain identified functions/components, dependencies, assumptions, missing failure/repair data and uncertainty. Calibration retains prior/revised parameters, supplied-data identity and residual units. Independent assessment stays separate. All profiles preserve raw histories, invalid/missing samples, masks, sample/receipt times, solver settings, resources, failures and partial results. cFS and F-Prime are optional engineer-selected host integration mappings, each requiring verification. Corresponding MIL/SIL runs use matched stimuli and fixed comparison rules. Successful execution or replay establishes no framework V\&V, predictive validity or EPS readiness.

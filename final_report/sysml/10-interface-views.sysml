@@ -1,136 +1,344 @@
-// Detailed external interface specifications and high-level typed exchange bundles.
+// Current native interface specification and black-box function signatures.
 package BoundaryViews {
     private import FrameworkDomain::*;
-    private import ScalarValues::String;
+    private import ScalarValues::*;
+    doc /* Versioned interface specifications define information meaning and receiving checks. Algorithm, transport, tool implementation and storage selections belong to later architecture. IF-05 is retired with no current participant or exchange. */
 
-    doc /* OOSEM 17.3.3: the system context specifies the framework as a black box
-         * interacting with external actors through typed input/output flows.
-         * Each bundle below groups existing directed P01..P06 features for the
-         * report. It adds no transport, tool-specific schema or implementation
-         * capability. The exact 19 flows remain inside Context::IF01..IF06.
-         * FrameworkDomain retains the original payload and port definitions.
-         */
-
-    item def 'Needs/criteria' :> Submission01 {
-        doc /* Needs, changes, requirements, mission assumptions, criteria and
-             * decisions supplied by PM, SE, EPS and non-EPS engineers. */
+    // Typed black-box signatures. Mission-level definitions are unchanged.
+    // The shared legacy signatures in FrameworkDomain are compatibility bases only.
+    item def Quantity :> EngineeringArtifact {
+        attribute value : Real [0..1];
+        attribute unit : String;
+        attribute quantityKind : String;
+        attribute uncertainty : String;
+        attribute unknownReason : String [0..1];
     }
-    item def 'Models/justification' :> Response01 {
-        doc /* Guidance, templates, models, traces, impacts, BOM/cost and
-             * justification returned to the engineering team. */
+    item def ContextRevision :> EngineeringArtifact {
+        attribute missionRevision : String;
+        attribute requirementsRevision : String;
+        attribute designRevision : String;
+        attribute sourcesRevision : String;
+        attribute criteriaRevision : String;
+        attribute scopeRevision : String;
     }
-    item def 'Facts/methods' :> Submission02 {
-        doc /* Supplier datasheets, part identities, quotes/prices, evidence,
-             * standards, literature methods and tailoring rules. */
+    item def EngineeringDecision :> NeedRequirementDecision {
+        attribute authorizedRole : String;
+        attribute disposition : String;
+        attribute rationale : String;
+        attribute subjectRevision : String;
+        attribute acceptedModifiedRejectedDeferred : String;
+        doc /* An identified human decision. Technical review progression additionally requires TechnicalReviewDecision and agreed success criteria. */
     }
-    item def 'Catalogue/assumptions' :> Response02 {
-        doc /* Source-linked catalogue, registered assumptions and status.
-             * This does not transfer supplier qualification authority. */
+    item def RequirementRecord :> NeedRequirementDecision {
+        attribute statement : String;
+        attribute level : String;
+        attribute parentAndSourceRevisions : String [0..*];
+        attribute conditionQuantityUnitCriterion : String;
+        attribute ownerAndMethod : String;
+        attribute unresolvedOrInapplicableRationale : String;
     }
-    item def 'Plans/inputs' :> EngineeringArtifact {
-        ref item inputs : Submission03;
-        ref item plan : ScenarioAnalysisPlan;
-        doc /* Framework outputs P03.submission and P03.executionPlan:
-             * controlled inputs, run contract and analysis plan. */
+    item def MissionDefinition :> EPSModelArtifact {
+        attribute expectationsConstraints : String [0..*];
+        attribute orbitAttitudeDurationEnvironment : String;
+        attribute nominalDegradedConOps : String;
+        attribute modesLoadsSchedulesTransitions : String;
+        attribute scenarioRevision : String;
     }
-    item def 'Results/limits' :> EngineeringArtifact {
-        ref item context : Response03;
-        ref item rawResults : RunPackage;
-        doc /* Framework inputs P03.response and P03.rawResult: raw results,
-             * environment identity, runtime, applicability and limitations. */
+    item def DesignConfiguration :> EPSModelArtifact {
+        ref item mission : MissionDefinition;
+        ref item requirements : RequirementRecord [0..*];
+        attribute functionsElementsAllocationsInterfaces : String;
+        attribute candidateComponentVariants : String;
+        attribute parametersExtensionsAssumptions : String;
+        attribute physicalDesignModelReferences : String [0..*];
     }
-    item def 'Definitions/builds/resources' :> EngineeringArtifact {
-        ref item definitions : Submission04;
-        ref item implementation : SoftwareArtifact;
-        ref item resourceEvidence : RunPackage;
-        doc /* Framework inputs P04.submission, implementationArtifact and
-             * resourceEvidence: dictionaries, commands/modes, target profiles,
-             * builds and processor, memory, timing and power evidence. */
+    item def DesignStudy :> BOMCostRAM {
+        ref item configuration : DesignConfiguration;
+        ref item quantities : Quantity [0..*];
+        attribute powerEnergySizingEquationsMargins : String;
+        attribute bomMassVolumeCostAvailability : String;
+        attribute commonCriteriaAlternativesSensitivity : String;
+        attribute feasibilityRiskUnknowns : String;
     }
-    item def 'Contract/mappings' :> EngineeringArtifact {
-        ref item findings : Response04;
-        ref item contract : ArchitectureServiceContract;
-        doc /* Framework outputs P04.response and sharedContract: checked
-             * flight/ground mappings, integration findings and shared contract. */
+    item def GuidanceRequest :> EngineeringArtifact {
+        ref item context : ContextRevision;
+        attribute phaseMaturityQuestion : String;
+        attribute availableInputsValidityResourcesScope : String;
+        attribute trigger : String;
     }
-    item def 'Profiles/observations' :> EngineeringArtifact {
-        ref item profiles : Submission05;
-        ref item observations : ObservationPackage;
-        doc /* Framework inputs P05.submission and suppliedObservations:
-             * equipment/DUT profiles, safety dispositions, timestamped raw
-             * observations, calibration data, invalid samples and masks. */
+    item def AssistanceFinding :> EngineeringArtifact {
+        attribute affectedTextRecords : String;
+        attribute ruleOrSourcePassage : String;
+        attribute correctionOrQuestion : String;
+        attribute deterministicOrProbable : String;
+        attribute uncertaintyAssessmentLimit : String;
+        attribute assessedNotAssessedNoFinding : String;
     }
-    item def 'Procedure/feedback' :> EngineeringArtifact {
-        ref item feedback : Response05;
-        ref item procedure : VerificationSpecification;
-        doc /* Framework outputs P05.response and plannedProcedure:
-             * verification procedure/capture proposal, quality checks and
-             * proposed update records, not facility authorization. */
+    item def MethodRecommendation :> EngineeringArtifact {
+        attribute methodOrModelPurpose : String;
+        attribute applicabilityInputsValidityResourcesScope : String;
+        attribute rationaleSourcePassage : String;
+        attribute alternativesRejectionsUnresolvedGaps : String;
+        attribute assessedScopeUncertainty : String;
     }
-    item def 'Requests/findings' :> Submission06 {
-        doc /* Named analyses, review/reproduction requests, reference answers
-             * and findings supplied by reviewers, researchers or reproducers. */
+    item def AssistanceReport :> KnowledgeCaseReview {
+        ref item context : ContextRevision;
+        ref item findings : AssistanceFinding [0..*];
+        ref item recommendations : MethodRecommendation [0..*];
+        attribute prerequisiteActivitiesReassessments : String;
+        attribute ruleReferenceAssessmentRevision : String;
+        attribute currentStalePendingUnavailable : String;
+        attribute triggerTimeFirstResponseTimeCompletionTimeSeconds : String;
+        doc /* Suggestions establish no technical verification or human approval. A later edit invalidates currency before a late response can be applied. */
     }
-    item def 'Packages/replay' :> Response06 {
-        doc /* Reconstructable packages, replay verdicts, views, measured
-             * evaluation observations and retained dispositions. */
+    item def ReferenceData :> ObservationPackage {
+        attribute independentCalibrationAssessmentUse : String;
+        attribute channelsUnitsSampleReceiptTimes : String;
+        attribute completenessInvalidValuesMasks : String;
+        attribute suppliedSourceDomainUncertainty : String;
     }
-
-    metadata def ExternalInterfaceSpecification {
-        attribute identifier : String;
-        attribute actors : String;
-        attribute responsibleComponents : String;
-        attribute receivingChecks : String;
-        attribute failureBehavior : String;
-        attribute externalAuthority : String;
+    item def ModelAssessment :> ModelCredibility {
+        attribute intendedUseFidelityMechanismsOmissions : String;
+        attribute validityDomainNumericalChecks : String;
+        attribute calibrationDataRevision : String [0..1];
+        attribute independentAssessmentDataRevision : String [0..1];
+        attribute residualsUncertaintyAcceptanceRules : String;
+        attribute reviewerDispositionEvidenceGaps : String;
     }
-
-    @ExternalInterfaceSpecification about FrameworkContext::Context::IF01 {
-        identifier = "IF-01";
-        actors = "Project manager, systems engineer, EPS and non-EPS engineers; roles may share people";
-        responsibleComponents = "L09 case workspace/technical review; L02 requirements/decision governance";
-        receivingChecks = "Check case scope, identity and unresolved criteria";
-        failureBehavior = "Incomplete submissions remain draft; reject/quarantine incompatible transfers and preserve the accepted baseline";
-        externalAuthority = "Engineers authorize mission decisions, changes and EPS acceptance criteria";
+    item def AnalysisPlan :> ScenarioAnalysisPlan {
+        ref item configuration : DesignConfiguration;
+        ref item assessment : ModelAssessment;
+        attribute methodInputsOutputsCriterion : String;
+        attribute scenarioTimeStepCouplingConvergence : String;
+        attribute environmentVersionsResourcesRuntimeLimit : String;
+        attribute selectedFaultsProtectionRecovery : String;
     }
-    @ExternalInterfaceSpecification about FrameworkContext::Context::IF02 {
-        identifier = "IF-02";
-        actors = "Suppliers, standards owners and literature sources";
-        responsibleComponents = "L01 guidance/knowledge; L04 component/lifecycle characterization";
-        receivingChecks = "Check source, revision, units and applicability";
-        failureBehavior = "Unsupported facts stay unknown; rejected submissions and findings are retained";
-        externalAuthority = "Supplier qualification and source truth remain external";
+    item def AnalysisResult :> RunPackage {
+        ref item plan : AnalysisPlan;
+        ref item samples : ReferenceData [0..*];
+        attribute exactVersionsInputsEnvironmentRawOutputs : String;
+        attribute executionSuccessFailedCancelledPartial : String;
+        attribute quantitiesLimitsUncertaintyCriterionVerdicts : String;
+        attribute replayDependenciesSeedsComparisonRules : String;
     }
-    @ExternalInterfaceSpecification about FrameworkContext::Context::IF03 {
-        identifier = "IF-03";
-        actors = "Declared electrical, thermal, EMC, CAD, orbit/attitude, battery and RAM tools or their operators";
-        responsibleComponents = "L05 analysis orchestration; L03 architecture/service contracts; L08 information/configuration authority";
-        receivingChecks = "Check supported tool/version profiles, applicability and transfer integrity";
-        failureBehavior = "Preserve failed runs and unsupported/lossy mappings; no unsupported claim receives unqualified support";
-        externalAuthority = "External tools/operators execute declared analyses; execution success is not a verification verdict";
+    item def EPSInterfaceSpecification :> ArchitectureServiceContract {
+        attribute endpointsIdentifiersTypesUnitsRangesEncoding : String;
+        attribute polarityTimeModeOwnership : String;
+        attribute commandsTelemetryEventsParameters : String;
+        attribute guardsOrderEffectsRejectionRecovery : String;
+        attribute selectedSoftwareMappingRevision : String;
+        attribute unsupportedOrLossyMeanings : String;
     }
-    @ExternalInterfaceSpecification about FrameworkContext::Context::IF04 {
-        identifier = "IF-04";
-        actors = "Flight/ground contributors and declared cFS/F-Prime build/configuration environments";
-        responsibleComponents = "L03 architecture/service contracts";
-        receivingChecks = "Check versions, typed-connection/message semantics and target resource evidence";
-        failureBehavior = "Missing implementation or target evidence remains unresolved; preserve rejected and unsupported mappings";
-        externalAuthority = "Mission functionality remains an engineered artifact; contributors own implementation and flight qualification is not presumed";
+    item def EPSAssessmentPlan :> VerificationSpecification {
+        ref item configuration : DesignConfiguration;
+        attribute verificationRequirements : String [0..*];
+        attribute validationExpectationsConOps : String [0..*];
+        attribute subjectMethodConditionsInputsExpectedCriterion : String;
+        attribute observationsApplicabilityLimitsStatus : String;
+        doc /* EPS phase-product assessment plan only. Framework V&V and research evaluation have different subjects. Analysis, MIL and SIL use no target hardware. */
     }
-    @ExternalInterfaceSpecification about FrameworkContext::Context::IF05 {
-        identifier = "IF-05";
-        actors = "Testing facility technician, facility safety authority and later instruments/DUTs";
-        responsibleComponents = "L07 verification specification/safety; L06 model credibility/observation reconciliation";
-        receivingChecks = "L07 checks safety/procedure completeness; L06 checks clocks, channels, completeness and validity";
-        failureBehavior = "Preserve raw/invalid samples and masks; incomplete readiness remains blocked";
-        externalAuthority = "The facility alone authorizes physical work and owns feasibility, safety approval and execution";
+    item def SoftwareAssessment :> EngineeringArtifact {
+        ref item specification : EPSInterfaceSpecification;
+        attribute scopedBehaviorMappingCompatibilityGaps : String;
+        attribute milSilComparisonDisposition : String;
     }
-    @ExternalInterfaceSpecification about FrameworkContext::Context::IF06 {
-        identifier = "IF-06";
-        actors = "Reviewer, researcher or reproducer; these may be separate roles held by mission-team members";
-        responsibleComponents = "L09 case workspace/technical review; L05 analysis orchestration";
-        receivingChecks = "Identify the review subject, dependencies, comparison rule and replay tolerance";
-        failureBehavior = "Missing dependencies and contested findings remain explicit; preserve findings and dispositions";
-        externalAuthority = "Reviewer outcomes, study governance and project/research-deliverable assessment remain separate authorities";
+    item def HostSoftwareProduct :> SoftwareArtifact {
+        attribute sourceBuildDependencyRevision : String;
+        attribute declaredHostEnvironment : String;
+        attribute authorizedDesignRelease : String;
+    }
+    item def SoftwareRunResult :> RunPackage {
+        ref item product : HostSoftwareProduct;
+        attribute hostToolchainBuildLogs : String;
+        attribute simulatedInputsExpectedOutputsActualOutputs : String;
+        attribute milSilDifferencesFailuresStatus : String;
+    }
+    item def ChangeProposal :> NeedRequirementDecision {
+        ref item previousBaseline : PhaseBaseline;
+        attribute submittedReplacementsRationale : String;
+        attribute reciprocalImpactsUnresolvedDependencies : String;
+        attribute repeatedChecksStaleEvidence : String;
+        ref item decision : EngineeringDecision [0..1];
+    }
+    item def ReviewRequest :> EngineeringArtifact {
+        ref item baseline : PhaseBaseline;
+        attribute phaseReviewEntranceSuccessCriteriaRevision : String;
+        attribute requestedAssessmentScope : String;
+    }
+    item def ReviewFinding :> EngineeringArtifact {
+        attribute baselineCriteriaSubject : String;
+        attribute blockingConditionalAdvisory : String;
+        attribute findingRationaleActionOwnerDueDate : String;
+    }
+    item def ReviewPackage :> TechnicalReviewPackage {
+        ref item evidence : AnalysisResult [0..*];
+        ref item findings : ReviewFinding [0..*];
+        attribute requirementsExpectationsCoverage : String;
+        attribute designDecisionsViewsLimitsGaps : String;
+    }
+    item def EngineeringSubmission :> Submission01 {
+        ref item context : ContextRevision;
+        ref item mission : MissionDefinition [0..1];
+        ref item requirements : RequirementRecord [0..*];
+        ref item design : DesignConfiguration [0..1];
+        ref item guidance : GuidanceRequest [0..1];
+        ref item changes : ChangeProposal [0..*];
+        ref item decisions : EngineeringDecision [0..*];
+        ref item review : ReviewRequest [0..1];
+    }
+    item def EngineeringResponse :> Response01 {
+        ref item context : ContextRevision;
+        ref item assistance : AssistanceReport [0..1];
+        ref item study : DesignStudy [0..1];
+        ref item assessment : ModelAssessment [0..1];
+        ref item changes : ChangeProposal [0..*];
+        ref item baseline : PhaseBaseline [0..1];
+        ref item reviewPackage : ReviewPackage [0..1];
+        attribute transferFindingsStatus : String;
+    }
+    item def SourceSubmission :> Submission02 {
+        attribute sourceAuthorityRevisionLocator : String;
+        attribute componentPropertiesPricesDatesEvidence : String;
+        attribute methodsModelsApplicabilityLimits : String;
+        ref item referenceData : ReferenceData [0..*];
+    }
+    item def SourceQuery :> Response02 {
+        attribute questionRequiredPropertiesSourceRevision : String;
+        attribute receiptFindingsUnknowns : String;
+    }
+    item def AnalysisRequest :> Submission03 { ref item plan : AnalysisPlan; }
+    item def AnalysisResponse :> Response03 {
+        attribute requestRevisionEnvironmentRuntimeStatus : String;
+        attribute unsupportedMappingsDiagnostics : String;
+    }
+    item def CodingResponse :> Submission04 {
+        attribute requestDesignRevisionHostEnvironmentStatus : String;
+        attribute diagnosticsCompatibilityGaps : String;
+    }
+    item def CodingRequest :> Response04 {
+        ref item design : EPSInterfaceSpecification;
+        attribute approvedScopeBuildSilInputsCriteria : String;
+        attribute requiredHostVersionsDependencies : String;
+    }
+    item def ReviewSubmission :> Submission06 {
+        ref item findings : ReviewFinding [0..*];
+        ref item decisions : TechnicalReviewDecision [0..*];
+        attribute subjectBaselineAuthorizedRole : String;
+    }
+    item def ReviewResponse :> Response06 {
+        ref item reviewPackage : ReviewPackage;
+        attribute recordedDispositionProgressionConditions : String;
+    }
+    port def EngineeringUsePort :> P01 {
+        in item engineeringSubmission : EngineeringSubmission :>> submission;
+        out item engineeringResponse : EngineeringResponse :>> response;
+    }
+    port def KnowledgePort :> P02 {
+        in item sourceSubmission : SourceSubmission :>> submission;
+        out item sourceQuery : SourceQuery :>> response;
+    }
+    port def AnalysisPort :> P03 {
+        out item analysisRequest : AnalysisRequest :>> submission;
+        in item analysisResponse : AnalysisResponse :>> response;
+        out item analysisPlan : AnalysisPlan :>> executionPlan;
+        in item analysisResult : AnalysisResult :>> rawResult;
+    }
+    port def HostSoftwarePort :> P04 {
+        in item codingResponse : CodingResponse :>> submission;
+        out item codingRequest : CodingRequest :>> response;
+        out item interfaceSpecification : EPSInterfaceSpecification :>> sharedContract;
+        in item softwareProduct : HostSoftwareProduct :>> implementationArtifact;
+        in item softwareResult : SoftwareRunResult :>> resourceEvidence;
+    }
+    port def TechnicalReviewPort :> P06 {
+        in item reviewSubmission : ReviewSubmission :>> submission;
+        out item reviewResponse : ReviewResponse :>> response;
+    }
+    interface def <'IF-01'> EngineeringUseInterface {
+        end client : ~EngineeringUsePort;
+        end framework : EngineeringUsePort;
+    }
+    interface def <'IF-02'> KnowledgeInterface {
+        end client : ~KnowledgePort;
+        end framework : KnowledgePort;
+    }
+    interface def <'IF-03'> AnalysisInterface {
+        end client : ~AnalysisPort;
+        end framework : AnalysisPort;
+    }
+    interface def <'IF-04'> HostSoftwareInterface {
+        end client : ~HostSoftwarePort;
+        end framework : HostSoftwarePort;
+    }
+    interface def <'IF-06'> TechnicalReviewInterface {
+        end client : ~TechnicalReviewPort;
+        end framework : TechnicalReviewPort;
+    }
+    action def F01 :> FrameworkDomain::F01 {
+        in item request : GuidanceRequest;
+        out item guidance : AssistanceReport;
+        doc /* F01: Recommend lifecycle activities, derivation/analysis/V&V methods and models from the current question, maturity, dependencies and scoped resources. */
+    }
+    action def F02 :> FrameworkDomain::F02 {
+        in item submission : EngineeringSubmission;
+        out item response : EngineeringResponse;
+        doc /* F02: Check drafts actively, explain findings and corrections, derive and allocate requirements with engineer dispositions and bidirectional traces. */
+    }
+    action def F03 :> FrameworkDomain::F03 {
+        in item configuration : DesignConfiguration;
+        out item study : DesignStudy;
+        doc /* F03: Calculate preliminary power/energy budgets and sizing, characterize modeled components and compare EPS alternatives with resources and uncertainty. */
+    }
+    action def F04 :> FrameworkDomain::F04 {
+        in item :>> observations : ReferenceData [0..*];
+        in item plan : AnalysisPlan;
+        out item result : AnalysisResult;
+        doc /* F04: Coordinate coupled time-dependent and applicable RAM analyses, model assessment and reproducible execution through declared software tools. */
+    }
+    action def F05 :> FrameworkDomain::F05 {
+        in item specification : EPSInterfaceSpecification;
+        out item assessment : SoftwareAssessment;
+        doc /* F05: Specify and check detailed EPS control/interfaces, coordinate approved host coding and MIL/SIL assessment against simulated products. */
+    }
+    action def F06 :> FrameworkDomain::F06 {
+        in item :>> analyticalResults : AnalysisResult [0..*];
+        in item plan : EPSAssessmentPlan;
+        out item findings : ReviewFinding [0..*];
+        doc /* F06: Plan EPS phase-product verification and validation and assess applicable results against requirements and expectations with explicit limitations. */
+    }
+    action def F07 :> FrameworkDomain::F07 {
+        in item proposal : ChangeProposal;
+        out item baseline : PhaseBaseline;
+        doc /* F07: Check transfers, identify impacts, invalidate affected guidance/evidence and retain coherent successors only after authorized engineering decisions. */
+    }
+    action def F08 :> FrameworkDomain::F08 {
+        in item request : ReviewRequest;
+        out item reviewPackage : ReviewPackage;
+        doc /* F08: Prepare baseline-linked views and review evidence, record findings and designated authority decisions against agreed scoped success criteria. */
+    }
+    @InterfaceControl about EngineeringUsePort {
+        owner = "IF-01, F01/F02/F03/F07, engineering use";
+        validation = "Current context revision, scoped request, record fields, decision identity and authorized role";
+        failureBehavior = "Retain raw request and findings. Incomplete drafts remain unresolved. Unauthorized or stale decisions change no controlled record.";
+    }
+    @InterfaceControl about KnowledgePort {
+        owner = "IF-02, F01/F03/F04, knowledge and supplied data";
+        validation = "Source locator, authority, revision, applicability, quantity units and data-use separation";
+        failureBehavior = "Keep missing properties unknown and conflicting sources separate. Source retrieval establishes no truth or mandatory applicability.";
+    }
+    @InterfaceControl about AnalysisPort {
+        owner = "IF-03, F04/F06/F07, model execution";
+        validation = "Plan and model revision, supported discipline mappings, validity, units, time base, convergence and environment";
+        failureBehavior = "Retain failed/cancelled/partial logs and raw results. Unsupported effects, failed numerical checks or out-of-domain results support no unqualified conclusion.";
+    }
+    @InterfaceControl about HostSoftwarePort {
+        owner = "IF-04, F05/F06/F07, host coding/build/SIL";
+        validation = "Authorized design release, scope, interface revision, selected integration profile, host dependencies and build identity";
+        failureBehavior = "Block unreleased coding. Retain build failures and mapping gaps. MIL/SIL establishes no target-hardware qualification.";
+    }
+    @InterfaceControl about TechnicalReviewPort {
+        owner = "IF-06, F08/F07, technical review";
+        validation = "Exact baseline, scoped criteria revision, findings and designated review authority";
+        failureBehavior = "A prepared package confers no acceptance. Blocking findings prevent progression. Conditional decisions retain limits, actions, owners and dates. Reject unauthorized or stale-baseline dispositions.";
     }
 }

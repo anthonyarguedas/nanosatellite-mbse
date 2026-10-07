@@ -1,4 +1,6 @@
-# Scoped native Syside presentation for ScenarioViews only.
+# Scoped native Syside presentation for lifecycle scenarios and system context.
+# check_scenarios.py includes all current model dependencies and checks
+# scenario/black-box consistency. It executes no empirical framework V&V.
 # Responsibility is modeled by metadata and allocations in 09-scenarios.sysml.
 # The CLI selects metaclasses, not arbitrary metadata. External calls are genuine
 # PerformActionUsage instances of the named external behavior definitions.
@@ -11,6 +13,15 @@ max_entries = 0
 show_node_heritage_edges = false
 show_attributes_as = "hidden"
 show_inherited_nodes = false
+
+[viz.filters.interconnection]
+show_node_heritage_edges = false
+show_port_heritage_edges = false
+show_inherited_nodes = true
+show_attributes_as = "hidden"
+
+[viz.expose]
+mode = "flat"
 
 [viz.style]
 theme = "light_mono"

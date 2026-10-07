@@ -1,99 +1,63 @@
 {
-  "scope": "Report and SysML model consistency, native figure provenance and publication layout. Framework implementation verification is not executed.",
-  "report_pdf": {
-    "path": "final_report/main.pdf",
-    "pages": 80,
-    "sha256": "e23cade0db8c98d6451328746d1384a073c2c55adc63b0763c0e4c7106e794fe"
+  "schema_version": 4,
+  "scope": "Current automatic specification/publication checks. Empirical framework verification, validation and research evaluation are not executed.",
+  "status": "passed within specification/publication check scope, final read-only publication review completed",
+  "source_of_truth": ["final report", "native SysML v2 model"],
+  "report_pdf": {"path":"final_report/main.pdf","pages":96,"sha256":"943c1f2311bb1391835cc13614d12c2347b43fd04560a480bba48d3d105ce2c4"},
+  "current_counts": {
+    "concern_occurrences":141,"root_concerns":30,"mission_requirements":5,"use_cases":5,"mission_scenarios":5,
+    "framework_requirements":41,"black_box_functions":8,"logical_components":8,"planned_verification_cases":41,
+    "measures_of_effectiveness":4,"measures_of_performance":6,
+    "candidate_allocations":{"PA-COM":41,"PA-CDT":41,"PA-GY":41,"PA-NS":41,"PA-VS":41},
+    "native_view_assets":9,"publication_figures":8,"glossary_acronyms":67
   },
-  "source_of_truth": {
-    "report": "final_report/solucion.tex and its direct TeX inputs",
-    "detailed_design": "final_report/sysml/",
-    "supporting_records": "Historical provenance and supplementary material. No separate design registry is required to understand the proposal."
+  "native_checks": {"full_model_files":17,"errors":0,"warnings":0,"warnings_as_errors":true,"uncapped_elements":8658,"uncapped_relationships":81929,"elements_truncated":false,"relationships_truncated":false,"satisfaction_assertions":0},
+  "scenario_checks": {
+    "status":"passed specification checks, not empirical V&V","native_errors":0,"native_warnings":0,
+    "scenarios":5,"summary_views":5,"actor_allocations":53,"guarded_alternatives":12,"scenario_typed_flows":28,"interface_typed_flows":15,"requirements":41,"mr_derivations":83,"retired_requirement":"FR-40",
+    "review_control":{"review_transitions":6,"truth_table_cases":96,"closed_prior_conditions_renewed_conditional":"remains conditional","source":"Syside semantic expression tree"}
   },
-  "native_figures": [
-    {
-      "figure": "fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc01view.pdf",
-      "view": "ScenarioViews::sc01View",
-      "manifest": "fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc01view.manifest.json",
-      "native_svg_sha256": "1d41cd24e683912ed7de92f0ee82dcf248484a9f86ccf9022231ba932d5294f5",
-      "exact_pdf_source_hash_matches": true
-    },
-    {
-      "figure": "fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc02view.pdf",
-      "view": "ScenarioViews::sc02View",
-      "manifest": "fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc02view.manifest.json",
-      "native_svg_sha256": "0f9b505a3da90a7691def054735dffe8cdea5e593f58a04409ddee0fb9aac144",
-      "exact_pdf_source_hash_matches": true
-    },
-    {
-      "figure": "fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc03view.pdf",
-      "view": "ScenarioViews::sc03View",
-      "manifest": "fig/sysml/scenarios/09-scenarios-defined-view-scenarioviews-sc03view.manifest.json",
-      "native_svg_sha256": "24bf2a82e36347de18f3d4e12bb817002152e7b8ef386b954df47e46492c4445",
-      "exact_pdf_source_hash_matches": true
-    },
-    {
-      "figure": "fig/sysml/context/sysml-defined-view-reportviews-contextview.pdf",
-      "view": "ReportViews::contextView",
-      "manifest": "fig/sysml/context/sysml-defined-view-reportviews-contextview.manifest.json",
-      "native_svg_sha256": "3f60d1e18cdae4ae9b77d5aeaabbb9fed23b900554509c658620707fbaf0f95e",
-      "exact_pdf_source_hash_matches": true
-    },
-    {
-      "figure": "fig/sysml/logical/sysml-defined-view-logicalresponsibilityviews-definitionresponsibilities.pdf",
-      "view": "LogicalResponsibilityViews::definitionResponsibilities",
-      "manifest": "fig/sysml/logical/sysml-defined-view-logicalresponsibilityviews-definitionresponsibilities.manifest.json",
-      "native_svg_sha256": "a176bbc110733538a222ac107d6434c4a9bbd04a9827bf313644293a0706d020",
-      "exact_pdf_source_hash_matches": true
-    },
-    {
-      "figure": "fig/sysml/logical/sysml-defined-view-logicalresponsibilityviews-analysisresponsibilities.pdf",
-      "view": "LogicalResponsibilityViews::analysisResponsibilities",
-      "manifest": "fig/sysml/logical/sysml-defined-view-logicalresponsibilityviews-analysisresponsibilities.manifest.json",
-      "native_svg_sha256": "06fb48c32aa6f703be23f5d791369d7f73b8d82691df0e5dcc6c2b32dea370c7",
-      "exact_pdf_source_hash_matches": true
-    },
-    {
-      "figure": "fig/sysml/logical/sysml-defined-view-logicalresponsibilityviews-assuranceresponsibilities.pdf",
-      "view": "LogicalResponsibilityViews::assuranceResponsibilities",
-      "manifest": "fig/sysml/logical/sysml-defined-view-logicalresponsibilityviews-assuranceresponsibilities.manifest.json",
-      "native_svg_sha256": "85e659ee607ff8f45bc1ae81751ce921860d6c2f1a0b620b0fcc2365ffafeb77",
-      "exact_pdf_source_hash_matches": true
-    },
-    {
-      "figure": "fig/sysml/physical/sysml-defined-view-reportviews-selectedphysicalview.pdf",
-      "view": "ReportViews::selectedPhysicalView",
-      "manifest": "fig/sysml/physical/sysml-defined-view-reportviews-selectedphysicalview.manifest.json",
-      "native_svg_sha256": "5256c15713575900126e56ef074486630d2f1a35f14b6f0ac4578e257e272f04",
-      "exact_pdf_source_hash_matches": true
-    }
-  ],
-  "semantic_check": {
-    "valid": true,
-    "errors": 0,
-    "warnings": 0,
-    "tool": "Syside Automator"
+  "logical_checks": {
+    "status":"passed","native_errors":0,"native_warnings":0,"components":8,"current_FRs":41,"supporting_allocations":43,"allocated_actions":133,"guarded_alternatives":68,"typed_realization_flows":158,"typed_internal_exchanges":12,"report_and_ledger_match":true,"verification":"planned only"
   },
-  "focused_checks": {
-    "framework_requirement_statements_match": 40,
-    "primary_FR_allocations": 40,
-    "logical_component_summaries": 9,
-    "scenario_ownership_color_actor_allocations": 24,
-    "guarded_scenario_links": 14,
-    "boundary_interfaces": 6,
-    "exact_typed_boundary_flows": 19,
-    "publication_figures": 6,
-    "native_diagrams": 8,
-    "glossary_acronyms": 50,
-    "audit_unit_tests": 9
+  "physical_checks": {
+    "status":"passed specification checks, not framework V&V","physical_flows":69,"native_guards_checked":10,"profile_guard_cases":80,
+    "per_candidate":{"primary_FR":41,"performed_refinements":7,"admitted_execution_calls":7,"external_port_routes":13},
+    "candidate_count":5,"scope":"Full current native dependencies, actual performed calls/adapters and planned allocations"
   },
-  "source_fidelity_and_trace_audit": "report-audit.json",
+  "negative_cases": {"scenario":18,"logical":21,"physical":44,"total":83,"all_rejected":true,"physical_mutants_natively_valid_before_semantic_rejection":42},
+  "report_audit": {"status":"passed","native_inspection":true,"actual_final_latex_log":true,"unit_tests_passed":61,"scope":"report/model checks only","record":"validation/report-audit.json"},
   "layout": {
-    "undefined_references": 0,
-    "undefined_citations": 0,
-    "overfull_boxes": 0,
-    "reviewed_pdf_pages": [41, 42, 43, 45, 54, 55, 56],
-    "inherited_bookmark_hierarchy_warnings": 2
+    "undefined_citations":0,"undefined_references":0,"overfull_boxes":0,"oversized_floats":0,
+    "inherited_bookmark_hierarchy_warnings":1,"remaining_warning_source":"Untouched resultados.tex heading on input line 5",
+    "underfull_box_messages":19,"reviewed_current_pdf_pages":[64,77,83],
+    "bibliography":"Actual latexmk/BibTeX completed","acronyms":"67 makeindex/nomencl entries accepted, zero rejected, final latexmk completed"
   },
-  "implementation_verification": "Not executed. V01 through V40 remain planned. Detailed payload schemas, tool profiles and execution procedures require further specification and agreement."
+  "protected_current_sha256": {
+    "as-is-domain.tex":"237ec05344d4eb560628b1e136b95abd3cfcd7bad7ffcc4102232406667ebdf2",
+    "intro.tex":"cce42b5c9fda5a13e51a6c9d648f47163215a2e029ac1f71b57128f74318d149",
+    "objectives.tex":"579570a217b9b523e8f066ac481742cdeba76c25f87be86ebf6692a1b8f235e1",
+    "titlepage.tex":"ba7d53b2f8571b26f2832ddc146f2099820a73c33967ca0450e005a9968fbf09"
+  },
+  "native_figures": {"assets":9,"report_figures":8,"registrations":"traceability/framework-baseline.json","manifests":"fig/sysml/lifecycle","actual_native_producer_graphs_verified":true,"exact_native_SVG_to_PDF_provenance":true,"source_hashes_current":true,"new_render_required":false},
+  "planned_protocols": {
+    "frameworkValidation":{"subject":"Future framework in representative engineering use","status":"planned, not executed"},
+    "epsPhaseProductVerification":{"subject":"Identified EPS concept, requirements, design model or released host software","status":"planned, not executed"},
+    "epsPhaseProductValidation":{"subject":"Identified EPS phase product against stakeholder expectations and ConOps","status":"planned, not executed"},
+    "modelCredibilityProtocol":{"subject":"Identified model and intended prediction, separate calibration and independent assessment","status":"planned, not executed"},
+    "researchEvaluation":{"subject":"Two fixed contrasting EPS cases, common reusable core and declared adaptations","status":"planned, not executed"}
+  },
+  "framework_requirement_verification": {
+    "status":"planned, not executed",
+    "case_ids":["V01","V02","V03","V04","V05","V06","V07","V08","V09","V10","V11","V12","V13","V14","V15","V16","V17","V18","V19","V20","V21","V22","V23","V24","V25","V26","V27","V28","V29","V30","V31","V32","V33","V34","V35","V36","V37","V38","V39","V41","V42"],
+    "observed_verdicts":0,"qualification":"numerical TBR resolution required before qualification"
+  },
+  "executed_framework_results": [],
+  "independent_review": "independent correctness review completed, both major findings closed on rereview",
+  "original_major_findings":2,"major_findings_closed":2,"empirical_approval":false,
+  "prose_review":{"performed":true,"bounded_passes_applied":[1,2,3]},
+  "final_publication_review":"completed read-only review, zero material blockers",
+  "publication_material_blockers":0,
+  "publication_review_evidence":{"scope":"publication of the proposed EPS framework specification, no empirical approval","review_record_sha256":"214a406d5a735e3875f988b087df2c41652c52671cb4876b56252cea259496ab","collected_result_sha256":"8e2610db4e1727286a20e0fea12963f753ca7bcd3f3694738568699f94911b37","report_pdf_sha256":"943c1f2311bb1391835cc13614d12c2347b43fd04560a480bba48d3d105ce2c4","empirical_approval":false},
+  "open_items":["stakeholder expectations, priorities and success criteria agreement", "risk-based numerical TBR and independent reference-set resolution", "profile credibility and deployment/access eligibility", "implementation, empirical framework V&V, EPS phase-product assessment and research evaluation"]
 }

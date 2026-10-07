@@ -1,57 +1,48 @@
 \section{Manage Requirements Traceability}
 \label{section:manage-requirements-traceability}
 
-Derivation, intended allocation and planned verification are distinct relations \citep[Sec.~17.3.7]{friedenthal2014practical}. Table~\ref{tab:framework-root-traces} gives one representative path per root. The paths flow from source concerns through mission requirements to framework system requirements, intended logical and physical responsibilities, and planned verification. All 144 concern occurrences retain their source wording in the stakeholder analysis. The accompanying SysML v2 model formalizes concern and requirement links, supporting responsibilities, candidate realizations and planned verification cases. The table is a representative explanation, not a claim that each requirement has only one source or supporting component. Every V case here is planned.
+OOSEM maintains requirements relationships throughout specification and design. Derivation explains the need for a requirement. A scenario refines an enterprise accomplishment. Allocation identifies an intended responsibility. A verification relationship identifies a planned check. These relations establish different claims \citep[Sec.~17.3.7]{friedenthal2014practical}.
+
+Stakeholder concerns shape the four MOEs, design priorities and scope constraints. The five mission requirements describe enterprise accomplishments across the EPS lifecycle. UC01--05 and SC01--05 refine those accomplishments into engineering work. The 41 framework requirements specify the behavior that supports that work.
+
+\subsection{Current specification and allocation paths}
+
+Table~\ref{tab:framework-root-traces} illustrates the lifecycle thread. A requirement can derive from several MRs and contribute to several scenarios. The requirement table gives its exact parents. The logical responsibility table gives every primary allocation. Supporting responsibilities retain information, applicability and control dependencies.
+
 {\small
 \setlength{\tabcolsep}{4pt}
-\setlength{\parskip}{0pt}
-\setlength{\LTpre}{0.4\baselineskip}
-\setlength{\LTpost}{0.4\baselineskip}
-\renewcommand{\arraystretch}{1.06}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.23\linewidth-0.92\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.37\linewidth-1.48\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.4\linewidth-1.6\tabcolsep\relax}@{}}
-\caption{Representative traceability paths to planned verification. Physical functions are named alongside component codes (VS-PC- prefix).}\label{tab:framework-root-traces}\\
+\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.44\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.40\linewidth-4\tabcolsep\relax}@{}}
+\caption{Representative current enterprise-to-framework paths. Each V case is planned.}\label{tab:framework-root-traces}\\
 \toprule
-\textbf{Source concern} & \textbf{MR $\rightarrow$ FR} & \textbf{Logical / physical / planned V} \\
+\textbf{Mission / use / scenario} & \textbf{Framework behavior} & \textbf{Intended responsibility / planned check} \\
 \midrule
 \endfirsthead
-\caption[]{Representative traceability paths to planned verification. Physical functions are named alongside component codes (VS-PC- prefix). (continued).}\\
-\toprule
-\textbf{Source concern} & \textbf{MR $\rightarrow$ FR} & \textbf{Logical / physical / planned V} \\
+\toprule \textbf{Mission / use / scenario} & \textbf{Framework behavior} & \textbf{Intended responsibility / planned check} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-\ConcernRef{C-PM-01} & MR-01 $\rightarrow$ FR-01 & L02 $\rightarrow$ Shared workspace (WEB) $\rightarrow$ V01 \\
-\ConcernRef{C-PM-02} & MR-03 $\rightarrow$ FR-12 & L04 $\rightarrow$ Component data (CHARACTERIZATION) $\rightarrow$ V12 \\
-\ConcernRef{C-PM-03} & MR-04 $\rightarrow$ FR-18 & L03 $\rightarrow$ Exchange checks (BRIDGE) $\rightarrow$ V18 \\
-\ConcernRef{C-PM-04} & MR-09 $\rightarrow$ FR-10 & L05 $\rightarrow$ Scenario analyses (SCENARIO) $\rightarrow$ V10 \\
-\ConcernRef{C-PM-05} & MR-11 $\rightarrow$ FR-39 & L09 $\rightarrow$ Case evaluation (EVALUATION) $\rightarrow$ V39 \\
-\ConcernRef{C-SE-01} & MR-02 $\rightarrow$ FR-04 & L02 $\rightarrow$ Requirements and changes (GOVERNANCE) $\rightarrow$ V04 \\
-\ConcernRef{C-SE-02} & MR-10 $\rightarrow$ FR-04 & L02 $\rightarrow$ Requirements and changes (GOVERNANCE) $\rightarrow$ V04 \\
-\ConcernRef{C-SE-03} & MR-02 $\rightarrow$ FR-05 & L02 $\rightarrow$ Requirements and changes (GOVERNANCE) $\rightarrow$ V05 \\
-\ConcernRef{C-SE-04} & MR-02 $\rightarrow$ FR-05 & L02 $\rightarrow$ Requirements and changes (GOVERNANCE) $\rightarrow$ V05 \\
-\ConcernRef{C-SE-05} & MR-06 $\rightarrow$ FR-26 & L02 $\rightarrow$ Requirements and changes (GOVERNANCE) $\rightarrow$ V26 \\
-\ConcernRef{C-SE-06} & MR-04 $\rightarrow$ FR-16 & L05 $\rightarrow$ Scenario analyses (SCENARIO) $\rightarrow$ V16 \\
-\ConcernRef{C-SE-07} & MR-02 $\rightarrow$ FR-07 & L08 $\rightarrow$ Released archive (ARCHIVE) $\rightarrow$ V07 \\
-\ConcernRef{C-SE-08} & MR-05 $\rightarrow$ FR-21 & L06 $\rightarrow$ Model assessment (CREDIBILITY) $\rightarrow$ V21 \\
-\ConcernRef{C-SE-09} & MR-08 $\rightarrow$ FR-05 & L02 $\rightarrow$ Requirements and changes (GOVERNANCE) $\rightarrow$ V05 \\
-\ConcernRef{C-SE-10} & MR-08 $\rightarrow$ FR-33 & L03 $\rightarrow$ Software definitions (FSW) $\rightarrow$ V33 \\
-\ConcernRef{C-EPS-01} & MR-04 $\rightarrow$ FR-14 & L05 $\rightarrow$ Scenario analyses (SCENARIO) $\rightarrow$ V14 \\
-\ConcernRef{C-EPS-02} & MR-02 $\rightarrow$ FR-04 & L02 $\rightarrow$ Requirements and changes (GOVERNANCE) $\rightarrow$ V04 \\
-\ConcernRef{C-EPS-03} & MR-02 $\rightarrow$ FR-04 & L02 $\rightarrow$ Requirements and changes (GOVERNANCE) $\rightarrow$ V04 \\
-\ConcernRef{C-EPS-04} & MR-02 $\rightarrow$ FR-05 & L02 $\rightarrow$ Requirements and changes (GOVERNANCE) $\rightarrow$ V05 \\
-\ConcernRef{C-EPS-05} & MR-05 $\rightarrow$ FR-20 & L05 $\rightarrow$ Battery analysis (EPS-ENGINE) $\rightarrow$ V20 \\
-\ConcernRef{C-EPS-06} & MR-05 $\rightarrow$ FR-20 & L05 $\rightarrow$ Battery analysis (EPS-ENGINE) $\rightarrow$ V20 \\
-\ConcernRef{C-EPS-07} & MR-05 $\rightarrow$ FR-25 & L06 $\rightarrow$ Model assessment (CREDIBILITY) $\rightarrow$ V25 \\
-\ConcernRef{C-EPS-08} & MR-05 $\rightarrow$ FR-24 & L05 $\rightarrow$ Scenario analyses (SCENARIO) $\rightarrow$ V24 \\
-\ConcernRef{C-EPS-09} & MR-08 $\rightarrow$ FR-33 & L03 $\rightarrow$ Software definitions (FSW) $\rightarrow$ V33 \\
-\ConcernRef{C-EPS-10} & MR-08 $\rightarrow$ FR-35 & L03 $\rightarrow$ Software definitions (FSW) $\rightarrow$ V35 \\
-\ConcernRef{C-EPS-11} & MR-10 $\rightarrow$ FR-37 & L09 $\rightarrow$ Review views (REVIEW) $\rightarrow$ V37 \\
-\ConcernRef{C-NE-01} & MR-04 $\rightarrow$ FR-19 & L05 $\rightarrow$ Scenario analyses (SCENARIO) $\rightarrow$ V19 \\
-\ConcernRef{C-NE-02} & MR-08 $\rightarrow$ FR-33 & L03 $\rightarrow$ Software definitions (FSW) $\rightarrow$ V33 \\
-\ConcernRef{C-TFT-01} & MR-07 $\rightarrow$ FR-28 & L07 $\rightarrow$ Verification proposals (VERIFICATION) $\rightarrow$ V28 \\
-\ConcernRef{C-TFT-02} & MR-07 $\rightarrow$ FR-28 & L07 $\rightarrow$ Verification proposals (VERIFICATION) $\rightarrow$ V28 \\
+MR-01 / UC01 / SC01 & FR-20: preliminary budgets and sizing justify concept feasibility. & L04 design $\rightarrow$ each candidate C04 $\rightarrow$ V20. \\
+MR-02 / UC02 / SC02 & FR-02: active explained draft checks support requirements work. & L02 assistance $\rightarrow$ each candidate C02 $\rightarrow$ V02. \\
+MR-03 / UC03 / SC03 & FR-16: coupled temporal analysis exposes design shortages. & L05 analysis $\rightarrow$ each candidate C05 $\rightarrow$ V16. \\
+MR-04 / UC04 / SC04 & FR-36: exact authorized design release controls host coding/builds. & L05 host work $\rightarrow$ each candidate C05 $\rightarrow$ V36. \\
+MR-05 / UC05 / SC05 & FR-42: designated review authority decides progression. & L07 assessment/review $\rightarrow$ each candidate C07 $\rightarrow$ V42. \\
 \end{longtable}
 }
 
-All occurrences have a response. External outcomes remain bounded: redesign cost, physical defects, spacecraft RAM, replica use and non-EPS acceptance depend on mission artifacts/operations. Coverage checks flag orphan sources, unknown IDs, missing allocations, interface specifications or verification procedures and unsupported derivations. They check design records. Implementation, stakeholder validation, MOEs, model adequacy, target compatibility and facility authorization remain open. Changed requirements/models retain revision/impact/successor history. Separate EPS specification trees link mission/component requirements to EPS evidence. Framework operation satisfies no EPS voltage, thermal or software requirement.
+All five physical candidates retain the same primary and supporting logical allocations. C01--08 realize L01--08 respectively. Their full identifiers use COM-, CDT-, GY-, NS- and VS- for PA-COM, PA-CDT, PA-GY, PA-NS and PA-VS. For example, L02 maps to COM-C02, CDT-C02, GY-C02, NS-C02 and VS-C02. Their component operations and tool arrangements differ. All must meet the same applicable requirement and planned verification need. PA-CDT remains a conditional development direction, with implementation eligibility and comparative benefit unresolved.
+
+Tables~\ref{tab:logical-responsibilities} and~\ref{tab:selected-framework-allocation} give the complete primary FR allocations for the logical and preferred physical architectures. Each FR has its same-numbered planned V case. FR-40 is retired and its number is unused. The two contrasting cases belong solely to framework validation and research evaluation.
+
+\subsection{Concern dispositions and claim limits}
+
+Burden and learning concerns inform MOE-01 and 04. Early defect and uncertainty concerns inform MOE-02. Trace, credibility and communication concerns inform MOE-03. A causal occurrence retains its local parent and any referenced concern. Its context can contribute to several priorities without becoming a separate capability obligation.
+
+Physical redesign and prototype concerns motivate earlier model assessment. They establish no measured avoided fabrication cost. Physical replica maintenance and operational mission troubleshooting remain outside the covered lifecycle. Facility procedures, technician communication, equipment interactions and physical safety authorization remain current as-is context only. The Testing Facility Technician has no to-be role or interaction. Target deployment and processor, memory, timing and power qualification also remain external. Their transferable host configuration and modeled interface concepts support only the independently derived model/software scope.
+
+Supplied existing data can support calibration and independent assessment. Simulated histories can support timing and quality checks. These contributions introduce no physical campaign. Missing hardware evidence remains a limitation. Modeled anomaly and protection cases establish no general pre-threshold detection capability. Successful model/software work establishes neither hardware safety nor flight readiness.
+
+Specification checks assess consistency of the report and SysML model. They cover paths from MRs through use cases and scenarios, FR derivations and logical allocations. They also cover all five candidate allocations, planned V cases, scope and source and figure provenance. They provide no evidence of conformity or suitability of the future framework. The specified owner, risk basis and resolution gate for numerical targets have passed consistency checks. Numerical acceptance criteria remain to be resolved (TBR). Future trace checking must retain unresolved numerical criteria as TBR and block affected qualification or reconstruction conclusions. Section~\ref{section:integrate-and-verify-system} specifies their resolution with the Systems Engineer, experts and stakeholders.
+
+A future implementation must preserve changed requirement, model, interface and evidence revisions with impacts, decisions and successor history. Its EPS specification trees remain separate from the framework specification. EPS verification compares applicable product requirements. EPS validation compares stakeholder expectations and ConOps. The framework's successful operation satisfies no EPS voltage, thermal or control requirement by itself.
