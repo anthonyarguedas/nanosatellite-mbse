@@ -1,48 +1,44 @@
 \section{Manage Requirements Traceability}
 \label{section:manage-requirements-traceability}
 
-OOSEM maintains requirements relationships throughout specification and design. Derivation explains the need for a requirement. A scenario refines an enterprise accomplishment. Allocation identifies an intended responsibility. A verification relationship identifies a planned check. These relations establish different claims \citep[Sec.~17.3.7]{friedenthal2014practical}.
+OOSEM maintains derivation, allocation and verification relationships throughout specification and design. Derivation explains why an FR follows from an MR. Allocation identifies the logical component responsible for it. Verification identifies a planned check \citep[Sec.~17.3.7]{friedenthal2014practical}.
 
-Stakeholder concerns shape the four MOEs, design priorities and scope constraints. The five mission requirements describe enterprise accomplishments across the EPS lifecycle. UC01--05 and SC01--05 refine those accomplishments into engineering work. The 41 framework requirements specify the behavior that supports that work.
+Stakeholder concerns shape the four MOEs, design priorities and scope constraints. The five MRs describe enterprise accomplishments. The 41 FRs specify supporting framework behavior and are allocated to eight logical components.
 
 \subsection{Current specification and allocation paths}
 
-Table~\ref{tab:framework-root-traces} illustrates the lifecycle thread. A requirement can derive from several MRs and contribute to several scenarios. The requirement table gives its exact parents. The logical responsibility table gives every primary allocation. Supporting responsibilities retain information, applicability and control dependencies.
+Table~\ref{tab:framework-root-traces} illustrates the direct MR--FR--logical component chain. Table~\ref{tab:framework-requirements} gives each FR's complete MR parents. Table~\ref{tab:logical-responsibilities} gives every primary allocation. Supporting responsibilities supply information and control services.
 
 {\small
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.08}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.44\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.40\linewidth-4\tabcolsep\relax}@{}}
-\caption{Representative current enterprise-to-framework paths. Each V case is planned.}\label{tab:framework-root-traces}\\
+\caption{Representative mission derivation and logical allocation paths.}\label{tab:framework-root-traces}\\
 \toprule
-\textbf{Mission / use / scenario} & \textbf{Framework behavior} & \textbf{Intended responsibility / planned check} \\
+\textbf{Mission requirement} & \textbf{Derived framework behavior} & \textbf{Primary logical responsibility} \\
 \midrule
 \endfirsthead
-\toprule \textbf{Mission / use / scenario} & \textbf{Framework behavior} & \textbf{Intended responsibility / planned check} \\
+\toprule \textbf{Mission requirement} & \textbf{Derived framework behavior} & \textbf{Primary logical responsibility} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-MR-01 / UC01 / SC01 & FR-20: preliminary budgets and sizing justify concept feasibility. & L04 design $\rightarrow$ each candidate C04 $\rightarrow$ V20. \\
-MR-02 / UC02 / SC02 & FR-02: active explained draft checks support requirements work. & L02 assistance $\rightarrow$ each candidate C02 $\rightarrow$ V02. \\
-MR-03 / UC03 / SC03 & FR-16: coupled temporal analysis exposes design shortages. & L05 analysis $\rightarrow$ each candidate C05 $\rightarrow$ V16. \\
-MR-04 / UC04 / SC04 & FR-36: exact authorized design release controls host coding/builds. & L05 host work $\rightarrow$ each candidate C05 $\rightarrow$ V36. \\
-MR-05 / UC05 / SC05 & FR-42: designated review authority decides progression. & L07 assessment/review $\rightarrow$ each candidate C07 $\rightarrow$ V42. \\
+MR-01, 03 & FR-20: preliminary budgets and sizing support concept feasibility. & L04: mission and EPS design. \\
+MR-02 & FR-02: explained draft checks support requirements work. & L02: active engineering assistance. \\
+MR-03, 04 & FR-16: coupled temporal analysis exposes design shortages. & L05: analysis and host work. \\
+MR-04 & FR-36: authorized detailed design release controls host coding/builds. & L05: analysis and host work. \\
+MR-05 & FR-42: designated review authority decides progression. & L07: phase-product assessment and review. \\
 \end{longtable}
 }
 
-All five physical candidates retain the same primary and supporting logical allocations. C01--08 realize L01--08 respectively. Their full identifiers use COM-, CDT-, GY-, NS- and VS- for PA-COM, PA-CDT, PA-GY, PA-NS and PA-VS. For example, L02 maps to COM-C02, CDT-C02, GY-C02, NS-C02 and VS-C02. Their component operations and tool arrangements differ. All must meet the same applicable requirement and planned verification need. PA-CDT remains a conditional development direction, with implementation eligibility and comparative benefit unresolved.
-
-Tables~\ref{tab:logical-responsibilities} and~\ref{tab:selected-framework-allocation} give the complete primary FR allocations for the logical and preferred physical architectures. Each FR has its same-numbered planned V case. FR-40 is retired and its number is unused. The two contrasting cases belong solely to framework validation and research evaluation.
+All five physical candidates retain the same primary and supporting logical allocations. Their C01--08 components realize L01--08 respectively, using the candidate prefixes specified in Section~\ref{section:selected-physical-architecture}. Table~\ref{tab:selected-framework-allocation} gives the preferred physical allocations. Each FR has its same-numbered planned V case. FR-40 is retired. The two contrasting evaluation cases are validation and research activities.
 
 \subsection{Concern dispositions and claim limits}
 
-Burden and learning concerns inform MOE-01 and 04. Early defect and uncertainty concerns inform MOE-02. Trace, credibility and communication concerns inform MOE-03. A causal occurrence retains its local parent and any referenced concern. Its context can contribute to several priorities without becoming a separate capability obligation.
+Table~\ref{tab:framework-moe-concerns} links root concerns to the MOEs. Causal occurrences retain their local parents and referenced concerns. They can inform several priorities without creating separate capability obligations.
 
-Physical redesign and prototype concerns motivate earlier model assessment. They establish no measured avoided fabrication cost. Physical replica maintenance and operational mission troubleshooting remain outside the covered lifecycle. Facility procedures, technician communication, equipment interactions and physical safety authorization remain current as-is context only. The Testing Facility Technician has no to-be role or interaction. Target deployment and processor, memory, timing and power qualification also remain external. Their transferable host configuration and modeled interface concepts support only the independently derived model/software scope.
+Physical redesign and prototype concerns motivate earlier model assessment, with no measured avoided fabrication cost. Physical replica maintenance, operational troubleshooting, facility/technician work, physical safety authorization and target qualification remain outside the model/software scope. Existing data and simulated histories support scoped assessment without introducing a physical campaign. Missing hardware evidence remains a limitation. Modeled anomaly/protection cases establish no general pre-threshold detection capability, hardware safety or flight readiness.
 
-Supplied existing data can support calibration and independent assessment. Simulated histories can support timing and quality checks. These contributions introduce no physical campaign. Missing hardware evidence remains a limitation. Modeled anomaly and protection cases establish no general pre-threshold detection capability. Successful model/software work establishes neither hardware safety nor flight readiness.
+Specification checks compare MR--FR derivations, logical and candidate allocations, planned V cases, scope and source/figure provenance. They assess report/model consistency and provide no empirical evidence of framework conformity or suitability. Numerical acceptance criteria remain to be resolved (TBR). Future trace checking must preserve that status and block affected qualification or reconstruction conclusions. Section~\ref{section:integrate-and-verify-system} specifies resolution with the Systems Engineer, experts and stakeholders.
 
-Specification checks assess consistency of the report and SysML model. They cover paths from MRs through use cases and scenarios, FR derivations and logical allocations. They also cover all five candidate allocations, planned V cases, scope and source and figure provenance. They provide no evidence of conformity or suitability of the future framework. The specified owner, risk basis and resolution gate for numerical targets have passed consistency checks. Numerical acceptance criteria remain to be resolved (TBR). Future trace checking must retain unresolved numerical criteria as TBR and block affected qualification or reconstruction conclusions. Section~\ref{section:integrate-and-verify-system} specifies their resolution with the Systems Engineer, experts and stakeholders.
-
-A future implementation must preserve changed requirement, model, interface and evidence revisions with impacts, decisions and successor history. Its EPS specification trees remain separate from the framework specification. EPS verification compares applicable product requirements. EPS validation compares stakeholder expectations and ConOps. The framework's successful operation satisfies no EPS voltage, thermal or control requirement by itself.
+Framework and EPS specification trees remain separate. EPS verification compares product requirements. EPS validation compares stakeholder expectations and ConOps. Successful framework operation alone satisfies no EPS voltage, thermal or control requirement.
