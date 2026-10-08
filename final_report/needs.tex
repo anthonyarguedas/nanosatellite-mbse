@@ -4,114 +4,81 @@
 \label{subsection:framework-mission-requirements}
 \label{subsection:framework-mission-needs}
 \label{subsection:framework-moes}
-
-The EPS engineering enterprise must turn mission expectations into a justified design and a consistent set of engineering products. The observations above show useful reuse, task allocation, reviews and analysis. They do not establish a shared, formal lifecycle for EPS engineering. A reference lifecycle makes the expected maturity of each product clear. The stakeholder concerns then shape the effort, affordability, early issue detection and clarity with which the enterprise achieves those results. This separates enterprise accomplishments from the services that the framework will provide, following OOSEM \citep[Sec.~17.3.2]{friedenthal2014practical}.
-
-The mission requirements, measures and scoped review criteria below are a proposed specification. Stakeholder agreement remains pending.
-
-\subsubsection{EPS lifecycle and scope}
 \label{subsection:eps-reference-lifecycle}
 
-The NASA Systems Engineering Handbook supplies the reference phase names, product maturity and review purposes. The scope covers Pre-Phase A, A, B and an adapted Phase C. It ends before Phase D. This adoption makes no claim of NASA certification or approved waivers. NASA normally includes hardware development in these phases, including fabrication in C. Here, engineers model EPS hardware and compare candidate physical architectures, including COTS and custom designs. Physical prototyping, fabrication, procurement, hardware operation and physical testing are excluded. Hardware technology maturity relies on applicable existing evidence. Missing evidence remains an external limitation \citep[Secs.~2.2--2.4 and~3.3--3.6]{nasa2016systems}.
+These proposed enterprise requirements state EPS outcomes, while the MOEs express stakeholder value, following OOSEM \citep[Sec.~17.3.2]{friedenthal2014practical}. The scope covers NASA Pre-Phase A, A, B and adapted C for modeled EPS hardware and host-executed control/interface software. It ends at model/software integration readiness before Phase D. Physical development, procurement, hardware operation and testing, PIL/HIL, target qualification and flight readiness are excluded. Hardware maturity relies on applicable existing evidence, with gaps recorded. NASA supplies reference phases and review purposes without a certification claim \citep[Secs.~2.2--2.4 and~3.3--3.6]{nasa2016systems}. A prepared review package is an entrance product. Acceptance requires the designated authority's decision against agreed success criteria \citep[Sec.~6.7 and Table~6.7-1]{nasa2016systems}.
 
-\paragraph{Pre-Phase A: Concept Studies.}
-Engineers establish stakeholder expectations, mission objectives and the concept of operations (ConOps), including degraded operation. Orbit, attitude, mission duration, environment and load behavior define when energy can be generated and when it is needed. Initial power and energy budgets, array and battery sizing, and resource estimates identify feasible concepts and their uncertainties. Empirical estimates provide starting values when information is sparse. Analytical refinement tests their consistency with candidate components. The main products are feasible EPS concepts, initial ConOps, draft requirements, budgets, assumptions, risks and a preliminary verification and validation approach \citep[Sec.~3.3]{nasa2016systems} \citep[Secs.~2--3]{handpicked-0003} \citep[Sec.~2]{review-0289} \citep[Secs.~2.1--2.2]{review-0711}.
-
-\paragraph{Phase A: Concept and Technology Development.}
-The mission concept develops into validated EPS requirements, interfaces and a credible architecture. Engineers derive measurable limits and verification criteria from spacecraft requirements and stakeholder expectations. They check correctness, feasibility, verifiability, consistency and probable redundancy with the responsible stakeholders. Functions and requirements are allocated to EPS elements as alternatives are compared. Technology gaps, assumptions and proposed methods of assessment remain explicit. The products are the mission concept baseline, EPS requirements and interface definitions, architecture alternatives and selection rationale, and technical and verification and validation plans. These establish what the preliminary design must accomplish \citep[Secs.~3.4 and~4.1--4.2]{nasa2016systems}.
-
-\paragraph{Phase B: Preliminary Design and Technology Completion.}
-Engineers refine array and battery sizing, conversion, bus regulation, protection, distribution and control choices. They assess mass, volume, cost, availability, margins and risk on a common mission basis. Time-dependent generation, demand and battery state analyses reveal shortages that an average power budget can conceal. Pointing, communications, thermal conditions and operating modes must remain compatible with the EPS design. EPS limits may require changes to payload operation or mission ambitions. Sourced component properties, bills of materials and estimates support the trades. Component recommendations alone establish neither affordability nor availability. The products are a justified preliminary design, allocated specifications, agreed interfaces, trade and sizing results, updated budgets and risks, and integration and verification and validation plans \citep[Sec.~3.5]{nasa2016systems} \citep[Secs.~2--4]{review-0289} \citep[Sec.~4]{handpicked-0003} \citep[Secs.~3--4]{campioli2025integration} \citep[Sec.~3.2]{review-0711}.
-
-\paragraph{Phase C: Final Design and Fabrication (adapted).}
-The selected design develops into detailed component, electrical, thermal and applicable EMC models, interface specifications and declared host-executed control/interface software. Engineers define the detailed software design before coding the deliverable products. They assess modeled control through model-in-the-loop (MIL) and the declared code through software-in-the-loop (SIL). Mode transitions, protection events and recovery are considered with subsystem interactions. The products are a controlled technical data package, released models and software, applicable analysis and MIL/SIL results, and model/software integration configurations and procedures. Completion establishes scoped integration readiness. Target processor timing, memory and power qualification, processor-in-the-loop (PIL), hardware-in-the-loop (HIL), physical qualification and flight readiness remain outside scope \citep[Sec.~3.6]{nasa2016systems} \citep[Sec.~2]{review-0573} \citep[pp.~7--9]{handpicked-0001}.
-
-Model fidelity follows the intended decision. Lossless converter models, omitted solar degradation, fixed battery temperature and health, or simplified loads cannot support claims about effects they omit. Electrothermal and aging models require suitable parameters and credibility evidence. Calibration against supplied data and independent validation, where data are available, bound the supported predictions. An autonomous control proposal or a published HIL demonstration establishes no hardware capability for this framework \citep[Secs.~2--4]{review-0573} \citep[pp.~7--9]{handpicked-0001}.
-
-These phases involve repeated engineering work. Requirement allocation and component refinement apply the processes recursively through product levels. A changed load, orbit, component or software interface can require iteration on earlier requirements, designs and evidence. Dependency analysis supports the choice of affected work. Engineers assess the impact, authorize changes, repeat affected checks and issue a consistent successor baseline. Superseded evidence remains identifiable and cannot support a current compliance claim. Shared architecture, mode and budget information supports this multidisciplinary work \citep[Secs.~2.1 and~6.2--6.5]{nasa2016systems} \citep[Secs.~3.2 and~5--6]{review-0340} \citep[Secs.~3--4]{campioli2025integration}.
-
-Table~\ref{tab:eps-lifecycle-reviews} summarizes the proposed scoped success evidence. It applies NASA review purposes to EPS products. A complete review package is an entrance product. Acceptance is a subsequent decision by the designated review authority against agreed success criteria. Blocking findings prevent progression. A conditional decision records its limits, closure actions, owners and dates. Preparing a package or recording a planned procedure establishes no review acceptance. CDR occurs during C before deliverable coding. The end-of-C SIR assesses readiness of the released products for integration, so CDR alone does not complete the scoped phase \citep[Sec.~6.7 and Table~6.7-1]{nasa2016systems}.
+% TODO: Agree measurement targets, acceptable errors and review thresholds with stakeholders.
+% TODO: Review downstream scenario and requirement traces for the condensed MR statements.
+% TODO: Refresh source locators, parser snapshots and publication checks after compression.
+% Preserve historical review evidence and approved/protected source hashes.
 
 {\small
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.08}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.76\linewidth-2\tabcolsep\relax}@{}}
-\caption{Proposed EPS review success evidence within the model and software scope.}\label{tab:eps-lifecycle-reviews}\\
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.68\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.23\linewidth-2\tabcolsep\relax}@{}}
+\caption{Proposed mission requirements for the EPS engineering enterprise.}\label{tab:framework-mission-requirements}\\
 \toprule
-\textbf{Review and timing} & \textbf{Evidence supporting a future acceptance decision} \\
+\textbf{ID} & \textbf{Enterprise mission requirement} & \textbf{Motivating sources/phases} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Review and timing} & \textbf{Evidence supporting a future acceptance decision} \\
+\textbf{ID} & \textbf{Enterprise mission requirement} & \textbf{Motivating sources/phases} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-MCR, end of Pre-Phase A & Justified mission need, feasible EPS concepts, initial ConOps, budgets, assumptions, risks and preliminary V\&V approach support further concept development. \\
-SRR, during A & Validated EPS requirements, measurable criteria, source traceability and defined interfaces are consistent with mission expectations and support architecture definition. \\
-MDR/SDR, end of A & A credible EPS architecture, requirement allocation and justified alternatives support preliminary design. \\
-PDR, end of B & Compatible preliminary design, sizing and trade evidence, margins, risk dispositions, controlled interfaces and V\&V plans justify detailed design against applicable requirements. \\
-CDR, during adapted C & Complete detailed model/software design, interface specifications and scoped implementation, integration and V\&V plans support release of the design baseline and deliverable coding. \\
-SIR, end of adapted C & Released model/software products, applicable MIL/SIL evidence, compatible interfaces and ready integration configurations and procedures justify scoped integration readiness. \\
+MR-01 & The EPS engineering enterprise shall obtain MCR acceptance at the end of Pre-Phase A for a mission concept whose EPS feasibility is justified against agreed stakeholder expectations and mission constraints, supported by initial ConOps, budgets, assumptions, risks and a preliminary verification and validation approach. & Pre-Phase A, concept studies \citep[Sec.~3.3]{nasa2016systems}. \\
+MR-02 & The enterprise shall obtain SRR acceptance during Phase A for validated EPS requirements and interfaces traced to the mission concept and allocated spacecraft requirements, with measurable criteria consistent with stakeholder expectations. It shall derive, refine and validate EPS and component requirements and interfaces as the design matures through Phase B and adapted C. & A, refinement through B and adapted C \citep[Secs.~3.4--3.6 and~4.1--4.2]{nasa2016systems}. \\
+MR-03 & The enterprise shall obtain MDR/SDR acceptance at the end of Phase A for a credible EPS architecture with requirement allocations and justified alternatives, and PDR acceptance at the end of Phase B for a sized, compatible preliminary design supported by sizing and trades, margins, risk dispositions, controlled interfaces and verification and validation plans against applicable requirements and agreed resource and risk limits. & A/B, architecture and preliminary design \citep[Secs.~3.4--3.5]{nasa2016systems}. \\
+MR-04 & The enterprise shall obtain CDR acceptance during adapted Phase C, before deliverable coding, for complete detailed EPS model/software design, interface specifications and implementation, integration and verification and validation plans, followed by SIR acceptance at the end of C for released models and declared host-executed control/interface software, applicable MIL/SIL evidence, compatible interfaces and ready integration configurations and procedures. & Adapted C \citep[Sec.~3.6]{nasa2016systems}. Scoped model/software assessment \citep[Sec.~2]{review-0573} \citep[pp.~7--9]{handpicked-0001}. \\
+MR-05 & The enterprise shall establish and maintain coherent phase baselines through authorized changes, repeated affected checks and applicable verification and validation evidence, retaining configuration-linked requirements, expectations, methods, results, limitations and finding dispositions. It shall obtain and retain acceptance decisions from the designated review authority against agreed success criteria, prevent progression with blocking findings, and record conditional limits, closure actions, owners and dates. & All scoped phases, technical management \citep[Secs.~6.2--6.7]{nasa2016systems}. \\
 \end{longtable}
 }
-
-The evidence must identify the product configuration, applicable requirements and expectations, methods, results, limitations and finding dispositions. Hardware production readiness and physical qualification criteria are excluded from these scoped reviews. Missing hardware evidence is reported without treating it as satisfied. Accepted review decisions and any conditions are retained with the reviewed baseline.
-
-\subsubsection{Enterprise mission requirements and measures}
-
-Table~\ref{tab:framework-mission-requirements} states five enterprise outcomes. They span phases. Requirements, design compatibility and evidence mature throughout the lifecycle. Iteration and recursion are part of achieving these outcomes. They require no separate mission requirement.
 
 {\small
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.08}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.88\linewidth-2\tabcolsep\relax}@{}}
-\caption{Proposed mission requirements for the EPS engineering enterprise.}\label{tab:framework-mission-requirements}\\
+\caption{Crosscutting enterprise measures of effectiveness.}\label{tab:framework-lifecycle-moes}\\
 \toprule
-\textbf{ID} & \textbf{Enterprise mission requirement} \\
+\textbf{ID} & \textbf{Measure and observation basis} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{ID} & \textbf{Enterprise mission requirement} \\
+\textbf{ID} & \textbf{Measure and observation basis} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-MR-01 & The EPS engineering enterprise shall establish a mission concept whose EPS feasibility is justified against agreed stakeholder expectations and mission constraints. \\
-MR-02 & The enterprise shall establish validated EPS and component requirements and interfaces consistent with the mission concept and allocated spacecraft requirements. \\
-MR-03 & The enterprise shall justify a sized EPS architecture and preliminary design against applicable requirements, agreed resource limits and acceptable risk within the declared model and analysis scope. \\
-MR-04 & The enterprise shall complete detailed EPS design models and declared host-executed control/interface software products sufficient for integration within the model and software scope. \\
-MR-05 & The enterprise shall establish and maintain coherent phase baselines after controlled changes, supported by applicable verification and validation evidence and accepted against agreed technical review success criteria. \\
-\end{longtable}
-}
-
-MR-03 concerns justified preliminary design within the declared analysis scope. MR-05 also requires accepted review decisions under the scoped criteria in Section~\ref{subsection:eps-reference-lifecycle}.
-
-The crosscutting MOEs in Table~\ref{tab:framework-lifecycle-moes} express stakeholder value across these accomplishments. Effort is measured in person-hours. Elapsed, waiting and unattended execution times are measured separately in hours. Framework usage cost is reported in Canadian dollars (CAD) for a declared period and price date. It differs from an estimated EPS acquisition cost. All achieved values are unknown. Targets, acceptable errors and review thresholds remain pending stakeholder agreement and intended-use justification.
-
-\begin{table}[htbp]
-\small
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.08}
-\caption{Crosscutting enterprise measures of effectiveness.}\label{tab:framework-lifecycle-moes}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.88\linewidth-2\tabcolsep\relax}@{}}
-\toprule
-\textbf{ID} & \textbf{Measure and observation basis} \\
-\midrule
 MOE-01 & Engineering burden: active person-hours and elapsed hours for correct requirements, design, change and review tasks, with waiting and unattended execution reported separately. \\
 MOE-02 & Early issue detection: expert-confirmed issues found before scoped final design, critical misses and unnecessary investigations against a declared reference issue set. \\
 MOE-03 & Evidence and review usefulness: applicable requirement and expectation coverage, critical review defects, reviewer interpretation accuracy and successful independent reconstruction. \\
 MOE-04 & Adoption and affordability: person-hours to learn and complete correct tasks and adapt to a mission, and direct framework usage cost in CAD over a declared period and price date. \\
+\end{longtable}
+}
+
+{\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.33\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.55\linewidth-2\tabcolsep\relax}@{}}
+\caption{Primary root concern contributions motivating the MOEs.}\label{tab:framework-moe-concerns}\\
+\toprule
+\textbf{MOE} & \textbf{Primary root concerns} & \textbf{Motivation} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{MOE} & \textbf{Primary root concerns} & \textbf{Motivation} \\
+\midrule
+\endhead
 \bottomrule
-\end{tabular}
-\end{table}
-
-Prediction residuals support model credibility. They retain their own engineering units, such as volts, temperature difference in kelvin, watt-hours or battery health percentage points, with uncertainty and a validity domain. Runtime, assistance precision and recall, and response delay support framework performance assessment. These supporting measures do not replace enterprise effectiveness. Faster work receives comparative credit only when its outcome is correct.
-
-\paragraph{Verification, validation and evaluation.}
-Framework verification will assess conformity to framework requirements. Framework validation will assess suitability for engineers and reviewers under representative engineering use. EPS phase-product verification will assess conformity to applicable EPS requirements. EPS phase-product validation will assess stakeholder expectations and ConOps under representative, possibly simulated conditions. NASA permits validation of early phase products, including models, and permits analysis as a validation method \citep[Secs.~2.4 and~5.3--5.4]{nasa2016systems}. Model credibility separately addresses intended use, numerical correctness, assumptions, calibration, independent validation data and uncertainty. Successful reconstruction of a run establishes reproducibility within its comparison rules. It establishes no predictive validity by itself.
-
-Research evaluation will assess enterprise benefit and bounded transfer across two contrasting EPS cases. The protocol is specified under ``Research evaluation and bounded reuse'' in Section~\ref{section:integrate-and-verify-system}.
+\endfoot
+MOE-01 & \ConcernRef{C-PM-01}, \ConcernRef{C-PM-02}, \ConcernRef{C-SE-03} & Requirements effort, budgets and subsystem changes. \\
+MOE-02 & \ConcernRef{C-PM-03}, \ConcernRef{C-EPS-01} & Late redesign and repeated verification burden. \\
+MOE-03 & \ConcernRef{C-SE-02}, \ConcernRef{C-EPS-11} & Communicating evidence and designs during reviews. \\
+MOE-04 & \ConcernRef{C-PM-01}, \ConcernRef{C-PM-05} & Learning and tool costs under C-PM-01, and mission adaptation. \\
+\end{longtable}
+}
 
 \subsection{To-be enterprise use cases}
 \label{subsection:framework-to-be-use-cases}
