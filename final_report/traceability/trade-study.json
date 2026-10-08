@@ -1,181 +1,602 @@
 {
-  "schema_version": 2,
-  "status": "conditional reasoned design direction, implementation/verification/evaluation pending",
+  "schema_version": 4,
+  "status": "neutral proposed structural comparison, no empirical evaluation",
   "candidate_ids": [
-    "PA-CDT",
     "PA-COM",
-    "PA-GY",
+    "PA-VS",
     "PA-NS",
-    "PA-VS"
+    "PA-GY",
+    "PA-CDT"
   ],
-  "scope": "Same current 41FRs/eight logical responsibilities, SC01–05 and Pre-Phase A through adapted C model/software tasks",
+  "scope": "Same 40 active FRs and six logical components for all five candidates",
+  "alternatives": [
+    {
+      "id": "L01.AR1",
+      "logical": "L01",
+      "citation": "deutsch2022comet",
+      "supported_subset": "COMET: shared requirements, parameters and numerical links \\citep{deutsch2022comet}.",
+      "required_additions": "Add requirement-quality rules, contextual guidance and evidence traces.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L01.AR2",
+      "logical": "L01",
+      "citation": "citation-4690",
+      "supported_subset": "Capella/Valispace: scripted function-description requirement imports and hierarchy checks \\citep{citation-4690}.",
+      "required_additions": "Add persistent trace identities, guidance and conflict handling.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L01.AR3",
+      "logical": "L01",
+      "citation": "review-0340",
+      "supported_subset": "Nanospace authoring plus separate first-valid hierarchical task-network (HTN) planning \\citep{review-0340}.",
+      "required_additions": "Integrate planner actions, richer requirement relations and reviewed guidance.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L01.AR4",
+      "logical": "L01",
+      "citation": "chiu2023sealion",
+      "supported_subset": "SeaLion: YAML needs/stories/data relationships and generated views \\citep{chiu2023sealion}.",
+      "required_additions": "Add requirement semantics, quality checks and engineering guidance.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L01.AR5",
+      "logical": "L01",
+      "citation": "kaslow2019csrm",
+      "supported_subset": "CubeSat System Reference Model (CSRM): tailored requirements, architecture and V\\&V relationships \\citep{kaslow2019csrm}.",
+      "required_additions": "Populate mission content and implement contextual guidance.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L02.EP1",
+      "logical": "L02",
+      "citation": "kaslow2019csrm",
+      "supported_subset": "CSRM: mission components and physical-property rollups \\citep{kaslow2019csrm}.",
+      "required_additions": "Add executable EPS/volume parametrics, selection and maintained component data.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L02.EP2",
+      "logical": "L02",
+      "citation": "deutsch2022comet",
+      "supported_subset": "COMET/Excel: state-dependent budgets and datasheet-linked catalogue \\citep{deutsch2022comet}.",
+      "required_additions": "Add dynamic EPS analyses, volume estimates and catalogue currency.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L02.EP3",
+      "logical": "L02",
+      "citation": "review-0711",
+      "supported_subset": "GREATCUBE+: commercial off-the-shelf (COTS) matches, power/battery sizing and geometry concepts \\citep{review-0711}.",
+      "required_additions": "Add broader mission coverage, maintained records and dynamic models.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L02.EP4",
+      "logical": "L02",
+      "citation": "review-0289",
+      "supported_subset": "Boan: load modes, ephemeris/flux files and Opalis energy sizing \\citep{review-0289}.",
+      "required_additions": "Add requirement traces, technical mass/volume links and specialist analyses.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L02.EP5",
+      "logical": "L02",
+      "citation": "review-0573",
+      "supported_subset": "Casado: characterized EPS plant and orbital simulation \\citep{review-0573}.",
+      "required_additions": "Add reusable component selection, aging/uncertainty and design estimates.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L03.IN1",
+      "logical": "L03",
+      "citation": "review-0853",
+      "supported_subset": "F Prime: architecture export and component unit-test mechanism \\citep{review-0853}.",
+      "required_additions": "Implement mission behavior, plant feedback and system-level SIL.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L03.IN2",
+      "logical": "L03",
+      "citation": "handpicked-0001",
+      "supported_subset": "Zhu: battery OpenUSD mappings and numerical outputs to Omniverse \\citep{handpicked-0001}.",
+      "required_additions": "Extend to whole CUBICS and implement F Prime feedback.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L03.IN3",
+      "logical": "L03",
+      "citation": "handpicked-0002",
+      "supported_subset": "Janiak/Cristiano: industrial Functional Mock-up Interface (FMI) co-simulation/virtual commissioning \\citep{handpicked-0002}.",
+      "required_additions": "Adapt developing USD--FMI, spacecraft plants and time/port contracts.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L03.IN4",
+      "logical": "L03",
+      "citation": "review-0289",
+      "supported_subset": "Boan: file-based scenario/load/energy continuity \\citep{review-0289}.",
+      "required_additions": "Add controller interfaces, synchronized exchange and verified SIL.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L03.IN5",
+      "logical": "L03",
+      "citation": "review-0573",
+      "supported_subset": "Casado: EPS twin, Python inputs and control/power hardware-in-the-loop comparisons \\citep{review-0573}.",
+      "required_additions": "Provide a portable software plant and whole-system simulation adapters.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L04.CR1",
+      "logical": "L04",
+      "citation": "review-0573",
+      "supported_subset": "Casado: EPS outputs compared with physical reference waveforms \\citep{review-0573}.",
+      "required_additions": "Use identified supplied histories, portable comparisons and independent assessment.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L04.CR2",
+      "logical": "L04",
+      "citation": "handpicked-0001",
+      "supported_subset": "Zhu: electrochemical/thermal calibration and physical-consistency checks \\citep{handpicked-0001}.",
+      "required_additions": "Adapt cell/boundary assumptions and assess independently of calibration.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L04.CR3",
+      "logical": "L04",
+      "citation": "review-1251",
+      "supported_subset": "Djebko: root mean square error (RMSE) calibration and conditional valid-signal mappings \\citep{review-1251}.",
+      "required_additions": "Add independent assessment, timing/uncertainty and retained validity masks.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L04.CR4",
+      "logical": "L04",
+      "citation": "review-1303",
+      "supported_subset": "UPPAAL CORA schedules with separate stochastic kinetic battery model (KiBaM) validation \\citep{review-1303}.",
+      "required_additions": "Adapt scenario constraints and assess assumptions/model mismatch.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L04.CR5",
+      "logical": "L04",
+      "citation": "kaslow2019csrm",
+      "supported_subset": "CSRM: model V\\&V activities linked to requirements/objectives \\citep{kaslow2019csrm}.",
+      "required_additions": "Add executable checks, numerical evidence and independent review.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L05.EC1",
+      "logical": "L05",
+      "citation": "chiu2023sealion",
+      "supported_subset": "SeaLion: generated diagrams, tables and documents \\citep{chiu2023sealion}.",
+      "required_additions": "Add EPS result ingestion, verdicts and review packages.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L05.EC2",
+      "logical": "L05",
+      "citation": "citation-0569",
+      "supported_subset": "Latserus: requirement/procedure/verdict records and feedback concept \\citep{citation-0569}.",
+      "required_additions": "Complete result write-back, criteria and reviewer acceptance.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L05.EC3",
+      "logical": "L05",
+      "citation": "review-0340",
+      "supported_subset": "Nanospace: shared intermediate results and dependency-guided reruns \\citep{review-0340}.",
+      "required_additions": "Add preserved runs, requirement links and accepted EPS evidence.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L05.EC4",
+      "logical": "L05",
+      "citation": "deutsch2022comet",
+      "supported_subset": "COMET: numerical requirement--parameter compliance \\citep{deutsch2022comet}.",
+      "required_additions": "Add dynamic/software evidence, EPS reports and review decisions.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L05.EC5",
+      "logical": "L05",
+      "citation": "citation-1573",
+      "supported_subset": "Capella: requirement/review status and assembly/integration/verification/test plan traces \\citep{citation-1573}.",
+      "required_additions": "Formalize the extension and ingest executed software/analysis evidence.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L06.EC1",
+      "logical": "L06",
+      "citation": "chiu2023sealion",
+      "supported_subset": "SeaLion: Git history for YAML inputs and generated views \\citep{chiu2023sealion}.",
+      "required_additions": "Add approved releases, technical authority and stale-view flags.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L06.EC2",
+      "logical": "L06",
+      "citation": "citation-0569",
+      "supported_subset": "Latserus: managed requirement records and collaborative web views \\citep{citation-0569}.",
+      "required_additions": "Add released configurations, change authority and result-currency checks.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L06.EC3",
+      "logical": "L06",
+      "citation": "review-0340",
+      "supported_subset": "Nanospace: common database/API and dependency paths \\citep{review-0340}.",
+      "required_additions": "Add frozen releases, field authority and dependency-currency checks.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L06.EC4",
+      "logical": "L06",
+      "citation": "deutsch2022comet",
+      "supported_subset": "COMET: server synchronization and owner/state parameters \\citep{deutsch2022comet}.",
+      "required_additions": "Add released snapshots, exchange authority and stale-import checks.",
+      "status": "published partial method, completion proposed"
+    },
+    {
+      "id": "L06.EC5",
+      "logical": "L06",
+      "citation": "citation-1573",
+      "supported_subset": "Capella: design changes traced into verification/test procedures \\citep{citation-1573}.",
+      "required_additions": "Add released baselines, transfer authority and evidence-currency checks.",
+      "status": "published partial method, completion proposed"
+    }
+  ],
+  "composition": {
+    "PA-COM": {
+      "L01": "AR1",
+      "L02": "EP2+EP3",
+      "L03": "IN1+IN2",
+      "L04": "CR1+CR5",
+      "L05": "EC4+EC2",
+      "L06": "EC4+EC1"
+    },
+    "PA-VS": {
+      "L01": "AR2",
+      "L02": "EP5",
+      "L03": "IN1+IN5",
+      "L04": "CR1+CR2",
+      "L05": "EC5+EC2",
+      "L06": "EC5+EC1"
+    },
+    "PA-NS": {
+      "L01": "AR3",
+      "L02": "EP4",
+      "L03": "IN1+IN4",
+      "L04": "CR3+CR4",
+      "L05": "EC3+EC2",
+      "L06": "EC3+EC1"
+    },
+    "PA-GY": {
+      "L01": "AR4+AR5",
+      "L02": "EP1+EP3",
+      "L03": "IN1+IN3",
+      "L04": "CR4+CR5",
+      "L05": "EC1+EC2",
+      "L06": "EC1+EC2"
+    },
+    "PA-CDT": {
+      "L01": "Native+Jev",
+      "L02": "Param.+Python+DB",
+      "L03": "Python+IN1+IN2",
+      "L04": "Python+CR1+CR5",
+      "L05": "Python+EC2",
+      "L06": "Native+EC1"
+    }
+  },
   "retention": {
-    "PA-COM": "Retain: published parameter ownership, catalogues and Excel budget work remain useful. Complete requirement semantics, dynamic analysis, active assistance and exact releases are proposed additions.",
-    "PA-NS": "Retain: concurrent parameter sharing and dependency analysis remain distinct strengths. Integrated Nanospace/HyperTension planning is prospective. Gaphor extraction is a separate tool-specific profile, never assumed to transfer automatically.",
-    "PA-VS": "Retain and reopen: demonstrated preliminary tree/mode/budget transfer is relevant. It establishes neither complete EPS readiness nor qualified assistance. Prior preference is replaced by this current comparison with unresolved service access and synchronization.",
-    "PA-CDT": "Retain and refine: native model/Python core gives explicit local semantic authority and replaceable specialist profiles. CSRM is a source of structural patterns, not proof of a SysML v2 EPS library or migration. No mandatory scene profile is inherited.",
-    "PA-GY": "Retain: portable reviewable text is a distinct authoring choice. Source prototypes exclude requirement/test management, so all engineering semantics, assistance and evidence controls are proposed additions. Git alone supplies no approval or engineering meaning."
+    "PA-COM": "COMET requirement/parameter and workbook records combine with sourced sizing, battery mapping and evidence methods. Contextual guidance, whole-CUBICS/F Prime adapters and controlled releases are proposed additions.",
+    "PA-VS": "The Capella/Valispace requirement/tree bridge combines with characterized EPS models, source waveform comparisons and review traces. Cross-tool authority, method guidance and required platform adapters are proposed additions.",
+    "PA-NS": "Nanospace requirements/dependencies combine with Boan mission/energy continuity and separate credibility methods. HTN planning integration, method admission and required platform adapters are proposed additions.",
+    "PA-GY": "SeaLion YAML/Git records combine with CSRM patterns, concept sizing and developing industrial FMI methods. EPS semantics, method guidance, required platform adapters and human authority controls are proposed additions.",
+    "PA-CDT": "The user custom enriches native SysML v2/CSRM requirements and parametrics. Jev recommends analyses and V&V, engineers decide eligibility/acceptance, Python implements/orchestrates calculations and a maintained COTS database supplies engineering data. These are proposed custom enrichments."
   },
   "common_basis": {
-    "inputs": "Same mission/requirements/reference sets, fidelity, host software scope and result-comparison rules",
-    "separation": "Fixed specialist profiles for integration overhead, then complete native end-to-end correct tasks",
-    "cost": "Dated framework usage costs separate from EPS BOM/acquisition estimates",
-    "evaluation_cases": "Two contrasting cases belong solely to planned validation/research evaluation"
+    "inputs": "Same declared mission/design scenarios, stimuli, workloads and reference populations",
+    "reference": "Independent experts or independent implementation of the same declared model",
+    "integration_overhead": "Hold model fidelity and solver scope constant",
+    "separation": "Specification consistency, framework conformity, prediction validity and EPS engineering evidence remain distinct"
   },
-  "eligibility": [
+  "critical_mop_comparison": [
     {
-      "id": "EG-01",
-      "need": "All current FRs have coherent allocation including active explained assistance and recommendations",
-      "status": "specified, not demonstrated"
+      "id": "MOP-FR02",
+      "mechanisms": {
+        "PA-COM": "Requirement and parameter records feed proposed quality rules and companion semantic checks.",
+        "PA-VS": "Imported requirement text and Capella architecture context feed proposed quality checks.",
+        "PA-NS": "Database requirement relations feed proposed structural checks and semantic services.",
+        "PA-GY": "YAML schemas and CSRM traces combine validation with proposed semantic checks.",
+        "PA-CDT": "Native requirement fields and rules support proposed semantic checks, separate from Jev."
+      },
+      "achieved": "unknown",
+      "desired_range": ""
     },
     {
-      "id": "EG-02",
-      "need": "Checked stable-identity quantities/time/mode exchange with failed-transfer preservation",
-      "status": "verification pending"
+      "id": "MOP-FR03",
+      "mechanisms": {
+        "PA-COM": "Catalogue and parameter context feed sourced method selection and eligibility checks.",
+        "PA-VS": "Architecture, modes and requirements feed a proposed method service with eligibility checks.",
+        "PA-NS": "Separate first-valid HTN plans require integrated applicability checks and action admission.",
+        "PA-GY": "YAML/CSRM traces feed a proposed sourced method catalogue with applicability checks.",
+        "PA-CDT": "Native context feeds Jev analysis and V\\&V suggestions for engineer eligibility checks."
+      },
+      "achieved": "unknown",
+      "desired_range": ""
     },
     {
-      "id": "EG-03",
-      "need": "Current authorized changes, exact design release before host coding and designated review authority",
-      "status": "verification pending"
+      "id": "MOP-FR18",
+      "mechanisms": {
+        "PA-COM": "Workbook categories require Python and battery USD mappings, checking units, time and entities.",
+        "PA-VS": "Capella and Valispace require EPS plant and USD mappings, checking units, time and entities.",
+        "PA-NS": "Database, ephemeris and loads need Opalis and Omniverse mappings, checking units, time and entities.",
+        "PA-GY": "YAML quantities need developing industrial FMI and Omniverse contracts, checking units, time and entities.",
+        "PA-CDT": "Native quantity bindings need Python and USD mappings, checking units, time and entities."
+      },
+      "achieved": "unknown",
+      "desired_range": ""
     },
     {
-      "id": "EG-04",
-      "need": "Every mandatory discipline/host profile verified with intended-use credibility and explicit gaps",
-      "status": "verification pending"
+      "id": "MOP-FR34",
+      "mechanisms": {
+        "PA-COM": "Requirement, parameter and workbook records require new interface adapters to F Prime.",
+        "PA-VS": "Capella and Valispace interface definitions require new translations into the F Prime profile.",
+        "PA-NS": "Database interface records require new adapters translating definitions into F Prime.",
+        "PA-GY": "YAML/CSRM interface definitions require new adapters into the F Prime profile.",
+        "PA-CDT": "Native interface fields require Python mappings into the versioned F Prime profile."
+      },
+      "achieved": "unknown",
+      "desired_range": ""
     },
     {
-      "id": "EG-05",
-      "need": "Preserved raw results, dependencies and independently reconstructible released evidence",
-      "status": "verification pending"
+      "id": "MOP-FR30",
+      "mechanisms": {
+        "PA-COM": "Parameter and workbook revisions must invalidate advice and trigger current-context checks.",
+        "PA-VS": "Asynchronous Capella and Valispace transfers must invalidate advice and recheck both context revisions.",
+        "PA-NS": "Database, dependency and planner revisions must invalidate advice before current-context reassessment.",
+        "PA-GY": "Git/YAML revisions must invalidate cached guidance and recheck source/context identities.",
+        "PA-CDT": "Native, source, classifier and rule revisions must invalidate advice before context reassessment."
+      },
+      "achieved": "unknown",
+      "desired_range": ""
     },
     {
-      "id": "EG-06",
-      "need": "Legal deployable access, exact export, resource declaration, backup/recovery",
-      "status": "unresolved"
+      "id": "MOP-FR10",
+      "mechanisms": {
+        "PA-COM": "Freeze server, catalogue, workbook, add-in and numerical dependencies for independent replay.",
+        "PA-VS": "Preserve both tool exports, synchronization scripts and plant dependencies for replay.",
+        "PA-NS": "Freeze database snapshots, scenarios and Opalis dependencies for independent run reconstruction.",
+        "PA-GY": "Preserve YAML/Git revisions, FMI models, solver and connector dependencies for replay.",
+        "PA-CDT": "Preserve native baselines, Python environments and COTS revisions for independent replay."
+      },
+      "achieved": "unknown",
+      "desired_range": ""
     }
   ],
-  "criteria": [
-    {
-      "dimension": "Explained assistance",
-      "MR": [
-        "MR-02",
-        "MR-05"
+  "empirical_vv_executed": false,
+  "numerical_results": null,
+  "reconciliation": {
+    "status": "reconciled with final native contract",
+    "remaining": []
+  },
+  "historical_evidence": {
+    "record_role": "HISTORICAL",
+    "note": "Prior conditional decision and measurements schema, superseded.",
+    "record": {
+      "schema_version": 2,
+      "status": "conditional reasoned design direction, implementation/verification/evaluation pending",
+      "candidate_ids": [
+        "PA-CDT",
+        "PA-COM",
+        "PA-GY",
+        "PA-NS",
+        "PA-VS"
       ],
-      "MOE": [
-        "MOE-01",
-        "MOE-02",
-        "MOE-04"
+      "scope": "Same current 41FRs/eight logical responsibilities, SC01–05 and Pre-Phase A through adapted C model/software tasks",
+      "retention": {
+        "PA-COM": "Retain: published parameter ownership, catalogues and Excel budget work remain useful. Complete requirement semantics, dynamic analysis, active assistance and exact releases are proposed additions.",
+        "PA-NS": "Retain: concurrent parameter sharing and dependency analysis remain distinct strengths. Integrated Nanospace/HyperTension planning is prospective. Gaphor extraction is a separate tool-specific profile, never assumed to transfer automatically.",
+        "PA-VS": "Retain and reopen: demonstrated preliminary tree/mode/budget transfer is relevant. It establishes neither complete EPS readiness nor qualified assistance. Prior preference is replaced by this current comparison with unresolved service access and synchronization.",
+        "PA-CDT": "Retain and refine: native model/Python core gives explicit local semantic authority and replaceable specialist profiles. CSRM is a source of structural patterns, not proof of a SysML v2 EPS library or migration. No mandatory scene profile is inherited.",
+        "PA-GY": "Retain: portable reviewable text is a distinct authoring choice. Source prototypes exclude requirement/test management, so all engineering semantics, assistance and evidence controls are proposed additions. Git alone supplies no approval or engineering meaning."
+      },
+      "common_basis": {
+        "inputs": "Same mission/requirements/reference sets, fidelity, host software scope and result-comparison rules",
+        "separation": "Fixed specialist profiles for integration overhead, then complete native end-to-end correct tasks",
+        "cost": "Dated framework usage costs separate from EPS BOM/acquisition estimates",
+        "evaluation_cases": "Two contrasting cases belong solely to planned validation/research evaluation"
+      },
+      "eligibility": [
+        {
+          "id": "EG-01",
+          "need": "All current FRs have coherent allocation including active explained assistance and recommendations",
+          "status": "specified, not demonstrated"
+        },
+        {
+          "id": "EG-02",
+          "need": "Checked stable-identity quantities/time/mode exchange with failed-transfer preservation",
+          "status": "verification pending"
+        },
+        {
+          "id": "EG-03",
+          "need": "Current authorized changes, exact design release before host coding and designated review authority",
+          "status": "verification pending"
+        },
+        {
+          "id": "EG-04",
+          "need": "Every mandatory discipline/host profile verified with intended-use credibility and explicit gaps",
+          "status": "verification pending"
+        },
+        {
+          "id": "EG-05",
+          "need": "Preserved raw results, dependencies and independently reconstructible released evidence",
+          "status": "verification pending"
+        },
+        {
+          "id": "EG-06",
+          "need": "Legal deployable access, exact export, resource declaration, backup/recovery",
+          "status": "unresolved"
+        }
       ],
-      "MOP": [
-        "MOP-01",
-        "MOP-02"
-      ]
-    },
-    {
-      "dimension": "Design/analysis usefulness",
-      "MR": [
-        "MR-01",
-        "MR-02",
-        "MR-03",
-        "MR-04"
+      "criteria": [
+        {
+          "dimension": "Explained assistance",
+          "MR": [
+            "MR-02",
+            "MR-05"
+          ],
+          "MOE": [
+            "MOE-01",
+            "MOE-02",
+            "MOE-04"
+          ],
+          "MOP": [
+            "MOP-01",
+            "MOP-02"
+          ]
+        },
+        {
+          "dimension": "Design/analysis usefulness",
+          "MR": [
+            "MR-01",
+            "MR-02",
+            "MR-03",
+            "MR-04"
+          ],
+          "MOE": [
+            "MOE-02",
+            "MOE-03"
+          ],
+          "MOP": [
+            "MOP-03"
+          ]
+        },
+        {
+          "dimension": "Continuity/authority",
+          "MR": [
+            "MR-02",
+            "MR-03",
+            "MR-04",
+            "MR-05"
+          ],
+          "MOE": [
+            "MOE-02",
+            "MOE-03"
+          ],
+          "MOP": [
+            "MOP-04"
+          ]
+        },
+        {
+          "dimension": "Evidence/review",
+          "MR": [
+            "MR-05"
+          ],
+          "MOE": [
+            "MOE-03"
+          ],
+          "MOP": [
+            "MOP-05",
+            "MOP-06"
+          ]
+        },
+        {
+          "dimension": "Adoption/resources",
+          "MR": [
+            "MR-01",
+            "MR-02",
+            "MR-03",
+            "MR-04",
+            "MR-05"
+          ],
+          "MOE": [
+            "MOE-01",
+            "MOE-04"
+          ],
+          "MOP": [
+            "MOP-01",
+            "MOP-06"
+          ]
+        }
       ],
-      "MOE": [
-        "MOE-02",
-        "MOE-03"
-      ],
-      "MOP": [
-        "MOP-03"
-      ]
-    },
-    {
-      "dimension": "Continuity/authority",
-      "MR": [
-        "MR-02",
-        "MR-03",
-        "MR-04",
-        "MR-05"
-      ],
-      "MOE": [
-        "MOE-02",
-        "MOE-03"
-      ],
-      "MOP": [
-        "MOP-04"
-      ]
-    },
-    {
-      "dimension": "Evidence/review",
-      "MR": [
-        "MR-05"
-      ],
-      "MOE": [
-        "MOE-03"
-      ],
-      "MOP": [
-        "MOP-05",
-        "MOP-06"
-      ]
-    },
-    {
-      "dimension": "Adoption/resources",
-      "MR": [
-        "MR-01",
-        "MR-02",
-        "MR-03",
-        "MR-04",
-        "MR-05"
-      ],
-      "MOE": [
-        "MOE-01",
-        "MOE-04"
-      ],
-      "MOP": [
-        "MOP-01",
-        "MOP-06"
-      ]
+      "decision": {
+        "preferred": "PA-CDT",
+        "principal_alternative": "PA-VS",
+        "authority": "Analyst proposed direction, stakeholder agreement and implementation eligibility pending",
+        "priorities": [
+          "Local engineering semantic authority and exact current-context controls",
+          "Inspectable explanations, portable reconstructible releases and replaceable specialist profiles",
+          "Workable collaboration/adoption with reusable services where conditions are preserved"
+        ],
+        "rationale": "Native SysML/Python local core exposes engineering meanings and assistance logic. Git/archive releases reduce dependence on hosted authoring data. This is a development-structure choice, not a measured performance claim.",
+        "verify_before_retaining": [
+          "Deployment/extension rights and engineering quantity fidelity",
+          "Every mandatory discipline and selected host profile",
+          "Active explained assistance with independent expert references and uncertain/no-eligible/outage/stale-cache cases",
+          "Coupled changes and interrupted-transfer recovery",
+          "Exact release gate, raw histories, independent assessment and clean replay",
+          "Current review authority and agreed MOP targets"
+        ],
+        "reversal": [
+          "Mandatory access/profile or fidelity failure",
+          "Response/currency/reconstruction target failure",
+          "Impractical correct-task/adoption burden",
+          "Verified alternative service/integration advantage under the same tasks"
+        ]
+      },
+      "numerical_results": {
+        "measured_scores": null,
+        "weights": null,
+        "benefit": null,
+        "prices": null,
+        "pareto_set": null,
+        "sensitivity": null
+      },
+      "physical_behavior": {
+        "status": "specified physical invocation paths, implementation and qualification pending",
+        "realizations": [
+          "PhysicalVocabulary::PhysicalAssistanceRealization",
+          "PhysicalVocabulary::PhysicalConceptRealization",
+          "PhysicalVocabulary::PhysicalDesignRealization",
+          "PhysicalVocabulary::PhysicalSoftwareRealization",
+          "PhysicalVocabulary::PhysicalChangeReviewRealization",
+          "PhysicalVocabulary::PhysicalReplayRealization",
+          "PhysicalVocabulary::PhysicalCalibrationRealization"
+        ],
+        "admission": [
+          "PhysicalVocabulary::SupportedExecution::admitProfiles",
+          "PhysicalVocabulary::SupportedHostExecution::admitProfiles"
+        ],
+        "assistance_operations": [
+          "PhysicalVocabulary::PhysicalCheckDraft",
+          "PhysicalVocabulary::PhysicalRecommendMethods",
+          "PhysicalVocabulary::PhysicalReassessAssistance"
+        ],
+        "existing_SIL": "PhysicalVocabulary::ExistingHostSIL",
+        "returned_reports": "PhysicalVocabulary::ActiveAssistance::report",
+        "candidate_instances": "Current candidate behavior_realizations indexes resolve to seven performed physical usages each"
+      },
+      "source_support": "See current source-review roles/limits. Every complete candidate contains proposed additions."
     }
-  ],
-  "decision": {
-    "preferred": "PA-CDT",
-    "principal_alternative": "PA-VS",
-    "authority": "Analyst proposed direction, stakeholder agreement and implementation eligibility pending",
-    "priorities": [
-      "Local engineering semantic authority and exact current-context controls",
-      "Inspectable explanations, portable reconstructible releases and replaceable specialist profiles",
-      "Workable collaboration/adoption with reusable services where conditions are preserved"
-    ],
-    "rationale": "Native SysML/Python local core exposes engineering meanings and assistance logic. Git/archive releases reduce dependence on hosted authoring data. This is a development-structure choice, not a measured performance claim.",
-    "verify_before_retaining": [
-      "Deployment/extension rights and engineering quantity fidelity",
-      "Every mandatory discipline and selected host profile",
-      "Active explained assistance with independent expert references and uncertain/no-eligible/outage/stale-cache cases",
-      "Coupled changes and interrupted-transfer recovery",
-      "Exact release gate, raw histories, independent assessment and clean replay",
-      "Current review authority and agreed MOP targets"
-    ],
-    "reversal": [
-      "Mandatory access/profile or fidelity failure",
-      "Response/currency/reconstruction target failure",
-      "Impractical correct-task/adoption burden",
-      "Verified alternative service/integration advantage under the same tasks"
-    ]
   },
-  "numerical_results": {
-    "measured_scores": null,
-    "weights": null,
-    "benefit": null,
-    "prices": null,
-    "pareto_set": null,
-    "sensitivity": null
-  },
-  "physical_behavior": {
-    "status": "specified physical invocation paths, implementation and qualification pending",
-    "realizations": ["PhysicalVocabulary::PhysicalAssistanceRealization", "PhysicalVocabulary::PhysicalConceptRealization", "PhysicalVocabulary::PhysicalDesignRealization", "PhysicalVocabulary::PhysicalSoftwareRealization", "PhysicalVocabulary::PhysicalChangeReviewRealization", "PhysicalVocabulary::PhysicalReplayRealization", "PhysicalVocabulary::PhysicalCalibrationRealization"],
-    "admission": ["PhysicalVocabulary::SupportedExecution::admitProfiles", "PhysicalVocabulary::SupportedHostExecution::admitProfiles"],
-    "assistance_operations": ["PhysicalVocabulary::PhysicalCheckDraft", "PhysicalVocabulary::PhysicalRecommendMethods", "PhysicalVocabulary::PhysicalReassessAssistance"],
-    "existing_SIL": "PhysicalVocabulary::ExistingHostSIL",
-    "returned_reports": "PhysicalVocabulary::ActiveAssistance::report",
-    "candidate_instances": "Current candidate behavior_realizations indexes resolve to seven performed physical usages each"
-  },
-  "source_support": "See current source-review roles/limits. Every complete candidate contains proposed additions."
+  "logical_api": {
+    "contract": "traceability/framework-baseline.json#/logical_io_contract",
+    "publication_sha256": {
+      "export-manifest.json": "c2e6a030e11292fe7a6a8705a216e2a3b3d7621f0abe564af4d7e5c49a29e6a1",
+      "native-io-contract.json": "7f51f4f052d9afba6d080a7437d44d0f4fea9d014a36d45d5a54de05f4b76c56",
+      "focused-checks.json": "dfe2f2c3d2627bf39498fcf57e5a97b1b4bec6b414e916da805c767fb2c85857"
+    },
+    "final_logical_ledger": {
+      "path": "traceability/logical-architecture.json",
+      "sha256": "e0cad9dc41bebfa573af77abb98344b30bb8ea71b43571666a521b93c81f986b",
+      "scope": "Released task6 logical specification snapshot. Not current full-model validation or empirical approval."
+    }
+  }
 }

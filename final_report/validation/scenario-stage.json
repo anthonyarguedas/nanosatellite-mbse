@@ -1,0 +1,368 @@
+{
+  "id": "scenario",
+  "valid": true,
+  "scope": "Actual full current native specification checks and matched semantic/policy mutations. No empirical V&V.",
+  "baseline_passed": true,
+  "source_sha256": {
+    "sysml/05-verification.sysml": "6fa84c3ae626234c39e86b3306522dd6f262d579cf5157cb943aeb35dcc2296f",
+    "sysml/08-physical-vocabulary.sysml": "dcb2673ab222b8649dadbc68f84434432284a88a1c7a8d65ac520c8812303ed3",
+    "sysml/00-domain.sysml": "1332e2c7c1d89fb614ebaa86954c4584a62ee39f11e3f2b75faf649755b29c29",
+    "sysml/03-requirements.sysml": "7dac5243462a6ff2857a5f0ce3d0f0cc4c2b84156ec0fe3d214c6f66dbb466bb",
+    "sysml/11-logical-responsibilities.sysml": "3e4e26162eda82bc8dc2f461b6ea28fe4c7f4159d405a0f7c241c8b8124ec6e5",
+    "sysml/06-system-context.sysml": "fd89ef55d2fc57db91f743c1908af57e4ebfe4efaea411039367a4f1345a0829",
+    "sysml/10-interface-views.sysml": "271cd1dbea2c0ede498fc4000d4ff45c2b232576d4adc7ae5c6c4f93befadc01",
+    "sysml/04-logical.sysml": "789a22cde3e2c962f258e6f7f9f9f91c7f0ae9b32b4192d6173aa0b9d050e9db",
+    "sysml/01-concerns.sysml": "6f4b8beffa04564556d13bcf5e3aef0d67717f4fe9580ed90ef01921ebeed794",
+    "sysml/02-needs-context.sysml": "88296cc33485c91c0ebaf97942543e903018194db441f438272839e3fa9a03ee",
+    "sysml/09-scenarios.sysml": "95f4825c0151d50462f6ba56fd6a6acdf48b794b7b713fa746bc7dd87a154faa",
+    "sysml/07-report-views.sysml": "9eb00d2ceef23aba90f46a524ac03b738b7d070e4b5e7cf2675f77e6953f6c53",
+    "sysml/candidates/nanospace.sysml": "a3c9fd8b404fcbfed81915d12d353e5faf3ce86488c9d45294390ad94dd9d16d",
+    "sysml/candidates/comet.sysml": "a5f9f336d450aa0c06d99c3826ed61abb006278d2fefb55af216988597c24594",
+    "sysml/candidates/valispace.sysml": "12b2aeb894395f6a1e6ea195754062aa781ac4cdf384dbbe6256876363db4a2a",
+    "sysml/candidates/git-yaml.sysml": "91b703e403a0f4f93143305fa9ef3f4a363c2bdf87151015e3a938778bea260a",
+    "sysml/candidates/custom.sysml": "1e6514fde96dc08baafba17ed8244aa206bad8bc22c707af9ce898e13c98857e",
+    "sysml/check_scenarios.py": "d69277945d0c1def4b35431bfd068e9aa09ceeb15ac3c0884689cf9639de68a0",
+    "tools/audit_report.py": "ab5b563ff9e31d015a6637554538f938d43609a0883d26cb75d541cbd8bcc375",
+    "traceability/logical-architecture.json": "e0cad9dc41bebfa573af77abb98344b30bb8ea71b43571666a521b93c81f986b",
+    "requirements.tex": "853c56e2b2acf9fa1152cbd4930ab013021b84bc71a52e8535c8c0485351fcf9",
+    "logical.tex": "53b2876b13b69cdb85b81815f9f00fd4d2eae0879958b4d1c489b50bc0cd9594",
+    "literatura.bib": "fd3b1871afd80544b35c0b511587e79a0d18e64ebe05db3c4bfa874e9c71956b"
+  },
+  "negative_cases": {
+    "actor-allocation": {
+      "case": "actor-allocation",
+      "rejected": true,
+      "reason": "FAIL: ScenarioViews::SC02::'FW: check and recommend': allocation mismatch",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": null,
+      "baseline_passed": true
+    },
+    "typed-flow": {
+      "case": "typed-flow",
+      "rejected": true,
+      "reason": "FAIL: ScenarioViews::SC01::exchange1: payload does not conform to source parameter",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": null,
+      "baseline_passed": true
+    },
+    "scenario-mr": {
+      "case": "scenario-mr",
+      "rejected": true,
+      "reason": "FAIL: SC03: wrong MR derivation",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": null,
+      "baseline_passed": true
+    },
+    "uc-mr": {
+      "case": "uc-mr",
+      "rejected": true,
+      "reason": "FAIL: SC02: disagrees with approved UC/MR links",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": null,
+      "baseline_passed": true
+    },
+    "stale-guidance": {
+      "case": "stale-guidance",
+      "rejected": true,
+      "reason": "FAIL: GuidanceControl::apply: missing guard",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": null,
+      "baseline_passed": true
+    },
+    "edit-invalidation": {
+      "case": "edit-invalidation",
+      "rejected": true,
+      "reason": "FAIL: A context edit must invalidate guidance immediately",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": null,
+      "baseline_passed": true
+    },
+    "review-authority": {
+      "case": "review-authority",
+      "rejected": true,
+      "reason": "FAIL: BaselineControl: review transition mismatch from underReview, disposition=accepted, {'authorizedCurrent': False, 'blocking': False, 'conditionalRecordsComplete': False, 'closureComplete': False}, enabled=['approve']",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": true,
+      "baseline_passed": true
+    },
+    "initial-accepted-disposition": {
+      "case": "initial-accepted-disposition",
+      "rejected": true,
+      "reason": "FAIL: BaselineControl: review transition mismatch from underReview, disposition=conditional, {'authorizedCurrent': True, 'blocking': False, 'conditionalRecordsComplete': False, 'closureComplete': False}, enabled=['approve']",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": true,
+      "baseline_passed": true
+    },
+    "renewal-accepted-disposition": {
+      "case": "renewal-accepted-disposition",
+      "rejected": true,
+      "reason": "FAIL: BaselineControl: closed prior conditions override renewed conditional disposition",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": true,
+      "baseline_passed": true
+    },
+    "blocked-renewal-path": {
+      "case": "blocked-renewal-path",
+      "rejected": true,
+      "reason": "FAIL: BaselineControl: missing renewed progressionBlocked decision path",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": true,
+      "baseline_passed": true
+    },
+    "conditional-renewal-record": {
+      "case": "conditional-renewal-record",
+      "rejected": true,
+      "reason": "FAIL: BaselineControl: missing renewed conditional decision path",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": true,
+      "baseline_passed": true
+    },
+    "closure-override-counterexample": {
+      "case": "closure-override-counterexample",
+      "rejected": true,
+      "reason": "FAIL: BaselineControl: closed prior conditions override renewed conditional disposition",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": true,
+      "baseline_passed": true
+    },
+    "prior-closure-evidence": {
+      "case": "prior-closure-evidence",
+      "rejected": true,
+      "reason": "FAIL: BaselineControl: review transition mismatch from conditional, disposition=accepted, {'authorizedCurrent': True, 'blocking': False, 'conditionalRecordsComplete': False, 'closureComplete': False}, enabled=['closeConditions']",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": true,
+      "baseline_passed": true
+    },
+    "blocked-disposition-renewal": {
+      "case": "blocked-disposition-renewal",
+      "rejected": true,
+      "reason": "FAIL: BaselineControl: review transition mismatch from conditional, disposition=accepted, {'authorizedCurrent': True, 'blocking': True, 'conditionalRecordsComplete': False, 'closureComplete': False}, enabled=['blockRenewal']",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": true,
+      "baseline_passed": true
+    },
+    "independent-approval-flag": {
+      "case": "independent-approval-flag",
+      "rejected": true,
+      "reason": "FAIL: BaselineControl: uncontrolled guard reference ScenarioViews::BaselineControl::acceptedDecision",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": true,
+      "baseline_passed": true
+    },
+    "V42-procedure-agreement": {
+      "case": "V42-procedure-agreement",
+      "rejected": true,
+      "reason": "FAIL: V42: native/ledger stimulus_conditions disagreement",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": true,
+      "baseline_passed": true
+    },
+    "physical-participant": {
+      "case": "physical-participant",
+      "rejected": true,
+      "reason": "FAIL: Native model invalid: No Type named 'TestingFacilityTechnician' found.",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": null,
+      "baseline_passed": true
+    },
+    "retired-FR40": {
+      "case": "retired-FR40",
+      "rejected": true,
+      "reason": "FAIL: Current FR set changed or retired FR-12/FR-40 restored",
+      "mutation_matches": 1,
+      "native_check_executed": true,
+      "native_validation_passed": null,
+      "baseline_passed": true
+    }
+  },
+  "actual_result": {
+    "status": "passed specification checks, not empirical V&V",
+    "native_errors": 0,
+    "native_warnings": 0,
+    "scenarios": 5,
+    "summary_views": 5,
+    "actor_allocations": 53,
+    "guarded_alternatives": 12,
+    "scenario_typed_flows": 28,
+    "interface_typed_flows": 17,
+    "requirements": 40,
+    "mr_derivations": 169,
+    "retired_requirement": "FR-40",
+    "review_control": {
+      "source": "Syside semantic expression tree",
+      "review_transitions": 6,
+      "truth_table_cases": 96,
+      "closed_prior_conditions_renewed_conditional": "remains conditional",
+      "renewed_dispositions": {
+        "accepted": "acceptedBaseline",
+        "conditional": "conditional",
+        "progressionBlocked": "progressionBlocked"
+      }
+    },
+    "V42": "report FR-42 statement and native/ledger procedure agree, planned, not executed",
+    "negative_cases": [
+      {
+        "case": "actor-allocation",
+        "rejected": true,
+        "reason": "FAIL: ScenarioViews::SC02::'FW: check and recommend': allocation mismatch",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": null
+      },
+      {
+        "case": "typed-flow",
+        "rejected": true,
+        "reason": "FAIL: ScenarioViews::SC01::exchange1: payload does not conform to source parameter",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": null
+      },
+      {
+        "case": "scenario-mr",
+        "rejected": true,
+        "reason": "FAIL: SC03: wrong MR derivation",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": null
+      },
+      {
+        "case": "uc-mr",
+        "rejected": true,
+        "reason": "FAIL: SC02: disagrees with approved UC/MR links",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": null
+      },
+      {
+        "case": "stale-guidance",
+        "rejected": true,
+        "reason": "FAIL: GuidanceControl::apply: missing guard",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": null
+      },
+      {
+        "case": "edit-invalidation",
+        "rejected": true,
+        "reason": "FAIL: A context edit must invalidate guidance immediately",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": null
+      },
+      {
+        "case": "review-authority",
+        "rejected": true,
+        "reason": "FAIL: BaselineControl: review transition mismatch from underReview, disposition=accepted, {'authorizedCurrent': False, 'blocking': False, 'conditionalRecordsComplete': False, 'closureComplete': False}, enabled=['approve']",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": true
+      },
+      {
+        "case": "initial-accepted-disposition",
+        "rejected": true,
+        "reason": "FAIL: BaselineControl: review transition mismatch from underReview, disposition=conditional, {'authorizedCurrent': True, 'blocking': False, 'conditionalRecordsComplete': False, 'closureComplete': False}, enabled=['approve']",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": true
+      },
+      {
+        "case": "renewal-accepted-disposition",
+        "rejected": true,
+        "reason": "FAIL: BaselineControl: closed prior conditions override renewed conditional disposition",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": true
+      },
+      {
+        "case": "blocked-renewal-path",
+        "rejected": true,
+        "reason": "FAIL: BaselineControl: missing renewed progressionBlocked decision path",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": true
+      },
+      {
+        "case": "conditional-renewal-record",
+        "rejected": true,
+        "reason": "FAIL: BaselineControl: missing renewed conditional decision path",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": true
+      },
+      {
+        "case": "closure-override-counterexample",
+        "rejected": true,
+        "reason": "FAIL: BaselineControl: closed prior conditions override renewed conditional disposition",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": true
+      },
+      {
+        "case": "prior-closure-evidence",
+        "rejected": true,
+        "reason": "FAIL: BaselineControl: review transition mismatch from conditional, disposition=accepted, {'authorizedCurrent': True, 'blocking': False, 'conditionalRecordsComplete': False, 'closureComplete': False}, enabled=['closeConditions']",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": true
+      },
+      {
+        "case": "blocked-disposition-renewal",
+        "rejected": true,
+        "reason": "FAIL: BaselineControl: review transition mismatch from conditional, disposition=accepted, {'authorizedCurrent': True, 'blocking': True, 'conditionalRecordsComplete': False, 'closureComplete': False}, enabled=['blockRenewal']",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": true
+      },
+      {
+        "case": "independent-approval-flag",
+        "rejected": true,
+        "reason": "FAIL: BaselineControl: uncontrolled guard reference ScenarioViews::BaselineControl::acceptedDecision",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": true
+      },
+      {
+        "case": "V42-procedure-agreement",
+        "rejected": true,
+        "reason": "FAIL: V42: native/ledger stimulus_conditions disagreement",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": true
+      },
+      {
+        "case": "physical-participant",
+        "rejected": true,
+        "reason": "FAIL: Native model invalid: No Type named 'TestingFacilityTechnician' found.",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": null
+      },
+      {
+        "case": "retired-FR40",
+        "rejected": true,
+        "reason": "FAIL: Current FR set changed or retired FR-12/FR-40 restored",
+        "mutation_matches": 1,
+        "native_check_executed": true,
+        "native_validation_passed": null
+      }
+    ],
+    "negative_baseline_passed": true
+  }
+}

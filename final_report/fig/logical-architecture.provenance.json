@@ -1,0 +1,149 @@
+{
+  "artifact": "logical-architecture",
+  "authoring": "Custom hand-positioned editable SVG with text elements. No graph layout generator.",
+  "native_syside": false,
+  "basis": "Approved provisional nodes and selected requirement-derived exchanges supplied in the diagram brief. Independent final FR I/O and model verification was outside this diagram-only turn.",
+  "physical_size_mm": {
+    "width": 165,
+    "height": 105
+  },
+  "font": {
+    "family": "Arial",
+    "minimum_pt": 8.5,
+    "component_name_pt": 9.75,
+    "sources": [
+      {
+        "weight": "regular",
+        "resolved_family": "Arial",
+        "source_file": "/System/Library/Fonts/Supplemental/Arial.ttf",
+        "source_sha256": "525979822591a3447cfc49d943d6f7683508e25543407871c0ed8fed05fd2bd9"
+      },
+      {
+        "weight": "bold",
+        "resolved_family": "Arial",
+        "source_file": "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+        "source_sha256": "d72db21f9242aedd6b917d8549ad5921766b24d5f8d0becfda2ff4c620b3c2e0"
+      }
+    ],
+    "pdf_embedding": "ArialMT and Arial-BoldMT TrueType subsets. Four embedded Cairo Type 3 resources contain searchable space glyphs only (U+0020). No raster glyphs or images."
+  },
+  "renderers": {
+    "pdf": {
+      "version": "rsvg-convert version 2.62.2\n\nlibraries used:\n  cairo 1.18.4\n  pango 1.57.1\n  harfbuzz 14.2.0\n  fontconfig 2.17.1",
+      "command": "rsvg-convert --format=pdf --output=final_report/fig/logical-architecture.pdf final_report/fig/logical-architecture.svg"
+    },
+    "png": {
+      "version": "pdftoppm version 26.04.0",
+      "command": "pdftoppm -r 180 -png -singlefile final_report/fig/logical-architecture.pdf final_report/fig/logical-architecture"
+    }
+  },
+  "selected_nodes": {
+    "L01": "Requirements and guidance",
+    "L02": "Mission and EPS design",
+    "L03": "Simulation and software integration",
+    "L04": "Model credibility",
+    "L05": "Evidence and technical review",
+    "L06": "Configuration and controlled exchange"
+  },
+  "selected_edges": [
+    [
+      "L01",
+      "L02",
+      "requirements / allocations"
+    ],
+    [
+      "L02",
+      "L03",
+      "models / scenarios"
+    ],
+    [
+      "L03",
+      "L04",
+      "run histories"
+    ],
+    [
+      "L04",
+      "L05",
+      "model assessment"
+    ],
+    [
+      "L05",
+      "L06",
+      "baseline / decisions"
+    ],
+    [
+      "L06",
+      "L01",
+      "current context (dashed)"
+    ],
+    [
+      "L06",
+      "L03",
+      "release / revisions (dashed)"
+    ],
+    [
+      "L03",
+      "F Prime",
+      "requests"
+    ],
+    [
+      "F Prime",
+      "L03",
+      "products / results"
+    ],
+    [
+      "NVIDIA Omniverse",
+      "L03",
+      "whole-CUBICS scenarios"
+    ],
+    [
+      "L03",
+      "NVIDIA Omniverse",
+      "EPS states / results"
+    ]
+  ],
+  "scope_notes": [
+    "F Prime host coding/build/SIL and NVIDIA Omniverse whole-CUBICS simulation are outside the framework. Both connect only to L03.",
+    "L06 preserves an exact human-authorized release. It does not grant its own release.",
+    "Other peer exchanges are deliberately omitted. The Omniverse exchange does not assert that it contains every numerical physics solver."
+  ],
+  "checks": {
+    "page_count": 1,
+    "physical_dimensions_mm": [
+      165,
+      105
+    ],
+    "searchable_text_elements": 39,
+    "minimum_declared_font_pt": 8.5,
+    "component_name_font_pt": 9.75,
+    "minimum_component_text_padding_mm": 1.684,
+    "text_bbox_overlaps": 0,
+    "text_arrow_stroke_bbox_intersections": 0,
+    "selected_exchange_paths": 11,
+    "exchange_arrow_crossings": 0,
+    "pdf_raster_images": 0,
+    "all_pdf_font_resources_embedded": true,
+    "supplementary_type3_font_resources": 4,
+    "supplementary_type3_space_glyphs_verified_no_raster": 4,
+    "publication_preview_dpi": 180,
+    "preview_pixels": [
+      1170,
+      745
+    ]
+  },
+  "visual_review": "The authoring agent and task6 coordinator independently read and inspected the final 180 dpi PDF-derived preview. All labels and arrow directions were legible at the declared 165 mm width.",
+  "independent_verification": {
+    "svg_and_artifact_hashes_match": true,
+    "font_source_hashes_match": true,
+    "minimum_font_pt_computed_from_svg": 8.5,
+    "independent_svg_to_pdf_to_png_reproduction": "Byte-identical 180 dpi PNG using the recorded renderer commands. PDF byte identity varies with Cairo creation metadata.",
+    "reproduced_png_sha256": "00c6f7c77cb6db59d816bdfd0232150eee68fe28a9e81065e76288949e9d3f80",
+    "upstream_staged_snapshot_unchanged": true,
+    "final_fr_model_consistency_checked": false
+  },
+  "sha256": {
+    "logical-architecture.svg": "93d102d8a9a2d467d748bf747ca13120aa90c7fe5d27f1202a38c5aa0aa92ac0",
+    "logical-architecture.pdf": "054177e3ad13658d89c754d11b9e39d62098d18061d8f16d74a362496c1ff2fe",
+    "logical-architecture.png": "00c6f7c77cb6db59d816bdfd0232150eee68fe28a9e81065e76288949e9d3f80"
+  }
+}

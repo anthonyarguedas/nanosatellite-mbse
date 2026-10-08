@@ -16,63 +16,63 @@ package LogicalRealization {
         doc /* Interactive requirement assistance and contextual method/lifecycle guidance. Compatible input and exact latest-context gates precede registration, presentation and application. Draft findings are no technical approval. Independent requirement validation remains external. */
         perform action edit : ScenarioViews::SC02External1 { @ExternalStep { performer = ScenarioViews::systemsEngineer meta SysML::PartUsage; } }
         perform action receive : CheckTransfer {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::checkTransfer meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkTransfer meta SysML::ActionUsage; }
         }
         perform action capture : CaptureContext {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::captureContext meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::captureContext meta SysML::ActionUsage; }
         }
         perform action invalidateOnEdit : InvalidateAndReassess {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::invalidate meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::invalidate meta SysML::ActionUsage; }
         }
         perform action acknowledge : AcknowledgeAssistance {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::Assistance::acknowledge meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::RequirementsAssistance::acknowledge meta SysML::ActionUsage; }
         }
         perform action retainDraft : RetainRequirements {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L03 meta SysML::PartUsage; operation = FrameworkLogical::Requirements::retainRequirements meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::RequirementsAssistance::retainRequirements meta SysML::ActionUsage; }
         }
         perform action checkDraft : CheckDraft {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::Assistance::checkDraft meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::RequirementsAssistance::checkDraft meta SysML::ActionUsage; }
         }
         perform action recommend : RecommendMethods {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::Assistance::recommend meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::RequirementsAssistance::recommend meta SysML::ActionUsage; }
         }
         perform action checkReply : CheckCurrency {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::checkCurrency meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkCurrency meta SysML::ActionUsage; }
         }
         perform action present : PresentAdvice {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::presentAdvice meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::RequirementsAssistance::presentAdvice meta SysML::ActionUsage; }
         }
         perform action engineerDisposition : ScenarioViews::SC02External3 { @ExternalStep { performer = ScenarioViews::systemsEngineer meta SysML::PartUsage; } }
         perform action dispose : DisposeSuggestion {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::Assistance::dispose meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::RequirementsAssistance::dispose meta SysML::ActionUsage; }
         }
         perform action checkApplication : CheckCurrency {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::checkCurrency meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkCurrency meta SysML::ActionUsage; }
         }
         perform action derive : DeriveAllocate {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L03 meta SysML::PartUsage; operation = FrameworkLogical::Requirements::deriveAllocate meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::RequirementsAssistance::deriveAllocate meta SysML::ActionUsage; }
         }
         perform action trace : TraceLinks {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L03 meta SysML::PartUsage; operation = FrameworkLogical::Requirements::traceLinks meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::RequirementsAssistance::traceLinks meta SysML::ActionUsage; }
         }
         perform action validate : ScenarioViews::SC02External5 { @ExternalStep { performer = ScenarioViews::reviewers meta SysML::PartUsage; } }
         perform action retainValidation : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
         perform action retainDisposition : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
         perform action invalidate : InvalidateAndReassess {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::invalidate meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::invalidate meta SysML::ActionUsage; }
         }
         perform action reassess : ReassessAssistance {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::Assistance::reassess meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::RequirementsAssistance::reassess meta SysML::ActionUsage; }
         }
         perform action rejectTransfer : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
         perform action rejectDisposition : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
         decide compatibleInput;
         decide currentReply;
@@ -141,75 +141,78 @@ package LogicalRealization {
         flow exchange25 of ImpactNotice from invalidate.impact to reassess.impact;
     }
     allocate AssistanceRealization::edit to ScenarioViews::systemsEngineer;
-    allocate AssistanceRealization::receive to logical.L01;
-    allocate AssistanceRealization::capture to logical.L08;
-    allocate AssistanceRealization::invalidateOnEdit to logical.L08;
-    allocate AssistanceRealization::acknowledge to logical.L02;
-    allocate AssistanceRealization::retainDraft to logical.L03;
-    allocate AssistanceRealization::checkDraft to logical.L02;
-    allocate AssistanceRealization::recommend to logical.L02;
-    allocate AssistanceRealization::checkReply to logical.L08;
+    allocate AssistanceRealization::receive to logical.L06;
+    allocate AssistanceRealization::capture to logical.L06;
+    allocate AssistanceRealization::invalidateOnEdit to logical.L06;
+    allocate AssistanceRealization::acknowledge to logical.L01;
+    allocate AssistanceRealization::retainDraft to logical.L01;
+    allocate AssistanceRealization::checkDraft to logical.L01;
+    allocate AssistanceRealization::recommend to logical.L01;
+    allocate AssistanceRealization::checkReply to logical.L06;
     allocate AssistanceRealization::present to logical.L01;
     allocate AssistanceRealization::engineerDisposition to ScenarioViews::systemsEngineer;
-    allocate AssistanceRealization::dispose to logical.L02;
-    allocate AssistanceRealization::checkApplication to logical.L08;
-    allocate AssistanceRealization::derive to logical.L03;
-    allocate AssistanceRealization::trace to logical.L03;
+    allocate AssistanceRealization::dispose to logical.L01;
+    allocate AssistanceRealization::checkApplication to logical.L06;
+    allocate AssistanceRealization::derive to logical.L01;
+    allocate AssistanceRealization::trace to logical.L01;
     allocate AssistanceRealization::validate to ScenarioViews::reviewers;
-    allocate AssistanceRealization::retainValidation to logical.L08;
-    allocate AssistanceRealization::retainDisposition to logical.L08;
-    allocate AssistanceRealization::invalidate to logical.L08;
-    allocate AssistanceRealization::reassess to logical.L02;
-    allocate AssistanceRealization::rejectTransfer to logical.L08;
-    allocate AssistanceRealization::rejectDisposition to logical.L08;
+    allocate AssistanceRealization::retainValidation to logical.L06;
+    allocate AssistanceRealization::retainDisposition to logical.L06;
+    allocate AssistanceRealization::invalidate to logical.L06;
+    allocate AssistanceRealization::reassess to logical.L01;
+    allocate AssistanceRealization::rejectTransfer to logical.L06;
+    allocate AssistanceRealization::rejectDisposition to logical.L06;
     #sourceTrace dependency AssistanceRealization_SC02 from AssistanceRealization to ScenarioViews::SC02;
     action def DesignRealization {
-        doc /* Mission concept and preliminary design use the same mission/component/budget basis at the fidelity suited to maturity. Numerical applicability and criterion gates precede supported mandatory feasibility and engineer selection. Unknown costs/rates and temporal shortages remain explicit. */
+        doc /* Mission concept and preliminary design use the same mission/component/budget basis at the fidelity suited to maturity. Numerical applicability and criterion gates precede supported mandatory feasibility and engineer selection. Unknown technical quantities/rates and temporal shortages remain explicit. */
         perform action submit : ScenarioViews::SC03External1 { @ExternalStep { performer = ScenarioViews::epsEngineer meta SysML::PartUsage; } }
         perform action receive : CheckTransfer {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::checkTransfer meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkTransfer meta SysML::ActionUsage; }
         }
         perform action configure : DefineDesign {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::Design::defineDesign meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::MissionDesign::defineDesign meta SysML::ActionUsage; }
         }
         perform action budget : BudgetSize {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::Design::budgetSize meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::MissionDesign::budgetSize meta SysML::ActionUsage; }
         }
         perform action planCriteria : PlanAssessment {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L07 meta SysML::PartUsage; operation = FrameworkLogical::AssessmentReview::planAssessment meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::EvidenceReview::planAssessment meta SysML::ActionUsage; }
         }
         perform action plan : PlanAnalysis {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::Analysis::planAnalysis meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L03 meta SysML::PartUsage; operation = FrameworkLogical::SimulationIntegration::planAnalysis meta SysML::ActionUsage; }
         }
         perform action execute : ScenarioViews::SC03External3 { @ExternalStep { performer = ScenarioViews::analysisTools meta SysML::PartUsage; } }
         perform action receiveResult : CheckTransfer {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::checkTransfer meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkTransfer meta SysML::ActionUsage; }
         }
         perform action preserve : PreserveRun {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRun meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRun meta SysML::ActionUsage; }
         }
         perform action checkCurrent : CheckResultContext {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::checkResultContext meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkResultContext meta SysML::ActionUsage; }
         }
         perform action credibility : AssessModel {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::Credibility::assessModel meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::ModelCredibility::assessModel meta SysML::ActionUsage; }
         }
         perform action assess : AssessProduct {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L07 meta SysML::PartUsage; operation = FrameworkLogical::AssessmentReview::assessProduct meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::EvidenceReview::assessProduct meta SysML::ActionUsage; }
         }
         perform action compare : CompareDesigns {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::Design::compareDesigns meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::MissionDesign::compareDesigns meta SysML::ActionUsage; }
         }
         perform action select : ScenarioViews::SC03External5 { @ExternalStep { performer = ScenarioViews::epsEngineer meta SysML::PartUsage; } }
         perform action checkSelection : CheckEngineerSelection {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::checkSelection meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkSelection meta SysML::ActionUsage; }
         }
         perform action retainSelection : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
         perform action retainGaps : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
+        perform action retainRaw_receiveResult : PreserveRecord { @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; } }
+        flow raw_receiveResult of CheckedTransfer from receiveResult.checked to retainRaw_receiveResult.record;
+        first retainRaw_receiveResult then complete;
         decide compatibleInput;
         decide compatibleResult;
         decide usableNumerics;
@@ -228,7 +231,7 @@ package LogicalRealization {
         first execute then receiveResult;
         first receiveResult then compatibleResult;
         succession admitResult first compatibleResult if receiveResult.compatible then preserve;
-        succession rejectResult first compatibleResult if not receiveResult.compatible then retainGaps;
+        succession rejectResult first compatibleResult if not receiveResult.compatible then retainRaw_receiveResult;
         first preserve then checkCurrent;
         first checkCurrent then credibility;
         first credibility then usableNumerics;
@@ -265,73 +268,77 @@ package LogicalRealization {
         flow exchange18 of EngineeringDecision from select.decision to retainSelection.record;
         flow exchange19 of EngineeringArtifact from submit.configuration to retainGaps.record;
     }
+    allocate DesignRealization::retainRaw_receiveResult to logical.L06;
     allocate DesignRealization::submit to ScenarioViews::epsEngineer;
-    allocate DesignRealization::receive to logical.L01;
-    allocate DesignRealization::configure to logical.L04;
-    allocate DesignRealization::budget to logical.L04;
-    allocate DesignRealization::planCriteria to logical.L07;
-    allocate DesignRealization::plan to logical.L05;
+    allocate DesignRealization::receive to logical.L06;
+    allocate DesignRealization::configure to logical.L02;
+    allocate DesignRealization::budget to logical.L02;
+    allocate DesignRealization::planCriteria to logical.L05;
+    allocate DesignRealization::plan to logical.L03;
     allocate DesignRealization::execute to ScenarioViews::analysisTools;
-    allocate DesignRealization::receiveResult to logical.L01;
-    allocate DesignRealization::preserve to logical.L08;
-    allocate DesignRealization::checkCurrent to logical.L08;
-    allocate DesignRealization::credibility to logical.L06;
-    allocate DesignRealization::assess to logical.L07;
-    allocate DesignRealization::compare to logical.L04;
+    allocate DesignRealization::receiveResult to logical.L06;
+    allocate DesignRealization::preserve to logical.L06;
+    allocate DesignRealization::checkCurrent to logical.L06;
+    allocate DesignRealization::credibility to logical.L04;
+    allocate DesignRealization::assess to logical.L05;
+    allocate DesignRealization::compare to logical.L02;
     allocate DesignRealization::select to ScenarioViews::epsEngineer;
-    allocate DesignRealization::checkSelection to logical.L08;
-    allocate DesignRealization::retainSelection to logical.L08;
-    allocate DesignRealization::retainGaps to logical.L08;
+    allocate DesignRealization::checkSelection to logical.L06;
+    allocate DesignRealization::retainSelection to logical.L06;
+    allocate DesignRealization::retainGaps to logical.L06;
     #sourceTrace dependency DesignRealization_SC03 from DesignRealization to ScenarioViews::SC03;
     action def ConceptRealization {
-        doc /* Mission concepts use the agreed Systems Engineer mission definition, concept analysis and Systems Engineer selection authority. Numerical applicability and criterion gates precede supported mandatory feasibility and engineer selection. Unknown costs/rates and temporal shortages remain explicit. */
-        perform action makeConfiguration : ConfigureConcept { @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::Design::configureConcept meta SysML::ActionUsage; } }
+        doc /* Mission concepts use the agreed Systems Engineer mission definition, concept analysis and Systems Engineer selection authority. Numerical applicability and criterion gates precede supported mandatory feasibility and engineer selection. Unknown technical quantities/rates and temporal shortages remain explicit. */
+        perform action makeConfiguration : ConfigureConcept { @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::MissionDesign::configureConcept meta SysML::ActionUsage; } }
         first makeConfiguration then configure;
         perform action submit : ScenarioViews::SC01External1 { @ExternalStep { performer = ScenarioViews::systemsEngineer meta SysML::PartUsage; } }
         perform action receive : CheckTransfer {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::checkTransfer meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkTransfer meta SysML::ActionUsage; }
         }
         perform action configure : DefineDesign {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::Design::defineDesign meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::MissionDesign::defineDesign meta SysML::ActionUsage; }
         }
         perform action budget : BudgetSize {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::Design::budgetSize meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::MissionDesign::budgetSize meta SysML::ActionUsage; }
         }
         perform action planCriteria : PlanAssessment {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L07 meta SysML::PartUsage; operation = FrameworkLogical::AssessmentReview::planAssessment meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::EvidenceReview::planAssessment meta SysML::ActionUsage; }
         }
         perform action plan : PlanAnalysis {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::Analysis::planAnalysis meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L03 meta SysML::PartUsage; operation = FrameworkLogical::SimulationIntegration::planAnalysis meta SysML::ActionUsage; }
         }
         perform action execute : ScenarioViews::SC01External3 { @ExternalStep { performer = ScenarioViews::analysisTools meta SysML::PartUsage; } }
         perform action receiveResult : CheckTransfer {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::checkTransfer meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkTransfer meta SysML::ActionUsage; }
         }
         perform action preserve : PreserveRun {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRun meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRun meta SysML::ActionUsage; }
         }
         perform action checkCurrent : CheckResultContext {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::checkResultContext meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkResultContext meta SysML::ActionUsage; }
         }
         perform action credibility : AssessModel {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::Credibility::assessModel meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::ModelCredibility::assessModel meta SysML::ActionUsage; }
         }
         perform action assess : AssessProduct {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L07 meta SysML::PartUsage; operation = FrameworkLogical::AssessmentReview::assessProduct meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::EvidenceReview::assessProduct meta SysML::ActionUsage; }
         }
         perform action compare : CompareDesigns {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::Design::compareDesigns meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::MissionDesign::compareDesigns meta SysML::ActionUsage; }
         }
         perform action select : ScenarioViews::SC01External5 { @ExternalStep { performer = ScenarioViews::systemsEngineer meta SysML::PartUsage; } }
         perform action checkSelection : CheckEngineerSelection {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::checkSelection meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkSelection meta SysML::ActionUsage; }
         }
         perform action retainSelection : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
         perform action retainGaps : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
+        perform action retainRaw_receiveResult : PreserveRecord { @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; } }
+        flow raw_receiveResult of CheckedTransfer from receiveResult.checked to retainRaw_receiveResult.record;
+        first retainRaw_receiveResult then complete;
         decide compatibleInput;
         decide compatibleResult;
         decide usableNumerics;
@@ -350,7 +357,7 @@ package LogicalRealization {
         first execute then receiveResult;
         first receiveResult then compatibleResult;
         succession admitResult first compatibleResult if receiveResult.compatible then preserve;
-        succession rejectResult first compatibleResult if not receiveResult.compatible then retainGaps;
+        succession rejectResult first compatibleResult if not receiveResult.compatible then retainRaw_receiveResult;
         first preserve then checkCurrent;
         first checkCurrent then credibility;
         first credibility then usableNumerics;
@@ -388,89 +395,102 @@ package LogicalRealization {
         flow exchange19 of EngineeringArtifact from submit.mission to retainGaps.record;
         flow exchange20 of MissionDefinition from submit.mission to makeConfiguration.mission;
     }
+    allocate ConceptRealization::retainRaw_receiveResult to logical.L06;
     allocate ConceptRealization::submit to ScenarioViews::systemsEngineer;
-    allocate ConceptRealization::receive to logical.L01;
-    allocate ConceptRealization::configure to logical.L04;
-    allocate ConceptRealization::budget to logical.L04;
-    allocate ConceptRealization::planCriteria to logical.L07;
-    allocate ConceptRealization::plan to logical.L05;
+    allocate ConceptRealization::receive to logical.L06;
+    allocate ConceptRealization::configure to logical.L02;
+    allocate ConceptRealization::budget to logical.L02;
+    allocate ConceptRealization::planCriteria to logical.L05;
+    allocate ConceptRealization::plan to logical.L03;
     allocate ConceptRealization::execute to ScenarioViews::analysisTools;
-    allocate ConceptRealization::receiveResult to logical.L01;
-    allocate ConceptRealization::preserve to logical.L08;
-    allocate ConceptRealization::checkCurrent to logical.L08;
-    allocate ConceptRealization::credibility to logical.L06;
-    allocate ConceptRealization::assess to logical.L07;
-    allocate ConceptRealization::compare to logical.L04;
+    allocate ConceptRealization::receiveResult to logical.L06;
+    allocate ConceptRealization::preserve to logical.L06;
+    allocate ConceptRealization::checkCurrent to logical.L06;
+    allocate ConceptRealization::credibility to logical.L04;
+    allocate ConceptRealization::assess to logical.L05;
+    allocate ConceptRealization::compare to logical.L02;
     allocate ConceptRealization::select to ScenarioViews::systemsEngineer;
-    allocate ConceptRealization::checkSelection to logical.L08;
-    allocate ConceptRealization::retainSelection to logical.L08;
-    allocate ConceptRealization::retainGaps to logical.L08;
-    allocate ConceptRealization::makeConfiguration to logical.L04;
+    allocate ConceptRealization::checkSelection to logical.L06;
+    allocate ConceptRealization::retainSelection to logical.L06;
+    allocate ConceptRealization::retainGaps to logical.L06;
+    allocate ConceptRealization::makeConfiguration to logical.L02;
     #sourceTrace dependency ConceptRealization_SC01 from ConceptRealization to ScenarioViews::SC01;
     action def SoftwareRealization {
         doc /* Detailed interfaces/control, external model MIL and authorized external host coding/build/SIL. Specific current detailed-design release is required before a coding request exists. MIL/SIL findings and engineer product disposition precede any scoped readiness claim. */
         perform action submit : ScenarioViews::SC04External1 { @ExternalStep { performer = ScenarioViews::epsEngineer meta SysML::PartUsage; } }
         perform action receive : CheckTransfer {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::checkTransfer meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkTransfer meta SysML::ActionUsage; }
         }
         perform action interfaces : DefineInterfaces {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::Design::defineInterfaces meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::MissionDesign::defineInterfaces meta SysML::ActionUsage; }
         }
+        perform action mapping : MapFPrime { @LogicalStep { component = FrameworkLogical::LogicalFramework::L03 meta SysML::PartUsage; operation = FrameworkLogical::SimulationIntegration::mapFPrime meta SysML::ActionUsage; } }
+        flow mappedSpecification from submit.specification to mapping.specification;
+        flow mappedCodingWork from mapping.work to coordinate.work;
         perform action planCriteria : PlanAssessment {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L07 meta SysML::PartUsage; operation = FrameworkLogical::AssessmentReview::planAssessment meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::EvidenceReview::planAssessment meta SysML::ActionUsage; }
         }
         perform action planMIL : PlanMIL {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::Analysis::planMIL meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L03 meta SysML::PartUsage; operation = FrameworkLogical::SimulationIntegration::planMIL meta SysML::ActionUsage; }
         }
         perform action executeMIL : ScenarioViews::SC04External3 { @ExternalStep { performer = ScenarioViews::analysisTools meta SysML::PartUsage; } }
         perform action receiveMIL : CheckTransfer {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::checkTransfer meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkTransfer meta SysML::ActionUsage; }
         }
         perform action preserveMIL : PreserveRun {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRun meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRun meta SysML::ActionUsage; }
         }
         perform action assessMIL : AssessModel {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::Credibility::assessModel meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::ModelCredibility::assessModel meta SysML::ActionUsage; }
         }
         perform action release : AuthorizeDetailedDesign { @ExternalStep { performer = ScenarioViews::epsEngineer meta SysML::PartUsage; } }
         perform action checkRelease : CheckDetailedDesignAuthorization {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::checkDesignAuthorization meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkDesignAuthorization meta SysML::ActionUsage; }
         }
         perform action coordinate : CoordinateCoding {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::Analysis::coordinateCoding meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L03 meta SysML::PartUsage; operation = FrameworkLogical::SimulationIntegration::coordinateCoding meta SysML::ActionUsage; }
         }
         perform action codeBuildSil : ScenarioViews::SC04External5 { @ExternalStep { performer = ScenarioViews::hostToolchain meta SysML::PartUsage; } }
         perform action receiveSIL : CheckTransfer {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::checkTransfer meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkTransfer meta SysML::ActionUsage; }
         }
         perform action preserveSIL : PreserveRun {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRun meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRun meta SysML::ActionUsage; }
         }
         perform action checkCurrent : CheckResultContext {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::checkResultContext meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkResultContext meta SysML::ActionUsage; }
         }
         perform action compare : CompareMILSil {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::Analysis::compareMILSil meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L03 meta SysML::PartUsage; operation = FrameworkLogical::SimulationIntegration::compareMILSil meta SysML::ActionUsage; }
         }
         perform action credibility : AssessModel {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::Credibility::assessModel meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::ModelCredibility::assessModel meta SysML::ActionUsage; }
         }
         perform action assess : AssessProduct {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L07 meta SysML::PartUsage; operation = FrameworkLogical::AssessmentReview::assessProduct meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::EvidenceReview::assessProduct meta SysML::ActionUsage; }
         }
         perform action present : PresentAssessment {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::presentAssessment meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::EvidenceReview::presentAssessment meta SysML::ActionUsage; }
         }
         perform action approve : ScenarioViews::SC04External7 { @ExternalStep { performer = ScenarioViews::epsEngineer meta SysML::PartUsage; } }
         perform action checkProducts : CheckEngineerSelection {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::checkSelection meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkSelection meta SysML::ActionUsage; }
         }
         perform action retainProducts : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
         perform action block : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
+        perform action retainRaw_receiveMIL : PreserveRecord { @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; } }
+        flow raw_receiveMIL of CheckedTransfer from receiveMIL.checked to retainRaw_receiveMIL.record;
+        first retainRaw_receiveMIL then complete;
+        perform action retainRaw_receiveSIL : PreserveRecord { @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; } }
+        flow raw_receiveSIL of CheckedTransfer from receiveSIL.checked to retainRaw_receiveSIL.record;
+        first retainRaw_receiveSIL then complete;
+        perform action rejectRelease : PreserveRecord { @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; } }
+        flow rejectedRelease of DetailedDesignAuthorization from release.authorization to rejectRelease.record;
+        first rejectRelease then complete;
         decide compatibleInput;
         decide compatibleMIL;
         decide codingRelease;
@@ -483,24 +503,25 @@ package LogicalRealization {
         first receive then compatibleInput;
         succession admitInput first compatibleInput if receive.compatible then interfaces;
         succession rejectInput first compatibleInput if not receive.compatible then block;
-        first interfaces then planCriteria;
+        first interfaces then mapping;
+        first mapping then planCriteria;
         first planCriteria then planMIL;
         first planMIL then executeMIL;
         first executeMIL then receiveMIL;
         first receiveMIL then compatibleMIL;
         succession admitMIL first compatibleMIL if receiveMIL.compatible then preserveMIL;
-        succession rejectMIL first compatibleMIL if not receiveMIL.compatible then block;
+        succession rejectMIL first compatibleMIL if not receiveMIL.compatible then retainRaw_receiveMIL;
         first preserveMIL then assessMIL;
         first assessMIL then release;
         first release then checkRelease;
         first checkRelease then codingRelease;
-        succession authorizeCoding first codingRelease if checkRelease.authorizedDetailedDesign and checkRelease.currentDesign and checkRelease.blockersClear and interfaces.profileCompatible then coordinate;
-        succession blockCoding first codingRelease if not (checkRelease.authorizedDetailedDesign and checkRelease.currentDesign and checkRelease.blockersClear and interfaces.profileCompatible) then block;
+        succession authorizeCoding first codingRelease if checkRelease.authorizedDetailedDesign and checkRelease.currentDesign and checkRelease.blockersClear and interfaces.profileCompatible and mapping.profileCompatible then coordinate;
+        succession blockCoding first codingRelease if not (checkRelease.authorizedDetailedDesign and checkRelease.currentDesign and checkRelease.blockersClear and interfaces.profileCompatible and mapping.profileCompatible) then rejectRelease;
         first coordinate then codeBuildSil;
         first codeBuildSil then receiveSIL;
         first receiveSIL then compatibleSIL;
         succession admitSIL first compatibleSIL if receiveSIL.compatible then preserveSIL;
-        succession rejectSIL first compatibleSIL if not receiveSIL.compatible then block;
+        succession rejectSIL first compatibleSIL if not receiveSIL.compatible then retainRaw_receiveSIL;
         first preserveSIL then checkCurrent;
         first checkCurrent then compare;
         first compare then credibility;
@@ -528,7 +549,7 @@ package LogicalRealization {
         flow exchange10 of DetailedDesignAuthorization from release.authorization to checkRelease.authorization;
         flow exchange11 of DesignWork from interfaces.work to checkRelease.work;
         flow exchange12 of DetailedDesignAuthorization from release.authorization to coordinate.authorization;
-        flow exchange13 of DesignWork from interfaces.work to coordinate.work;
+        flow exchange13 of DesignWork from mapping.work to coordinate.work;
         flow exchange14 of CodingRequest from coordinate.request to codeBuildSil.request;
         flow exchange15 of SoftwareRunResult from codeBuildSil.result to receiveSIL.raw;
         flow exchange16 of AnalysisResult from executeMIL.result to preserveSIL.result;
@@ -545,98 +566,105 @@ package LogicalRealization {
         flow exchange27 of EngineeringDecision from approve.decision to retainProducts.record;
         flow exchange28 of EPSInterfaceSpecification from submit.specification to block.record;
     }
+    allocate SoftwareRealization::retainRaw_receiveSIL to logical.L06;
+    allocate SoftwareRealization::retainRaw_receiveMIL to logical.L06;
     allocate SoftwareRealization::submit to ScenarioViews::epsEngineer;
-    allocate SoftwareRealization::receive to logical.L01;
-    allocate SoftwareRealization::interfaces to logical.L04;
-    allocate SoftwareRealization::planCriteria to logical.L07;
-    allocate SoftwareRealization::planMIL to logical.L05;
+    allocate SoftwareRealization::receive to logical.L06;
+    allocate SoftwareRealization::interfaces to logical.L02;
+    allocate SoftwareRealization::mapping to logical.L03;
+    allocate SoftwareRealization::rejectRelease to logical.L06;
+    allocate SoftwareRealization::planCriteria to logical.L05;
+    allocate SoftwareRealization::planMIL to logical.L03;
     allocate SoftwareRealization::executeMIL to ScenarioViews::analysisTools;
-    allocate SoftwareRealization::receiveMIL to logical.L01;
-    allocate SoftwareRealization::preserveMIL to logical.L08;
-    allocate SoftwareRealization::assessMIL to logical.L06;
+    allocate SoftwareRealization::receiveMIL to logical.L06;
+    allocate SoftwareRealization::preserveMIL to logical.L06;
+    allocate SoftwareRealization::assessMIL to logical.L04;
     allocate SoftwareRealization::release to ScenarioViews::epsEngineer;
-    allocate SoftwareRealization::checkRelease to logical.L08;
-    allocate SoftwareRealization::coordinate to logical.L05;
+    allocate SoftwareRealization::checkRelease to logical.L06;
+    allocate SoftwareRealization::coordinate to logical.L03;
     allocate SoftwareRealization::codeBuildSil to ScenarioViews::hostToolchain;
-    allocate SoftwareRealization::receiveSIL to logical.L01;
-    allocate SoftwareRealization::preserveSIL to logical.L08;
-    allocate SoftwareRealization::checkCurrent to logical.L08;
-    allocate SoftwareRealization::compare to logical.L05;
-    allocate SoftwareRealization::credibility to logical.L06;
-    allocate SoftwareRealization::assess to logical.L07;
-    allocate SoftwareRealization::present to logical.L01;
+    allocate SoftwareRealization::receiveSIL to logical.L06;
+    allocate SoftwareRealization::preserveSIL to logical.L06;
+    allocate SoftwareRealization::checkCurrent to logical.L06;
+    allocate SoftwareRealization::compare to logical.L03;
+    allocate SoftwareRealization::credibility to logical.L04;
+    allocate SoftwareRealization::assess to logical.L05;
+    allocate SoftwareRealization::present to logical.L05;
     allocate SoftwareRealization::approve to ScenarioViews::epsEngineer;
-    allocate SoftwareRealization::checkProducts to logical.L08;
-    allocate SoftwareRealization::retainProducts to logical.L08;
-    allocate SoftwareRealization::block to logical.L08;
+    allocate SoftwareRealization::checkProducts to logical.L06;
+    allocate SoftwareRealization::retainProducts to logical.L06;
+    allocate SoftwareRealization::block to logical.L06;
     #sourceTrace dependency SoftwareRealization_SC04 from SoftwareRealization to ScenarioViews::SC04;
     action def ChangeReviewRealization {
         doc /* Controlled change and review shared by all phases and product levels. Context edits invalidate affected outputs before delayed work can be used. Only authorized current changes create successors. Current unaffected evidence can be reused, while changed assessments are repeated. Preparation and designated-authority progression are distinct. */
         perform action request : ScenarioViews::SC05External1 { @ExternalStep { performer = ScenarioViews::systemsEngineer meta SysML::PartUsage; } }
         perform action receive : CheckTransfer {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::checkTransfer meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkTransfer meta SysML::ActionUsage; }
         }
         perform action invalidate : InvalidateAndReassess {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::invalidate meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::invalidate meta SysML::ActionUsage; }
         }
         perform action changeDecision : RequestChangeDecision { @ExternalStep { performer = ScenarioViews::systemsEngineer meta SysML::PartUsage; } }
         perform action checkChange : CheckEngineeringChange {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::checkChange meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkChange meta SysML::ActionUsage; }
         }
         perform action successor : RetainSuccessor {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::successor meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::successor meta SysML::ActionUsage; }
         }
         perform action reassessAdvice : ReassessAssistance {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::Assistance::reassess meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::RequirementsAssistance::reassess meta SysML::ActionUsage; }
         }
         perform action planRepeat : PlanRepeatedAssessment {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::Analysis::planRepeat meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L03 meta SysML::PartUsage; operation = FrameworkLogical::SimulationIntegration::planRepeat meta SysML::ActionUsage; }
         }
         perform action repeat : ScenarioViews::SC05External3 { @ExternalStep { performer = ScenarioViews::analysisTools meta SysML::PartUsage; } }
         perform action receiveResult : CheckTransfer {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::checkTransfer meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkTransfer meta SysML::ActionUsage; }
         }
         perform action preserve : PreserveRun {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRun meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRun meta SysML::ActionUsage; }
         }
         perform action credibility : AssessModel {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::Credibility::assessModel meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::ModelCredibility::assessModel meta SysML::ActionUsage; }
         }
         perform action retrieve : RetrieveBaseline {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::retrieveBaseline meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::retrieveBaseline meta SysML::ActionUsage; }
         }
         perform action assess : AssessProduct {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L07 meta SysML::PartUsage; operation = FrameworkLogical::AssessmentReview::assessProduct meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::EvidenceReview::assessProduct meta SysML::ActionUsage; }
         }
         perform action views : MakeViews {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::makeViews meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::EvidenceReview::makeViews meta SysML::ActionUsage; }
         }
         perform action prepare : PrepareReviewPackage {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L07 meta SysML::PartUsage; operation = FrameworkLogical::AssessmentReview::prepareReview meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::EvidenceReview::prepareReview meta SysML::ActionUsage; }
         }
         perform action reviewers : ScenarioViews::SC05External5 { @ExternalStep { performer = ScenarioViews::reviewers meta SysML::PartUsage; } }
         perform action authority : ScenarioViews::SC05External6 { @ExternalStep { performer = ScenarioViews::reviewAuthority meta SysML::PartUsage; } }
         perform action checkBaseline : CheckResultContext {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::checkResultContext meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkResultContext meta SysML::ActionUsage; }
         }
         perform action checkDecision : CheckReviewDecision {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L07 meta SysML::PartUsage; operation = FrameworkLogical::AssessmentReview::checkReviewDecision meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::EvidenceReview::checkReviewDecision meta SysML::ActionUsage; }
         }
         perform action record : RecordReviewDecision {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L07 meta SysML::PartUsage; operation = FrameworkLogical::AssessmentReview::recordReview meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::EvidenceReview::recordReview meta SysML::ActionUsage; }
         }
         perform action retain : RetainReviewedBaseline {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::retainReview meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::retainReview meta SysML::ActionUsage; }
         }
         perform action holdChange : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
         perform action holdReview : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
         perform action rejectReview : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
+        perform action retainRaw_receiveResult : PreserveRecord { @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; } }
+        flow raw_receiveResult of CheckedTransfer from receiveResult.checked to retainRaw_receiveResult.record;
+        first retainRaw_receiveResult then complete;
         decide compatibleInput;
         decide changeRequested;
         decide authorizedChange;
@@ -668,7 +696,7 @@ package LogicalRealization {
         first repeat then receiveResult;
         first receiveResult then compatibleResult;
         succession admitResult first compatibleResult if receiveResult.compatible then preserve;
-        succession rejectResult first compatibleResult if not receiveResult.compatible then holdReview;
+        succession rejectResult first compatibleResult if not receiveResult.compatible then retainRaw_receiveResult;
         first preserve then credibility;
         first credibility then evidenceAvailable;
         first retrieve then evidenceAvailable;
@@ -695,6 +723,7 @@ package LogicalRealization {
         flow exchange4 of EngineeringSubmission from invalidate.updatedSubmission to checkChange.submission;
         flow exchange5 of EngineeringDecision from changeDecision.decision to checkChange.decision;
         flow exchange6 of EngineeringSubmission from invalidate.updatedSubmission to successor.submission;
+        flow exactChangeDecision of EngineeringDecision from changeDecision.decision to successor.decision;
         flow exchange7 of ImpactNotice from invalidate.impact to reassessAdvice.impact;
         flow exchange8 of ImpactNotice from invalidate.impact to planRepeat.impact;
         flow exchange9 of AnalysisPlan from planRepeat.plan to repeat.plan;
@@ -726,54 +755,58 @@ package LogicalRealization {
         flow exchange35 of ReviewWork from checkDecision.work to rejectReview.record;
         flow exchange36 of EngineeringDecision from changeDecision.decision to holdChange.record;
     }
+    allocate ChangeReviewRealization::retainRaw_receiveResult to logical.L06;
     allocate ChangeReviewRealization::request to ScenarioViews::systemsEngineer;
-    allocate ChangeReviewRealization::receive to logical.L01;
-    allocate ChangeReviewRealization::invalidate to logical.L08;
+    allocate ChangeReviewRealization::receive to logical.L06;
+    allocate ChangeReviewRealization::invalidate to logical.L06;
     allocate ChangeReviewRealization::changeDecision to ScenarioViews::systemsEngineer;
-    allocate ChangeReviewRealization::checkChange to logical.L08;
-    allocate ChangeReviewRealization::successor to logical.L08;
-    allocate ChangeReviewRealization::reassessAdvice to logical.L02;
-    allocate ChangeReviewRealization::planRepeat to logical.L05;
+    allocate ChangeReviewRealization::checkChange to logical.L06;
+    allocate ChangeReviewRealization::successor to logical.L06;
+    allocate ChangeReviewRealization::reassessAdvice to logical.L01;
+    allocate ChangeReviewRealization::planRepeat to logical.L03;
     allocate ChangeReviewRealization::repeat to ScenarioViews::analysisTools;
-    allocate ChangeReviewRealization::receiveResult to logical.L01;
-    allocate ChangeReviewRealization::preserve to logical.L08;
-    allocate ChangeReviewRealization::credibility to logical.L06;
-    allocate ChangeReviewRealization::retrieve to logical.L08;
-    allocate ChangeReviewRealization::assess to logical.L07;
-    allocate ChangeReviewRealization::views to logical.L01;
-    allocate ChangeReviewRealization::prepare to logical.L07;
+    allocate ChangeReviewRealization::receiveResult to logical.L06;
+    allocate ChangeReviewRealization::preserve to logical.L06;
+    allocate ChangeReviewRealization::credibility to logical.L04;
+    allocate ChangeReviewRealization::retrieve to logical.L06;
+    allocate ChangeReviewRealization::assess to logical.L05;
+    allocate ChangeReviewRealization::views to logical.L05;
+    allocate ChangeReviewRealization::prepare to logical.L05;
     allocate ChangeReviewRealization::reviewers to ScenarioViews::reviewers;
     allocate ChangeReviewRealization::authority to ScenarioViews::reviewAuthority;
-    allocate ChangeReviewRealization::checkBaseline to logical.L08;
-    allocate ChangeReviewRealization::checkDecision to logical.L07;
-    allocate ChangeReviewRealization::record to logical.L07;
-    allocate ChangeReviewRealization::retain to logical.L08;
-    allocate ChangeReviewRealization::holdChange to logical.L08;
-    allocate ChangeReviewRealization::holdReview to logical.L08;
-    allocate ChangeReviewRealization::rejectReview to logical.L08;
+    allocate ChangeReviewRealization::checkBaseline to logical.L06;
+    allocate ChangeReviewRealization::checkDecision to logical.L05;
+    allocate ChangeReviewRealization::record to logical.L05;
+    allocate ChangeReviewRealization::retain to logical.L06;
+    allocate ChangeReviewRealization::holdChange to logical.L06;
+    allocate ChangeReviewRealization::holdReview to logical.L06;
+    allocate ChangeReviewRealization::rejectReview to logical.L06;
     #sourceTrace dependency ChangeReviewRealization_SC05 from ChangeReviewRealization to ScenarioViews::SC05;
     action def ReplayRealization {
         doc /* Independent reconstruction of a designated analysis/MIL/SIL result. Fixed comparison rules and complete dependencies precede external execution. Failed replay never establishes model validity. */
         perform action request : SupplyReplay { @ExternalStep { performer = ScenarioViews::reviewers meta SysML::PartUsage; } }
         perform action prepare : PrepareReplay {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::prepareReplay meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::prepareReplay meta SysML::ActionUsage; }
         }
         perform action execute : ScenarioViews::SC05External3 { @ExternalStep { performer = ScenarioViews::analysisTools meta SysML::PartUsage; } }
         perform action receive : CheckTransfer {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::checkTransfer meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkTransfer meta SysML::ActionUsage; }
         }
         perform action preserve : PreserveRun {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRun meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRun meta SysML::ActionUsage; }
         }
         perform action compare : ReplayRun {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::Analysis::replay meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L03 meta SysML::PartUsage; operation = FrameworkLogical::SimulationIntegration::replay meta SysML::ActionUsage; }
         }
         perform action retain : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
         perform action missing : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
+        perform action retainRaw_receive : PreserveRecord { @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; } }
+        flow raw_receive of CheckedTransfer from receive.checked to retainRaw_receive.record;
+        first retainRaw_receive then complete;
         decide replayReady;
         decide compatibleResult;
         merge complete;
@@ -785,7 +818,7 @@ package LogicalRealization {
         first execute then receive;
         first receive then compatibleResult;
         succession admitResult first compatibleResult if receive.compatible then preserve;
-        succession rejectResult first compatibleResult if not receive.compatible then missing;
+        succession rejectResult first compatibleResult if not receive.compatible then retainRaw_receive;
         first preserve then compare;
         first compare then retain;
         first retain then complete;
@@ -800,68 +833,72 @@ package LogicalRealization {
         flow exchange7 of ReplayComparison from compare.comparison to retain.record;
         flow exchange8 of ReplayRequest from request.request to missing.record;
     }
+    allocate ReplayRealization::retainRaw_receive to logical.L06;
     allocate ReplayRealization::request to ScenarioViews::reviewers;
-    allocate ReplayRealization::prepare to logical.L08;
+    allocate ReplayRealization::prepare to logical.L06;
     allocate ReplayRealization::execute to ScenarioViews::analysisTools;
-    allocate ReplayRealization::receive to logical.L01;
-    allocate ReplayRealization::preserve to logical.L08;
-    allocate ReplayRealization::compare to logical.L05;
-    allocate ReplayRealization::retain to logical.L08;
-    allocate ReplayRealization::missing to logical.L08;
+    allocate ReplayRealization::receive to logical.L06;
+    allocate ReplayRealization::preserve to logical.L06;
+    allocate ReplayRealization::compare to logical.L03;
+    allocate ReplayRealization::retain to logical.L06;
+    allocate ReplayRealization::missing to logical.L06;
     #sourceTrace dependency ReplayRealization_SC05 from ReplayRealization to ScenarioViews::SC05;
     action def CalibrationRealization {
         doc /* Supplied-data calibration proposes a change. Independent assessment remains separate. A declined update is preserved. Accepted updates re-enter the shared impact, authorization and reassessment process, with no silent model overwrite. */
         perform action supply : SupplyCalibration { @ExternalStep { performer = ScenarioViews::epsEngineer meta SysML::PartUsage; } }
         perform action receive : CheckTransfer {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::checkTransfer meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkTransfer meta SysML::ActionUsage; }
         }
         perform action checkData : CheckReferenceData {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::Credibility::checkReferenceData meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::ModelCredibility::checkReferenceData meta SysML::ActionUsage; }
         }
         perform action propose : ProposeCalibration {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::Credibility::proposeCalibration meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::ModelCredibility::proposeCalibration meta SysML::ActionUsage; }
         }
         perform action choose : ChooseCalibration { @ExternalStep { performer = ScenarioViews::epsEngineer meta SysML::PartUsage; } }
         perform action prepareChange : PrepareCalibrationChange {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::prepareCalibrationChange meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::prepareCalibrationChange meta SysML::ActionUsage; }
         }
         perform action invalidate : InvalidateAndReassess {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::invalidate meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::invalidate meta SysML::ActionUsage; }
         }
         perform action checkChange : CheckEngineeringChange {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::checkChange meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkChange meta SysML::ActionUsage; }
         }
         perform action successor : RetainSuccessor {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::successor meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::successor meta SysML::ActionUsage; }
         }
         perform action reassess : ReassessAssistance {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L02 meta SysML::PartUsage; operation = FrameworkLogical::Assistance::reassess meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::RequirementsAssistance::reassess meta SysML::ActionUsage; }
         }
         perform action planRepeat : PlanRepeatedAssessment {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::Analysis::planRepeat meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L03 meta SysML::PartUsage; operation = FrameworkLogical::SimulationIntegration::planRepeat meta SysML::ActionUsage; }
         }
         perform action repeat : ScenarioViews::SC05External3 { @ExternalStep { performer = ScenarioViews::analysisTools meta SysML::PartUsage; } }
         perform action receiveResult : CheckTransfer {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L01 meta SysML::PartUsage; operation = FrameworkLogical::Exchange::checkTransfer meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::checkTransfer meta SysML::ActionUsage; }
         }
         perform action preserve : PreserveRun {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRun meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRun meta SysML::ActionUsage; }
         }
         perform action credibility : AssessModel {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::Credibility::assessModel meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L04 meta SysML::PartUsage; operation = FrameworkLogical::ModelCredibility::assessModel meta SysML::ActionUsage; }
         }
         perform action assess : AssessProduct {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L07 meta SysML::PartUsage; operation = FrameworkLogical::AssessmentReview::assessProduct meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L05 meta SysML::PartUsage; operation = FrameworkLogical::EvidenceReview::assessProduct meta SysML::ActionUsage; }
         }
         perform action retainEvidence : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
         perform action retain : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
         perform action unusable : PreserveRecord {
-            @LogicalStep { component = FrameworkLogical::LogicalFramework::L08 meta SysML::PartUsage; operation = FrameworkLogical::Configuration::preserveRecord meta SysML::ActionUsage; }
+            @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; }
         }
+        perform action retainRaw_receiveResult : PreserveRecord { @LogicalStep { component = FrameworkLogical::LogicalFramework::L06 meta SysML::PartUsage; operation = FrameworkLogical::ConfigurationExchange::preserveRecord meta SysML::ActionUsage; } }
+        flow raw_receiveResult of CheckedTransfer from receiveResult.checked to retainRaw_receiveResult.record;
+        first retainRaw_receiveResult then complete;
         decide compatibleData;
         decide calibrationData;
         decide authorizedChange;
@@ -888,7 +925,7 @@ package LogicalRealization {
         first repeat then receiveResult;
         first receiveResult then compatibleResult;
         succession admitReassessedResult first compatibleResult if receiveResult.compatible then preserve;
-        succession rejectReassessedResult first compatibleResult if not receiveResult.compatible then unusable;
+        succession rejectReassessedResult first compatibleResult if not receiveResult.compatible then retainRaw_receiveResult;
         first preserve then credibility;
         first credibility then assess;
         first assess then retainEvidence;
@@ -909,6 +946,7 @@ package LogicalRealization {
         flow exchange11 of EngineeringSubmission from invalidate.updatedSubmission to checkChange.submission;
         flow exchange12 of EngineeringDecision from choose.decision to checkChange.decision;
         flow exchange13 of EngineeringSubmission from invalidate.updatedSubmission to successor.submission;
+        flow exactCalibrationDecision of EngineeringDecision from choose.decision to successor.decision;
         flow exchange14 of ImpactNotice from invalidate.impact to reassess.impact;
         flow exchange15 of ImpactNotice from invalidate.impact to planRepeat.impact;
         flow exchange16 of AnalysisPlan from planRepeat.plan to repeat.plan;
@@ -919,30 +957,31 @@ package LogicalRealization {
         flow exchange21 of EvidenceAssessment from assess.updatedEvidence to retainEvidence.record;
         flow exchange22 of EngineeringDecision from choose.decision to retain.record;
     }
+    allocate CalibrationRealization::retainRaw_receiveResult to logical.L06;
     allocate CalibrationRealization::supply to ScenarioViews::epsEngineer;
-    allocate CalibrationRealization::receive to logical.L01;
-    allocate CalibrationRealization::checkData to logical.L06;
-    allocate CalibrationRealization::propose to logical.L06;
+    allocate CalibrationRealization::receive to logical.L06;
+    allocate CalibrationRealization::checkData to logical.L04;
+    allocate CalibrationRealization::propose to logical.L04;
     allocate CalibrationRealization::choose to ScenarioViews::epsEngineer;
-    allocate CalibrationRealization::prepareChange to logical.L08;
-    allocate CalibrationRealization::invalidate to logical.L08;
-    allocate CalibrationRealization::checkChange to logical.L08;
-    allocate CalibrationRealization::successor to logical.L08;
-    allocate CalibrationRealization::reassess to logical.L02;
-    allocate CalibrationRealization::planRepeat to logical.L05;
+    allocate CalibrationRealization::prepareChange to logical.L06;
+    allocate CalibrationRealization::invalidate to logical.L06;
+    allocate CalibrationRealization::checkChange to logical.L06;
+    allocate CalibrationRealization::successor to logical.L06;
+    allocate CalibrationRealization::reassess to logical.L01;
+    allocate CalibrationRealization::planRepeat to logical.L03;
     allocate CalibrationRealization::repeat to ScenarioViews::analysisTools;
-    allocate CalibrationRealization::receiveResult to logical.L01;
-    allocate CalibrationRealization::preserve to logical.L08;
-    allocate CalibrationRealization::credibility to logical.L06;
-    allocate CalibrationRealization::assess to logical.L07;
-    allocate CalibrationRealization::retainEvidence to logical.L08;
-    allocate CalibrationRealization::retain to logical.L08;
-    allocate CalibrationRealization::unusable to logical.L08;
+    allocate CalibrationRealization::receiveResult to logical.L06;
+    allocate CalibrationRealization::preserve to logical.L06;
+    allocate CalibrationRealization::credibility to logical.L04;
+    allocate CalibrationRealization::assess to logical.L05;
+    allocate CalibrationRealization::retainEvidence to logical.L06;
+    allocate CalibrationRealization::retain to logical.L06;
+    allocate CalibrationRealization::unusable to logical.L06;
     #sourceTrace dependency CalibrationRealization_SC03 from CalibrationRealization to ScenarioViews::SC03;
     #sourceTrace dependency CalibrationRealization_SC05 from CalibrationRealization to ScenarioViews::SC05;
     #sourceTrace dependency calibrationChangePath from CalibrationRealization to ChangeReviewRealization;
-    #sourceTrace dependency assistanceCurrency from AssistanceRealization to Configuration::assistanceCurrency;
-    #sourceTrace dependency reviewStateAuthority from ChangeReviewRealization to AssessmentReview::reviewState;
+    #sourceTrace dependency assistanceCurrency from AssistanceRealization to ConfigurationExchange::assistanceCurrency;
+    #sourceTrace dependency reviewStateAuthority from ChangeReviewRealization to EvidenceReview::reviewState;
     #sourceTrace dependency behavior_FR01_1 from FrameworkRequirements::FR_01 to LogicalRealization::AssistanceRealization::retainDraft;
     #sourceTrace dependency behavior_FR02_1 from FrameworkRequirements::FR_02 to LogicalRealization::AssistanceRealization::checkDraft;
     #sourceTrace dependency behavior_FR03_1 from FrameworkRequirements::FR_03 to LogicalRealization::AssistanceRealization::recommend;
@@ -980,8 +1019,6 @@ package LogicalRealization {
     #sourceTrace dependency behavior_FR11_3 from FrameworkRequirements::FR_11 to LogicalRealization::SoftwareRealization::assess;
     #sourceTrace dependency behavior_FR11_4 from FrameworkRequirements::FR_11 to LogicalRealization::ChangeReviewRealization::assess;
     #sourceTrace dependency behavior_FR11_5 from FrameworkRequirements::FR_11 to LogicalRealization::CalibrationRealization::assess;
-    #sourceTrace dependency behavior_FR12_1 from FrameworkRequirements::FR_12 to LogicalRealization::DesignRealization::budget;
-    #sourceTrace dependency behavior_FR12_2 from FrameworkRequirements::FR_12 to LogicalRealization::ConceptRealization::budget;
     #sourceTrace dependency behavior_FR13_1 from FrameworkRequirements::FR_13 to LogicalRealization::DesignRealization::budget;
     #sourceTrace dependency behavior_FR13_2 from FrameworkRequirements::FR_13 to LogicalRealization::ConceptRealization::budget;
     #sourceTrace dependency behavior_FR14_1 from FrameworkRequirements::FR_14 to LogicalRealization::DesignRealization::compare;
@@ -1033,7 +1070,7 @@ package LogicalRealization {
     #sourceTrace dependency behavior_FR32_5 from FrameworkRequirements::FR_32 to LogicalRealization::ChangeReviewRealization::credibility;
     #sourceTrace dependency behavior_FR32_6 from FrameworkRequirements::FR_32 to LogicalRealization::CalibrationRealization::credibility;
     #sourceTrace dependency behavior_FR33_1 from FrameworkRequirements::FR_33 to LogicalRealization::SoftwareRealization::interfaces;
-    #sourceTrace dependency behavior_FR34_1 from FrameworkRequirements::FR_34 to LogicalRealization::SoftwareRealization::interfaces;
+    #sourceTrace dependency behavior_FR34_1 from FrameworkRequirements::FR_34 to LogicalRealization::SoftwareRealization::mapping;
     #sourceTrace dependency behavior_FR35_1 from FrameworkRequirements::FR_35 to LogicalRealization::SoftwareRealization::interfaces;
     #sourceTrace dependency behavior_FR36_1 from FrameworkRequirements::FR_36 to LogicalRealization::SoftwareRealization::coordinate;
     #sourceTrace dependency behavior_FR37_1 from FrameworkRequirements::FR_37 to LogicalRealization::ChangeReviewRealization::views;

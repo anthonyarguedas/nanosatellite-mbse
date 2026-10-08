@@ -65,7 +65,6 @@ package ScenarioViews {
     allocate SC01::'FW: keep concept open' to framework;
     #sourceTrace dependency scenario_UC01 from SC01 to FrameworkNeeds::UC01;
     #proposedDerivation dependency scenario_SC01_MR01 from SC01 to FrameworkNeeds::MR_01;
-    #proposedDerivation dependency scenario_SC01_MR05 from SC01 to FrameworkNeeds::MR_05;
     #sourceTrace dependency review_SC01 from SC01 to SC05;
     action def SC01Summary {
         doc /* Main interaction summary of SC01. Coordinated tool work and alternative/failure paths are specified by the full scenario and report prose. */
@@ -98,7 +97,7 @@ package ScenarioViews {
     action def SC02External5 { in item reviewPackage : ReviewPackage; out item findings : ReviewSubmission; out attribute resolved : Boolean; doc /* Independently assess correctness, feasibility, verifiability, uniqueness and consistency with stakeholder expectations and ConOps. Report unresolved findings. resolved means all blocking requirement-validation findings are dispositioned. SRR progression belongs to the authority through SC05. */ }
     action def <'SC02'> SC02 {
         @MissionScenario { useCase = "UC02"; title = "Define and validate EPS requirements and interfaces"; }
-        doc /* Define and validate EPS requirements and interfaces. The output is controlled phase products or explicit open findings. Review acceptance is a separate authorized decision through SC05. */
+        doc /* Define and validate EPS requirements and interfaces. The output is controlled phase products or explicit open findings. UC02 is reused for requirement refinement through detailed design. Review acceptance is a separate authorized decision through SC05. */
         perform action 'SE: edit requirements' : SC02External1 { @ExternalAction { performer = systemsEngineer meta SysML::PartUsage; fillColor = "#FFF0D6"; } }
         action 'FW: check and recommend' { in item submission : EngineeringSubmission; out item response : EngineeringResponse; @FrameworkAction { performer = framework meta SysML::PartUsage; function = BoundaryViews::F02 meta SysML::ActionDefinition; fillColor = "#DCEEF8"; } doc /* Check deterministic identifiers, required fields, responsible product, single shall, units and declared limits against NASA Appendix C plus the expert-approved project reference. Flag probable semantic duplicates by subject, level, mode, conditions and quantity. Compare declared scenarios, functions, interfaces and risks for probable gaps and sources for conflicts. Explain each rule/passage and corrective suggestion, uncertainty and unassessed scope. F01 recommends applicable derivation/V&V methods and alternatives. Record delay and context revisions. New edits invalidate guidance before a late response can become current. */ }
         perform action 'SE: dispose suggestions' : SC02External3 { @ExternalAction { performer = systemsEngineer meta SysML::PartUsage; fillColor = "#FFF0D6"; } }
@@ -142,8 +141,9 @@ package ScenarioViews {
     allocate SC02::'FW: retain requirements' to framework;
     allocate SC02::'FW: retain draft findings' to framework;
     #sourceTrace dependency scenario_UC02 from SC02 to FrameworkNeeds::UC02;
-    #proposedDerivation dependency scenario_SC02_MR01 from SC02 to FrameworkNeeds::MR_01;
     #proposedDerivation dependency scenario_SC02_MR02 from SC02 to FrameworkNeeds::MR_02;
+    #proposedDerivation dependency scenario_SC02_MR03 from SC02 to FrameworkNeeds::MR_03;
+    #proposedDerivation dependency scenario_SC02_MR04 from SC02 to FrameworkNeeds::MR_04;
     #proposedDerivation dependency scenario_SC02_MR05 from SC02 to FrameworkNeeds::MR_05;
     #sourceTrace dependency review_SC02 from SC02 to SC05;
     action def SC02Summary {
@@ -179,12 +179,12 @@ package ScenarioViews {
         @MissionScenario { useCase = "UC03"; title = "Justify the EPS preliminary design"; }
         doc /* Justify the EPS preliminary design. The output is controlled phase products or explicit open findings. Review acceptance is a separate authorized decision through SC05. */
         perform action 'EPS: propose designs' : SC03External1 { @ExternalAction { performer = epsEngineer meta SysML::PartUsage; fillColor = "#FFF0D6"; } }
-        action 'FW: plan design analyses' { in item configuration : DesignConfiguration; out item plan : AnalysisPlan; @FrameworkAction { performer = framework meta SysML::PartUsage; function = BoundaryViews::F04 meta SysML::ActionDefinition; fillColor = "#DCEEF8"; } doc /* F03 calculates preliminary power/energy budgets, array/battery sizing, BOM, mass/volume and sourced acquisition-cost/availability estimates. F01 proposes models and analysis methods at the fidelity needed by the trade question. Form time-dependent mission-load/EPS scenarios and applicable RAM analyses. Battery thermal/aging mechanisms are included only when the intended question needs them and suitable evidence exists. */ }
+        action 'FW: plan design analyses' { in item configuration : DesignConfiguration; out item plan : AnalysisPlan; @FrameworkAction { performer = framework meta SysML::PartUsage; function = BoundaryViews::F04 meta SysML::ActionDefinition; fillColor = "#DCEEF8"; } doc /* F03 calculates preliminary power/energy budgets, array/battery sizing and mass/volume estimates from modeled component and design data. F01 proposes models and analysis methods at the fidelity needed by the trade question. Form time-dependent mission-load/EPS scenarios and applicable RAM analyses. Battery thermal/aging mechanisms are included only when the intended question needs them and suitable evidence exists. */ }
         perform action 'Tool: simulate designs' : SC03External3 { @ExternalAction { performer = analysisTools meta SysML::PartUsage; fillColor = "#FFF0D6"; } }
-        action 'FW: compare evidence' { in item result : AnalysisResult; out item study : DesignStudy; out attribute usable : Boolean; @FrameworkAction { performer = framework meta SysML::PartUsage; function = BoundaryViews::F04 meta SysML::ActionDefinition; fillColor = "#DCEEF8"; } doc /* Assess numerical convergence, intended use, fidelity omissions, calibration and independent model assessment. F03 compares mandatory feasibility separately from preference ranking with uncertainty/sensitivity. Expose temporal shortages hidden by average budgets, missing rates/prices and incompatible subsystem assumptions. usable requires the supported evidence specified by the decision criteria. */ }
+        action 'FW: compare evidence' { in item result : AnalysisResult; out item study : DesignStudy; out attribute usable : Boolean; @FrameworkAction { performer = framework meta SysML::PartUsage; function = BoundaryViews::F04 meta SysML::ActionDefinition; fillColor = "#DCEEF8"; } doc /* Assess numerical convergence, intended use, fidelity omissions, calibration and independent model assessment. F03 compares mandatory feasibility separately from preference ranking with uncertainty/sensitivity. Expose temporal shortages hidden by average budgets, missing reliability rates and incompatible subsystem assumptions. usable requires the supported evidence specified by the decision criteria. */ }
         perform action 'EPS: justify selection' : SC03External5 { @ExternalAction { performer = epsEngineer meta SysML::PartUsage; fillColor = "#FFF0D6"; } }
         action 'FW: retain design' { in item decision : EngineeringDecision; out item configuration : DesignConfiguration; @FrameworkAction { performer = framework meta SysML::PartUsage; function = BoundaryViews::F07 meta SysML::ActionDefinition; fillColor = "#DCEEF8"; } doc /* Retain the selected design and allocation, sizing/trade results, interface specifications, margins, risk dispositions and V&V plans for MDR/SDR or PDR through SC05. */ }
-        action 'FW: retain design gaps' { @FrameworkAction { performer = framework meta SysML::PartUsage; function = BoundaryViews::F07 meta SysML::ActionDefinition; fillColor = "#DCEEF8"; } doc /* Keep failed numerical checks, invalid model domains, unsupported mechanisms, missing reliability/cost inputs and rejected design choices. Propose revised assumptions, independent supplied evidence or alternate models. Missing hardware evidence stays an external limitation with no physical-test proposal. */ }
+        action 'FW: retain design gaps' { @FrameworkAction { performer = framework meta SysML::PartUsage; function = BoundaryViews::F07 meta SysML::ActionDefinition; fillColor = "#DCEEF8"; } doc /* Keep failed numerical checks, invalid model domains, unsupported mechanisms, missing reliability inputs and rejected design choices. Propose revised assumptions, independent supplied evidence or alternate models. Missing hardware evidence stays an external limitation with no physical-test proposal. */ }
         attribute usable : Boolean = 'FW: compare evidence'.usable;
         attribute accepted : Boolean = 'EPS: justify selection'.accepted;
         decide 'Proceed?';
@@ -220,9 +220,8 @@ package ScenarioViews {
     allocate SC03::'FW: retain design' to framework;
     allocate SC03::'FW: retain design gaps' to framework;
     #sourceTrace dependency scenario_UC03 from SC03 to FrameworkNeeds::UC03;
-    #proposedDerivation dependency scenario_SC03_MR02 from SC03 to FrameworkNeeds::MR_02;
     #proposedDerivation dependency scenario_SC03_MR03 from SC03 to FrameworkNeeds::MR_03;
-    #proposedDerivation dependency scenario_SC03_MR05 from SC03 to FrameworkNeeds::MR_05;
+    #proposedDerivation dependency scenario_SC03_MR04 from SC03 to FrameworkNeeds::MR_04;
     #sourceTrace dependency review_SC03 from SC03 to SC05;
     action def SC03Summary {
         doc /* Main interaction summary of SC03. Coordinated tool work and alternative/failure paths are specified by the full scenario and report prose. */
@@ -302,10 +301,8 @@ package ScenarioViews {
     allocate SC04::'EPS: approve products' to epsEngineer;
     allocate SC04::'FW: block coding' to framework;
     #sourceTrace dependency scenario_UC04 from SC04 to FrameworkNeeds::UC04;
-    #proposedDerivation dependency scenario_SC04_MR02 from SC04 to FrameworkNeeds::MR_02;
-    #proposedDerivation dependency scenario_SC04_MR03 from SC04 to FrameworkNeeds::MR_03;
-    #proposedDerivation dependency scenario_SC04_MR04 from SC04 to FrameworkNeeds::MR_04;
     #proposedDerivation dependency scenario_SC04_MR05 from SC04 to FrameworkNeeds::MR_05;
+    #proposedDerivation dependency scenario_SC04_MR06 from SC04 to FrameworkNeeds::MR_06;
     #sourceTrace dependency review_SC04 from SC04 to SC05;
     action def SC04Summary {
         doc /* Main interaction summary of SC04. Coordinated tool work and alternative/failure paths are specified by the full scenario and report prose. */
@@ -411,6 +408,7 @@ package ScenarioViews {
     #proposedDerivation dependency scenario_SC05_MR03 from SC05 to FrameworkNeeds::MR_03;
     #proposedDerivation dependency scenario_SC05_MR04 from SC05 to FrameworkNeeds::MR_04;
     #proposedDerivation dependency scenario_SC05_MR05 from SC05 to FrameworkNeeds::MR_05;
+    #proposedDerivation dependency scenario_SC05_MR06 from SC05 to FrameworkNeeds::MR_06;
     action def SC05Summary {
         doc /* Main interaction summary of SC05. Coordinated tool work and alternative/failure paths are specified by the full scenario and report prose. */
         action def 'Submit';

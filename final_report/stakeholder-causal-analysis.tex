@@ -22,16 +22,16 @@
 ]
   % Root stakeholder problem and main cause-effect spine.
   \node[problem,anchor=west] (effect) at (15.4,0)
-    {\textbf{Stakeholder problem}\\Early EPS evidence is dispersed, reducing traceability and reproducibility and hindering design justification before physical verification and validation};
+    {\textbf{Stakeholder problem}\\Dispersed EPS evidence hinders early design verification};
   \draw[very thick,-{Latex[length=3.2mm,width=2.3mm]}] (0,0) -- (effect.west);
 
   % Upper causes.
   \node[cause] (method) at (2.0,3.0)
-    {\textbf{Method and objectives}\\Artifacts are weakly tied to mission decisions and evaluation criteria};
+    {\textbf{Method}\\Students follow no systems engineering method};
   \node[cause] (resources) at (7.0,3.0)
-    {\textbf{Resource fit}\\Integrated approaches can exceed available time, expertise, and tooling};
+    {\textbf{Adoption burden}\\Tools require learning and mission adaptation};
   \node[cause] (assurance) at (12.0,3.0)
-    {\textbf{Validation and assurance}\\Model validity, uncertainty, and representative validation are weakly reported};
+    {\textbf{Model credibility}\\Prediction limits need independent evidence};
 
   \draw[bone] (method.south) -- (4.2,0);
   \draw[bone] (resources.south) -- (9.2,0);
@@ -39,11 +39,11 @@
 
   % Lower causes.
   \node[cause] (artifacts) at (2.0,-3.0)
-    {\textbf{Artifacts}\\Requirements, power budgets, models, assumptions, and simulations remain separate};
+    {\textbf{Evidence continuity}\\Requirements, models and results can drift apart};
   \node[cause] (toolchain) at (7.0,-3.0)
-    {\textbf{Toolchain and data}\\Heterogeneous tools and formats require manual transfer and synchronization};
+    {\textbf{Interfaces}\\Different data formats require reconciliation};
   \node[cause] (governance) at (12.0,-3.0)
-    {\textbf{Governance and lifecycle}\\Weak configuration, provenance, and change control break evidence continuity};
+    {\textbf{Verification timing}\\Students verify payload power after fabrication};
 
   \draw[bone] (artifacts.north) -- (4.2,0);
   \draw[bone] (toolchain.north) -- (9.2,0);

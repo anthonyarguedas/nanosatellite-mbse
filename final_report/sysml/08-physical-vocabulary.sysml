@@ -1,4 +1,5 @@
-// Proposed physical component specifications. No implementation or satisfaction claim.
+// Proposed physical realization of the published six-component working API.
+// Native consistency and planned allocation are separate from empirical qualification.
 package PhysicalVocabulary {
     private import ScalarValues::*;
     private import FrameworkDomain::*;
@@ -18,34 +19,199 @@ package PhysicalVocabulary {
     metadata def physicalDetail;
     metadata def ComponentSpecification {
         attribute tools : String;
+        attribute logical : String;
+        attribute sourceMethods : String [0..*];
         attribute authority : String;
         attribute verificationNeed : String;
         attribute status : String;
     }
+    metadata def ComparisonMechanism {
+        attribute mop : String;
+        attribute mechanism : String;
+        attribute achieved : String = "unknown";
+        ref operation : SysML::ActionUsage;
+    }
     part def SoftwareResource;
+    // Common required platform and Jev method contracts. Logical adapters are defined after export synchronization.
+    package IntegrationScaffold {
+        private import ScalarValues::*;
+        private import FrameworkDomain::*;
+        private import BoundaryViews::*;
+        doc /* Proposed common platform and custom recommendation contracts. These definitions specify unexecuted work. They contain no candidate selection, engineering approval or empirical outcome. */
+
+        part def RequiredFPrimeProfile {
+            port hostSoftware : HostSoftwarePort;
+            ref item interfaceMeaning : EPSInterfaceSpecification;
+            attribute fPrimeRepresentationToolchainVersions : String;
+            attribute componentsInstancesPortsTopology : String;
+            attribute commandsTelemetryEventsParameters : String;
+            attribute entityUnitPolarityEncodingTimeModeMappings : String;
+            attribute unsupportedLossyCompatibilityFindings : String;
+            attribute status : String = "proposed/unexecuted";
+            doc /* Required F Prime host software profile for every candidate. Declare exact representation, tool and dependency versions. Architecture translation alone supplies neither mission behavior nor complete ground definitions. Coding/build admission requires a current engineer-authorized exact design/interface/software release. A successful host build supplies no SIL verdict or target qualification. */
+        }
+        part def RequiredWholeCUBICSProfile {
+            port numericalExchange : AnalysisPort;
+            ref item coupling : SimulationCouplingProfile;
+            attribute epsSolverModelAndWholeSpacecraftRevisions : String;
+            attribute incomingSpacecraftSubsystemHistories : String;
+            attribute outgoingEPSStatesResultsSameScenario : String;
+            attribute unitEntityTimeAdmissionAndUnsupportedEffects : String;
+            attribute status : String = "proposed/unexecuted";
+            doc /* Required NVIDIA Omniverse whole-CUBICS numerical connection for every candidate. AnalysisPort receives spacecraft/subsystem inputs and returns EPS responses for the same identified scenario. Scene display alone is insufficient. Entity/channel/quantity/unit, sample/receipt/scenario time, synchronization limits, delays, model revisions and supported effects are declared by coupling. Specialized external tools may compute EPS physics. Preserve raw invalid/missing/inactive samples, masks, failed/partial/cancelled statuses and transfer limitations. */
+        }
+        part def RequiredPlatformConnections {
+            part fPrime : RequiredFPrimeProfile;
+            part wholeCUBICS : RequiredWholeCUBICSProfile;
+            doc /* Both connections are mandatory. This template is independent of logical component names. The simulation/software component binds both through managed IF-03/04. */
+        }
+        @SourceRecord about RequiredPlatformConnections {
+            identifier = "PA-common-platform-contract";
+            sourceText = "Required F Prime host software and numerical whole-CUBICS NVIDIA Omniverse connections. Source methods supply bounded architecture/battery mapping patterns. Whole-spacecraft and combined software adapters are proposed additions.";
+            sourceLocator = "Halvorson/Thomas sections 3-4. Zhu PDF pages 4-5. Final FR-18/24/33/34/36.";
+            citationRecord = "review-0853, handpicked-0001";
+            status = "proposed/unexecuted";
+        }
+
+        item def MethodContext :> EngineeringArtifact {
+            ref item contextRevision : ContextRevision;
+            ref item nativeSubjectsAndInputs : EngineeringArtifact [0..*];
+            attribute lifecyclePurposeQuestion : String;
+            attribute requiredEffectsAvailableInputsValidityResources : String;
+            attribute nativeSourceClassifierRubricRevisions : String;
+        }
+        item def EngineeringMethod :> EngineeringArtifact {
+            attribute analysisOrVerificationOrValidation : String;
+            attribute purposeApplicableSubjectsAndLifecycle : String;
+            attribute requiredInputsQuantitiesUnitsAndValidity : String;
+            attribute supportedEffectsOmissionsUncertainty : String;
+            attribute independentReferenceAndAssessmentNeeds : String;
+            attribute executionResourcesAndOutputMeaning : String;
+            attribute sourceExcerptsLocatorsAuthorityRevisions : String;
+        }
+        item def MethodSuggestion :> EngineeringArtifact {
+            ref item method : EngineeringMethod;
+            attribute classifierScore : Real [0..1];
+            attribute eligibilityInputsValidityResourcesFindings : String;
+            attribute explanationCitationsRejectedAlternatives : String;
+            doc /* A Jev score ranks a possible analysis or V&V method. Applicability is assessed separately against actual inputs, supported effects, maturity, resources and independent reference needs. Neither a score nor a suggestion authorizes execution, changes a design or establishes conformity. */
+        }
+        item def MethodRecommendations :> EngineeringArtifact {
+            ref item context : MethodContext;
+            ref item suggestions : MethodSuggestion [0..*];
+            attribute requestedReturnedClassifierRubricIdentities : String;
+            attribute rawResponseDigestTruncationAndServiceStatus : String;
+            attribute eligibleNoneAbstainedStaleUnavailable : String;
+        }
+        item def EngineerMethodDisposition :> EngineeringArtifact {
+            ref item context : MethodContext;
+            ref item suggestion : MethodSuggestion;
+            attribute responsibleEngineerAndAuthority : String;
+            attribute acceptedModifiedRejectedDeferred : String;
+            attribute applicabilityRationaleAndExecutionRequest : String;
+            doc /* Preserve an engineer's decision as a separate record. An accepted suggestion still needs the applicable current-context, data admission and execution gates. */
+        }
+        action def AdmitJevMethodRequest {
+            in profile : RequiredJevClassifier;
+            in context : MethodContext;
+            in methods : EngineeringMethod [0..*];
+            out attribute authorizedPinnedQualifiedCurrent : Boolean;
+            doc /* Require authorized minimized payload, source/data rights, declared service access, pinned requested identity and qualified analysis/V&V rubrics, current context, input limits and bounded timeout/retry. Outage returns unavailable. It never silently substitutes a local classifier. */
+        }
+        action def RequestJevMethodScores {
+            in profile : RequiredJevClassifier;
+            in context : MethodContext;
+            in methods : EngineeringMethod [0..*];
+            out response : MethodRecommendations;
+            doc /* The required Jev classifiers suggest analyses and verification/validation methods. Preserve actual returned identity, raw scores, input truncation and service failures. Jev supplies no independent engineering explanation or execution authority. */
+        }
+        action def CheckJevMethodResponse {
+            in profile : RequiredJevClassifier;
+            in context : MethodContext;
+            in response : MethodRecommendations;
+            out attribute pinnedFiniteCompleteCurrent : Boolean;
+        }
+        action def ExplainApplicableMethods {
+            in context : MethodContext;
+            in response : MethodRecommendations;
+            out recommendations : MethodRecommendations;
+            doc /* Python checks method prerequisites and explains retained source/context comparisons separately from Jev ranking. Missing inputs, unsupported effects, unqualified identity, stale context or unavailable evidence cause rejection or abstention. The engineer makes the applicability and acceptance decision. */
+        }
+        action def UnavailableMethodRecommendations {
+            in context : MethodContext;
+            in response : MethodRecommendations [0..1];
+            out recommendations : MethodRecommendations;
+            bind recommendations.context = context;
+            attribute scoringStatus : String = "unavailable/abstained";
+            doc /* Preserve request and any raw response. Return unavailable or abstained status, distinct from an assessed no-eligible-method result. */
+        }
+        action def JevMethodRecommendations {
+            ref part classifier : RequiredJevClassifier;
+            in context : MethodContext;
+            in methods : EngineeringMethod [0..*];
+            out recommendations : MethodRecommendations;
+            perform action admission : AdmitJevMethodRequest;
+            perform action classify : RequestJevMethodScores;
+            perform action checkResponse : CheckJevMethodResponse;
+            perform action explain : ExplainApplicableMethods;
+            perform action unavailable : UnavailableMethodRecommendations;
+            first start then admission;
+            first admission if admission.authorizedPinnedQualifiedCurrent then classify;
+            first admission if not admission.authorizedPinnedQualifiedCurrent then unavailable;
+            first classify then checkResponse;
+            first checkResponse if checkResponse.pinnedFiniteCompleteCurrent then explain;
+            first checkResponse if not checkResponse.pinnedFiniteCompleteCurrent then unavailable;
+            first explain then done;
+            first unavailable then done;
+            bind admission.profile = classifier;
+            bind classify.profile = classifier;
+            bind checkResponse.profile = classifier;
+            bind admission.context = context;
+            bind admission.methods = methods;
+            bind classify.context = context;
+            bind classify.methods = methods;
+            bind checkResponse.context = context;
+            bind checkResponse.response = classify.response;
+            bind explain.context = context;
+            bind explain.response = classify.response;
+            bind unavailable.context = context;
+            flow rawUnavailableResponse of MethodRecommendations from classify.response to unavailable.response;
+            flow explained of MethodRecommendations from explain.recommendations to recommendations;
+            flow unavailableReport of MethodRecommendations from unavailable.recommendations to recommendations;
+            doc /* Proposed guarded method service. Logical presentation/application currency and human authority guards remain additional requirements at integration. This action neither applies guidance nor implements an engineering analysis. */
+        }
+        part def RequiredJevClassifier {
+            attribute requestedPinnedClassifierAndRubricVersions : String;
+            attribute authorizedDataPolicyAccessTimeoutRetry : String;
+            attribute qualificationEvidenceAndLimits : String;
+            doc /* Mandatory PA-CDT analysis/V&V classifier role. Concrete identities and qualification evidence are supplied by a controlled project profile. An inaccessible or unqualified Jev service produces explicit unavailable guidance. */
+        }
+        part def RequiredJevRecommendations {
+            part classifier : RequiredJevClassifier;
+            perform action recommendMethods : JevMethodRecommendations {
+                bind classifier = RequiredJevRecommendations::classifier;
+            }
+        }
+    }
     part def HostResource {
-        attribute operatingSystemRuntimeVersions : String;
-        attribute cpuMemoryStorageNetworkLimits : String;
-        attribute accessLicenceBackupRecovery : String;
-        doc /* Generic computers, networks and storage are framework infrastructure. Capacity and legal access require declaration and verification. They are not executing EPS hardware. Co-location is allowed only while access, workload isolation and recovery rules remain satisfied. */
+        attribute runtimeToolAndDependencyVersions : String;
+        attribute declaredCapacityAccessRecovery : String;
+        doc /* Generic computation and storage roles. Capacity, access and recovery require verification. These are framework infrastructure, not executing EPS hardware or a preferred deployment. */
     }
     part def ResponsibilityNode { attribute responsibilityAndLocation : String; }
     item def ControlledData :> EngineeringArtifact {
         ref item context : ContextRevision;
-        attribute contentDigestSchemaProducerSourceRevisions : String;
+        attribute digestSchemaProducerAndSourceRevisions : String;
         attribute proposedReleasedStaleFailedStatus : String;
     }
     item def ModelData :> ControlledData {
         ref item requirements : RequirementAllocation [0..*];
         ref item designs : DesignWork [0..*];
         ref item interfaces : EPSInterfaceSpecification [0..*];
-        doc /* Working native/YAML/vendor records retain the declared field owner. A release captures their exact native revisions in ReleaseData. */
     }
     item def AdviceData :> ControlledData {
-        ref item batches : AdviceBatch [0..*];
-        ref item referenceData : ReferenceData [0..*];
+        ref item reports : AssistanceReport [0..*];
         ref item dispositions : SuggestionDisposition [0..*];
-        doc /* Local source/advice indexes are rebuildable. Exact cited source packages and disposition records are preserved in ReleaseData. */
     }
     item def ReleaseData :> ControlledData {
         ref item baselines : PhaseBaseline [0..*];
@@ -54,417 +220,474 @@ package PhysicalVocabulary {
         ref item runs : RunWork [0..*];
         ref item assessments : EvidenceAssessment [0..*];
         ref item rejectedTransfers : CheckedTransfer [0..*];
-        doc /* Managed archive preserves exact native source/model/software revisions, cited data, raw outputs, logs, statuses, masks, review decisions and replay dependencies. Digests check file identity, not engineering correctness. */
+        doc /* Exact native/vendor/source/software revisions, raw outputs, masks, logs, statuses, decisions and replay dependencies remain retrievable. A digest proves identity only. */
     }
-    item def AdviceInput :> EngineeringArtifact {
-        ref item work : AssistanceWork;
-        ref item context : ContextRevision;
+    item def AuthoringRecords :> ControlledData {
+        ref item requirements : RequirementRecord [0..*];
+        ref item quantities : Quantity [0..*];
+        ref item interfaces : EPSInterfaceSpecification [0..*];
+        attribute relationsModesOwnershipAndSchema : String;
+    }
+    item def COMETRecords :> AuthoringRecords {
+        attribute serverStudyCatalogueAndCategoryRevisions : String;
+        attribute workbookCellsAddInAndParameterOwners : String;
+    }
+    item def CapellaValispaceRecords :> AuthoringRecords {
+        attribute architectureTreeRequirementAndModeExportRevisions : String;
+        attribute valispaceParameterAndSynchronizationScriptRevisions : String;
+        attribute asynchronousTransferAndAuthorityFindings : String;
+    }
+    item def NanospaceRecords :> AuthoringRecords {
+        attribute databaseSnapshotAPISchemaAndRequirementRelations : String;
+        attribute dependencyGraphHDDLDomainProblemAndPlannerRevisions : String;
+    }
+    item def YAMLCSRMRecords :> AuthoringRecords {
+        attribute gitRevisionYAMLSchemaAndCSRMTraceRevisions : String;
+        attribute schemaAndSemanticServiceFindings : String;
+    }
+    item def NativeRecords :> AuthoringRecords {
+        attribute nativeSubjectRequirementQuantityCalculationBindingRevisions : String;
+        attribute ruleSourceClassifierRubricRevisions : String;
+    }
+    part def AuthoringProfile {
+        ref item currentRecords : AuthoringRecords;
+        ref item sourcedMethods : IntegrationScaffold::EngineeringMethod [0..*];
+        attribute qualityRulesSemanticChecksAndLimitations : String;
+        attribute recommendationContextAndApplicability : String;
+    }
+    part def COMETAuthoringProfile :> AuthoringProfile {
+        ref item records : COMETRecords;
+        bind currentRecords = records;
+    }
+    part def CapellaValispaceAuthoringProfile :> AuthoringProfile {
+        ref item records : CapellaValispaceRecords;
+        bind currentRecords = records;
+    }
+    part def NanospaceAuthoringProfile :> AuthoringProfile {
+        ref item records : NanospaceRecords;
+        bind currentRecords = records;
+        part planner : FirstValidHTNProfile;
+    }
+    part def YAMLCSRMProfile :> AuthoringProfile {
+        ref item records : YAMLCSRMRecords;
+        bind currentRecords = records;
+    }
+    part def NativeAuthoringProfile :> AuthoringProfile {
+        ref item records : NativeRecords;
+        bind currentRecords = records;
+    }
+    item def HTNPlanProposal :> EngineeringArtifact {
         ref item request : GuidanceRequest;
-        ref item drafts : RequirementRecord [0..*];
-        attribute purpose : String;
-        attribute questionStagePurposeAvailableInputsConstraints : String;
-        attribute ruleRubricSourceModelRevisions : String;
+        attribute domainProblemPlannerFirstValidPlanRevisions : String;
+        attribute requiredInputsActionsPrerequisitesAndLimits : String;
+        attribute applicabilityRejectionsAndUnknowns : String;
+        doc /* Separate proposed integration of the reported first-valid HTN planner. A valid plan is not optimality, execution admission or engineer approval. */
     }
-    item def AdviceBatch :> EngineeringArtifact {
-        ref item input : AdviceInput;
-        ref item report : AssistanceReport;
-        attribute affectedTextSubjectLevelModeConditionQuantity : String;
-        attribute sourceExcerptsLocatorsAndAuthority : String;
-        attribute modelIdentityRevisionPromptRawScoresTruncation : String;
-        attribute eligibilityRejectedAlternativesUncertainty : String;
-        attribute citedCorrectionOrQuestionAndComparedContext : String;
-        attribute assessedNoFindingAbstainedUnavailableScope : String;
+    action def ProposeFirstValidHTNPlan {
+        in work : AssistanceWork;
+        out proposal : HTNPlanProposal;
+        bind proposal.request = work.request;
     }
-    part def DeterministicRules :> SoftwareResource {
-        attribute ruleRevision : String;
-        doc /* Python rules check identifiers, required fields, parent/end revisions, responsible product, one thought, shall/should/will wording, vague terms, dimensional units, inequality direction, declared quantity limits and arithmetic consistency. NASA Appendix C is a default reference, supplemented by an expert-approved project rubric. Rules expose exact affected text and a cited correction template or clarification question. Missing quantities stay unresolved. Technical validity remains a reviewer decision. */
+    part def FirstValidHTNProfile {
+        perform action propose : ProposeFirstValidHTNPlan;
+        attribute domainProblemPlannerActionLibraryRevisions : String;
     }
-    part def LocalScoring :> SoftwareResource {
-        attribute embeddingModel : String = "Qwen/Qwen3-Embedding-0.6B";
-        attribute rerankerModel : String = "Qwen/Qwen3-Reranker-0.6B";
-        attribute embeddingRevision : String = "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3";
-        attribute rerankerRevision : String = "e61197ed45024b0ed8a2d74b80b4d909f1255473";
-        attribute modelRevisionTokenizerPromptLibraryIdentity : String;
-        doc /* BM25 and exact quantity/subject queries provide lexical candidates. Pinned local Qwen embedding retrieval and CrossEncoder pairwise reranking are a semantic alternative through sentence-transformers. Separate source-content selection, contextual question relevance and requirement-pair candidate assessment use qualified rubrics. Local content selection defaults to declared section types and retained source authority. A local probabilistic content classifier needs separate qualification. Scores only rank potential evidence or probable similarity. They cannot establish duplicate equivalence. Input truncation, unsupported language and incomplete conditions cause flags or abstention. Exact weights, cutoffs and shortlist limits require independent project qualification. */
+    action def CheckDraftRules {
+        in work : AssistanceWork;
+        in profile : AuthoringProfile;
+        out checked : AssistanceWork;
+        doc /* Check identified requirement fields, subject, condition, quantity/unit, parent/source revisions and project-approved drafting rules using this exact native/vendor schema. Preserve drafts and dispositions. Findings remain proposed corrections or clarification questions. */
     }
-    part def JevScoring :> SoftwareResource {
-        attribute modelIdentity : String = "jev-1.13.0";
-        attribute sdkIdentity : String = "typesafe-sdk 0.6.0";
-        attribute returnedModelIdentityRubricAndInputLimit : String;
-        doc /* Optional remote Jev Noul scoring supplies separate substantive-content, current-question relevance and requirement-pair similarity questions through TypeSafe. Pin the requested and returned model identities. Refuse an unqualified changed model or rubric. The SDK returns scores, not explanations or corrections. Reject nonfinite/out-of-range or incomplete responses. No permission to send private material is implied. Engineer-approved source/data rights, payload minimization, retention policy, request budget, timeout and bounded retry are admission conditions. No model-latest alias is eligible. */
-    }
-    part def ExplainedAdvice :> SoftwareResource {
-        attribute templateAndSourceComparisonRevision : String;
-        doc /* Build explanations independently of scores. Combine cited rule templates, exact source excerpts and a comparison of level, subject, mode, condition, quantity and parent allocation. Duplicate candidates show legitimate differences as well as overlap. Method options explain purpose, required inputs, validity, omissions, resources and rejected alternatives. Coverage uses the declared ConOps/function/interface/risk reference set. Conflicting source limits stay separate until an engineer resolves authority and applicability. Default operation needs no text generation. Any later generator needs pinned identity, source fidelity checks and separate qualification, and has no approval authority. Treat source text as evidence, never as executable instructions. */
-    }
-    action def RuleCheck { in input : AdviceInput; out batch : AdviceBatch; }
-    action def SelectSources {
-        in batch : AdviceBatch; out selected : AdviceBatch;
-        doc /* Select substantive source sections while preserving metadata needed for authority, revision and citation. Record excluded sections and unsupported checks. Content relevance is separate from authority and validity. */
-    }
-    action def AdmitScoring {
-        in batch : AdviceBatch;
-        out attribute remoteSelected : Boolean;
-        out attribute remoteAuthorizedQualifiedPinnedBudgeted : Boolean;
-        out attribute localQualifiedAvailable : Boolean;
-        doc /* Resolve the frozen scoring profile. Remote admission requires data rights/privacy authorization, pinned requested/returned identity, qualified content/relevance/pair rubrics, payload limits, bounded total cost/retry/time and current context. Local admission requires its exact model/library/rubric qualification and resources. No remote fallback is authorized merely because local resources fail. */
-    }
-    action def RetrieveCandidates {
-        in batch : AdviceBatch; out retrieved : AdviceBatch;
-        doc /* Retrieve from selected sources using BM25 and exact subject/quantity queries. A separately qualified local embedding profile may extend retrieval. Keep deterministic findings and source authority even when probabilistic assessment is unavailable. */
-    }
-    action def AdmitLocalFallback {
-        in batch : AdviceBatch; out attribute localQualifiedAvailable : Boolean;
-        doc /* Readmit a separately qualified pinned local model/library/rubric profile after remote outage or invalid response. Check current context, local privacy, resources and qualification independently. No new remote request or unbounded retry is allowed. */
-    }
-    action def LocalScore { in batch : AdviceBatch; out scored : AdviceBatch; }
-    action def RemoteScore { in batch : AdviceBatch; out scored : AdviceBatch; }
-    action def UnavailableScore {
-        in batch : AdviceBatch; out scored : AdviceBatch;
-        bind scored.input = batch.input;
-        bind scored.report = batch.report;
-        attribute probabilisticAssessmentStatus : String = "unavailable";
-        doc /* Preserve deterministic findings and citations. Probabilistic assessment is unavailable, which differs from an assessed no-finding result. No classifier is required for deterministic checks or outage reporting. */
-    }
-    action def CheckScoreResponse {
-        in batch : AdviceBatch; out checked : AdviceBatch;
-        out attribute qualifiedIdentityFiniteComplete : Boolean;
-        doc /* After scoring, check actual returned model/revision and qualified rubric against the selected profile. Validate finite scores within that model's declared scale, completeness and decisive input truncation. Preserve raw responses. Invalid, changed, incomplete or unqualified outputs become unavailable/abstained and never eligible ranking evidence. Local raw logits are not forced into a probability scale. */
-    }
-    action def ReturnScores { in batch : AdviceBatch; out scored : AdviceBatch; }
-    action def ScoreCandidates {
-        in batch : AdviceBatch; out scored : AdviceBatch;
-        perform action admit : AdmitScoring;
-        perform action local : LocalScore;
-        perform action remote : RemoteScore;
-        perform action unavailable : UnavailableScore;
-        perform action check : CheckScoreResponse;
-        perform action checkRemote : CheckScoreResponse;
-        perform action fallback : AdmitLocalFallback;
-        perform action returnScores : ReturnScores;
-        decide profile;
-        decide validScores;
-        decide validRemote;
-        decide fallbackReady;
-        merge complete;
-        first start then admit;
-        first admit then profile;
-        succession remoteAdmitted first profile if admit.remoteSelected and admit.remoteAuthorizedQualifiedPinnedBudgeted then remote;
-        succession localAdmitted first profile if not admit.remoteSelected and admit.localQualifiedAvailable then local;
-        succession unavailableProfile first profile if (admit.remoteSelected and not admit.remoteAuthorizedQualifiedPinnedBudgeted) or (not admit.remoteSelected and not admit.localQualifiedAvailable) then unavailable;
-        first local then check;
-        first remote then checkRemote;
-        first checkRemote then validRemote;
-        succession admitRemoteScores first validRemote if checkRemote.qualifiedIdentityFiniteComplete then returnScores;
-        succession invalidRemoteScores first validRemote if not checkRemote.qualifiedIdentityFiniteComplete then fallback;
-        first fallback then fallbackReady;
-        succession admitFallback first fallbackReady if fallback.localQualifiedAvailable then local;
-        succession noFallback first fallbackReady if not fallback.localQualifiedAvailable then unavailable;
-        first check then validScores;
-        succession admitScores first validScores if check.qualifiedIdentityFiniteComplete then returnScores;
-        succession invalidScores first validScores if not check.qualifiedIdentityFiniteComplete then unavailable;
-        first returnScores then complete;
-        first unavailable then complete;
-        first complete then done;
-        flow admissionInput of AdviceBatch from batch to admit.batch;
-        flow localInput of AdviceBatch from batch to local.batch;
-        flow remoteInput of AdviceBatch from batch to remote.batch;
-        flow unavailableInput of AdviceBatch from batch to unavailable.batch;
-        flow localOutput of AdviceBatch from local.scored to check.batch;
-        flow remoteOutput of AdviceBatch from remote.scored to checkRemote.batch;
-        flow fallbackInput of AdviceBatch from checkRemote.checked to fallback.batch;
-        flow fallbackBatch of AdviceBatch from checkRemote.checked to local.batch;
-        flow remoteFailureRecord of AdviceBatch from checkRemote.checked to unavailable.batch;
-        flow remoteCheckedOutput of AdviceBatch from checkRemote.checked to returnScores.batch;
-        flow checkedOutput of AdviceBatch from check.checked to returnScores.batch;
-        flow invalidOutput of AdviceBatch from check.checked to unavailable.batch;
-        flow admittedOutput of AdviceBatch from returnScores.scored to scored;
-        flow unavailableOutput of AdviceBatch from unavailable.scored to scored;
-        doc /* Retrieve and score source/method/requirement candidates under the frozen local or admitted remote profile. Retain both question relevance and pair comparison scores with model/rubric identity. Do not reuse corpus retrieval cutoffs or fusion weights as engineering acceptance limits. API outage falls back only through readmission of a separately qualified local profile. Otherwise return unavailable/abstained, with deterministic findings intact. */
-    }
-    action def FilterApplicability {
-        in batch : AdviceBatch; out eligible : AdviceBatch;
-        out attribute hasEligible : Boolean;
-        doc /* Apply engineer-approved mandatory scope, phase/purpose, requirements, available inputs, model validity, required discipline/fidelity, resource and legal-access conditions before ranking eligible options. Unknown mandatory inputs are unresolved, never favorable defaults. Keep rejected alternatives with reasons. Rank by qualified contextual relevance only among eligible options. Raw probability is neither technical confidence nor acceptance. */
-    }
-    action def ExplainOptions {
-        in batch : AdviceBatch; out explained : AdviceBatch;
-        doc /* Produce cited rule corrections and context/source comparisons using ExplainedAdvice. Explain the eligible shortlist and close alternatives. No score is an explanation. Retain uncertain findings and unsupported scope for engineer disposition. */
-    }
-    action def NoEligible {
-        in batch : AdviceBatch; out explained : AdviceBatch;
-        doc /* Return no eligible recommendation and unmet prerequisites, abstention or service-unavailable status. Still explain supported deterministic drafting findings. No finding and not assessed are distinct. */
-    }
-    action def CheckAdviceCurrency {
-        in batch : AdviceBatch; out attribute current : Boolean;
-        doc /* Compare latest requirement, mission, design, source, criterion and scope revisions plus assistance model/rule revisions immediately before display. Cache identity includes all these revisions, question, content digests, applicability profile and qualification version. Superseded cached advice remains historical. A delayed response never replaces newer advice. Current engineer authority and context are checked again by the retained logical application gate. */
-    }
-    action def PublishAdvice {
-        in batch : AdviceBatch; out report : AssistanceReport;
-        bind report.context = batch.input.context;
-        bind report.findings = batch.report.findings;
-        bind report.recommendations = batch.report.recommendations;
-        doc /* Return the current explained findings, method options, prerequisites, limitations and assessment scope. Scoring alone supplies no explanation or corrective suggestion. */
-    }
-    item def StaleAdviceReport :> AssistanceReport {
-        attribute :>> currentStalePendingUnavailable = "stale";
-    }
-    action def PreserveStale {
-        in batch : AdviceBatch; out report : StaleAdviceReport;
-        bind report.context = batch.input.context;
-        doc /* Preserve the stale report and its findings, invalidate its use and request the latest context. Return stale status without displaying it as current. The enclosing logical latest-context gate rejects this report for presentation or application. */
-    }
-    action def ActiveAssistance {
-        in input : AdviceInput; out report : AssistanceReport;
-        perform action rules : RuleCheck;
-        perform action sources : SelectSources;
-        perform action retrieve : RetrieveCandidates;
-        perform action scores : ScoreCandidates;
-        perform action applicability : FilterApplicability;
-        perform action explain : ExplainOptions;
-        perform action none : NoEligible;
-        perform action currency : CheckAdviceCurrency;
-        perform action publish : PublishAdvice;
-        perform action stale : PreserveStale;
-        decide eligible;
-        merge explained;
-        decide current;
-        merge complete;
-        first start then rules;
-        first rules then sources;
-        first sources then retrieve;
-        first retrieve then scores;
-        first scores then applicability;
-        first applicability then eligible;
-        succession admitOptions first eligible if applicability.hasEligible then explain;
-        succession noOptions first eligible if not applicability.hasEligible then none;
-        first explain then explained;
-        first none then explained;
-        first explained then currency;
-        first currency then current;
-        succession admitCurrent first current if currency.current then publish;
-        succession rejectStale first current if not currency.current then stale;
-        first publish then complete;
-        first stale then complete;
-        first complete then done;
-        flow inputFlow of AdviceInput from input to rules.input;
-        flow sourceFlow of AdviceBatch from rules.batch to sources.batch;
-        flow retrievalFlow of AdviceBatch from sources.selected to retrieve.batch;
-        flow scoreFlow of AdviceBatch from retrieve.retrieved to scores.batch;
-        flow applicabilityFlow of AdviceBatch from scores.scored to applicability.batch;
-        flow explanationFlow of AdviceBatch from applicability.eligible to explain.batch;
-        flow noOptionFlow of AdviceBatch from applicability.eligible to none.batch;
-        flow explanationCurrency of AdviceBatch from explain.explained to currency.batch;
-        flow noneCurrency of AdviceBatch from none.explained to currency.batch;
-        flow presentFlow of AdviceBatch from explain.explained to publish.batch;
-        flow presentNoneFlow of AdviceBatch from none.explained to publish.batch;
-        flow staleFlow of AdviceBatch from explain.explained to stale.batch;
-        flow staleNoneFlow of AdviceBatch from none.explained to stale.batch;
-        flow publishedReport of AssistanceReport from publish.report to report;
-        flow staleReport of AssistanceReport from stale.report to report;
-        doc /* Refines L02 checking/recommendation. The approved logical receive/capture/immediate edit invalidation/acknowledgement steps precede this action. Its presentation check supplements the retained latest-context and human application gates. It cannot apply a correction or authorize a review. */
-    }
-    action def MapAdviceWork {
-        in work : AssistanceWork; in attribute purpose : String;
-        out input : AdviceInput;
-        bind input.work = work;
-        bind input.request = work.request;
-        bind input.context = work.request.context;
-        bind input.drafts = work.drafts;
-        bind input.purpose = purpose;
-        doc /* Preserve the exact request, drafts, submission and prior dispositions. The request carries the current question, maturity, available inputs, validity, resources and scope. Resolve rule/source/model revisions for this purpose without changing context or granting application authority. */
-    }
-    action def ReturnAdviceWork {
-        in work : AssistanceWork; in report : AssistanceReport;
-        out updatedWork : AssistanceWork;
-        bind updatedWork.submission = work.submission;
-        bind updatedWork.request = work.request;
-        bind updatedWork.drafts = work.drafts;
-        bind updatedWork.dispositions = work.dispositions;
-        bind updatedWork.findings = report.findings;
-        bind updatedWork.report = report;
-        bind updatedWork.triggerAcknowledgementCompletion = work.triggerAcknowledgementCompletion;
-        doc /* Return the actual explained report and findings in the logical work record. Preserve acknowledgement/completion information and all human dispositions. This adapter applies no suggestion. */
+    action def CompanionSemanticChecks {
+        in work : AssistanceWork;
+        in profile : AuthoringProfile;
+        out checked : AssistanceWork;
+        doc /* Proposed semantic checks compare subject, level, mode, conditions, quantities, trace and declared coverage. Explain findings, unsupported checks and uncertainty separately from deterministic rules. This service is separate from Jev method suggestions and grants no technical validation or application authority. */
     }
     action def PhysicalCheckDraft :> CheckDraft {
-        perform action map : MapAdviceWork { in :>> purpose = "draft check"; }
-        perform action pipeline : ActiveAssistance;
-        perform action returnWork : ReturnAdviceWork;
-        first start then map;
-        first map then pipeline;
-        first pipeline then returnWork;
-        first returnWork then done;
-        flow workInput of AssistanceWork from work to map.work;
-        flow mappedInput of AdviceInput from map.input to pipeline.input;
-        flow originalWork of AssistanceWork from work to returnWork.work;
-        flow explainedReport of AssistanceReport from pipeline.report to returnWork.report;
-        flow workOutput of AssistanceWork from returnWork.updatedWork to updatedWork;
+        ref part authoring : AuthoringProfile;
+        perform action rules : CheckDraftRules;
+        perform action semantics : CompanionSemanticChecks;
+        first start then rules;
+        first rules then semantics;
+        first semantics then done;
+        bind rules.work = work;
+        bind rules.profile = authoring;
+        bind semantics.work = rules.checked;
+        bind semantics.profile = authoring;
+        bind updatedWork = semantics.checked;
+    }
+    action def SelectSourcedMethods {
+        in work : AssistanceWork;
+        in profile : AuthoringProfile;
+        in htn : HTNPlanProposal [0..1];
+        out report : AssistanceReport;
+        bind report.context = work.request.context;
+        doc /* Select sourced analysis/V&V and lifecycle methods from the exact catalogue/architecture/database/YAML context. Check purpose, maturity, available inputs, supported effects, validity, resources, prerequisites and independent reference needs. Explain citations and rejected alternatives. If a separate HTN proposal is supplied, check every planned action and prerequisite before recommendation. No-eligible, unavailable and stale outcomes remain distinct. Scores or first-valid plans grant no execution or design-change authority. */
     }
     action def PhysicalRecommendMethods :> RecommendMethods {
-        perform action map : MapAdviceWork { in :>> purpose = "methods and lifecycle guidance"; }
-        perform action pipeline : ActiveAssistance;
-        first start then map;
-        first map then pipeline;
-        first pipeline then done;
-        flow workInput of AssistanceWork from work to map.work;
-        flow mappedInput of AdviceInput from map.input to pipeline.input;
-        flow explainedReport of AssistanceReport from pipeline.report to report;
-        doc /* Include the draft report in work with its deterministic findings and unsupported scope. Explain contextual method/model alternatives and lifecycle prerequisites. Return the pipeline report, never a score. */
+        ref part authoring : AuthoringProfile;
+        perform action select : SelectSourcedMethods;
+        first start then select;
+        first select then done;
+        bind select.work = work;
+        bind select.profile = authoring;
+        bind report = select.report;
+    }
+    action def PhysicalHTNRecommendMethods :> RecommendMethods {
+        ref part authoring : NanospaceAuthoringProfile;
+        perform action planner : ProposeFirstValidHTNPlan;
+        perform action select : SelectSourcedMethods;
+        first start then planner;
+        first planner then select;
+        first select then done;
+        bind planner.work = work;
+        bind select.work = work;
+        bind select.profile = authoring;
+        bind select.htn = planner.proposal;
+        bind report = select.report;
+    }
+    action def ReturnAdviceWork {
+        in original : AssistanceWork;
+        in report : AssistanceReport;
+        out updated : AssistanceWork;
+        bind updated.submission = original.submission;
+        bind updated.request = original.request;
+        bind updated.drafts = original.drafts;
+        bind updated.dispositions = original.dispositions;
+        bind updated.triggerAcknowledgementCompletion = original.triggerAcknowledgementCompletion;
+        bind updated.findings = report.findings;
+        bind updated.report = report;
     }
     action def PhysicalReassessAssistance :> ReassessAssistance {
         perform action prepare : ReassessAssistance;
-        perform action checkDraft : PhysicalCheckDraft;
-        perform action recommend : PhysicalRecommendMethods;
+        perform action checkDraft : CheckDraft;
+        perform action recommend : RecommendMethods;
         perform action returnWork : ReturnAdviceWork;
         first start then prepare;
         first prepare then checkDraft;
         first checkDraft then recommend;
         first recommend then returnWork;
         first returnWork then done;
-        flow impactInput of ImpactNotice from impact to prepare.impact;
-        flow newWork of AssistanceWork from prepare.work to checkDraft.work;
-        flow checkedWork of AssistanceWork from checkDraft.updatedWork to recommend.work;
-        flow preservedWork of AssistanceWork from checkDraft.updatedWork to returnWork.work;
-        flow explainedReport of AssistanceReport from recommend.report to returnWork.report;
-        flow workOutput of AssistanceWork from returnWork.updatedWork to work;
+        bind prepare.impact = impact;
+        bind checkDraft.work = prepare.work;
+        bind recommend.work = checkDraft.updatedWork;
+        bind returnWork.original = checkDraft.updatedWork;
+        bind returnWork.report = recommend.report;
+        bind work = returnWork.updated;
     }
-    action def CheckReturnedAdvice {
+    item def PhysicalDependencyContext :> ControlledData {
+        attribute authoringParameterWorkbookOrToolTransferRevisions : String;
+        attribute databaseDependencyPlannerRevisions : String;
+        attribute nativeSourceClassifierRuleRevisions : String;
+        attribute currentRequestReplyAndInvalidationIdentities : String;
+    }
+    part def CurrencyProfile {
+        ref item latest : PhysicalDependencyContext;
+        attribute affectedRevisionKeysAndInvalidationPolicy : String;
+    }
+    action def CheckPhysicalCurrency {
         in report : AssistanceReport;
-        out attribute presentable : Boolean = report.currentStalePendingUnavailable != "stale";
+        in context : ContextRevision;
+        in profile : CurrencyProfile;
+        out attribute currentPhysicalDependencies : Boolean;
+        doc /* Recheck latest physical source/tool/schema/rule/classifier revisions, not just the saved request. A superseded or unqualified reply is stale/unavailable and cannot replace newer guidance. Preserve raw delayed replies. */
     }
     action def PhysicalCheckCurrency :> CheckCurrency {
-        out attribute sameContext : Boolean :>> CheckCurrency::sameContext = latest.sameContext and status.presentable;
-        perform action latest : CheckCurrency;
-        perform action status : CheckReturnedAdvice;
-        first start then latest;
-        first latest then status;
-        first status then done;
-        flow reportInput of AssistanceReport from report to latest.report;
-        flow contextInput of ContextRevision from context to latest.context;
-        flow statusInput of AssistanceReport from report to status.report;
-        doc /* Preserve the logical latest-context check. A physical pipeline that rejected model/rule/source currency returns stale status and cannot pass the enclosing display or application gate, even if the six logical context revisions otherwise match. */
+        ref part profile : CurrencyProfile;
+        out attribute sameContext : Boolean :>> CheckCurrency::sameContext = logicalCheck.sameContext and physicalCheck.currentPhysicalDependencies and report.currentStalePendingUnavailable != "stale";
+        perform action logicalCheck : CheckCurrency;
+        perform action physicalCheck : CheckPhysicalCurrency;
+        first start then logicalCheck;
+        first logicalCheck then physicalCheck;
+        first physicalCheck then done;
+        bind logicalCheck.report = report;
+        bind logicalCheck.context = context;
+        bind physicalCheck.report = report;
+        bind physicalCheck.context = context;
+        bind physicalCheck.profile = profile;
+    }
+    action def InvalidatePhysicalDependencies {
+        in submission : EngineeringSubmission;
+        in logicalImpact : ImpactNotice;
+        in profile : CurrencyProfile;
+        out impact : ImpactNotice;
+        out updatedSubmission : EngineeringSubmission;
+        out attribute physicalChange : Boolean;
+        doc /* Immediately mark affected current and pending guidance stale on the profile's revision changes. Preserve predecessor/report/request identities, record extra source/tool/classifier/rule impacts and trigger reassessment. This operation grants no successor or application authority. */
+    }
+    action def PhysicalInvalidateAndReassess :> InvalidateAndReassess {
+        ref part profile : CurrencyProfile;
+        out attribute hasChange : Boolean :>> InvalidateAndReassess::hasChange = logicalChange.hasChange or physicalChange.physicalChange;
+        perform action logicalChange : InvalidateAndReassess;
+        perform action physicalChange : InvalidatePhysicalDependencies;
+        first start then logicalChange;
+        first logicalChange then physicalChange;
+        first physicalChange then done;
+        bind logicalChange.submission = submission;
+        bind physicalChange.submission = logicalChange.updatedSubmission;
+        bind physicalChange.logicalImpact = logicalChange.impact;
+        bind physicalChange.profile = profile;
+        bind impact = physicalChange.impact;
+        bind updatedSubmission = physicalChange.updatedSubmission;
+    }
+    item def ExactDependencyManifest :> ControlledData {
+        ref item nativeSourceModelSoftwareAndRawProducts : EngineeringArtifact [0..*];
+        attribute sourceExportsCataloguesWorkbooksAddIns : String;
+        attribute scriptsPlannerFMUsSolversConnectors : String;
+        attribute pythonHostToolchainEnvironmentCOTS : String;
+        attribute exactAvailabilityDigestsAndFixedComparisonRules : String;
+    }
+    part def ReplayProfile {
+        ref item dependencies : ExactDependencyManifest;
+        attribute requiredDependencyClasses : String;
+    }
+    action def CheckReplayDependencies {
+        in request : ReplayRequest;
+        in profile : ReplayProfile;
+        out attribute exactDependenciesAvailable : Boolean;
+        doc /* Resolve every declared native/vendor/tool/environment/data dependency independently. Missing revision, unavailable export or unresolved reconstruction instructions blocks replay admission. This check neither executes replay nor establishes prediction validity. */
+    }
+    action def PhysicalPrepareReplay :> PrepareReplay {
+        ref part profile : ReplayProfile;
+        out attribute dependenciesComplete : Boolean :>> PrepareReplay::dependenciesComplete = logicalPreparation.dependenciesComplete and dependencies.exactDependenciesAvailable;
+        perform action logicalPreparation : PrepareReplay;
+        perform action dependencies : CheckReplayDependencies;
+        first start then logicalPreparation;
+        first logicalPreparation then dependencies;
+        first dependencies then done;
+        bind logicalPreparation.request = request;
+        bind dependencies.request = request;
+        bind dependencies.profile = profile;
+        bind preparation = logicalPreparation.preparation;
+        bind rulesFixed = logicalPreparation.rulesFixed;
+    }
+    part def IntegrationMethodProfile {
+        ref item sourceRecords : AuthoringRecords;
+        ref item wholeSpacecraftInputHistories : ReferenceData [0..*];
+        ref item coupling : SimulationCouplingProfile;
+        attribute authoringDesignToPythonPlantUSDOrFMIMappings : String;
+        attribute fPrimeInterfaceTranslationPathAndVersions : String;
+        attribute disciplineSolverEffectsAndUnsupportedTransfers : String;
+        attribute numericalEntityUnitSampleReceiptScenarioTimeChecks : String;
+    }
+    action def MapNumericalPlan {
+        in work : DesignWork;
+        in proposed : AnalysisPlan;
+        in profile : IntegrationMethodProfile;
+        out mapped : AnalysisPlan;
+        doc /* Proposed source-specific adapter maps workbook/architecture/database/YAML/native quantities to declared numerical plant inputs and EPS responses for the same whole-CUBICS scenario. Declare entity/channel/unit/sign mappings, time bases, synchronization limits/delays, model/tool revisions, omissions and raw validity masks. Required whole-CUBICS and EPS SIL plans carry the numerical coupling profile. Unrelated RAM runs may omit it. No scene-only update or unsupported mandatory mapping is admitted as numerical coupling. */
+    }
+    action def PhysicalPlanAnalysis :> PlanAnalysis {
+        ref part profile : IntegrationMethodProfile;
+        perform action logicalPlan : PlanAnalysis;
+        perform action map : MapNumericalPlan;
+        first start then logicalPlan;
+        first logicalPlan then map;
+        first map then done;
+        bind logicalPlan.work = work;
+        bind map.work = work;
+        bind map.proposed = logicalPlan.plan;
+        bind map.profile = profile;
+        bind plan = map.mapped;
+    }
+    action def MapSourceInterfaces {
+        in specification : EPSInterfaceSpecification;
+        in profile : IntegrationMethodProfile;
+        out mapped : EPSInterfaceSpecification;
+        out attribute compatibleCompleteCurrent : Boolean;
+        doc /* Translate identified source fields into the required versioned F Prime component/instance/port/topology and command/telemetry/event/parameter profile. Preserve endpoint ownership, direction, types, units, polarity, ranges, encoding and time/mode meaning. New adapters and mission behavior need verification. Retain unsupported/lossy findings and incompatible versions. */
+    }
+    action def PhysicalMapFPrime :> MapFPrime {
+        ref part profile : IntegrationMethodProfile;
+        out attribute profileCompatible : Boolean :>> MapFPrime::profileCompatible = adapter.compatibleCompleteCurrent and logicalMapping.profileCompatible;
+        perform action adapter : MapSourceInterfaces;
+        perform action logicalMapping : MapFPrime;
+        first start then adapter;
+        first adapter then logicalMapping;
+        first logicalMapping then done;
+        bind adapter.specification = specification;
+        bind adapter.profile = profile;
+        bind logicalMapping.specification = adapter.mapped;
+        bind work = logicalMapping.work;
+    }
+    part def CredibilityMethodProfile {
+        ref item independentReferences : ReferenceData [0..*];
+        attribute waveformHistorySeparateModelAndCSRMMethods : String;
+        attribute applicabilityTimingRawMasksAndIndependentDataRules : String;
+    }
+    action def AdmitAssessmentHistories {
+        in work : RunWork;
+        in profile : CredibilityMethodProfile;
+        out checked : RunWork;
+        out attribute numericallySuitable : Boolean;
+        out attribute intendedUseIndependentEvidenceAdequate : Boolean;
+        doc /* Check entity/channel identity, units, scenario/sample/receipt time, synchronization limits/delays, completeness and validity before numerical assessment. Retain raw values and processing masks. Missing/inactive readings never become zero. Calibration data and independent assessment data remain distinct or have explicit gaps. */
+    }
+    action def PhysicalAssessModel :> AssessModel {
+        ref part profile : CredibilityMethodProfile;
+        out attribute numericallyValid : Boolean :>> AssessModel::numericallyValid = histories.numericallySuitable and logicalAssessment.numericallyValid;
+        out attribute applicable : Boolean :>> AssessModel::applicable = histories.intendedUseIndependentEvidenceAdequate and logicalAssessment.applicable;
+        perform action histories : AdmitAssessmentHistories;
+        perform action logicalAssessment : AssessModel;
+        first start then histories;
+        first histories then logicalAssessment;
+        first logicalAssessment then done;
+        bind histories.work = work;
+        bind histories.profile = profile;
+        bind logicalAssessment.work = histories.checked;
+        bind evidence = logicalAssessment.evidence;
+    }
+    part def EvidenceMethodProfile {
+        attribute requirementProcedureVerdictAndPublishedReviewTraces : String;
+        attribute exactBaselineAuthorityAndCoverageAssembly : String;
     }
     action def PhysicalAssistanceRealization :> LogicalRealization::AssistanceRealization {
         perform action :>> checkDraft : PhysicalCheckDraft;
-        perform action :>> recommend : PhysicalRecommendMethods;
         perform action :>> reassess : PhysicalReassessAssistance;
         perform action :>> checkReply : PhysicalCheckCurrency;
         perform action :>> checkApplication : PhysicalCheckCurrency;
     }
-    part def ExchangeSoftware :> Exchange, SoftwareResource;
-    part def AssistanceSoftware :> Assistance, SoftwareResource {
-        part rules : DeterministicRules;
-        part localScoring : LocalScoring;
-        part explanation : ExplainedAdvice;
-        part remoteScoring : JevScoring [0..1];
-        part planning : DependencyPlanningProfile [0..1];
-        perform action :>> checkDraft : PhysicalCheckDraft;
-        perform action :>> recommend : PhysicalRecommendMethods;
-        perform action :>> reassess : PhysicalReassessAssistance;
+    part def RequirementsGuidanceSoftware :> FrameworkLogical::RequirementsAssistance, SoftwareResource;
+    part def MissionDesignSoftware :> FrameworkLogical::MissionDesign, SoftwareResource;
+    part def SimulationIntegrationSoftware :> FrameworkLogical::SimulationIntegration, SoftwareResource {
+        part platforms : IntegrationScaffold::RequiredPlatformConnections;
+        part mapping : IntegrationMethodProfile;
+        part replayDependencies : ReplayProfile;
+        bind platforms.wholeCUBICS.numericalExchange = p03;
+        bind platforms.fPrime.hostSoftware = p04;
+        bind platforms.wholeCUBICS.coupling = mapping.coupling;
+        bind mapping.wholeSpacecraftInputHistories = p03.spacecraftInputs;
+        perform action verifyProfiles : AdmitProfiles {
+            bind mapping = SimulationIntegrationSoftware::mapping;
+            bind platforms = SimulationIntegrationSoftware::platforms;
+        }
+        perform action verifyHostProfiles : AdmitHostProfiles {
+            bind mapping = SimulationIntegrationSoftware::mapping;
+            bind platforms = SimulationIntegrationSoftware::platforms;
+        }
+        doc /* Every candidate includes both mandatory external platform connections and declares applicable electrical, thermal, EMC/geometry and RAM profiles. Authored failure-data-to-fault-tree adaptation is proposed. Missing failure/repair data remain unresolved. The cited source supplies no generic rates or complete RAM validity. */
     }
-    part def RequirementsSoftware :> Requirements, SoftwareResource;
-    part def ToolProfile :> SoftwareResource {
-        port modelExchange : AnalysisPort;
-        attribute toolModelSolverRevisionApplicabilityAccess : String;
-        attribute sourceSupportedRoleAndProposedAdaptation : String;
-        attribute numericalMappingCalibrationIndependentEvidence : String;
-    }
-    part def ConceptSeedProfile :> ToolProfile {
-        doc /* Optional GREATCUBE+ empirical/analytical/COTS/numerical placement profile, Girardello sections 2--4. Import starting design quantities with correlation/database limits and engineer adaptation. Price/availability ranking is excluded by the source. Current tool access is unknown. */
-    }
-    part def DependencyPlanningProfile :> SoftwareResource {
-        doc /* Optional curated dependency graph/DSM and HDDL/HyperTension profile for L02 activity recommendations, Gateau sections 3--6. Nanospace API sharing is reported. Full HTN integration is prospective. A valid task plan is not an optimum or engineering approval. */
-    }
-    part def BoanEnergyProfile :> ToolProfile {
-        doc /* Alternative linked preliminary profile: IDM-CIC system/geometry/budgets, Simu-CIC orbital scenario ephemerides, IDM-Power mode-linked temporal demand, Flows Manager ephemeris-to-flux conversion and Opalis energy simulation. Boan sections 2--4 supports this chain, not a full lifecycle or independently validated fidelity. Current access is unknown. Verify exact records, quantities/time bases, raw export and reconstruction before admission. */
-    }
-    part def BatteryProfile :> ToolProfile {
-        doc /* Conditional PyBaMM SPM/DFN and thermal model profile informed by Zhu pp.7--9. Declare cell/pack parameters and supported temperature/aging/current domain. Supplied-data calibration and SOH prediction demonstration does not validate arbitrary CubeSat packs. Independent data and prediction-error rules remain necessary. */
-    }
-    part def SurrogateProfile :> ToolProfile {
-        doc /* Optional PhysicsNeMo surrogate, informed by Zhu. Requires sufficient identified training data, separate independent assessment, numerical/physics checks, uncertainty and host/GPU resources for the actual decision. No autonomous control is admitted. */
-    }
-    part def GeometryProfile :> ToolProfile {
-        doc /* Optional Omniverse/OpenUSD view for a declared illumination, accommodation or thermal engineering decision, informed by Zhu. Exact model/geometry correspondence needs verification. Visualization alone supplies no electrical fidelity. Isaac and live feedback are outside this proposed profile. */
-    }
-    part def DisciplineProfile :> ToolProfile {
-        doc /* Select electrical, thermal, applicable EMC/geometry and RAM tools or transparent analyses according to required effects. No complete EMC implementation is established. Averaged converters cannot predict switching spectra. Calibration fit, source workflow matching and successful execution cannot establish independent validity. Missing mandatory capability blocks admission. */
-    }
-    part def DesignSoftware :> Design, SoftwareResource {
-        part conceptSeeds : ConceptSeedProfile [0..1];
-    }
-    part def AnalysisSoftware :> Analysis, SoftwareResource {
-        part electrical : DisciplineProfile;
-        part thermal : DisciplineProfile;
-        part emc : DisciplineProfile [0..1];
-        part ram : DisciplineProfile [0..1];
-        part boanAlternative : BoanEnergyProfile [0..1];
-        part battery : BatteryProfile [0..1];
-        part surrogate : SurrogateProfile [0..1];
-        part geometry : GeometryProfile [0..1];
-        attribute declaredElectricalThermalEMCGeometryRAMProfiles : String;
-        attribute selectedHostCodeProfile : String;
-        perform action verifyProfiles : AdmitProfiles;
-        perform action verifyHostProfiles : AdmitHostProfiles;
-        doc /* Python analysis adapters coordinate declared external numerical tools. A proposed CPU minimum uses transparent sizing/budget equations, time-dependent EPS component/control models informed by Casado, PyBaMM battery models when applicable, declared thermal and applicable EMC analyses, RAM transformations and host MIL/SIL profiles. Every mandatory profile requires mapping, numerical/fidelity and independent-reference verification. Unavailable mandatory profiles block the affected complete-use claim. FMI/FMU exchange is optional pending quantity/time/solver compatibility. Source tool chains are alternatives, not silently combined executables. */
-    }
-    part def CredibilitySoftware :> Credibility, SoftwareResource;
-    part def ReviewSoftware :> AssessmentReview, SoftwareResource;
-    part def ConfigurationSoftware :> Configuration, SoftwareResource {
-        perform action :>> checkCurrency : PhysicalCheckCurrency;
-        doc /* Git controls model/text revisions and signed-off manifests. Identified raw binary outputs and source/reference packages use a managed archive with digest checks and declared backup/restore. Python maintains current-context and impact indexes as rebuildable views. Git commits are not engineering authorization. One authority per field is declared. No background name-based or bidirectional overwrite is permitted. Preserve failed transfers and predecessors. */
-    }
+    part def ModelCredibilitySoftware :> FrameworkLogical::ModelCredibility, SoftwareResource;
+    part def EvidenceReviewSoftware :> FrameworkLogical::EvidenceReview, SoftwareResource;
+    part def ConfigurationExchangeSoftware :> FrameworkLogical::ConfigurationExchange, SoftwareResource;
     port def BaselinePort { inout item record : ControlledData; }
-    port def AdviceExchangePort { inout item input : AdviceInput; inout item batch : AdviceBatch; }
+    port def AdviceExchangePort { inout item report : AdviceData; }
     part def EngineeringHost :> HostResource {
-        ref part exchange : ExchangeSoftware;
-        ref part requirements : RequirementsSoftware;
-        ref part design : DesignSoftware;
-        ref part analyses : AnalysisSoftware;
-        ref part credibility : CredibilitySoftware;
-        ref part review : ReviewSoftware;
+        ref part requirements : RequirementsGuidanceSoftware;
+        ref part design : MissionDesignSoftware;
+        ref part analyses : SimulationIntegrationSoftware;
+        ref part credibility : ModelCredibilitySoftware;
+        ref part review : EvidenceReviewSoftware;
         port revisions : BaselinePort;
         port assistance : AdviceExchangePort;
         port models : AnalysisPort;
         port hostCode : HostSoftwarePort;
     }
     part def AssistanceHost :> HostResource {
-        ref part advice : AssistanceSoftware;
+        ref part advice : RequirementsGuidanceSoftware;
         port assistance : AdviceExchangePort;
         port revisions : BaselinePort;
     }
     part def ArchiveHost :> HostResource {
-        ref part configuration : ConfigurationSoftware;
+        ref part configuration : ConfigurationExchangeSoftware;
         port engineering : BaselinePort;
         port assistance : BaselinePort;
-        port execution : BaselinePort;
     }
     part def ModelEnvironment :> HostResource {
         port requests : ~AnalysisPort;
-        attribute toolSolverModelAndProfileRevisions : String;
-        doc /* External electrical/thermal/applicable EMC/geometry and RAM tools execute controlled requests and return raw results and all statuses. Supplied reference data are imported through IF-02. No physical acquisition, EPS operation or live feedback exists. CPU host profiles are declared. GPU is conditional on an admitted surrogate or decision-specific visualization profile. */
+        attribute wholeCUBICSOmniverseAndExternalNumericalToolRevisions : String;
+        doc /* Required whole-CUBICS Omniverse numerical environment with declared external EPS/discipline solvers. Return identified EPS effects and same-scenario histories, raw masks and all execution statuses. Display alone supplies no coupling verdict. */
     }
     part def HostToolchain :> HostResource {
         port requests : ~HostSoftwarePort;
-        attribute compilerBuildSimulationDependenciesAndProfile : String;
-        doc /* External declared host toolchains perform coding/builds/SIL for the exact current authorized design/interface release and software scope. Engineer selects one compatible integration profile. Plain host code, cFS and F-Prime mappings are alternatives, each requiring verification. Neither both flight frameworks nor target qualification is required. */
+        attribute requiredFPrimeHostRepresentationCompilerDependencies : String;
+        doc /* Required F Prime host build/SIL toolchain. Exact current engineer-authorized release, profile versions and dependencies precede coding/build. Released host SIL uses simulated products coupled through managed IF-03/04 to the same whole-CUBICS scenario. No target qualification is asserted. */
     }
-    part def ExternalEnvironments { part models : ModelEnvironment; part hostCode : HostToolchain; }
-    action def OperatingProcedure {
-        attribute ownerInputsStepsOutputsFailureAndAuthority : String;
-        doc /* Engineering operating procedures cover source/profile admission, field ownership and reviewed transfer, suggestion disposition, model calibration/independent assessment, exact detailed-design release, review decision, backup/restore and independent replay. Engineers/review authorities remain external. These are planned procedures, not executed V&V. */
+    action def EngineeringProcedure { in submission : EngineeringSubmission; out response : EngineeringResponse; }
+    action def ReviewProcedure { in reviewPackage : ReviewPackage; out decision : TechnicalReviewDecision; }
+    part def DesignMethodProfile {
+        ref item sourceRecords : AuthoringRecords;
+        ref item sourcedComponentAndMissionData : EngineeringArtifact [0..*];
+        attribute publishedSizingPlantEnergyOrCSRMMethods : String;
+        attribute missingEffectsUnknownsAndProposedCompletion : String;
     }
-    action def EngineeringProcedure :> OperatingProcedure {
-        doc /* Systems Engineer coordinates qualified EPS/domain contributors: declare field owners and source/profile rights, review proposed transfers/differences, assess and dispose assistance, authorize identified changes, establish exact detailed design/interface/software-scope release before coding, and reconstruct releases through declared restore/replay instructions. Failed access, mismatch, missing prerequisites or unauthorized decisions preserve predecessors and stop affected work. */
+    action def MapSourcedDesignStudy {
+        in work : DesignWork;
+        in profile : DesignMethodProfile;
+        out mapped : DesignWork;
+        doc /* Apply the declared catalogue/workbook, characterized EPS plant, Boan energy workflow or CSRM/concept sizing input mapping. Retain source revisions, quantities/units, mode/scenario assumptions and missing effects. Technical mass/volume estimates and power/energy sizing remain proposed study outputs. No component choice or design change is applied. */
     }
-    action def ReviewProcedure :> OperatingProcedure {
-        doc /* Designated review authority receives the identified prepared package and independent reviewer findings, checks current baseline and agreed scoped criteria, decides accepted/conditional/blocked progression, and records rationale. Conditional records include limits, closure actions, owners and dates. Unauthorized, stale or inconsistent decisions are preserved without changing state. Closing conditions requires new current authority and evidence. */
+    action def PhysicalBudgetSize :> BudgetSize {
+        ref part profile : DesignMethodProfile;
+        perform action map : MapSourcedDesignStudy;
+        perform action logicalBudget : BudgetSize;
+        first start then map;
+        first map then logicalBudget;
+        first logicalBudget then done;
+        bind map.work = work;
+        bind map.profile = profile;
+        bind logicalBudget.work = map.mapped;
+        bind updatedWork = logicalBudget.updatedWork;
+    }
+    action def AssembleSourcedReviewInputs {
+        in baseline : PhaseBaseline;
+        in views : ReviewPackage;
+        in evidence : EvidenceAssessment;
+        in profile : EvidenceMethodProfile;
+        out mappedViews : ReviewPackage;
+        out mappedEvidence : EvidenceAssessment;
+        doc /* Map the declared numerical compliance, Capella review/AIV, Nanospace intermediate result or generated YAML/native evidence paths to exact baseline-linked requirement/procedure/result records. Preserve missing coverage, critical gaps, uncertainty, raw statuses and independent references. Assembly grants prepared status only. */
+    }
+    action def PhysicalPrepareReviewPackage :> PrepareReviewPackage {
+        ref part profile : EvidenceMethodProfile;
+        perform action assemble : AssembleSourcedReviewInputs;
+        perform action logicalPackage : PrepareReviewPackage;
+        first start then assemble;
+        first assemble then logicalPackage;
+        first logicalPackage then done;
+        bind assemble.baseline = baseline;
+        bind assemble.views = views;
+        bind assemble.evidence = evidence;
+        bind assemble.profile = profile;
+        bind logicalPackage.baseline = baseline;
+        bind logicalPackage.views = assemble.mappedViews;
+        bind logicalPackage.evidence = assemble.mappedEvidence;
+        bind reviewPackage = logicalPackage.reviewPackage;
+        bind entranceComplete = logicalPackage.entranceComplete;
+    }
+    action def ReturnAdmittedCoupledEPSResponse {
+        in result : AnalysisResult;
+        in mapping : IntegrationMethodProfile;
+        in currency : CurrencyProfile;
+        out response : AnalysisResult [0..1];
+        doc /* For an applicable whole-CUBICS numerical or EPS SIL result, recheck current scenario/profile/model identities, entity/channel/quantity/unit mappings, sample/receipt times, timing limits/delays and raw masks before returning EPS states/results to the same scene. Unsupported, stale, invalid, missing or failed results retain explicit status/limitations and supply no admitted numerical payload. Unrelated RAM work produces no artificial scene response. A returned simulation result supplies no independent predictive-validity or product-conformity verdict. */
+    }
+    action def PhysicalPreserveRun :> PreserveRun {
+        ref part mapping : IntegrationMethodProfile;
+        ref part currency : CurrencyProfile;
+        ref port numericalEndpoint : AnalysisPort;
+        perform action preserve : PreserveRun;
+        perform action mapResponse : ReturnAdmittedCoupledEPSResponse;
+        first start then preserve;
+        first preserve then mapResponse;
+        first mapResponse then done;
+        bind preserve.result = result;
+        bind preserve.software = software;
+        bind work = preserve.work;
+        bind mapResponse.result = result;
+        bind mapResponse.mapping = mapping;
+        bind mapResponse.currency = currency;
+        bind numericalEndpoint.epsResponses = mapResponse.response;
+        doc /* The original scenario reaches this operation only after receiving compatibility. Preserve all raw/status records, then map current suitable coupled EPS responses. This adapter changes no baseline, release, review state or engineering conclusion. */
     }
     action def AdmitProfiles {
+        ref part mapping : IntegrationMethodProfile;
+        ref part platforms : IntegrationScaffold::RequiredPlatformConnections;
         in plan : AnalysisPlan; out admittedPlan : AnalysisPlan;
         out attribute mandatoryProfilesVerified : Boolean;
         bind admittedPlan = plan;
-        doc /* Recheck the exact current plan/configuration, criteria, source/model/software/scope and selected profile revisions before execution. Check selected electrical, thermal and applicable EMC/geometry profiles, RAM transformation and software profile/version against required effects, available resources/access, supported mappings and verification records. Independent reference/numerical/calibration evidence bounds intended use. An unverified mandatory profile or unresolved loss blocks admission. Framework profile verification remains pending. */
+        doc /* Recheck the exact current plan/configuration, criteria, source/model/software/scope and selected profile revisions before execution. Check required electrical, thermal, applicable EMC/geometry and numerical whole-CUBICS Omniverse profiles, RAM transformation and software profile/version against required effects, available resources/access, supported mappings and verification records. Independent reference/numerical/calibration evidence bounds intended use. An unverified mandatory profile or unresolved loss blocks admission. All empirical profile evidence remains unexecuted. */
     }
     item def BlockedAnalysisResult :> AnalysisResult {
         attribute :>> executionSuccessFailedCancelledPartial = "blocked: mandatory profile admission failed";
@@ -484,6 +707,7 @@ package PhysicalVocabulary {
     action def MapExistingSILRequest {
         in plan : AnalysisPlan; out request : ExistingSILRequest;
         bind request.plan = plan;
+        bind request.couplingProfile = plan.couplingProfile;
         doc /* Resolve the released design/interface mapping, existing product, matched stimuli, criteria and dependencies identified by the plan. Preserve their exact revisions. Admission verifies their availability and compatibility before this adapter is reached. No coding or build is requested. */
     }
     action def ExecuteExistingSoftware {
@@ -502,6 +726,8 @@ package PhysicalVocabulary {
         doc /* Map the exact SIL histories, units, time bases, raw values, masks, execution statuses and fixed comparison outcomes into the analysis result. Retain the original software result. Missing or invalid channels remain gaps. */
     }
     action def ExistingHostSIL {
+        ref port hostEndpoint : ~HostSoftwarePort;
+        bind execute.endpoint = hostEndpoint;
         in plan : AnalysisPlan; out result : AnalysisResult;
         perform action map : MapExistingSILRequest;
         perform action execute : ExecuteExistingSoftware;
@@ -531,6 +757,10 @@ package PhysicalVocabulary {
         bind result = endpoint.softwareResult;
     }
     action def ExecuteSelectedProfiles {
+        ref port modelEndpoint : ~AnalysisPort;
+        ref port hostEndpoint : ~HostSoftwarePort;
+        bind models.endpoint = modelEndpoint;
+        bind sil.hostEndpoint = hostEndpoint;
         in plan : AnalysisPlan; out result : AnalysisResult;
         perform action kind : SelectExecutionKind;
         perform action models : DeclaredModelExecution;
@@ -555,6 +785,10 @@ package PhysicalVocabulary {
         in plan : AnalysisPlan :>> ScenarioViews::SC01External3::plan, ScenarioViews::SC03External3::plan, ScenarioViews::SC04External3::plan, ScenarioViews::SC05External3::plan;
         out result : AnalysisResult :>> ScenarioViews::SC01External3::result, ScenarioViews::SC03External3::result, ScenarioViews::SC04External3::result, ScenarioViews::SC05External3::result;
         out attribute admitted : Boolean = profiles.mandatoryProfilesVerified;
+        ref port modelEndpoint : ~AnalysisPort;
+        ref port hostEndpoint : ~HostSoftwarePort;
+        bind execute.modelEndpoint = modelEndpoint;
+        bind execute.hostEndpoint = hostEndpoint;
         perform action profiles : AdmitProfiles;
         perform action execute : ExecuteSelectedProfiles;
         perform action blocked : BlockExecution;
@@ -575,19 +809,17 @@ package PhysicalVocabulary {
         doc /* This wrapper replaces the logical external operation. Admission controls the actual call, including selected MIL/SIL/change/replay profiles. The blocked result follows the existing preservation and evidence-gap paths. No execution occurs on rejected admission. */
     }
     action def AdmitHostProfiles {
+        ref part mapping : IntegrationMethodProfile;
+        ref part platforms : IntegrationScaffold::RequiredPlatformConnections;
         in request : CodingRequest; in plan : AnalysisPlan;
         out admittedRequest : CodingRequest;
         out attribute mandatoryProfilesVerified : Boolean;
         bind admittedRequest = request;
-        doc /* Check the exact authorized request, selected build/SIL toolchain, simulated plant, mappings, dependencies, numerical/resource limits and every mandatory discipline/software verification record. Recheck current design/context. Missing capability blocks the request with no coding/build/SIL call. */
-    }
-    item def RequestedSoftwareProduct :> HostSoftwareProduct {
-        attribute built : Boolean = false;
-        doc /* Identified requested product descriptor only. No source/build revision or executable is fabricated on failed admission. */
+        doc /* Check the exact authorized request, required F Prime host build/SIL toolchain and whole-CUBICS numerical coupling, simulated plant, mappings, dependencies, numerical/resource limits and every mandatory discipline/software verification record. Recheck current design/context. Missing capability blocks the request with no coding/build/SIL call. */
     }
     item def BlockedSoftwareResult :> SoftwareRunResult {
         ref item request : CodingRequest;
-        ref item :>> product : RequestedSoftwareProduct;
+        ref item :>> product [0];
         attribute :>> milSilDifferencesFailuresStatus = "blocked: profile admission failed, no coding/build/SIL execution";
         attribute externalExecutionOccurred : Boolean = false;
     }
@@ -596,6 +828,8 @@ package PhysicalVocabulary {
         bind result.request = request;
     }
     action def SupportedHostExecution :> ScenarioViews::SC04External5 {
+        ref port hostEndpoint : ~HostSoftwarePort;
+        bind execute.endpoint = hostEndpoint;
         in :>> request;
         out :>> result;
         in plan : AnalysisPlan;

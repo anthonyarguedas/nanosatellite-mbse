@@ -3,7 +3,7 @@
 
 OOSEM maintains derivation, allocation and verification relationships throughout specification and design. Derivation explains why an FR follows from an MR. Allocation identifies the logical component responsible for it. Verification identifies a planned check \citep[Sec.~17.3.7]{friedenthal2014practical}.
 
-Stakeholder concerns shape the four MOEs, design priorities and scope constraints. The five MRs describe enterprise accomplishments. The 41 FRs specify supporting framework behavior and are allocated to eight logical components.
+Stakeholder concerns shape the four MOEs, design priorities and scope constraints. The six MRs describe successive review-gate outcomes with shared baseline and decision conditions. The 40 FRs specify supporting framework behavior and are allocated to six logical components.
 
 \subsection{Current specification and allocation paths}
 
@@ -23,22 +23,22 @@ Table~\ref{tab:framework-root-traces} illustrates the direct MR--FR--logical com
 \endhead
 \bottomrule
 \endfoot
-MR-01, 03 & FR-20: preliminary budgets and sizing support concept feasibility. & L04: mission and EPS design. \\
-MR-02 & FR-02: explained draft checks support requirements work. & L02: active engineering assistance. \\
-MR-03, 04 & FR-16: coupled temporal analysis exposes design shortages. & L05: analysis and host work. \\
-MR-04 & FR-36: authorized detailed design release controls host coding/builds. & L05: analysis and host work. \\
-MR-05 & FR-42: designated review authority decides progression. & L07: phase-product assessment and review. \\
+MR-01, 03, 04 & FR-20: preliminary budgets and sizing support concept feasibility. & L02: Mission and EPS design. \\
+MR-02 & FR-02: explained draft checks support requirements work. & L01: Requirements and guidance. \\
+MR-03--06 & FR-16: coupled temporal analysis exposes design shortages. & L03: Simulation and software integration. \\
+MR-06 & FR-36: authorized detailed design release controls host coding/builds. & L03: Simulation and software integration. \\
+MR-01--06 & FR-42: designated review authority decides progression. & L05: Evidence and technical review. \\
 \end{longtable}
 }
 
-All five physical candidates retain the same primary and supporting logical allocations. Their C01--08 components realize L01--08 respectively, using the candidate prefixes specified in Section~\ref{section:selected-physical-architecture}. Table~\ref{tab:selected-framework-allocation} gives the preferred physical allocations. Each FR has its same-numbered planned V case. FR-40 is retired. The two contrasting evaluation cases are validation and research activities.
+All five physical candidates retain the same primary and supporting logical allocations. Their C01--06 components realize L01--06 respectively. Table~\ref{tab:framework-candidate-inventories} gives all five compositions. Each FR has its same-numbered planned V case. The two contrasting evaluation cases are validation and research activities.
 
 \subsection{Concern dispositions and claim limits}
 
 Table~\ref{tab:framework-moe-concerns} links root concerns to the MOEs. Causal occurrences retain their local parents and referenced concerns. They can inform several priorities without creating separate capability obligations.
 
-Physical redesign and prototype concerns motivate earlier model assessment, with no measured avoided fabrication cost. Physical replica maintenance, operational troubleshooting, facility/technician work, physical safety authorization and target qualification remain outside the model/software scope. Existing data and simulated histories support scoped assessment without introducing a physical campaign. Missing hardware evidence remains a limitation. Modeled anomaly/protection cases establish no general pre-threshold detection capability, hardware safety or flight readiness.
+Earlier model assessment addresses redesign and prototype concerns. Supplied data and simulated histories support scoped assessment. Missing hardware evidence limits claims about physical behavior. Modeled anomaly/protection cases establish no general early detection capability, hardware safety or flight readiness.
 
-Specification checks compare MR--FR derivations, logical and candidate allocations, planned V cases, scope and source/figure provenance. They assess report/model consistency and provide no empirical evidence of framework conformity or suitability. Numerical acceptance criteria remain to be resolved (TBR). Future trace checking must preserve that status and block affected qualification or reconstruction conclusions. Section~\ref{section:integrate-and-verify-system} specifies resolution with the Systems Engineer, experts and stakeholders.
+Specification checks compare MR--FR derivations, logical and candidate allocations, planned V cases, scope and source/figure provenance. They assess report/model consistency and provide no empirical evidence of framework conformity or suitability. Desired MOP ranges remain unspecified. Agreed workloads and acceptance rules are required before empirical qualification. Section~\ref{section:integrate-and-verify-system} defines the Systems Engineer's responsibility for those criteria with experts and stakeholders.
 
 Framework and EPS specification trees remain separate. EPS verification compares product requirements. EPS validation compares stakeholder expectations and ConOps. Successful framework operation alone satisfies no EPS voltage, thermal or control requirement.

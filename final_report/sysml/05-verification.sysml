@@ -220,24 +220,6 @@ package FrameworkVerification {
         methods = "T";
     }
     #sourceTrace dependency gate_V11 from V11 to qualificationGate;
-    verification <'V12'> V12 {
-        subject framework : ToBe::FutureFramework;
-        objective { verify FrameworkRequirements::FR_12; }
-        doc /* Future implementation verification. Apply the controlled common procedure and the case-specific conditions and comparison basis below. Planned, not executed. */
-        metadata VerificationMethod { kind = (VerificationMethodKind::analyze, VerificationMethodKind::test); }
-    }
-    @PlannedProcedure about V12 {
-        subjectDescription = "Future implemented framework candidate and core revision, with exact component/tool/rule/corpus/model/solver/compiler versions, declared host/workload, access rights and controlled data";
-        configuration = "Modeled candidate assemblies and sourced component occurrences";
-        prerequisites = "Approved applicable FR baseline and interface/profile scope, independently reviewed reference inputs/expected results, identified implementation and environment, verified comparison scripts, and criteria fixed before execution. Unresolved numerical TBRs block performance qualification.";
-        procedure = "1 identify subject/configuration and applicable criteria. 2 confirm prerequisites and record gaps. 3 perform the stated stimulus and clean/failure controls. 4 retain raw observations and compare with the independent reference. 5 report each criterion and discrepancies without substituting framework or EPS statuses. 6 authorize corrections prospectively and rerun affected checks with predecessors retained.";
-        stimulus_conditions = "Generate BOMs for variants and a substitution, including missing part data.";
-        expected_response = "Retain candidate-specific assembly relationships, occurrence quantities, part/variant/source revisions and selection status.";
-        criteria_comparison_basis = "Exact occurrence/quantity and variant separation against an independently counted assembly.";
-        retained_evidence = "Models, BOMs, substitution records and count differences, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
-        methods = "A,T";
-    }
-    #sourceTrace dependency gate_V12 from V12 to qualificationGate;
     verification <'V13'> V13 {
         subject framework : ToBe::FutureFramework;
         objective { verify FrameworkRequirements::FR_13; }
@@ -246,13 +228,13 @@ package FrameworkVerification {
     }
     @PlannedProcedure about V13 {
         subjectDescription = "Future implemented framework candidate and core revision, with exact component/tool/rule/corpus/model/solver/compiler versions, declared host/workload, access rights and controlled data";
-        configuration = "Reference BOM, additional cost categories and dated source data";
+        configuration = "Modeled component and design data with sourced mass and volume properties";
         prerequisites = "Approved applicable FR baseline and interface/profile scope, independently reviewed reference inputs/expected results, identified implementation and environment, verified comparison scripts, and criteria fixed before execution. Unresolved numerical TBRs block performance qualification.";
         procedure = "1 identify subject/configuration and applicable criteria. 2 confirm prerequisites and record gaps. 3 perform the stated stimulus and clean/failure controls. 4 retain raw observations and compare with the independent reference. 5 report each criterion and discrepancies without substituting framework or EPS statuses. 6 authorize corrections prospectively and rerun affected checks with predecessors retained.";
-        stimulus_conditions = "Recalculate mass, volume and acquisition estimates after substitution. Include missing price/availability and different currencies.";
-        expected_response = "Preserve sources, dates/currencies, availability assumptions, uncertainty and unknown values.";
-        criteria_comparison_basis = "Independent arithmetic/unit/currency comparison under preapproved numerical rules. Unknowns stay unknown. No framework usage cost is substituted.";
-        retained_evidence = "BOM/source revisions, calculations, unknowns and residuals, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
+        stimulus_conditions = "Recalculate mass and volume after a component substitution. Include unknown properties and incompatible units.";
+        expected_response = "Preserve sources, units, aggregation assumptions, uncertainty and unknown values.";
+        criteria_comparison_basis = "Independent mass/volume arithmetic and unit comparison under preapproved numerical rules. Unknowns stay unknown.";
+        retained_evidence = "Component/design/source revisions, calculations, unknowns and residuals, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
         methods = "A,T";
     }
     #sourceTrace dependency gate_V13 from V13 to qualificationGate;
@@ -300,13 +282,13 @@ package FrameworkVerification {
     }
     @PlannedProcedure about V16 {
         subjectDescription = "Future implemented framework candidate and core revision, with exact component/tool/rule/corpus/model/solver/compiler versions, declared host/workload, access rights and controlled data";
-        configuration = "Controlled coupled mission-load/EPS model and independent temporal reference";
+        configuration = "Controlled whole-CUBICS Omniverse scenario, EPS models, required coupling profile and independent temporal reference";
         prerequisites = "Approved applicable FR baseline and interface/profile scope, independently reviewed reference inputs/expected results, identified implementation and environment, verified comparison scripts, and criteria fixed before execution. Unresolved numerical TBRs block performance qualification.";
         procedure = "1 identify subject/configuration and applicable criteria. 2 confirm prerequisites and record gaps. 3 perform the stated stimulus and clean/failure controls. 4 retain raw observations and compare with the independent reference. 5 report each criterion and discrepancies without substituting framework or EPS statuses. 6 authorize corrections prospectively and rerun affected checks with predecessors retained.";
-        stimulus_conditions = "Run nominal illumination/load transitions and a transient shortage whose average budget passes. Include declared thermal and protection effects.";
-        expected_response = "Compose orbit/attitude/eclipse/mode/thermal/load histories and report power/energy balance, bus quantities and battery state within model scope.";
-        criteria_comparison_basis = "Compare histories, coupling, event order and balance with independent calculations under fixed unit/time/numerical rules. Unsupported effects remain explicit. Numerical tolerances are TBR.";
-        retained_evidence = "All input histories, solver/configuration, raw channels, balances and residuals, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
+        stimulus_conditions = "Receive whole-CUBICS load/mode/orbit/attitude/illumination and supported thermal histories. Perturb a mapped load or illumination input and run a transient shortage whose average budget passes. Include declared protection effects.";
+        expected_response = "Compose histories and trace the incoming scenario perturbation through its numerical EPS power/energy, bus and battery-state effect to the EPS response returned to the same external scenario. Retain supported effects and omissions.";
+        criteria_comparison_basis = "Compare mapped histories, returned scenario identity, event order and balance with independent calculations under fixed quantity/unit/sign/time rules. Scene-only updates supply no numerical verdict. Unsupported effects remain explicit. Numerical tolerances are TBR.";
+        retained_evidence = "Whole-CUBICS model/scenario and profile revisions, incoming and returned raw histories/masks, mapped perturbation/effect chain, solver/environment configuration, balances, residuals and status, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
         methods = "A,T";
     }
     #sourceTrace dependency gate_V16 from V16 to qualificationGate;
@@ -336,13 +318,13 @@ package FrameworkVerification {
     }
     @PlannedProcedure about V18 {
         subjectDescription = "Future implemented framework candidate and core revision, with exact component/tool/rule/corpus/model/solver/compiler versions, declared host/workload, access rights and controlled data";
-        configuration = "Every mandatory electrical, thermal, applicable EMC and geometry profile";
+        configuration = "Every mandatory electrical, thermal, applicable EMC and geometry profile plus required whole-CUBICS NVIDIA Omniverse numerical coupling profile";
         prerequisites = "Approved applicable FR baseline and interface/profile scope, independently reviewed reference inputs/expected results, identified implementation and environment, verified comparison scripts, and criteria fixed before execution. Unresolved numerical TBRs block performance qualification.";
         procedure = "1 identify subject/configuration and applicable criteria. 2 confirm prerequisites and record gaps. 3 perform the stated stimulus and clean/failure controls. 4 retain raw observations and compare with the independent reference. 5 report each criterion and discrepancies without substituting framework or EPS statuses. 6 authorize corrections prospectively and rerun affected checks with predecessors retained.";
-        stimulus_conditions = "Perform reference request/result exchanges for each required profile. Inject incompatible quantity/time/revision mappings, unsupported effects and lossy transfers.";
-        expected_response = "Complete each mandatory compatible exchange with identified model/tool versions, mappings/units/effects. Preserve incompatible/unsupported findings.";
-        criteria_comparison_basis = "Profile-specific independent reference agreement and exact identity/unit/meaning checks. A missing mandatory profile remains not verified or undetermined and cannot pass. Numerical rules are TBR. Reduced scope requires reviewed change before evaluation.";
-        retained_evidence = "Per-profile requests/results, model/tool identity, raw rejected transfers and mapping/comparison reports, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
+        stimulus_conditions = "Exchange reference models/results for every discipline profile. Receive a whole-CUBICS scenario perturbation, calculate its mapped EPS effect and return the numerical response. Separately update a scene-only entity. Inject wrong entity/channel/model/scenario identity, quantity/unit/conversion/sign/frame/time mappings, unsupported effects and lossy transfers.";
+        expected_response = "Complete mandatory compatible exchanges with exact platform/model/tool/scenario versions, directed mappings and supported effects. Associate the incoming perturbation, numerical EPS effect and returned response with the same external scenario. Preserve rejection, unsupported/lossy, synchronization-limit and failed/partial findings. Classify scene-only updates separately.";
+        criteria_comparison_basis = "Independent per-profile mapping and numerical references check identity, direction, quantity/unit/sign/frame and timing. Missing Omniverse numerical exchange or any mandatory profile cannot pass V18. Scene display supplies no numerical or SIL verdict. Numerical rules are TBR. Reduced scope requires reviewed change before evaluation.";
+        retained_evidence = "Per-profile requests/results and revisions, directed mappings, raw incoming/returned histories and masks, perturbation/effect comparisons, separate scene-only observations, raw rejected transfers, timing/limit findings and execution logs/status, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
         methods = "D,T";
     }
     #sourceTrace dependency gate_V18 from V18 to qualificationGate;
@@ -354,13 +336,13 @@ package FrameworkVerification {
     }
     @PlannedProcedure about V19 {
         subjectDescription = "Future implemented framework candidate and core revision, with exact component/tool/rule/corpus/model/solver/compiler versions, declared host/workload, access rights and controlled data";
-        configuration = "Framework MIL coordinator, declared model tool and simulated plant";
+        configuration = "Framework MIL coordinator, declared controller/plant tools and whole-CUBICS scenario/profile fixed for the later released F Prime host SIL comparison";
         prerequisites = "Approved applicable FR baseline and interface/profile scope, independently reviewed reference inputs/expected results, identified implementation and environment, verified comparison scripts, and criteria fixed before execution. Unresolved numerical TBRs block performance qualification.";
         procedure = "1 identify subject/configuration and applicable criteria. 2 confirm prerequisites and record gaps. 3 perform the stated stimulus and clean/failure controls. 4 retain raw observations and compare with the independent reference. 5 report each criterion and discrepancies without substituting framework or EPS statuses. 6 authorize corrections prospectively and rerun affected checks with predecessors retained.";
-        stimulus_conditions = "Request nominal, load/supply-change, transition, selected-fault, protection and recovery sequences, including a failed behavioral criterion.";
-        expected_response = "Coordinate MIL and retain stimulus, conditions, expected/actual responses, criteria and failures.";
-        criteria_comparison_basis = "Exact plan/run/status/evidence agreement and numerical response comparison with an independent simulation reference under fixed rules. MIL conformity applies only to modeled requirements.";
-        retained_evidence = "Plans, plant/controller revisions, raw histories, logs and criterion failures, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
+        stimulus_conditions = "Request nominal and rejected-command, load/supply-change, transition, selected-fault, protection and recovery sequences. Include failed behavioral criteria and failed/partial runs.";
+        expected_response = "Coordinate MIL and retain scenario-linked stimuli, conditions, expected/actual state/event responses, criteria and failures for matching released F Prime host SIL. Keep modeled behavior distinct from generated definitions or builds.";
+        criteria_comparison_basis = "Exact plan/run/status/evidence agreement and numerical/state/event comparison with an independent simulation reference under fixed rules. MIL conformity applies only to modeled requirements and supplies no host-code verdict.";
+        retained_evidence = "Plans, controller/plant and scenario/profile revisions, nominal/rejected/protection/recovery stimuli, expected/actual raw state/event histories, logs and criterion/failed/partial outcomes, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
         methods = "D,T";
     }
     #sourceTrace dependency gate_V19 from V19 to qualificationGate;
@@ -426,13 +408,13 @@ package FrameworkVerification {
     }
     @PlannedProcedure about V23 {
         subjectDescription = "Future implemented framework candidate and core revision, with exact component/tool/rule/corpus/model/solver/compiler versions, declared host/workload, access rights and controlled data";
-        configuration = "Pinned solvers/coupling, host resources and run comparison rules";
+        configuration = "Declared solver/coupling configuration, whole-CUBICS Omniverse profile, F Prime host SIL environment, resources and fixed run comparison rules";
         prerequisites = "Approved applicable FR baseline and interface/profile scope, independently reviewed reference inputs/expected results, identified implementation and environment, verified comparison scripts, and criteria fixed before execution. Unresolved numerical TBRs block performance qualification.";
         procedure = "1 identify subject/configuration and applicable criteria. 2 confirm prerequisites and record gaps. 3 perform the stated stimulus and clean/failure controls. 4 retain raw observations and compare with the independent reference. 5 report each criterion and discrepancies without substituting framework or EPS statuses. 6 authorize corrections prospectively and rerun affected checks with predecessors retained.";
-        stimulus_conditions = "Change time step/solver/coupling, cause nonconvergence and exceed a declared resource/runtime limit for analysis, MIL and SIL.";
-        expected_response = "Retain fidelity/configuration, convergence rules, environment, resources and estimated/measured runtime, with unmet limits.";
-        criteria_comparison_basis = "Exact recorded settings and failure classification against reference runs. Numerical/resource limits are TBR before qualification. No real-time target claim.";
-        retained_evidence = "Run/environment manifests, convergence studies, resource observations and failures, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
+        stimulus_conditions = "Change numerical step or declared solver/coupling settings, cause nonconvergence, seed unsupported effects and exceed declared synchronization/resource/runtime limits for analysis, MIL and released host SIL. Include failed, partial and cancelled runs.";
+        expected_response = "Retain exact fidelity/configuration, profile/scenario identity, convergence rules, environment, resources, estimated/measured runtime and execution status. Expose omitted/unsupported effects and exceeded or unknown limits.";
+        criteria_comparison_basis = "Exact recorded settings, limit findings and failure classification against reference runs. Numerical/resource limits are TBR before qualification. Success alone establishes no model credibility or EPS conformity. No particular solver or real-time target is required.";
+        retained_evidence = "Run/profile/scenario/environment manifests, raw results/masks, convergence studies, synchronization and resource observations, unsupported-effect findings and failed/partial/cancelled logs, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
         methods = "I,T";
     }
     #sourceTrace dependency gate_V23 from V23 to qualificationGate;
@@ -444,13 +426,13 @@ package FrameworkVerification {
     }
     @PlannedProcedure about V24 {
         subjectDescription = "Future implemented framework candidate and core revision, with exact component/tool/rule/corpus/model/solver/compiler versions, declared host/workload, access rights and controlled data";
-        configuration = "Released host control/interface code, simulated products and matching MIL results";
+        configuration = "Released F Prime host control/interface source/build, simulated EPS/subsystem products, whole-CUBICS Omniverse scenario/coupling profile and matching MIL results";
         prerequisites = "Approved applicable FR baseline and interface/profile scope, independently reviewed reference inputs/expected results, identified implementation and environment, verified comparison scripts, and criteria fixed before execution. Unresolved numerical TBRs block performance qualification.";
         procedure = "1 identify subject/configuration and applicable criteria. 2 confirm prerequisites and record gaps. 3 perform the stated stimulus and clean/failure controls. 4 retain raw observations and compare with the independent reference. 5 report each criterion and discrepancies without substituting framework or EPS statuses. 6 authorize corrections prospectively and rerun affected checks with predecessors retained.";
-        stimulus_conditions = "Request SIL under matching MIL stimuli, then seed a code/interface discrepancy and a failed run.";
-        expected_response = "Report applicable requirement/ConOps outcomes and MIL/SIL differences using the same fixed comparison rules, preserving failures.";
-        criteria_comparison_basis = "Independent host simulation reference and result-specific preapproved MIL/SIL comparisons. Unknown differences remain gaps. Numerical rules are TBR.";
-        retained_evidence = "Code/build revisions, stimuli, raw MIL/SIL histories, logs and discrepancies, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
+        stimulus_conditions = "Execute released F Prime host SIL under matched MIL scenario/stimuli, including nominal/rejected commands, protection and recovery. Trace a whole-CUBICS input perturbation through simulated numerical EPS effect and returned response. Seed a code/interface discrepancy and failed/partial runs. Exercise scene-only display separately.";
+        expected_response = "Retain raw host command/port/state/telemetry/event responses, requirement/ConOps outcomes and MIL/SIL differences for the same scenario and fixed rules, including failures and limits. Scene-only display and build success supply no SIL verdict.";
+        criteria_comparison_basis = "Independent host simulation reference and result-specific preapproved matched MIL/SIL comparisons, exact released build/profile/model/scenario identity and numerical-exchange trace. Unknown differences or missing coupling remain gaps. Numerical rules are TBR. No target qualification follows.";
+        retained_evidence = "Exact authorized release, F Prime source/build/tool/dependency/host versions, profile/model/scenario revisions, matched stimuli and raw MIL/SIL/input/returned histories/masks, separate scene-only observations, comparison calculations, failed/partial logs and discrepancies, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
         methods = "A,T";
     }
     #sourceTrace dependency gate_V24 from V24 to qualificationGate;
@@ -570,13 +552,13 @@ package FrameworkVerification {
     }
     @PlannedProcedure about V31 {
         subjectDescription = "Future implemented framework candidate and core revision, with exact component/tool/rule/corpus/model/solver/compiler versions, declared host/workload, access rights and controlled data";
-        configuration = "Simulated/supplied histories with sample/receipt and delay metadata";
+        configuration = "Whole-CUBICS exchanged, simulated and supplied reference histories with declared coupling-profile timing/synchronization rules and limits";
         prerequisites = "Approved applicable FR baseline and interface/profile scope, independently reviewed reference inputs/expected results, identified implementation and environment, verified comparison scripts, and criteria fixed before execution. Unresolved numerical TBRs block performance qualification.";
         procedure = "1 identify subject/configuration and applicable criteria. 2 confirm prerequisites and record gaps. 3 perform the stated stimulus and clean/failure controls. 4 retain raw observations and compare with the independent reference. 5 report each criterion and discrepancies without substituting framework or EPS statuses. 6 authorize corrections prospectively and rerun affected checks with predecessors retained.";
-        stimulus_conditions = "Compare aligned and skewed histories, change synchronization or calculation/interface delay and remove timing metadata.";
-        expected_response = "Retain time bases, sample/receipt times, sampling, synchronization and known delays and expose timing uncertainty/gaps.";
-        criteria_comparison_basis = "Independent time alignment and metadata comparison under preapproved time rules. TBR tolerances block timing qualification.";
-        retained_evidence = "Raw histories, timing metadata, alignments and time residuals, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
+        stimulus_conditions = "Compare aligned histories with clock offsets, delayed/out-of-order timestamps and calculation/interface delays. Change sampling, numerical integration and scene update rates independently. Remove timing metadata and exceed a declared synchronization limit.";
+        expected_response = "Retain scenario time bases, source/sample and receipt/scene times, sampling, synchronization and known delays. Distinguish scene update rate from numerical step. Report missing timing, offsets, delayed samples and exceeded/unknown limits without silently asserting alignment.";
+        criteria_comparison_basis = "Independent timing/alignment references under the declared preapproved rules and limits. Compare exact gap/limit findings and residual times. TBR tolerances block timing qualification. No specific clock, resampling algorithm or strict real-time rate is required.";
+        retained_evidence = "Unchanged raw histories, profile/model/scenario revisions, original timing metadata, checked alignments, offsets/delays, residuals and missing/exceeded-limit findings, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
         methods = "A,T";
     }
     #sourceTrace dependency gate_V31 from V31 to qualificationGate;
@@ -588,13 +570,13 @@ package FrameworkVerification {
     }
     @PlannedProcedure about V32 {
         subjectDescription = "Future implemented framework candidate and core revision, with exact component/tool/rule/corpus/model/solver/compiler versions, declared host/workload, access rights and controlled data";
-        configuration = "Simulated/supplied channels with approved quality-reference masks";
+        configuration = "Whole-CUBICS exchanged, simulated and supplied reference histories with directed entity/channel/model mappings and independent admission/quality masks";
         prerequisites = "Approved applicable FR baseline and interface/profile scope, independently reviewed reference inputs/expected results, identified implementation and environment, verified comparison scripts, and criteria fixed before execution. Unresolved numerical TBRs block performance qualification.";
         procedure = "1 identify subject/configuration and applicable criteria. 2 confirm prerequisites and record gaps. 3 perform the stated stimulus and clean/failure controls. 4 retain raw observations and compare with the independent reference. 5 report each criterion and discrepancies without substituting framework or EPS statuses. 6 authorize corrections prospectively and rerun affected checks with predecessors retained.";
-        stimulus_conditions = "Inject missing samples/intervals, inactive readings, invalid values, wrong units/identity/timing and complete clean histories.";
-        expected_response = "Preserve raw values, missing/invalid intervals and processing masks. Missing/inactive samples remain distinct from zero.";
-        criteria_comparison_basis = "Exact mask/status/raw-data agreement against the independent quality reference for every channel family.";
-        retained_evidence = "Raw and processed histories, masks, metadata and findings, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
+        stimulus_conditions = "Inject wrong entity/channel/model/scenario revision, quantity/unit/conversion/sign/frame mismatch, wrong or missing timing, missing samples/intervals, inactive readings and invalid values. Include complete clean incoming and returned histories.";
+        expected_response = "Check identity, quantity/unit/sign/time meaning, completeness and validity before numerical use. Prevent incompatible use while preserving controlled content, raw values, invalid/missing/inactive status and processing masks. Missing/inactive samples remain distinct from zero.";
+        criteria_comparison_basis = "Exact admission/mask/status/raw-preservation agreement against the independent reference for each channel family and direction. Incompatible histories cannot drive or silently replace numerical evidence.";
+        retained_evidence = "Raw rejected/admitted and processed histories, profile/model/scenario revisions, mappings, original metadata, masks and admission/quality findings, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
         methods = "T";
     }
     #sourceTrace dependency gate_V32 from V32 to qualificationGate;
@@ -606,13 +588,13 @@ package FrameworkVerification {
     }
     @PlannedProcedure about V33 {
         subjectDescription = "Future implemented framework candidate and core revision, with exact component/tool/rule/corpus/model/solver/compiler versions, declared host/workload, access rights and controlled data";
-        configuration = "Controlled EPS interface, command/telemetry/event/parameter specification";
+        configuration = "Revision-linked EPS endpoint/port and command/telemetry/event/parameter specification for the required F Prime host mapping";
         prerequisites = "Approved applicable FR baseline and interface/profile scope, independently reviewed reference inputs/expected results, identified implementation and environment, verified comparison scripts, and criteria fixed before execution. Unresolved numerical TBRs block performance qualification.";
         procedure = "1 identify subject/configuration and applicable criteria. 2 confirm prerequisites and record gaps. 3 perform the stated stimulus and clean/failure controls. 4 retain raw observations and compare with the independent reference. 5 report each criterion and discrepancies without substituting framework or EPS statuses. 6 authorize corrections prospectively and rerun affected checks with predecessors retained.";
-        stimulus_conditions = "Round-trip records and alter ownership, identifiers, types, units, ranges, polarity, time/mode or encoding at one endpoint.";
-        expected_response = "Retain exact revisions and all meanings and expose inconsistent endpoint definitions.";
-        criteria_comparison_basis = "Exact field/revision/endpoint agreement against the reference specification. Incompatible meanings cannot silently replace controlled content.";
-        retained_evidence = "Interface records, round trips, mappings and mismatch findings, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
+        stimulus_conditions = "Round-trip every endpoint and ground-definition category. Alter ownership/direction, identifiers, types, quantities/units, ranges, polarity, time/mode or encoding. Omit a mandatory engineering meaning.";
+        expected_response = "Retain exact revisions, directed endpoint ownership and all engineering meanings. Expose inconsistent or missing definitions before F Prime mapping.";
+        criteria_comparison_basis = "Exact field/revision/direction/endpoint agreement against the independent specification. Native FPP structural/type checks alone do not establish quantity/unit/range/polarity/time semantics or behavioral conformity. Incompatible meanings cannot replace controlled content.";
+        retained_evidence = "Interface and ground-definition records/revisions, round trips, directed mappings, omitted-meaning and mismatch findings, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
         methods = "I,T";
     }
     #sourceTrace dependency gate_V33 from V33 to qualificationGate;
@@ -624,13 +606,13 @@ package FrameworkVerification {
     }
     @PlannedProcedure about V34 {
         subjectDescription = "Future implemented framework candidate and core revision, with exact component/tool/rule/corpus/model/solver/compiler versions, declared host/workload, access rights and controlled data";
-        configuration = "Engineer-selected versioned host integration profile and interface reference";
+        configuration = "Required versioned F Prime host integration profile, declared FPP or other supported representation/tool versions and independent EPS mapping reference";
         prerequisites = "Approved applicable FR baseline and interface/profile scope, independently reviewed reference inputs/expected results, identified implementation and environment, verified comparison scripts, and criteria fixed before execution. Unresolved numerical TBRs block performance qualification.";
         procedure = "1 identify subject/configuration and applicable criteria. 2 confirm prerequisites and record gaps. 3 perform the stated stimulus and clean/failure controls. 4 retain raw observations and compare with the independent reference. 5 report each criterion and discrepancies without substituting framework or EPS statuses. 6 authorize corrections prospectively and rerun affected checks with predecessors retained.";
-        stimulus_conditions = "Map valid definitions and definitions with incompatible versions, unsupported behavior or lossy encodings.";
-        expected_response = "Produce/coordinate checked mappings for the selected profile and report compatibility and omissions.";
-        criteria_comparison_basis = "Independent reference mapping/semantic agreement for every required selected-profile feature. Unsupported mandatory meaning blocks a complete mapping claim.";
-        retained_evidence = "Selected profile/version, exports, mapping comparisons and gaps, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
+        stimulus_conditions = "Map component definitions/instances, directed ports, topology and command/telemetry/event/parameter definitions. Seed identifier conflicts, wrong direction/type, omitted engineering meaning, incompatible F Prime/representation/tool versions, unsupported behavior and lossy encodings.";
+        expected_response = "Produce or coordinate checked F Prime mappings and definitions with exact profile/tool versions, compatibility findings and unsupported/lossy records. Retain ownership, connectivity and engineering quantity/unit/range/polarity/time meanings.";
+        criteria_comparison_basis = "Independent reference mapping and semantic agreement for every required F Prime category. Unsupported mandatory meaning blocks a complete mapping claim. Structural/FPP checks and generated definitions establish no implemented behavior or SIL verdict.";
+        retained_evidence = "F Prime profile, representation/tool versions, component/port/topology/ground exports, independent comparisons, raw rejected definitions and compatibility/unsupported/lossy gaps, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
         methods = "D,T";
     }
     #sourceTrace dependency gate_V34 from V34 to qualificationGate;
@@ -642,13 +624,13 @@ package FrameworkVerification {
     }
     @PlannedProcedure about V35 {
         subjectDescription = "Future implemented framework candidate and core revision, with exact component/tool/rule/corpus/model/solver/compiler versions, declared host/workload, access rights and controlled data";
-        configuration = "Declared modeled control requirements and independently specified sequences";
+        configuration = "Declared modeled EPS command/control requirements, independently specified sequences and engineering interface meanings for the required F Prime mapping";
         prerequisites = "Approved applicable FR baseline and interface/profile scope, independently reviewed reference inputs/expected results, identified implementation and environment, verified comparison scripts, and criteria fixed before execution. Unresolved numerical TBRs block performance qualification.";
         procedure = "1 identify subject/configuration and applicable criteria. 2 confirm prerequisites and record gaps. 3 perform the stated stimulus and clean/failure controls. 4 retain raw observations and compare with the independent reference. 5 report each criterion and discrepancies without substituting framework or EPS statuses. 6 authorize corrections prospectively and rerun affected checks with predecessors retained.";
-        stimulus_conditions = "Exercise nominal ordering, unmet preconditions, rejected commands, faults, protection, transitions and recovery in simulated conditions.";
-        expected_response = "Check required guards/order/effects, rejection/failure behavior and endpoint/recovery ownership.";
-        criteria_comparison_basis = "Exact reference event/state/ownership agreement and fixed numerical response rules. TBR response tolerances remain a qualification gate.";
-        retained_evidence = "Sequence/model revisions, stimuli, state/event histories and failures, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
+        stimulus_conditions = "Exercise nominal ordering, unmet preconditions, rejected commands, selected faults, protection, transitions and recovery in simulated conditions. Seed a discrepancy between mapped command conditions/effects and the modeled behavior.";
+        expected_response = "Check required guards/order/effects, rejection/failure behavior and directed endpoint/recovery ownership. Retain modeled expected/actual responses for corresponding MIL and released host SIL assessment.";
+        criteria_comparison_basis = "Exact independent event/state/ownership agreement and fixed numerical response rules. F Prime mapping or compilation does not replace behavioral checking. TBR response tolerances remain a qualification gate.";
+        retained_evidence = "Sequence/model/interface revisions, stimuli, expected/actual raw state/event histories, mapping/behavior discrepancies and failures, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
         methods = "A,T";
     }
     #sourceTrace dependency gate_V35 from V35 to qualificationGate;
@@ -660,13 +642,13 @@ package FrameworkVerification {
     }
     @PlannedProcedure about V36 {
         subjectDescription = "Future implemented framework candidate and core revision, with exact component/tool/rule/corpus/model/solver/compiler versions, declared host/workload, access rights and controlled data";
-        configuration = "External host toolchain and exact current authorized design/interface/software-scope release";
+        configuration = "Required external F Prime host toolchain, checked integration mapping and exact current engineer-authorized design/interface/software-scope release";
         prerequisites = "Approved applicable FR baseline and interface/profile scope, independently reviewed reference inputs/expected results, identified implementation and environment, verified comparison scripts, and criteria fixed before execution. Unresolved numerical TBRs block performance qualification.";
         procedure = "1 identify subject/configuration and applicable criteria. 2 confirm prerequisites and record gaps. 3 perform the stated stimulus and clean/failure controls. 4 retain raw observations and compare with the independent reference. 5 report each criterion and discrepancies without substituting framework or EPS statuses. 6 authorize corrections prospectively and rerun affected checks with predecessors retained.";
-        stimulus_conditions = "Attempt coding/building with unreleased, stale and unauthorized designs, then a released design. Cause a build failure.";
-        expected_response = "Block inadmissible requests. Coordinate admitted coding/builds and preserve source/build/dependency/host/log/failure records.";
-        criteria_comparison_basis = "Reference release-admission agreement. Broad CDR status cannot replace exact design authorization. Exact source/build identity and preserved failures.";
-        retained_evidence = "Releases, attempted requests, authority/context checks, sources/build manifests and logs, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
+        stimulus_conditions = "Attempt F Prime coding/host building with unreleased, stale and unauthorized designs, then the exact current authorized release. Seed missing dependencies, incompatible tool versions and separate generation/compilation failures.";
+        expected_response = "Block inadmissible requests. Coordinate admitted declared F Prime EPS control/interface coding and host builds, retaining exact authorized release, source/build/tool/dependency/host configuration, logs and failed/partial status. Separate generated skeletons, implemented behavior, compilation and SIL.";
+        criteria_comparison_basis = "Independent exact release-admission and source/build/configuration agreement. Broad CDR acceptance cannot replace current engineer design authorization. Build success supplies no SIL or target-qualification verdict. All failures remain retrievable.";
+        retained_evidence = "Releases, admitted/rejected requests, authority/context checks, F Prime/representation/toolchain versions, source/build/dependency/host manifests, generation/compilation and failed/partial logs, exact subject/environment/reference versions, as-run procedure, deviations, discrepancy dispositions and planned reruns";
         methods = "D,T";
     }
     #sourceTrace dependency gate_V36 from V36 to qualificationGate;
@@ -764,7 +746,7 @@ package FrameworkVerification {
         doc /* PLANNED, NOT EXECUTED. Anticipated Systems, EPS and Non-EPS Engineers perform concept, requirements, preliminary design, detailed model/software, controlled-change and review tasks across SC01--05. Include novice and experienced engineers and independent reviewers under representative team time, staffing, computing, access and supplied-data conditions. Fix needs/ConOps, expected products, independent reference answers, training, task limits, interpretation questions, failure/clean controls and stakeholder success criteria before execution. Judges assess correct outcomes, burdens, critical misses, review usefulness, adoption and unmet needs. Passing all FRs does not establish suitability. Preserve task products, decisions, assistance dispositions, observations, limitations and stakeholder acceptance separately from classifier measures. */
     }
     item epsPhaseProductVerification : EngineeringArtifact {
-        doc /* PLANNED, NOT EXECUTED. Subject is the identified EPS concept, requirements, design model or released host-software product. Begin in Pre-Phase A. Fix applicable EPS requirement revisions, method, operational/simulated conditions, stimulus, expected response and comparison criteria. Verify budgets/sizing/interfaces/models and declared MIL/SIL outcomes using independent calculations, specification inspections and nominal/degraded/fault simulation. CDR assesses detailed design before coding. SIR assesses released products and scoped integration readiness. Preserve raw evidence, credibility limits, failures and discrepancies. Target qualification, physical prototypes/testing, technician/facility work and PIL/HIL are excluded. */
+        doc /* PLANNED, NOT EXECUTED. Subject is the identified EPS concept, requirements, design model or released F Prime host-software product coupled to the required whole-CUBICS Omniverse simulation. Begin in Pre-Phase A. Fix applicable EPS requirement revisions, method, operational/simulated conditions, stimulus, expected response and comparison criteria. Verify budgets/sizing/interfaces/models and declared MIL/SIL outcomes using independent calculations, specification inspections and nominal/degraded/fault simulation. CDR assesses detailed design before coding. SIR assesses released products and scoped integration readiness. Preserve raw evidence, credibility limits, failures and discrepancies. Target qualification, physical prototypes/testing and PIL/HIL are excluded. */
     }
     item epsPhaseProductValidation : EngineeringArtifact {
         doc /* PLANNED, NOT EXECUTED. Subject is the same identified EPS phase product, assessed against agreed stakeholder expectations and ConOps rather than requirement conformity. Early concept/model analysis can validate mission suitability in Pre-Phase A. Use representative orbit/attitude/illumination/eclipse/load/mode/thermal conditions, degraded operation, protection and recovery within the declared model domain. Compare expected operational energy/service and mode/recovery outcomes with agreed expectations. Retain expectation coverage, independent review, raw model/MIL/SIL evidence, limitations and corrective actions. No flight readiness is established. */
@@ -773,7 +755,7 @@ package FrameworkVerification {
         doc /* PLANNED, NOT EXECUTED. Identify model/fidelity, intended prediction and supported domain. Check equations, implementation, units, coupling, convergence/time resolution and uncertainty against independent engineering references. Calibrate only on quality-checked supplied data, retaining prior/revised parameters and residual units. Assess prediction separately on withheld independent data across loads, temperature and health where available. Missing independent data/error criteria remain a credibility gap. Calibration fit and replay alone establish neither predictive validity nor EPS suitability. */
     }
     item researchEvaluation : FrameworkEvaluation {
-        doc /* PLANNED, NOT EXECUTED. Fix two contrasting EPS cases before execution, for example a sparse-data simple concept and a variable-load detailed EPS with richer supplied data and host control. Freeze a common reusable core, allowed mission parameters/variants/extensions, model/software mappings, tasks, participant assignment/training, independent references/outcome rules, baseline workflow, workload/time resources, comparison rules and dated framework cost inclusions. Cover all SC01--05 with clean and seeded failed controls, missing data, misleading suggestions and stale evidence. Compare MOE-01--04 only for correct outcomes under comparable conditions, with uncertainty, per-case results and no simultaneous current-benefit claim. Human dispositions and stakeholder acceptance remain distinct from classifier scores. Core changes are prospective reviewed successor revisions. Preserve originals and failures, rerun both cases on the changed core and disclose all adaptations and both reruns before a bounded transfer claim. */
+        doc /* PLANNED, NOT EXECUTED. Fix two contrasting EPS cases before execution, for example a sparse-data simple concept and a variable-load detailed EPS with richer supplied data and host control. Freeze a common reusable core, allowed mission parameters/variants/extensions, model/software mappings, tasks, participant assignment/training, independent references/outcome rules, baseline workflow, workload/time resources, comparison rules. Cover all SC01--05 with clean and seeded failed controls, missing data, misleading suggestions and stale evidence. Compare MOE-01--04 only for correct outcomes under comparable conditions, with uncertainty, per-case results and no simultaneous current-benefit claim. Human dispositions and stakeholder acceptance remain distinct from classifier scores. Core changes are prospective reviewed successor revisions. Preserve originals and failures, rerun both cases on the changed core and disclose all adaptations and both reruns before a bounded transfer claim. */
     }
     #sourceTrace dependency frameworkValidation_SC01 from frameworkValidation to ScenarioViews::SC01;
     #sourceTrace dependency frameworkValidation_SC02 from frameworkValidation to ScenarioViews::SC02;

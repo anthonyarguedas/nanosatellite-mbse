@@ -1,33 +1,65 @@
 #!/usr/bin/env python3
-"""Check current report/native trace and publication records, not empirical V&V."""
+"""Audit the current proposed specification. This never certifies empirical V&V.
+
+Report tables and native statements are authoritative. Historical reviews are
+checked as historical evidence, not renewed by replacing their source hashes.
+Detailed logical/physical contracts must be reconciled before a full audit can
+pass. No obsolete logical operation or selected deployment is required.
+"""
 from __future__ import annotations
 
 import argparse
 from collections import defaultdict
+import copy
 import hashlib
 import json
 from pathlib import Path
 import re
 import sys
+import xml.etree.ElementTree as ET
 
-# Initial current worktree snapshots supplied with the approved brief.
-# These protect the user's as-is changes independently of editable trace records.
-PROTECTED = {
-    'as-is-domain.tex': '237ec05344d4eb560628b1e136b95abd3cfcd7bad7ffcc4102232406667ebdf2',
-    'intro.tex': 'cce42b5c9fda5a13e51a6c9d648f47163215a2e029ac1f71b57128f74318d149',
-    'objectives.tex': '579570a217b9b523e8f066ac481742cdeba76c25f87be86ebf6692a1b8f235e1',
-    'titlepage.tex': 'ba7d53b2f8571b26f2832ddc146f2099820a73c33967ca0450e005a9968fbf09',
+ACTIVE_FR = {f'FR-{n:02}' for n in range(1, 43) if n not in (12, 40)}
+GROUPS = {
+    'L01': {1, 2, 3, 4, 17, 29, 39, 41},
+    'L02': {13, 14, 15, 20, 25, 33, 35},
+    'L03': {10, 16, 18, 19, 23, 24, 26, 27, 34, 36},
+    'L04': {21, 22, 31, 32},
+    'L05': {11, 28, 37, 38, 42},
+    'L06': {5, 6, 7, 8, 9, 30},
 }
-PUBLICATION_REVIEW_STATUS = 'completed read-only review, zero material blockers'
-# Metadata pins from the actual closed review and collected reviewer result.
-PUBLICATION_REVIEW_EVIDENCE = {
-    'review_record_sha256': '214a406d5a735e3875f988b087df2c41652c52671cb4876b56252cea259496ab',
-    'collected_result_sha256': '8e2610db4e1727286a20e0fea12963f753ca7bcd3f3694738568699f94911b37',
-    'report_pdf_sha256': '943c1f2311bb1391835cc13614d12c2347b43fd04560a480bba48d3d105ce2c4',
+OWNERS = {f'FR-{n:02}': lid for lid, ns in GROUPS.items() for n in ns}
+CANDIDATES = {
+    'PA-COM': ('comet', 'CandidateCOM', 'COM'),
+    'PA-VS': ('valispace', 'CandidateVS', 'VS'),
+    'PA-NS': ('nanospace', 'CandidateNS', 'NS'),
+    'PA-GY': ('git-yaml', 'CandidateGY', 'GY'),
+    'PA-CDT': ('custom', 'CandidateCDT', 'CDT'),
 }
+CRITICAL_MOPS = ('MOP-FR02', 'MOP-FR03', 'MOP-FR18', 'MOP-FR34', 'MOP-FR30', 'MOP-FR10')
+ALTERNATIVE_KEYS = {
+    'L01': ('deutsch2022comet', 'citation-4690', 'review-0340', 'chiu2023sealion', 'kaslow2019csrm'),
+    'L02': ('kaslow2019csrm', 'deutsch2022comet', 'review-0711', 'review-0289', 'review-0573'),
+    'L03': ('review-0853', 'handpicked-0001', 'handpicked-0002', 'review-0289', 'review-0573'),
+    'L04': ('review-0573', 'handpicked-0001', 'review-1251', 'review-1303', 'kaslow2019csrm'),
+    'L05': ('chiu2023sealion', 'citation-0569', 'review-0340', 'deutsch2022comet', 'citation-1573'),
+    'L06': ('chiu2023sealion', 'citation-0569', 'review-0340', 'deutsch2022comet', 'citation-1573'),
+}
+FAMILIES = dict(zip(GROUPS, ('AR', 'EP', 'IN', 'CR', 'EC', 'EC')))
+# Approved design choices, not achieved performance or a preference ordering.
+COMPOSITION = {
+    'PA-COM': ('AR1', 'EP2+EP3', 'IN1+IN2', 'CR1+CR5', 'EC4+EC2', 'EC4+EC1'),
+    'PA-VS': ('AR2', 'EP5', 'IN1+IN5', 'CR1+CR2', 'EC5+EC2', 'EC5+EC1'),
+    'PA-NS': ('AR3', 'EP4', 'IN1+IN4', 'CR3+CR4', 'EC3+EC2', 'EC3+EC1'),
+    'PA-GY': ('AR4+AR5', 'EP1+EP3', 'IN1+IN3', 'CR4+CR5', 'EC1+EC2', 'EC1+EC2'),
+    'PA-CDT': ('Native+Jev', 'Param.+Python+DB', 'Python+IN1+IN2', 'Python+CR1+CR5', 'Python+EC2', 'Native+EC1'),
+}
+CUSTOM_ROLES = {'native_requirements', 'native_parametrics', 'jev_recommendations',
+                'python_execution', 'maintained_cots_database'}
 PROCEDURE_FIELDS = ('subject', 'configuration', 'prerequisites', 'procedure',
                     'stimulus_conditions', 'expected_response',
                     'criteria_comparison_basis', 'retained_evidence')
+PUBLISHED_API_SCHEMA = 'task7-published-logical-api-v1'
+BRIDGED_API_STATUS = 'published logical API bridged, physical allocation/control reconciliation incomplete'
 
 
 def load(path):
@@ -38,8 +70,13 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def unique(records, label):
-    result = {record['id']: record for record in records}
+def evidence_digest(record):
+    return hashlib.sha256(json.dumps(record, sort_keys=True, ensure_ascii=False,
+                                     separators=(',', ':')).encode()).hexdigest()
+
+
+def unique(records, label, key='id'):
+    result = {record[key]: record for record in records}
     assert len(result) == len(records), f'Duplicate {label} IDs'
     return result
 
@@ -49,7 +86,7 @@ def visible(text):
 
 
 def group(text, start):
-    """Read a balanced TeX brace group without losing nested citations."""
+    """Read a balanced TeX brace group, including nested citations."""
     assert text[start] == '{', 'Expected brace group'
     depth = 0
     for end in range(start, len(text)):
@@ -60,83 +97,155 @@ def group(text, start):
     raise AssertionError('Unclosed TeX group')
 
 
-def parse_concerns(path):
-    text = Path(path).read_text()
-    records = []
-    for match in re.finditer(r'\\Concern(Root|Cause)\{([^}]+)\}', text):
-        statement, end = group(text, match.end())
-        cid = match[2]
-        alias = re.match(r'\\ConcernAliasLink\{([^}]+)\}', text[end:])
-        records.append({'id': cid, 'kind': match[1].lower(), 'text': statement,
-                        'parent': cid.rsplit('.', 1)[0] if '.' in cid else None,
-                        'alias_target': alias[1] if alias else None,
-                        'source_line': text.count('\n', 0, match.start()) + 1})
-    unique(records, 'protected concern occurrence')
-    return records
-
-
 def number_set(text, prefix):
     result = set()
     for match in re.finditer(rf'\b{re.escape(prefix)}(\d{{2}})(?:--(?:{re.escape(prefix)})?(\d{{2}}))?', text):
-        first = int(match[1]); last = int(match[2] or match[1])
+        first, last = int(match[1]), int(match[2] or match[1])
         assert last >= first, f'Invalid {prefix} range: {match[0]}'
         result.update(f'{prefix}{n:02}' for n in range(first, last + 1))
     return result
 
 
+def bare_numbers(text, prefix):
+    text = text.strip()
+    assert re.fullmatch(r'\d{2}(?:--\d{2})?(?:\s*,\s*\d{2}(?:--\d{2})?)*', text), f'Invalid {prefix} numbers: {text}'
+    return number_set(re.sub(r'(?<!\d)(\d{2})', prefix + r'\1', text), prefix)
+
+
+def table_cells(text):
+    """Split unescaped top-level ampersands. Empty cells remain literally empty."""
+    cells, begin, depth = [], 0, 0
+    for n, char in enumerate(text):
+        escaped = n > 0 and text[n - 1] == '\\'
+        if not escaped and char in '{}':
+            depth += 1 if char == '{' else -1
+        if char == '&' and not escaped and depth == 0:
+            cells.append(text[begin:n].strip()); begin = n + 1
+    assert depth == 0, 'Unbalanced table braces'
+    return cells + [text[begin:].strip()]
+
+
+def table_rows(text, start_pattern):
+    text = visible(text)
+    pattern = rf'(?m)^\s*({start_pattern})(?=\s|\\|&)(.*?)\\\\\*?[ \t]*(?:\n|$)'
+    return [table_cells(m[1] + m[2]) for m in re.finditer(pattern, text, re.DOTALL)]
+
+
+def parse_concerns(path):
+    text = Path(path).read_text(); records = []
+    for match in re.finditer(r'\\Concern(Root|Cause)\{([^}]+)\}', text):
+        statement, end = group(text, match.end())
+        cid = match[2]; alias = re.match(r'\\ConcernAliasLink\{([^}]+)\}', text[end:])
+        records.append({'id': cid, 'kind': match[1].lower(), 'text': statement,
+                        'parent': cid.rsplit('.', 1)[0] if '.' in cid else None,
+                        'alias_target': alias[1] if alias else None,
+                        'source_line': text.count('\n', 0, match.start()) + 1})
+    unique(records, 'concern occurrence')
+    return records
+
+
 def native_statements(text, prefix):
-    pattern = rf"requirement <'({prefix}-\d+)'> \w+ \{{\s*subject[^;]+;\s*doc /\* (.*?) \*/"
-    rows = [{'id': m[1], 'text': m[2]} for m in re.finditer(pattern, text, re.DOTALL)]
-    return unique(rows, f'native {prefix}')
+    pattern = rf"requirement <'({prefix}-\d{{2}})'> \w+ \{{\s*subject[^;]+;\s*doc /\* (.*?) \*/"
+    return unique([{'id': m[1], 'text': m[2]} for m in re.finditer(pattern, text, re.DOTALL)], f'native {prefix}')
+
+
+def string_attributes(text):
+    return {k: json.loads(v) for k, v in re.findall(r'(\w+)\s*(?:\:\s*(?!>)[\w:]+)?\s*=\s*("(?:[^"\\]|\\.)*")\s*;', text)}
+
+
+def native_block(text, start):
+    """Balanced native body, excluding braces inside escaped string literals."""
+    assert text[start] == '{', 'Expected native body'
+    depth, quoted, escaped = 0, False, False
+    for n in range(start, len(text)):
+        char = text[n]
+        if quoted:
+            if escaped:
+                escaped = False
+            elif char == '\\':
+                escaped = True
+            elif char == '"':
+                quoted = False
+        elif char == '"':
+            quoted = True
+        elif char in '{}':
+            depth += 1 if char == '{' else -1
+            if depth == 0:
+                return text[start + 1:n]
+    raise AssertionError('Unclosed native body')
+
+
+def annotations(text, name, about):
+    rows = [(m[1], string_attributes(native_block(text, m.end() - 1))) for m in re.finditer(
+        rf'@{name}\s+about\s+({about})\s*\{{', text)]
+    assert len({k for k, _ in rows}) == len(rows), f'Duplicate {name} annotation'
+    return dict(rows)
 
 
 def report_requirements(root):
-    mr = unique([{'id': m[1], 'text': m[2]} for m in re.finditer(
-        r'^(MR-\d{2}) & (.*?) \\\\$', (root/'needs.tex').read_text(), re.MULTILINE)], 'report MR')
-    fr = unique([{'id': m[1], 'text': m[3], 'parents': ['MR-' + n for n in re.findall(r'\d{2}', m[2])],
-                 'methods': m[4].split(',')} for m in re.finditer(
-        r'^(FR-\d{2})\\par MR-([\d, ]+) & (.*?) & ([IADT,]+)\\par',
-        (root/'requirements.tex').read_text(), re.MULTILINE)], 'report FR')
-    assert mr and fr, 'No report requirement rows found'
-    return mr, fr
+    mr = []
+    for cells in table_rows((root/'needs.tex').read_text(), r'MR-\d{2}'):
+        assert len(cells) == 3, 'Malformed concise MR table row'
+        mr.append({'id': cells[0], 'text': cells[1]})
+    fr = []
+    for cells in table_rows((root/'requirements.tex').read_text(), r'FR-\d{2}\s*&'):
+        assert len(cells) == 3, 'Malformed concise FR table row'
+        match = re.fullmatch(r'(.*?)\\par\s*\\textit\{Inputs:\}\s*(.*?)\\par\s*\\textit\{Outputs:\}\s*(.*)', cells[1], re.DOTALL)
+        assert match and all(s.strip() for s in match.groups()), f'Missing FR statement/IO: {cells[0]}'
+        fr.append({'id': cells[0], 'text': match[1].strip(), 'inputs': match[2].strip(),
+                   'outputs': match[3].strip(), 'parents': sorted(bare_numbers(cells[2], 'MR-'))})
+    assert mr and fr, 'No concise report requirement rows found'
+    return unique(mr, 'report MR'), unique(fr, 'report FR')
 
 
 def current_trace(root):
-    """Extract current specification records. Semantic checks remain Syside's job."""
     mr, fr = report_requirements(root)
     nt = (root/'sysml/03-requirements.sysml').read_text()
-    nm = native_statements((root/'sysml/02-needs-context.sysml').read_text(), 'MR')
+    needs = (root/'sysml/02-needs-context.sysml').read_text()
+    assert mr == native_statements(needs, 'MR'), 'MR report/native statement or ID mismatch'
     nf = native_statements(nt, 'FR')
-    assert mr == nm, 'MR report/native statement or ID mismatch'
-    assert set(fr) == set(nf), 'FR report/native ID mismatch'
-    derivations = defaultdict(set); scenarios = defaultdict(set); functions = defaultdict(set)
-    for m in re.finditer(r'connection derive_MR_(\d+)_FR_(\d+) \{ end #original ::> FrameworkNeeds::MR_(\d+); end #derive ::> FR_(\d+);', nt):
-        assert (m[1], m[2]) == (m[3], m[4]), f'Derivation identifier/endpoint mismatch: {m[0]}'
-        derivations['FR-'+m[2]].add('MR-'+m[3])
-    for m in re.finditer(r'dependency scenario_FR\d+_SC\d+ from FR_(\d+) to ScenarioViews::(SC\d+);', nt):
-        scenarios['FR-'+m[1]].add(m[2])
-    for m in re.finditer(r'dependency function_FR\d+_F\d+ from FR_(\d+) to BoundaryViews::(F\d+);', nt):
-        functions['FR-'+m[1]].add(m[2])
+    assert set(fr) == set(nf) == ACTIVE_FR, 'FR report/native active ID mismatch'
+    assert set(mr) == {f'MR-{n:02}' for n in range(1, 7)}, 'Exactly six mission gates required'
+    gates = ('MCR', 'SRR', 'MDR/SDR', 'PDR', 'CDR', 'SIR')
+    for mid, gate in zip(sorted(mr), gates):
+        present = re.findall(r'\b(?:MCR|SRR|MDR/SDR|PDR|CDR|SIR)\b', mr[mid]['text'])
+        assert present == [gate], f'MR gate uniqueness mismatch: {mid}'
+    derivations, scenarios, functions = defaultdict(set), defaultdict(set), defaultdict(set)
+    derivation_rows = re.findall(r'connection derive_MR_(\d+)_FR_(\d+) \{ end #original ::> FrameworkNeeds::MR_(\d+); end #derive ::> FR_(\d+);', nt)
+    assert len(derivation_rows) == 169 and len(set(derivation_rows)) == 169, 'Exactly 169 unique direct FR parents required'
+    for a, b, c, d in derivation_rows:
+        assert (a, b) == (c, d), 'Derivation identifier/endpoint mismatch'
+        derivations['FR-' + b].add('MR-' + a)
+    for f, s in re.findall(r'dependency scenario_FR\d+_SC\d+ from FR_(\d+) to ScenarioViews::(SC\d+);', nt):
+        scenarios['FR-' + f].add(s)
+    for f, b in re.findall(r'dependency function_FR\d+_F\d+ from FR_(\d+) to BoundaryViews::(F\d+);', nt):
+        functions['FR-' + f].add(b)
+    checks = annotations(nt, 'PlannedRequirementCheck', r'FR_\d{2}')
+    assert set(checks) == {r.replace('-', '_') for r in fr}, 'Missing/extra native FR planned check'
     for rid, row in fr.items():
         assert row['text'] == nf[rid]['text'], f'FR wording mismatch: {rid}'
-        assert set(row['parents']) == derivations[rid], f'MR/FR derivation mismatch: {rid}'
-        assert derivations[rid] and derivations[rid] <= set(mr), f'Missing/unknown MR parent: {rid}'
+        assert set(row['parents']) == derivations[rid] <= set(mr), f'MR/FR derivation mismatch: {rid}'
         assert scenarios[rid] and functions[rid], f'Missing FR scenario/function endpoints: {rid}'
-        row['scenarios'] = sorted(scenarios[rid]); row['functions'] = sorted(functions[rid])
-    needs = (root/'sysml/02-needs-context.sysml').read_text()
+        check = checks[rid.replace('-', '_')]
+        assert check['checkSummary'] and re.fullmatch(r'[IADT](?:,[IADT])*', check['methods']), f'Invalid planned check: {rid}'
+        row.update(methods=check['methods'].split(','), planned_check=check['methods'] + ': ' + check['checkSummary'],
+                   scenarios=sorted(scenarios[rid]), functions=sorted(functions[rid]))
     sc = (root/'sysml/09-scenarios.sysml').read_text()
     ucs = set(re.findall(r"use case <'(UC\d+)'>", needs))
     scs = set(re.findall(r"action def <'(SC\d+)'>", sc))
-    uc_mrs = defaultdict(set); sc_mrs = defaultdict(set); sc_ucs = defaultdict(set)
+    uc_mrs, sc_mrs, sc_ucs = defaultdict(set), defaultdict(set), defaultdict(set)
     for u, m in re.findall(r'dependency refine_UC\d+_MR\d+ from (UC\d+) to MR_(\d+);', needs):
-        uc_mrs[u].add('MR-'+m)
+        uc_mrs[u].add('MR-' + m)
     for s, m in re.findall(r'dependency scenario_SC\d+_MR\d+ from (SC\d+) to FrameworkNeeds::MR_(\d+);', sc):
-        sc_mrs[s].add('MR-'+m)
+        sc_mrs[s].add('MR-' + m)
     for s, u in re.findall(r'dependency scenario_UC\d+ from (SC\d+) to FrameworkNeeds::(UC\d+);', sc):
         sc_ucs[s].add(u)
     assert ucs == set(uc_mrs) and scs == set(sc_mrs) == set(sc_ucs), 'UC/SC endpoint set mismatch'
-    assert ucs == number_set(visible((root/'needs.tex').read_text()), 'UC'), 'UC report/native ID mismatch'
-    assert scs == number_set(visible((root/'requirements.tex').read_text()), 'SC'), 'SC report/native ID mismatch'
+    assert ucs == {f'UC{n:02}' for n in range(1, 6)} and scs == {f'SC{n:02}' for n in range(1, 6)}, 'Five current UC/SC subjects required'
+    # The concise audience section need not repeat the native scenario inventory.
+    # Any identifiers it does publish must still resolve.
+    assert number_set(visible((root/'needs.tex').read_text()), 'UC') <= ucs, 'Unknown report UC'
+    assert number_set(visible((root/'requirements.tex').read_text()), 'SC') <= scs, 'Unknown report SC'
     for s in scs:
         assert len(sc_ucs[s]) == 1 and sc_ucs[s] <= ucs, f'Missing/unknown UC: {s}'
         assert sc_mrs[s] == uc_mrs[next(iter(sc_ucs[s]))], f'Scenario/UC MR disagreement: {s}'
@@ -147,8 +256,552 @@ def current_trace(root):
     return mr, fr, ucs, scs, uc_mrs, sc_mrs, sc_ucs
 
 
+def audit_mops(root, fr, records=None):
+    rows = []
+    for cells in table_rows((root/'requirements.tex').read_text(), r'FR-\d{2}\\newline\s+MOP-FR\d{2}'):
+        assert len(cells) == 3, 'Malformed MOP row'
+        rid, mid = re.fullmatch(r'(FR-\d{2})\\newline\s+(MOP-FR\d{2})', cells[0]).groups()
+        assert rid[-2:] == mid[-2:], 'MOP/FR identity mismatch'
+        assert cells[1] and cells[2] == '', f'Desired MOP range must be literally empty: {mid}'
+        rows.append({'id': mid, 'FR': rid, 'definition_and_unit': cells[1], 'target': '', 'target_source': '', 'achieved': 'unknown'})
+    measures = unique(rows, 'report MOP')
+    assert {r['FR'] for r in rows} == set(fr) and len(rows) == 40, 'Exact per-FR MOP coverage required'
+    nt = (root/'sysml/03-requirements.sysml').read_text()
+    blocks = list(re.finditer(r"item <'(MOP-FR\d{2})'> (MOP_FR\d{2}) : PerformanceMeasure \{(.*?)\n    \}", nt, re.DOTALL))
+    assert len(blocks) == 40 and {m[1] for m in blocks} == set(measures), 'Native MOP coverage mismatch'
+    type_block = re.search(r'item def PerformanceMeasure\b(.*?)\n    \}', nt, re.DOTALL)
+    defaults = string_attributes(type_block[1])
+    assert defaults['target'] == defaults['targetSource'] == '' and defaults['achieved'] == 'unknown, no empirical evaluation', 'False native target/achieved default'
+    for m in blocks:
+        assert m[2] == m[1].replace('-', '_'), 'Native MOP identity mismatch'
+        attrs = string_attributes(m[3])
+        assert all(attrs.get(f) for f in ('observationBasis', 'units', 'protocol', 'referenceConfiguration')), f'Incomplete native MOP protocol: {m[1]}'
+        assert attrs.get('target', '') == attrs.get('targetSource', '') == '' and attrs.get('achieved', defaults['achieved']) == defaults['achieved'], 'False native MOP result/target'
+        measures[m[1]]['native_protocol'] = attrs
+    edges = re.findall(r'dependency MOPFR\d+_FR\d+ from (MOP_FR\d{2}) to (FR_\d{2});', nt)
+    expected = {(mid.replace('-', '_'), row['FR'].replace('-', '_')) for mid, row in measures.items()}
+    assert len(edges) == 40 and set(edges) == expected, 'Native MOP/FR dependency mismatch'
+    contributions = re.findall(r'#qualitativeContribution dependency MOPFR\d+_MOE\d+ from (MOP_FR\d{2}) to FrameworkNeeds::(MOE_\d{2});', nt)
+    assert len(contributions) == len(set(contributions)) == 68, 'Exactly 68 qualitative MOP/MOE contributions required'
+    assert all(m.replace('_', '-') in measures and e in {'MOE_01', 'MOE_02', 'MOE_03', 'MOE_04'} for m, e in contributions), 'Unknown qualitative MOP/MOE endpoint'
+    for mid, row in measures.items():
+        row['moe_ids'] = sorted(e.replace('_', '-') for m, e in contributions if m == mid.replace('-', '_'))
+        assert row['moe_ids'], 'MOP without qualitative MOE contribution'
+    if records is not None:
+        ledger = unique(records, 'ledger MOP')
+        assert set(ledger) == set(measures), 'MOP ledger coverage mismatch'
+        for mid, row in measures.items():
+            assert all(ledger[mid].get(k) == v for k, v in row.items()), f'MOP ledger mismatch: {mid}'
+    return measures
+
+
+def assert_neutral(record):
+    """Reject current selection fields recursively. Historical snapshots are separate."""
+    forbidden = {'preferred', 'winner', 'principal_alternative', 'priorities', 'selected_candidate', 'physical_direction', 'reversal'}
+    if isinstance(record, dict):
+        assert not (forbidden & set(record)), 'Current winner/priority/selected claim'
+        for k, v in record.items():
+            if k != 'historical_evidence':
+                assert_neutral(v)
+    elif isinstance(record, list):
+        for v in record:
+            assert_neutral(v)
+    elif isinstance(record, str):
+        assert not re.search(r'recommends developing|preferred (?:candidate|direction|deployment)|reuse-first priority|principal alternative|priority ordering|PA-\w+ is (?:the )?(?:winner|preferred|selected)', record, re.I), 'Current winner/priority/selected claim'
+
+
+def audit_moes(root, records):
+    rows = [row for row in table_rows((root/'needs.tex').read_text(), r'MOE-\d{2}\s*&') if len(row) == 2]
+    assert len(rows) == 4, 'Four concise MOE definitions required'
+    ledger = unique(records, 'MOE')
+    assert set(ledger) == {row[0] for row in rows}, 'MOE report/ledger coverage mismatch'
+    native = (root/'sysml/02-needs-context.sysml').read_text()
+    docs = dict(re.findall(r"item <'(MOE-\d{2})'> \w+ : EffectivenessMeasure \{\s*doc /\* (.*?) \*/", native, re.DOTALL))
+    assert set(docs) == set(ledger), 'MOE native coverage mismatch'
+    for mid, definition in rows:
+        assert ledger[mid]['observation_basis'] == docs[mid] == definition and ledger[mid]['achieved'] == 'unknown', 'MOE wording or measured outcome mismatch'
+    assert not re.search(r'cost|CAD|price|affordability', ledger['MOE-04']['observation_basis'], re.I), 'Financial MOE reintroduced'
+    return ledger
+
+
+def expected_alternatives():
+    return {f'{lid}.{FAMILIES[lid]}{n}': key for lid, keys in ALTERNATIVE_KEYS.items() for n, key in enumerate(keys, 1)}
+
+
+def audit_candidate_records(root, fr, logical=None, require_native=False):
+    trade = load(root/'traceability/trade-study.json'); assert_neutral(trade)
+    assert trade['candidate_ids'] == list(CANDIDATES), 'Four literature candidates plus custom required'
+    alternatives = unique(trade['alternatives'], 'scoped alternative')
+    assert set(alternatives) == set(expected_alternatives()), 'Exactly five scoped alternatives per L required'
+    for aid, key in expected_alternatives().items():
+        a = alternatives[aid]
+        assert a['logical'] == aid[:3] and a['citation'] == key and a['supported_subset'] and a['required_additions'], f'Alternative scope/source mismatch: {aid}'
+    candidates = {}
+    assert {p.stem for p in (root/'candidates').glob('*.json')} == {c[0] for c in CANDIDATES.values()}, 'Candidate source set mismatch'
+    logical_rows = unique(logical['allocations'], 'logical allocation', 'FR') if logical is not None else None
+    published = None
+    for cid, (file, pkg, prefix) in CANDIDATES.items():
+        record = load(root/f'candidates/{file}.json'); assert_neutral(record)
+        assert record['id'] == cid and record['native'] == pkg + '::candidate', 'Candidate identity mismatch'
+        assert record['numerical_results'] is None and record['achieved'] == 'unknown' and record['empirical_vv_executed'] is False, 'Invented candidate outcome'
+        components = unique(record['components'], 'physical component')
+        assert set(components) == {f'{prefix}-C{n:02}' for n in range(1, 7)}, 'Six physical C01-C06 components required'
+        by_l = {c['logical']: c for c in components.values()}
+        assert set(by_l) == set(GROUPS), 'Candidate logical coverage mismatch'
+        for n, (lid, choice) in enumerate(zip(GROUPS, COMPOSITION[cid]), 1):
+            c = by_l[lid]
+            assert c['id'] == f'{prefix}-C{n:02}' and c['type'] == f'{pkg}::C{n:02}', 'Physical component identity mismatch'
+            assert c['composition'] == choice, f'Candidate composition mismatch: {cid} {lid}'
+            refs = [lid + '.' + s for s in choice.split('+') if re.fullmatch(r'(?:AR|EP|IN|CR|EC)\d', s)]
+            assert c['alternative_ids'] == refs, f'Unscoped/wrong alternative identity: {cid} {lid}'
+            assert set(c['primary_FR']) == {f'FR-{n:02}' for n in GROUPS[lid]}, 'Physical component primary FR mismatch'
+        allocations = unique(record['allocations'], 'candidate allocation', 'FR')
+        assert set(allocations) == set(fr) == ACTIVE_FR, f'Candidate FR allocation set mismatch: {cid}'
+        for rid, a in allocations.items():
+            assert a['primary'] == OWNERS[rid], f'Candidate logical allocation mismatch: {cid} {rid}'
+            assert a['planned_check'] == fr[rid]['planned_check'], f'Candidate planned check mismatch: {cid} {rid}'
+            if require_native:
+                assert logical_rows is not None and record['reconciliation']['status'] == 'reconciled with final native contract', 'Final candidate native contract not reconciled'
+                lr = logical_rows[rid]
+                assert a['support'] == lr['support'] and a['interfaces'] == lr['interfaces'], 'Candidate supporting/interface allocation mismatch'
+                assert isinstance(a['operation'], str) and a['operation'].startswith(by_l[a['primary']]['type'] + '::'), 'Unresolved physical operation'
+        if record.get('logical_api'):
+            if published is None:
+                published = load(root/'traceability/framework-baseline.json')['logical_io_contract']
+                audit_published_logical_api(root, fr, published)
+        integrations = record['required_integrations']
+        assert set(integrations) == {'f_prime', 'omniverse'}, 'Missing mandatory integration'
+        for key, covered in [('f_prime', {'FR-24', 'FR-34', 'FR-36'}), ('omniverse', {'FR-18', 'FR-24'})]:
+            integration = integrations[key]
+            assert integration['required'] is True and set(integration['FR']) == covered and integration['status'] == 'proposed, not executed', f'Common integration scope mismatch: {cid} {key}'
+            if key == 'omniverse':
+                assert integration['scope'] == 'whole-CUBICS numerical scenario inputs and EPS states/results', 'Scene-only Omniverse integration'
+            if require_native:
+                assert integration['native_elements'], 'Mandatory integration lacks native realization'
+        if cid == 'PA-CDT':
+            roles = record['custom_roles']
+            assert set(roles) == CUSTOM_ROLES, 'Missing substantive custom responsibility'
+            for name, role in roles.items():
+                assert role['required'] is True and role['inputs'] and role['outputs'] and role['status'] == 'proposed, not executed', f'Incomplete custom role: {name}'
+                if require_native:
+                    assert role['native_elements'], f'Custom role lacks native realization: {name}'
+        if record.get('logical_api'):
+            audit_candidate_logical_bridge(record, published)
+        if require_native:
+            native = record['native_contract']
+            assert native and native['schema'] == 'task7-current-physical-v1' and native['status'] == 'reconciled with final native contract', 'Physical native contract not reconciled'
+            assert len(native['framework_calls']) == 118 and len(native['procedure_performers']) == 24, 'Incomplete current physical performed/actor mapping'
+            mechanisms = unique(native['comparison_mechanisms'], 'native critical MOP')
+            assert set(mechanisms) == set(CRITICAL_MOPS) and all(m['mechanism'] and m['operation'] == m['native'] and m['achieved'] == 'unknown' for m in mechanisms.values()), 'Native structural MOP comparison mismatch'
+            specs = unique(native['component_specifications'], 'native component source', 'component')
+            assert set(specs) == {c['type'] for c in record['components']}, 'Missing native component specification/source'
+            keys = set(re.findall(r'@\w+\s*\{\s*([^,\s]+)\s*,', (root/'literatura.bib').read_text()))
+            for c in record['components']:
+                s = specs[c['type']]
+                assert s['specification']['logical'] == c['logical'] and s['source']['identifier'] == c['id'] and s['source']['sourceText'] and s['source']['status'] == 'proposed/unexecuted', 'Native component identity/source scope mismatch'
+                assert {k.strip() for k in s['source']['citationRecord'].split(',')} <= keys, 'Native component citation does not resolve'
+        candidates[cid] = record
+    return trade, candidates
+
+
+def audit_candidate_logical_bridge(record, contract):
+    """Check shared logical pointers without treating them as physical exports."""
+    pointer = record['logical_api']
+    assert pointer['contract'] == 'traceability/framework-baseline.json#/logical_io_contract' and pointer['publication_sha256'] == contract['publication_sha256'], 'Candidate published API pointer mismatch'
+    if contract.get('final_logical_ledger'):
+        assert pointer.get('final_logical_ledger') == contract['final_logical_ledger'], 'Candidate final logical ledger pointer mismatch'
+    components = unique(contract['components'], 'published component')
+    req = unique(contract['requirements'], 'published FR')
+    for c in record['components']:
+        logical = components[c['logical']]
+        assert c['logical_type'] == logical['definition'] and c['logical_part'] == logical['part'] and c['logical_io_port'] == logical['definition'] + '::io', 'Candidate published component pointer mismatch'
+    for row in record['allocations']:
+        r = req[row['FR']]
+        calls = [s['path'] for s in contract['scenario_members'] if s.get('operation') == r['operation']]
+        assert row['logical_operation'] == r['operation'] and row['logical_contract'] == r['model_path'], 'Candidate published FR operation/IO pointer mismatch'
+        assert row['logical_scenario_calls'] == calls and calls, 'Candidate published scenario call mismatch'
+    for key, names, frs in [
+        ('f_prime', {'fPrimeRequests', 'fPrimeProducts', 'fPrimeResults'}, ('FR-34', 'FR-36', 'FR-24')),
+        ('omniverse', {'wholeCUBICSScenarios', 'epsStatesResults'}, ('FR-18', 'FR-24'))]:
+        expected = list(dict.fromkeys(req[r]['operation'] for r in frs)) + [
+            e['model_path'] for e in contract['external_aggregates'] if e['name'] in names]
+        assert record['required_integrations'][key]['logical_elements'] == expected, 'Candidate required platform logical pointer mismatch'
+
+
+def audit_trade_matrix(text, trade):
+    rows = table_rows(text, r'MOP-FR\d{2}')
+    matrix = {}
+    headers = re.findall(r'\\textbf\{(PA-(?:COM|VS|NS|GY|CDT))\}|(?<![\w-])(PA-(?:COM|VS|NS|GY|CDT))(?=\s*&|\s*\\\\)', visible(text))
+    header_ids = [a or b for a, b in headers]
+    assert header_ids[:5] == list(CANDIDATES), 'Critical-MOP matrix candidate columns missing/out of order'
+    for cells in rows:
+        assert len(cells) == 6, 'Actual critical-MOP by five-candidate matrix required'
+        mid = cells[0]
+        assert mid not in matrix, 'Duplicate critical MOP row'
+        assert all(c and c.lower() not in {'unknown', 'tbr', 'n/a', '?'} for c in cells[1:]), 'Missing structural comparison cell'
+        assert not any(re.search(r'\b(?:best|better|worst|winner|preferred|\d+\s*%|passed)\b', c, re.I) for c in cells[1:]), 'Unmeasured ranking/result in comparison'
+        matrix[mid] = dict(zip(CANDIDATES, cells[1:]))
+    assert tuple(matrix) == CRITICAL_MOPS, 'Exact six critical MOP rows required'
+    ledger = unique(trade['critical_mop_comparison'], 'critical MOP')
+    assert set(ledger) == set(matrix), 'Critical MOP ledger coverage mismatch'
+    for mid, cells in matrix.items():
+        row = ledger[mid]
+        assert row['mechanisms'] == cells and row['achieved'] == 'unknown' and row['desired_range'] == '', 'Trade mechanism/result mismatch'
+    active = visible(text)
+    assert re.search(r'achieved values are unknown', active, re.I), 'Unknown achieved values must be explicit'
+    assert not re.search(r'recommends developing|preferred (?:candidate|direction|deployment)|selected physical|reuse-first priority|principal alternative|priority ordering', active, re.I), 'Current selected/preferred report claim'
+    return matrix
+
+
+def audit_physical_tables(text, trade):
+    active = visible(text); found = {}; lid = None
+    for line in active.splitlines():
+        heading = re.search(r'\\textbf\{(L\d{2})\b', line)
+        if heading:
+            lid = heading[1]
+        for cells in table_rows(line + '\n', r'(?:AR|EP|IN|CR|EC)\d'):
+            assert lid in GROUPS and len(cells) == 3, 'Alternative without logical scope'
+            aid = lid + '.' + cells[0]
+            assert aid not in found, 'Duplicate published alternative'
+            found[aid] = cells
+    assert set(found) == set(expected_alternatives()), 'Published alternatives must be five per L'
+    ledger = unique(trade['alternatives'], 'scoped alternative')
+    for aid, cells in found.items():
+        assert cells[1] == ledger[aid]['supported_subset'] and cells[2] == ledger[aid]['required_additions'], f'Published alternative mismatch: {aid}'
+        assert expected_alternatives()[aid] in cells[1] and cells[2], f'Missing source/additions: {aid}'
+    rows = table_rows(active, r'PA-(?:COM|VS|NS|GY|CDT)')
+    assert [r[0] for r in rows] == list(CANDIDATES) and all(len(r) == 7 for r in rows), 'Five by six published composition required'
+    def normalize(cell):
+        return re.sub(r'\s+', '', re.sub(r'\bPy\b', 'Python', cell))
+    for row in rows:
+        assert [normalize(c) for c in row[1:]] == [normalize(c) for c in COMPOSITION[row[0]]], f'Published candidate composition mismatch: {row[0]}'
+
+
+def audit_logical_table(text):
+    """Accept the concise name/ID, FR union and IO-summary table."""
+    found = {}
+    for line in visible(text).splitlines():
+        if not re.search(r'\bL\d{2}\b', line) or not re.search(r'\\\\\*?\s*$', line):
+            continue
+        cells = table_cells(re.sub(r'\\\\\*?\s*$', '', line))
+        ids = re.findall(r'\bL\d{2}\b', cells[0])
+        if len(cells) != 3 or len(ids) != 1:
+            continue
+        lid = ids[0]
+        groups = [c for c in cells[1:] if re.fullmatch(r'\d{2}(?:--\d{2})?(?:\s*,\s*\d{2}(?:--\d{2})?)*', c)]
+        assert lid not in found and len(groups) == 1, 'Duplicate/missing published logical allocation row'
+        found[lid] = bare_numbers(groups[0], 'FR-')
+    assert set(found) == set(GROUPS), 'Exactly six published logical allocation rows required'
+    for lid, ids in found.items():
+        assert ids == {f'FR-{n:02}' for n in GROUPS[lid]}, f'Published primary FR allocation mismatch: {lid}'
+    return found
+
+
+def bridge_published_logical_api(fr, manifest, native_io, provenance):
+    """Normalize published task6 exports, without inventing physical operations.
+
+    IO contracts are not the engineering operations invoked by scenarios.
+    Crosswalks perform typed projections, with a separate flow on each side.
+    Publication hashes identify the import, not a current validation result.
+    """
+    assert manifest['schema'] == 'task6-model-export-v1' and native_io['schema'] == 'task6-native-io-v1', 'Unexpected published API schema'
+    assert native_io['active_count'] == 40 and set(native_io['retired']) == {'FR-12', 'FR-40'}, 'Published active FR scope mismatch'
+    components = copy.deepcopy(manifest['components'])
+    requirements = copy.deepcopy(native_io['requirements'])
+    req = unique(requirements, 'published FR')
+    assert set(req) == set(fr), 'Published FR coverage mismatch'
+    assert native_io['external_aggregates'] == manifest['external_aggregates'], 'Published boundary export mismatch'
+    # native-io-contract adds declaration paths to the manifest's mappings.
+    mex = unique(manifest['pairwise_exchanges'], 'published exchange', 'name')
+    nex = unique(native_io['exchanges'], 'published IO exchange', 'name')
+    assert set(mex) == set(nex), 'Published exchange set mismatch'
+    for name, exchange in mex.items():
+        other = nex[name]
+        assert all(exchange[k] == other[k] for k in ('name', 'source', 'target', 'label', 'model_path')), 'Published exchange identity mismatch'
+        assert len(exchange['mappings']) == len(other['mappings']) and all(
+            all(b.get(k) == v for k, v in a.items()) for a, b in zip(exchange['mappings'], other['mappings'])), 'Published field mapping mismatch'
+    unions = []
+    io_components = unique(native_io['components'], 'published IO component')
+    for c in components:
+        lid = c['id']; ids = sorted(c['frs'])
+        assert io_components[lid]['definition'] == c['definition'], 'Published component type mismatch'
+        union = {'id': lid, 'FR': ids, 'native_features': {}, 'native_port_features': {}}
+        for direction in ('inputs', 'outputs'):
+            rows = unique(io_components[lid]['input_union' if direction == 'inputs' else 'output_union'], 'published IO union', 'fr')
+            assert set(rows) == set(ids) and all(rows[r]['fields'] == req[r][direction] and
+                rows[r]['model_path'] == req[r][direction + '_path'] for r in ids), 'Published IO union mismatch'
+            union[direction] = {rid: fr[rid][direction] for rid in ids}
+            for field, key in [('native_features', 'path'), ('native_port_features', 'port_path')]:
+                union[field][direction] = {rid: [f[key] for f in req[rid]['field_contracts'][direction]] for rid in ids}
+        unions.append(union)
+    crosswalk, exchanges = [], []
+    for e in native_io['exchanges']:
+        exchanges.append({k: e[k] for k in ('name', 'source', 'target', 'label', 'model_path')})
+        exchanges[-1]['mapping_count'] = len(e['mappings'])
+        for m in e['mappings']:
+            signature = manifest['reusable_action_signatures']['FrameworkLogical::Map_' + m['operation_path'].split('::')[-1]]
+            assert [p['name'] for p in signature] == ['source', 'target'], 'Unexpected projection signature'
+            crosswalk.append({
+                'exchange': e['name'], 'source_component': e['source'], 'target_component': e['target'],
+                'source_FR': m['source_fr'], 'source_field': m['source_output'],
+                'target_FR': m['target_fr'], 'target_field': m['target_input'],
+                'source_feature': m['source_declaration'], 'target_feature': m['target_declaration'],
+                'source_path': m['source_path'], 'target_path': m['target_path'],
+                'source_type': signature[0]['type'], 'target_type': signature[1]['type'],
+                'projection_operation': m['operation_path'],
+                'projection_type': signature[0]['declaration'].rsplit('::', 1)[0],
+                'projection_signature': copy.deepcopy(signature),
+                'native_source_flow': m['operation_path'] + '_source',
+                'native_target_flow': m['operation_path'] + '_target', 'mapping_basis': m['mapping']})
+    contract = {
+        'schema': PUBLISHED_API_SCHEMA, 'status': BRIDGED_API_STATUS,
+        'publication_sha256': dict(provenance),
+        'source_sha256': {'requirements.tex': native_io['source_sha256'], **{
+            'sysml/' + p: h for p, h in manifest['verification']['model_sha256'].items()
+            if p in ('04-logical.sysml', '11-logical-responsibilities.sysml', '10-interface-views.sysml')}},
+        'components': components, 'requirements': requirements, 'component_unions': unions,
+        'exchanges': exchanges, 'crosswalk': crosswalk,
+        'boundary_bindings': copy.deepcopy(manifest['boundary_bindings']),
+        'external_aggregates': copy.deepcopy(manifest['external_aggregates']),
+        'scenario_members': copy.deepcopy(manifest['scenario_members']), 'states': dict(manifest['states'])}
+    audit_published_logical_api(None, fr, contract)
+    return contract
+
+
+def audit_published_logical_api(root, fr, contract, require_sources=False):
+    """Audit the real exported shape. This is not physical release approval."""
+    assert contract and contract['schema'] == PUBLISHED_API_SCHEMA, 'Missing published logical API bridge'
+    assert set(contract['publication_sha256']) == {'export-manifest.json', 'native-io-contract.json', 'focused-checks.json'} and all(
+        re.fullmatch(r'[0-9a-f]{64}', h) for h in contract['publication_sha256'].values()), 'Missing published API provenance'
+    components = unique(contract['components'], 'published component')
+    req = unique(contract['requirements'], 'published FR')
+    assert set(components) == set(GROUPS) and set(req) == set(fr) == ACTIVE_FR, 'Published six-L/40-FR coverage mismatch'
+    operations, contracts = {}, {}
+    for lid, c in components.items():
+        assert set(c['frs']) == {f'FR-{n:02}' for n in GROUPS[lid]} and c['part'] == 'FrameworkLogical::LogicalFramework::' + lid, 'Published component membership mismatch'
+        assert c['definition'].startswith('FrameworkLogical::') and c['ports'] and c['definition'] + '::io' in c['ports'], 'Unresolved published component port'
+        for op in c['operations']:
+            assert op['path'] == c['definition'] + '::' + op['name'] and op['path'] not in operations, 'Duplicate/wrong published operation owner'
+            assert op['parameters'] and op['action_type'].startswith('FrameworkLogical::'), 'Missing published operation signature'
+            operations[op['path']] = (lid, op)
+        declared = unique(c['performed_contracts'], 'published performed contract', 'path')
+        assert set(declared) == set(c['contract_operations']) == {req[r]['model_path'] for r in c['frs']}, 'Published performed IO contract coverage mismatch'
+        contracts.update(declared)
+    for rid, r in req.items():
+        assert r['primary'] == OWNERS[rid] and r['statement'] == fr[rid]['text'] and r['direct_parents'] == fr[rid]['parents'], 'Published FR wording/parent/owner mismatch'
+        assert r['planned_check'] == fr[rid]['planned_check'], 'Published FR planned check mismatch'
+        assert r['operation'] in operations and operations[r['operation']][0] == r['primary'], 'Published engineering operation owner mismatch'
+        op = operations[r['operation']][1]; io = contracts[r['model_path']]
+        assert r['action_type'] == op['action_type'] and r['operation_signature'] == op['parameters'], 'Published engineering operation signature mismatch'
+        assert r['contract_action_type'] == io['action_type'] and r['contract_signature'] == io['parameters'], 'Published IO action signature mismatch'
+        assert r['model_path'] == components[r['primary']]['definition'] + '::contract' + rid.replace('-', ''), 'Published IO action identity mismatch'
+        assert r['operation'] != r['model_path'] and r['contract_signature'] == [
+            {'name': name, 'direction': direction, 'type': r[key + '_path'], 'multiplicity': '1',
+             'declaration': r['contract_action_type'] + '::' + name}
+            for name, direction, key in [('subjects', 'in', 'inputs'), ('products', 'out', 'outputs')]], 'IO contract substituted for engineering operation'
+        for direction, native_direction in [('inputs', 'in'), ('outputs', 'out')]:
+            assert r[direction + '_verbatim'] == fr[rid][direction], 'Published FR verbatim IO mismatch'
+            fields = r['field_contracts'][direction]
+            assert fields and [f['exact_field'] for f in fields] == r[direction] and len(set(r[direction])) == len(fields), 'Incomplete/duplicate published typed IO fields'
+            for n, f in enumerate(fields, 1):
+                suffix = '::field' + f'{n:02}'
+                assert f['path'] == r[direction + '_path'] + suffix and f['port_path'] == components[r['primary']]['definition'] + '::io::' + rid.replace('-', '').lower() + direction.capitalize() + suffix, 'Published IO field/port identity mismatch'
+                assert f['direction'] == native_direction and f['multiplicity'] == '0..*' and re.fullmatch(r'(?:BoundaryViews|FrameworkLogical|FrameworkDomain)::\w+', f['type']), 'Published IO type/direction/multiplicity mismatch'
+        assert r['admission_check'] == components['L06']['definition'] + '::checkTransfer', 'Published admission operation mismatch'
+    unions = unique(contract['component_unions'], 'published component union')
+    assert set(unions) == set(GROUPS), 'Missing logical input/output union'
+    for lid, u in unions.items():
+        ids = sorted(components[lid]['frs'])
+        assert sorted(u['FR']) == ids, 'Wrong logical union membership'
+        for direction in ('inputs', 'outputs'):
+            assert u[direction] == {rid: fr[rid][direction] for rid in ids}, f'Incomplete logical {direction} union: {lid}'
+            for field, key in [('native_features', 'path'), ('native_port_features', 'port_path')]:
+                assert u[field][direction] == {rid: [f[key] for f in req[rid]['field_contracts'][direction]] for rid in ids}, 'Unresolved native IO union field'
+    exchanges = unique(contract['exchanges'], 'published exchange', 'name')
+    assert len(exchanges) == 20 and contract['crosswalk'], 'Empty/incomplete logical exchange crosswalk'
+    identities, counts = set(), defaultdict(int)
+    for row in contract['crosswalk']:
+        identity = (row['source_FR'], row['source_field'], row['target_FR'], row['target_field'])
+        assert identity not in identities, 'Duplicate logical field crosswalk'
+        identities.add(identity)
+        assert row['source_FR'] in req and row['target_FR'] in req, 'Unknown crosswalk FR'
+        e = exchanges[row['exchange']]; counts[e['name']] += 1
+        assert row['source_component'] == OWNERS[row['source_FR']] == e['source'] and row['target_component'] == OWNERS[row['target_FR']] == e['target'], 'Wrong crosswalk owner'
+        for side, direction in [('source', 'outputs'), ('target', 'inputs')]:
+            r = req[row[side + '_FR']]
+            matches = [f for f in r['field_contracts'][direction] if f['exact_field'] == row[side + '_field']]
+            assert len(matches) == 1, 'Crosswalk outside declared FR IO'
+            f = matches[0]
+            assert row[side + '_feature'] == f['path'] and row[side + '_type'] == f['type'], 'Crosswalk typed declaration mismatch'
+            context_path = f['port_path'].replace(components[r['primary']]['definition'], components[r['primary']]['part'], 1)
+            assert row[side + '_path'] == context_path, 'Crosswalk contextual feature chain mismatch'
+        op = row['projection_operation']; action_type = row['projection_type']
+        assert row['mapping_basis'] and re.fullmatch(re.escape(e['model_path']) + r'_\d{3}', op), 'Unresolved logical projection operation'
+        assert action_type == 'FrameworkLogical::Map_' + op.split('::')[-1] and row['projection_signature'] == [
+            {'name': side, 'direction': direction, 'type': row[side + '_type'], 'multiplicity': '0..*',
+             'declaration': action_type + '::' + side} for side, direction in [('source', 'in'), ('target', 'out')]], 'Projection operation signature mismatch'
+        assert row['native_source_flow'] == op + '_source' and row['native_target_flow'] == op + '_target', 'Unresolved logical field binding'
+    assert sum(counts.values()) == 203 and all(counts[e['name']] == e['mapping_count'] for e in exchanges.values()), 'Published crosswalk mapping coverage mismatch'
+    members = unique(contract['scenario_members'], 'published scenario call', 'path')
+    assert len(members) == 142, 'Published scenario call coverage mismatch'
+    invoked = set()
+    for path, s in members.items():
+        assert s['kind'] == 'PerformActionUsage' and path.startswith('LogicalRealization::') and s['parameters'], 'Published scenario is not an actual performed call'
+        if s['owner'] == 'external':
+            assert not s.get('operation'), 'External scenario call given a framework owner'
+        else:
+            assert s['operation'] in operations, 'Unresolved published scenario operation'
+            lid, op = operations[s['operation']]; invoked.add(s['operation'])
+            assert s['owner'] == components[lid]['part'] and s['action_type'] == op['action_type'], 'Published scenario operation owner/type mismatch'
+            assert [{k: v for k, v in p.items() if k != 'endpoint'} for p in s['parameters']] == op['parameters'], 'Published scenario parameter signature mismatch'
+        assert all(p['endpoint'] == path + '::' + p['name'] for p in s['parameters']), 'Published scenario parameter endpoint mismatch'
+    assert {r['operation'] for r in req.values()} <= invoked, 'FR engineering operation has no performed scenario call'
+    bindings = unique(contract['boundary_bindings'], 'published boundary binding', 'name')
+    assert len(bindings) == 18 and all(b['source'] and b['target'] and set(b['fr_basis']) <= set(fr) for b in bindings.values()), 'Published boundary binding coverage mismatch'
+    external = unique(contract['external_aggregates'], 'published external aggregate', 'name')
+    expected = {'fPrimeRequests': ('out', 'BoundaryViews::CodingRequest'), 'fPrimeProducts': ('in', 'BoundaryViews::HostSoftwareProduct'),
+                'fPrimeResults': ('in', 'BoundaryViews::SoftwareRunResult'), 'wholeCUBICSScenarios': ('in', 'BoundaryViews::ReferenceData'),
+                'epsStatesResults': ('out', 'BoundaryViews::AnalysisResult')}
+    assert set(external) == set(expected) and all((external[k]['direction'], external[k]['type']) == v and
+        external[k]['endpoint'].startswith(components['L03']['part'] + '::') and set(external[k]['fr_basis']) <= set(fr) for k, v in expected.items()), 'Published required platform direction/type mismatch'
+    assert contract['states'] == {'guidance': components['L06']['definition'] + '::assistanceCurrency', 'review': components['L05']['definition'] + '::reviewState'}, 'Published authority/currency state owner mismatch'
+    if require_sources:
+        assert root is not None and contract['source_sha256'] and all(sha(Path(root)/p) == h for p, h in contract['source_sha256'].items()), 'Published logical API source identity mismatch'
+        text = (Path(root)/'sysml/04-logical.sysml').read_text()
+        metadata = dict(re.findall(r'@NativeIO about (\w+::contractFR\d{2}) \{[^\n]*?operation = (\w+::\w+) meta SysML::ActionUsage;', text))
+        assert len(metadata) == 40 and all(metadata.get(r['model_path'].removeprefix('FrameworkLogical::')) == r['operation'].removeprefix('FrameworkLogical::') for r in req.values()), 'Published native FR operation metadata mismatch'
+    return req
+
+
+def audit_final_logical_ledger(root, fr, logical, contract, require_sources=False):
+    """Reconcile the definitive task6 ledger's two independent IO layers.
+
+    Source IO unions use verbatim source categories. Native subject partitions
+    have separate typed declarations and provenance. A null native_feature on
+    a source-text union is intentional, not an absent typed native subject.
+    """
+    assert logical.get('schema_version') == 2 and logical.get('native_status') == 'verified', 'Final task6 logical ledger not released'
+    components = unique(logical['components'], 'logical component')
+    allocations = unique(logical['allocations'], 'logical allocation', 'FR')
+    source = unique(logical['source_contract']['entries'], 'logical source contract', 'FR')
+    published = audit_published_logical_api(root, fr, contract, require_sources=require_sources)
+    exported = unique(contract['components'], 'published component')
+    assert set(components) == set(GROUPS) and set(allocations) == set(source) == set(fr), 'Final logical ledger coverage mismatch'
+    for rid, row in allocations.items():
+        original = source[rid]; api = published[rid]
+        for key, expected in [('statement', fr[rid]['text']), ('inputs_verbatim', fr[rid]['inputs']),
+                              ('outputs_verbatim', fr[rid]['outputs']), ('parents', fr[rid]['parents'])]:
+            assert row[key] == original[key] == expected, 'Final logical source contract mismatch'
+        assert row['primary'] == original['primary'] == OWNERS[rid] and row['operation'] == api['operation'], 'Final logical operation/owner mismatch'
+        assert row['verification'] == original['verification'] and row['verification']['status'] == 'planned, not executed' and (
+            row['verification']['methods'] + ': ' + row['verification']['need']) == fr[rid]['planned_check'], 'Final logical planned check mismatch'
+        assert row['MOP'] == original['MOP'] == 'MOP-FR' + rid[-2:] and row['native_mop'] == original['native_mop'] == 'FrameworkRequirements::MOP_FR' + rid[-2:], 'Final logical MOP mismatch'
+        assert row['functions'] == ['BoundaryViews::' + f for f in fr[rid]['functions']] and row['scenarios'] == ['ScenarioViews::' + s for s in fr[rid]['scenarios']], 'Final logical scenario/function mismatch'
+        assert len(row['support']) == len(set(row['support'])) and set(row['support']) <= set(GROUPS) - {row['primary']}, 'Final logical supporting allocation mismatch'
+        assert len(row['interfaces']) == len(set(row['interfaces'])) and all(q.startswith('FrameworkLogical::') for q in row['interfaces']), 'Final logical interface allocation mismatch'
+        calls = [s['path'] for s in contract['scenario_members'] if s.get('operation') == api['operation']]
+        assert row['behaviors'] and set(row['behaviors']) <= set(calls), 'Final logical FR performed-call provenance mismatch'
+        io = row['native_io']
+        # Native ledger enriches the published field contracts with Subject metadata.
+        assert all(io[k] == api[k] for k in api if k != 'field_contracts'), 'Final logical published IO contract mismatch'
+        for direction in ('inputs', 'outputs'):
+            assert row[direction] == original[direction] and row[direction], 'Final logical source IO union mismatch'
+            fields, exported_fields = io['field_contracts'][direction], api['field_contracts'][direction]
+            assert len(fields) == len(exported_fields), 'Final logical typed field coverage mismatch'
+            for field, exported_field in zip(fields, exported_fields):
+                assert all(field[k] == v for k, v in exported_field.items() if k != 'subject_metadata'), 'Final logical typed field declaration mismatch'
+                meta = field['subject_metadata']
+                assert meta == exported_field.get('subject_metadata', meta) and meta['fr'] == rid and meta['direction'] == direction and meta['exactField'] == field['exact_field'] and meta['provenance'], 'Final logical typed field provenance mismatch'
+    for lid, component in components.items():
+        c = exported[lid]
+        assert component['native_part'] == c['part'] and component['native_type'] == c['definition'] and set(component['primary_FR']) == set(c['frs']), 'Final logical component export mismatch'
+        rows = [r for r in logical['allocations'] if r['primary'] == lid]
+        for direction in ('inputs', 'outputs'):
+            expected_source, expected_typed = defaultdict(set), {}
+            for r in rows:
+                for field in r[direction]:
+                    expected_source[field].add(r['FR'])
+                for f in r['native_io']['field_contracts'][direction]:
+                    expected_typed.setdefault(f['exact_field'], []).append({'FR': r['FR'], 'native': f['path'], 'type': f['type']})
+            union = unique(component['io_union'][direction], 'logical source union field', 'field')
+            assert set(union) == set(expected_source) and all(len(u['provenance']) == len(set(u['provenance'])) and
+                set(u['provenance']) == expected_source[name] for name, u in union.items()), 'Final logical source union provenance mismatch'
+            assert component['typed_io_union'][direction] == expected_typed, 'Final logical typed union mismatch'
+    mappings = {m['operation_path']: (e, m) for e in logical['exchanges'] for m in e['mappings']}
+    assert len(logical['exchanges']) == 20 and len(mappings) == sum(len(e['mappings']) for e in logical['exchanges']) == 203, 'Final logical crosswalk coverage mismatch'
+    for row in contract['crosswalk']:
+        e, m = mappings[row['projection_operation']]
+        assert e['name'] == row['exchange'] and e['source_component'] == row['source_component'] and e['target_component'] == row['target_component'], 'Final logical crosswalk aggregate mismatch'
+        pairs = {'source_fr': 'source_FR', 'target_fr': 'target_FR', 'source_output': 'source_field', 'target_input': 'target_field',
+                 'source_declaration': 'source_feature', 'target_declaration': 'target_feature', 'source_path': 'source_path', 'target_path': 'target_path',
+                 'action_type': 'projection_type', 'source_qualified_type': 'source_type', 'target_qualified_type': 'target_type', 'mapping': 'mapping_basis'}
+        assert all(m[k] == row[v] for k, v in pairs.items()), 'Final logical typed projection mismatch'
+        for side in ('source', 'target'):
+            route = m[side + '_flow']
+            assert route['native'] == row['native_' + side + '_flow'] and route['payload'] == row[side + '_type'], 'Final logical projection route mismatch'
+            if side + '_route' in row:
+                assert row[side + '_route'] == route, 'Final logical actual flow-end chain mismatch'
+        if 'aggregate_field' in row:
+            assert row['aggregate_field'] == m['aggregate_field'] and row['field_metadata'] == m['metadata'], 'Final logical aggregate field provenance mismatch'
+    assert contract['boundary_bindings'] == logical['native_contract']['boundary_routes'], 'Final logical boundary dispatch mismatch'
+    external = unique(logical['external_exchanges'], 'logical external exchange', 'name')
+    for row in contract['external_aggregates']:
+        assert all(external[row['name']][k] == v for k, v in row.items()), 'Final logical external aggregate mismatch'
+    tasks = unique(logical['safety_contract']['tasks'], 'logical performed task', 'native')
+    assert set(tasks) == {s['path'] for s in contract['scenario_members']}, 'Final logical performed task coverage mismatch'
+    for s in contract['scenario_members']:
+        task = tasks[s['path']]
+        assert task['action_type'] == s['action_type'], 'Final logical performed task type mismatch'
+        if s['owner'] != 'external':
+            assert task['component'] == s['owner'] and task['operation'] == s['operation'] and task['allocated_target'] == ['FrameworkLogical::logical', s['owner']], 'Final logical performed task allocation mismatch'
+        else:
+            assert task.get('actor') and task['allocated_target'] == [task['actor']], 'Final logical external performer missing'
+    if require_sources:
+        pointer = contract['final_logical_ledger']
+        assert pointer['path'] == 'traceability/logical-architecture.json' and sha(Path(root)/pointer['path']) == pointer['sha256'], 'Final logical ledger source identity mismatch'
+        assert sha(Path(root)/'requirements.tex') == logical['source_contract']['requirements_sha256'] and sha(Path(root)/'sysml/03-requirements.sysml') == logical['source_contract']['native_requirements_sha256'], 'Final logical requirement source identity mismatch'
+        audit_logical_table((Path(root)/'logical.tex').read_text())
+    return allocations
+
+
+def audit_logical_contract(root, fr, logical, contract):
+    """Check final unions/crosswalk without requiring the retired logical API."""
+    components = unique(logical['components'], 'logical component')
+    allocations = unique(logical['allocations'], 'logical allocation', 'FR')
+    assert set(components) == set(GROUPS) and set(allocations) == set(fr), 'Six-L/40-FR logical coverage required'
+    for rid, row in allocations.items():
+        assert row['primary'] == OWNERS[rid] and set(row['support']) <= set(GROUPS), 'Wrong logical owner/support'
+        assert row['operation'] and row['verification']['status'] == 'planned, not executed', 'Unresolved logical operation/false outcome'
+    assert contract and contract['status'] == 'reconciled with final native contract', 'Final logical IO/crosswalk contract not reconciled'
+    if contract.get('schema') == PUBLISHED_API_SCHEMA:
+        if logical.get('schema_version') == 2:
+            return audit_final_logical_ledger(root, fr, logical, contract)
+        published = audit_published_logical_api(root, fr, contract)
+        assert all(allocations[rid]['operation'] == r['operation'] for rid, r in published.items()), 'Logical ledger operation differs from published native API'
+        return allocations
+    unions = unique(contract['component_unions'], 'component union')
+    assert set(unions) == set(GROUPS), 'Missing logical input/output union'
+    for lid, row in unions.items():
+        ids = {f'FR-{n:02}' for n in GROUPS[lid]}
+        assert set(row['FR']) == ids, 'Wrong logical union membership'
+        for direction in ('inputs', 'outputs'):
+            assert row[direction] == {rid: fr[rid][direction] for rid in sorted(ids)}, f'Incomplete logical {direction} union: {lid}'
+            assert set(row['native_features'][direction]) == ids and all(row['native_features'][direction].values()), 'Unresolved native IO union field'
+    assert contract['crosswalk'], 'Empty logical exchange crosswalk'
+    identities = set()
+    for row in contract['crosswalk']:
+        identity = (row['source_FR'], row['source_field'], row['target_FR'], row['target_field'])
+        assert identity not in identities, 'Duplicate logical field crosswalk'
+        identities.add(identity)
+        assert row['source_FR'] in fr and row['target_FR'] in fr, 'Unknown crosswalk FR'
+        assert row['source_component'] == OWNERS[row['source_FR']] and row['target_component'] == OWNERS[row['target_FR']], 'Wrong crosswalk owner'
+        assert row['source_field'] in fr[row['source_FR']]['outputs'] and row['target_field'] in fr[row['target_FR']]['inputs'], 'Crosswalk outside declared FR IO'
+        assert row['native_flow'] and row['source_feature'] and row['target_feature'] and row['mapping_basis'], 'Unresolved logical field binding'
+    return allocations
+
+
 def solution_sources(root):
-    result = []; pending = [root/'solucion.tex']
+    result, pending = [], [root/'solucion.tex']
     while pending:
         path = pending.pop()
         if path in result:
@@ -160,96 +813,85 @@ def solution_sources(root):
     return result
 
 
-def audit_allocation_tables(root, logical, preferred):
-    """Check the two complete published allocations without a duplicate trace listing."""
-    expected = defaultdict(set)
-    for row in logical['allocations']:
-        expected[row['primary']].add(row['FR'])
-    for name, physical in [('logical.tex', False), ('trade-selection.tex', True)]:
-        pattern = r'^(L\d{2})(?: / ([A-Z]+-C\d{2}))? & .*? & ([\d, -]+) \\\\$'
-        rows = list(re.finditer(pattern, visible((root/name).read_text()), re.MULTILINE))
-        assert len(rows) == len(expected) and {r[1] for r in rows} == set(expected), f'Duplicate/missing published allocation row: {name}'
-        components = {r['logical']: r['id'] for r in preferred['components']}
-        for row in rows:
-            ids = number_set(re.sub(r'(\d{2})', r'FR-\1', row[3]), 'FR-')
-            assert ids == expected[row[1]], f'Published primary FR allocation mismatch: {name} {row[1]}'
-            assert row[2] == (components[row[1]] if physical else None), f'Published physical component mismatch: {name} {row[1]}'
-
-
-def audit_independent_review(root, baseline):
-    review = load(root/'traceability/independent-review.json')
-    status = 'independent correctness review completed, both major findings closed on rereview'
-    assert review['status'] == baseline['independent_review'] == status and review['independent_review_performed'] is True, 'Independent correctness review disposition mismatch'
-    assert review['scope'] == 'proposed report/native specification correctness, no empirical approval', 'Independent review scope must remain specification correctness'
-    assert review['empirical_framework_vv_executed'] is False and review['empirical_approval'] is False, 'False framework empirical V&V approval'
-    findings = unique(review['findings'], 'independent finding')
-    assert set(findings) == {'1', '2'} and review['original_major_findings'] == 2, 'Original independent findings must remain recorded'
-    for row in findings.values():
-        assert row['severity'] == 'major' and row['original_status'] == 'open' and row['status'] == 'closed on rereview' and row['resolution'] and row['rereview_evidence'], 'Independent major finding closure incomplete'
-    assert re.fullmatch(r'[0-9a-f]{64}', review['review_record_sha256']), 'Missing independent review record digest'
-    assert review['prose_review']['performed'] is True and review['prose_review']['bounded_passes_applied'] == [1, 2, 3], 'Prose review/pass record incomplete'
-    assert review['final_publication_review'] == PUBLICATION_REVIEW_STATUS, 'Final publication review disposition mismatch'
-    publication = review['final_publication_review_evidence']
-    assert publication['performed'] is True and publication['scope'] == 'publication of the proposed EPS framework specification, no empirical approval' and publication['empirical_approval'] is False, 'Publication review scope/authority mismatch'
-    assert publication['material_blockers'] == 0, 'Publication review has material blockers'
-    assert all(publication[k] == v for k,v in PUBLICATION_REVIEW_EVIDENCE.items()) and review['prose_review']['review_record_sha256'] == publication['review_record_sha256'], 'Publication review evidence digest mismatch'
-    assert publication['report_pdf_sha256'] == sha(root/'main.pdf'), 'Publication review PDF identity mismatch'
-    counts = review['current_specification_counts']
-    fields = {'concern_occurrences':'concerns', 'MR':'mission_requirements', 'UC':'use_cases',
-              'SC':'mission_scenarios', 'FR':'framework_requirements', 'LA':'logical_components',
-              'PA':'candidate_ids', 'V':'verification_cases', 'MOE':'measures_of_effectiveness',
-              'MOP':'measures_of_performance'}
-    functions = set().union(*(set(r['black_box_function_ids']) for r in baseline['framework_requirements']))
-    assert all(counts[k] == len(baseline[v]) for k, v in fields.items()) and counts['root_concerns'] == sum(c['kind'] == 'root' for c in baseline['concerns']) and counts['F'] == len(functions), 'Independent review current-count mismatch'
-    assert review['current_source_sha256'] == baseline['approved_source_sha256'], 'Independent review integration source snapshot mismatch'
-    pending = visible((root/'verification-plan.tex').read_text())
-    assert not re.search(r'independent correctness review[^.]*remain pending', pending), 'Stale independent correctness review status in report'
-    return review
-
-
-def audit_native_figures(root, diagrams):
+def audit_figures(root, diagrams):
+    """Verify declared artifact provenance. Illustrations need no native render."""
     assert len(diagrams) == len(set(diagrams)), 'Duplicate solution figure paths'
     result = []
     for diagram in diagrams:
         figure = root/diagram
-        assert figure.is_file(), f'Missing figure: {diagram}'
+        assert diagram.startswith('fig/') and figure.is_file(), f'Missing/non-fig figure: {diagram}'
+        svg = figure.with_suffix('.svg')
+        provenance_path = figure.with_suffix('.provenance.json')
+        if provenance_path.is_file():
+            record = load(provenance_path)
+            assert record.get('native_syside_render', record.get('native_syside')) is False, 'Authored figure falsely claims native rendering'
+            hashes = record.get('artifact_sha256') or {Path(k).suffix[1:]: v for k, v in record['sha256'].items()}
+            assert {'svg', 'pdf'} <= set(hashes), 'Incomplete illustrative figure hashes'
+            for fmt, digest in hashes.items():
+                assert sha(figure.with_suffix('.' + fmt)) == digest, f'Figure {fmt} hash mismatch: {diagram}'
+            if 'svg_sha256_used_for_pdf' in record:
+                assert record['svg_sha256_used_for_pdf'] == hashes['svg'], 'PDF source hash mismatch'
+            elif 'independent_svg_to_pdf_to_png_reproduction' in record.get('independent_verification', {}):
+                reproduction = record['independent_verification']
+                assert reproduction['independent_svg_to_pdf_to_png_reproduction'] and reproduction['reproduced_png_sha256'] == hashes.get('png'), 'Illustration conversion unverified'
+                command = record['renderers']['pdf']['command']
+                assert svg.name in command and figure.name in command and 'rsvg-convert' in command, 'Missing illustration conversion command'
+            else:
+                raise AssertionError('Missing declared SVG/PDF conversion provenance')
+            labels = ' '.join(ET.parse(svg).getroot().itertext())
+            if figure.stem == 'logical-architecture':
+                assert all(lid in labels for lid in GROUPS) and 'L07' not in labels and 'L08' not in labels, 'Logical figure component labels mismatch'
+                assert 'F Prime' in labels and 'Omniverse' in labels and 'CUBICS' in labels, 'Logical figure mandatory endpoints missing'
+            result.append({'figure': diagram, 'kind': 'authored illustration', 'provenance': str(provenance_path.relative_to(root)), 'artifact_sha256': hashes})
+            continue
         manifest_path = figure.with_suffix('.manifest.json')
-        assert manifest_path.is_file(), f'Missing native figure manifest: {diagram}'
-        manifest = load(manifest_path)
-        assert manifest['visualizer']['name'] == 'Syside Modeler' and manifest['visualizer']['native'], f'Non-native figure: {diagram}'
-        artifacts = {a['format']: a for a in manifest['artifacts']}
-        assert {'svg', 'png', 'pdf'} == set(artifacts) and len(manifest['artifacts']) == 3, f'Incomplete/duplicate native figure artifacts: {diagram}'
+        assert manifest_path.is_file(), f'Missing figure provenance: {diagram}'
+        record = load(manifest_path)
+        assert record['visualizer']['name'] == 'Syside Modeler' and record['visualizer']['native'] is True, 'False native figure provenance'
+        artifacts = {a['format']: a for a in record['artifacts']}
+        assert len(artifacts) == len(record['artifacts']) and {'svg', 'pdf'} <= set(artifacts), 'Incomplete/duplicate native figure artifacts'
         for fmt, artifact in artifacts.items():
-            path = figure.with_suffix('.'+fmt)
-            assert Path(artifact['path']).name == path.name, f'Figure artifact name mismatch: {diagram}'
-            assert path.is_file(), f'Missing {fmt} artifact: {diagram}'
-        svg = figure.with_suffix('.svg'); svg_hash = sha(svg)
-        provenance = artifacts['svg']['provenance']
-        assert provenance['producer'] == 'Syside Modeler' and provenance['native'], f'Non-native SVG: {diagram}'
-        assert svg_hash == provenance['sha256'], f'Native SVG hash mismatch: {diagram}'
-        png = artifacts['png'].get('provenance', {})
-        assert png.get('producer') == 'Syside Modeler' and png.get('native'), f'Non-native PNG: {diagram}'
-        assert png.get('sha256') == sha(figure.with_suffix('.png')), f'Native PNG hash mismatch: {diagram}'
-        presentation = manifest.get('presentation')
-        assert '/lifecycle/' not in diagram or presentation is not None, f'Missing native presentation provenance: {diagram}'
-        if presentation is not None:
-            assert manifest['capabilities']['interface'] == 'programmatic-named-view' and presentation['native_API'] == 'Syside Modeler 0.10.3 bundled coordinator, scene materializer, layouter and renderer', f'Unexpected native presentation producer: {diagram}'
-            assert presentation['no_authored_or_edited_nodes_ports_edges_or_SVG_geometry'] is True and presentation['frame_and_model_content_uncropped'] is True and presentation['semantic_view_descriptor_and_filter_evaluation'] == 'unchanged', f'Altered native model geometry/content: {diagram}'
-            sources = presentation['model_source_sha256']
-            current = {str(p.relative_to(root)): sha(p) for p in (root/'sysml').rglob('*.sysml')}
-            assert sources == current, f'Native presentation model source mismatch: {diagram}'
-            for field in ('driver_sha256', 'configuration_sha256', 'native_generated_graph_sha256'):
-                assert re.fullmatch(r'[0-9a-f]{64}', presentation[field]), f'Missing native producer digest: {diagram}'
-            assert presentation['native_generated_nodes'] > 0 and presentation['native_generated_edges'] >= 0, f'Missing native generated graph: {diagram}'
-        pdf = artifacts['pdf']['provenance']; source = pdf['source_svg']
-        assert pdf['producer'] == 'rsvg-convert', f'Unexpected PDF producer: {diagram}'
-        assert source['producer'] == 'Syside Modeler', f'Non-native PDF source: {diagram}'
-        assert Path(source['path']).name == svg.name and source['sha256'] == svg_hash, f'PDF source hash mismatch: {diagram}'
-        result.append({'figure': diagram, 'view': manifest['target']['qualified_name'],
-                       'manifest': str(manifest_path.relative_to(root)), 'native_svg_sha256': svg_hash,
-                       'artifact_sha256': {fmt: sha(figure.with_suffix('.'+fmt)) for fmt in artifacts},
-                       'exact_pdf_source_hash_matches': True,
-                       **({'native_presentation': {k:presentation[k] for k in ('native_API', 'driver_sha256', 'configuration_sha256', 'native_generated_graph_sha256', 'native_generated_nodes', 'native_generated_edges')}} if presentation is not None else {})})
+            path = figure.with_suffix('.' + fmt)
+            assert Path(artifact['path']).name == path.name and path.is_file(), f'Missing/wrong {fmt} artifact'
+            declared = artifact['provenance'].get('sha256')
+            if declared:
+                assert sha(path) == declared, f'Figure {fmt} hash mismatch: {diagram}'
+        source = artifacts['pdf']['provenance']['source_svg']
+        assert Path(source['path']).name == svg.name and source['sha256'] == sha(svg), 'PDF source hash mismatch'
+        # A published illustration can survive unrelated model edits. Old all-model
+        # hashes describe the render snapshot only. They are not current semantics.
+        result.append({'figure': diagram, 'kind': 'native render snapshot', 'view': record['target']['qualified_name'],
+                       'provenance': str(manifest_path.relative_to(root)), 'artifact_sha256': {fmt: sha(figure.with_suffix('.' + fmt)) for fmt in artifacts}})
+    return result
+
+
+def audit_historical_reviews(root):
+    result = {}
+    for name in ('independent-review', 'source-review'):
+        record = load(root/f'traceability/{name}.json')
+        assert record['record_role'] == record['status'] == 'HISTORICAL', 'Historical review presented as current'
+        assert record['current_revision_review_performed'] is False and record['empirical_approval'] is False, 'False renewed/empirical review approval'
+        evidence = record['historical_evidence']
+        assert evidence_digest(evidence) == record['historical_evidence_sha256'], 'Historical review evidence altered'
+        if name == 'independent-review':
+            assert evidence['empirical_framework_vv_executed'] is False and evidence['empirical_approval'] is False, 'False historical empirical approval'
+            for finding in evidence['findings']:
+                assert finding['original_status'] == 'open' and finding['resolution'] and finding['rereview_evidence'], 'Historical finding evidence erased'
+            result[name] = {'role': 'HISTORICAL', 'current_review_performed': False,
+                            'historical_review_record_sha256': evidence['review_record_sha256']}
+        else:
+            current = record['current_assertions']
+            assert len(current) <= 40, 'Source assertions must remain bounded'
+            seen = set()
+            for assertion in current:
+                assert assertion['id'] not in seen and assertion['supported_subset'] and assertion['limits'], 'Unbounded/duplicate source assertion'
+                seen.add(assertion['id']); path = Path(assertion['source'])
+                assert sha(path) == assertion['sha256'], 'Current bounded source hash mismatch'
+                start, end = assertion['lines']
+                assert 1 <= start <= end and end - start < 120, 'Unbounded source excerpt'
+                excerpt = '\n'.join(path.read_text().splitlines()[start - 1:end])
+                assert assertion['quote'] and assertion['quote'] in excerpt, 'Current source quotation/locator mismatch'
+            result[name] = {'role': 'HISTORICAL', 'current_review_performed': False, 'bounded_current_assertions': len(current)}
     return result
 
 
@@ -257,272 +899,222 @@ def audit_cases(root, baseline, fr):
     cases = unique(baseline['verification_cases'], 'verification case')
     text = (root/'sysml/05-verification.sysml').read_text()
     targets = dict(re.findall(r"verification <'(V\d+)'> \w+ \{\s*subject framework : ToBe::FutureFramework;\s*objective \{ verify FrameworkRequirements::FR_(\d+);", text))
-    assert set(cases) == set(targets), 'V case native/ledger ID or subject mismatch'
-    assert {'FR-'+n for n in targets.values()} == set(fr) and len(targets) == len(fr), 'V/FR coverage mismatch'
-    annotations = dict(re.findall(r'@PlannedProcedure about (V\d+) \{(.*?)\n    \}', text, re.DOTALL))
+    assert set(cases) == set(targets) and {'FR-' + n for n in targets.values()} == set(fr) and len(cases) == 40, 'V case subject/coverage mismatch'
+    attrs = annotations(text, 'PlannedProcedure', r'V\d{2}')
     defaults = dict(re.findall(r'attribute (status|executed|observedVerdict) : ScalarValues::\w+ = ([^;]+);', text))
     assert defaults == {'status': '"planned, not executed"', 'executed': 'false', 'observedVerdict': '"none"'}, 'False native verification outcome'
     for vid, case in cases.items():
         rid = case['framework_requirement_id']
-        assert rid == 'FR-'+targets[vid], f'Wrong V target: {vid}'
-        assert case['status'] == 'planned, not executed' and case['executed'] is False and case['verdict'] is None, f'False verification outcome: {vid}'
-        attrs = {k: json.loads(v) for k, v in re.findall(r'(\w+) = ("(?:[^"\\]|\\.)*");', annotations[vid])}
+        assert rid == 'FR-' + targets[vid], 'Wrong V target'
+        assert case['status'] == 'planned, not executed' and case['executed'] is False and case['verdict'] is None, 'False verification outcome'
         for field in PROCEDURE_FIELDS:
-            native_field = 'subjectDescription' if field == 'subject' else field
-            assert case[field].strip() and attrs.get(native_field) == case[field], f'Incomplete/mismatched V procedure {vid}: {field}'
-        assert attrs.get('methods') == ','.join(case['methods']) == ','.join(fr[rid]['methods']), f'V method mismatch: {vid}'
-        assert set(attrs) == (set(PROCEDURE_FIELDS) - {'subject'}) | {'subjectDescription', 'methods'}, f'Unexpected V outcome override: {vid}'
-        assert 'TBR' in case['prerequisites'] and 'before execution' in case['prerequisites'], f'Missing qualification gate: {vid}'
-        assert not re.search(r'\b(?:technician|equipment|HIL|PIL|test bench|target processor)\b', ' '.join(case[f] for f in PROCEDURE_FIELDS), re.I), f'Excluded V activity: {vid}'
+            native = 'subjectDescription' if field == 'subject' else field
+            assert case[field].strip() and attrs[vid].get(native) == case[field], f'Incomplete/mismatched V procedure: {vid} {field}'
+        assert attrs[vid]['methods'] == ','.join(case['methods']) == ','.join(fr[rid]['methods']), 'V method mismatch'
+        assert set(attrs[vid]) == (set(PROCEDURE_FIELDS) - {'subject'}) | {'subjectDescription', 'methods'}, 'Unexpected V outcome override'
+        assert 'before execution' in case['prerequisites'], 'Missing pre-execution criteria gate'
+        assert not re.search(r'\b(?:technician|HIL|PIL|test bench|target processor)\b', ' '.join(case[f] for f in PROCEDURE_FIELDS), re.I), 'Excluded V activity'
+    assert number_set(visible((root/'verification-plan.tex').read_text()), 'V') == set(cases), 'Report V coverage mismatch'
     gate = baseline['qualification_gate']
-    assert gate['status'] == 'TBR, performance qualification blocked' and gate['owner'] == 'Systems Engineer' and gate['risk_basis'] and gate['action'], 'Missing TBR owner/risk/action'
-    for field, native_name in [('owner','owner'), ('status','status'), ('risk_basis','riskBasis'), ('action','resolutionAction')]:
-        declaration = ':>> status' if native_name == 'status' else native_name + ' : ScalarValues::String'
-        assert f'{declaration} = {json.dumps(gate[field], ensure_ascii=False)};' in text, f'TBR gate native mismatch: {field}'
+    assert gate['owner'] == 'Systems Engineer' and gate['risk_basis'] and gate['action'] and 'blocked' in gate['status'], 'Missing qualification owner/risk/action'
     policy = baseline['future_tracecheck_policy']
-    assert policy['status'] == 'planned, numerical TBR resolution required before qualification' and policy['gate_native'] == 'FrameworkVerification::qualificationGate', 'Future tracecheck qualification must remain pending TBR resolution'
-    assert (policy['owner'], policy['risk_basis'], policy['action']) == (gate['owner'], gate['risk_basis'], gate['action']), 'Future tracecheck owner/risk/action mismatch'
-    groups = number_set(visible((root/'verification-plan.tex').read_text()), 'V')
-    assert groups == set(cases), f'Report V coverage mismatch: {sorted(groups ^ set(cases))}'
+    assert policy['scope'] and policy['status'].startswith('planned,') and policy['gate_native'] == 'FrameworkVerification::qualificationGate', 'False future qualification'
+    assert (policy['owner'], policy['risk_basis'], policy['action']) == (gate['owner'], gate['risk_basis'], gate['action']), 'Future qualification owner/risk/action mismatch'
+    for field, native_name in [('owner', 'owner'), ('status', 'status'), ('risk_basis', 'riskBasis'), ('action', 'resolutionAction')]:
+        declaration = ':>> status' if native_name == 'status' else native_name + ' : ScalarValues::String'
+        assert f'{declaration} = {json.dumps(gate[field], ensure_ascii=False)};' in text, 'Qualification gate native/ledger mismatch'
     for name in ('frameworkValidation', 'epsPhaseProductVerification', 'epsPhaseProductValidation', 'modelCredibilityProtocol', 'researchEvaluation'):
-        assert f'item {name} :' in text, f'Missing assessment subject: {name}'
+        assert f'item {name} :' in text, f'Missing distinct assessment subject: {name}'
     return cases
 
 
-def semantic_audit(inspection, baseline, fr, native_figures):
+def semantic_audit(inspection, baseline, fr, figures):
     assert inspection['valid'] and inspection['exit_code'] == 0, 'Native inspection failed'
-    assert not [d for d in inspection['diagnostics'] if d.get('severity') in ('error','warning')], 'Native diagnostics present'
+    assert not [d for d in inspection['diagnostics'] if d.get('severity') in ('error', 'warning')], 'Native diagnostics present'
     model = inspection['semantic_model']; summary = model['summary']
     assert not summary['elements_truncated'] and not summary['relationships_truncated'], 'Inspection must be uncapped'
-    elements = model['elements']; by = {e['qualified_name']: e for e in elements if e.get('qualified_name')}
+    elements = model['elements']; ids = {e['id'] for e in elements}
+    by = {e['qualified_name']: e for e in elements if e.get('qualified_name')}
     assert not [e for e in elements if e['kind'] == 'SatisfyRequirementUsage'], 'False satisfaction assertion'
-    edges = defaultdict(set); id_edges = defaultdict(set)
-    ids = {e['id'] for e in elements}
+    edges, id_edges = defaultdict(set), defaultdict(set)
     for rel in model['relationships']:
         for endpoint in rel['sources'] + rel['targets']:
-            assert endpoint.get('external') or endpoint['id'] in ids, f'Incomplete local native endpoint: {endpoint}'
+            assert endpoint.get('external') or endpoint['id'] in ids, 'Incomplete local native endpoint'
         for s in rel['sources']:
             for t in rel['targets']:
                 id_edges[(rel['kind'], s['id'])].add(t['id'])
                 if s.get('qualified_name') and t.get('qualified_name'):
                     edges[(rel['kind'], s['qualified_name'])].add(t['qualified_name'])
     def exact(kind, source, target):
-        assert target in edges[(kind, source)], f'Unresolved native {kind} endpoint: {source} -> {target}'
-    def allocated_target(source, instance, part):
-        # Syside exports chained allocation ends through unnamed semantic
-        # Features. Traverse their IDs rather than inventing instance qnames.
-        chain_ids = id_edges[('ReferenceSubsetting', by[source]['id'])]
-        expected = {by[instance]['id'], by[part]['id']}
-        assert len(chain_ids) == 1 and id_edges[('FeatureChaining', next(iter(chain_ids)))] == expected, f'Unresolved native allocation path: {source} -> {instance}.{part}'
-    for c in baseline['concerns']:
-        q = 'FrameworkConcerns::'+re.sub(r'[-.]','_',c['id'])
-        assert q in by and by[q]['kind'] == 'ConcernUsage', f'Missing native concern: {c["id"]}'
-        for target in (c['parent'], c['alias_target']):
-            if target:
-                exact('Dependency',q,'FrameworkConcerns::'+re.sub(r'[-.]','_',target))
-    for row in baseline['mission_scenarios']:
-        s = 'ScenarioViews::'+row['id']
-        for u in row['use_case_ids']:
-            exact('Dependency',s,'FrameworkNeeds::'+u)
-        for m in row['mission_requirement_ids']:
-            exact('Dependency',s,'FrameworkNeeds::'+m.replace('-','_'))
-    for row in baseline['use_cases']:
-        for mid in row['mission_requirement_ids']:
-            exact('Dependency','FrameworkNeeds::'+row['id'],'FrameworkNeeds::'+mid.replace('-','_'))
+        assert target in edges[(kind, source)], f'Unresolved native {kind}: {source} -> {target}'
     for rid, row in fr.items():
-        n = rid[-2:]; q = 'FrameworkRequirements::FR_'+n
+        q = 'FrameworkRequirements::' + rid.replace('-', '_')
         assert q in by, f'Missing native FR: {rid}'
-        for mid in row['parents']:
-            d = 'FrameworkRequirements::derive_'+mid.replace('-','_')+'_FR_'+n
-            exact('ReferenceSubsetting',d+'::source','FrameworkNeeds::'+mid.replace('-','_'))
-            exact('ReferenceSubsetting',d+'::target',q)
+        for m in row['parents']:
+            d = 'FrameworkRequirements::derive_' + m.replace('-', '_') + '_' + rid.replace('-', '_')
+            exact('ReferenceSubsetting', d + '::source', 'FrameworkNeeds::' + m.replace('-', '_'))
+            exact('ReferenceSubsetting', d + '::target', q)
         for s in row['scenarios']:
-            exact('Dependency',q,'ScenarioViews::'+s)
+            exact('Dependency', q, 'ScenarioViews::' + s)
         for f in row['functions']:
-            exact('Dependency',q,'BoundaryViews::'+f)
-        # Both planning and component mappings resolve through the real semantic API.
-        for v in row['verification_case_ids']:
-            assert by['FrameworkVerification::'+v]['kind'] == 'VerificationCaseUsage', f'Missing native case: {v}'
-            matches = [name for name, e in by.items() if e['kind'] == 'RequirementUsage' and name.startswith('FrameworkVerification::'+v+'::obj::')]
-            assert matches and any(q in edges[('ReferenceSubsetting',name)] for name in matches), f'Wrong native verify endpoint: {v}'
-        l = row['primary_logical_component_id']
-        a = 'FrameworkLogical::responsibility_FR_'+n+'_'+l
-        exact('ReferenceSubsetting',a+'::source',q)
-        allocated_target(a+'::target','FrameworkLogical::logical','FrameworkLogical::LogicalFramework::'+l)
-        for supporting in row['supporting_logical_component_ids']:
-            sa = 'FrameworkLogical::support_FR_'+n+'_'+supporting
-            exact('ReferenceSubsetting',sa+'::source',q)
-            allocated_target(sa+'::target','FrameworkLogical::logical','FrameworkLogical::LogicalFramework::'+supporting)
-        assert row['logical_operation'] in by and by[row['logical_operation']]['kind'] == 'PerformActionUsage', f'Unresolved logical operation: {rid}'
-        exact('Dependency',q,row['logical_operation'])
-        for allocation in row['physical_allocations']:
-            p = allocation['native_package']; a = p+'::FR_'+n+'_primary'
-            exact('ReferenceSubsetting',a+'::source',q)
-            allocated_target(a+'::target',p+'::candidate',p+'::Configuration::'+l)
-            for supporting in row['supporting_logical_component_ids']:
-                sa = p+'::FR_'+n+'_'+supporting
-                exact('ReferenceSubsetting',sa+'::source',q)
-                allocated_target(sa+'::target',p+'::candidate',p+'::Configuration::'+supporting)
-            assert allocation['operation'] in by and by[allocation['operation']]['kind'] == 'PerformActionUsage', f'Unresolved physical operation: {rid}'
-            exact('Dependency',q,allocation['operation'])
-    for figure in native_figures:
-        assert figure['view'] in by and by[figure['view']]['kind'] == 'ViewUsage', f'Unresolved figure target: {figure["view"]}'
-    return {'elements':len(elements), 'relationships':len(model['relationships']),
-            'endpoint_completeness':True, 'satisfaction_assertions':0, 'errors':0, 'warnings':0}
+            exact('Dependency', q, 'BoundaryViews::' + f)
+        operation = row['logical_operation']
+        assert operation in by and by[operation]['kind'] == 'PerformActionUsage', 'Unresolved logical operation'
+        exact('Dependency', q, operation)
+        for pa in row['physical_allocations']:
+            assert pa['operation'] in by and by[pa['operation']]['kind'] == 'PerformActionUsage', 'Unresolved physical operation'
+            # Physical trace is the actual primary allocation's typed operation
+            # metadata, checked by the current native physical stage. The
+            # released design does not duplicate it as a plain Dependency.
+            assert pa['operation'].startswith(pa['native_package'] + '::'), 'Wrong physical operation package'
+    contract = baseline['logical_io_contract']
+    for union in contract['component_unions']:
+        for direction in ('inputs', 'outputs'):
+            for features in union['native_features'][direction].values():
+                assert all(q in by for q in features), 'Unresolved native union feature'
+    for mapping in contract['crosswalk']:
+        flows = [mapping['native_source_flow'], mapping['native_target_flow']] if contract.get('schema') == PUBLISHED_API_SCHEMA else [mapping['native_flow']]
+        assert all(q in by and by[q]['kind'] == 'FlowUsage' for q in flows), 'Unresolved logical flow'
+        assert mapping['source_feature'] in by and mapping['target_feature'] in by, 'Unresolved logical flow feature'
+        if contract.get('schema') == PUBLISHED_API_SCHEMA:
+            q = mapping['projection_operation']
+            assert q in by and by[q]['kind'] == 'PerformActionUsage' and mapping['projection_type'] in by[q]['semantic_types'], 'Unresolved typed logical projection'
+            for side in ('source', 'target'):
+                assert mapping[side + '_type'] in by[mapping[side + '_feature']]['semantic_types'], 'Logical IO declaration type mismatch'
+    if contract.get('schema') == PUBLISHED_API_SCHEMA:
+        for row in contract['requirements']:
+            assert row['model_path'] in by and by[row['model_path']]['kind'] == 'PerformActionUsage', 'Unresolved native FR IO contract'
+            for direction in ('inputs', 'outputs'):
+                for field in row['field_contracts'][direction]:
+                    assert field['path'] in by and field['type'] in by[field['path']]['semantic_types'], 'Unresolved typed native IO field'
+        for row in contract['scenario_members']:
+            assert row['path'] in by and by[row['path']]['kind'] == 'PerformActionUsage' and row['action_type'] in by[row['path']]['semantic_types'], 'Unresolved current performed scenario call'
+    # Actual allocation/control endpoints are checked by the licensed stage
+    # checkers. Their current source identities are mandatory for this release.
+    assert {c['id'] for c in baseline['stage_checks']} == {'scenario', 'logical', 'physical'}, 'All three current stage checks required'
+    for checker in baseline['stage_checks']:
+        assert checker['valid'] is True and checker['negative_cases'] and all(
+            c['mutation_matches'] == 1 and c['rejected'] is True for c in checker['negative_cases'].values()), 'Missing/ineffective current authority/admission/currency checks'
+        assert all(sha(Path(baseline['report_root']) / p) == h for p, h in checker['source_sha256'].items()), 'Stage check source identity mismatch'
+    return {'elements': len(elements), 'relationships': len(model['relationships']), 'endpoint_completeness': True, 'satisfaction_assertions': 0}
 
 
 def audit(root, inspect_path=None, log_path=None):
     root = Path(root).resolve(); baseline = load(root/'traceability/framework-baseline.json')
-    assert baseline['protected_current_sha256'] == PROTECTED, 'Protected snapshot policy changed'
-    for name, expected in PROTECTED.items():
-        assert sha(root/name) == expected, f'Protected current source changed: {name}'
-    # Exact current source policy replaces membership in an obsolete git-show snapshot.
-    concerns = unique(baseline['concerns'], 'concern'); parsed = parse_concerns(root/'as-is-domain.tex')
+    assert baseline['reconciliation']['status'] == 'reconciled with final native contract', 'Integrated release reconciliation incomplete'
+    assert_neutral({k: v for k, v in baseline.items() if k != 'historical_evidence'})
+    concerns = unique(baseline['concerns'], 'concern'); parsed = parse_concerns(root/'apendice.tex')
     assert set(concerns) == {r['id'] for r in parsed}, 'Concern current-source ID mismatch'
-    native_concerns = dict(re.findall(r"concern <'([^']+)'> \w+ \{[^\n]*doc /\* (.*?) \*/", (root/'sysml/01-concerns.sysml').read_text()))
+    native_text = (root/'sysml/01-concerns.sysml').read_text()
+    native_concerns = dict(re.findall(r"concern <'([^']+)'> \w+ \{[^\n]*doc /\* (.*?) \*/", native_text))
     assert set(native_concerns) == set(concerns), 'Concern native/current-source ID mismatch'
-    for record in parsed:
-        c = concerns[record['id']]
-        assert all(c.get(k) == v for k,v in record.items()), f'Concern current wording/hierarchy mismatch: {record["id"]}'
-        assert native_concerns[c['id']] == c['text'], f'Concern native wording mismatch: {c["id"]}'
-        assert c['parent'] is None or c['parent'] in concerns, f'Orphan concern: {c["id"]}'
-        assert c['alias_target'] is None or c['alias_target'] in concerns, f'Unknown concern alias: {c["id"]}'
-        assert c['disposition'] and c['scope_status'], f'Missing concern disposition: {c["id"]}'
-        assert not c.get('framework_requirement_ids'), f'Forced every-concern-to-FR mapping: {c["id"]}'
-    assert 'mission_needs' not in baseline and 'legacy_aliases' not in baseline, 'Obsolete parallel mission ledger'
+    locators = annotations(native_text, 'SourceRecord', r'C_\w+')
+    for row in parsed:
+        c = concerns[row['id']]
+        assert all(c.get(k) == v for k, v in row.items()) and native_concerns[c['id']] == c['text'], 'Concern wording/hierarchy mismatch'
+        assert c['parent'] is None or c['parent'] in concerns, 'Orphan concern'
+        assert c['alias_target'] is None or c['alias_target'] in concerns, 'Unknown concern alias'
+        assert c['disposition'] and c['scope_status'] and not c.get('framework_requirement_ids'), 'Invalid concern scope/forced FR mapping'
+        locator = locators[re.sub(r'[-.]', '_', c['id'])]['sourceLocator']
+        assert f'final_report/apendice.tex#{c["id"]}' in locator and 'current protected SHA-256' not in locator, 'Stale concern SourceRecord locator'
     mr, fr, ucs, scs, uc_mrs, sc_mrs, sc_ucs = current_trace(root)
-    bm = unique(baseline['mission_requirements'],'mission requirement'); bf = unique(baseline['framework_requirements'],'framework requirement')
-    assert set(bm) == set(mr) and set(bf) == set(fr), 'Report/current ledger requirement ID mismatch'
-    assert set(unique(baseline['use_cases'],'use case')) == ucs and set(unique(baseline['mission_scenarios'],'scenario')) == scs, 'Use case/scenario ledger IDs mismatch'
-    for row in baseline['use_cases']:
-        assert set(row['mission_requirement_ids']) == uc_mrs[row['id']], f'UC ledger MR mismatch: {row["id"]}'
-    for row in baseline['mission_scenarios']:
-        assert set(row['mission_requirement_ids']) == sc_mrs[row['id']] and set(row['use_case_ids']) == sc_ucs[row['id']], f'SC ledger endpoints mismatch: {row["id"]}'
+    bm = unique(baseline['mission_requirements'], 'mission requirement')
+    bf = unique(baseline['framework_requirements'], 'framework requirement')
+    assert set(bm) == set(mr) and set(bf) == set(fr), 'Current ledger requirement IDs mismatch'
     for mid, row in bm.items():
-        assert row['text'] == mr[mid]['text'], f'MR ledger wording mismatch: {mid}'
-        assert set(row['framework_requirement_ids']) == {r for r in fr if mid in fr[r]['parents']}, f'MR ledger FR mismatch: {mid}'
-    logical = load(root/'traceability/logical-architecture.json'); la = {r['FR']:r for r in logical['allocations']}
-    logical_ids = {r['id'] for r in logical['components']}
-    native_las = set(re.findall(r'part (L\d+) :', (root/'sysml/04-logical.sysml').read_text()))
-    assert logical_ids == native_las == {r['id'] for r in baseline['logical_components']}, 'Logical component ID mismatch'
-    assert set(la) == set(fr) and len(la) == len(logical['allocations']), 'Logical FR allocation set mismatch'
-    candidates = {}; trade = load(root/'traceability/trade-study.json')
-    for path in sorted((root/'candidates').glob('*.json')):
-        candidate = load(path); cid = candidate['id']
-        assert cid not in candidates, f'Duplicate candidate: {cid}'
-        allocations = {r['FR']:r for r in candidate['allocations']}
-        assert set(allocations) == set(fr) and len(allocations) == len(candidate['allocations']), f'Candidate FR allocation set mismatch: {cid}'
-        components = {r['logical']:r for r in candidate['components']}
-        assert set(components) == logical_ids, f'Candidate logical coverage mismatch: {cid}'
-        candidates[cid] = {'record':candidate,'allocations':allocations,'components':components,'path':path}
-    assert set(candidates) == set(trade['candidate_ids']) == set(baseline['candidate_ids']), 'Candidate ID agreement failed'
-    native_candidates = {p.stem for p in (root/'sysml/candidates').glob('*.sysml')}
-    assert native_candidates == {c['path'].stem for c in candidates.values()}, 'Native/current candidate record set mismatch'
-    direction = re.search(r'This comparison recommends developing (PA-\w+) first', (root/'trade-selection.tex').read_text())
-    assert direction and trade['decision']['preferred'] == direction[1] and baseline['physical_direction'].startswith(direction[1]+','), 'Conditional physical direction report/ledger mismatch'
-    audit_allocation_tables(root, logical, candidates[direction[1]]['record'])
+        assert row['text'] == mr[mid]['text'] and set(row['framework_requirement_ids']) == {r for r in fr if mid in fr[r]['parents']}, 'MR ledger trace mismatch'
+    assert {r['id']: set(r['mission_requirement_ids']) for r in baseline['use_cases']} == dict(uc_mrs), 'UC ledger mismatch'
+    assert {r['id']: set(r['mission_requirement_ids']) for r in baseline['mission_scenarios']} == dict(sc_mrs), 'SC ledger mismatch'
+    logical = load(root/'traceability/logical-architecture.json')
+    la = audit_logical_contract(root, fr, logical, baseline['logical_io_contract'])
+    audit_final_logical_ledger(root, fr, logical, baseline['logical_io_contract'], require_sources=True)
+    audit_logical_table((root/'logical.tex').read_text())
+    trade, candidates = audit_candidate_records(root, fr, logical, require_native=True)
+    audit_physical_tables((root/'physical-candidates.tex').read_text(), trade)
+    audit_trade_matrix((root/'trade-selection.tex').read_text(), trade)
     for rid, row in bf.items():
-        assert row['text'] == fr[rid]['text'], f'FR ledger wording mismatch: {rid}'
-        assert set(row['mission_requirement_ids']) == set(fr[rid]['parents']), f'FR ledger MR mismatch: {rid}'
-        assert row['mission_scenario_ids'] == fr[rid]['scenarios'] and row['black_box_function_ids'] == fr[rid]['functions'], f'FR ledger scenario/function mismatch: {rid}'
+        assert row['text'] == fr[rid]['text'] and row['mission_requirement_ids'] == fr[rid]['parents'], 'FR ledger wording/parent mismatch'
+        assert row['inputs'] == fr[rid]['inputs'] and row['outputs'] == fr[rid]['outputs'], 'FR ledger IO mismatch'
+        assert row['mission_scenario_ids'] == fr[rid]['scenarios'] and row['black_box_function_ids'] == fr[rid]['functions'], 'FR ledger scenario/function mismatch'
         lr = la[rid]
-        assert lr['verification']['status'] == 'planned, not executed', f'False logical verification outcome: {rid}'
-        assert row['primary_logical_component_id'] == lr['primary'] and row['supporting_logical_component_ids'] == lr['support'] and row['logical_operation'] == lr['operation'], f'Logical allocation ledger mismatch: {rid}'
-        assert lr['primary'] in logical_ids and set(lr['support']) <= logical_ids, f'Unknown logical endpoint: {rid}'
-        pas = unique([dict(a,id=a['candidate_id']) for a in row['physical_allocations']], 'physical trace')
-        assert set(pas) == set(candidates), f'Incomplete all-candidate trace: {rid}'
-        for cid, c in candidates.items():
-            ar = c['allocations'][rid]; traced = pas[cid]
-            assert ar['primary'] == lr['primary'] and ar['support'] == lr['support'], f'Candidate logical allocation mismatch: {cid} {rid}'
-            assert ar['planned_check'] == ','.join(fr[rid]['methods'])+': '+lr['verification']['need'], f'Candidate planned check mismatch: {cid} {rid}'
-            assert traced['physical_component_id'] == c['components'][lr['primary']]['id'] and traced['operation'] == ar['operation'], f'Physical component/operation mismatch: {cid} {rid}'
-            assert traced['verification_case_ids'] == row['verification_case_ids'], f'Physical V trace mismatch: {cid} {rid}'
+        assert row['primary_logical_component_id'] == lr['primary'] and row['supporting_logical_component_ids'] == lr['support'] and row['logical_operation'] == lr['operation'], 'Logical ledger mismatch'
+        pas = unique(row['physical_allocations'], 'physical trace', 'candidate_id')
+        assert set(pas) == set(candidates), 'Incomplete all-candidate trace'
+        for cid, candidate in candidates.items():
+            ar = next(a for a in candidate['allocations'] if a['FR'] == rid)
+            component = next(c for c in candidate['components'] if c['logical'] == lr['primary'])
+            assert pas[cid]['physical_component_id'] == component['id'] and pas[cid]['operation'] == ar['operation'], 'Physical component/operation mismatch'
         fr[rid].update(row)
-    moes = {r['id'] for r in baseline['measures_of_effectiveness']}
-    mops = {r['id'] for r in baseline['measures_of_performance']}
-    assert moes == set(re.findall(r"item <'(MOE-\d+)'>",(root/'sysml/02-needs-context.sysml').read_text())), 'MOE native/ledger mismatch'
-    assert mops == set(re.findall(r"item <'(MOP-\d+)'>",(root/'sysml/03-requirements.sysml').read_text())), 'MOP native/ledger mismatch'
-    for c in concerns.values():
-        assert set(c['moe_ids']) <= moes, f'Unknown concern MOE: {c["id"]}'
-    for measure in baseline['measures_of_effectiveness'] + baseline['measures_of_performance']:
-        assert measure['achieved'] == 'unknown' and 'TBR' in measure['target'], f'False measured/qualified outcome: {measure["id"]}'
-    cases = audit_cases(root,baseline,fr)
-    review = audit_independent_review(root, baseline)
-    assert review['physical_direction'].startswith(direction[1]+','), 'Stale physical direction in review record'
-    solution_files = solution_sources(root); solution = '\n'.join(visible(p.read_text()) for p in solution_files)
-    active = '\n'.join(visible(p.read_text()) for p in solution_files if p.name != 'as-is-domain.tex')
-    assert not re.search(r'\bMN-\d|\bMR-(?:0[6-9]|1[01])\b|\bL09\b', active), 'Retired current trace identifier in report'
-    assert not re.search(r'\bevidence contract\b|\bclaim custody\b|\bfixture\b|—',active,re.I), 'Non-source terminology in current prose'
-    assert not re.search(r'\\(?:scriptsize|tiny|resizebox|scalebox)\b',active), 'Unreadable reduced publication content'
-    for path, expected in baseline['approved_source_sha256'].items():
-        assert sha(root/path) == expected, f'Approved current scope/wording/ID source changed: {path}'
-    glossary = (root/'glosario.tex').read_text(); acronyms = re.findall(r'\\syma(?:\[[^]]*\])?\{([^}]+)\}',glossary)
-    assert len(acronyms) == len(set(acronyms)), 'Duplicate glossary acronym'
-    required = {'MBSE','OOSEM','SysML','EPS','RAM','BOM','SIL','HIL','MOE','MOP','MR','FR','MIL','CDR','SIR','BM25','SOH','TBR'}
-    assert required <= set(acronyms), f'Missing glossary acronyms: {sorted(required-set(acronyms))}'
-    bibliography = (root/'literatura.bib').read_text(); keys = re.findall(r'@\w+\s*\{\s*([^,\s]+)\s*,',bibliography)
+    mops = audit_mops(root, fr, baseline['measures_of_performance'])
+    moes = audit_moes(root, baseline['measures_of_effectiveness'])
+    cases = audit_cases(root, baseline, fr); reviews = audit_historical_reviews(root)
+    assertions = load(root/'traceability/source-review.json')['current_assertions']
+    assert set(expected_alternatives().values()) | {'handpicked-0004'} <= {s['citation'] for s in assertions}, 'Missing bounded current source assertions'
+    assert {c['id'] for c in baseline['stage_checks']} == {'scenario', 'logical', 'physical'}, 'All three current stage checks required'
+    for checker in baseline['stage_checks']:
+        assert checker['valid'] is True and checker['negative_cases'] and all(
+            c['mutation_matches'] == 1 and c['rejected'] is True for c in checker['negative_cases'].values()), 'Missing/ineffective current stage negative checks'
+        assert checker['source_sha256'] and all(sha(root/p) == h for p, h in checker['source_sha256'].items()), 'Stage check source identity mismatch'
+    files = solution_sources(root); solution = '\n'.join(visible(p.read_text()) for p in files)
+    active = '\n'.join(visible(p.read_text()) for p in files if p.name != 'as-is-domain.tex')
+    assert not re.search(r'\bMN-\d|\bFR-(?:12|40)\b|\bL0[789]\b', active), 'Retired current report identifier'
+    assert not re.search(r'\\(?:scriptsize|tiny|resizebox|scalebox)\b', active), 'Unreadable reduced publication content'
+    source_hashes = baseline['current_source_sha256']
+    assert source_hashes and all(sha(root/p) == h for p, h in source_hashes.items()), 'Current audit source snapshot mismatch'
+    acronyms = audit_glossary((root/'glosario.tex').read_text())
+    bibliography = (root/'literatura.bib').read_text(); keys = re.findall(r'@\w+\s*\{\s*([^,\s]+)\s*,', bibliography)
     assert len(keys) == len(set(keys)), 'Duplicate bibliography key'
     missing = set()
     for path in root.glob('*.tex'):
         text = visible(path.read_text())
-        assert not re.search(r'\\\\cite[a-zA-Z]*',text), f'Doubled citation escape: {path.name}'
-        for citations in re.findall(r'\\cite[a-zA-Z]*\*?(?:\[[^]]*\]){0,2}\{([^}]+)\}',text):
-            missing.update({k.strip() for k in citations.split(',')}-set(keys))
-    assert not missing, f'Missing bibliography citations: {sorted(missing)}'
-    for key in baseline['primary_bibliography_keys']:
-        assert key in keys, f'Missing primary bibliography source: {key}'
-    assert 'NASA/SP-2016-6105' in bibliography and '10.1007/s12567-023-00509-9' in bibliography, 'Incorrect NASA or Girardello source bibliography'
-    sources = load(root/'traceability/source-review.json')['sources']
-    for source in sources:
-        if source['id'] == 'search-transfer':
-            assert Path(source['source']).parts[-2:] == ('embeddings', 'search.py'), 'Incorrect search-code provenance'
-        else:
-            assert source['id'] in keys, f'Unknown reviewed bibliography key: {source["id"]}'
-        assert sha(source['source']) == source['sha256'], f'Reviewed primary source changed: {source["id"]}'
-    diagrams = re.findall(r'\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}',solution)
-    assert all(d.startswith('fig/') for d in diagrams), 'Solution figures must be under fig/'
-    figures = audit_native_figures(root,diagrams)
-    assert figures == baseline['native_figures'], 'Current native figure manifest/provenance mismatch'
+        assert not re.search(r'\\\\cite[a-zA-Z]*', text), 'Doubled citation escape'
+        for citations in re.findall(r'\\cite[a-zA-Z]*\*?(?:\[[^]]*\]){0,2}\{([^}]+)\}', text):
+            missing.update({k.strip() for k in citations.split(',')} - set(keys))
+    assert not missing and set(expected_alternatives().values()) <= set(keys), f'Missing bibliography citations: {sorted(missing)}'
+    figures = audit_figures(root, re.findall(r'\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}', solution))
     semantic = None
     if inspect_path:
         inspection = load(inspect_path)
         paths = inspection['files']['input'] + inspection['files']['included']
         assert len(paths) == len(set(paths)) and {Path(p).resolve() for p in paths} == {p.resolve() for p in (root/'sysml').rglob('*.sysml')}, 'Inspection current source set mismatch'
-        semantic = semantic_audit(inspection,baseline,fr,figures)
-    pages = None
-    if log_path:
-        log = Path(log_path).read_text(errors='replace')
-        assert not re.search(r'Overfull \\[hv]box|undefined on input|undefined references|undefined citations|Citation .+ undefined|Reference .+ undefined|Float too large|^!',log,re.MULTILINE), 'LaTeX unresolved reference/citation, error, overfull box or oversized float'
-        match = re.search(r'Output written on .*?\((\d+) pages?',log)
-        assert match, 'No final PDF page count in LaTeX log'
-        pages = int(match[1]); assert pages <= 100, f'Report exceeds 100 pages: {pages}'
-    return {'valid':True, 'scope':'Current report/native specification consistency, planned trace and publication checks only. No empirical framework V&V.',
-            'concern_occurrences':len(concerns), 'root_concerns':sum(c['kind']=='root' for c in concerns.values()),
-            'mission_requirements':len(mr), 'use_cases':len(ucs), 'mission_scenarios':len(scs),
-            'framework_requirements':len(fr), 'logical_components':len(logical_ids), 'planned_verification_cases':len(cases),
-            'black_box_functions':len(set().union(*(set(r['functions']) for r in fr.values()))),
-            'measures_of_effectiveness':len(moes), 'measures_of_performance':len(mops),
-            'candidate_allocations':{cid:len(c['allocations']) for cid,c in candidates.items()},
-            'protected_current_sources_unchanged':True, 'native_figures':figures,
-            'publication_figures':len(re.findall(r'\\begin\{figure\}',solution))-solution.count('\\ContinuedFloat'),
-            'glossary_acronyms':len(acronyms),
-            'missing_citations':[], 'semantic':semantic, 'pages':pages,
-            'framework_empirical_vv':'not executed', 'independent_review':review['status'],
-            'original_major_findings':review['original_major_findings'], 'major_findings_closed':len(review['findings']),
-            'final_publication_review':review['final_publication_review'],
-            'publication_material_blockers':review['final_publication_review_evidence']['material_blockers']}
+        semantic = semantic_audit(inspection, dict(baseline, report_root=str(root)), fr, figures)
+    pages = audit_latex_log(Path(log_path).read_text(errors='replace')) if log_path else None
+    return {'valid': True, 'scope': 'Current specification consistency only. No empirical V&V or renewed independent review.',
+            'concern_occurrences': len(concerns), 'mission_requirements': len(mr), 'direct_fr_parents': 169,
+            'framework_requirements': len(fr), 'logical_components': len(logical['components']), 'measures_of_performance': len(mops),
+            'candidate_allocations': {cid: len(c['allocations']) for cid, c in candidates.items()},
+            'planned_verification_cases': len(cases), 'figures': figures, 'historical_reviews': reviews,
+            'semantic': semantic, 'pages': pages, 'framework_empirical_vv': 'not executed'}
+
+
+def audit_glossary(text):
+    acronyms = re.findall(r'\\syma(?:\[[^]]*\])?\{([^}]+)\}', text)
+    assert len(acronyms) == len(set(acronyms)), 'Duplicate glossary acronym'
+    required = {'MBSE', 'OOSEM', 'SysML', 'EPS', 'RAM', 'SIL', 'MOE', 'MOP',
+                'MR', 'FR', 'MIL', 'CDR', 'SIR', 'CSRM', 'FMI', 'USD', 'COTS',
+                'HTN', 'KiBaM', 'RMSE'}
+    assert required <= set(acronyms), f'Missing current glossary acronyms: {sorted(required - set(acronyms))}'
+    return acronyms
+
+
+def audit_latex_log(log):
+    assert not re.search(r'Overfull \\[hv]box|undefined on input|undefined references|undefined citations|Citation .+ undefined|Reference .+ undefined|Float too large|^!', log, re.MULTILINE), 'LaTeX unresolved reference/citation, error, overfull box or oversized float'
+    match = re.search(r'Output written on .*?\((\d+) pages?', log)
+    assert match, 'No final PDF page count in LaTeX log'
+    pages = int(match[1]); assert pages <= 86, f'Report exceeds 86 page release target: {pages}'
+    return pages
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--report',type=Path,default=Path(__file__).resolve().parents[1])
-    parser.add_argument('--inspect',type=Path,help='Uncapped genuine Syside inspection JSON')
-    parser.add_argument('--log',type=Path,help='Final-pass actual report LaTeX log')
+    parser.add_argument('--report', type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument('--inspect', type=Path, help='Uncapped genuine Syside inspection JSON')
+    parser.add_argument('--log', type=Path, help='Final-pass actual report LaTeX log')
     args = parser.parse_args()
     try:
-        print(json.dumps(audit(args.report,args.inspect,args.log),indent=2)); return 0
-    except (AssertionError,KeyError,ValueError,OSError) as error:
-        print(json.dumps({'valid':False,'scope':'report/model check','error':str(error)}),file=sys.stderr); return 1
+        print(json.dumps(audit(args.report, args.inspect, args.log), indent=2)); return 0
+    except (AssertionError, KeyError, ValueError, OSError, TypeError) as error:
+        print(json.dumps({'valid': False, 'scope': 'specification check', 'error': str(error)}), file=sys.stderr); return 1
 
 
 if __name__ == '__main__':

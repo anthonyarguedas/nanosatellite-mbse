@@ -3,17 +3,18 @@
 # requires-python = "==3.12.*"
 # dependencies = []
 # ///
-"""Check the current logical specification through licensed Syside semantics.
+"""Audit six logical responsibilities using real licensed Syside semantics.
 
-This checks planned allocations, typed information, actual guarded behavior and
-report/ledger agreement. It executes no framework or EPS product V&V. Run the
-whole model check separately as well. All current dependencies are included.
-
-Run: uv run check_logical_responsibilities.py --negative-cases
+--source-only checks the final report contract and the seven-file native source
+boundary. --core-only checks the nine-file logical boundary independently of
+physical candidates. A pending native ledger never counts as an architecture
+pass. This checks planned design consistency, not executed framework/EPS V&V.
 """
 from __future__ import annotations
 
 import argparse
+from collections import Counter
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -21,79 +22,33 @@ import re
 import shutil
 import sys
 import tempfile
+import tomllib
 
-FILES = tuple(f'{n}.sysml' for n in (
-    '00-domain', '01-concerns', '02-needs-context', '03-requirements',
-    '04-logical', '05-verification', '06-system-context', '07-report-views',
-    '08-physical-vocabulary', '09-scenarios', '10-interface-views',
-    '11-logical-responsibilities')) + tuple(
-    f'candidates/{n}.sysml' for n in ('comet', 'custom', 'git-yaml', 'nanospace', 'valispace'))
-EXPECTED = {
-    "L01": {8: "checkTransfer", 37: "makeViews"},
-    "L02": {2: "checkDraft", 3: "recommend", 29: "dispose", 39: "recommend", 41: "acknowledge"},
-    "L03": {1: "retainRequirements", 4: "traceLinks", 17: "deriveAllocate"},
-    "L04": {12: "budgetSize", 13: "budgetSize", 14: "compareDesigns", 15: "defineDesign",
-            20: "budgetSize", 25: "defineDesign", 33: "defineInterfaces",
-            34: "defineInterfaces", 35: "defineInterfaces"},
-    "L05": {10: "replay", 16: "planAnalysis", 18: "planAnalysis", 19: "planMIL",
-            23: "planAnalysis", 24: "compareMILSil", 26: "planAnalysis",
-            27: "planAnalysis", 36: "coordinateCoding"},
-    "L06": {21: "assessModel", 22: "proposeCalibration", 31: "assessModel", 32: "assessModel"},
-    "L07": {11: "assessProduct", 28: "planAssessment", 38: "prepareReview", 42: "recordReview"},
-    "L08": {5: "invalidate", 6: "successor", 7: "retrieveBaseline", 9: "preserveRun", 30: "invalidate"},
+SOURCE_FILES = tuple(f"{n}.sysml" for n in (
+    "00-domain", "01-concerns", "02-needs-context", "03-requirements",
+    "06-system-context", "09-scenarios", "10-interface-views"))
+CORE_FILES = SOURCE_FILES + ("04-logical.sysml", "11-logical-responsibilities.sysml")
+FILES = CORE_FILES + ("05-verification.sysml", "07-report-views.sysml", "08-physical-vocabulary.sysml") + tuple(
+    f"candidates/{n}.sysml" for n in ("comet", "custom", "git-yaml", "nanospace", "valispace"))
+GROUPS = {
+    "L01": ("Requirements and guidance", "RequirementsAssistance", (1, 2, 3, 4, 17, 29, 39, 41)),
+    "L02": ("Mission and EPS design", "MissionDesign", (13, 14, 15, 20, 25, 33, 35)),
+    "L03": ("Simulation and software integration", "SimulationIntegration", (10, 16, 18, 19, 23, 24, 26, 27, 34, 36)),
+    "L04": ("Model credibility", "ModelCredibility", (21, 22, 31, 32)),
+    "L05": ("Evidence and technical review", "EvidenceReview", (11, 28, 37, 38, 42)),
+    "L06": ("Configuration and controlled exchange", "ConfigurationExchange", (5, 6, 7, 8, 9, 30)),
 }
-PORTS = {8: {1, 2, 3, 4, 6}, 9: {3, 4}, 10: {3, 4}, 11: {1, 6}, 18: {3}, 19: {3},
-         21: {2, 3}, 22: {1, 2}, 23: {3, 4}, 24: {3, 4}, 27: {3}, 31: {2, 3, 4},
-         32: {2, 3, 4}, 36: {4}, 38: {1, 6}, 42: {6}, 3: {1, 2}}
-# Independent control invariants. These resolve to native TransitionUsage guards
-# and their actual targets, rather than dependencies to prose guard descriptions.
-GUARDS = {
-    "AssistanceRealization": {
-        "admitInput": ("receive.compatible", "capture"),
-        "admitReply": ("checkReply.sameContext", "present"),
-        "admitDisposition": ("dispose.authorized and checkApplication.sameContext", "applyCorrection"),
-        "applyAuthorized": ("dispose.applyRequested", "derive"),
-        "validRequirements": ("validate.resolved", "retainValidation"),
-    },
-    "DesignRealization": {
-        "admitInput": ("receive.compatible", "configure"),
-        "admitResult": ("receiveResult.compatible", "preserve"),
-        "admitModel": ("checkCurrent.current and credibility.numericallyValid and credibility.applicable", "assess"),
-        "admitCriteria": ("assess.claimSupported", "compare"),
-        "admitSelection": ("compare.feasible and select.accepted and checkSelection.authorizedCurrent", "retainSelection"),
-    },
-    "SoftwareRealization": {
-        "admitInput": ("receive.compatible", "interfaces"),
-        "admitMIL": ("receiveMIL.compatible", "preserveMIL"),
-        "authorizeCoding": ("checkRelease.authorizedDetailedDesign and checkRelease.currentDesign and checkRelease.blockersClear and interfaces.profileCompatible", "coordinate"),
-        "admitSIL": ("receiveSIL.compatible", "preserveSIL"),
-        "admitProducts": ("checkCurrent.current and credibility.numericallyValid and credibility.applicable and assess.claimSupported", "present"),
-        "admitApproval": ("checkProducts.authorizedCurrent", "retainProducts"),
-    },
-    "ChangeReviewRealization": {
-        "admitInput": ("receive.compatible", "invalidate"),
-        "proposedChange": ("invalidate.hasChange", "changeDecision"),
-        "admitChange": ("checkChange.authorizedCurrent and checkChange.acceptedChange", "successor"),
-        "repeatAffected": ("checkChange.reassessmentRequired", "planRepeat"),
-        "admitResult": ("receiveResult.compatible", "preserve"),
-        "preparePackage": ("prepare.entranceComplete", "reviewers"),
-        "admitReviewDecision": ("checkDecision.authorized and checkDecision.current and checkDecision.decisionConsistent and (checkDecision.blocking or not checkDecision.conditional or checkDecision.conditionsComplete)", "record"),
-    },
-    "ReplayRealization": {
-        "admitReplay": ("prepare.dependenciesComplete and prepare.rulesFixed", "execute"),
-        "admitResult": ("receive.compatible", "preserve"),
-    },
-    "CalibrationRealization": {
-        "admitData": ("receive.compatible", "checkData"),
-        "admitCalibration": ("checkData.dataUsable and checkData.independentSeparation", "propose"),
-        "admitCalibrationChange": ("checkChange.authorizedCurrent and checkChange.acceptedChange", "successor"),
-        "admitReassessedResult": ("receiveResult.compatible", "preserve"),
-    },
+RETIRED = {"FR-12", "FR-40"}
+# Independent invariants, rather than acceptance conditions invented by a ledger.
+SAFETY_FAMILIES = {
+    "compatibility_before_registration", "immediate_context_invalidation",
+    "latest_context_before_presentation", "authorized_current_requested_application",
+    "authorized_current_successor", "exact_detailed_design_release_before_build",
+    "raw_missing_invalid_inactive_samples", "independent_calibration_assessment",
+    "critical_gaps_block_claims", "authorized_current_consistent_review",
+    "renewed_authorized_condition_closure", "replay_dependencies_and_fixed_rules",
+    "all_execution_statuses_optional_numerical_payloads",
 }
-
-
-GUARDS["ConceptRealization"] = dict(GUARDS["DesignRealization"])
-GUARDS["ConceptRealization"]["admitInput"] = ("receive.compatible", "makeConfiguration")
 
 
 def require(condition, message):
@@ -102,397 +57,693 @@ def require(condition, message):
 
 
 def qn(element):
-    return str(element.qualified_name) if element.qualified_name else ""
+    return str(element.qualified_name) if element is not None and element.qualified_name else ""
 
 
 def compact(text):
     return re.sub(r"\s+", "", text)
 
 
-def check(tool, root, ledger_path, report_path):
-    ledger = json.loads(ledger_path.read_text())
-    result = tool.validate([root / name for name in FILES], [], warnings_as_errors=True,
-                           config=root / "logical-responsibilities.toml")
-    model, api = tool.require_semantic_model(result)
-    elements = list(model.nodes(api.Element, include_subtypes=True))
-    by = {qn(e): e for e in elements if e.qualified_name}
-    compiler = api.Compiler()
+def unique_rows(rows, key, label):
+    counts = Counter(row[key] for row in rows)
+    require(all(n == 1 for n in counts.values()), f"Duplicate {label}")
+    return {row[key]: row for row in rows}
 
-    def values(annotation):
-        out = {}
-        for feature in annotation.owned_features:
-            value, diagnostics = compiler.evaluate_feature(feature, annotation)
-            require(bool(diagnostics), f"Cannot evaluate {feature.name}")
-            out[feature.name] = value
-        return out
 
-    def annotations(element, typename):
-        return [e for e in elements if isinstance(e, api.MetadataUsage)
+def expand_numbers(cell):
+    numbers = []
+    for term in cell.strip().split(","):
+        term = term.strip()
+        require(bool(re.fullmatch(r"\d{2}(?:--\d{2})?", term)), f"Invalid number list: {cell}")
+        bounds = list(map(int, term.split("--")))
+        require(bounds[0] <= bounds[-1], "Reversed range")
+        numbers.extend(range(bounds[0], bounds[-1] + 1))
+    require(len(numbers) == len(set(numbers)), "Duplicate number in row")
+    return numbers
+
+
+def parse_requirements(text):
+    # This parses TeX only. Native models are always parsed by Syside.
+    pattern = r"^FR-(\d{2}) & (.*?)\\par \\textit\{Inputs:\} (.*?)\\par \\textit\{Outputs:\} (.*?) & ([\d, -]+) \\\\"
+    rows = [{"FR": f"FR-{m[1]}", "statement": m[2], "inputs_verbatim": m[3],
+             "outputs_verbatim": m[4], "parents": [f"MR-{n:02}" for n in expand_numbers(m[5])]}
+            for m in re.finditer(pattern, text, re.M)]
+    require(rows, "No report requirement rows")
+    return unique_rows(rows, "FR", "report FR")
+
+
+def parse_logical_table(text):
+    # Column 1 is name plus ID. Column 2 is FRs. Column 3 is interfaces.
+    pattern = r"^(L\d{2}) ([^&\n]+) & ([\d, -]+) & (.+?) \\\\"
+    rows = [{"id": m[1], "name": m[2].strip(), "FR": [f"FR-{n:02}" for n in expand_numbers(m[3])],
+             "interfaces": m[4]} for m in re.finditer(pattern, text, re.M)]
+    return unique_rows(rows, "id", "logical table component")
+
+
+def expected_union(allocations, cid, direction):
+    fields = {}
+    for row in allocations:
+        if row["primary"] == cid:
+            for field in row[direction]:
+                require(isinstance(field, str) and field, "Empty/non-string IO field")
+                fields.setdefault(field, set()).add(row["FR"])
+    return fields
+
+
+def validate_source_contract(ledger, requirements_text, logical_text):
+    source = parse_requirements(requirements_text)
+    active = {f"FR-{n:02}" for _, _, group in GROUPS.values() for n in group}
+    require(set(source) == active and not RETIRED.intersection(source), "Missing or retired report FR")
+    allocations = unique_rows(ledger["allocations"], "FR", "allocation")
+    require(set(allocations) == set(source), "Missing or retired allocation")
+    contract = unique_rows(ledger["source_contract"]["entries"], "FR", "source contract FR")
+    require(set(contract) == set(source), "Source contract coverage")
+    components = unique_rows(ledger["components"], "id", "component")
+    require(set(components) == set(GROUPS), "Wrong logical component set")
+    table = parse_logical_table(logical_text)
+    require(set(table) == set(GROUPS), "Missing/obsolete logical table rows")
+    counts = Counter(fr for row in table.values() for fr in row["FR"])
+    require(set(counts) == set(source) and all(n == 1 for n in counts.values()), "Missing/duplicate/retired table allocation")
+    for cid, (name, definition, group) in GROUPS.items():
+        expected = {f"FR-{n:02}" for n in group}
+        component = components[cid]
+        require(component["name"] == table[cid]["name"] == name, "Logical name disagreement")
+        require(len(component["primary_FR"]) == len(set(component["primary_FR"])) and
+                set(table[cid]["FR"]) == set(component["primary_FR"]) == expected,
+                "Logical table/ledger primary mismatch")
+        require(component["native_part"] == f"FrameworkLogical::LogicalFramework::{cid}" and
+                component["native_type"] == f"FrameworkLogical::{definition}", "Unapproved public export")
+        for fr in expected:
+            require(allocations[fr]["primary"] == cid, "Wrong primary allocation")
+        for direction in ("inputs", "outputs"):
+            union = unique_rows(component["io_union"][direction], "field", "union field")
+            expected_fields = expected_union(ledger["allocations"], cid, direction)
+            require(set(union) == set(expected_fields), "IO union mismatch")
+            for field, provenance in expected_fields.items():
+                refs = union[field]["provenance"]
+                require(len(refs) == len(set(refs)) and set(refs) == provenance, "IO union provenance mismatch")
+    for fr, row in allocations.items():
+        for direction in ("inputs", "outputs"):
+            require(row[direction] and len(row[direction]) == len(set(row[direction])), "Missing/duplicate per-FR IO field")
+        for key in ("statement", "inputs_verbatim", "outputs_verbatim", "parents"):
+            require(row[key] == contract[fr][key] == source[fr][key], f"Stale final FR contract: {fr} {key}")
+        for key in ("inputs", "outputs", "verification", "native_mop"):
+            require(row[key] == contract[fr][key], f"Changed final source contract: {fr} {key}")
+        require(row["verification"]["status"] == "planned, not executed", "False verification outcome")
+        require(row["native_mop"] == f"FrameworkRequirements::MOP_FR{fr[-2:]}", "Obsolete MOP name")
+    exchanges = unique_rows(ledger["exchanges"], "name", "exchange")
+    for row in exchanges.values():
+        require(row["source_component"] in GROUPS and row["target_component"] in GROUPS, "Exchange component missing")
+        require(row["source_component"] != row["target_component"], "Non-peer exchange")
+        require(row["kind"] in {"information", "control"} and row["bindings"], "Untyped/empty exchange intent")
+        for binding in row["bindings"]:
+            require(binding["source_direction"] == "out" and binding["target_direction"] == "in", "Exchange direction mismatch")
+            for end, direction in (("source", "outputs"), ("target", "inputs")):
+                fr = binding[f"{end}_FR"]
+                require(fr in allocations and allocations[fr]["primary"] == row[f"{end}_component"], "Exchange FR provenance/owner mismatch")
+                fields = binding[f"{end}_fields"]
+                categories = allocations[fr]["native_io"][direction] if ledger.get("native_status") in {"ready", "verified"} else allocations[fr][direction]
+                require(fields and len(fields) == len(set(fields)) and set(fields) <= set(categories), "Exchange IO field provenance mismatch")
+            require(bool(binding["mapping"]), "Differently named fields need an explicit mapping")
+    return source
+
+
+def validate_guard(actual, expected, target, expected_target):
+    require(compact(actual) == compact(expected), "Lost required safety guard")
+    require(target == expected_target, "Safety guard controls wrong action")
+
+
+def reachable_without_gate(edges, starts):
+    reachable = set(starts)
+    while True:
+        expanded = reachable | {b for a, b in edges if a in reachable}
+        if expanded == reachable:
+            return reachable
+        reachable = expanded
+
+
+def mutate_exact(text, selector, replacement):
+    # Crucially outside a rejection-catching try block. No match is a failed test.
+    require(selector and text.count(selector) == 1, "Negative mutation selector must match exactly once")
+    require(selector != replacement, "Negative mutation must change source")
+    return text.replace(selector, replacement, 1)
+
+
+class Native:
+    def __init__(self, tool, root, files):
+        result = tool.validate([root / f for f in files], [], warnings_as_errors=True, config=None)
+        try:
+            self.model, self.api = tool.require_semantic_model(result)
+        except tool.ToolError as error:
+            if error.exit_code == 1:
+                details = "; ".join(d.message for d in result.diagnostics[:6])
+                raise ValueError(f"Native model invalid ({result.summary}): {details or error}") from error
+            raise RuntimeError(f"Native tooling unavailable: {error}") from error
+        self.elements = list(self.model.nodes(self.api.Element, include_subtypes=True))
+        self.by = {qn(e): e for e in self.elements if e.qualified_name}
+        for element in self.elements:
+            if isinstance(element, self.api.Feature):
+                for typename in element.types:
+                    if typename.qualified_name:
+                        self.by.setdefault(qn(typename), typename)
+        self.compiler = self.api.Compiler()
+
+    def annotations(self, element, typename):
+        return [e for e in self.elements if isinstance(e, self.api.MetadataUsage)
                 and element in e.annotated_elements and any(qn(t) == typename for t in e.types)]
 
-    def dependencies(element):
-        return {t for e in elements if isinstance(e, api.Dependency) and element in e.sources
-                for t in e.targets}
+    def values(self, annotation):
+        values = {}
+        for feature in annotation.owned_features:
+            value, diagnostics = self.compiler.evaluate_feature(feature, annotation)
+            require(bool(diagnostics), f"Cannot evaluate native feature {feature.name}")
+            values[feature.name] = value
+        return values
 
-    def chain(feature):
-        return list(feature.chaining_features) or [feature]
+    def dependencies(self, element):
+        return {t for e in self.elements if isinstance(e, self.api.Dependency)
+                and element in e.sources for t in e.targets}
 
-    logical = by["FrameworkLogical::LogicalFramework"]
-    require(logical.conforms(by["FrameworkDomain::ToBe::FutureFramework"]),
-            "Logical design must specialize the current black box")
+    def require_element(self, name):
+        require(name in self.by, f"Unresolved native export: {name}")
+        return self.by[name]
+
+
+def chain(feature):
+    return list(feature.chaining_features) or [feature]
+
+
+def array(value):
+    return [value] if isinstance(value, str) else list(value)
+
+
+def check_native_source(native, ledger, source):
+    by, elements, api = native.by, native.elements, native.api
+    actual = {e.name.replace("FR_", "FR-") for e in elements
+              if type(e).__name__ == "RequirementUsage" and qn(e.owner) == "FrameworkRequirements"}
+    require(actual == set(source), "Native active FR set differs from report")
+    for row in ledger["allocations"]:
+        fr = native.require_element(row["native_requirement"])
+        metadata = native.annotations(fr, "FrameworkDomain::SourceRecord")
+        require(len(metadata) == 1 and native.values(metadata[0])["sourceText"] == row["statement"], "Native/report requirement meaning mismatch")
+        checks = native.annotations(fr, "FrameworkRequirements::PlannedRequirementCheck")
+        require(len(checks) == 1, "Missing planned requirement check")
+        check = native.values(checks[0])
+        require(check["methods"] == row["verification"]["methods"] and check["checkSummary"] == row["verification"]["need"], "Changed planned check meaning")
+        io = native.annotations(fr, "FrameworkRequirements::RequirementExchange")
+        if io:
+            require(len(io) == 1, "Duplicate source IO metadata")
+            fields = native.values(io[0])
+            for direction in ("inputs", "outputs"):
+                require(array(fields[direction]) == row[direction], "Native final source IO mismatch")
+        else:
+            for direction in ("inputs", "outputs"):
+                require(row[direction] == [row[f"{direction}_verbatim"]], "Invented source IO partition")
+        # Native derivation ends, not a regex over model source or inferred MR parents.
+        parents = set()
+        for connection in elements:
+            if type(connection).__name__ != "ConnectionUsage" or qn(connection.owner) != "FrameworkRequirements":
+                continue
+            ends = {e.name: getattr(e, "referenced_feature", None) for e in connection.owned_features}
+            if ends.get("target") == fr and qn(ends.get("source")).startswith("FrameworkNeeds::MR_"):
+                parents.add(ends["source"].name.replace("MR_", "MR-"))
+        require(parents == set(row["parents"]), "Native/report MR derivation mismatch")
+        mop = native.require_element(row["native_mop"])
+        require(fr in native.dependencies(mop), "MOP lost direct final FR dependency")
+
+
+GUARDS = {'AssistanceRealization': {'admitInput': ['receive.compatible', 'capture'], 'admitReply': ['checkReply.sameContext', 'present'], 'admitDisposition': ['dispose.authorized and checkApplication.sameContext', 'applyCorrection'], 'applyAuthorized': ['dispose.applyRequested', 'derive'], 'validRequirements': ['validate.resolved', 'retainValidation']}, 'DesignRealization': {'admitInput': ['receive.compatible', 'configure'], 'admitResult': ['receiveResult.compatible', 'preserve'], 'admitModel': ['checkCurrent.current and credibility.numericallyValid and credibility.applicable', 'assess'], 'admitCriteria': ['assess.claimSupported', 'compare'], 'admitSelection': ['compare.feasible and select.accepted and checkSelection.authorizedCurrent', 'retainSelection']}, 'SoftwareRealization': {'admitInput': ['receive.compatible', 'interfaces'], 'admitMIL': ['receiveMIL.compatible', 'preserveMIL'], 'authorizeCoding': ['checkRelease.authorizedDetailedDesign and checkRelease.currentDesign and checkRelease.blockersClear and interfaces.profileCompatible and mapping.profileCompatible', 'coordinate'], 'admitSIL': ['receiveSIL.compatible', 'preserveSIL'], 'admitProducts': ['checkCurrent.current and credibility.numericallyValid and credibility.applicable and assess.claimSupported', 'present'], 'admitApproval': ['checkProducts.authorizedCurrent', 'retainProducts']}, 'ChangeReviewRealization': {'admitInput': ['receive.compatible', 'invalidate'], 'proposedChange': ['invalidate.hasChange', 'changeDecision'], 'admitChange': ['checkChange.authorizedCurrent and checkChange.acceptedChange', 'successor'], 'repeatAffected': ['checkChange.reassessmentRequired', 'planRepeat'], 'admitResult': ['receiveResult.compatible', 'preserve'], 'preparePackage': ['prepare.entranceComplete', 'reviewers'], 'admitReviewDecision': ['checkDecision.authorized and checkDecision.current and checkDecision.decisionConsistent and (checkDecision.blocking or not checkDecision.conditional or checkDecision.conditionsComplete)', 'record']}, 'ReplayRealization': {'admitReplay': ['prepare.dependenciesComplete and prepare.rulesFixed', 'execute'], 'admitResult': ['receive.compatible', 'preserve']}, 'CalibrationRealization': {'admitData': ['receive.compatible', 'checkData'], 'admitCalibration': ['checkData.dataUsable and checkData.independentSeparation', 'propose'], 'admitCalibrationChange': ['checkChange.authorizedCurrent and checkChange.acceptedChange', 'successor'], 'admitReassessedResult': ['receiveResult.compatible', 'preserve']}, 'ConceptRealization': {'admitInput': ['receive.compatible', 'makeConfiguration'], 'admitResult': ['receiveResult.compatible', 'preserve'], 'admitModel': ['checkCurrent.current and credibility.numericallyValid and credibility.applicable', 'assess'], 'admitCriteria': ['assess.claimSupported', 'compare'], 'admitSelection': ['compare.feasible and select.accepted and checkSelection.authorizedCurrent', 'retainSelection']}}
+
+RECORD_FIELDS = [('FrameworkLogical::RunWork::result', 'BoundaryViews::AnalysisResult', '0..1', False), ('FrameworkLogical::RunWork::milResult', 'BoundaryViews::AnalysisResult', '0..1', False), ('FrameworkLogical::ReplayComparison::result', 'BoundaryViews::AnalysisResult', '0..1', False), ('BoundaryViews::HistorySample::numericValue', 'ScalarValues::Real', '0..1', True), ('BoundaryViews::HistorySample::sampleTimeSeconds', 'ScalarValues::Real', '0..1', True), ('BoundaryViews::HistorySample::receiptTimeSeconds', 'ScalarValues::Real', '0..1', True), ('BoundaryViews::HistorySample::rawValue', 'ScalarValues::String', '1', False), ('BoundaryViews::HistorySample::validInvalidMissingInactive', 'ScalarValues::String', '1', False), ('BoundaryViews::HistorySample::processingMaskAndReason', 'ScalarValues::String', '1', False), ('BoundaryViews::HistorySample::modelScenarioEntityChannelRevision', 'ScalarValues::String', '1', False), ('BoundaryViews::HistorySample::quantityKindUnitSignFrame', 'ScalarValues::String', '1', False), ('BoundaryViews::HistorySample::scenarioTimeBase', 'ScalarValues::String', '1', False), ('BoundaryViews::SoftwareRunResult::product', 'BoundaryViews::HostSoftwareProduct', '0..1', False), ('BoundaryViews::ReferenceData::samples', 'BoundaryViews::HistorySample', '0..*', False), ('BoundaryViews::ModelAssessment::calibrationDataRevision', 'ScalarValues::String', '0..1', False), ('BoundaryViews::ModelAssessment::independentAssessmentDataRevision', 'ScalarValues::String', '0..1', False), ('BoundaryViews::AnalysisResult::executionSuccessFailedCancelledPartial', 'ScalarValues::String', '1', False), ('FrameworkLogical::ExecutionStatusRecord::successFailedCancelledPartial', 'ScalarValues::String', '1', False), ('FrameworkLogical::ExecutionStatusRecord::numericalPayload', 'BoundaryViews::ReferenceData', '0..*', False), ('FrameworkLogical::RetainSuccessor::decision', 'BoundaryViews::EngineeringDecision', '1', False), ('FrameworkLogical::DetailedDesignAuthorization::decision', 'BoundaryViews::EngineeringDecision', '1', False), ('FrameworkLogical::DetailedDesignAuthorization::context', 'BoundaryViews::ContextRevision', '1', False)]
+
+def direction(feature):
+    return str(feature.direction).split(".")[-1].lower() if feature.direction is not None else None
+
+
+def multiplicity(feature):
+    value = feature.multiplicity
+    if value is None:
+        return "1"
+    low, high = value.lower_bound, value.upper_bound
+    require(type(low).__name__ == "LiteralInteger", "Unresolved multiplicity lower bound")
+    upper = "*" if type(high).__name__ == "LiteralInfinity" else str(high.value)
+    return str(low.value) if str(low.value) == upper else f"{low.value}..{upper}"
+
+
+def flow_record(native, flow):
+    ends = {e.name: e for e in flow.owned_features if type(e).__name__ == "FlowEnd"}
+    require(set(ends) == {"source", "target"}, "Flow lacks two actual native ends")
+    result = {"native": qn(flow), "ends": {}}
+    for name, context in (("source", flow.source_feature), ("target", list(flow.target_features)[0])):
+        parameters = list(ends[name].owned_features)
+        require(len(parameters) == 1, "Flow end parameter missing/ambiguous")
+        parameter = parameters[0]
+        redefinitions = list(parameter.owned_redefinitions)
+        require(len(redefinitions) == 1, "Flow end must redefine its resolved declared parameter")
+        declaration = redefinitions[0].redefined_feature
+        result["ends"][name] = {"context": [qn(e) for e in chain(context)], "parameter": qn(declaration)}
+    payloads = list(flow.payload_types)
+    result["payload_basis"] = "explicit flow type" if payloads else "resolved producer parameter type"
+    if not payloads:
+        payloads = list(native.require_element(result["ends"]["source"]["parameter"]).types)
+    leaves = [t for t in payloads if not any(t != other and other.conforms(t) and not t.conforms(other) for other in payloads)]
+    require(len(leaves) == 1, f"Flow payload missing/ambiguous: {qn(flow)} {[qn(t) for t in payloads]}")
+    result["payload"] = qn(leaves[0])
+    for name, end in result["ends"].items():
+        parameter = native.require_element(end["parameter"])
+        require(any(t.conforms(leaves[0]) if name == "source" else leaves[0].conforms(t) for t in parameter.types), "Flow payload/parameter conformance mismatch")
+    return result
+
+
+def binding_record(binding):
+    targets = list(binding.target_features)
+    require(len(targets) == 1, "Ambiguous native binding")
+    return {"source": [qn(e) for e in chain(binding.source_feature)],
+            "target": [qn(e) for e in chain(targets[0])]}
+
+
+def check_native_architecture(native, ledger):
+    require(ledger["native_status"] in {"ready", "verified"} and ledger["native_contract"] is not None,
+            "Native architecture synchronization incomplete")
+    by, elements, api = native.by, native.elements, native.api
+    logical = native.require_element("FrameworkLogical::LogicalFramework")
+    require(logical.conforms(native.require_element("FrameworkDomain::ToBe::FutureFramework")), "Logical root changed black-box meaning")
     parts = {p.name: p for p in logical.owned_features if type(p).__name__ == "PartUsage"}
-    require(set(parts) == set(EXPECTED), "Wrong current logical component set")
-    require({r.name for r in elements if type(r).__name__ == "RequirementUsage"
-             and qn(r.owner) == "FrameworkRequirements"}
-            == {f"FR_{n:02}" for n in range(1, 40)} | {"FR_41", "FR_42"},
-            "Current FR set changed or retired FR-40 restored")
-    require(not any(type(e).__name__ == "SatisfyRequirementUsage" and
-                    qn(e).startswith(("FrameworkLogical::", "LogicalRealization::"))
-                    for e in elements), "Planned allocations must not assert satisfaction")
-    forbidden = {"FrameworkDomain::TestingFacilityTechnician", "FrameworkDomain::EPSHardware",
-                 "FrameworkDomain::AsIs::TestingFacility"}
-    require(not any(type(e).__name__ == "PartUsage" and
-                    qn(e).startswith(("FrameworkLogical::", "LogicalRealization::")) and
-                    forbidden.intersection(qn(t) for t in e.types) for e in elements),
-            "Physical participant or execution obligation leaked into logical design")
-
-    component_rows = {row["id"]: row for row in ledger["components"]}
-    require(set(component_rows) == set(parts), "Ledger component coverage")
+    require(set(parts) == set(GROUPS), "Native component coverage")
+    for name in ledger["native_contract"]["retired_exports"]:
+        require(name not in by, "Obsolete logical export restored")
+    owned = [e for e in elements if qn(e).startswith(("FrameworkLogical::", "LogicalRealization::"))]
+    require(not any(type(e).__name__ == "SatisfyRequirementUsage" for e in owned), "Planned architecture asserts satisfaction")
+    require(not any(direction(e) == "inout" for e in owned if isinstance(e, api.Feature)), "Generic inout logical work interface restored")
+    forbidden = {"FrameworkDomain::TestingFacilityTechnician", "FrameworkDomain::EPSHardware", "FrameworkDomain::AsIs::TestingFacility"}
+    require(not any(type(e).__name__ == "PartUsage" and forbidden.intersection(qn(t) for t in e.types) for e in owned), "Physical participant leaked into logical design")
+    components = {r["id"]: r for r in ledger["components"]}
     for cid, part in parts.items():
-        row = component_rows[cid]
-        require(row["native_part"] == qn(part), "Ledger component path")
-        definition = by[row["native_type"]]
-        require(definition in part.types, "Ledger component definition")
-        source = annotations(definition, "FrameworkDomain::SourceRecord")
-        require(len(source) == 1, "Component lacks source rationale")
-        fields = values(source[0])
-        require(fields["sourceText"] == row["derivation"] and fields["citationRecord"] == row["sources"],
-                "Ledger/native source rationale disagreement")
-        expected_targets = {"BoundaryViews::" + f for f in row["functions"]} | {
-            "ScenarioViews::" + s for s in row["scenarios"]} | {
-            "FrameworkNeeds::" + m.replace("-", "_") for m in row["moes"]}
-        require(expected_targets <= {qn(t) for t in dependencies(definition)},
-                "Unresolved component function/scenario/MOE derivation")
-        require(row["category"] in {"external interface", "application", "infrastructure"},
-                "Missing OOSEM component distinction")
-    require(component_rows["L01"]["category"] == "external interface" and
-            component_rows["L08"]["category"] == "infrastructure", "Boundary/infrastructure ownership")
-
-    bindings = [e for e in logical.owned_features if type(e).__name__ == "BindingConnectorAsUsage"]
-    require(len(bindings) == 5, "Five external port delegations are required")
-    for binding in bindings:
-        target = chain(list(binding.target_features)[0])
-        require(len(target) == 2 and target[0] == parts["L01"]
-                and target[1].name in {"p01", "p02", "p03", "p04", "p06"},
-                "External port must delegate to the exchange component")
-        source_types = {qn(t) for t in binding.source_feature.types if qn(t).startswith("BoundaryViews::")}
-        target_types = {qn(t) for t in target[-1].types if qn(t).startswith("BoundaryViews::")}
-        require(len(source_types) == 1 and source_types == target_types, "External delegation type mismatch")
-
+        require(qn(part) == components[cid]["native_part"] and native.require_element(components[cid]["native_type"]) in part.types, "Native component type disagreement")
     allocations = [e for e in elements if type(e).__name__ == "AllocationUsage"]
-    primary = [a for a in allocations if annotations(a, "FrameworkDomain::primaryResponsibility")]
-    support = [a for a in allocations if annotations(a, "FrameworkDomain::supportingResponsibility")]
-    require(len(primary) == 41, "Every current FR needs one primary owner")
-    rows = {r["FR"]: r for r in ledger["allocations"]}
-    require(set(rows) == {f"FR-{n:02}" for group in EXPECTED.values() for n in group}, "Ledger FR coverage")
-    owners = {}
-    for allocation in primary:
-        r = allocation.source_feature
-        require(type(r).__name__ == "RequirementUsage", "Primary source is not a requirement")
-        number = int(r.name[-2:])
+    primary = [a for a in allocations if native.annotations(a, "FrameworkDomain::primaryResponsibility")]
+    require(len(primary) == len(ledger["allocations"]), "Native missing/duplicate primary allocation")
+    owners = set()
+    for row in ledger["allocations"]:
+        fr = native.require_element(row["native_requirement"])
+        assigned = [a for a in primary if a.source_feature == fr]
+        require(len(assigned) == 1, "Native FR primary allocation exactness")
+        allocation = assigned[0]
         target = chain(list(allocation.target_features)[0])
-        require(len(target) == 2 and qn(target[0]) == "FrameworkLogical::logical"
-                and target[-1] in parts.values(), "Primary allocation is not an actual logical part path")
-        cid = target[-1].name
-        require(number in EXPECTED[cid] and r not in owners, "Wrong or duplicate semantic FR owner")
-        owners[r] = cid
-        row = rows[f"FR-{number:02}"]
-        require(row["primary"] == cid, "Ledger/native primary mismatch")
-        require(row["verification"]["status"] == "planned, not executed", "False verification outcome")
-        attached = annotations(allocation, "FrameworkLogical::LogicalAllocation")
-        require(len(attached) == 1, "Allocation lacks rationale/planned check/operation")
-        fields = values(attached[0])
-        operation = fields["operation"].element
-        definition = by[component_rows[cid]["native_type"]]
-        require(operation.owner == definition and operation.name == EXPECTED[cid][number]
-                and qn(operation) == row["operation"] and operation in dependencies(r),
-                "FR operation does not belong to its allocated component")
-        planned = annotations(r, "FrameworkRequirements::PlannedRequirementCheck")
-        require(len(planned) == 1, "FR lacks current planned verification need")
-        plan = values(planned[0])
-        require((plan["methods"], plan["checkSummary"]) ==
-                (row["verification"]["methods"], row["verification"]["need"]),
-                "Ledger changed approved planned verification needs")
-        require(fields["rationale"] == row["rationale"] and fields["plannedCheck"] ==
-                plan["methods"] + ": " + plan["checkSummary"], "Allocation rationale/check mismatch")
-        helpers = set()
-        for a in support:
-            if a.source_feature == r:
-                end = chain(list(a.target_features)[0])
-                require(len(end) == 2 and end[-1] in parts.values(), "Unresolved supporting owner")
-                helpers.add(end[-1].name)
-        require(helpers == set(row["support"]) and cid not in helpers, "Supporting allocation mismatch")
-        ports = {f"FrameworkLogical::Exchange::p{n:02}" for n in PORTS.get(number, {1})}
-        actual_ports = {qn(t) for t in dependencies(r) if type(t).__name__ == "PortUsage"}
-        require(actual_ports == set(row["interfaces"]) == ports, "FR interface allocation mismatch")
-        behaviors = {t for t in dependencies(r) if type(t).__name__ == "PerformActionUsage"
-                     and qn(t).startswith("LogicalRealization::")}
-        require(behaviors and {qn(t) for t in behaviors} == set(row["behaviors"]),
-                "FR lacks its exact realization actions")
-        for behavior in behaviors:
-            meta = annotations(behavior, "LogicalRealization::LogicalStep")
-            require(len(meta) == 1, "Behavior has no resolved component/operation")
-            assignment = values(meta[0])
-            require(assignment["component"].element == parts[cid]
-                    and assignment["operation"].element == operation, "FR behavior ownership mismatch")
+        require(len(target) == 2 and qn(target[0]) == "FrameworkLogical::logical" and target[-1] == parts[row["primary"]], "Native wrong primary owner")
+        require(fr not in owners, "Duplicate primary FR")
+        owners.add(fr)
+        require(qn(allocation) == row["native_allocation"], "Native allocation path disagreement")
+        meta = native.annotations(allocation, "FrameworkLogical::LogicalAllocation")
+        require(len(meta) == 1, "Missing allocation rationale/check metadata")
+        fields = native.values(meta[0]); operation = fields["operation"].element
+        require(qn(operation) == row["operation"] and operation.owner in parts[row["primary"]].types and operation in native.dependencies(fr), "Native FR operation owner/dependency mismatch")
+        require(fields["rationale"] == row["rationale"] and fields["plannedCheck"] == row["verification"]["methods"] + ": " + row["verification"]["need"], "Allocation changed planned check/rationale")
+        helpers = {chain(list(a.target_features)[0])[-1].name for a in allocations if a.source_feature == fr and native.annotations(a, "FrameworkDomain::supportingResponsibility")}
+        require(helpers == set(row["support"]) and row["primary"] not in helpers, "Supporting allocation mismatch")
+        ports = {qn(t) for t in native.dependencies(fr) if type(t).__name__ == "PortUsage"}
+        require(ports == set(row["interfaces"]), "Invented/default boundary interface trace")
+        actual_behaviors = {qn(t) for t in native.dependencies(fr) if type(t).__name__ == "PerformActionUsage" and qn(t).startswith("LogicalRealization::")}
+        require(actual_behaviors and actual_behaviors == set(row["behaviors"]), "FR behavior provenance mismatch")
+        for name in row["behaviors"]:
+            task = native.require_element(name); metadata = native.annotations(task, "LogicalRealization::LogicalStep")
+            require(len(metadata) == 1, "Behavior logical owner missing")
+            assignment = native.values(metadata[0])
+            require(assignment["component"].element == parts[row["primary"]] and assignment["operation"].element == operation, "FR behavior/operation/component disagreement")
+        io = row["native_io"]; contract = native.require_element(io["model_path"])
+        require(contract.owner == operation.owner and native.require_element(io["contract_action_type"]) in contract.types, "FR contract operation/type ownership")
+        metadata = native.annotations(contract, "FrameworkLogical::NativeIO")
+        require(len(metadata) == 1, "Native complete IO contract missing")
+        values = native.values(metadata[0])
+        require(values["fr"] == row["FR"] and values["primary"] == row["primary"] and values["operation"].element == operation, "Native IO responsible-operation provenance")
+        definition = native.require_element(components[row["primary"]]["native_type"])
+        bindings = [binding_record(e) for e in definition.owned_features if type(e).__name__ == "BindingConnectorAsUsage"]
+        for d, parameter_name, port_name in (("inputs", "subjects", "Inputs"), ("outputs", "products", "Outputs")):
+            require(array(values[d]) == io[d], "Native IO exact partition mismatch")
+            subject = native.require_element(io[d + "_path"])
+            fields_by_name = {f.name: f for f in subject.owned_features if type(f).__name__ == "ItemUsage"}
+            require(len(fields_by_name) == len(io["field_contracts"][d]), "Native IO union field missing/extra")
+            for field in io["field_contracts"][d]:
+                feature = native.require_element(field["path"])
+                require(feature in fields_by_name.values() and native.require_element(field["type"]) in feature.types and multiplicity(feature) == field["multiplicity"], "Native IO subject type/multiplicity mismatch")
+                metas = native.annotations(feature, "FrameworkLogical::Subject")
+                require(len(metas) == 1, "Native IO field provenance missing")
+                provenance = native.values(metas[0])
+                require(provenance == field["subject_metadata"], "Native IO field source/direction/provenance mismatch")
+                require(provenance["fr"] == row["FR"] and provenance["direction"] == d and provenance["exactField"] == field["exact_field"], "Native FR IO field direction/provenance mismatch")
+            port = native.require_element(f"FrameworkLogical::{row['primary']}Subjects::fr{row['FR'][-2:]}{port_name}")
+            require(direction(port) == ("in" if d == "inputs" else "out") and subject in port.types, "Native complete union port direction/type")
+            parameter = native.require_element(io["contract_action_type"] + "::" + parameter_name)
+            require(direction(parameter) == direction(port) and subject in parameter.types, "Native contract parameter direction/type")
+            a = [components[row["primary"]]["native_type"] + "::io", qn(port)]
+            b = [qn(contract), qn(parameter)]
+            expected = {"source": a if d == "inputs" else b, "target": b if d == "inputs" else a}
+            require(expected in bindings, "Contract complete IO is not bound to its owning directed port")
+    # Source unions and typed partitions are independently retained and compared.
+    for component in ledger["components"]:
+        rows = [r for r in ledger["allocations"] if r["primary"] == component["id"]]
+        for d in ("inputs", "outputs"):
+            actual = {}
+            for row in rows:
+                for f in row["native_io"]["field_contracts"][d]: actual.setdefault(f["exact_field"], []).append({"FR": row["FR"], "native": f["path"], "type": f["type"]})
+            require(component["typed_io_union"][d] == actual, "Typed native union/provenance disagreement")
+    root_bindings = [binding_record(e) for e in logical.owned_features if type(e).__name__ == "BindingConnectorAsUsage"]
+    exchanges = ledger["exchanges"]
+    require(len(exchanges) == 20 and sum(len(e["mappings"]) for e in exchanges) == 203, "Pairwise native mapping coverage")
+    mapped_flows = set()
+    for row in exchanges:
+        aggregate = native.require_element(row["native"])
+        require(native.require_element(row["payload_type"]) in aggregate.types, "Aggregate typed record mismatch")
+        record = native.require_element(row["payload_type"])
+        actual_fields = [f for f in record.owned_features if native.annotations(f, "FrameworkLogical::ExchangeField")]
+        require(len(actual_fields) == len(row["mappings"]), "Aggregate member coverage mismatch")
+        for mapping in row["mappings"]:
+            op = native.require_element(mapping["operation_path"])
+            require(type(op).__name__ == "PerformActionUsage" and op.owner == logical and native.require_element(mapping["action_type"]) in op.types, "Projection is not an actual performed mapping operation")
+            field = native.require_element(mapping["aggregate_field"])
+            metadata = native.annotations(field, "FrameworkLogical::ExchangeField")
+            require(len(metadata) == 1 and native.values(metadata[0]) == mapping["metadata"], "Exchange FR field provenance/translation mismatch")
+            require(field in actual_fields, "Aggregate field not owned by aggregate type")
+            for side, d in (("source", "outputs"), ("target", "inputs")):
+                fr = next(a for a in ledger["allocations"] if a["FR"] == mapping[f"{side}_fr"])
+                require(fr["primary"] == row[f"{side}_component"] and mapping["source_output" if side == "source" else "target_input"] in fr["native_io"][d], "Exchange native field direction/owner provenance")
+                declaration = native.require_element(mapping[f"{side}_declaration"])
+                parameter = native.require_element(mapping["action_type"] + "::" + side)
+                require(direction(parameter) == ("in" if side == "source" else "out") and any(t in parameter.types for t in declaration.types if qn(t) == mapping[f"{side}_qualified_type"]), "Projection declared parameter type/direction mismatch")
+                flow = native.require_element(mapping[f"{side}_flow"]["native"])
+                require(flow_record(native, flow) == mapping[f"{side}_flow"], "Projection flow actual parameter chain mismatch")
+                mapped_flows.add(qn(flow))
+            require({"source": [qn(aggregate), qn(field)], "target": [qn(op), mapping["action_type"] + "::source"]} in root_bindings, "Aggregate field is not bound to actual producer projection")
+    for row in ledger["native_contract"]["boundary_flows"]:
+        require(flow_record(native, native.require_element(row["native"])) == row, "Boundary directed dispatch parameter chain mismatch")
+    actual_root_flows = {qn(e) for e in logical.owned_features if type(e).__name__ == "FlowUsage"}
+    require(actual_root_flows == mapped_flows | {r["native"] for r in ledger["native_contract"]["boundary_flows"]}, "Unrecorded or missing logical root flow")
+    require(root_bindings == ledger["native_contract"]["root_bindings"], "Boundary/aggregate native binding coverage mismatch")
+    require(len(ledger["external_exchanges"]) == 5, "Visible external aggregate coverage")
+    for row in ledger["external_exchanges"]:
+        aggregate = native.require_element(row["native"]); endpoint = native.require_element(row["endpoint_declaration"])
+        require(native.require_element(row["type"]) in aggregate.types and direction(endpoint) == row["direction"], "External platform aggregate type/direction")
+        require(row["binding"] in root_bindings and row["binding"]["source"] == [qn(aggregate)], "External aggregate lacks real boundary binding")
+    require(native.require_element("FrameworkContext::Engines").conforms(native.require_element("FrameworkDomain::ToBe::CUBICSSimulationEnvironment")), "Whole-CUBICS platform scope lost")
+    check_native_safety(native, ledger)
+    return {"components": len(parts), "current_FRs": len(primary), "pairwise_aggregates": len(exchanges), "field_mappings": len(mapped_flows)//2, "external_aggregates": 5}
 
-    # Resolve all behavior owners and calls, including external authority/tool roles.
-    realizations = [by["LogicalRealization::" + name] for name in GUARDS]
-    require({r["native"] for r in ledger["realizations"]} == {qn(r) for r in realizations},
-            "Logical realization coverage")
-    tasks = [e for e in elements if type(e).__name__ == "PerformActionUsage" and e.owner in realizations]
-    allowed = {"systemsEngineer", "epsEngineer", "analysisTools", "hostToolchain", "reviewers", "reviewAuthority"}
-    for task in tasks:
-        internal = annotations(task, "LogicalRealization::LogicalStep")
-        external = annotations(task, "LogicalRealization::ExternalStep")
-        require(len(internal) + len(external) == 1, "Unowned or multiply owned logical task")
-        tagged = values((internal or external)[0])
-        # Full dependencies also allocate the same behavior to each candidate.
-        # Check the logical assignment at its own level. Physical assignments
-        # are checked independently by check_physical_allocations.py.
-        assigned = [a for a in allocations if a.source_feature == task
-                    and qn(a.owner) == "LogicalRealization"]
-        require(len(assigned) == 1, "Task needs exactly one real logical allocation")
-        if internal:
-            component, operation = tagged["component"].element, tagged["operation"].element
-            end = chain(list(assigned[0].target_features)[0])
-            require(len(end) == 2 and end[-1] == component and operation.owner in component.types,
-                    "Task allocation, parent operation and component disagree")
-            require(set(task.types) == set(operation.types), "Task invokes a different operation type")
+
+def evaluate_guard(api, expression, environment):
+    if isinstance(expression, api.FeatureReferenceExpression):
+        require(expression.referent in environment, "Uncontrolled native guard reference")
+        return environment[expression.referent]
+    if isinstance(expression, api.FeatureChainExpression):
+        operands = list(expression.operands)
+        require(len(operands) == 1, "Invalid guard chain")
+        record = evaluate_guard(api, operands[0], environment)
+        require(isinstance(record, dict) and expression.target_feature in record, "Guard outcome is not the resolved decision/operation payload")
+        return record[expression.target_feature]
+    if isinstance(expression, api.LiteralBoolean):
+        return expression.value
+    require(isinstance(expression, api.OperatorExpression), "Unsupported native guard expression")
+    op = str(expression.operator); values = [evaluate_guard(api, e, environment) for e in expression.operands]
+    if op in ("and", "or", "not"):
+        require(all(type(v) is bool for v in values), "Non-Boolean safety operand")
+        return not values[0] if op == "not" else all(values) if op == "and" else any(values)
+    require(op in ("==", "!=") and len(values) == 2, "Unsupported guard operator")
+    return (values[0] == values[1]) if op == "==" else (values[0] != values[1])
+
+
+def check_native_safety(native, ledger):
+    from itertools import product
+    from types import SimpleNamespace
+    safety = ledger["safety_contract"]
+    require(safety and set(safety["families"]) == SAFETY_FAMILIES, "Safety contract incomplete")
+    expected_guards = [{"native": f"LogicalRealization::{name}::{gate}", "expression": expr, "target": f"LogicalRealization::{name}::{target}"}
+                       for name, rows in GUARDS.items() for gate, (expr, target) in rows.items()]
+    require(safety["guards"] == expected_guards, "Independent safety guard basis changed")
+    require([(r["native"], r["type"], r["multiplicity"], r.get("no_default", False)) for r in safety["record_fields"]] == RECORD_FIELDS, "Independent raw/status/authority record basis changed")
+    api, elements = native.api, native.elements
+    actions = {native.require_element(row["native"]) for row in safety["realizations"]}
+    allocations = [e for e in elements if type(e).__name__ == "AllocationUsage" and qn(e.owner) == "LogicalRealization"]
+    tasks = [e for e in elements if type(e).__name__ == "PerformActionUsage" and e.owner in actions]
+    require({qn(t) for t in tasks} == {r["native"] for r in safety["tasks"]}, "Logical task coverage")
+    for row in safety["tasks"]:
+        task = native.require_element(row["native"])
+        require(native.require_element(row["action_type"]) in task.types, "Task operation type changed")
+        assignments = [a for a in allocations if a.source_feature == task]
+        require(len(assignments) == 1, "Task allocation exactness")
+        require([qn(x) for x in chain(list(assignments[0].target_features)[0])] == row["allocated_target"], "Task native owner/actor changed")
+        logical = native.annotations(task, "LogicalRealization::LogicalStep")
+        external = native.annotations(task, "LogicalRealization::ExternalStep")
+        require(len(logical) + len(external) == 1, "Unowned/multiply owned task")
+        values = native.values((logical or external)[0])
+        if logical:
+            component, operation = values["component"].element, values["operation"].element
+            require(qn(component) == row["component"] and qn(operation) == row["operation"] and operation.owner in component.types and set(task.types) == set(operation.types), "Task operation/component mismatch")
         else:
-            actor = tagged["performer"].element
-            require(qn(actor).startswith("ScenarioViews::") and actor.name in allowed
-                    and list(assigned[0].target_features) == [actor], "External authority/tool allocation mismatch")
-    for flow_name, scenario, actors in (
-        ("ConceptRealization", "SC01", {"submit": (1, "systemsEngineer"), "execute": (3, "analysisTools"), "select": (5, "systemsEngineer")}),
-        ("DesignRealization", "SC03", {"submit": (1, "epsEngineer"), "execute": (3, "analysisTools"), "select": (5, "epsEngineer")}),
-        ("SoftwareRealization", "SC04", {"submit": (1, "epsEngineer"), "executeMIL": (3, "analysisTools"), "codeBuildSil": (5, "hostToolchain"), "approve": (7, "epsEngineer")}),
-    ):
-        for name, (number, actor_name) in actors.items():
-            task = by[f"LogicalRealization::{flow_name}::{name}"]
-            require(by[f"ScenarioViews::{scenario}External{number}"] in task.types
-                    and values(annotations(task, "LogicalRealization::ExternalStep")[0])["performer"].element
-                    == by["ScenarioViews::" + actor_name], "Logical realization changed approved scenario actor/operation authority")
-    for row in ledger["realizations"]:
-        require({"ScenarioViews::" + s for s in row["scenarios"]} <=
-                {qn(t) for t in dependencies(by[row["native"]])}, "Missing scenario realization derivation")
-
-    # Check typed port-to-port exchanges, including hidden overview detail links.
-    interfaces = {e.name: e for e in logical.owned_features if type(e).__name__ == "InterfaceUsage"}
-    require(set(interfaces) == {row["name"] for row in ledger["exchanges"]}, "Exchange coverage")
-    for row in ledger["exchanges"]:
-        interface = interfaces[row["name"]]
-        require(qn(interface) == row["native"], "Exchange native path mismatch")
-        ends = [chain(interface.source_feature), chain(list(interface.target_features)[0])]
-        for path, end in zip((row["source"], row["target"]), ends):
-            cid, name = path.split(".")
-            require(len(end) == 2 and end[0] == parts[cid] and end[1].name == name,
-                    "Exchange component/port endpoint mismatch")
-            require(by[row["port_type"]] in end[-1].types, "Exchange port type mismatch")
-        port = by[row["port_type"]]
-        payload = next(f for f in port.owned_features if f.name == "work")
-        require(any(t.name == row["payload"] for t in payload.types), "Exchange payload mismatch")
-    for name, fields in ledger["item_types"].items():
-        item = by["FrameworkLogical::" + name]
-        for field, typename in fields.items():
-            feature = next(f for f in item.owned_features if f.name == field.split()[-1])
-            type_name = typename.split()[0]
-            require(any(t.name == type_name for t in feature.types), "Logical record field type mismatch")
-
-    typed_flows = [e for e in elements if type(e).__name__ == "FlowUsage" and e.owner in realizations]
-    for flow in typed_flows:
-        payloads = [t for t in flow.payload_types if qn(t).startswith(
-            ("FrameworkLogical::", "BoundaryViews::", "FrameworkDomain::", "ScalarValues::"))]
-        require(len(payloads) == 1, "Missing/ambiguous typed realization payload")
-        ends = {e.name: e for e in flow.owned_features if type(e).__name__ == "FlowEnd"}
-        require(set(ends) == {"source", "target"}, "Flow lacks resolved ends")
-        for name, end in ends.items():
-            types = [t for feature in end.owned_features for t in feature.types
-                     if qn(t).startswith(("FrameworkLogical::", "BoundaryViews::", "FrameworkDomain::", "ScalarValues::"))]
-            types = [t for t in types if not any(other != t and other.conforms(t)
-                     and not t.conforms(other) for other in types)]
-            compatible = any(t.conforms(payloads[0]) if name == "source" else
-                             payloads[0].conforms(t) for t in types)
-            require(compatible, f"{qn(flow)}: payload/parameter conformance mismatch")
-
-    # Every positive gate has resolved Boolean result features and no unguarded
-    # succession into its protected action. Alternative guards must be present.
-    transitions = [e for e in elements if type(e).__name__ == "TransitionUsage" and e.owner in realizations]
-    def references(expr):
-        if type(expr).__name__ == "FeatureChainExpression":
-            operands = list(expr.operands)
-            require(len(operands) == 1 and type(operands[0]).__name__ == "FeatureReferenceExpression",
-                    "Guard outcome must reference a resolved operation result")
-            yield [operands[0].referent, expr.target_feature]
-        else:
-            for operand in expr.operands:
-                yield from references(operand)
-    for flow_name, specs in GUARDS.items():
-        flow = by["LogicalRealization::" + flow_name]
-        for gate, (expected, destination) in specs.items():
-            transition = by[qn(flow) + "::" + gate]
-            require(compact(api.pprint(transition.guard_expression)) == compact(expected),
-                    f"{flow_name}::{gate}: lost required guard")
-            require(transition.target == by[qn(flow) + "::" + destination], "Guard controls wrong action")
-            for ref in references(transition.guard_expression):
-                require(len(ref) == 2 and ref[0].owner == flow and
-                        type(ref[0]).__name__ == "PerformActionUsage" and
-                        ref[-1].owner in ref[0].types and any(qn(t) == "ScalarValues::Boolean" for t in ref[-1].types),
-                        "Guard is not a resolved outcome of an owned logical/external operation")
-            require(not any(type(e).__name__ == "SuccessionAsUsage" and e.owner == flow
-                            and transition.target in e.target_features for e in elements),
-                    "Unguarded path bypasses a required control gate")
-            alternatives = [t for t in transitions if t.owner == flow and t.source == transition.source
-                            and t != transition and t.guard_expression is not None]
-            require(alternatives, "Control gate lost its alternative response")
-    software = by["LogicalRealization::SoftwareRealization"]
-    release = by[qn(software) + "::authorizeCoding"]
-    edges = [(e.source_feature, target) for e in elements
-             if type(e).__name__ == "SuccessionAsUsage" and e.owner == software
-             for target in e.target_features]
-    edges += [(t.source, t.target) for t in transitions if t.owner == software and t != release]
-    reachable = {source for source, _ in edges if source.name == "start"}
-    require(reachable, "Software realization has no native start")
-    changed = True
-    while changed:
-        updated = reachable | {target for source, target in edges if source in reachable}
-        changed, reachable = updated != reachable, updated
-    require(by[qn(software) + "::codeBuildSil"] not in reachable,
-            "External host work bypasses the detailed-design release gate")
-    assistance = by["LogicalRealization::AssistanceRealization"]
-    for source, target in (("capture", "invalidateOnEdit"), ("invalidateOnEdit", "acknowledge")):
-        a, b = by[qn(assistance) + "::" + source], by[qn(assistance) + "::" + target]
-        require(any(type(e).__name__ == "SuccessionAsUsage" and e.owner == assistance
-                    and e.source_feature == a and list(e.target_features) == [b] for e in elements),
-                "New edits must immediately invalidate old work before assistance starts")
-    # Component state ownership preserves the approved pending/current/stale and
-    # prepared/accepted/conditional/blocked semantics, rather than prose-only links.
-    for cid, name, state in (("L08", "assistanceCurrency", "GuidanceControl"),
-                             ("L07", "reviewState", "BaselineControl")):
-        definition = by[component_rows[cid]["native_type"]]
-        owned = next(e for e in definition.owned_features if e.name == name)
-        require(by["ScenarioViews::" + state] in owned.types, "Component state ownership missing")
-        mapping = by["FrameworkLogical::" + ("guidanceControlOwner" if cid == "L08" else "baselineControlOwner")]
-        source, target = chain(mapping.source_feature), chain(list(mapping.target_features)[0])
-        require(len(source) == 2 and source[-1].name == ("guidanceControl" if cid == "L08" else "baselineControl")
-                and len(target) == 3 and target[-2] == parts[cid] and target[-1] == owned,
-                "Black-box state is not allocated to the responsible component state")
+            actor = values["performer"].element
+            require(qn(actor) == row["actor"] and actor.name in {"systemsEngineer", "epsEngineer", "analysisTools", "hostToolchain", "reviewers", "reviewAuthority"}, "External authority actor changed")
+    all_flows = [flow_record(native, e) for e in elements if type(e).__name__ == "FlowUsage" and e.owner in actions]
+    require(all_flows == safety["flows"], "Actual realization data producer/consumer parameter chain changed")
+    for row in safety["realizations"]:
+        action = native.require_element(row["native"])
+        require(set(row["scenarios"]) <= {qn(t) for t in native.dependencies(action)}, "Scenario realization basis changed")
+    truth_cases = 0
+    for row in safety["guards"]:
+        transition = native.require_element(row["native"])
+        require(type(transition).__name__ == "TransitionUsage" and transition.guard_expression is not None and qn(transition.target) == row["target"], "Safety guard lost or controls wrong action")
+        owner = transition.owner
+        predicates = sorted(set(re.findall(r"\b(\w+)\.(\w+)\b", row["expression"])))
+        for bits in product((False, True), repeat=len(predicates)):
+            environment, expected_environment = {}, {}
+            for (opname, fieldname), bit in zip(predicates, bits):
+                operation = native.require_element(qn(owner) + "::" + opname)
+                field = next(f for t in operation.types for f in t.owned_features if f.name == fieldname)
+                require(type(operation).__name__ == "PerformActionUsage" and any(qn(t) == "ScalarValues::Boolean" for t in field.types), "Guard is not an owned operation Boolean result")
+                environment.setdefault(operation, {})[field] = bit
+                expected_environment.setdefault(opname, SimpleNamespace()).__dict__[fieldname] = bit
+            expected = eval(row["expression"], {"__builtins__": {}}, expected_environment)
+            actual = evaluate_guard(api, transition.guard_expression, environment)
+            require(type(actual) is bool and actual == expected, "Native safety guard counterexample")
+            truth_cases += 1
+        require(not any(type(e).__name__ == "SuccessionAsUsage" and e.owner == owner and transition.target in e.target_features for e in elements), "Unguarded protected entry")
+        require(any(type(e).__name__ == "TransitionUsage" and e.owner == owner and e.source == transition.source and e != transition and e.guard_expression is not None for e in elements), "Safety gate lost rejection/alternative")
+    for row in safety["dominance"]:
+        owner = native.require_element(row["realization"]); gate = native.require_element(row["gate"]); protected = native.require_element(row["protected"])
+        edges = [(e.source_feature, t) for e in elements if type(e).__name__ == "SuccessionAsUsage" and e.owner == owner for t in e.target_features]
+        edges += [(e.source, e.target) for e in elements if type(e).__name__ == "TransitionUsage" and e.owner == owner and e != gate]
+        starts = {a for a, _ in edges if a.name == "start"}
+        require(starts and protected not in reachable_without_gate(edges, starts), "Safety gate bypass reaches protected action")
+    for row in safety["immediate_successions"]:
+        a, b = native.require_element(row["source"]), native.require_element(row["target"])
+        require(any(type(e).__name__ == "SuccessionAsUsage" and e.source_feature == a and list(e.target_features) == [b] for e in elements), "Immediate context invalidation removed")
+    for cid, member, state, mappingname, inherited in (("L06", "assistanceCurrency", "GuidanceControl", "guidanceControlOwner", "guidanceControl"), ("L05", "reviewState", "BaselineControl", "baselineControlOwner", "baselineControl")):
+        definition = native.require_element(next(c["native_type"] for c in ledger["components"] if c["id"] == cid))
+        feature = native.require_element(qn(definition) + "::" + member)
+        require(native.require_element("ScenarioViews::" + state) in feature.types, "Responsible component state missing")
+        mapping = native.require_element("FrameworkLogical::" + mappingname)
+        require(chain(mapping.source_feature)[-1].name == inherited and [x.name for x in chain(list(mapping.target_features)[0])][-2:] == [cid, member], "Black-box state ownership changed")
     for edit in ("editCurrent", "editPending"):
-        require(by["ScenarioViews::GuidanceControl::" + edit].target.name == "stale",
-                "Edit must invalidate current and pending assistance")
-    for name, fragments in (("apply", ("sameContext", "authorized")), ("response", ("sameContext",))):
-        guard = api.pprint(by["ScenarioViews::GuidanceControl::" + name].guard_expression)
-        require(all(x in guard for x in fragments), "Shared assistance state lost authority/currency")
+        require(native.require_element("ScenarioViews::GuidanceControl::" + edit).target.name == "stale", "Edit fails immediate pending/current invalidation")
+    for row in safety["state_guards"]:
+        transition = native.require_element(row["native"])
+        require(transition.guard_expression is not None and qn(transition.target) == row["target"], "Guidance/review state guard or target missing")
+    guidance = native.require_element("ScenarioViews::GuidanceControl")
+    for member, expected in (("apply", lambda current, authorized: current and authorized), ("response", lambda current, authorized: current)):
+        transition = native.require_element(qn(guidance) + "::" + member)
+        for current, authorized in product((False, True), repeat=2):
+            environment = {native.require_element(qn(guidance) + "::sameContext"): current,
+                           native.require_element(qn(guidance) + "::authorized"): authorized}
+            require(evaluate_guard(api, transition.guard_expression, environment) == expected(current, authorized), "Guidance state authority/currency counterexample")
+    check_review_control(elements, native.by, api)
+    for row in safety["record_fields"]:
+        feature = native.require_element(row["native"])
+        require(native.require_element(row["type"]) in feature.types and multiplicity(feature) == row["multiplicity"], "Raw sample/result/evidence record type or optionality changed")
+        if row.get("no_default"):
+            require(feature.feature_value_expression is None, "Missing sample/time fabricated with a default value")
+    ledger_summary = ledger["native_contract"]["source_query_basis"]
+    query = native.require_element(ledger_summary["operation"])
+    require(native.require_element("FrameworkLogical::RequestApplicableSource") in query.types and ledger_summary["FR"] == ["FR-03", "FR-13"], "Unbounded source-query basis")
+    require(ledger_summary["binding"] in ledger["native_contract"]["root_bindings"], "Source query disconnected from declared guidance input")
+    return truth_cases
 
-    prose = report_path.read_text()
-    for cid, expected in EXPECTED.items():
-        row = re.search(rf"^{cid} & .*? & ([\d, -]+) \\\\", prose, re.M)
-        require(row is not None, "Report responsibility summary missing")
-        numbers = set()
-        for term in row[1].split(", "):
-            bounds = [int(x) for x in term.split("--")]
-            numbers.update(range(bounds[0], bounds[-1] + 1))
-        require(numbers == set(expected), "Report/native primary FR summary disagreement")
-        require(set(component_rows[cid]["primary_FR"]) == {f"FR-{n:02}" for n in expected},
-                "Ledger component FR summary disagreement")
-    return {"status": "passed", "native_errors": 0, "native_warnings": 0,
-            "components": len(parts), "current_FRs": len(primary), "supporting_allocations": len(support),
-            "allocated_actions": len(tasks), "guarded_alternatives": len(transitions),
-            "typed_realization_flows": len(typed_flows), "typed_internal_exchanges": len(interfaces),
-            "report_and_ledger_match": True, "verification": "planned only"}
+
+def check_review_control(elements, by, api):
+    state = by["ScenarioViews::BaselineControl"]
+    event = by["ScenarioViews::DecideReview"]
+    decision_type = by["FrameworkDomain::TechnicalReviewDecision"]
+    disposition = by["FrameworkDomain::TechnicalReviewDecision::disposition"]
+    enumeration = by["FrameworkDomain::ReviewDisposition"]
+    enums = {name: by[f"FrameworkDomain::ReviewDisposition::{name}"]
+             for name in ("accepted", "conditional", "progressionBlocked")}
+    require(event.conforms(decision_type) and enumeration in disposition.types,
+            "BaselineControl: review event lacks the recorded decision/disposition type")
+    flags = {name: by[f"ScenarioViews::BaselineControl::{name}"] for name in
+             ("authorizedCurrent", "blocking", "conditionalRecordsComplete", "closureComplete")}
+    require(all(any(str(t.qualified_name) == "ScalarValues::Boolean" for t in f.types)
+                for f in flags.values()),
+            "BaselineControl: invalid Boolean control type")
+    states = {name: by[f"ScenarioViews::BaselineControl::{name}"] for name in
+              ("underReview", "acceptedBaseline", "conditional", "progressionBlocked")}
+    transitions = [e for e in state.owned_features if isinstance(e, api.TransitionUsage)]
+    reviews = []
+    payload_references = {}
+    for transition in transitions:
+        trigger = transition.trigger_action
+        payload = trigger.payload_parameter if trigger is not None else None
+        if payload is not None and event in payload.types:
+            require(len(transition.trigger_actions) == 1,
+                    "BaselineControl: ambiguous review trigger")
+            reviews.append(transition)
+            # Syside binds the transition's named payload to accepter.payload by
+            # a Subsetting whose target is a resolved FeatureChaining.
+            refs = {payload}
+            for relation in elements:
+                if type(relation).__name__ == "Subsetting" and any(
+                    list(target.chaining_features) == [trigger, payload] for target in relation.targets
+                ):
+                    refs.update(relation.sources)
+            payload_references[transition] = refs
+        if transition.target in (states["acceptedBaseline"], states["conditional"],
+                                  states["progressionBlocked"]):
+            require(transition in reviews, "BaselineControl: disposition path bypasses the review decision")
+    require(not any(type(e).__name__ == "SuccessionAsUsage" and e.owner == state and
+                    states["acceptedBaseline"] in e.target_features for e in elements),
+            "BaselineControl: unguarded acceptance bypass")
+    paths = {(t.source, t.target) for t in reviews}
+    for source in ("underReview", "conditional"):
+        for target in ("acceptedBaseline", "conditional", "progressionBlocked"):
+            require((states[source], states[target]) in paths,
+                    f"BaselineControl: missing {'renewed' if source == 'conditional' else 'initial'} {target} decision path")
+    require(all(t.source in (states["underReview"], states["conditional"]) for t in reviews),
+            "BaselineControl: decision can bypass review submission")
+
+    def enabled(source, chosen, values):
+        environment = {flags[name]: v for name, v in values.items()}
+        environment.update({v: v for v in enums.values()})
+        record = {disposition: enums[chosen]}
+        admitted = []
+        for transition in reviews:
+            if transition.source != states[source]:
+                continue
+            inputs = environment | {ref: record for ref in payload_references[transition]}
+            guard = evaluate_guard(api, transition.guard_expression, inputs)
+            require(type(guard) is bool, "BaselineControl: non-Boolean transition guard")
+            if guard:
+                admitted.append(transition)
+        return admitted
+
+    counterexample = dict(authorizedCurrent=True, blocking=False,
+                          conditionalRecordsComplete=True, closureComplete=True)
+    admitted = enabled("conditional", "conditional", counterexample)
+    require(len(admitted) == 1 and admitted[0].target == states["conditional"],
+            "BaselineControl: closed prior conditions override renewed conditional disposition")
+    from itertools import product
+    count = 0
+    for source, chosen, bits in product(("underReview", "conditional"), enums, product((False, True), repeat=4)):
+        values = dict(zip(flags, bits))
+        authorized, blocking, complete, closed = bits
+        expected = None
+        if authorized:
+            if chosen == "progressionBlocked":
+                expected = states["progressionBlocked"]
+            elif not blocking:
+                if chosen == "accepted" and (source == "underReview" or closed):
+                    expected = states["acceptedBaseline"]
+                elif chosen == "conditional" and complete:
+                    expected = states["conditional"]
+        actual = enabled(source, chosen, values)
+        require([t.target for t in actual] == ([] if expected is None else [expected]),
+                f"BaselineControl: review transition mismatch from {source}, disposition={chosen}, "
+                f"{values}, enabled={[t.name for t in actual]}")
+        count += 1
+    return {"source": "Syside semantic expression tree", "review_transitions": len(reviews),
+            "truth_table_cases": count, "closed_prior_conditions_renewed_conditional": "remains conditional",
+            "renewed_dispositions": {"accepted": "acceptedBaseline", "conditional": "conditional",
+                                     "progressionBlocked": "progressionBlocked"}}
+
+def check(tool, root, ledger_path, report_path, *, core_only=False, source_only=False):
+    ledger = json.loads(ledger_path.read_text())
+    requirements = report_path.parent / "requirements.tex"
+    source = validate_source_contract(ledger, requirements.read_text(), report_path.read_text())
+    config = tomllib.loads((root / "logical-responsibilities.toml").read_text())
+    require(config["validation"]["pending_native_is_failure"], "Pending architecture cannot pass")
+    native = Native(tool, root, SOURCE_FILES if source_only else CORE_FILES if core_only else FILES)
+    check_native_source(native, ledger, source)
+    figure = ledger["figure"]
+    for pathkey, hashkey in (("source", "source_sha256"), ("pdf", "pdf_sha256")):
+        require(hashlib.sha256((report_path.parent / figure[pathkey]).read_bytes()).hexdigest() == figure[hashkey], "Approved custom figure identity changed")
+    result = {"status": "passed", "scope": "source contract only" if source_only else "core logical model" if core_only else "full model",
+              "native_errors": 0, "native_warnings": 0, "active_FRs": len(source),
+              "MR_parent_links": sum(len(r["parents"]) for r in source.values()),
+              "native_architecture_checked": not source_only, "verification": "planned only"}
+    if not source_only:
+        result.update(check_native_architecture(native, ledger))
+    return result
 
 
-def negative_checks(tool, root, ledger, report):
-    cases = [
-        ("wrong_primary_owner", "04-logical.sysml",
-         "responsibility_FR_02_L02 allocate FrameworkRequirements::FR_02 to logical.L02 {",
-         "responsibility_FR_02_L02 allocate FrameworkRequirements::FR_02 to logical.L03 {"),
-        ("wrong_action_owner", "11-logical-responsibilities.sysml",
-         "allocate AssistanceRealization::checkDraft to logical.L02;",
-         "allocate AssistanceRealization::checkDraft to logical.L03;"),
-        ("wrong_FR_operation", "04-logical.sysml", "operation_FR02 from FrameworkRequirements::FR_02 to Assistance::checkDraft;",
-         "operation_FR02 from FrameworkRequirements::FR_02 to Requirements::deriveAllocate;"),
-        ("wrong_payload", "11-logical-responsibilities.sysml", "of AssistanceWork from acknowledge.work to checkDraft.work;",
-         "of DesignStudy from acknowledge.work to checkDraft.work;"),
-        ("wrong_host_interface", "04-logical.sysml", "interface_FR36_04 from FrameworkRequirements::FR_36 to Exchange::p04;",
-         "interface_FR36_04 from FrameworkRequirements::FR_36 to Exchange::p03;"),
-        ("edit_invalidation_removed", "11-logical-responsibilities.sysml", "first capture then invalidateOnEdit;", "first capture then acknowledge;"),
-        ("late_response_current", "11-logical-responsibilities.sysml", "if checkReply.sameContext then present;", "if true then present;"),
-        ("unauthorized_suggestion", "11-logical-responsibilities.sysml", "if dispose.authorized and checkApplication.sameContext then applyCorrection;",
-         "if checkApplication.sameContext then applyCorrection;"),
-        ("stale_design_coding", "11-logical-responsibilities.sysml", "checkRelease.authorizedDetailedDesign and checkRelease.currentDesign and checkRelease.blockersClear and interfaces.profileCompatible then coordinate;",
-         "checkRelease.authorizedDetailedDesign and checkRelease.blockersClear and interfaces.profileCompatible then coordinate;"),
-        ("stale_result_claim", "11-logical-responsibilities.sysml", "checkCurrent.current and credibility.numericallyValid and credibility.applicable then assess;",
-         "credibility.numericallyValid and credibility.applicable then assess;"),
-        ("unauthorized_review", "11-logical-responsibilities.sysml", "if checkDecision.authorized and checkDecision.current and checkDecision.decisionConsistent and (checkDecision.blocking or not checkDecision.conditional or checkDecision.conditionsComplete) then record;",
-         "if checkDecision.current and checkDecision.decisionConsistent and (checkDecision.blocking or not checkDecision.conditional or checkDecision.conditionsComplete) then record;"),
-        ("inconsistent_blocking_review", "11-logical-responsibilities.sysml", "if checkDecision.authorized and checkDecision.current and checkDecision.decisionConsistent and (checkDecision.blocking or not checkDecision.conditional or checkDecision.conditionsComplete) then record;",
-         "if checkDecision.authorized and checkDecision.current and (checkDecision.blocking or not checkDecision.conditional or checkDecision.conditionsComplete) then record;"),
-        ("incomplete_conditional_review", "11-logical-responsibilities.sysml", "if checkDecision.authorized and checkDecision.current and checkDecision.decisionConsistent and (checkDecision.blocking or not checkDecision.conditional or checkDecision.conditionsComplete) then record;",
-         "if checkDecision.authorized and checkDecision.current and checkDecision.decisionConsistent then record;"),
-        ("unfixed_replay_rules", "11-logical-responsibilities.sysml", "if prepare.dependenciesComplete and prepare.rulesFixed then execute;",
-         "if prepare.dependenciesComplete then execute;"),
-        ("calibration_as_validation", "11-logical-responsibilities.sysml", "if checkData.dataUsable and checkData.independentSeparation then propose;",
-         "if checkData.dataUsable then propose;"),
-        ("unauthorized_calibration_update", "11-logical-responsibilities.sysml",
-         "succession admitCalibrationChange first authorizedChange if checkChange.authorizedCurrent and checkChange.acceptedChange then successor;",
-         "succession admitCalibrationChange first authorizedChange if checkChange.acceptedChange then successor;"),
-        ("physical_participant", "04-logical.sysml", "part def LogicalFramework :> ToBe::FutureFramework {",
+def require_native_mutation_rejection(returncode, reason):
+    require(returncode == 1 and reason.startswith("FAIL:")
+            and "Native tooling unavailable" not in reason and "Traceback" not in reason,
+            "Mutation was not rejected by native semantic/policy checking")
 
-         "part def LogicalFramework :> ToBe::FutureFramework {\n        part L09 : TestingFacilityTechnician;"),
-        ("restored_FR40", "03-requirements.sysml", "requirement <'FR-42'> FR_42 {",
-         "requirement FR_40 { subject framework : ToBe::FutureFramework; doc /* Obsolete evaluation obligation. */ }\n    requirement <'FR-42'> FR_42 {"),
-        ("external_host_bypass", "11-logical-responsibilities.sysml", "first checkRelease then codingRelease;",
-         "first checkRelease then codingRelease;\n        first checkRelease then codeBuildSil;"),
-        ("unguarded_coding_bypass", "11-logical-responsibilities.sysml", "first checkRelease then codingRelease;",
 
-         "first checkRelease then codingRelease;\n        first checkRelease then coordinate;"),
-    ]
-    outcomes = []
+def negative_checks(tool, root, ledger, report, *, core_only=False):
+    import subprocess
+    from concurrent.futures import ThreadPoolExecutor
+    check(tool, root, ledger, report, core_only=core_only)
+    data = json.loads(ledger.read_text())
+    cases = data["safety_contract"]["mutations"]
+    require({r["family"] for r in cases} >= SAFETY_FAMILIES, "Missing safety negative cases")
     with tempfile.TemporaryDirectory(prefix="logical-negative-") as directory:
         base = Path(directory)
-        for name, filename, old, new in cases:
-            case = base / name
+        frozen_checker = base / "frozen-checker.py"
+        shutil.copy2(Path(__file__).resolve(), frozen_checker)
+        frozen_ledger = base / "frozen-ledger.json"
+        shutil.copy2(ledger, frozen_ledger)
+        frozen_report = base / "report/logical.tex"
+        frozen_report.parent.mkdir()
+        shutil.copy2(report, frozen_report)
+        shutil.copy2(report.parent / "requirements.tex", frozen_report.parent / "requirements.tex")
+        for key in ("source", "pdf"):
+            destination = frozen_report.parent / data["figure"][key]
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(report.parent / data["figure"][key], destination)
+        jobs = []
+        for row in cases:
+            require(row["file"] in CORE_FILES, "Negative mutation outside logical core")
+            case = Path(directory) / row["name"]
             case.mkdir()
-            for source in FILES + ("logical-responsibilities.toml",):
-                (case / source).parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(root / source, case / source)
-            path = case / filename
+            for name in CORE_FILES if core_only else FILES:
+                target = case / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(root / name, target)
+            shutil.copy2(root / "logical-responsibilities.toml", case / "logical-responsibilities.toml")
+            path = case / row["file"]
             text = path.read_text()
-            begin, end = 0, len(text)
-            if name == "stale_result_claim":
-                begin = text.index("    action def DesignRealization {")
-                end = text.index("    action def ConceptRealization {")
-            fragment = text[begin:end]
-            require(fragment.count(old) == 1, f"Negative test no longer precise: {name}")
-            path.write_text(text[:begin] + fragment.replace(old, new) + text[end:])
-            try:
-                check(tool, case, ledger, report)
-            except (ValueError, KeyError, AttributeError, RuntimeError) as error:
-                outcomes.append({"case": name, "rejected": True, "reason": str(error)[:220]})
+            if row.get("scope_start"):
+                require(text.count(row["scope_start"]) == 1, "Negative scope must match exactly once")
+                start = text.index(row["scope_start"])
+                end = text.index(row["scope_end"], start + len(row["scope_start"])) if row.get("scope_end") else len(text)
+                mutated = text[:start] + mutate_exact(text[start:end], row["selector"], row["replacement"]) + text[end:]
             else:
-                raise ValueError(f"Negative case accepted: {name}")
-        false_ledger = json.loads(ledger.read_text())
-        false_ledger["allocations"][0]["verification"]["status"] = "executed, passed"
-        path = base / "false-verification.json"
-        path.write_text(json.dumps(false_ledger))
-        try:
-            check(tool, root, path, report)
-        except ValueError as error:
-            outcomes.append({"case": "false_verification_outcome", "rejected": True, "reason": str(error)})
-        else:
-            raise ValueError("Negative case accepted: false_verification_outcome")
-    return outcomes
+                mutated = mutate_exact(text, row["selector"], row["replacement"])
+            path.write_text(mutated)
+            jobs.append((row, case))
+
+        def run(job):
+            row, case = job
+            command = [sys.executable, str(frozen_checker), "--tool", str(Path(tool.__file__).resolve()),
+                       "--model-root", str(case), "--ledger", str(frozen_ledger), "--report", str(frozen_report)]
+            if core_only:
+                command.append("--core-only")
+            completed = subprocess.run(command, capture_output=True, text=True, timeout=180)
+            reason = completed.stderr.strip()
+            require_native_mutation_rejection(completed.returncode, reason)
+            print(f"Native mutation rejected: {row['name']}: {reason[:130]}", file=sys.stderr, flush=True)
+            return {"case": row["name"], "selector_matched": True, "native_check_executed": True,
+                    "rejected": True, "reason": reason[6:][:300]}
+
+        # Isolated native processes, not shared concurrent Syside API models.
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            return list(pool.map(run, jobs))
 
 
 def main():
@@ -501,16 +752,20 @@ def main():
     parser.add_argument("--model-root", type=Path, default=Path(__file__).resolve().parent)
     parser.add_argument("--ledger", type=Path, default=Path(__file__).resolve().parent.parent / "traceability/logical-architecture.json")
     parser.add_argument("--report", type=Path, default=Path(__file__).resolve().parent.parent / "logical.tex")
+    boundary = parser.add_mutually_exclusive_group()
+    boundary.add_argument("--core-only", action="store_true")
+    boundary.add_argument("--source-only", action="store_true")
     parser.add_argument("--negative-cases", action="store_true")
     args = parser.parse_args()
+    require(not (args.source_only and args.negative_cases), "Safety mutations require a complete native architecture baseline")
     spec = importlib.util.spec_from_file_location("logical_native_tool", args.tool.resolve())
-    require(spec is not None and spec.loader is not None, "Cannot load native wrapper")
+    require(spec and spec.loader, "Cannot load native wrapper")
     tool = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = tool
     spec.loader.exec_module(tool)
-    result = check(tool, args.model_root, args.ledger, args.report)
+    result = check(tool, args.model_root, args.ledger, args.report, core_only=args.core_only, source_only=args.source_only)
     if args.negative_cases:
-        result["negative_cases"] = negative_checks(tool, args.model_root, args.ledger, args.report)
+        result["negative_cases"] = negative_checks(tool, args.model_root, args.ledger, args.report, core_only=args.core_only)
     print(json.dumps(result, indent=2))
     return 0
 

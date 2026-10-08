@@ -1,19 +1,11 @@
-# Native view of current logical parts. No deployments or implementation choices.
-[viz.layout.render_style]
-interconnection = "nested"
-[viz.expose]
-mode = "flat"
-[viz.compartments]
-max_entries = 0
-show_inherited_rows = false
-show_annotation_rows = false
-[viz.filters.interconnection]
-show_node_heritage_edges = false
-show_port_heritage_edges = false
-show_inherited_nodes = true
-show_attributes_as = "hidden"
-[viz.render]
-zoom_level = 2.0
-max_raster_memory_mb = 512
-[viz.style]
-theme = "light_mono"
+# Logical validation policy. The audience figure is an approved custom SVG/PDF,
+# not a native Syside visualization. No render settings are passed to Syside.
+[validation]
+pending_native_is_failure = true
+source_boundary = "seven files, excludes architecture and physical candidates"
+core_boundary = "nine files, excludes verification/publication/physical candidates"
+allocation = "exactly one primary owner per active FR, retired FRs excluded"
+io_union = "exact final category strings with complete per-FR provenance"
+negative_mutation = "native baseline passes, frozen inputs, selector matches exactly once, isolated licensed native check rejects; tooling failures never count"
+safety = "native Boolean/enum truth tables, actor allocation, parameter flows, state ownership and gate dominance"
+publication = "approved custom SVG/PDF identity, no native-render claim"

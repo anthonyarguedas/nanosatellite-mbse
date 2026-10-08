@@ -1,90 +1,210 @@
-// Current proposed physical candidate. No satisfaction or empirical result.
+// Proposed six-component physical candidate. Empirical status: proposed/unexecuted.
 package CandidateNS {
     private import PhysicalVocabulary::*;
     private import FrameworkDomain::*;
+    private import BoundaryViews::*;
     private import FrameworkLogical::*;
-    doc /* PA-NS: Nanospace collaboration with EPS model services. Retain: concurrent parameter sharing and dependency analysis remain distinct strengths. Integrated Nanospace/HyperTension planning is prospective. Gaphor extraction is a separate tool-specific profile, never assumed to transfer automatically. Browser workstation, declared Nanospace server/API/database, local assistance and managed release archive. Server/API/database technology and maintained versions require confirmation from the accessible distribution. Native model owns structure/interfaces, Nanospace owns assigned working parameters. Access, maintained stack, failed-update recovery and exact export remain unknown. */
-    part def C01 :> ExchangeSoftware {
-        doc /* Nanospace browser/API and checked Python model/source adapters. Check every external mapping for stable identities, revisions, structure, units, polarity and time/mode meaning. Preserve rejected raw transfers. Views resolve one controlled baseline. */
-        perform action :>> checkTransfer;
-        perform action :>> makeViews;
-    }
-    @ComponentSpecification about C01 { tools = "Nanospace browser/API and checked Python model/source adapters"; authority = "Check every external mapping for stable identities, revisions, structure, units, polarity and time/mode meaning. Preserve rejected raw transfers. Views resolve one controlled baseline."; verificationNeed = "Verify assigned current FR checks, interfaces, failure/currency paths and source/profile limitations. Implementation pending."; status = "proposed, not verified"; }
-    part def C02 :> AssistanceSoftware {
-        doc /* Python assistance integrated with browser edits; optional curated HyperTension/HDDL adapter. Active Python drafting rules, BM25/local pinned Qwen retrieval/reranking, optional admitted pinned Jev scoring, controlled applicability and separate cited rule/source/context explanations. Retain uncertainty, no eligible/unavailable status and human dispositions. */
+    private import ScalarValues::*;
+    doc /* PA-NS: Nanospace/dependency composite. Every cited method supplies a bounded subset. All joins, missing capabilities and whole-CUBICS/F Prime adapters are proposed completion. There is no selected candidate or empirical comparison outcome. */
+    part def <'NS-C01'> C01 :> RequirementsGuidanceSoftware {
+        doc /* Nanospace database/API requirements and parameter relations plus separate first-valid HTN planning. Full planner integration, semantic checks and applicability admission are proposed. */
+        part authoring : NanospaceAuthoringProfile {
+            attribute :>> qualityRulesSemanticChecksAndLimitations = "Database requirement relations feed structural checks and proposed semantic services.";
+            attribute :>> recommendationContextAndApplicability = "Separate first-valid HTN plans require integrated applicability checks and admission of every planned action.";
+        }
         perform action :>> acknowledge;
-        perform action checkDraft : PhysicalCheckDraft :>> AssistanceSoftware::checkDraft;
+        perform action :>> checkDraft : PhysicalCheckDraft {
+            bind authoring = C01::authoring;
+        }
+        perform action :>> recommend : PhysicalHTNRecommendMethods {
+            bind authoring = C01::authoring;
+            perform action :>> planner references authoring.planner.propose;
+        }
         perform action :>> dispose;
-        perform action recommend : PhysicalRecommendMethods :>> AssistanceSoftware::recommend;
-        perform action reassess : PhysicalReassessAssistance :>> AssistanceSoftware::reassess {
-            perform action checkDraft :>> checkDraft references CandidateNS::C02::checkDraft;
-            perform action recommend :>> recommend references CandidateNS::C02::recommend;
+        perform action :>> reassess : PhysicalReassessAssistance {
+            perform action :>> checkDraft references CandidateNS::C01::checkDraft;
+            perform action :>> recommend references CandidateNS::C01::recommend;
         }
-    }
-    @ComponentSpecification about C02 { tools = "Python assistance integrated with browser edits; optional curated HyperTension/HDDL adapter"; authority = "Active Python drafting rules, BM25/local pinned Qwen retrieval/reranking, optional admitted pinned Jev scoring, controlled applicability and separate cited rule/source/context explanations. Retain uncertainty, no eligible/unavailable status and human dispositions."; verificationNeed = "Verify assigned current FR checks, interfaces, failure/currency paths and source/profile limitations. Implementation pending."; status = "proposed, not verified"; }
-    part def C03 :> RequirementsSoftware {
-        doc /* Proposed requirement semantics and allocation records linked to Nanospace IDs. Retain requirement meaning and proposed derivation/allocation. Reviewed record changes preserve unresolved fields and exact parents. Similarity and imported functions are not requirement derivation. */
-        perform action :>> deriveAllocate;
         perform action :>> retainRequirements;
+        perform action :>> deriveAllocate;
         perform action :>> traceLinks;
+        perform action :>> presentAdvice;
+        perform action :>> sourceQuery;
     }
-    @ComponentSpecification about C03 { tools = "Proposed requirement semantics and allocation records linked to Nanospace IDs"; authority = "Retain requirement meaning and proposed derivation/allocation. Reviewed record changes preserve unresolved fields and exact parents. Similarity and imported functions are not requirement derivation."; verificationNeed = "Verify assigned current FR checks, interfaces, failure/currency paths and source/profile limitations. Implementation pending."; status = "proposed, not verified"; }
-    part def C04 :> DesignSoftware {
-        doc /* Nanospace parameters with declared native model authority and Python budgets. Own mission/ConOps, modeled component occurrences, variants, BOM quantities and sourced budgets/sizing, dated EPS acquisition estimates, feasibility-first trades and detailed control/interface definitions. */
-        perform action :>> budgetSize;
-        perform action :>> compareDesigns;
-        perform action :>> defineDesign;
-        perform action :>> defineInterfaces;
-    }
-    @ComponentSpecification about C04 { tools = "Nanospace parameters with declared native model authority and Python budgets"; authority = "Own mission/ConOps, modeled component occurrences, variants, BOM quantities and sourced budgets/sizing, dated EPS acquisition estimates, feasibility-first trades and detailed control/interface definitions."; verificationNeed = "Verify assigned current FR checks, interfaces, failure/currency paths and source/profile limitations. Implementation pending."; status = "proposed, not verified"; }
-    part def C05 :> AnalysisSoftware {
-        doc /* Python plans, specialist-model adapters and host work coordination. Plan declared coupled numerical, RAM and MIL profiles. Coordinate external models and exact released host coding/build/SIL. Preserve solver/coupling/resources, matched stimuli and replay rules. Every mandatory discipline profile needs verification. */
-        perform action :>> compareMILSil;
-        perform action :>> coordinateCoding;
-        perform action :>> planAnalysis;
-        perform action :>> planMIL;
-        perform action :>> replay;
-        perform action :>> verifyProfiles;
-        perform action :>> verifyHostProfiles;
-    }
-    @ComponentSpecification about C05 { tools = "Python plans, specialist-model adapters and host work coordination"; authority = "Plan declared coupled numerical, RAM and MIL profiles. Coordinate external models and exact released host coding/build/SIL. Preserve solver/coupling/resources, matched stimuli and replay rules. Every mandatory discipline profile needs verification."; verificationNeed = "Verify assigned current FR checks, interfaces, failure/currency paths and source/profile limitations. Implementation pending."; status = "proposed, not verified"; }
-    part def C06 :> CredibilitySoftware {
-        doc /* Python credibility and supplied-history assessment. Check intended use, fidelity, omissions, validity, numerics and history quality. Preserve raw values and masks, sample/receipt times and residual units. Separate supplied-data calibration proposals from independent assessment. */
-        perform action :>> assessModel;
-        perform action :>> proposeCalibration;
-    }
-    @ComponentSpecification about C06 { tools = "Python credibility and supplied-history assessment"; authority = "Check intended use, fidelity, omissions, validity, numerics and history quality. Preserve raw values and masks, sample/receipt times and residual units. Separate supplied-data calibration proposals from independent assessment."; verificationNeed = "Verify assigned current FR checks, interfaces, failure/currency paths and source/profile limitations. Implementation pending."; status = "proposed, not verified"; }
-    part def C07 :> ReviewSoftware {
-        doc /* Browser baseline views plus Python EPS/review assessment. Plan EPS verification/validation against separate requirements/expectations. Assess critical gaps, prepare scoped review packages and record only current designated-authority decisions. Prepared is not accepted. */
-        perform action :>> assessProduct;
-        perform action :>> planAssessment;
-        perform action :>> prepareReview;
-        perform action :>> recordReview;
-    }
-    @ComponentSpecification about C07 { tools = "Browser baseline views plus Python EPS/review assessment"; authority = "Plan EPS verification/validation against separate requirements/expectations. Assess critical gaps, prepare scoped review packages and record only current designated-authority decisions. Prepared is not accepted."; verificationNeed = "Verify assigned current FR checks, interfaces, failure/currency paths and source/profile limitations. Implementation pending."; status = "proposed, not verified"; }
-    part def C08 :> ConfigurationSoftware {
-        doc /* Reviewed API/native-model snapshots, Git manifests, managed archive and dependency index. Git and a managed raw-result/source archive preserve exact revisions, impacts, predecessors and authorized successors. Rebuildable indexes do not own engineering fields. Invalidate edited/pending guidance immediately and recheck latest context before display/application. */
-        perform action :>> invalidate;
-        perform action :>> preserveRun;
-        perform action :>> retrieveBaseline;
-        perform action :>> successor;
-        perform action checkCurrency : PhysicalCheckCurrency :>> ConfigurationSoftware::checkCurrency;
-    }
-    @ComponentSpecification about C08 { tools = "Reviewed API/native-model snapshots, Git manifests, managed archive and dependency index"; authority = "Git and a managed raw-result/source archive preserve exact revisions, impacts, predecessors and authorized successors. Rebuildable indexes do not own engineering fields. Invalidate edited/pending guidance immediately and recheck latest context before display/application."; verificationNeed = "Verify assigned current FR checks, interfaces, failure/currency paths and source/profile limitations. Implementation pending."; status = "proposed, not verified"; }
-    part def Configuration :> LogicalFramework {
-        part :>> L01 : C01;
-        part :>> L02 : C02 {
-            perform action checkDraft : PhysicalCheckDraft :>> C02::checkDraft, FrameworkLogical::Assistance::checkDraft;
-            perform action recommend : PhysicalRecommendMethods :>> C02::recommend, FrameworkLogical::Assistance::recommend;
-            perform action reassess : PhysicalReassessAssistance :>> C02::reassess, FrameworkLogical::Assistance::reassess;
+    @ComponentSpecification about C01 { tools = "Nanospace database/API requirements and parameter relations plus separate first-valid HTN planning. Full planner integration, semantic checks and applicability admission are proposed."; logical = "L01"; sourceMethods = ("L01.AR3"); authority = "Engineer application/change/release and designated review authority remain distinct. Profiles and scores confer no approval."; verificationNeed = "All allocated FR checks, exact IO fields, failure/currency/replay paths and source limits require verification."; status = "proposed/unexecuted"; }
+    @SourceRecord about C01 { identifier = "NS-C01"; sourceText = "Nanospace database/API requirements and parameter relations plus separate first-valid HTN planning. Full planner integration, semantic checks and applicability admission are proposed."; sourceLocator = "OOSEM L01 proposed physical synthesis. Cited partial method capabilities and missing completion are stated in this component specification."; citationRecord = "review-0340"; status = "proposed/unexecuted"; }
+    part def <'NS-C02'> C02 :> MissionDesignSoftware {
+        doc /* Boan mode/ephemeris/load and energy workflow. Iterative sizing remains scoped to declared models and expert scenarios, with broader effects and source governance added. */
+        part designMethods : DesignMethodProfile {
+            attribute :>> publishedSizingPlantEnergyOrCSRMMethods = "Boan mode/ephemeris/load and energy workflow. Iterative sizing remains scoped to declared models and expert scenarios, with broader effects and source governance added.";
+            attribute :>> missingEffectsUnknownsAndProposedCompletion = "Declare missing source data, dynamic/thermal/aging/EMC/RAM effects, uncertainty and applicability. No complete tool workflow is established.";
         }
-        part :>> L03 : C03;
-        part :>> L04 : C04;
-        part :>> L05 : C05;
-        part :>> L06 : C06;
-        part :>> L07 : C07;
-        part :>> L08 : C08 {
-            perform action checkCurrency : PhysicalCheckCurrency :>> C08::checkCurrency, FrameworkLogical::Configuration::checkCurrency;
+        perform action :>> defineDesign;
+        perform action :>> budgetSize : PhysicalBudgetSize {
+            bind profile = C02::designMethods;
+        }
+        perform action :>> compareDesigns;
+        perform action :>> defineInterfaces;
+        perform action :>> configureConcept;
+    }
+    @ComponentSpecification about C02 { tools = "Boan mode/ephemeris/load and energy workflow. Iterative sizing remains scoped to declared models and expert scenarios, with broader effects and source governance added."; logical = "L02"; sourceMethods = ("L02.EP4"); authority = "Engineer application/change/release and designated review authority remain distinct. Profiles and scores confer no approval."; verificationNeed = "All allocated FR checks, exact IO fields, failure/currency/replay paths and source limits require verification."; status = "proposed/unexecuted"; }
+    @SourceRecord about C02 { identifier = "NS-C02"; sourceText = "Boan mode/ephemeris/load and energy workflow. Iterative sizing remains scoped to declared models and expert scenarios, with broader effects and source governance added."; sourceLocator = "OOSEM L02 proposed physical synthesis. Cited partial method capabilities and missing completion are stated in this component specification."; citationRecord = "review-0289"; status = "proposed/unexecuted"; }
+    part def <'NS-C03'> C03 :> SimulationIntegrationSoftware {
+        doc /* F Prime architecture pattern plus Boan file-based continuity into Opalis. No Opalis FMU export is assumed. Required numerical Omniverse/host adapters are proposed. */
+        part :>> mapping {
+            attribute :>> authoringDesignToPythonPlantUSDOrFMIMappings = "Nanospace database, ephemeris and loads -> Boan/Opalis energy workflow -> proposed numerical whole-CUBICS Omniverse mappings.";
+            attribute :>> fPrimeInterfaceTranslationPathAndVersions = "Database interface records -> new checked adapters of component/port/topology and ground definitions -> required F Prime profile.";
+            attribute :>> numericalEntityUnitSampleReceiptScenarioTimeChecks = "Check same scenario, entity/channel identity, quantities/units, sample/receipt times, synchronization rules/limits/delays, raw missing/invalid/inactive values and masks.";
+            attribute :>> disciplineSolverEffectsAndUnsupportedTransfers = "Required electrical/thermal and applicable EMC/geometry/RAM profiles with supported effects, validity, omissions and independent evidence. Authored failure data to fault trees is a proposed adaptation with unresolved missing rates.";
+        }
+        part :>> replayDependencies {
+            attribute :>> requiredDependencyClasses = "Database/API snapshots, scenario/ephemeris/load records, HTN/dependency versions, Opalis/tool dependencies and raw outputs.";
+        }
+        perform action :>> planAnalysis : PhysicalPlanAnalysis {
+            bind profile = C03::mapping;
+        }
+        perform action :>> planMIL;
+        perform action :>> coordinateCoding;
+        perform action :>> compareMILSil;
+        perform action :>> replay;
+        perform action :>> planRepeat;
+        perform action :>> mapFPrime : PhysicalMapFPrime {
+            bind profile = C03::mapping;
+        }
+    }
+    @ComponentSpecification about C03 { tools = "F Prime architecture pattern plus Boan file-based continuity into Opalis. No Opalis FMU export is assumed. Required numerical Omniverse/host adapters are proposed."; logical = "L03"; sourceMethods = ("L03.IN1", "L03.IN4"); authority = "Engineer application/change/release and designated review authority remain distinct. Profiles and scores confer no approval."; verificationNeed = "All allocated FR checks, exact IO fields, failure/currency/replay paths and source limits require verification."; status = "proposed/unexecuted"; }
+    @SourceRecord about C03 { identifier = "NS-C03"; sourceText = "F Prime architecture pattern plus Boan file-based continuity into Opalis. No Opalis FMU export is assumed. Required numerical Omniverse/host adapters are proposed."; sourceLocator = "OOSEM L03 proposed physical synthesis. Cited partial method capabilities and missing completion are stated in this component specification."; citationRecord = "review-0853, review-0289"; status = "proposed/unexecuted"; }
+    part def <'NS-C04'> C04 :> ModelCredibilitySoftware {
+        doc /* Djebko mapped histories, validity masks and RMSE plus separate UPPAAL CORA/KiBaM assessment. Source-specific methods need EPS applicability and independent reference checks. */
+        part assessmentMethods : CredibilityMethodProfile {
+            attribute :>> waveformHistorySeparateModelAndCSRMMethods = "Djebko valid-history/RMSE mapping plus separate UPPAAL CORA/KiBaM validation.";
+            attribute :>> applicabilityTimingRawMasksAndIndependentDataRules = "Keep calibration and independent reference use distinct. Check current intended use, units/timing/raw masks and uncertainty. Critical evidence gaps block unqualified claims.";
+        }
+        perform action :>> assessModel : PhysicalAssessModel {
+            bind profile = C04::assessmentMethods;
+        }
+        perform action :>> proposeCalibration;
+        perform action :>> checkReferenceData;
+    }
+    @ComponentSpecification about C04 { tools = "Djebko mapped histories, validity masks and RMSE plus separate UPPAAL CORA/KiBaM assessment. Source-specific methods need EPS applicability and independent reference checks."; logical = "L04"; sourceMethods = ("L04.CR3", "L04.CR4"); authority = "Engineer application/change/release and designated review authority remain distinct. Profiles and scores confer no approval."; verificationNeed = "All allocated FR checks, exact IO fields, failure/currency/replay paths and source limits require verification."; status = "proposed/unexecuted"; }
+    @SourceRecord about C04 { identifier = "NS-C04"; sourceText = "Djebko mapped histories, validity masks and RMSE plus separate UPPAAL CORA/KiBaM assessment. Source-specific methods need EPS applicability and independent reference checks."; sourceLocator = "OOSEM L04 proposed physical synthesis. Cited partial method capabilities and missing completion are stated in this component specification."; citationRecord = "review-1251, review-1303"; status = "proposed/unexecuted"; }
+    part def <'NS-C05'> C05 :> EvidenceReviewSoftware {
+        doc /* Nanospace intermediate result/rerun records plus requirement/procedure/verdict feedback. Exact scoped evidence and designated review authority are proposed. */
+        part evidenceMethods : EvidenceMethodProfile {
+            attribute :>> requirementProcedureVerdictAndPublishedReviewTraces = "Nanospace intermediate results/reruns plus requirement/procedure/verdict feedback.";
+            attribute :>> exactBaselineAuthorityAndCoverageAssembly = "Exact current baseline and scoped criteria, source-linked evidence and gaps. Preparation is not acceptance. Designated authority retains decisions and renewed closure control.";
+        }
+        perform action :>> planAssessment;
+        perform action :>> assessProduct;
+        perform action :>> prepareReview : PhysicalPrepareReviewPackage {
+            bind profile = C05::evidenceMethods;
+        }
+        perform action :>> checkReviewDecision;
+        perform action :>> recordReview;
+        perform action :>> makeViews;
+        perform action :>> presentAssessment;
+    }
+    @ComponentSpecification about C05 { tools = "Nanospace intermediate result/rerun records plus requirement/procedure/verdict feedback. Exact scoped evidence and designated review authority are proposed."; logical = "L05"; sourceMethods = ("L05.EC3", "L05.EC2"); authority = "Engineer application/change/release and designated review authority remain distinct. Profiles and scores confer no approval."; verificationNeed = "All allocated FR checks, exact IO fields, failure/currency/replay paths and source limits require verification."; status = "proposed/unexecuted"; }
+    @SourceRecord about C05 { identifier = "NS-C05"; sourceText = "Nanospace intermediate result/rerun records plus requirement/procedure/verdict feedback. Exact scoped evidence and designated review authority are proposed."; sourceLocator = "OOSEM L05 proposed physical synthesis. Cited partial method capabilities and missing completion are stated in this component specification."; citationRecord = "review-0340, citation-0569"; status = "proposed/unexecuted"; }
+    part def <'NS-C06'> C06 :> ConfigurationExchangeSoftware {
+        doc /* Nanospace database/API/dependencies plus Git history. Database, dependency and planner revisions immediately invalidate affected guidance and preserve exact replay snapshots. */
+        part currency : CurrencyProfile {
+            attribute :>> affectedRevisionKeysAndInvalidationPolicy = "Database, dependency graph, HDDL/domain/problem and planner revisions invalidate advice before current-context reassessment.";
+        }
+        ref part replayProfile : ReplayProfile;
+        ref part numericalMapping : IntegrationMethodProfile;
+        ref port numericalEndpoint : AnalysisPort;
+        perform action :>> captureContext;
+        perform action :>> checkCurrency : PhysicalCheckCurrency {
+            bind profile = C06::currency;
+        }
+        perform action :>> invalidate : PhysicalInvalidateAndReassess {
+            bind profile = C06::currency;
+        }
+        perform action :>> checkChange;
+        perform action :>> successor;
+        perform action :>> preserveRun : PhysicalPreserveRun {
+            bind mapping = C06::numericalMapping;
+            bind currency = C06::currency;
+            bind numericalEndpoint = C06::numericalEndpoint;
+        }
+        perform action :>> checkDesignAuthorization;
+        perform action :>> retrieveBaseline;
+        perform action :>> retainReview;
+        perform action :>> prepareReplay : PhysicalPrepareReplay {
+            bind profile = C06::replayProfile;
+        }
+        perform action :>> preserveRecord;
+        perform action :>> checkSelection;
+        perform action :>> checkResultContext;
+        perform action :>> prepareCalibrationChange;
+        perform action :>> checkTransfer;
+        perform action :>> checkEngineeringTransfer;
+        perform action :>> checkSourceTransfer;
+    }
+    @ComponentSpecification about C06 { tools = "Nanospace database/API/dependencies plus Git history. Database, dependency and planner revisions immediately invalidate affected guidance and preserve exact replay snapshots."; logical = "L06"; sourceMethods = ("L06.EC3", "L06.EC1"); authority = "Engineer application/change/release and designated review authority remain distinct. Profiles and scores confer no approval."; verificationNeed = "All allocated FR checks, exact IO fields, failure/currency/replay paths and source limits require verification."; status = "proposed/unexecuted"; }
+    @SourceRecord about C06 { identifier = "NS-C06"; sourceText = "Nanospace database/API/dependencies plus Git history. Database, dependency and planner revisions immediately invalidate affected guidance and preserve exact replay snapshots."; sourceLocator = "OOSEM L06 proposed physical synthesis. Cited partial method capabilities and missing completion are stated in this component specification."; citationRecord = "review-0340, chiu2023sealion"; status = "proposed/unexecuted"; }
+    part def Configuration :> LogicalFramework {
+        part :>> L01 : C01 {
+            perform action acknowledge : FrameworkLogical::AcknowledgeAssistance :>> C01::acknowledge, FrameworkLogical::RequirementsAssistance::acknowledge;
+            perform action checkDraft : PhysicalCheckDraft :>> C01::checkDraft, FrameworkLogical::RequirementsAssistance::checkDraft;
+            perform action recommend : PhysicalHTNRecommendMethods :>> C01::recommend, FrameworkLogical::RequirementsAssistance::recommend;
+            perform action dispose : FrameworkLogical::DisposeSuggestion :>> C01::dispose, FrameworkLogical::RequirementsAssistance::dispose;
+            perform action reassess : PhysicalReassessAssistance :>> C01::reassess, FrameworkLogical::RequirementsAssistance::reassess;
+            perform action retainRequirements : FrameworkLogical::RetainRequirements :>> C01::retainRequirements, FrameworkLogical::RequirementsAssistance::retainRequirements;
+            perform action deriveAllocate : FrameworkLogical::DeriveAllocate :>> C01::deriveAllocate, FrameworkLogical::RequirementsAssistance::deriveAllocate;
+            perform action traceLinks : FrameworkLogical::TraceLinks :>> C01::traceLinks, FrameworkLogical::RequirementsAssistance::traceLinks;
+            perform action presentAdvice : FrameworkLogical::PresentAdvice :>> C01::presentAdvice, FrameworkLogical::RequirementsAssistance::presentAdvice;
+            perform action sourceQuery : FrameworkLogical::RequestApplicableSource :>> C01::sourceQuery, FrameworkLogical::RequirementsAssistance::sourceQuery;
+        }
+        part :>> L02 : C02 {
+            perform action defineDesign : FrameworkLogical::DefineDesign :>> C02::defineDesign, FrameworkLogical::MissionDesign::defineDesign;
+            perform action budgetSize : PhysicalBudgetSize :>> C02::budgetSize, FrameworkLogical::MissionDesign::budgetSize;
+            perform action compareDesigns : FrameworkLogical::CompareDesigns :>> C02::compareDesigns, FrameworkLogical::MissionDesign::compareDesigns;
+            perform action defineInterfaces : FrameworkLogical::DefineInterfaces :>> C02::defineInterfaces, FrameworkLogical::MissionDesign::defineInterfaces;
+            perform action configureConcept : FrameworkLogical::ConfigureConcept :>> C02::configureConcept, FrameworkLogical::MissionDesign::configureConcept;
+        }
+        part :>> L03 : C03 {
+            perform action planAnalysis : PhysicalPlanAnalysis :>> C03::planAnalysis, FrameworkLogical::SimulationIntegration::planAnalysis;
+            perform action planMIL : FrameworkLogical::PlanMIL :>> C03::planMIL, FrameworkLogical::SimulationIntegration::planMIL;
+            perform action coordinateCoding : FrameworkLogical::CoordinateCoding :>> C03::coordinateCoding, FrameworkLogical::SimulationIntegration::coordinateCoding;
+            perform action compareMILSil : FrameworkLogical::CompareMILSil :>> C03::compareMILSil, FrameworkLogical::SimulationIntegration::compareMILSil;
+            perform action replay : FrameworkLogical::ReplayRun :>> C03::replay, FrameworkLogical::SimulationIntegration::replay;
+            perform action planRepeat : FrameworkLogical::PlanRepeatedAssessment :>> C03::planRepeat, FrameworkLogical::SimulationIntegration::planRepeat;
+            perform action mapFPrime : PhysicalMapFPrime :>> C03::mapFPrime, FrameworkLogical::SimulationIntegration::mapFPrime;
+        }
+        part :>> L04 : C04 {
+            perform action assessModel : PhysicalAssessModel :>> C04::assessModel, FrameworkLogical::ModelCredibility::assessModel;
+            perform action proposeCalibration : FrameworkLogical::ProposeCalibration :>> C04::proposeCalibration, FrameworkLogical::ModelCredibility::proposeCalibration;
+            perform action checkReferenceData : FrameworkLogical::CheckReferenceData :>> C04::checkReferenceData, FrameworkLogical::ModelCredibility::checkReferenceData;
+        }
+        part :>> L05 : C05 {
+            perform action planAssessment : FrameworkLogical::PlanAssessment :>> C05::planAssessment, FrameworkLogical::EvidenceReview::planAssessment;
+            perform action assessProduct : FrameworkLogical::AssessProduct :>> C05::assessProduct, FrameworkLogical::EvidenceReview::assessProduct;
+            perform action prepareReview : PhysicalPrepareReviewPackage :>> C05::prepareReview, FrameworkLogical::EvidenceReview::prepareReview;
+            perform action checkReviewDecision : FrameworkLogical::CheckReviewDecision :>> C05::checkReviewDecision, FrameworkLogical::EvidenceReview::checkReviewDecision;
+            perform action recordReview : FrameworkLogical::RecordReviewDecision :>> C05::recordReview, FrameworkLogical::EvidenceReview::recordReview;
+            perform action makeViews : FrameworkLogical::MakeViews :>> C05::makeViews, FrameworkLogical::EvidenceReview::makeViews;
+            perform action presentAssessment : FrameworkLogical::PresentAssessment :>> C05::presentAssessment, FrameworkLogical::EvidenceReview::presentAssessment;
+        }
+        part :>> L06 : C06 {
+            perform action captureContext : FrameworkLogical::CaptureContext :>> C06::captureContext, FrameworkLogical::ConfigurationExchange::captureContext;
+            perform action checkCurrency : PhysicalCheckCurrency :>> C06::checkCurrency, FrameworkLogical::ConfigurationExchange::checkCurrency;
+            perform action invalidate : PhysicalInvalidateAndReassess :>> C06::invalidate, FrameworkLogical::ConfigurationExchange::invalidate;
+            perform action checkChange : FrameworkLogical::CheckEngineeringChange :>> C06::checkChange, FrameworkLogical::ConfigurationExchange::checkChange;
+            perform action successor : FrameworkLogical::RetainSuccessor :>> C06::successor, FrameworkLogical::ConfigurationExchange::successor;
+            perform action preserveRun : PhysicalPreserveRun :>> C06::preserveRun, FrameworkLogical::ConfigurationExchange::preserveRun;
+            perform action checkDesignAuthorization : FrameworkLogical::CheckDetailedDesignAuthorization :>> C06::checkDesignAuthorization, FrameworkLogical::ConfigurationExchange::checkDesignAuthorization;
+            perform action retrieveBaseline : FrameworkLogical::RetrieveBaseline :>> C06::retrieveBaseline, FrameworkLogical::ConfigurationExchange::retrieveBaseline;
+            perform action retainReview : FrameworkLogical::RetainReviewedBaseline :>> C06::retainReview, FrameworkLogical::ConfigurationExchange::retainReview;
+            perform action prepareReplay : PhysicalPrepareReplay :>> C06::prepareReplay, FrameworkLogical::ConfigurationExchange::prepareReplay;
+            perform action preserveRecord : FrameworkLogical::PreserveRecord :>> C06::preserveRecord, FrameworkLogical::ConfigurationExchange::preserveRecord;
+            perform action checkSelection : FrameworkLogical::CheckEngineerSelection :>> C06::checkSelection, FrameworkLogical::ConfigurationExchange::checkSelection;
+            perform action checkResultContext : FrameworkLogical::CheckResultContext :>> C06::checkResultContext, FrameworkLogical::ConfigurationExchange::checkResultContext;
+            perform action prepareCalibrationChange : FrameworkLogical::PrepareCalibrationChange :>> C06::prepareCalibrationChange, FrameworkLogical::ConfigurationExchange::prepareCalibrationChange;
+            perform action checkTransfer : FrameworkLogical::CheckTransfer :>> C06::checkTransfer, FrameworkLogical::ConfigurationExchange::checkTransfer;
+            perform action checkEngineeringTransfer : FrameworkLogical::CheckTransfer :>> C06::checkEngineeringTransfer, FrameworkLogical::ConfigurationExchange::checkEngineeringTransfer;
+            perform action checkSourceTransfer : FrameworkLogical::CheckTransfer :>> C06::checkSourceTransfer, FrameworkLogical::ConfigurationExchange::checkSourceTransfer;
         }
         part N1 : EngineeringHost;
         part N2 : AssistanceHost;
@@ -99,467 +219,482 @@ package CandidateNS {
         ref item rawResultsAndReleases : ReleaseData [0..*];
         perform action engineeringProcedure : EngineeringProcedure;
         perform action reviewProcedure : ReviewProcedure;
-        perform action assistance : PhysicalAssistanceRealization {
-            perform action checkDraft :>> checkDraft references L02.checkDraft;
-            perform action recommend :>> recommend references L02.recommend;
-            perform action reassess :>> reassess references L02.reassess;
-            perform action checkReply :>> checkReply references L08.checkCurrency;
-            perform action checkApplication :>> checkApplication references L08.checkCurrency;
-        }
-        perform action concept : PhysicalConceptRealization {
-            perform action :>> execute { perform action profiles :>> profiles references L05.verifyProfiles; }
-        }
-        perform action designRun : PhysicalDesignRealization {
-            perform action :>> execute { perform action profiles :>> profiles references L05.verifyProfiles; }
-        }
-        perform action software : PhysicalSoftwareRealization {
-            perform action :>> executeMIL { perform action profiles :>> profiles references L05.verifyProfiles; }
-            perform action :>> codeBuildSil { perform action profiles :>> profiles references L05.verifyHostProfiles; }
-        }
-        perform action changeReview : PhysicalChangeReviewRealization {
-            perform action reassessAdvice :>> reassessAdvice references L02.reassess;
-            perform action :>> repeat { perform action profiles :>> profiles references L05.verifyProfiles; }
-        }
-        perform action replayRun : PhysicalReplayRealization {
-            perform action :>> execute { perform action profiles :>> profiles references L05.verifyProfiles; }
-        }
-        perform action calibration : PhysicalCalibrationRealization {
-            perform action reassess :>> reassess references L02.reassess;
-            perform action :>> repeat { perform action profiles :>> profiles references L05.verifyProfiles; }
-        }
-        bind N1.exchange = L01;
-        bind N1.requirements = L03;
-        bind N1.design = L04;
-        bind N1.analyses = L05;
-        bind N1.credibility = L06;
-        bind N1.review = L07;
-        bind N2.advice = L02;
-        bind N3.configuration = L08;
-        bind N1.models = L01.p03;
-        bind N1.hostCode = L01.p04;
+        bind N1.requirements = L01;
+        bind N1.design = L02;
+        bind N1.analyses = L03;
+        bind N1.credibility = L04;
+        bind N1.review = L05;
+        bind N2.advice = L01;
+        bind N3.configuration = L06;
+        bind N1.models = L03.p03;
+        bind N1.hostCode = L03.p04;
+        bind L03.mapping.sourceRecords = L01.authoring.currentRecords;
+        bind L06.replayProfile = L03.replayDependencies;
+        bind L06.numericalMapping = L03.mapping;
+        bind L06.numericalEndpoint = L03.p03;
+        bind L06.currency.latest.context = L01.authoring.currentRecords.context;
+        bind L02.designMethods.sourceRecords = L01.authoring.currentRecords;
         interface adviceLink connect N1.assistance to N2.assistance;
         interface releasedData connect N1.revisions to N3.engineering;
         interface sourceAdvice connect N2.revisions to N3.assistance;
         interface modelLink connect N1.models to models.requests;
         interface codeLink connect N1.hostCode to hostCode.requests;
+        perform action assistance : PhysicalAssistanceRealization {
+            perform action receive :>> receive references L06.checkTransfer;
+            perform action capture :>> capture references L06.captureContext;
+            perform action invalidateOnEdit :>> invalidateOnEdit references L06.invalidate;
+            perform action acknowledge :>> acknowledge references L01.acknowledge;
+            perform action retainDraft :>> retainDraft references L01.retainRequirements;
+            perform action checkDraft :>> checkDraft references L01.checkDraft;
+            perform action recommend :>> recommend references L01.recommend;
+            perform action checkReply :>> checkReply references L06.checkCurrency;
+            perform action present :>> present references L01.presentAdvice;
+            perform action dispose :>> dispose references L01.dispose;
+            perform action checkApplication :>> checkApplication references L06.checkCurrency;
+            perform action derive :>> derive references L01.deriveAllocate;
+            perform action trace :>> trace references L01.traceLinks;
+            perform action retainValidation :>> retainValidation references L06.preserveRecord;
+            perform action retainDisposition :>> retainDisposition references L06.preserveRecord;
+            perform action invalidate :>> invalidate references L06.invalidate;
+            perform action reassess :>> reassess references L01.reassess;
+            perform action rejectTransfer :>> rejectTransfer references L06.preserveRecord;
+            perform action rejectDisposition :>> rejectDisposition references L06.preserveRecord;
+        }
+        perform action concept : PhysicalConceptRealization {
+            perform action makeConfiguration :>> makeConfiguration references L02.configureConcept;
+            perform action receive :>> receive references L06.checkTransfer;
+            perform action configure :>> configure references L02.defineDesign;
+            perform action budget :>> budget references L02.budgetSize;
+            perform action planCriteria :>> planCriteria references L05.planAssessment;
+            perform action plan :>> plan references L03.planAnalysis;
+            perform action :>> execute {
+                perform action :>> profiles references L03.verifyProfiles;
+                bind modelEndpoint = Configuration::models.requests;
+                bind hostEndpoint = Configuration::hostCode.requests;
+            }
+            perform action receiveResult :>> receiveResult references L06.checkTransfer;
+            perform action preserve :>> preserve references L06.preserveRun;
+            perform action checkCurrent :>> checkCurrent references L06.checkResultContext;
+            perform action credibility :>> credibility references L04.assessModel;
+            perform action assess :>> assess references L05.assessProduct;
+            perform action compare :>> compare references L02.compareDesigns;
+            perform action checkSelection :>> checkSelection references L06.checkSelection;
+            perform action retainSelection :>> retainSelection references L06.preserveRecord;
+            perform action retainGaps :>> retainGaps references L06.preserveRecord;
+            perform action retainRaw_receiveResult :>> retainRaw_receiveResult references L06.preserveRecord;
+        }
+        perform action designRun : PhysicalDesignRealization {
+            perform action receive :>> receive references L06.checkTransfer;
+            perform action configure :>> configure references L02.defineDesign;
+            perform action budget :>> budget references L02.budgetSize;
+            perform action planCriteria :>> planCriteria references L05.planAssessment;
+            perform action plan :>> plan references L03.planAnalysis;
+            perform action :>> execute {
+                perform action :>> profiles references L03.verifyProfiles;
+                bind modelEndpoint = Configuration::models.requests;
+                bind hostEndpoint = Configuration::hostCode.requests;
+            }
+            perform action receiveResult :>> receiveResult references L06.checkTransfer;
+            perform action preserve :>> preserve references L06.preserveRun;
+            perform action checkCurrent :>> checkCurrent references L06.checkResultContext;
+            perform action credibility :>> credibility references L04.assessModel;
+            perform action assess :>> assess references L05.assessProduct;
+            perform action compare :>> compare references L02.compareDesigns;
+            perform action checkSelection :>> checkSelection references L06.checkSelection;
+            perform action retainSelection :>> retainSelection references L06.preserveRecord;
+            perform action retainGaps :>> retainGaps references L06.preserveRecord;
+            perform action retainRaw_receiveResult :>> retainRaw_receiveResult references L06.preserveRecord;
+        }
+        perform action software : PhysicalSoftwareRealization {
+            perform action receive :>> receive references L06.checkTransfer;
+            perform action interfaces :>> interfaces references L02.defineInterfaces;
+            perform action mapping :>> mapping references L03.mapFPrime;
+            perform action planCriteria :>> planCriteria references L05.planAssessment;
+            perform action planMIL :>> planMIL references L03.planMIL;
+            perform action :>> executeMIL {
+                perform action :>> profiles references L03.verifyProfiles;
+                bind modelEndpoint = Configuration::models.requests;
+                bind hostEndpoint = Configuration::hostCode.requests;
+            }
+            perform action receiveMIL :>> receiveMIL references L06.checkTransfer;
+            perform action preserveMIL :>> preserveMIL references L06.preserveRun;
+            perform action assessMIL :>> assessMIL references L04.assessModel;
+            perform action checkRelease :>> checkRelease references L06.checkDesignAuthorization;
+            perform action coordinate :>> coordinate references L03.coordinateCoding;
+            perform action :>> codeBuildSil {
+                perform action :>> profiles references L03.verifyHostProfiles;
+                bind hostEndpoint = Configuration::hostCode.requests;
+            }
+            perform action receiveSIL :>> receiveSIL references L06.checkTransfer;
+            perform action preserveSIL :>> preserveSIL references L06.preserveRun;
+            perform action checkCurrent :>> checkCurrent references L06.checkResultContext;
+            perform action compare :>> compare references L03.compareMILSil;
+            perform action credibility :>> credibility references L04.assessModel;
+            perform action assess :>> assess references L05.assessProduct;
+            perform action present :>> present references L05.presentAssessment;
+            perform action checkProducts :>> checkProducts references L06.checkSelection;
+            perform action retainProducts :>> retainProducts references L06.preserveRecord;
+            perform action block :>> block references L06.preserveRecord;
+            perform action retainRaw_receiveMIL :>> retainRaw_receiveMIL references L06.preserveRecord;
+            perform action retainRaw_receiveSIL :>> retainRaw_receiveSIL references L06.preserveRecord;
+            perform action rejectRelease :>> rejectRelease references L06.preserveRecord;
+        }
+        perform action changeReview : PhysicalChangeReviewRealization {
+            perform action receive :>> receive references L06.checkTransfer;
+            perform action invalidate :>> invalidate references L06.invalidate;
+            perform action checkChange :>> checkChange references L06.checkChange;
+            perform action successor :>> successor references L06.successor;
+            perform action reassessAdvice :>> reassessAdvice references L01.reassess;
+            perform action planRepeat :>> planRepeat references L03.planRepeat;
+            perform action :>> repeat {
+                perform action :>> profiles references L03.verifyProfiles;
+                bind modelEndpoint = Configuration::models.requests;
+                bind hostEndpoint = Configuration::hostCode.requests;
+            }
+            perform action receiveResult :>> receiveResult references L06.checkTransfer;
+            perform action preserve :>> preserve references L06.preserveRun;
+            perform action credibility :>> credibility references L04.assessModel;
+            perform action retrieve :>> retrieve references L06.retrieveBaseline;
+            perform action assess :>> assess references L05.assessProduct;
+            perform action views :>> views references L05.makeViews;
+            perform action prepare :>> prepare references L05.prepareReview;
+            perform action checkBaseline :>> checkBaseline references L06.checkResultContext;
+            perform action checkDecision :>> checkDecision references L05.checkReviewDecision;
+            perform action record :>> record references L05.recordReview;
+            perform action retain :>> retain references L06.retainReview;
+            perform action holdChange :>> holdChange references L06.preserveRecord;
+            perform action holdReview :>> holdReview references L06.preserveRecord;
+            perform action rejectReview :>> rejectReview references L06.preserveRecord;
+            perform action retainRaw_receiveResult :>> retainRaw_receiveResult references L06.preserveRecord;
+        }
+        perform action replayRun : PhysicalReplayRealization {
+            perform action prepare :>> prepare references L06.prepareReplay;
+            perform action :>> execute {
+                perform action :>> profiles references L03.verifyProfiles;
+                bind modelEndpoint = Configuration::models.requests;
+                bind hostEndpoint = Configuration::hostCode.requests;
+            }
+            perform action receive :>> receive references L06.checkTransfer;
+            perform action preserve :>> preserve references L06.preserveRun;
+            perform action compare :>> compare references L03.replay;
+            perform action retain :>> retain references L06.preserveRecord;
+            perform action missing :>> missing references L06.preserveRecord;
+            perform action retainRaw_receive :>> retainRaw_receive references L06.preserveRecord;
+        }
+        perform action calibration : PhysicalCalibrationRealization {
+            perform action receive :>> receive references L06.checkTransfer;
+            perform action checkData :>> checkData references L04.checkReferenceData;
+            perform action propose :>> propose references L04.proposeCalibration;
+            perform action prepareChange :>> prepareChange references L06.prepareCalibrationChange;
+            perform action invalidate :>> invalidate references L06.invalidate;
+            perform action checkChange :>> checkChange references L06.checkChange;
+            perform action successor :>> successor references L06.successor;
+            perform action reassess :>> reassess references L01.reassess;
+            perform action planRepeat :>> planRepeat references L03.planRepeat;
+            perform action :>> repeat {
+                perform action :>> profiles references L03.verifyProfiles;
+                bind modelEndpoint = Configuration::models.requests;
+                bind hostEndpoint = Configuration::hostCode.requests;
+            }
+            perform action receiveResult :>> receiveResult references L06.checkTransfer;
+            perform action preserve :>> preserve references L06.preserveRun;
+            perform action credibility :>> credibility references L04.assessModel;
+            perform action assess :>> assess references L05.assessProduct;
+            perform action retainEvidence :>> retainEvidence references L06.preserveRecord;
+            perform action retain :>> retain references L06.preserveRecord;
+            perform action unusable :>> unusable references L06.preserveRecord;
+            perform action retainRaw_receiveResult :>> retainRaw_receiveResult references L06.preserveRecord;
+        }
     }
-    @SourceRecord about Configuration { identifier = "PA-NS"; sourceText = "Retain: concurrent parameter sharing and dependency analysis remain distinct strengths. Integrated Nanospace/HyperTension planning is prospective. Gaphor extraction is a separate tool-specific profile, never assumed to transfer automatically."; sourceLocator = "Synthesize Candidate Physical Architectures and conditional comparison"; status = "proposed, access and verification pending"; citationRecord = "review-0340, cordero2022nanospace, luccisano2024formalization"; }
+    @SourceRecord about Configuration { identifier = "PA-NS"; sourceText = "Nanospace/dependency composite with exact six-component proposed composition and mandatory F Prime/numerical whole-CUBICS Omniverse connections."; sourceLocator = "OOSEM physical synthesis and neutral MOP comparison"; citationRecord = "review-0340, review-0289, review-0853, review-1251, review-1303, citation-0569, chiu2023sealion"; status = "proposed/unexecuted"; }
     part candidate : Configuration;
     #logicalRealization allocation logical_L01 allocate logical.L01 to candidate.L01;
-    #executionHost allocation host_L01 allocate candidate.L01 to candidate.N1;
-    allocation node_L01 allocate logical.L01 to candidate.engineeringNode;
     #logicalRealization allocation logical_L02 allocate logical.L02 to candidate.L02;
-    #executionHost allocation host_L02 allocate candidate.L02 to candidate.N2;
-    allocation node_L02 allocate logical.L02 to candidate.assistanceNode;
     #logicalRealization allocation logical_L03 allocate logical.L03 to candidate.L03;
-    #executionHost allocation host_L03 allocate candidate.L03 to candidate.N1;
-    allocation node_L03 allocate logical.L03 to candidate.engineeringNode;
     #logicalRealization allocation logical_L04 allocate logical.L04 to candidate.L04;
-    #executionHost allocation host_L04 allocate candidate.L04 to candidate.N1;
-    allocation node_L04 allocate logical.L04 to candidate.engineeringNode;
     #logicalRealization allocation logical_L05 allocate logical.L05 to candidate.L05;
-    #executionHost allocation host_L05 allocate candidate.L05 to candidate.N1;
-    allocation node_L05 allocate logical.L05 to candidate.engineeringNode;
     #logicalRealization allocation logical_L06 allocate logical.L06 to candidate.L06;
-    #executionHost allocation host_L06 allocate candidate.L06 to candidate.N1;
-    allocation node_L06 allocate logical.L06 to candidate.engineeringNode;
-    #logicalRealization allocation logical_L07 allocate logical.L07 to candidate.L07;
-    #executionHost allocation host_L07 allocate candidate.L07 to candidate.N1;
-    allocation node_L07 allocate logical.L07 to candidate.engineeringNode;
-    #logicalRealization allocation logical_L08 allocate logical.L08 to candidate.L08;
-    #executionHost allocation host_L08 allocate candidate.L08 to candidate.N3;
-    allocation node_L08 allocate logical.L08 to candidate.evidenceNode;
-    #persistentStorage allocation store_modelRecords allocate candidate.modelRecords to candidate.N1;
-    #persistentStorage allocation store_sourceAndAdviceRecords allocate candidate.sourceAndAdviceRecords to candidate.N2;
-    #persistentStorage allocation store_rawResultsAndReleases allocate candidate.rawResultsAndReleases to candidate.N3;
-    #procedurePerformer allocation engineeringOperator allocate candidate.engineeringProcedure to ScenarioViews::systemsEngineer;
-    #procedurePerformer allocation reviewOperator allocate candidate.reviewProcedure to ScenarioViews::reviewAuthority;
-    allocation guidanceState allocate logical.L08.assistanceCurrency to candidate.L08.assistanceCurrency;
-    allocation reviewState allocate logical.L07.reviewState to candidate.L07.reviewState;
-    #physicalPrimary allocation FR_01_primary allocate FrameworkRequirements::FR_01 to candidate.L03 {
-        @PhysicalAllocation { rationale = "Proposed requirement semantics and allocation records linked to Nanospace IDs. Requirement semantics and unresolved fields belong with the allocated requirement record."; plannedCheck = "I,T: Round-trip quantitative and qualitative records, including unresolved criteria."; operation = CandidateNS::C03::retainRequirements meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_01_L08 allocate FrameworkRequirements::FR_01 to candidate.L08;
-    dependency operation_FR_01 from FrameworkRequirements::FR_01 to CandidateNS::C03::retainRequirements;
-    #physicalPrimary allocation FR_02_primary allocate FrameworkRequirements::FR_02 to candidate.L02 {
-        @PhysicalAllocation { rationale = "Python assistance integrated with browser edits; optional curated HyperTension/HDDL adapter. Active rule and probable semantic checks share explained assistance, separate from technical approval."; plannedCheck = "A,T: Compare clean and seeded drafts with an independent expert reference, including valid similar requirements and missed defects."; operation = CandidateNS::C02::checkDraft meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_02_L03 allocate FrameworkRequirements::FR_02 to candidate.L03;
-    dependency operation_FR_02 from FrameworkRequirements::FR_02 to CandidateNS::C02::checkDraft;
-    #physicalPrimary allocation FR_03_primary allocate FrameworkRequirements::FR_03 to candidate.L02 {
-        @PhysicalAllocation { rationale = "Python assistance integrated with browser edits; optional curated HyperTension/HDDL adapter. Contextual eligibility and explained alternatives belong to assistance, with model validity supplied by credibility."; plannedCheck = "A,T: Use contextual queries whose eligible methods change with inputs, maturity or intended use."; operation = CandidateNS::C02::recommend meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_03_L06 allocate FrameworkRequirements::FR_03 to candidate.L06;
-    dependency operation_FR_03 from FrameworkRequirements::FR_03 to CandidateNS::C02::recommend;
-    #physicalPrimary allocation FR_04_primary allocate FrameworkRequirements::FR_04 to candidate.L03 {
-        @PhysicalAllocation { rationale = "Proposed requirement semantics and allocation records linked to Nanospace IDs. Requirements ownership defines link/coverage meaning while configuration preserves exact endpoints."; plannedCheck = "T: Compare both query directions and coverage with a known relationship set."; operation = CandidateNS::C03::traceLinks meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_04_L08 allocate FrameworkRequirements::FR_04 to candidate.L08;
-    dependency operation_FR_04 from FrameworkRequirements::FR_04 to CandidateNS::C03::traceLinks;
-    #physicalPrimary allocation FR_05_primary allocate FrameworkRequirements::FR_05 to candidate.L08 {
-        @PhysicalAllocation { rationale = "Reviewed API/native-model snapshots, Git manifests, managed archive and dependency index. Cross-domain revision dependencies determine impacts and repeated work."; plannedCheck = "A,T: Compare the impact set of coupled load, pointing and interface changes with an expert reference."; operation = CandidateNS::C08::invalidate meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_05_L03 allocate FrameworkRequirements::FR_05 to candidate.L03;
-    #physicalSupport allocation FR_05_L04 allocate FrameworkRequirements::FR_05 to candidate.L04;
-    dependency operation_FR_05 from FrameworkRequirements::FR_05 to CandidateNS::C08::invalidate;
-    #physicalPrimary allocation FR_06_primary allocate FrameworkRequirements::FR_06 to candidate.L08 {
-        @PhysicalAllocation { rationale = "Reviewed API/native-model snapshots, Git manifests, managed archive and dependency index. Only configuration can preserve predecessors and issue an authorized distinct successor."; plannedCheck = "T: Accept, decline and interrupt changes without erasing the predecessor."; operation = CandidateNS::C08::successor meta SysML::ActionUsage; }
-    }
-    dependency operation_FR_06 from FrameworkRequirements::FR_06 to CandidateNS::C08::successor;
-    #physicalPrimary allocation FR_07_primary allocate FrameworkRequirements::FR_07 to candidate.L08 {
-        @PhysicalAllocation { rationale = "Reviewed API/native-model snapshots, Git manifests, managed archive and dependency index. Exact product/evidence revisions and decisions define a reconstructible baseline."; plannedCheck = "I,T: Reconstruct predecessor and successor manifests and all applicable products."; operation = CandidateNS::C08::retrieveBaseline meta SysML::ActionUsage; }
-    }
-    dependency operation_FR_07 from FrameworkRequirements::FR_07 to CandidateNS::C08::retrieveBaseline;
-    #physicalPrimary allocation FR_08_primary allocate FrameworkRequirements::FR_08 to candidate.L01 {
-        @PhysicalAllocation { rationale = "Nanospace browser/API and checked Python model/source adapters. The external receiving responsibility checks meaning before controlled registration."; plannedCheck = "T: Inject identity, unit, sign and revision mismatches at each active interface."; operation = CandidateNS::C01::checkTransfer meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_08_L08 allocate FrameworkRequirements::FR_08 to candidate.L08;
-    dependency operation_FR_08 from FrameworkRequirements::FR_08 to CandidateNS::C01::checkTransfer;
-    #physicalPrimary allocation FR_09_primary allocate FrameworkRequirements::FR_09 to candidate.L08 {
-        @PhysicalAllocation { rationale = "Reviewed API/native-model snapshots, Git manifests, managed archive and dependency index. Preservation links every status and raw output to its execution configuration."; plannedCheck = "I,T: Trace successful, failed, cancelled and partial outputs to their configurations."; operation = CandidateNS::C08::preserveRun meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_09_L05 allocate FrameworkRequirements::FR_09 to candidate.L05;
-    dependency operation_FR_09 from FrameworkRequirements::FR_09 to CandidateNS::C08::preserveRun;
-    #physicalPrimary allocation FR_10_primary allocate FrameworkRequirements::FR_10 to candidate.L05 {
-        @PhysicalAllocation { rationale = "Python plans, specialist-model adapters and host work coordination. Analysis coordination owns replay and comparison, configuration supplies fixed dependencies."; plannedCheck = "D,T: Independently replay in the declared host environment and compare under fixed tolerances."; operation = CandidateNS::C05::replay meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_10_L08 allocate FrameworkRequirements::FR_10 to candidate.L08;
-    dependency operation_FR_10 from FrameworkRequirements::FR_10 to CandidateNS::C05::replay;
-    #physicalPrimary allocation FR_11_primary allocate FrameworkRequirements::FR_11 to candidate.L07 {
-        @PhysicalAllocation { rationale = "Browser baseline views plus Python EPS/review assessment. Applicability and critical evidence gaps govern phase-product claims."; plannedCheck = "T: Seed every evidence status and attempt a current claim with a blocking gap."; operation = CandidateNS::C07::assessProduct meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_11_L06 allocate FrameworkRequirements::FR_11 to candidate.L06;
-    #physicalSupport allocation FR_11_L08 allocate FrameworkRequirements::FR_11 to candidate.L08;
-    dependency operation_FR_11 from FrameworkRequirements::FR_11 to CandidateNS::C07::assessProduct;
-    #physicalPrimary allocation FR_12_primary allocate FrameworkRequirements::FR_12 to candidate.L04 {
-        @PhysicalAllocation { rationale = "Nanospace parameters with declared native model authority and Python budgets. BOM occurrences are the modeled design, distinct from component catalogue definitions."; plannedCheck = "A,T: Compare quantities and substitutions with a reference assembly."; operation = CandidateNS::C04::budgetSize meta SysML::ActionUsage; }
-    }
-    dependency operation_FR_12 from FrameworkRequirements::FR_12 to CandidateNS::C04::budgetSize;
-    #physicalPrimary allocation FR_13_primary allocate FrameworkRequirements::FR_13 to candidate.L04 {
-        @PhysicalAllocation { rationale = "Nanospace parameters with declared native model authority and Python budgets. The same occurrence basis supports consistent dated resource and acquisition estimates."; plannedCheck = "A,T: Recalculate after a substitution and preserve unknown prices and availability."; operation = CandidateNS::C04::budgetSize meta SysML::ActionUsage; }
-    }
-    dependency operation_FR_13 from FrameworkRequirements::FR_13 to CandidateNS::C04::budgetSize;
-    #physicalPrimary allocation FR_14_primary allocate FrameworkRequirements::FR_14 to candidate.L04 {
-        @PhysicalAllocation { rationale = "Nanospace parameters with declared native model authority and Python budgets. Mandatory supported feasibility precedes engineer preference ranking."; plannedCheck = "A,T: Use infeasible and closely ranked alternatives with uncertain inputs."; operation = CandidateNS::C04::compareDesigns meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_14_L06 allocate FrameworkRequirements::FR_14 to candidate.L06;
-    dependency operation_FR_14 from FrameworkRequirements::FR_14 to CandidateNS::C04::compareDesigns;
-    #physicalPrimary allocation FR_15_primary allocate FrameworkRequirements::FR_15 to candidate.L04 {
-        @PhysicalAllocation { rationale = "Nanospace parameters with declared native model authority and Python budgets. EPS variants and extensions remain coherent with design allocations."; plannedCheck = "I,D: Configure alternate EPS topologies and retain the distinct allocation and extension revisions."; operation = CandidateNS::C04::defineDesign meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_15_L03 allocate FrameworkRequirements::FR_15 to candidate.L03;
-    dependency operation_FR_15 from FrameworkRequirements::FR_15 to CandidateNS::C04::defineDesign;
-    #physicalPrimary allocation FR_16_primary allocate FrameworkRequirements::FR_16 to candidate.L05 {
-        @PhysicalAllocation { rationale = "Python plans, specialist-model adapters and host work coordination. Coupled temporal composition and controlled tool execution realize mission-load/EPS analysis."; plannedCheck = "A,T: Use a temporal shortage hidden by an average power budget and check coupling against a reference."; operation = CandidateNS::C05::planAnalysis meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_16_L04 allocate FrameworkRequirements::FR_16 to candidate.L04;
-    dependency operation_FR_16 from FrameworkRequirements::FR_16 to CandidateNS::C05::planAnalysis;
-    #physicalPrimary allocation FR_17_primary allocate FrameworkRequirements::FR_17 to candidate.L03 {
-        @PhysicalAllocation { rationale = "Proposed requirement semantics and allocation records linked to Nanospace IDs. Derivation connects spacecraft parents to EPS/component quantities and dispositions."; plannedCheck = "A,T: Recalculate an allocation and follow it to the parent and source quantities."; operation = CandidateNS::C03::deriveAllocate meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_17_L04 allocate FrameworkRequirements::FR_17 to candidate.L04;
-    dependency operation_FR_17 from FrameworkRequirements::FR_17 to CandidateNS::C03::deriveAllocate;
-    #physicalPrimary allocation FR_18_primary allocate FrameworkRequirements::FR_18 to candidate.L05 {
-        @PhysicalAllocation { rationale = "Python plans, specialist-model adapters and host work coordination. Discipline execution profiles expose tool/version mappings and unsupported transfers."; plannedCheck = "D,T: Exercise each required discipline profile and incompatible mappings."; operation = CandidateNS::C05::planAnalysis meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_18_L01 allocate FrameworkRequirements::FR_18 to candidate.L01;
-    #physicalSupport allocation FR_18_L04 allocate FrameworkRequirements::FR_18 to candidate.L04;
-    dependency operation_FR_18 from FrameworkRequirements::FR_18 to CandidateNS::C05::planAnalysis;
-    #physicalPrimary allocation FR_19_primary allocate FrameworkRequirements::FR_19 to candidate.L05 {
-        @PhysicalAllocation { rationale = "Python plans, specialist-model adapters and host work coordination. Controlled MIL stimuli and responses follow the detailed design and assessment criteria."; plannedCheck = "D,T: Run declared nominal and fault sequences with a simulated plant and retain failed criteria."; operation = CandidateNS::C05::planMIL meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_19_L04 allocate FrameworkRequirements::FR_19 to candidate.L04;
-    #physicalSupport allocation FR_19_L07 allocate FrameworkRequirements::FR_19 to candidate.L07;
-    dependency operation_FR_19 from FrameworkRequirements::FR_19 to CandidateNS::C05::planMIL;
-    #physicalPrimary allocation FR_20_primary allocate FrameworkRequirements::FR_20 to candidate.L04 {
-        @PhysicalAllocation { rationale = "Nanospace parameters with declared native model authority and Python budgets. Preliminary equations and margins belong with mission assumptions and candidate sizing."; plannedCheck = "A,T: Compare sizing and energy balance with independent calculations, including an infeasible eclipse case."; operation = CandidateNS::C04::budgetSize meta SysML::ActionUsage; }
-    }
-    dependency operation_FR_20 from FrameworkRequirements::FR_20 to CandidateNS::C04::budgetSize;
-    #physicalPrimary allocation FR_21_primary allocate FrameworkRequirements::FR_21 to candidate.L06 {
-        @PhysicalAllocation { rationale = "Python credibility and supplied-history assessment. Intended use, numerics, omissions and independent evidence bound model-supported conclusions."; plannedCheck = "I,T: Attempt conclusions outside validity and with missing independent evidence."; operation = CandidateNS::C06::assessModel meta SysML::ActionUsage; }
-    }
-    dependency operation_FR_21 from FrameworkRequirements::FR_21 to CandidateNS::C06::assessModel;
-    #physicalPrimary allocation FR_22_primary allocate FrameworkRequirements::FR_22 to candidate.L06 {
-        @PhysicalAllocation { rationale = "Python credibility and supplied-history assessment. Calibration proposals preserve prior values and independent assessment separation."; plannedCheck = "A,T: Calibrate from supplied data, retain separate assessment data and decline an update."; operation = CandidateNS::C06::proposeCalibration meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_22_L08 allocate FrameworkRequirements::FR_22 to candidate.L08;
-    dependency operation_FR_22 from FrameworkRequirements::FR_22 to CandidateNS::C06::proposeCalibration;
-    #physicalPrimary allocation FR_23_primary allocate FrameworkRequirements::FR_23 to candidate.L05 {
-        @PhysicalAllocation { rationale = "Python plans, specialist-model adapters and host work coordination. Every execution plan retains solver/coupling/resource settings, later joined to measured results."; plannedCheck = "I,T: Change the time step, solver and resource limits and inspect the run configuration and findings."; operation = CandidateNS::C05::planAnalysis meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_23_L08 allocate FrameworkRequirements::FR_23 to candidate.L08;
-    dependency operation_FR_23 from FrameworkRequirements::FR_23 to CandidateNS::C05::planAnalysis;
-    #physicalPrimary allocation FR_24_primary allocate FrameworkRequirements::FR_24 to candidate.L05 {
-        @PhysicalAllocation { rationale = "Python plans, specialist-model adapters and host work coordination. Corresponding declared host SIL and MIL scenarios support meaningful differences."; plannedCheck = "A,T: Use matching MIL/SIL inputs and a seeded code/interface discrepancy."; operation = CandidateNS::C05::compareMILSil meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_24_L06 allocate FrameworkRequirements::FR_24 to candidate.L06;
-    #physicalSupport allocation FR_24_L07 allocate FrameworkRequirements::FR_24 to candidate.L07;
-    dependency operation_FR_24 from FrameworkRequirements::FR_24 to CandidateNS::C05::compareMILSil;
-    #physicalPrimary allocation FR_25_primary allocate FrameworkRequirements::FR_25 to candidate.L04 {
-        @PhysicalAllocation { rationale = "Nanospace parameters with declared native model authority and Python budgets. Mission and degraded ConOps revisions supply the common design and analysis basis."; plannedCheck = "I,T: Revise a degraded mode and trace its requirement and analysis inputs."; operation = CandidateNS::C04::defineDesign meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_25_L03 allocate FrameworkRequirements::FR_25 to candidate.L03;
-    dependency operation_FR_25 from FrameworkRequirements::FR_25 to CandidateNS::C04::defineDesign;
-    #physicalPrimary allocation FR_26_primary allocate FrameworkRequirements::FR_26 to candidate.L05 {
-        @PhysicalAllocation { rationale = "Python plans, specialist-model adapters and host work coordination. RAM applicability follows requirements, ConOps, risks and justified exclusions."; plannedCheck = "I,T: Assess applicability with and without repair or redundancy assumptions."; operation = CandidateNS::C05::planAnalysis meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_26_L02 allocate FrameworkRequirements::FR_26 to candidate.L02;
-    dependency operation_FR_26 from FrameworkRequirements::FR_26 to CandidateNS::C05::planAnalysis;
-    #physicalPrimary allocation FR_27_primary allocate FrameworkRequirements::FR_27 to candidate.L05 {
-        @PhysicalAllocation { rationale = "Python plans, specialist-model adapters and host work coordination. Selected RAM transformations follow design failure dependencies without invented rates."; plannedCheck = "A,T: Compare transformations and results with a reference and leave missing rates unresolved."; operation = CandidateNS::C05::planAnalysis meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_27_L04 allocate FrameworkRequirements::FR_27 to candidate.L04;
-    dependency operation_FR_27 from FrameworkRequirements::FR_27 to CandidateNS::C05::planAnalysis;
-    #physicalPrimary allocation FR_28_primary allocate FrameworkRequirements::FR_28 to candidate.L07 {
-        @PhysicalAllocation { rationale = "Browser baseline views plus Python EPS/review assessment. Verification requirements and validation expectations need distinct phase-product plans."; plannedCheck = "I,T: Distinguish planned activities from results and verification criteria from validation expectations."; operation = CandidateNS::C07::planAssessment meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_28_L03 allocate FrameworkRequirements::FR_28 to candidate.L03;
-    dependency operation_FR_28 from FrameworkRequirements::FR_28 to CandidateNS::C07::planAssessment;
-    #physicalPrimary allocation FR_29_primary allocate FrameworkRequirements::FR_29 to candidate.L02 {
-        @PhysicalAllocation { rationale = "Python assistance integrated with browser edits; optional curated HyperTension/HDDL adapter. All assistance dispositions retain human authority and exact suggestion/context identity."; plannedCheck = "I,T: Exercise all dispositions and an unauthorized attempt to apply a suggestion."; operation = CandidateNS::C02::dispose meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_29_L01 allocate FrameworkRequirements::FR_29 to candidate.L01;
-    #physicalSupport allocation FR_29_L08 allocate FrameworkRequirements::FR_29 to candidate.L08;
-    dependency operation_FR_29 from FrameworkRequirements::FR_29 to CandidateNS::C02::dispose;
-    #physicalPrimary allocation FR_30_primary allocate FrameworkRequirements::FR_30 to candidate.L08 {
-        @PhysicalAllocation { rationale = "Reviewed API/native-model snapshots, Git manifests, managed archive and dependency index. Revision and pending-work currency require immediate invalidation and delayed-response checks."; plannedCheck = "T: Edit during a delayed response and check that the old response cannot replace current guidance."; operation = CandidateNS::C08::invalidate meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_30_L02 allocate FrameworkRequirements::FR_30 to candidate.L02;
-    dependency operation_FR_30 from FrameworkRequirements::FR_30 to CandidateNS::C08::invalidate;
-    #physicalPrimary allocation FR_31_primary allocate FrameworkRequirements::FR_31 to candidate.L06 {
-        @PhysicalAllocation { rationale = "Python credibility and supplied-history assessment. History comparison needs explicit sample/receipt time bases and known delays."; plannedCheck = "A,T: Compare aligned and skewed histories with declared time tolerances."; operation = CandidateNS::C06::assessModel meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_31_L05 allocate FrameworkRequirements::FR_31 to candidate.L05;
-    dependency operation_FR_31 from FrameworkRequirements::FR_31 to CandidateNS::C06::assessModel;
-    #physicalPrimary allocation FR_32_primary allocate FrameworkRequirements::FR_32 to candidate.L06 {
-        @PhysicalAllocation { rationale = "Python credibility and supplied-history assessment. History validity and masks must preserve missing/inactive values rather than zero filling."; plannedCheck = "T: Inject missing, inactive, invalid and wrong-unit data and compare masks."; operation = CandidateNS::C06::assessModel meta SysML::ActionUsage; }
-    }
-    dependency operation_FR_32 from FrameworkRequirements::FR_32 to CandidateNS::C06::assessModel;
-    #physicalPrimary allocation FR_33_primary allocate FrameworkRequirements::FR_33 to candidate.L04 {
-        @PhysicalAllocation { rationale = "Nanospace parameters with declared native model authority and Python budgets. Detailed interface meaning and ownership belong to the modeled EPS design."; plannedCheck = "I,T: Round-trip interface definitions and reject inconsistent endpoint meanings."; operation = CandidateNS::C04::defineInterfaces meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_33_L03 allocate FrameworkRequirements::FR_33 to candidate.L03;
-    dependency operation_FR_33 from FrameworkRequirements::FR_33 to CandidateNS::C04::defineInterfaces;
-    #physicalPrimary allocation FR_34_primary allocate FrameworkRequirements::FR_34 to candidate.L04 {
-        @PhysicalAllocation { rationale = "Nanospace parameters with declared native model authority and Python budgets. Engineer-selected integration mappings preserve detailed interface meanings and version gaps."; plannedCheck = "D,T: Check a selected profile and expose omitted or incompatible meanings."; operation = CandidateNS::C04::defineInterfaces meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_34_L05 allocate FrameworkRequirements::FR_34 to candidate.L05;
-    dependency operation_FR_34 from FrameworkRequirements::FR_34 to CandidateNS::C04::defineInterfaces;
-    #physicalPrimary allocation FR_35_primary allocate FrameworkRequirements::FR_35 to candidate.L04 {
-        @PhysicalAllocation { rationale = "Nanospace parameters with declared native model authority and Python budgets. Control preconditions/effects/recovery are detailed design responsibilities checked in simulation."; plannedCheck = "A,T: Exercise nominal, rejected, protection and recovery sequences in simulated conditions."; operation = CandidateNS::C04::defineInterfaces meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_35_L05 allocate FrameworkRequirements::FR_35 to candidate.L05;
-    dependency operation_FR_35 from FrameworkRequirements::FR_35 to CandidateNS::C04::defineInterfaces;
-    #physicalPrimary allocation FR_36_primary allocate FrameworkRequirements::FR_36 to candidate.L05 {
-        @PhysicalAllocation { rationale = "Python plans, specialist-model adapters and host work coordination. External host coordination is gated by a current specific detailed-design authorization."; plannedCheck = "D,T: Attempt an unreleased build and then build the released design, including a toolchain failure."; operation = CandidateNS::C05::coordinateCoding meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_36_L08 allocate FrameworkRequirements::FR_36 to candidate.L08;
-    dependency operation_FR_36 from FrameworkRequirements::FR_36 to CandidateNS::C05::coordinateCoding;
-    #physicalPrimary allocation FR_37_primary allocate FrameworkRequirements::FR_37 to candidate.L01 {
-        @PhysicalAllocation { rationale = "Nanospace browser/API and checked Python model/source adapters. User-facing views derive from controlled records and never define an independent baseline."; plannedCheck = "I,D: Compare views with their source baseline and follow represented record links."; operation = CandidateNS::C01::makeViews meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_37_L08 allocate FrameworkRequirements::FR_37 to candidate.L08;
-    dependency operation_FR_37 from FrameworkRequirements::FR_37 to CandidateNS::C01::makeViews;
-    #physicalPrimary allocation FR_38_primary allocate FrameworkRequirements::FR_38 to candidate.L07 {
-        @PhysicalAllocation { rationale = "Browser baseline views plus Python EPS/review assessment. Scoped entrance/success evidence needs coherent phase-product assessment, not automatic acceptance."; plannedCheck = "I,D: Prepare phase-specific packages, including CDR design release and SIR released-product evidence."; operation = CandidateNS::C07::prepareReview meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_38_L01 allocate FrameworkRequirements::FR_38 to candidate.L01;
-    #physicalSupport allocation FR_38_L08 allocate FrameworkRequirements::FR_38 to candidate.L08;
-    dependency operation_FR_38 from FrameworkRequirements::FR_38 to CandidateNS::C07::prepareReview;
-    #physicalPrimary allocation FR_39_primary allocate FrameworkRequirements::FR_39 to candidate.L02 {
-        @PhysicalAllocation { rationale = "Python assistance integrated with browser edits; optional curated HyperTension/HDDL adapter. Activity advice uses maturity, dependencies, findings and review prerequisites."; plannedCheck = "A,D: Change maturity and blocking findings and inspect the revised activity proposals."; operation = CandidateNS::C02::recommend meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_39_L07 allocate FrameworkRequirements::FR_39 to candidate.L07;
-    #physicalSupport allocation FR_39_L08 allocate FrameworkRequirements::FR_39 to candidate.L08;
-    dependency operation_FR_39 from FrameworkRequirements::FR_39 to CandidateNS::C02::recommend;
-    #physicalPrimary allocation FR_41_primary allocate FrameworkRequirements::FR_41 to candidate.L02 {
-        @PhysicalAllocation { rationale = "Python assistance integrated with browser edits; optional curated HyperTension/HDDL adapter. Interactive assistance owns trigger/response/completion status while infrastructure supplies time/context."; plannedCheck = "T: Measure response delay under the declared workload, including outage and superseded edits."; operation = CandidateNS::C02::acknowledge meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_41_L01 allocate FrameworkRequirements::FR_41 to candidate.L01;
-    #physicalSupport allocation FR_41_L08 allocate FrameworkRequirements::FR_41 to candidate.L08;
-    dependency operation_FR_41 from FrameworkRequirements::FR_41 to CandidateNS::C02::acknowledge;
-    #physicalPrimary allocation FR_42_primary allocate FrameworkRequirements::FR_42 to candidate.L07 {
-        @PhysicalAllocation { rationale = "Browser baseline views plus Python EPS/review assessment. Only designated-authority current decisions change review disposition, separately from preparation."; plannedCheck = "I,T: Reject unauthorized or stale-baseline decisions and exercise blocking and conditional findings."; operation = CandidateNS::C07::recordReview meta SysML::ActionUsage; }
-    }
-    #physicalSupport allocation FR_42_L08 allocate FrameworkRequirements::FR_42 to candidate.L08;
-    dependency operation_FR_42 from FrameworkRequirements::FR_42 to CandidateNS::C07::recordReview;
-    // Allocation aliases index the performed candidate usages. They carry no control semantics.
-    package LogicalRealization {
-        alias AssistanceRealization for Configuration::assistance;
-        alias ConceptRealization for Configuration::concept;
-        alias DesignRealization for Configuration::designRun;
-        alias SoftwareRealization for Configuration::software;
-        alias ChangeReviewRealization for Configuration::changeReview;
-        alias ReplayRealization for Configuration::replayRun;
-        alias CalibrationRealization for Configuration::calibration;
-    }
-    allocate LogicalRealization::DesignRealization::execute to candidate.L05;
-    allocate LogicalRealization::ConceptRealization::execute to candidate.L05;
-    allocate LogicalRealization::SoftwareRealization::executeMIL to candidate.L05;
-    allocate LogicalRealization::SoftwareRealization::codeBuildSil to candidate.L05;
-    allocate LogicalRealization::ChangeReviewRealization::repeat to candidate.L05;
-    allocate LogicalRealization::ReplayRealization::execute to candidate.L05;
-    allocate LogicalRealization::CalibrationRealization::repeat to candidate.L05;
-    allocate candidate.concept.execute.execute.models to candidate.models;
-    allocate candidate.designRun.execute.execute.models to candidate.models;
-    allocate candidate.software.executeMIL.execute.models to candidate.models;
-    allocate candidate.software.codeBuildSil.execute to candidate.hostCode;
-    allocate candidate.changeReview.repeat.execute.models to candidate.models;
-    allocate candidate.replayRun.execute.execute.models to candidate.models;
-    allocate candidate.calibration.repeat.execute.models to candidate.models;
-    allocate candidate.concept.execute.execute.sil.execute to candidate.hostCode;
-    allocate candidate.designRun.execute.execute.sil.execute to candidate.hostCode;
-    allocate candidate.software.executeMIL.execute.sil.execute to candidate.hostCode;
-    allocate candidate.changeReview.repeat.execute.sil.execute to candidate.hostCode;
-    allocate candidate.replayRun.execute.execute.sil.execute to candidate.hostCode;
-    allocate candidate.calibration.repeat.execute.sil.execute to candidate.hostCode;
-    bind candidate.concept.execute.execute.models.endpoint = candidate.models.requests;
-    bind candidate.designRun.execute.execute.models.endpoint = candidate.models.requests;
-    bind candidate.software.executeMIL.execute.models.endpoint = candidate.models.requests;
-    bind candidate.software.codeBuildSil.execute.endpoint = candidate.hostCode.requests;
-    bind candidate.changeReview.repeat.execute.models.endpoint = candidate.models.requests;
-    bind candidate.replayRun.execute.execute.models.endpoint = candidate.models.requests;
-    bind candidate.calibration.repeat.execute.models.endpoint = candidate.models.requests;
-    bind candidate.concept.execute.execute.sil.execute.endpoint = candidate.hostCode.requests;
-    bind candidate.designRun.execute.execute.sil.execute.endpoint = candidate.hostCode.requests;
-    bind candidate.software.executeMIL.execute.sil.execute.endpoint = candidate.hostCode.requests;
-    bind candidate.changeReview.repeat.execute.sil.execute.endpoint = candidate.hostCode.requests;
-    bind candidate.replayRun.execute.execute.sil.execute.endpoint = candidate.hostCode.requests;
-    bind candidate.calibration.repeat.execute.sil.execute.endpoint = candidate.hostCode.requests;
-    allocate LogicalRealization::AssistanceRealization::receive to candidate.L01;
-    allocate LogicalRealization::AssistanceRealization::capture to candidate.L08;
-    allocate LogicalRealization::AssistanceRealization::invalidateOnEdit to candidate.L08;
-    allocate LogicalRealization::AssistanceRealization::acknowledge to candidate.L02;
-    allocate LogicalRealization::AssistanceRealization::retainDraft to candidate.L03;
-    allocate LogicalRealization::AssistanceRealization::checkDraft to candidate.L02;
-    allocate LogicalRealization::AssistanceRealization::recommend to candidate.L02;
-    allocate LogicalRealization::AssistanceRealization::checkReply to candidate.L08;
-    allocate LogicalRealization::AssistanceRealization::present to candidate.L01;
-    allocate LogicalRealization::AssistanceRealization::dispose to candidate.L02;
-    allocate LogicalRealization::AssistanceRealization::checkApplication to candidate.L08;
-    allocate LogicalRealization::AssistanceRealization::derive to candidate.L03;
-    allocate LogicalRealization::AssistanceRealization::trace to candidate.L03;
-    allocate LogicalRealization::AssistanceRealization::retainValidation to candidate.L08;
-    allocate LogicalRealization::AssistanceRealization::retainDisposition to candidate.L08;
-    allocate LogicalRealization::AssistanceRealization::invalidate to candidate.L08;
-    allocate LogicalRealization::AssistanceRealization::reassess to candidate.L02;
-    allocate LogicalRealization::AssistanceRealization::rejectTransfer to candidate.L08;
-    allocate LogicalRealization::AssistanceRealization::rejectDisposition to candidate.L08;
-    allocate LogicalRealization::DesignRealization::receive to candidate.L01;
-    allocate LogicalRealization::DesignRealization::configure to candidate.L04;
-    allocate LogicalRealization::DesignRealization::budget to candidate.L04;
-    allocate LogicalRealization::DesignRealization::planCriteria to candidate.L07;
-    allocate LogicalRealization::DesignRealization::plan to candidate.L05;
-    allocate LogicalRealization::DesignRealization::receiveResult to candidate.L01;
-    allocate LogicalRealization::DesignRealization::preserve to candidate.L08;
-    allocate LogicalRealization::DesignRealization::checkCurrent to candidate.L08;
-    allocate LogicalRealization::DesignRealization::credibility to candidate.L06;
-    allocate LogicalRealization::DesignRealization::assess to candidate.L07;
-    allocate LogicalRealization::DesignRealization::compare to candidate.L04;
-    allocate LogicalRealization::DesignRealization::checkSelection to candidate.L08;
-    allocate LogicalRealization::DesignRealization::retainSelection to candidate.L08;
-    allocate LogicalRealization::DesignRealization::retainGaps to candidate.L08;
-    allocate LogicalRealization::ConceptRealization::receive to candidate.L01;
-    allocate LogicalRealization::ConceptRealization::configure to candidate.L04;
-    allocate LogicalRealization::ConceptRealization::budget to candidate.L04;
-    allocate LogicalRealization::ConceptRealization::planCriteria to candidate.L07;
-    allocate LogicalRealization::ConceptRealization::plan to candidate.L05;
-    allocate LogicalRealization::ConceptRealization::receiveResult to candidate.L01;
-    allocate LogicalRealization::ConceptRealization::preserve to candidate.L08;
-    allocate LogicalRealization::ConceptRealization::checkCurrent to candidate.L08;
-    allocate LogicalRealization::ConceptRealization::credibility to candidate.L06;
-    allocate LogicalRealization::ConceptRealization::assess to candidate.L07;
-    allocate LogicalRealization::ConceptRealization::compare to candidate.L04;
-    allocate LogicalRealization::ConceptRealization::checkSelection to candidate.L08;
-    allocate LogicalRealization::ConceptRealization::retainSelection to candidate.L08;
-    allocate LogicalRealization::ConceptRealization::retainGaps to candidate.L08;
-    allocate LogicalRealization::ConceptRealization::makeConfiguration to candidate.L04;
-    allocate LogicalRealization::SoftwareRealization::receive to candidate.L01;
-    allocate LogicalRealization::SoftwareRealization::interfaces to candidate.L04;
-    allocate LogicalRealization::SoftwareRealization::planCriteria to candidate.L07;
-    allocate LogicalRealization::SoftwareRealization::planMIL to candidate.L05;
-    allocate LogicalRealization::SoftwareRealization::receiveMIL to candidate.L01;
-    allocate LogicalRealization::SoftwareRealization::preserveMIL to candidate.L08;
-    allocate LogicalRealization::SoftwareRealization::assessMIL to candidate.L06;
-    allocate LogicalRealization::SoftwareRealization::checkRelease to candidate.L08;
-    allocate LogicalRealization::SoftwareRealization::coordinate to candidate.L05;
-    allocate LogicalRealization::SoftwareRealization::receiveSIL to candidate.L01;
-    allocate LogicalRealization::SoftwareRealization::preserveSIL to candidate.L08;
-    allocate LogicalRealization::SoftwareRealization::checkCurrent to candidate.L08;
-    allocate LogicalRealization::SoftwareRealization::compare to candidate.L05;
-    allocate LogicalRealization::SoftwareRealization::credibility to candidate.L06;
-    allocate LogicalRealization::SoftwareRealization::assess to candidate.L07;
-    allocate LogicalRealization::SoftwareRealization::present to candidate.L01;
-    allocate LogicalRealization::SoftwareRealization::checkProducts to candidate.L08;
-    allocate LogicalRealization::SoftwareRealization::retainProducts to candidate.L08;
-    allocate LogicalRealization::SoftwareRealization::block to candidate.L08;
-    allocate LogicalRealization::ChangeReviewRealization::receive to candidate.L01;
-    allocate LogicalRealization::ChangeReviewRealization::invalidate to candidate.L08;
-    allocate LogicalRealization::ChangeReviewRealization::checkChange to candidate.L08;
-    allocate LogicalRealization::ChangeReviewRealization::successor to candidate.L08;
-    allocate LogicalRealization::ChangeReviewRealization::reassessAdvice to candidate.L02;
-    allocate LogicalRealization::ChangeReviewRealization::planRepeat to candidate.L05;
-    allocate LogicalRealization::ChangeReviewRealization::receiveResult to candidate.L01;
-    allocate LogicalRealization::ChangeReviewRealization::preserve to candidate.L08;
-    allocate LogicalRealization::ChangeReviewRealization::credibility to candidate.L06;
-    allocate LogicalRealization::ChangeReviewRealization::retrieve to candidate.L08;
-    allocate LogicalRealization::ChangeReviewRealization::assess to candidate.L07;
-    allocate LogicalRealization::ChangeReviewRealization::views to candidate.L01;
-    allocate LogicalRealization::ChangeReviewRealization::prepare to candidate.L07;
-    allocate LogicalRealization::ChangeReviewRealization::checkBaseline to candidate.L08;
-    allocate LogicalRealization::ChangeReviewRealization::checkDecision to candidate.L07;
-    allocate LogicalRealization::ChangeReviewRealization::record to candidate.L07;
-    allocate LogicalRealization::ChangeReviewRealization::retain to candidate.L08;
-    allocate LogicalRealization::ChangeReviewRealization::holdChange to candidate.L08;
-    allocate LogicalRealization::ChangeReviewRealization::holdReview to candidate.L08;
-    allocate LogicalRealization::ChangeReviewRealization::rejectReview to candidate.L08;
-    allocate LogicalRealization::ReplayRealization::prepare to candidate.L08;
-    allocate LogicalRealization::ReplayRealization::receive to candidate.L01;
-    allocate LogicalRealization::ReplayRealization::preserve to candidate.L08;
-    allocate LogicalRealization::ReplayRealization::compare to candidate.L05;
-    allocate LogicalRealization::ReplayRealization::retain to candidate.L08;
-    allocate LogicalRealization::ReplayRealization::missing to candidate.L08;
-    allocate LogicalRealization::CalibrationRealization::receive to candidate.L01;
-    allocate LogicalRealization::CalibrationRealization::checkData to candidate.L06;
-    allocate LogicalRealization::CalibrationRealization::propose to candidate.L06;
-    allocate LogicalRealization::CalibrationRealization::prepareChange to candidate.L08;
-    allocate LogicalRealization::CalibrationRealization::invalidate to candidate.L08;
-    allocate LogicalRealization::CalibrationRealization::checkChange to candidate.L08;
-    allocate LogicalRealization::CalibrationRealization::successor to candidate.L08;
-    allocate LogicalRealization::CalibrationRealization::reassess to candidate.L02;
-    allocate LogicalRealization::CalibrationRealization::planRepeat to candidate.L05;
-    allocate LogicalRealization::CalibrationRealization::receiveResult to candidate.L01;
-    allocate LogicalRealization::CalibrationRealization::preserve to candidate.L08;
-    allocate LogicalRealization::CalibrationRealization::credibility to candidate.L06;
-    allocate LogicalRealization::CalibrationRealization::assess to candidate.L07;
-    allocate LogicalRealization::CalibrationRealization::retainEvidence to candidate.L08;
-    allocate LogicalRealization::CalibrationRealization::retain to candidate.L08;
-    allocate LogicalRealization::CalibrationRealization::unusable to candidate.L08;
-    allocate candidate.L02.checkDraft.pipeline.rules to candidate.L02.rules;
-    allocate candidate.L02.checkDraft.pipeline.sources to candidate.L02.localScoring;
-    allocate candidate.L02.checkDraft.pipeline.retrieve to candidate.L02.localScoring;
-    allocate candidate.L02.checkDraft.pipeline.scores to candidate.L02;
-    allocate candidate.L02.checkDraft.pipeline.applicability to candidate.L02;
-    allocate candidate.L02.checkDraft.pipeline.explain to candidate.L02.explanation;
-    allocate candidate.L02.checkDraft.pipeline.none to candidate.L02.explanation;
-    allocate candidate.L02.checkDraft.pipeline.currency to candidate.L08;
-    allocate candidate.L02.checkDraft.pipeline.publish to candidate.L01;
-    allocate candidate.L02.checkDraft.pipeline.stale to candidate.L08;
-    allocate candidate.L02.recommend.pipeline.rules to candidate.L02.rules;
-    allocate candidate.L02.recommend.pipeline.sources to candidate.L02.localScoring;
-    allocate candidate.L02.recommend.pipeline.retrieve to candidate.L02.localScoring;
-    allocate candidate.L02.recommend.pipeline.scores to candidate.L02;
-    allocate candidate.L02.recommend.pipeline.applicability to candidate.L02;
-    allocate candidate.L02.recommend.pipeline.explain to candidate.L02.explanation;
-    allocate candidate.L02.recommend.pipeline.none to candidate.L02.explanation;
-    allocate candidate.L02.recommend.pipeline.currency to candidate.L08;
-    allocate candidate.L02.recommend.pipeline.publish to candidate.L01;
-    allocate candidate.L02.recommend.pipeline.stale to candidate.L08;
-    allocate candidate.concept.execute.profiles to candidate.L05;
-    allocate candidate.designRun.execute.profiles to candidate.L05;
-    allocate candidate.software.executeMIL.profiles to candidate.L05;
-    allocate candidate.software.codeBuildSil.profiles to candidate.L05;
-    allocate candidate.changeReview.repeat.profiles to candidate.L05;
-    allocate candidate.replayRun.execute.profiles to candidate.L05;
-    allocate candidate.calibration.repeat.profiles to candidate.L05;
+    #physicalDetail allocation guidanceState allocate logical.L06.assistanceCurrency to candidate.L06.assistanceCurrency;
+    #physicalDetail allocation reviewState allocate logical.L05.reviewState to candidate.L05.reviewState;
+    #physicalPrimary allocation primary_FR_01 allocate FrameworkRequirements::FR_01 to candidate.L01 { @PhysicalAllocation { rationale = "Nanospace database/API requirements and parameter relations plus separate first-valid HTN planning. Full planner integration, semantic checks and applicability admission are proposed."; plannedCheck = "I,T: Round-trip quantitative and qualitative records, including unresolved criteria."; operation = CandidateNS::C01::retainRequirements meta SysML::ActionUsage; } }
+    dependency operation_FR_01 from FrameworkLogical::RequirementsAssistance::retainRequirements to CandidateNS::C01::retainRequirements;
+    dependency contract_FR_01 from FrameworkLogical::ContractFR01 to CandidateNS::C01::contractFR01;
+    #physicalPrimary allocation primary_FR_02 allocate FrameworkRequirements::FR_02 to candidate.L01 { @PhysicalAllocation { rationale = "Nanospace database/API requirements and parameter relations plus separate first-valid HTN planning. Full planner integration, semantic checks and applicability admission are proposed."; plannedCheck = "A,T: Compare clean and seeded drafts with an independent expert reference, including valid similar requirements and missed defects."; operation = CandidateNS::C01::checkDraft meta SysML::ActionUsage; } }
+    dependency operation_FR_02 from FrameworkLogical::RequirementsAssistance::checkDraft to CandidateNS::C01::checkDraft;
+    dependency contract_FR_02 from FrameworkLogical::ContractFR02 to CandidateNS::C01::contractFR02;
+    #physicalPrimary allocation primary_FR_03 allocate FrameworkRequirements::FR_03 to candidate.L01 { @PhysicalAllocation { rationale = "Nanospace database/API requirements and parameter relations plus separate first-valid HTN planning. Full planner integration, semantic checks and applicability admission are proposed."; plannedCheck = "A,T: Use contextual queries whose eligible methods change with inputs, maturity or intended use."; operation = CandidateNS::C01::recommend meta SysML::ActionUsage; } }
+    dependency operation_FR_03 from FrameworkLogical::RequirementsAssistance::recommend to CandidateNS::C01::recommend;
+    dependency contract_FR_03 from FrameworkLogical::ContractFR03 to CandidateNS::C01::contractFR03;
+    #physicalPrimary allocation primary_FR_04 allocate FrameworkRequirements::FR_04 to candidate.L01 { @PhysicalAllocation { rationale = "Nanospace database/API requirements and parameter relations plus separate first-valid HTN planning. Full planner integration, semantic checks and applicability admission are proposed."; plannedCheck = "T: Compare both query directions and coverage with a known relationship set."; operation = CandidateNS::C01::traceLinks meta SysML::ActionUsage; } }
+    dependency operation_FR_04 from FrameworkLogical::RequirementsAssistance::traceLinks to CandidateNS::C01::traceLinks;
+    dependency contract_FR_04 from FrameworkLogical::ContractFR04 to CandidateNS::C01::contractFR04;
+    #physicalPrimary allocation primary_FR_05 allocate FrameworkRequirements::FR_05 to candidate.L06 { @PhysicalAllocation { rationale = "Nanospace database/API/dependencies plus Git history. Database, dependency and planner revisions immediately invalidate affected guidance and preserve exact replay snapshots."; plannedCheck = "A,T: Compare the impact set of coupled load, pointing and interface changes with an expert reference."; operation = CandidateNS::C06::invalidate meta SysML::ActionUsage; } }
+    dependency operation_FR_05 from FrameworkLogical::ConfigurationExchange::invalidate to CandidateNS::C06::invalidate;
+    dependency contract_FR_05 from FrameworkLogical::ContractFR05 to CandidateNS::C06::contractFR05;
+    #physicalPrimary allocation primary_FR_06 allocate FrameworkRequirements::FR_06 to candidate.L06 { @PhysicalAllocation { rationale = "Nanospace database/API/dependencies plus Git history. Database, dependency and planner revisions immediately invalidate affected guidance and preserve exact replay snapshots."; plannedCheck = "T: Accept, decline and interrupt changes without erasing the predecessor."; operation = CandidateNS::C06::successor meta SysML::ActionUsage; } }
+    dependency operation_FR_06 from FrameworkLogical::ConfigurationExchange::successor to CandidateNS::C06::successor;
+    dependency contract_FR_06 from FrameworkLogical::ContractFR06 to CandidateNS::C06::contractFR06;
+    #physicalPrimary allocation primary_FR_07 allocate FrameworkRequirements::FR_07 to candidate.L06 { @PhysicalAllocation { rationale = "Nanospace database/API/dependencies plus Git history. Database, dependency and planner revisions immediately invalidate affected guidance and preserve exact replay snapshots."; plannedCheck = "I,T: Reconstruct predecessor and successor manifests and all applicable products."; operation = CandidateNS::C06::retrieveBaseline meta SysML::ActionUsage; } }
+    dependency operation_FR_07 from FrameworkLogical::ConfigurationExchange::retrieveBaseline to CandidateNS::C06::retrieveBaseline;
+    dependency contract_FR_07 from FrameworkLogical::ContractFR07 to CandidateNS::C06::contractFR07;
+    #physicalPrimary allocation primary_FR_08 allocate FrameworkRequirements::FR_08 to candidate.L06 { @PhysicalAllocation { rationale = "Nanospace database/API/dependencies plus Git history. Database, dependency and planner revisions immediately invalidate affected guidance and preserve exact replay snapshots."; plannedCheck = "T: Inject identity, unit, sign and revision mismatches at each active interface."; operation = CandidateNS::C06::checkTransfer meta SysML::ActionUsage; } }
+    dependency operation_FR_08 from FrameworkLogical::ConfigurationExchange::checkTransfer to CandidateNS::C06::checkTransfer;
+    dependency contract_FR_08 from FrameworkLogical::ContractFR08 to CandidateNS::C06::contractFR08;
+    #physicalPrimary allocation primary_FR_09 allocate FrameworkRequirements::FR_09 to candidate.L06 { @PhysicalAllocation { rationale = "Nanospace database/API/dependencies plus Git history. Database, dependency and planner revisions immediately invalidate affected guidance and preserve exact replay snapshots."; plannedCheck = "I,T: Trace successful, failed, cancelled and partial outputs to their configurations."; operation = CandidateNS::C06::preserveRun meta SysML::ActionUsage; } }
+    dependency operation_FR_09 from FrameworkLogical::ConfigurationExchange::preserveRun to CandidateNS::C06::preserveRun;
+    dependency contract_FR_09 from FrameworkLogical::ContractFR09 to CandidateNS::C06::contractFR09;
+    #physicalPrimary allocation primary_FR_10 allocate FrameworkRequirements::FR_10 to candidate.L03 { @PhysicalAllocation { rationale = "F Prime architecture pattern plus Boan file-based continuity into Opalis. No Opalis FMU export is assumed. Required numerical Omniverse/host adapters are proposed."; plannedCheck = "D,T: Independently replay in the declared host environment and compare under fixed tolerances."; operation = CandidateNS::C03::replay meta SysML::ActionUsage; } }
+    dependency operation_FR_10 from FrameworkLogical::SimulationIntegration::replay to CandidateNS::C03::replay;
+    dependency contract_FR_10 from FrameworkLogical::ContractFR10 to CandidateNS::C03::contractFR10;
+    #physicalPrimary allocation primary_FR_11 allocate FrameworkRequirements::FR_11 to candidate.L05 { @PhysicalAllocation { rationale = "Nanospace intermediate result/rerun records plus requirement/procedure/verdict feedback. Exact scoped evidence and designated review authority are proposed."; plannedCheck = "T: Seed every evidence status and attempt a current claim with a blocking gap."; operation = CandidateNS::C05::assessProduct meta SysML::ActionUsage; } }
+    dependency operation_FR_11 from FrameworkLogical::EvidenceReview::assessProduct to CandidateNS::C05::assessProduct;
+    dependency contract_FR_11 from FrameworkLogical::ContractFR11 to CandidateNS::C05::contractFR11;
+    #physicalPrimary allocation primary_FR_13 allocate FrameworkRequirements::FR_13 to candidate.L02 { @PhysicalAllocation { rationale = "Boan mode/ephemeris/load and energy workflow. Iterative sizing remains scoped to declared models and expert scenarios, with broader effects and source governance added."; plannedCheck = "A,T: Recalculate mass and volume after a component substitution and preserve unknown properties and aggregation assumptions."; operation = CandidateNS::C02::budgetSize meta SysML::ActionUsage; } }
+    dependency operation_FR_13 from FrameworkLogical::MissionDesign::budgetSize to CandidateNS::C02::budgetSize;
+    dependency contract_FR_13 from FrameworkLogical::ContractFR13 to CandidateNS::C02::contractFR13;
+    #physicalPrimary allocation primary_FR_14 allocate FrameworkRequirements::FR_14 to candidate.L02 { @PhysicalAllocation { rationale = "Boan mode/ephemeris/load and energy workflow. Iterative sizing remains scoped to declared models and expert scenarios, with broader effects and source governance added."; plannedCheck = "A,T: Use infeasible and closely ranked alternatives with uncertain inputs."; operation = CandidateNS::C02::compareDesigns meta SysML::ActionUsage; } }
+    dependency operation_FR_14 from FrameworkLogical::MissionDesign::compareDesigns to CandidateNS::C02::compareDesigns;
+    dependency contract_FR_14 from FrameworkLogical::ContractFR14 to CandidateNS::C02::contractFR14;
+    #physicalPrimary allocation primary_FR_15 allocate FrameworkRequirements::FR_15 to candidate.L02 { @PhysicalAllocation { rationale = "Boan mode/ephemeris/load and energy workflow. Iterative sizing remains scoped to declared models and expert scenarios, with broader effects and source governance added."; plannedCheck = "I,D: Configure alternate EPS topologies and retain the distinct allocation and extension revisions."; operation = CandidateNS::C02::defineDesign meta SysML::ActionUsage; } }
+    dependency operation_FR_15 from FrameworkLogical::MissionDesign::defineDesign to CandidateNS::C02::defineDesign;
+    dependency contract_FR_15 from FrameworkLogical::ContractFR15 to CandidateNS::C02::contractFR15;
+    #physicalPrimary allocation primary_FR_16 allocate FrameworkRequirements::FR_16 to candidate.L03 { @PhysicalAllocation { rationale = "F Prime architecture pattern plus Boan file-based continuity into Opalis. No Opalis FMU export is assumed. Required numerical Omniverse/host adapters are proposed."; plannedCheck = "A,T: Use whole-CUBICS histories with a temporal shortage hidden by an average budget. Perturb load, mode or illumination and compare the mapped EPS numerical response with an independent reference within model scope."; operation = CandidateNS::C03::planAnalysis meta SysML::ActionUsage; } }
+    dependency operation_FR_16 from FrameworkLogical::SimulationIntegration::planAnalysis to CandidateNS::C03::planAnalysis;
+    dependency contract_FR_16 from FrameworkLogical::ContractFR16 to CandidateNS::C03::contractFR16;
+    #physicalPrimary allocation primary_FR_17 allocate FrameworkRequirements::FR_17 to candidate.L01 { @PhysicalAllocation { rationale = "Nanospace database/API requirements and parameter relations plus separate first-valid HTN planning. Full planner integration, semantic checks and applicability admission are proposed."; plannedCheck = "A,T: Recalculate an allocation and follow it to the parent and source quantities."; operation = CandidateNS::C01::deriveAllocate meta SysML::ActionUsage; } }
+    dependency operation_FR_17 from FrameworkLogical::RequirementsAssistance::deriveAllocate to CandidateNS::C01::deriveAllocate;
+    dependency contract_FR_17 from FrameworkLogical::ContractFR17 to CandidateNS::C01::contractFR17;
+    #physicalPrimary allocation primary_FR_18 allocate FrameworkRequirements::FR_18 to candidate.L03 { @PhysicalAllocation { rationale = "F Prime architecture pattern plus Boan file-based continuity into Opalis. No Opalis FMU export is assumed. Required numerical Omniverse/host adapters are proposed."; plannedCheck = "D,T: Exercise each discipline profile and incompatible mappings. Perturb an incoming whole-CUBICS history, compare the EPS numerical effect independently and return its identified response to the same scenario. Scene-only updates or missing numerical exchange cannot pass. Retain failed/partial status and transfer limits."; operation = CandidateNS::C03::planAnalysis meta SysML::ActionUsage; } }
+    dependency operation_FR_18 from FrameworkLogical::SimulationIntegration::planAnalysis to CandidateNS::C03::planAnalysis;
+    dependency contract_FR_18 from FrameworkLogical::ContractFR18 to CandidateNS::C03::contractFR18;
+    #physicalPrimary allocation primary_FR_19 allocate FrameworkRequirements::FR_19 to candidate.L03 { @PhysicalAllocation { rationale = "F Prime architecture pattern plus Boan file-based continuity into Opalis. No Opalis FMU export is assumed. Required numerical Omniverse/host adapters are proposed."; plannedCheck = "D,T: Run declared nominal and fault sequences with a simulated plant and retain stimuli, expected/actual state/event responses and failed criteria for matched SIL comparison."; operation = CandidateNS::C03::planMIL meta SysML::ActionUsage; } }
+    dependency operation_FR_19 from FrameworkLogical::SimulationIntegration::planMIL to CandidateNS::C03::planMIL;
+    dependency contract_FR_19 from FrameworkLogical::ContractFR19 to CandidateNS::C03::contractFR19;
+    #physicalPrimary allocation primary_FR_20 allocate FrameworkRequirements::FR_20 to candidate.L02 { @PhysicalAllocation { rationale = "Boan mode/ephemeris/load and energy workflow. Iterative sizing remains scoped to declared models and expert scenarios, with broader effects and source governance added."; plannedCheck = "A,T: Compare sizing and energy balance with independent calculations, including an infeasible eclipse case."; operation = CandidateNS::C02::budgetSize meta SysML::ActionUsage; } }
+    dependency operation_FR_20 from FrameworkLogical::MissionDesign::budgetSize to CandidateNS::C02::budgetSize;
+    dependency contract_FR_20 from FrameworkLogical::ContractFR20 to CandidateNS::C02::contractFR20;
+    #physicalPrimary allocation primary_FR_21 allocate FrameworkRequirements::FR_21 to candidate.L04 { @PhysicalAllocation { rationale = "Djebko mapped histories, validity masks and RMSE plus separate UPPAAL CORA/KiBaM assessment. Source-specific methods need EPS applicability and independent reference checks."; plannedCheck = "I,T: Attempt conclusions outside validity and with missing independent evidence."; operation = CandidateNS::C04::assessModel meta SysML::ActionUsage; } }
+    dependency operation_FR_21 from FrameworkLogical::ModelCredibility::assessModel to CandidateNS::C04::assessModel;
+    dependency contract_FR_21 from FrameworkLogical::ContractFR21 to CandidateNS::C04::contractFR21;
+    #physicalPrimary allocation primary_FR_22 allocate FrameworkRequirements::FR_22 to candidate.L04 { @PhysicalAllocation { rationale = "Djebko mapped histories, validity masks and RMSE plus separate UPPAAL CORA/KiBaM assessment. Source-specific methods need EPS applicability and independent reference checks."; plannedCheck = "A,T: Calibrate from supplied data, retain separate assessment data and decline an update."; operation = CandidateNS::C04::proposeCalibration meta SysML::ActionUsage; } }
+    dependency operation_FR_22 from FrameworkLogical::ModelCredibility::proposeCalibration to CandidateNS::C04::proposeCalibration;
+    dependency contract_FR_22 from FrameworkLogical::ContractFR22 to CandidateNS::C04::contractFR22;
+    #physicalPrimary allocation primary_FR_23 allocate FrameworkRequirements::FR_23 to candidate.L03 { @PhysicalAllocation { rationale = "F Prime architecture pattern plus Boan file-based continuity into Opalis. No Opalis FMU export is assumed. Required numerical Omniverse/host adapters are proposed."; plannedCheck = "I,T: Change the time step, solver and resource limits and inspect the run configuration and findings."; operation = CandidateNS::C03::planAnalysis meta SysML::ActionUsage; } }
+    dependency operation_FR_23 from FrameworkLogical::SimulationIntegration::planAnalysis to CandidateNS::C03::planAnalysis;
+    dependency contract_FR_23 from FrameworkLogical::ContractFR23 to CandidateNS::C03::contractFR23;
+    #physicalPrimary allocation primary_FR_24 allocate FrameworkRequirements::FR_24 to candidate.L03 { @PhysicalAllocation { rationale = "F Prime architecture pattern plus Boan file-based continuity into Opalis. No Opalis FMU export is assumed. Required numerical Omniverse/host adapters are proposed."; plannedCheck = "A,T: Execute released F Prime host software with simulated EPS/subsystem products connected to the same whole-CUBICS scenario. Use matched MIL results and fixed comparison rules. Seed a code/interface discrepancy and failed/partial runs. Retain raw host responses, requirement/ConOps outcomes, differences, status and limits. Builds and scene updates supply no SIL evidence."; operation = CandidateNS::C03::compareMILSil meta SysML::ActionUsage; } }
+    dependency operation_FR_24 from FrameworkLogical::SimulationIntegration::compareMILSil to CandidateNS::C03::compareMILSil;
+    dependency contract_FR_24 from FrameworkLogical::ContractFR24 to CandidateNS::C03::contractFR24;
+    #physicalPrimary allocation primary_FR_25 allocate FrameworkRequirements::FR_25 to candidate.L02 { @PhysicalAllocation { rationale = "Boan mode/ephemeris/load and energy workflow. Iterative sizing remains scoped to declared models and expert scenarios, with broader effects and source governance added."; plannedCheck = "I,T: Revise a degraded mode and trace its requirement and analysis inputs."; operation = CandidateNS::C02::defineDesign meta SysML::ActionUsage; } }
+    dependency operation_FR_25 from FrameworkLogical::MissionDesign::defineDesign to CandidateNS::C02::defineDesign;
+    dependency contract_FR_25 from FrameworkLogical::ContractFR25 to CandidateNS::C02::contractFR25;
+    #physicalPrimary allocation primary_FR_26 allocate FrameworkRequirements::FR_26 to candidate.L03 { @PhysicalAllocation { rationale = "F Prime architecture pattern plus Boan file-based continuity into Opalis. No Opalis FMU export is assumed. Required numerical Omniverse/host adapters are proposed."; plannedCheck = "I,T: Assess applicability with and without repair or redundancy assumptions."; operation = CandidateNS::C03::planAnalysis meta SysML::ActionUsage; } }
+    dependency operation_FR_26 from FrameworkLogical::SimulationIntegration::planAnalysis to CandidateNS::C03::planAnalysis;
+    dependency contract_FR_26 from FrameworkLogical::ContractFR26 to CandidateNS::C03::contractFR26;
+    #physicalPrimary allocation primary_FR_27 allocate FrameworkRequirements::FR_27 to candidate.L03 { @PhysicalAllocation { rationale = "F Prime architecture pattern plus Boan file-based continuity into Opalis. No Opalis FMU export is assumed. Required numerical Omniverse/host adapters are proposed."; plannedCheck = "A,T: Compare transformations and results with a reference and leave missing rates unresolved."; operation = CandidateNS::C03::planAnalysis meta SysML::ActionUsage; } }
+    dependency operation_FR_27 from FrameworkLogical::SimulationIntegration::planAnalysis to CandidateNS::C03::planAnalysis;
+    dependency contract_FR_27 from FrameworkLogical::ContractFR27 to CandidateNS::C03::contractFR27;
+    #physicalPrimary allocation primary_FR_28 allocate FrameworkRequirements::FR_28 to candidate.L05 { @PhysicalAllocation { rationale = "Nanospace intermediate result/rerun records plus requirement/procedure/verdict feedback. Exact scoped evidence and designated review authority are proposed."; plannedCheck = "I,T: Distinguish planned activities from results and verification criteria from validation expectations."; operation = CandidateNS::C05::planAssessment meta SysML::ActionUsage; } }
+    dependency operation_FR_28 from FrameworkLogical::EvidenceReview::planAssessment to CandidateNS::C05::planAssessment;
+    dependency contract_FR_28 from FrameworkLogical::ContractFR28 to CandidateNS::C05::contractFR28;
+    #physicalPrimary allocation primary_FR_29 allocate FrameworkRequirements::FR_29 to candidate.L01 { @PhysicalAllocation { rationale = "Nanospace database/API requirements and parameter relations plus separate first-valid HTN planning. Full planner integration, semantic checks and applicability admission are proposed."; plannedCheck = "I,T: Exercise all dispositions and an unauthorized attempt to apply a suggestion."; operation = CandidateNS::C01::dispose meta SysML::ActionUsage; } }
+    dependency operation_FR_29 from FrameworkLogical::RequirementsAssistance::dispose to CandidateNS::C01::dispose;
+    dependency contract_FR_29 from FrameworkLogical::ContractFR29 to CandidateNS::C01::contractFR29;
+    #physicalPrimary allocation primary_FR_30 allocate FrameworkRequirements::FR_30 to candidate.L06 { @PhysicalAllocation { rationale = "Nanospace database/API/dependencies plus Git history. Database, dependency and planner revisions immediately invalidate affected guidance and preserve exact replay snapshots."; plannedCheck = "T: Edit during a delayed response and check that the old response cannot replace current guidance."; operation = CandidateNS::C06::invalidate meta SysML::ActionUsage; } }
+    dependency operation_FR_30 from FrameworkLogical::ConfigurationExchange::invalidate to CandidateNS::C06::invalidate;
+    dependency contract_FR_30 from FrameworkLogical::ContractFR30 to CandidateNS::C06::contractFR30;
+    #physicalPrimary allocation primary_FR_31 allocate FrameworkRequirements::FR_31 to candidate.L04 { @PhysicalAllocation { rationale = "Djebko mapped histories, validity masks and RMSE plus separate UPPAAL CORA/KiBaM assessment. Source-specific methods need EPS applicability and independent reference checks."; plannedCheck = "A,T: Seed clock offset, delayed/out-of-order samples and missing timing. Compare checked alignments, delays and exceeded/unknown limits with fixed timing references. Distinguish scenario/sample/receipt times, scene update rate and numerical time step."; operation = CandidateNS::C04::assessModel meta SysML::ActionUsage; } }
+    dependency operation_FR_31 from FrameworkLogical::ModelCredibility::assessModel to CandidateNS::C04::assessModel;
+    dependency contract_FR_31 from FrameworkLogical::ContractFR31 to CandidateNS::C04::contractFR31;
+    #physicalPrimary allocation primary_FR_32 allocate FrameworkRequirements::FR_32 to candidate.L04 { @PhysicalAllocation { rationale = "Djebko mapped histories, validity masks and RMSE plus separate UPPAAL CORA/KiBaM assessment. Source-specific methods need EPS applicability and independent reference checks."; plannedCheck = "T: Seed wrong entity/channel/revision, unit/sign/frame mismatch and missing, inactive or invalid samples. Compare admission findings and masks with a fixed reference before numerical use. Preserve raw histories and unchanged controlled content for rejected transfers."; operation = CandidateNS::C04::assessModel meta SysML::ActionUsage; } }
+    dependency operation_FR_32 from FrameworkLogical::ModelCredibility::assessModel to CandidateNS::C04::assessModel;
+    dependency contract_FR_32 from FrameworkLogical::ContractFR32 to CandidateNS::C04::contractFR32;
+    #physicalPrimary allocation primary_FR_33 allocate FrameworkRequirements::FR_33 to candidate.L02 { @PhysicalAllocation { rationale = "Boan mode/ephemeris/load and energy workflow. Iterative sizing remains scoped to declared models and expert scenarios, with broader effects and source governance added."; plannedCheck = "I,T: Round-trip endpoint ownership/directions and all interface and ground-definition fields. Reject inconsistent identifiers, types, units, ranges, polarity and temporal meanings against an independent reference. Structural checks supply no behavior verdict."; operation = CandidateNS::C02::defineInterfaces meta SysML::ActionUsage; } }
+    dependency operation_FR_33 from FrameworkLogical::MissionDesign::defineInterfaces to CandidateNS::C02::defineInterfaces;
+    dependency contract_FR_33 from FrameworkLogical::ContractFR33 to CandidateNS::C02::contractFR33;
+    #physicalPrimary allocation primary_FR_34 allocate FrameworkRequirements::FR_34 to candidate.L03 { @PhysicalAllocation { rationale = "F Prime architecture pattern plus Boan file-based continuity into Opalis. No Opalis FMU export is assumed. Required numerical Omniverse/host adapters are proposed."; plannedCheck = "D,T: Compare required F Prime component/instance/port/topology and command/telemetry/event/parameter mappings with an independent reference at declared actual profile/tool/representation versions. Seed conflicts, wrong directions/types, missing meanings and incompatible versions. Retain unsupported behavior and lossy translations."; operation = CandidateNS::C03::mapFPrime meta SysML::ActionUsage; } }
+    dependency operation_FR_34 from FrameworkLogical::SimulationIntegration::mapFPrime to CandidateNS::C03::mapFPrime;
+    dependency contract_FR_34 from FrameworkLogical::ContractFR34 to CandidateNS::C03::contractFR34;
+    #physicalPrimary allocation primary_FR_35 allocate FrameworkRequirements::FR_35 to candidate.L02 { @PhysicalAllocation { rationale = "Boan mode/ephemeris/load and energy workflow. Iterative sizing remains scoped to declared models and expert scenarios, with broader effects and source governance added."; plannedCheck = "A,T: Exercise nominal, rejected, protection and recovery sequences in simulated conditions."; operation = CandidateNS::C02::defineInterfaces meta SysML::ActionUsage; } }
+    dependency operation_FR_35 from FrameworkLogical::MissionDesign::defineInterfaces to CandidateNS::C02::defineInterfaces;
+    dependency contract_FR_35 from FrameworkLogical::ContractFR35 to CandidateNS::C02::contractFR35;
+    #physicalPrimary allocation primary_FR_36 allocate FrameworkRequirements::FR_36 to candidate.L03 { @PhysicalAllocation { rationale = "F Prime architecture pattern plus Boan file-based continuity into Opalis. No Opalis FMU export is assumed. Required numerical Omniverse/host adapters are proposed."; plannedCheck = "D,T: Reject stale, unreleased and unauthorized design requests. Coordinate an authorized current-release F Prime host build, retaining exact source/build, toolchain/dependency/host revisions, logs and generation/compilation failures. Review acceptance cannot replace exact authorization. Build success supplies no SIL verdict."; operation = CandidateNS::C03::coordinateCoding meta SysML::ActionUsage; } }
+    dependency operation_FR_36 from FrameworkLogical::SimulationIntegration::coordinateCoding to CandidateNS::C03::coordinateCoding;
+    dependency contract_FR_36 from FrameworkLogical::ContractFR36 to CandidateNS::C03::contractFR36;
+    #physicalPrimary allocation primary_FR_37 allocate FrameworkRequirements::FR_37 to candidate.L05 { @PhysicalAllocation { rationale = "Nanospace intermediate result/rerun records plus requirement/procedure/verdict feedback. Exact scoped evidence and designated review authority are proposed."; plannedCheck = "I,D: Compare views with their source baseline and follow represented record links."; operation = CandidateNS::C05::makeViews meta SysML::ActionUsage; } }
+    dependency operation_FR_37 from FrameworkLogical::EvidenceReview::makeViews to CandidateNS::C05::makeViews;
+    dependency contract_FR_37 from FrameworkLogical::ContractFR37 to CandidateNS::C05::contractFR37;
+    #physicalPrimary allocation primary_FR_38 allocate FrameworkRequirements::FR_38 to candidate.L05 { @PhysicalAllocation { rationale = "Nanospace intermediate result/rerun records plus requirement/procedure/verdict feedback. Exact scoped evidence and designated review authority are proposed."; plannedCheck = "I,D: Prepare phase-specific packages, including CDR design release and SIR released-product evidence."; operation = CandidateNS::C05::prepareReview meta SysML::ActionUsage; } }
+    dependency operation_FR_38 from FrameworkLogical::EvidenceReview::prepareReview to CandidateNS::C05::prepareReview;
+    dependency contract_FR_38 from FrameworkLogical::ContractFR38 to CandidateNS::C05::contractFR38;
+    #physicalPrimary allocation primary_FR_39 allocate FrameworkRequirements::FR_39 to candidate.L01 { @PhysicalAllocation { rationale = "Nanospace database/API requirements and parameter relations plus separate first-valid HTN planning. Full planner integration, semantic checks and applicability admission are proposed."; plannedCheck = "A,D: Change maturity and blocking findings and inspect the revised activity proposals."; operation = CandidateNS::C01::recommend meta SysML::ActionUsage; } }
+    dependency operation_FR_39 from FrameworkLogical::RequirementsAssistance::recommend to CandidateNS::C01::recommend;
+    dependency contract_FR_39 from FrameworkLogical::ContractFR39 to CandidateNS::C01::contractFR39;
+    #physicalPrimary allocation primary_FR_41 allocate FrameworkRequirements::FR_41 to candidate.L01 { @PhysicalAllocation { rationale = "Nanospace database/API requirements and parameter relations plus separate first-valid HTN planning. Full planner integration, semantic checks and applicability admission are proposed."; plannedCheck = "T: Measure response delay under the declared workload, including outage and superseded edits."; operation = CandidateNS::C01::acknowledge meta SysML::ActionUsage; } }
+    dependency operation_FR_41 from FrameworkLogical::RequirementsAssistance::acknowledge to CandidateNS::C01::acknowledge;
+    dependency contract_FR_41 from FrameworkLogical::ContractFR41 to CandidateNS::C01::contractFR41;
+    #physicalPrimary allocation primary_FR_42 allocate FrameworkRequirements::FR_42 to candidate.L05 { @PhysicalAllocation { rationale = "Nanospace intermediate result/rerun records plus requirement/procedure/verdict feedback. Exact scoped evidence and designated review authority are proposed."; plannedCheck = "I,T: Reject unauthorized or stale-baseline decisions and exercise blocking and conditional findings."; operation = CandidateNS::C05::recordReview meta SysML::ActionUsage; } }
+    dependency operation_FR_42 from FrameworkLogical::EvidenceReview::recordReview to CandidateNS::C05::recordReview;
+    dependency contract_FR_42 from FrameworkLogical::ContractFR42 to CandidateNS::C05::contractFR42;
+    #physicalDetail allocation step_AssistanceRealization_edit allocate LogicalRealization::AssistanceRealization::edit to candidate.assistance.edit;
+    #physicalDetail allocation step_AssistanceRealization_receive allocate LogicalRealization::AssistanceRealization::receive to candidate.assistance.receive;
+    #physicalDetail allocation step_AssistanceRealization_capture allocate LogicalRealization::AssistanceRealization::capture to candidate.assistance.capture;
+    #physicalDetail allocation step_AssistanceRealization_invalidateOnEdit allocate LogicalRealization::AssistanceRealization::invalidateOnEdit to candidate.assistance.invalidateOnEdit;
+    #physicalDetail allocation step_AssistanceRealization_acknowledge allocate LogicalRealization::AssistanceRealization::acknowledge to candidate.assistance.acknowledge;
+    #physicalDetail allocation step_AssistanceRealization_retainDraft allocate LogicalRealization::AssistanceRealization::retainDraft to candidate.assistance.retainDraft;
+    #physicalDetail allocation step_AssistanceRealization_checkDraft allocate LogicalRealization::AssistanceRealization::checkDraft to candidate.assistance.checkDraft;
+    #physicalDetail allocation step_AssistanceRealization_recommend allocate LogicalRealization::AssistanceRealization::recommend to candidate.assistance.recommend;
+    #physicalDetail allocation step_AssistanceRealization_checkReply allocate LogicalRealization::AssistanceRealization::checkReply to candidate.assistance.checkReply;
+    #physicalDetail allocation step_AssistanceRealization_present allocate LogicalRealization::AssistanceRealization::present to candidate.assistance.present;
+    #physicalDetail allocation step_AssistanceRealization_engineerDisposition allocate LogicalRealization::AssistanceRealization::engineerDisposition to candidate.assistance.engineerDisposition;
+    #physicalDetail allocation step_AssistanceRealization_dispose allocate LogicalRealization::AssistanceRealization::dispose to candidate.assistance.dispose;
+    #physicalDetail allocation step_AssistanceRealization_checkApplication allocate LogicalRealization::AssistanceRealization::checkApplication to candidate.assistance.checkApplication;
+    #physicalDetail allocation step_AssistanceRealization_derive allocate LogicalRealization::AssistanceRealization::derive to candidate.assistance.derive;
+    #physicalDetail allocation step_AssistanceRealization_trace allocate LogicalRealization::AssistanceRealization::trace to candidate.assistance.trace;
+    #physicalDetail allocation step_AssistanceRealization_validate allocate LogicalRealization::AssistanceRealization::validate to candidate.assistance.validate;
+    #physicalDetail allocation step_AssistanceRealization_retainValidation allocate LogicalRealization::AssistanceRealization::retainValidation to candidate.assistance.retainValidation;
+    #physicalDetail allocation step_AssistanceRealization_retainDisposition allocate LogicalRealization::AssistanceRealization::retainDisposition to candidate.assistance.retainDisposition;
+    #physicalDetail allocation step_AssistanceRealization_invalidate allocate LogicalRealization::AssistanceRealization::invalidate to candidate.assistance.invalidate;
+    #physicalDetail allocation step_AssistanceRealization_reassess allocate LogicalRealization::AssistanceRealization::reassess to candidate.assistance.reassess;
+    #physicalDetail allocation step_AssistanceRealization_rejectTransfer allocate LogicalRealization::AssistanceRealization::rejectTransfer to candidate.assistance.rejectTransfer;
+    #physicalDetail allocation step_AssistanceRealization_rejectDisposition allocate LogicalRealization::AssistanceRealization::rejectDisposition to candidate.assistance.rejectDisposition;
+    #physicalDetail allocation step_DesignRealization_submit allocate LogicalRealization::DesignRealization::submit to candidate.designRun.submit;
+    #physicalDetail allocation step_DesignRealization_receive allocate LogicalRealization::DesignRealization::receive to candidate.designRun.receive;
+    #physicalDetail allocation step_DesignRealization_configure allocate LogicalRealization::DesignRealization::configure to candidate.designRun.configure;
+    #physicalDetail allocation step_DesignRealization_budget allocate LogicalRealization::DesignRealization::budget to candidate.designRun.budget;
+    #physicalDetail allocation step_DesignRealization_planCriteria allocate LogicalRealization::DesignRealization::planCriteria to candidate.designRun.planCriteria;
+    #physicalDetail allocation step_DesignRealization_plan allocate LogicalRealization::DesignRealization::plan to candidate.designRun.plan;
+    #physicalDetail allocation step_DesignRealization_execute allocate LogicalRealization::DesignRealization::execute to candidate.designRun.execute;
+    #executionHost allocation external_DesignRealization_execute allocate candidate.designRun.execute to candidate.models;
+    #physicalDetail allocation step_DesignRealization_receiveResult allocate LogicalRealization::DesignRealization::receiveResult to candidate.designRun.receiveResult;
+    #physicalDetail allocation step_DesignRealization_preserve allocate LogicalRealization::DesignRealization::preserve to candidate.designRun.preserve;
+    #physicalDetail allocation step_DesignRealization_checkCurrent allocate LogicalRealization::DesignRealization::checkCurrent to candidate.designRun.checkCurrent;
+    #physicalDetail allocation step_DesignRealization_credibility allocate LogicalRealization::DesignRealization::credibility to candidate.designRun.credibility;
+    #physicalDetail allocation step_DesignRealization_assess allocate LogicalRealization::DesignRealization::assess to candidate.designRun.assess;
+    #physicalDetail allocation step_DesignRealization_compare allocate LogicalRealization::DesignRealization::compare to candidate.designRun.compare;
+    #physicalDetail allocation step_DesignRealization_select allocate LogicalRealization::DesignRealization::select to candidate.designRun.select;
+    #physicalDetail allocation step_DesignRealization_checkSelection allocate LogicalRealization::DesignRealization::checkSelection to candidate.designRun.checkSelection;
+    #physicalDetail allocation step_DesignRealization_retainSelection allocate LogicalRealization::DesignRealization::retainSelection to candidate.designRun.retainSelection;
+    #physicalDetail allocation step_DesignRealization_retainGaps allocate LogicalRealization::DesignRealization::retainGaps to candidate.designRun.retainGaps;
+    #physicalDetail allocation step_DesignRealization_retainRaw_receiveResult allocate LogicalRealization::DesignRealization::retainRaw_receiveResult to candidate.designRun.retainRaw_receiveResult;
+    #physicalDetail allocation step_ConceptRealization_makeConfiguration allocate LogicalRealization::ConceptRealization::makeConfiguration to candidate.concept.makeConfiguration;
+    #physicalDetail allocation step_ConceptRealization_submit allocate LogicalRealization::ConceptRealization::submit to candidate.concept.submit;
+    #physicalDetail allocation step_ConceptRealization_receive allocate LogicalRealization::ConceptRealization::receive to candidate.concept.receive;
+    #physicalDetail allocation step_ConceptRealization_configure allocate LogicalRealization::ConceptRealization::configure to candidate.concept.configure;
+    #physicalDetail allocation step_ConceptRealization_budget allocate LogicalRealization::ConceptRealization::budget to candidate.concept.budget;
+    #physicalDetail allocation step_ConceptRealization_planCriteria allocate LogicalRealization::ConceptRealization::planCriteria to candidate.concept.planCriteria;
+    #physicalDetail allocation step_ConceptRealization_plan allocate LogicalRealization::ConceptRealization::plan to candidate.concept.plan;
+    #physicalDetail allocation step_ConceptRealization_execute allocate LogicalRealization::ConceptRealization::execute to candidate.concept.execute;
+    #executionHost allocation external_ConceptRealization_execute allocate candidate.concept.execute to candidate.models;
+    #physicalDetail allocation step_ConceptRealization_receiveResult allocate LogicalRealization::ConceptRealization::receiveResult to candidate.concept.receiveResult;
+    #physicalDetail allocation step_ConceptRealization_preserve allocate LogicalRealization::ConceptRealization::preserve to candidate.concept.preserve;
+    #physicalDetail allocation step_ConceptRealization_checkCurrent allocate LogicalRealization::ConceptRealization::checkCurrent to candidate.concept.checkCurrent;
+    #physicalDetail allocation step_ConceptRealization_credibility allocate LogicalRealization::ConceptRealization::credibility to candidate.concept.credibility;
+    #physicalDetail allocation step_ConceptRealization_assess allocate LogicalRealization::ConceptRealization::assess to candidate.concept.assess;
+    #physicalDetail allocation step_ConceptRealization_compare allocate LogicalRealization::ConceptRealization::compare to candidate.concept.compare;
+    #physicalDetail allocation step_ConceptRealization_select allocate LogicalRealization::ConceptRealization::select to candidate.concept.select;
+    #physicalDetail allocation step_ConceptRealization_checkSelection allocate LogicalRealization::ConceptRealization::checkSelection to candidate.concept.checkSelection;
+    #physicalDetail allocation step_ConceptRealization_retainSelection allocate LogicalRealization::ConceptRealization::retainSelection to candidate.concept.retainSelection;
+    #physicalDetail allocation step_ConceptRealization_retainGaps allocate LogicalRealization::ConceptRealization::retainGaps to candidate.concept.retainGaps;
+    #physicalDetail allocation step_ConceptRealization_retainRaw_receiveResult allocate LogicalRealization::ConceptRealization::retainRaw_receiveResult to candidate.concept.retainRaw_receiveResult;
+    #physicalDetail allocation step_SoftwareRealization_submit allocate LogicalRealization::SoftwareRealization::submit to candidate.software.submit;
+    #physicalDetail allocation step_SoftwareRealization_receive allocate LogicalRealization::SoftwareRealization::receive to candidate.software.receive;
+    #physicalDetail allocation step_SoftwareRealization_interfaces allocate LogicalRealization::SoftwareRealization::interfaces to candidate.software.interfaces;
+    #physicalDetail allocation step_SoftwareRealization_mapping allocate LogicalRealization::SoftwareRealization::mapping to candidate.software.mapping;
+    #physicalDetail allocation step_SoftwareRealization_planCriteria allocate LogicalRealization::SoftwareRealization::planCriteria to candidate.software.planCriteria;
+    #physicalDetail allocation step_SoftwareRealization_planMIL allocate LogicalRealization::SoftwareRealization::planMIL to candidate.software.planMIL;
+    #physicalDetail allocation step_SoftwareRealization_executeMIL allocate LogicalRealization::SoftwareRealization::executeMIL to candidate.software.executeMIL;
+    #executionHost allocation external_SoftwareRealization_executeMIL allocate candidate.software.executeMIL to candidate.models;
+    #physicalDetail allocation step_SoftwareRealization_receiveMIL allocate LogicalRealization::SoftwareRealization::receiveMIL to candidate.software.receiveMIL;
+    #physicalDetail allocation step_SoftwareRealization_preserveMIL allocate LogicalRealization::SoftwareRealization::preserveMIL to candidate.software.preserveMIL;
+    #physicalDetail allocation step_SoftwareRealization_assessMIL allocate LogicalRealization::SoftwareRealization::assessMIL to candidate.software.assessMIL;
+    #physicalDetail allocation step_SoftwareRealization_release allocate LogicalRealization::SoftwareRealization::release to candidate.software.release;
+    #physicalDetail allocation step_SoftwareRealization_checkRelease allocate LogicalRealization::SoftwareRealization::checkRelease to candidate.software.checkRelease;
+    #physicalDetail allocation step_SoftwareRealization_coordinate allocate LogicalRealization::SoftwareRealization::coordinate to candidate.software.coordinate;
+    #physicalDetail allocation step_SoftwareRealization_codeBuildSil allocate LogicalRealization::SoftwareRealization::codeBuildSil to candidate.software.codeBuildSil;
+    #executionHost allocation external_SoftwareRealization_codeBuildSil allocate candidate.software.codeBuildSil to candidate.hostCode;
+    #physicalDetail allocation step_SoftwareRealization_receiveSIL allocate LogicalRealization::SoftwareRealization::receiveSIL to candidate.software.receiveSIL;
+    #physicalDetail allocation step_SoftwareRealization_preserveSIL allocate LogicalRealization::SoftwareRealization::preserveSIL to candidate.software.preserveSIL;
+    #physicalDetail allocation step_SoftwareRealization_checkCurrent allocate LogicalRealization::SoftwareRealization::checkCurrent to candidate.software.checkCurrent;
+    #physicalDetail allocation step_SoftwareRealization_compare allocate LogicalRealization::SoftwareRealization::compare to candidate.software.compare;
+    #physicalDetail allocation step_SoftwareRealization_credibility allocate LogicalRealization::SoftwareRealization::credibility to candidate.software.credibility;
+    #physicalDetail allocation step_SoftwareRealization_assess allocate LogicalRealization::SoftwareRealization::assess to candidate.software.assess;
+    #physicalDetail allocation step_SoftwareRealization_present allocate LogicalRealization::SoftwareRealization::present to candidate.software.present;
+    #physicalDetail allocation step_SoftwareRealization_approve allocate LogicalRealization::SoftwareRealization::approve to candidate.software.approve;
+    #physicalDetail allocation step_SoftwareRealization_checkProducts allocate LogicalRealization::SoftwareRealization::checkProducts to candidate.software.checkProducts;
+    #physicalDetail allocation step_SoftwareRealization_retainProducts allocate LogicalRealization::SoftwareRealization::retainProducts to candidate.software.retainProducts;
+    #physicalDetail allocation step_SoftwareRealization_block allocate LogicalRealization::SoftwareRealization::block to candidate.software.block;
+    #physicalDetail allocation step_SoftwareRealization_retainRaw_receiveMIL allocate LogicalRealization::SoftwareRealization::retainRaw_receiveMIL to candidate.software.retainRaw_receiveMIL;
+    #physicalDetail allocation step_SoftwareRealization_retainRaw_receiveSIL allocate LogicalRealization::SoftwareRealization::retainRaw_receiveSIL to candidate.software.retainRaw_receiveSIL;
+    #physicalDetail allocation step_SoftwareRealization_rejectRelease allocate LogicalRealization::SoftwareRealization::rejectRelease to candidate.software.rejectRelease;
+    #physicalDetail allocation step_ChangeReviewRealization_request allocate LogicalRealization::ChangeReviewRealization::request to candidate.changeReview.request;
+    #physicalDetail allocation step_ChangeReviewRealization_receive allocate LogicalRealization::ChangeReviewRealization::receive to candidate.changeReview.receive;
+    #physicalDetail allocation step_ChangeReviewRealization_invalidate allocate LogicalRealization::ChangeReviewRealization::invalidate to candidate.changeReview.invalidate;
+    #physicalDetail allocation step_ChangeReviewRealization_changeDecision allocate LogicalRealization::ChangeReviewRealization::changeDecision to candidate.changeReview.changeDecision;
+    #physicalDetail allocation step_ChangeReviewRealization_checkChange allocate LogicalRealization::ChangeReviewRealization::checkChange to candidate.changeReview.checkChange;
+    #physicalDetail allocation step_ChangeReviewRealization_successor allocate LogicalRealization::ChangeReviewRealization::successor to candidate.changeReview.successor;
+    #physicalDetail allocation step_ChangeReviewRealization_reassessAdvice allocate LogicalRealization::ChangeReviewRealization::reassessAdvice to candidate.changeReview.reassessAdvice;
+    #physicalDetail allocation step_ChangeReviewRealization_planRepeat allocate LogicalRealization::ChangeReviewRealization::planRepeat to candidate.changeReview.planRepeat;
+    #physicalDetail allocation step_ChangeReviewRealization_repeat allocate LogicalRealization::ChangeReviewRealization::repeat to candidate.changeReview.repeat;
+    #executionHost allocation external_ChangeReviewRealization_repeat allocate candidate.changeReview.repeat to candidate.models;
+    #physicalDetail allocation step_ChangeReviewRealization_receiveResult allocate LogicalRealization::ChangeReviewRealization::receiveResult to candidate.changeReview.receiveResult;
+    #physicalDetail allocation step_ChangeReviewRealization_preserve allocate LogicalRealization::ChangeReviewRealization::preserve to candidate.changeReview.preserve;
+    #physicalDetail allocation step_ChangeReviewRealization_credibility allocate LogicalRealization::ChangeReviewRealization::credibility to candidate.changeReview.credibility;
+    #physicalDetail allocation step_ChangeReviewRealization_retrieve allocate LogicalRealization::ChangeReviewRealization::retrieve to candidate.changeReview.retrieve;
+    #physicalDetail allocation step_ChangeReviewRealization_assess allocate LogicalRealization::ChangeReviewRealization::assess to candidate.changeReview.assess;
+    #physicalDetail allocation step_ChangeReviewRealization_views allocate LogicalRealization::ChangeReviewRealization::views to candidate.changeReview.views;
+    #physicalDetail allocation step_ChangeReviewRealization_prepare allocate LogicalRealization::ChangeReviewRealization::prepare to candidate.changeReview.prepare;
+    #physicalDetail allocation step_ChangeReviewRealization_reviewers allocate LogicalRealization::ChangeReviewRealization::reviewers to candidate.changeReview.reviewers;
+    #physicalDetail allocation step_ChangeReviewRealization_authority allocate LogicalRealization::ChangeReviewRealization::authority to candidate.changeReview.authority;
+    #physicalDetail allocation step_ChangeReviewRealization_checkBaseline allocate LogicalRealization::ChangeReviewRealization::checkBaseline to candidate.changeReview.checkBaseline;
+    #physicalDetail allocation step_ChangeReviewRealization_checkDecision allocate LogicalRealization::ChangeReviewRealization::checkDecision to candidate.changeReview.checkDecision;
+    #physicalDetail allocation step_ChangeReviewRealization_record allocate LogicalRealization::ChangeReviewRealization::record to candidate.changeReview.record;
+    #physicalDetail allocation step_ChangeReviewRealization_retain allocate LogicalRealization::ChangeReviewRealization::retain to candidate.changeReview.retain;
+    #physicalDetail allocation step_ChangeReviewRealization_holdChange allocate LogicalRealization::ChangeReviewRealization::holdChange to candidate.changeReview.holdChange;
+    #physicalDetail allocation step_ChangeReviewRealization_holdReview allocate LogicalRealization::ChangeReviewRealization::holdReview to candidate.changeReview.holdReview;
+    #physicalDetail allocation step_ChangeReviewRealization_rejectReview allocate LogicalRealization::ChangeReviewRealization::rejectReview to candidate.changeReview.rejectReview;
+    #physicalDetail allocation step_ChangeReviewRealization_retainRaw_receiveResult allocate LogicalRealization::ChangeReviewRealization::retainRaw_receiveResult to candidate.changeReview.retainRaw_receiveResult;
+    #physicalDetail allocation step_ReplayRealization_request allocate LogicalRealization::ReplayRealization::request to candidate.replayRun.request;
+    #physicalDetail allocation step_ReplayRealization_prepare allocate LogicalRealization::ReplayRealization::prepare to candidate.replayRun.prepare;
+    #physicalDetail allocation step_ReplayRealization_execute allocate LogicalRealization::ReplayRealization::execute to candidate.replayRun.execute;
+    #executionHost allocation external_ReplayRealization_execute allocate candidate.replayRun.execute to candidate.models;
+    #physicalDetail allocation step_ReplayRealization_receive allocate LogicalRealization::ReplayRealization::receive to candidate.replayRun.receive;
+    #physicalDetail allocation step_ReplayRealization_preserve allocate LogicalRealization::ReplayRealization::preserve to candidate.replayRun.preserve;
+    #physicalDetail allocation step_ReplayRealization_compare allocate LogicalRealization::ReplayRealization::compare to candidate.replayRun.compare;
+    #physicalDetail allocation step_ReplayRealization_retain allocate LogicalRealization::ReplayRealization::retain to candidate.replayRun.retain;
+    #physicalDetail allocation step_ReplayRealization_missing allocate LogicalRealization::ReplayRealization::missing to candidate.replayRun.missing;
+    #physicalDetail allocation step_ReplayRealization_retainRaw_receive allocate LogicalRealization::ReplayRealization::retainRaw_receive to candidate.replayRun.retainRaw_receive;
+    #physicalDetail allocation step_CalibrationRealization_supply allocate LogicalRealization::CalibrationRealization::supply to candidate.calibration.supply;
+    #physicalDetail allocation step_CalibrationRealization_receive allocate LogicalRealization::CalibrationRealization::receive to candidate.calibration.receive;
+    #physicalDetail allocation step_CalibrationRealization_checkData allocate LogicalRealization::CalibrationRealization::checkData to candidate.calibration.checkData;
+    #physicalDetail allocation step_CalibrationRealization_propose allocate LogicalRealization::CalibrationRealization::propose to candidate.calibration.propose;
+    #physicalDetail allocation step_CalibrationRealization_choose allocate LogicalRealization::CalibrationRealization::choose to candidate.calibration.choose;
+    #physicalDetail allocation step_CalibrationRealization_prepareChange allocate LogicalRealization::CalibrationRealization::prepareChange to candidate.calibration.prepareChange;
+    #physicalDetail allocation step_CalibrationRealization_invalidate allocate LogicalRealization::CalibrationRealization::invalidate to candidate.calibration.invalidate;
+    #physicalDetail allocation step_CalibrationRealization_checkChange allocate LogicalRealization::CalibrationRealization::checkChange to candidate.calibration.checkChange;
+    #physicalDetail allocation step_CalibrationRealization_successor allocate LogicalRealization::CalibrationRealization::successor to candidate.calibration.successor;
+    #physicalDetail allocation step_CalibrationRealization_reassess allocate LogicalRealization::CalibrationRealization::reassess to candidate.calibration.reassess;
+    #physicalDetail allocation step_CalibrationRealization_planRepeat allocate LogicalRealization::CalibrationRealization::planRepeat to candidate.calibration.planRepeat;
+    #physicalDetail allocation step_CalibrationRealization_repeat allocate LogicalRealization::CalibrationRealization::repeat to candidate.calibration.repeat;
+    #executionHost allocation external_CalibrationRealization_repeat allocate candidate.calibration.repeat to candidate.models;
+    #physicalDetail allocation step_CalibrationRealization_receiveResult allocate LogicalRealization::CalibrationRealization::receiveResult to candidate.calibration.receiveResult;
+    #physicalDetail allocation step_CalibrationRealization_preserve allocate LogicalRealization::CalibrationRealization::preserve to candidate.calibration.preserve;
+    #physicalDetail allocation step_CalibrationRealization_credibility allocate LogicalRealization::CalibrationRealization::credibility to candidate.calibration.credibility;
+    #physicalDetail allocation step_CalibrationRealization_assess allocate LogicalRealization::CalibrationRealization::assess to candidate.calibration.assess;
+    #physicalDetail allocation step_CalibrationRealization_retainEvidence allocate LogicalRealization::CalibrationRealization::retainEvidence to candidate.calibration.retainEvidence;
+    #physicalDetail allocation step_CalibrationRealization_retain allocate LogicalRealization::CalibrationRealization::retain to candidate.calibration.retain;
+    #physicalDetail allocation step_CalibrationRealization_unusable allocate LogicalRealization::CalibrationRealization::unusable to candidate.calibration.unusable;
+    #physicalDetail allocation step_CalibrationRealization_retainRaw_receiveResult allocate LogicalRealization::CalibrationRealization::retainRaw_receiveResult to candidate.calibration.retainRaw_receiveResult;
+    @ComparisonMechanism about C01::checkDraft { mop = "MOP-FR02"; mechanism = "Database requirement relations feed structural checks and proposed semantic services."; operation = CandidateNS::C01::checkDraft meta SysML::ActionUsage; }
+    dependency comparison_MOP_FR02 from FrameworkRequirements::MOP_FR02 to CandidateNS::C01::checkDraft;
+    @ComparisonMechanism about C01::recommend { mop = "MOP-FR03"; mechanism = "Separate first-valid HTN plans require integrated applicability checks and admission of every planned action."; operation = CandidateNS::C01::recommend meta SysML::ActionUsage; }
+    dependency comparison_MOP_FR03 from FrameworkRequirements::MOP_FR03 to CandidateNS::C01::recommend;
+    @ComparisonMechanism about C03::planAnalysis { mop = "MOP-FR18"; mechanism = "Nanospace database, ephemeris and loads -> Boan/Opalis energy workflow -> proposed numerical whole-CUBICS Omniverse mappings."; operation = CandidateNS::C03::planAnalysis meta SysML::ActionUsage; }
+    dependency comparison_MOP_FR18 from FrameworkRequirements::MOP_FR18 to CandidateNS::C03::planAnalysis;
+    @ComparisonMechanism about C03::mapFPrime { mop = "MOP-FR34"; mechanism = "Database interface records -> new checked adapters of component/port/topology and ground definitions -> required F Prime profile."; operation = CandidateNS::C03::mapFPrime meta SysML::ActionUsage; }
+    dependency comparison_MOP_FR34 from FrameworkRequirements::MOP_FR34 to CandidateNS::C03::mapFPrime;
+    @ComparisonMechanism about C06::invalidate { mop = "MOP-FR30"; mechanism = "Database, dependency graph, HDDL/domain/problem and planner revisions invalidate advice before current-context reassessment."; operation = CandidateNS::C06::invalidate meta SysML::ActionUsage; }
+    dependency comparison_MOP_FR30 from FrameworkRequirements::MOP_FR30 to CandidateNS::C06::invalidate;
+    @ComparisonMechanism about C06::prepareReplay { mop = "MOP-FR10"; mechanism = "Database/API snapshots, scenario/ephemeris/load records, HTN/dependency versions, Opalis/tool dependencies and raw outputs."; operation = CandidateNS::C06::prepareReplay meta SysML::ActionUsage; }
+    dependency comparison_MOP_FR10 from FrameworkRequirements::MOP_FR10 to CandidateNS::C06::prepareReplay;
 }

@@ -52,13 +52,14 @@ package BoundaryViews {
         attribute parametersExtensionsAssumptions : String;
         attribute physicalDesignModelReferences : String [0..*];
     }
-    item def DesignStudy :> BOMCostRAM {
+    item def DesignStudy :> ComponentResourceAssessment {
         ref item configuration : DesignConfiguration;
         ref item quantities : Quantity [0..*];
         attribute powerEnergySizingEquationsMargins : String;
-        attribute bomMassVolumeCostAvailability : String;
+        attribute massVolumeAvailabilitySources : String;
         attribute commonCriteriaAlternativesSensitivity : String;
         attribute feasibilityRiskUnknowns : String;
+        doc /* Technical component/design assessment retains sourced mass, volume, availability, aggregation assumptions and unknowns. */
     }
     item def GuidanceRequest :> EngineeringArtifact {
         ref item context : ContextRevision;
@@ -91,11 +92,25 @@ package BoundaryViews {
         attribute triggerTimeFirstResponseTimeCompletionTimeSeconds : String;
         doc /* Suggestions establish no technical verification or human approval. A later edit invalidates currency before a late response can be applied. */
     }
+    item def HistorySample :> EngineeringArtifact {
+        attribute modelScenarioEntityChannelRevision : String;
+        attribute quantityKindUnitSignFrame : String;
+        attribute scenarioTimeBase : String;
+        attribute sampleTimeSeconds : Real [0..1];
+        attribute receiptTimeSeconds : Real [0..1];
+        attribute rawValue : String;
+        attribute numericValue : Real [0..1];
+        attribute validInvalidMissingInactive : String;
+        attribute processingMaskAndReason : String;
+        doc /* Preserve raw values and missing/invalid/inactive masks. Optional numerical values and times represent absence honestly, never by a fabricated zero. Unit, sign, frame and same model/scenario/channel identities accompany every numerical sample. */
+    }
     item def ReferenceData :> ObservationPackage {
+        ref item samples : HistorySample [0..*];
         attribute independentCalibrationAssessmentUse : String;
         attribute channelsUnitsSampleReceiptTimes : String;
         attribute completenessInvalidValuesMasks : String;
         attribute suppliedSourceDomainUncertainty : String;
+        doc /* Retain raw entity/channel/model/scenario identities, quantities, units, source/sample and receipt times, invalid values, missing intervals and processing masks. Declare scenario-driving, calibration or independent-assessment use. Missing or inactive readings are not zero. Scene time does not replace numerical sample time. */
     }
     item def ModelAssessment :> ModelCredibility {
         attribute intendedUseFidelityMechanismsOmissions : String;
@@ -105,13 +120,23 @@ package BoundaryViews {
         attribute residualsUncertaintyAcceptanceRules : String;
         attribute reviewerDispositionEvidenceGaps : String;
     }
+    item def SimulationCouplingProfile :> ArchitectureServiceContract {
+        attribute platformModelScenarioVersions : String;
+        attribute directedEntityChannelQuantityUnitConversions : String [0..*];
+        attribute scenarioSampleReceiptSceneTimeRules : String;
+        attribute synchronizationRulesLimitsDelays : String;
+        attribute supportedOmittedUnsupportedEffectsTransferLimits : String;
+        doc /* Required numerical coupling to the external NVIDIA Omniverse simulation of the entire CUBICS spacecraft. Identify platform/tool, spacecraft/EPS model and scenario revisions. Each directed mapping declares endpoint/entity/channel identity, quantity, unit, conversion, sign and applicable frame. Incoming histories cover spacecraft/subsystem loads and modes, orbit/attitude/illumination and supported thermal boundaries. Outgoing histories return EPS bus/power quantities, battery state, protection/status and modeled thermal losses/states to the same scenario. Supporting tools may compute EPS physics. Distinguish numerical input/result exchange from scene-only updates. Declare scenario time base, source/sample time, receipt/scene time, numerical integration step, sampling and exchange/update rates, synchronization rules/limits and known calculation/interface delays. Record missing timing, supported/omitted/unsupported effects and lossy transfers. No solver, transport, clock or strict real-time algorithm is selected. */
+    }
     item def AnalysisPlan :> ScenarioAnalysisPlan {
         ref item configuration : DesignConfiguration;
         ref item assessment : ModelAssessment;
+        ref item couplingProfile : SimulationCouplingProfile [0..1];
         attribute methodInputsOutputsCriterion : String;
         attribute scenarioTimeStepCouplingConvergence : String;
         attribute environmentVersionsResourcesRuntimeLimit : String;
         attribute selectedFaultsProtectionRecovery : String;
+        doc /* A couplingProfile is required for the mandatory whole-CUBICS numerical run. Unrelated RAM runs need not use it. Existing environment, timing and execution fields retain the exact as-run configuration and declared limits. */
     }
     item def AnalysisResult :> RunPackage {
         ref item plan : AnalysisPlan;
@@ -120,14 +145,16 @@ package BoundaryViews {
         attribute executionSuccessFailedCancelledPartial : String;
         attribute quantitiesLimitsUncertaintyCriterionVerdicts : String;
         attribute replayDependenciesSeedsComparisonRules : String;
+        doc /* Incoming tool results and outgoing EPS responses retain the plan/profile and matching whole-CUBICS scenario identity, raw histories, masks, numerical/timing findings and successful/failed/cancelled/partial status. Scene-only updates supply no numerical-coupling or SIL verdict. */
     }
     item def EPSInterfaceSpecification :> ArchitectureServiceContract {
         attribute endpointsIdentifiersTypesUnitsRangesEncoding : String;
         attribute polarityTimeModeOwnership : String;
         attribute commandsTelemetryEventsParameters : String;
         attribute guardsOrderEffectsRejectionRecovery : String;
-        attribute selectedSoftwareMappingRevision : String;
+        attribute fPrimeMappingRepresentationToolVersions : String;
         attribute unsupportedOrLossyMeanings : String;
+        doc /* Required F Prime host integration mapping identifies component/instance ownership, directed ports, topology and command, telemetry, event and parameter definitions. Declare mapping revision, supported FPP or other representation versions and F Prime/tool versions. Preserve engineering quantity, unit, range, polarity, time/mode and encoding semantics beyond native structural/type checks. Mapping or generated definitions do not establish implemented behavior. */
     }
     item def EPSAssessmentPlan :> VerificationSpecification {
         ref item configuration : DesignConfiguration;
@@ -146,12 +173,14 @@ package BoundaryViews {
         attribute sourceBuildDependencyRevision : String;
         attribute declaredHostEnvironment : String;
         attribute authorizedDesignRelease : String;
+        doc /* Declared F Prime EPS control/interface flight-software source and host build retain the exact current engineer-authorized design/interface/software-scope release, checked mapping, F Prime/representation/toolchain versions, dependencies and host configuration. Generation, behavior implementation, compilation and SIL assessment remain distinct. A skeleton or successful build supplies no behavioral verdict or target qualification. */
     }
     item def SoftwareRunResult :> RunPackage {
-        ref item product : HostSoftwareProduct;
+        ref item product : HostSoftwareProduct [0..1];
         attribute hostToolchainBuildLogs : String;
         attribute simulatedInputsExpectedOutputsActualOutputs : String;
         attribute milSilDifferencesFailuresStatus : String;
+        doc /* Released F Prime host SIL uses simulated EPS/subsystem products coupled to the identified whole-CUBICS Omniverse scenario. Retain raw command/port/state/telemetry/event responses, matched MIL stimuli and fixed comparison rules, requirement/ConOps outcomes, differences, limits and failed/partial logs. The framework manages IF-03 and IF-04 exchanges. No unmanaged direct host-to-Omniverse link is implied. */
     }
     item def ChangeProposal :> NeedRequirementDecision {
         ref item previousBaseline : PhaseBaseline;
@@ -176,8 +205,25 @@ package BoundaryViews {
         attribute requirementsExpectationsCoverage : String;
         attribute designDecisionsViewsLimitsGaps : String;
     }
+    item def TraceQuery :> EngineeringArtifact {
+        attribute forwardReverseQuery : String;
+        ref item linkedRecords : EngineeringArtifact [0..*];
+        attribute declaredReferenceSet : String;
+    }
+    item def ViewSelection :> EngineeringArtifact {
+        attribute selectedSubjectsFilters : String;
+        attribute readableUnitsLegends : String;
+    }
+    item def BaselineRetrieval :> EngineeringArtifact {
+        attribute currentOrPredecessorExactRevision : String;
+        attribute requestedProductEvidenceScope : String;
+    }
     item def EngineeringSubmission :> Submission01 {
         ref item context : ContextRevision;
+        ref item traceQuery : TraceQuery [0..1];
+        ref item viewSelection : ViewSelection [0..1];
+        ref item baselineRetrieval : BaselineRetrieval [0..1];
+        ref item assessmentPlans : EPSAssessmentPlan [0..*];
         ref item mission : MissionDefinition [0..1];
         ref item requirements : RequirementRecord [0..*];
         ref item design : DesignConfiguration [0..1];
@@ -198,9 +244,10 @@ package BoundaryViews {
     }
     item def SourceSubmission :> Submission02 {
         attribute sourceAuthorityRevisionLocator : String;
-        attribute componentPropertiesPricesDatesEvidence : String;
+        attribute componentTechnicalPropertiesAvailabilitySources : String;
         attribute methodsModelsApplicabilityLimits : String;
         ref item referenceData : ReferenceData [0..*];
+        doc /* Generic component data retain technical quantities, units, applicability, availability, dated source evidence and uncertainty. Missing properties remain unknown and conflicting source claims remain distinct. */
     }
     item def SourceQuery :> Response02 {
         attribute questionRequiredPropertiesSourceRevision : String;
@@ -217,8 +264,10 @@ package BoundaryViews {
     }
     item def CodingRequest :> Response04 {
         ref item design : EPSInterfaceSpecification;
+        ref item couplingProfile : SimulationCouplingProfile [0..1];
         attribute approvedScopeBuildSilInputsCriteria : String;
         attribute requiredHostVersionsDependencies : String;
+        doc /* Request required F Prime mapping/coding/host build or released SIL only within the exact current engineer-authorized design/interface/software-scope release. Declare F Prime, supported FPP/interchange and toolchain versions, dependencies and host configuration. EPS SIL requests require couplingProfile, matching whole-CUBICS model/scenario revisions, simulated products, released source/build identity, corresponding MIL results and fixed comparison rules. Coding and build requests need not use the coupling profile. */
     }
     item def ReviewSubmission :> Submission06 {
         ref item findings : ReviewFinding [0..*];
@@ -242,6 +291,8 @@ package BoundaryViews {
         in item analysisResponse : AnalysisResponse :>> response;
         out item analysisPlan : AnalysisPlan :>> executionPlan;
         in item analysisResult : AnalysisResult :>> rawResult;
+        in item spacecraftInputs : ReferenceData;
+        out item epsResponses : AnalysisResult;
     }
     port def HostSoftwarePort :> P04 {
         in item codingResponse : CodingResponse :>> submission;
@@ -293,12 +344,12 @@ package BoundaryViews {
         in item :>> observations : ReferenceData [0..*];
         in item plan : AnalysisPlan;
         out item result : AnalysisResult;
-        doc /* F04: Coordinate coupled time-dependent and applicable RAM analyses, model assessment and reproducible execution through declared software tools. */
+        doc /* F04: Coordinate required whole-CUBICS Omniverse numerical coupling, supporting discipline tools, applicable RAM analyses, model assessment and reproducible execution under declared profiles. */
     }
     action def F05 :> FrameworkDomain::F05 {
         in item specification : EPSInterfaceSpecification;
         out item assessment : SoftwareAssessment;
-        doc /* F05: Specify and check detailed EPS control/interfaces, coordinate approved host coding and MIL/SIL assessment against simulated products. */
+        doc /* F05: Specify and check detailed EPS control/interfaces, required F Prime mappings and authorized host coding/builds. Coordinate MIL and released host SIL with simulated products connected to the whole-CUBICS Omniverse scenario. */
     }
     action def F06 :> FrameworkDomain::F06 {
         in item :>> analyticalResults : AnalysisResult [0..*];
@@ -328,13 +379,13 @@ package BoundaryViews {
     }
     @InterfaceControl about AnalysisPort {
         owner = "IF-03, F04/F06/F07, model execution";
-        validation = "Plan and model revision, supported discipline mappings, validity, units, time base, convergence and environment";
-        failureBehavior = "Retain failed/cancelled/partial logs and raw results. Unsupported effects, failed numerical checks or out-of-domain results support no unqualified conclusion.";
+        validation = "Plan/profile and platform/tool/model/scenario revisions, required whole-CUBICS numerical exchange, directed entity/channel/quantity/unit/conversion/sign/frame mappings, raw-history quality/masks, source/sample versus receipt/scene time, declared synchronization rules/limits/delays, supported discipline effects, validity, convergence and environment";
+        failureBehavior = "Prevent incompatible numerical use and preserve controlled content, raw rejected values, masks and findings. Retain failed/cancelled/partial logs/results, missing timing, exceeded/unknown synchronization or resource limits and unsupported/lossy transfers. A scene-only update or missing required numerical exchange supplies no coupling/SIL verdict. Execution success alone establishes no credibility or EPS conformity.";
     }
     @InterfaceControl about HostSoftwarePort {
         owner = "IF-04, F05/F06/F07, host coding/build/SIL";
-        validation = "Authorized design release, scope, interface revision, selected integration profile, host dependencies and build identity";
-        failureBehavior = "Block unreleased coding. Retain build failures and mapping gaps. MIL/SIL establishes no target-hardware qualification.";
+        validation = "Exact current engineer-authorized design/interface/software-scope release, required F Prime component/port/topology/ground mappings and engineering meanings, compatible F Prime/representation/toolchain/dependency versions, host/source/build identity, and required coupled SIL profile/scenario with matching MIL criteria";
+        failureBehavior = "Block unreleased, stale or unauthorized coding. Preserve rejected requests, unsupported/lossy mappings, generation/compilation failures and failed/partial SIL logs/raw responses. Broad CDR acceptance does not replace exact release authorization. Structural checks, build success and visualization supply no behavior/SIL verdict. Host MIL/SIL establishes no target-hardware qualification.";
     }
     @InterfaceControl about TechnicalReviewPort {
         owner = "IF-06, F08/F07, technical review";

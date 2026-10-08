@@ -1,12 +1,11 @@
-// Mission/lifecycle stage. The report and this model agree on final MR/MOE/UC text.
-// TODO: Re-derive 03-requirements and 09-scenarios. MR-06--11, all MN records and old SC01--03 are retired.
-// TODO: Old links to MR-01--05 resolve by name but have obsolete meanings. Replace them in the next stage.
+// Mission/lifecycle stage. Six mission requirements define the scoped review gates.
+// Preserve the established as-is basis, effectiveness measures and concern cuts.
 package FrameworkNeeds {
     private import FrameworkDomain::*;
     private import ScalarValues::*;
 
     item asIsBasis : EngineeringArtifact {
-        doc /* The preserved observations show reuse, atomic tasks, club review names and useful simulation. They establish no shared formal EPS lifecycle or NASA review maturity. All existing stakeholder roles and concern statements remain available unchanged in FrameworkDomain and FrameworkConcerns. */
+        doc /* ASCEND-associated students wishing to participate in CUBICS follow no systems engineering method. They verify payload power requirements only after fabrication. They value simulating rocket requirements before fabrication and want the same capability for power. These observations concern those students. The retained concern hierarchy covers four engineering roles. */
     }
     item lifecycleBasis : EngineeringArtifact {
         doc /* NASA supplies reference phases, product maturity and review purposes. EPS mission analysis, empirical and analytical sizing, time-dependent power analysis, coupled subsystem trades, model credibility and shared engineering data enrich the work. This is a proposed lifecycle through adapted C, not NASA certification or approved waivers. Modeling hardware and comparing physical EPS architectures remain in scope. No physical prototyping, fabrication, procurement, operation, testing, PIL, HIL, target processor timing/power qualification, physical qualification or Phase D. */
@@ -16,7 +15,7 @@ package FrameworkNeeds {
         sourceText = "Reference lifecycle from Pre-Phase A through adapted Phase C with scoped model/software integration readiness.";
         sourceLocator = "EPS lifecycle and scope, mission requirements and effectiveness";
         status = "proposed specification, stakeholder agreement and empirical evaluation pending";
-        citationRecord = "nasa2016systems: 2.1--2.4, 3.3--3.6, 6.2--6.7; handpicked-0003: 2--4; review-0289: 2--4; review-0711: 2--3; review-0340: 3,5--6; campioli2025integration: 3--4; review-0573: 2--4; handpicked-0001: pp.7--9";
+        citationRecord = "nasa2016systems: 2.1--2.4, 3.3--3.6, 6.2--6.7; handpicked-0003: 2--4; review-0289: 2--4; review-0711: 2--3; review-0340: 3,5--6; campioli2025integration: 3--4; review-0573: 2--4; handpicked-0002: slides 4,13,18; handpicked-0001: p.3, pp.7--9";
     }
     #sourceTrace dependency observedContext from lifecycleBasis to asIsBasis;
 
@@ -38,7 +37,7 @@ package FrameworkNeeds {
     }
     item phaseB : EPSLifecyclePhase {
         attribute :>> standardName = "Phase B: Preliminary Design and Technology Completion";
-        attribute :>> epsWork = "Refine array/battery sizing, conversion, bus regulation, protection, distribution and control. Compare mass, volume, cost, availability, margins and risk using a common time-dependent mission basis. Resolve subsystem incompatibilities. Hardware maturity depends on applicable existing evidence, with gaps external.";
+        attribute :>> epsWork = "Refine array/battery sizing, conversion, bus regulation, protection, distribution and control. Compare mass, volume, availability, margins and risk using a common time-dependent mission basis. Resolve subsystem incompatibilities. Hardware maturity depends on applicable existing evidence, with gaps external.";
         attribute :>> importantProducts = "Justified preliminary design, allocated specifications, agreed interfaces, trade and sizing results, updated budgets and risks, integration and verification and validation plans.";
     }
     item phaseC : EPSLifecyclePhase {
@@ -101,36 +100,61 @@ package FrameworkNeeds {
     #sourceTrace dependency phaseReview_C1 from cdr to phaseC;
     #sourceTrace dependency phaseReview_C2 from sir to phaseC;
 
+    item gateSuccessConditions : EngineeringArtifact {
+        doc /* The following success conditions apply to all six mission requirements. The enterprise shall establish and maintain coherent phase baselines through authorized changes, repeated affected checks and applicable verification and validation evidence, retaining configuration-linked requirements, expectations, methods, results, limitations and finding dispositions. It shall obtain and retain acceptance decisions from the designated review authority against agreed success criteria, prevent progression with blocking findings, and record conditional limits, closure actions, owners and dates. A prepared package supports entrance to review. Acceptance requires an explicit authorized accepted decision. */
+    }
+    item continuedRefinement : EngineeringArtifact {
+        doc /* The enterprise shall derive, refine and validate EPS and component requirements and interfaces as the design matures through Phase B and adapted C. Changes can reopen earlier work. */
+    }
+
     requirement <'MR-01'> MR_01 {
         subject enterprise : ToBe::EPSEngineeringEnterprise;
-        doc /* The EPS engineering enterprise shall obtain MCR acceptance at the end of Pre-Phase A for a mission concept whose EPS feasibility is justified against agreed stakeholder expectations and mission constraints, supported by initial ConOps, budgets, assumptions, risks and a preliminary verification and validation approach. */
+        doc /* The EPS engineering enterprise shall obtain MCR acceptance at the end of Pre-Phase A for a mission concept whose EPS feasibility is justified against agreed stakeholder expectations and mission constraints, supported by initial ConOps, technical budgets, assumptions, risks and a preliminary verification and validation approach. */
     }
-    @SourceRecord { identifier = "MR-01"; sourceText = "The EPS engineering enterprise shall obtain MCR acceptance at the end of Pre-Phase A for a mission concept whose EPS feasibility is justified against agreed stakeholder expectations and mission constraints, supported by initial ConOps, budgets, assumptions, risks and a preliminary verification and validation approach."; sourceLocator = "Mission requirements and effectiveness, Table tab:framework-mission-requirements"; status = "proposed specification, stakeholder agreement pending"; citationRecord = "nasa2016systems: 3.3"; }
+    @SourceRecord about MR_01 { identifier = "MR-01"; sourceText = "The EPS engineering enterprise shall obtain MCR acceptance at the end of Pre-Phase A for a mission concept whose EPS feasibility is justified against agreed stakeholder expectations and mission constraints, supported by initial ConOps, technical budgets, assumptions, risks and a preliminary verification and validation approach."; sourceLocator = "Mission requirements and effectiveness, Table tab:framework-mission-requirements"; status = "proposed specification, stakeholder agreement pending"; citationRecord = "nasa2016systems: 3.3"; }
     requirement <'MR-02'> MR_02 {
         subject enterprise : ToBe::EPSEngineeringEnterprise;
-        doc /* The enterprise shall obtain SRR acceptance during Phase A for validated EPS requirements and interfaces traced to the mission concept and allocated spacecraft requirements, with measurable criteria consistent with stakeholder expectations. It shall derive, refine and validate EPS and component requirements and interfaces as the design matures through Phase B and adapted C. */
+        doc /* The enterprise shall obtain SRR acceptance during Phase A for validated EPS requirements and interfaces traced to the mission concept and allocated spacecraft requirements, with measurable criteria consistent with stakeholder expectations. */
     }
-    @SourceRecord { identifier = "MR-02"; sourceText = "The enterprise shall obtain SRR acceptance during Phase A for validated EPS requirements and interfaces traced to the mission concept and allocated spacecraft requirements, with measurable criteria consistent with stakeholder expectations. It shall derive, refine and validate EPS and component requirements and interfaces as the design matures through Phase B and adapted C."; sourceLocator = "Mission requirements and effectiveness, Table tab:framework-mission-requirements"; status = "proposed specification, stakeholder agreement pending"; citationRecord = "nasa2016systems: 3.4--3.6, 4.1--4.2"; }
+    @SourceRecord about MR_02 { identifier = "MR-02"; sourceText = "The enterprise shall obtain SRR acceptance during Phase A for validated EPS requirements and interfaces traced to the mission concept and allocated spacecraft requirements, with measurable criteria consistent with stakeholder expectations."; sourceLocator = "Mission requirements and effectiveness, Table tab:framework-mission-requirements"; status = "proposed specification, stakeholder agreement pending"; citationRecord = "nasa2016systems: 3.4, 4.1--4.2"; }
     requirement <'MR-03'> MR_03 {
         subject enterprise : ToBe::EPSEngineeringEnterprise;
-        doc /* The enterprise shall obtain MDR/SDR acceptance at the end of Phase A for a credible EPS architecture with requirement allocations and justified alternatives, and PDR acceptance at the end of Phase B for a sized, compatible preliminary design supported by sizing and trades, margins, risk dispositions, controlled interfaces and verification and validation plans against applicable requirements and agreed resource and risk limits. */
+        doc /* The enterprise shall obtain MDR/SDR acceptance at the end of Phase A for a credible EPS architecture with requirement allocations and justified alternatives. */
     }
-    @SourceRecord { identifier = "MR-03"; sourceText = "The enterprise shall obtain MDR/SDR acceptance at the end of Phase A for a credible EPS architecture with requirement allocations and justified alternatives, and PDR acceptance at the end of Phase B for a sized, compatible preliminary design supported by sizing and trades, margins, risk dispositions, controlled interfaces and verification and validation plans against applicable requirements and agreed resource and risk limits."; sourceLocator = "Mission requirements and effectiveness, Table tab:framework-mission-requirements"; status = "proposed specification, stakeholder agreement pending"; citationRecord = "nasa2016systems: 3.4--3.5"; }
+    @SourceRecord about MR_03 { identifier = "MR-03"; sourceText = "The enterprise shall obtain MDR/SDR acceptance at the end of Phase A for a credible EPS architecture with requirement allocations and justified alternatives."; sourceLocator = "Mission requirements and effectiveness, Table tab:framework-mission-requirements"; status = "proposed specification, stakeholder agreement pending"; citationRecord = "nasa2016systems: 3.4"; }
     requirement <'MR-04'> MR_04 {
         subject enterprise : ToBe::EPSEngineeringEnterprise;
-        doc /* The enterprise shall obtain CDR acceptance during adapted Phase C, before deliverable coding, for complete detailed EPS model/software design, interface specifications and implementation, integration and verification and validation plans, followed by SIR acceptance at the end of C for released models and declared host-executed control/interface software, applicable MIL/SIL evidence, compatible interfaces and ready integration configurations and procedures. */
+        doc /* The enterprise shall obtain PDR acceptance at the end of Phase B for a sized, compatible preliminary EPS design supported by sizing and trades, margins, risk dispositions, controlled interfaces and verification and validation plans against applicable requirements and agreed technical resource and risk limits. */
     }
-    @SourceRecord { identifier = "MR-04"; sourceText = "The enterprise shall obtain CDR acceptance during adapted Phase C, before deliverable coding, for complete detailed EPS model/software design, interface specifications and implementation, integration and verification and validation plans, followed by SIR acceptance at the end of C for released models and declared host-executed control/interface software, applicable MIL/SIL evidence, compatible interfaces and ready integration configurations and procedures."; sourceLocator = "Mission requirements and effectiveness, Table tab:framework-mission-requirements"; status = "proposed specification, stakeholder agreement pending"; citationRecord = "nasa2016systems: 3.6; review-0573: 2; handpicked-0001: pp.7--9"; }
+    @SourceRecord about MR_04 { identifier = "MR-04"; sourceText = "The enterprise shall obtain PDR acceptance at the end of Phase B for a sized, compatible preliminary EPS design supported by sizing and trades, margins, risk dispositions, controlled interfaces and verification and validation plans against applicable requirements and agreed technical resource and risk limits."; sourceLocator = "Mission requirements and effectiveness, Table tab:framework-mission-requirements"; status = "proposed specification, stakeholder agreement pending"; citationRecord = "nasa2016systems: 3.5"; }
     requirement <'MR-05'> MR_05 {
         subject enterprise : ToBe::EPSEngineeringEnterprise;
-        doc /* The enterprise shall establish and maintain coherent phase baselines through authorized changes, repeated affected checks and applicable verification and validation evidence, retaining configuration-linked requirements, expectations, methods, results, limitations and finding dispositions. It shall obtain and retain acceptance decisions from the designated review authority against agreed success criteria, prevent progression with blocking findings, and record conditional limits, closure actions, owners and dates. */
+        doc /* The enterprise shall obtain scoped CDR acceptance during adapted Phase C, before deliverable coding, for complete detailed EPS model and software designs, interface specifications and implementation, integration and verification and validation plans. */
     }
-    @SourceRecord { identifier = "MR-05"; sourceText = "The enterprise shall establish and maintain coherent phase baselines through authorized changes, repeated affected checks and applicable verification and validation evidence, retaining configuration-linked requirements, expectations, methods, results, limitations and finding dispositions. It shall obtain and retain acceptance decisions from the designated review authority against agreed success criteria, prevent progression with blocking findings, and record conditional limits, closure actions, owners and dates."; sourceLocator = "Mission requirements and effectiveness, Table tab:framework-mission-requirements"; status = "proposed specification, stakeholder agreement pending"; citationRecord = "nasa2016systems: 6.2--6.7"; }
+    @SourceRecord about MR_05 { identifier = "MR-05"; sourceText = "The enterprise shall obtain scoped CDR acceptance during adapted Phase C, before deliverable coding, for complete detailed EPS model and software designs, interface specifications and implementation, integration and verification and validation plans."; sourceLocator = "Mission requirements and effectiveness, Table tab:framework-mission-requirements"; status = "proposed specification, stakeholder agreement pending"; citationRecord = "nasa2016systems: 3.6, 6.7 Table 6.7-1; review-0573: 2; handpicked-0002: slides 13,18"; }
+    requirement <'MR-06'> MR_06 {
+        subject enterprise : ToBe::EPSEngineeringEnterprise;
+        doc /* The enterprise shall obtain scoped SIR acceptance at the end of adapted Phase C for released EPS models and declared control and interface software for host execution, applicable MIL/SIL evidence, compatible interfaces and ready integration configurations and procedures. */
+    }
+    @SourceRecord about MR_06 { identifier = "MR-06"; sourceText = "The enterprise shall obtain scoped SIR acceptance at the end of adapted Phase C for released EPS models and declared control and interface software for host execution, applicable MIL/SIL evidence, compatible interfaces and ready integration configurations and procedures."; sourceLocator = "Mission requirements and effectiveness, Table tab:framework-mission-requirements"; status = "proposed specification, stakeholder agreement pending"; citationRecord = "nasa2016systems: 3.6, 6.7 Table 6.7-1; handpicked-0002: slide 4; handpicked-0001: p.3"; }
     #proposedDerivation dependency basis_MR01 from MR_01 to lifecycleBasis;
     #proposedDerivation dependency basis_MR02 from MR_02 to lifecycleBasis;
     #proposedDerivation dependency basis_MR03 from MR_03 to lifecycleBasis;
     #proposedDerivation dependency basis_MR04 from MR_04 to lifecycleBasis;
     #proposedDerivation dependency basis_MR05 from MR_05 to lifecycleBasis;
+    #proposedDerivation dependency basis_MR06 from MR_06 to lifecycleBasis;
+    #sourceTrace dependency gate_MR01_MCR from MR_01 to mcr;
+    #sourceTrace dependency gate_MR02_SRR from MR_02 to srr;
+    #sourceTrace dependency gate_MR03_MDRSDR from MR_03 to mdrSdr;
+    #sourceTrace dependency gate_MR04_PDR from MR_04 to pdr;
+    #sourceTrace dependency gate_MR05_CDR from MR_05 to cdr;
+    #sourceTrace dependency gate_MR06_SIR from MR_06 to sir;
+    #sourceTrace dependency gateConditions_MR01 from MR_01 to gateSuccessConditions;
+    #sourceTrace dependency gateConditions_MR02 from MR_02 to gateSuccessConditions;
+    #sourceTrace dependency gateConditions_MR03 from MR_03 to gateSuccessConditions;
+    #sourceTrace dependency gateConditions_MR04 from MR_04 to gateSuccessConditions;
+    #sourceTrace dependency gateConditions_MR05 from MR_05 to gateSuccessConditions;
+    #sourceTrace dependency gateConditions_MR06 from MR_06 to gateSuccessConditions;
 
     item <'MOE-01'> MOE_01 : EffectivenessMeasure {
         doc /* Engineering burden: active person-hours and elapsed hours for correct requirements, design, change and review tasks, with waiting and unattended execution reported separately. */
@@ -157,20 +181,18 @@ package FrameworkNeeds {
         attribute successfulReconstruction : CoverageFraction [0..1];
     }
     item <'MOE-04'> MOE_04 : EffectivenessMeasure {
-        doc /* Adoption and affordability: person-hours to learn and complete correct tasks and adapt to a mission, and direct framework usage cost in CAD over a declared period and price date. */
-        attribute :>> observationBasis = "Correct adoption and mission-adaptation tasks, declared computing/licenses/services, period and price date";
+        doc /* Adoption burden: person-hours to learn and complete correct tasks and adapt to a mission. */
+        attribute :>> observationBasis = "Correct learning and mission-adaptation tasks under declared participants, computing resources and task boundaries";
         attribute learningAndTaskEffort : ActiveEffort [0..1];
         attribute missionAdaptationEffort : ActiveEffort [0..1];
-        attribute directUsageCost : FrameworkUsageCost [0..1];
     }
-    // Each MOE observes enterprise accomplishment across MR-01--05.
+    // Each MOE observes enterprise accomplishment across MR-01--06.
     #sourceTrace dependency effectiveness_MOE01 from MOE_01 to ToBe::EPSEngineeringEnterprise;
     #sourceTrace dependency effectiveness_MOE02 from MOE_02 to ToBe::EPSEngineeringEnterprise;
     #sourceTrace dependency effectiveness_MOE03 from MOE_03 to ToBe::EPSEngineeringEnterprise;
     #sourceTrace dependency effectiveness_MOE04 from MOE_04 to ToBe::EPSEngineeringEnterprise;
     // Concern contributions explain quality of accomplishment, not one MR per concern.
     #qualitativeContribution dependency burden_PM01 from FrameworkConcerns::C_PM_01 to MOE_01;
-    #qualitativeContribution dependency burden_PM02 from FrameworkConcerns::C_PM_02 to MOE_01;
     #qualitativeContribution dependency burden_SE03 from FrameworkConcerns::C_SE_03 to MOE_01;
     #qualitativeContribution dependency detection_PM03 from FrameworkConcerns::C_PM_03 to MOE_02;
     #qualitativeContribution dependency detection_EPS01 from FrameworkConcerns::C_EPS_01 to MOE_02;
@@ -193,7 +215,7 @@ package FrameworkNeeds {
         doc /* Framework verification assesses framework requirements. Framework validation assesses engineer/reviewer suitability in representative use. EPS phase-product verification assesses applicable EPS requirements. EPS validation assesses stakeholder expectations and ConOps in representative, possibly simulated conditions, beginning early with phase products including models. Model credibility assesses intended use, numerical correctness, assumptions, calibration, independent validation data and uncertainty. Research evaluation assesses enterprise benefit and bounded transfer. Planned procedures remain specifications. Native syntax/semantic checks establish model quality within tool scope, not framework V&V or measured benefit. */
     }
     item researchEvaluationProtocol : FrameworkEvaluation {
-        doc /* Two contrasting EPS cases are an evaluation protocol only. Fix cases, tasks, reference answers, participants, configurations, permitted adaptations, comparison rules and price date before execution. Include failed checks, missing data, misleading suggestions, stale evidence and clean controls. Compare burden only for correct outcomes under comparable conditions. All achieved values are unknown. Targets, acceptable errors and review thresholds remain pending stakeholder agreement and intended-use justification. */
+        doc /* Two contrasting EPS cases are an evaluation protocol only. Fix cases, tasks, reference answers, participants, configurations, permitted adaptations, comparison rules before execution. Include failed checks, missing data, misleading suggestions, stale evidence and clean controls. Compare burden only for correct outcomes under comparable conditions. All achieved values are unknown. Targets, acceptable errors and review thresholds remain pending stakeholder agreement and intended-use justification. */
     }
 
     use case <'UC01'> UC01 {
@@ -201,7 +223,7 @@ package FrameworkNeeds {
         actor stakeholders : MissionStakeholder;
         actor authority : TechnicalReviewAuthority;
         objective { doc /* Engineers establish and compare EPS mission concepts against agreed stakeholder expectations and mission constraints. */ }
-        doc /* Establish a feasible EPS mission concept. Enterprise participants develop concepts, initial ConOps and feasibility evidence for stakeholder and MCR assessment. Scenario elaboration is pending. */
+        doc /* Establish a feasible EPS mission concept. Enterprise participants develop concepts, initial ConOps and feasibility evidence for stakeholder and MCR assessment. */
     }
     use case <'UC02'> UC02 {
         subject enterprise : ToBe::EPSEngineeringEnterprise;
@@ -209,7 +231,7 @@ package FrameworkNeeds {
         actor reviewers : IndependentReviewer;
         actor authority : TechnicalReviewAuthority;
         objective { doc /* Engineers derive, allocate and validate EPS and component requirements and interfaces from the mission concept and spacecraft requirements. */ }
-        doc /* Define and validate EPS requirements and interfaces. Enterprise participants prepare consistent requirements, criteria and interfaces for stakeholder and SRR assessment. Scenario elaboration is pending. */
+        doc /* Define and validate EPS requirements and interfaces. Enterprise participants prepare consistent requirements, criteria and interfaces for stakeholder and SRR assessment. UC02 is reused for requirement refinement through detailed design. */
     }
     use case <'UC03'> UC03 {
         subject enterprise : ToBe::EPSEngineeringEnterprise;
@@ -217,7 +239,7 @@ package FrameworkNeeds {
         actor reviewers : IndependentReviewer;
         actor authority : TechnicalReviewAuthority;
         objective { doc /* Engineers compare and size EPS architectures, justify the preliminary design against applicable requirements and resolve subsystem incompatibilities within agreed resources and risk. */ }
-        doc /* Justify the EPS preliminary design. Enterprise participants mature trades, allocation and preliminary design evidence through MDR/SDR and PDR. No hardware qualification is claimed. Scenario elaboration is pending. */
+        doc /* Justify the EPS preliminary design. Enterprise participants mature trades, allocation and preliminary design evidence through MDR/SDR and PDR. No hardware qualification is claimed. */
     }
     use case <'UC04'> UC04 {
         subject enterprise : ToBe::EPSEngineeringEnterprise;
@@ -225,7 +247,7 @@ package FrameworkNeeds {
         actor reviewers : IndependentReviewer;
         actor authority : TechnicalReviewAuthority;
         objective { doc /* Engineers complete detailed EPS design models and declared host-executed control/interface software, assess them through MIL/SIL and prepare scoped integration readiness evidence. */ }
-        doc /* Complete detailed EPS models and software. Enterprise participants prepare detailed design for scoped CDR, complete declared software and models, and prepare applicable MIL/SIL evidence and integration configurations/procedures for end-of-C SIR. Scenario elaboration is pending. */
+        doc /* Complete detailed EPS models and software. Enterprise participants prepare detailed design for scoped CDR, complete declared software and models, and prepare applicable MIL/SIL evidence and integration configurations/procedures for end-of-C SIR. */
     }
     use case <'UC05'> UC05 {
         subject enterprise : ToBe::EPSEngineeringEnterprise;
@@ -233,23 +255,21 @@ package FrameworkNeeds {
         actor reviewers : IndependentReviewer;
         actor authority : TechnicalReviewAuthority;
         objective { doc /* Engineers control changes, repeat affected analyses and V&V, and submit coherent phase baselines for authorized review decisions. */ }
-        doc /* Maintain and review coherent phase baselines. Crosscutting enterprise work preserves configuration, evidence currency, decision rationale and finding dispositions across phases and changes. Package preparation is distinct from accepted review decisions. Scenario elaboration is pending. */
+        doc /* Maintain and review coherent phase baselines. Crosscutting enterprise work preserves configuration, evidence currency, decision rationale and finding dispositions across phases and changes. Package preparation is distinct from accepted review decisions. */
     }
     #proposedDerivation dependency refine_UC01_MR01 from UC01 to MR_01;
-    #proposedDerivation dependency refine_UC01_MR05 from UC01 to MR_05;
-    #proposedDerivation dependency refine_UC02_MR01 from UC02 to MR_01;
     #proposedDerivation dependency refine_UC02_MR02 from UC02 to MR_02;
+    #proposedDerivation dependency refine_UC02_MR03 from UC02 to MR_03;
+    #proposedDerivation dependency refine_UC02_MR04 from UC02 to MR_04;
     #proposedDerivation dependency refine_UC02_MR05 from UC02 to MR_05;
-    #proposedDerivation dependency refine_UC03_MR02 from UC03 to MR_02;
     #proposedDerivation dependency refine_UC03_MR03 from UC03 to MR_03;
-    #proposedDerivation dependency refine_UC03_MR05 from UC03 to MR_05;
-    #proposedDerivation dependency refine_UC04_MR02 from UC04 to MR_02;
-    #proposedDerivation dependency refine_UC04_MR03 from UC04 to MR_03;
-    #proposedDerivation dependency refine_UC04_MR04 from UC04 to MR_04;
+    #proposedDerivation dependency refine_UC03_MR04 from UC03 to MR_04;
     #proposedDerivation dependency refine_UC04_MR05 from UC04 to MR_05;
+    #proposedDerivation dependency refine_UC04_MR06 from UC04 to MR_06;
     #proposedDerivation dependency refine_UC05_MR01 from UC05 to MR_01;
     #proposedDerivation dependency refine_UC05_MR02 from UC05 to MR_02;
     #proposedDerivation dependency refine_UC05_MR03 from UC05 to MR_03;
     #proposedDerivation dependency refine_UC05_MR04 from UC05 to MR_04;
     #proposedDerivation dependency refine_UC05_MR05 from UC05 to MR_05;
+    #proposedDerivation dependency refine_UC05_MR06 from UC05 to MR_06;
 }

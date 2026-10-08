@@ -1,0 +1,706 @@
+{
+  "id": "logical",
+  "valid": true,
+  "scope": "Actual full current native specification checks and matched semantic/policy mutations. No empirical V&V.",
+  "baseline_passed": true,
+  "source_sha256": {
+    "sysml/05-verification.sysml": "6fa84c3ae626234c39e86b3306522dd6f262d579cf5157cb943aeb35dcc2296f",
+    "sysml/08-physical-vocabulary.sysml": "dcb2673ab222b8649dadbc68f84434432284a88a1c7a8d65ac520c8812303ed3",
+    "sysml/00-domain.sysml": "1332e2c7c1d89fb614ebaa86954c4584a62ee39f11e3f2b75faf649755b29c29",
+    "sysml/03-requirements.sysml": "7dac5243462a6ff2857a5f0ce3d0f0cc4c2b84156ec0fe3d214c6f66dbb466bb",
+    "sysml/11-logical-responsibilities.sysml": "3e4e26162eda82bc8dc2f461b6ea28fe4c7f4159d405a0f7c241c8b8124ec6e5",
+    "sysml/06-system-context.sysml": "fd89ef55d2fc57db91f743c1908af57e4ebfe4efaea411039367a4f1345a0829",
+    "sysml/10-interface-views.sysml": "271cd1dbea2c0ede498fc4000d4ff45c2b232576d4adc7ae5c6c4f93befadc01",
+    "sysml/04-logical.sysml": "789a22cde3e2c962f258e6f7f9f9f91c7f0ae9b32b4192d6173aa0b9d050e9db",
+    "sysml/01-concerns.sysml": "6f4b8beffa04564556d13bcf5e3aef0d67717f4fe9580ed90ef01921ebeed794",
+    "sysml/02-needs-context.sysml": "88296cc33485c91c0ebaf97942543e903018194db441f438272839e3fa9a03ee",
+    "sysml/09-scenarios.sysml": "95f4825c0151d50462f6ba56fd6a6acdf48b794b7b713fa746bc7dd87a154faa",
+    "sysml/07-report-views.sysml": "9eb00d2ceef23aba90f46a524ac03b738b7d070e4b5e7cf2675f77e6953f6c53",
+    "sysml/candidates/nanospace.sysml": "a3c9fd8b404fcbfed81915d12d353e5faf3ce86488c9d45294390ad94dd9d16d",
+    "sysml/candidates/comet.sysml": "a5f9f336d450aa0c06d99c3826ed61abb006278d2fefb55af216988597c24594",
+    "sysml/candidates/valispace.sysml": "12b2aeb894395f6a1e6ea195754062aa781ac4cdf384dbbe6256876363db4a2a",
+    "sysml/candidates/git-yaml.sysml": "91b703e403a0f4f93143305fa9ef3f4a363c2bdf87151015e3a938778bea260a",
+    "sysml/candidates/custom.sysml": "1e6514fde96dc08baafba17ed8244aa206bad8bc22c707af9ce898e13c98857e",
+    "sysml/check_logical_responsibilities.py": "b67a5222e97ee01f302dbd747b9be18f7f7ad8420248fb6fd78e6e292e3c4418",
+    "tools/audit_report.py": "ab5b563ff9e31d015a6637554538f938d43609a0883d26cb75d541cbd8bcc375",
+    "traceability/logical-architecture.json": "e0cad9dc41bebfa573af77abb98344b30bb8ea71b43571666a521b93c81f986b",
+    "requirements.tex": "853c56e2b2acf9fa1152cbd4930ab013021b84bc71a52e8535c8c0485351fcf9",
+    "logical.tex": "53b2876b13b69cdb85b81815f9f00fd4d2eae0879958b4d1c489b50bc0cd9594",
+    "literatura.bib": "fd3b1871afd80544b35c0b511587e79a0d18e64ebe05db3c4bfa874e9c71956b"
+  },
+  "negative_cases": {
+    "AssistanceRealization_admitInput_lost_guard": {
+      "case": "AssistanceRealization_admitInput_lost_guard",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "AssistanceRealization_admitReply_lost_guard": {
+      "case": "AssistanceRealization_admitReply_lost_guard",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "AssistanceRealization_admitDisposition_lost_guard": {
+      "case": "AssistanceRealization_admitDisposition_lost_guard",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "AssistanceRealization_applyAuthorized_lost_guard": {
+      "case": "AssistanceRealization_applyAuthorized_lost_guard",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "SoftwareRealization_authorizeCoding_lost_guard": {
+      "case": "SoftwareRealization_authorizeCoding_lost_guard",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "DesignRealization_admitModel_lost_guard": {
+      "case": "DesignRealization_admitModel_lost_guard",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "DesignRealization_admitCriteria_lost_guard": {
+      "case": "DesignRealization_admitCriteria_lost_guard",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "ChangeReviewRealization_admitChange_lost_guard": {
+      "case": "ChangeReviewRealization_admitChange_lost_guard",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "ChangeReviewRealization_admitReviewDecision_lost_guard": {
+      "case": "ChangeReviewRealization_admitReviewDecision_lost_guard",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "ReplayRealization_admitReplay_lost_guard": {
+      "case": "ReplayRealization_admitReplay_lost_guard",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "CalibrationRealization_admitCalibration_lost_guard": {
+      "case": "CalibrationRealization_admitCalibration_lost_guard",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "CalibrationRealization_admitCalibrationChange_lost_guard": {
+      "case": "CalibrationRealization_admitCalibrationChange_lost_guard",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "build_missing_checkRelease_authorizedDetailedDesign": {
+      "case": "build_missing_checkRelease_authorizedDetailedDesign",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "build_missing_checkRelease_currentDesign": {
+      "case": "build_missing_checkRelease_currentDesign",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "build_missing_checkRelease_blockersClear": {
+      "case": "build_missing_checkRelease_blockersClear",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "build_missing_interfaces_profileCompatible": {
+      "case": "build_missing_interfaces_profileCompatible",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "build_missing_mapping_profileCompatible": {
+      "case": "build_missing_mapping_profileCompatible",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native safety guard counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "immediate_invalidation_bypass": {
+      "case": "immediate_invalidation_bypass",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Immediate context invalidation removed",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "AssistanceRealization_derive_direct_bypass": {
+      "case": "AssistanceRealization_derive_direct_bypass",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Unguarded protected entry",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "SoftwareRealization_coordinate_direct_bypass": {
+      "case": "SoftwareRealization_coordinate_direct_bypass",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Unguarded protected entry",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "SoftwareRealization_codeBuildSil_direct_bypass": {
+      "case": "SoftwareRealization_codeBuildSil_direct_bypass",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Safety gate bypass reaches protected action",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "ChangeReviewRealization_successor_direct_bypass": {
+      "case": "ChangeReviewRealization_successor_direct_bypass",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Unguarded protected entry",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "CalibrationRealization_successor_direct_bypass": {
+      "case": "CalibrationRealization_successor_direct_bypass",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Unguarded protected entry",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "ChangeReviewRealization_record_direct_bypass": {
+      "case": "ChangeReviewRealization_record_direct_bypass",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Unguarded protected entry",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "ReplayRealization_execute_direct_bypass": {
+      "case": "ReplayRealization_execute_direct_bypass",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Unguarded protected entry",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "wrong_actor": {
+      "case": "wrong_actor",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "External authority actor changed",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "exact_successor_decision_disconnected": {
+      "case": "exact_successor_decision_disconnected",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Actual realization data producer/consumer parameter chain changed",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "calibration_decision_disconnected": {
+      "case": "calibration_decision_disconnected",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Actual realization data producer/consumer parameter chain changed",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "renewed_conditional_wrong_disposition": {
+      "case": "renewed_conditional_wrong_disposition",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "BaselineControl: closed prior conditions override renewed conditional disposition",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "guidance_unauthorized_apply": {
+      "case": "guidance_unauthorized_apply",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Guidance state authority/currency counterexample",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "pending_edit_does_not_stale": {
+      "case": "pending_edit_does_not_stale",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Edit fails immediate pending/current invalidation",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "raw_numeric_payload_mandatory": {
+      "case": "raw_numeric_payload_mandatory",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Raw sample/result/evidence record type or optionality changed",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "raw_numeric_missing_becomes_zero": {
+      "case": "raw_numeric_missing_becomes_zero",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Missing sample/time fabricated with a default value",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "raw_processing_mask_removed": {
+      "case": "raw_processing_mask_removed",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Unresolved native export: BoundaryViews::HistorySample::processingMaskAndReason",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "failed_run_requires_numeric_result": {
+      "case": "failed_run_requires_numeric_result",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Raw sample/result/evidence record type or optionality changed",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "failed_build_requires_product": {
+      "case": "failed_build_requires_product",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Raw sample/result/evidence record type or optionality changed",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "wrong_projection_source_field": {
+      "case": "wrong_projection_source_field",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Projection flow actual parameter chain mismatch",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "wrong_union_port_direction": {
+      "case": "wrong_union_port_direction",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native complete union port direction/type",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "wrong_primary_owner": {
+      "case": "wrong_primary_owner",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native wrong primary owner",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "wrong_FR_operation_link": {
+      "case": "wrong_FR_operation_link",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Native FR operation owner/dependency mismatch",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    },
+    "source_query_unbound": {
+      "case": "source_query_unbound",
+      "selector_matched": true,
+      "native_check_executed": true,
+      "rejected": true,
+      "reason": "Boundary/aggregate native binding coverage mismatch",
+      "mutation_matches": 1,
+      "baseline_passed": true
+    }
+  },
+  "actual_result": {
+    "status": "passed",
+    "scope": "full model",
+    "native_errors": 0,
+    "native_warnings": 0,
+    "active_FRs": 40,
+    "MR_parent_links": 169,
+    "native_architecture_checked": true,
+    "verification": "planned only",
+    "components": 6,
+    "current_FRs": 40,
+    "pairwise_aggregates": 20,
+    "field_mappings": 203,
+    "external_aggregates": 5,
+    "negative_cases": [
+      {
+        "case": "AssistanceRealization_admitInput_lost_guard",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "AssistanceRealization_admitReply_lost_guard",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "AssistanceRealization_admitDisposition_lost_guard",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "AssistanceRealization_applyAuthorized_lost_guard",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "SoftwareRealization_authorizeCoding_lost_guard",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "DesignRealization_admitModel_lost_guard",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "DesignRealization_admitCriteria_lost_guard",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "ChangeReviewRealization_admitChange_lost_guard",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "ChangeReviewRealization_admitReviewDecision_lost_guard",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "ReplayRealization_admitReplay_lost_guard",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "CalibrationRealization_admitCalibration_lost_guard",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "CalibrationRealization_admitCalibrationChange_lost_guard",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "build_missing_checkRelease_authorizedDetailedDesign",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "build_missing_checkRelease_currentDesign",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "build_missing_checkRelease_blockersClear",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "build_missing_interfaces_profileCompatible",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "build_missing_mapping_profileCompatible",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native safety guard counterexample"
+      },
+      {
+        "case": "immediate_invalidation_bypass",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Immediate context invalidation removed"
+      },
+      {
+        "case": "AssistanceRealization_derive_direct_bypass",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Unguarded protected entry"
+      },
+      {
+        "case": "SoftwareRealization_coordinate_direct_bypass",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Unguarded protected entry"
+      },
+      {
+        "case": "SoftwareRealization_codeBuildSil_direct_bypass",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Safety gate bypass reaches protected action"
+      },
+      {
+        "case": "ChangeReviewRealization_successor_direct_bypass",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Unguarded protected entry"
+      },
+      {
+        "case": "CalibrationRealization_successor_direct_bypass",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Unguarded protected entry"
+      },
+      {
+        "case": "ChangeReviewRealization_record_direct_bypass",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Unguarded protected entry"
+      },
+      {
+        "case": "ReplayRealization_execute_direct_bypass",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Unguarded protected entry"
+      },
+      {
+        "case": "wrong_actor",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "External authority actor changed"
+      },
+      {
+        "case": "exact_successor_decision_disconnected",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Actual realization data producer/consumer parameter chain changed"
+      },
+      {
+        "case": "calibration_decision_disconnected",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Actual realization data producer/consumer parameter chain changed"
+      },
+      {
+        "case": "renewed_conditional_wrong_disposition",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "BaselineControl: closed prior conditions override renewed conditional disposition"
+      },
+      {
+        "case": "guidance_unauthorized_apply",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Guidance state authority/currency counterexample"
+      },
+      {
+        "case": "pending_edit_does_not_stale",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Edit fails immediate pending/current invalidation"
+      },
+      {
+        "case": "raw_numeric_payload_mandatory",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Raw sample/result/evidence record type or optionality changed"
+      },
+      {
+        "case": "raw_numeric_missing_becomes_zero",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Missing sample/time fabricated with a default value"
+      },
+      {
+        "case": "raw_processing_mask_removed",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Unresolved native export: BoundaryViews::HistorySample::processingMaskAndReason"
+      },
+      {
+        "case": "failed_run_requires_numeric_result",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Raw sample/result/evidence record type or optionality changed"
+      },
+      {
+        "case": "failed_build_requires_product",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Raw sample/result/evidence record type or optionality changed"
+      },
+      {
+        "case": "wrong_projection_source_field",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Projection flow actual parameter chain mismatch"
+      },
+      {
+        "case": "wrong_union_port_direction",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native complete union port direction/type"
+      },
+      {
+        "case": "wrong_primary_owner",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native wrong primary owner"
+      },
+      {
+        "case": "wrong_FR_operation_link",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Native FR operation owner/dependency mismatch"
+      },
+      {
+        "case": "source_query_unbound",
+        "selector_matched": true,
+        "native_check_executed": true,
+        "rejected": true,
+        "reason": "Boundary/aggregate native binding coverage mismatch"
+      }
+    ]
+  }
+}

@@ -1,4 +1,3 @@
-% Insert after the preserved as-is observation tail. Keep its existing section.
 \hyphenrules{english}
 \subsection{Mission requirements and effectiveness}
 \label{subsection:framework-mission-requirements}
@@ -6,12 +5,11 @@
 \label{subsection:framework-moes}
 \label{subsection:eps-reference-lifecycle}
 
-These proposed enterprise requirements state EPS outcomes, while the MOEs express stakeholder value, following OOSEM \citep[Sec.~17.3.2]{friedenthal2014practical}. The scope covers NASA Pre-Phase A, A, B and adapted C for modeled EPS hardware and host-executed control/interface software. It ends at model/software integration readiness before Phase D. Physical development, procurement, hardware operation and testing, PIL/HIL, target qualification and flight readiness are excluded. Hardware maturity relies on applicable existing evidence, with gaps recorded. NASA supplies reference phases and review purposes without a certification claim \citep[Secs.~2.2--2.4 and~3.3--3.6]{nasa2016systems}. A prepared review package is an entrance product. Acceptance requires the designated authority's decision against agreed success criteria \citep[Sec.~6.7 and Table~6.7-1]{nasa2016systems}.
+These enterprise requirements state EPS outcomes. The MOEs express stakeholder value, following OOSEM \citep[Sec.~17.3.2]{friedenthal2014practical}. The scope covers NASA Pre-Phase A through adapted C for EPS hardware models and declared control/interface software for host execution. It ends at model/software integration readiness before Phase D. Physical fabrication, procurement, hardware operation and testing, PIL/HIL, target qualification and flight readiness are excluded. Hardware maturity relies on applicable existing evidence, with gaps recorded. Industrial simulation examples motivate this adaptation without establishing target EPS implementation evidence \citep[slides~4,~13,~18]{handpicked-0002}. NASA supplies reference phases and review purposes without a certification claim \citep[Secs.~2.2--2.4 and~3.3--3.6]{nasa2016systems}. MDR and SDR are alternative names for one review gate.
 
-% TODO: Agree measurement targets, acceptable errors and review thresholds with stakeholders.
-% TODO: Review downstream scenario and requirement traces for the condensed MR statements.
-% TODO: Refresh source locators, parser snapshots and publication checks after compression.
-% Preserve historical review evidence and approved/protected source hashes.
+The enterprise shall derive, refine and validate EPS and component requirements and interfaces as the design matures through Phase B and adapted C. Changes can reopen earlier work.
+
+The following success conditions apply to all six mission requirements. The enterprise shall establish and maintain coherent phase baselines through authorized changes, repeated affected checks and applicable verification and validation evidence, retaining configuration-linked requirements, expectations, methods, results, limitations and finding dispositions. It shall obtain and retain acceptance decisions from the designated review authority against agreed success criteria, prevent progression with blocking findings, and record conditional limits, closure actions, owners and dates. A prepared package supports entrance to review. Acceptance requires an explicit authorized accepted decision \citep[Secs.~6.2--6.7 and Table~6.7-1]{nasa2016systems}.
 
 {\small
 \setlength{\tabcolsep}{4pt}
@@ -28,11 +26,12 @@ These proposed enterprise requirements state EPS outcomes, while the MOEs expres
 \endhead
 \bottomrule
 \endfoot
-MR-01 & The EPS engineering enterprise shall obtain MCR acceptance at the end of Pre-Phase A for a mission concept whose EPS feasibility is justified against agreed stakeholder expectations and mission constraints, supported by initial ConOps, budgets, assumptions, risks and a preliminary verification and validation approach. & Pre-Phase A, concept studies \citep[Sec.~3.3]{nasa2016systems}. \\
-MR-02 & The enterprise shall obtain SRR acceptance during Phase A for validated EPS requirements and interfaces traced to the mission concept and allocated spacecraft requirements, with measurable criteria consistent with stakeholder expectations. It shall derive, refine and validate EPS and component requirements and interfaces as the design matures through Phase B and adapted C. & A, refinement through B and adapted C \citep[Secs.~3.4--3.6 and~4.1--4.2]{nasa2016systems}. \\
-MR-03 & The enterprise shall obtain MDR/SDR acceptance at the end of Phase A for a credible EPS architecture with requirement allocations and justified alternatives, and PDR acceptance at the end of Phase B for a sized, compatible preliminary design supported by sizing and trades, margins, risk dispositions, controlled interfaces and verification and validation plans against applicable requirements and agreed resource and risk limits. & A/B, architecture and preliminary design \citep[Secs.~3.4--3.5]{nasa2016systems}. \\
-MR-04 & The enterprise shall obtain CDR acceptance during adapted Phase C, before deliverable coding, for complete detailed EPS model/software design, interface specifications and implementation, integration and verification and validation plans, followed by SIR acceptance at the end of C for released models and declared host-executed control/interface software, applicable MIL/SIL evidence, compatible interfaces and ready integration configurations and procedures. & Adapted C \citep[Sec.~3.6]{nasa2016systems}. Scoped model/software assessment \citep[Sec.~2]{review-0573} \citep[pp.~7--9]{handpicked-0001}. \\
-MR-05 & The enterprise shall establish and maintain coherent phase baselines through authorized changes, repeated affected checks and applicable verification and validation evidence, retaining configuration-linked requirements, expectations, methods, results, limitations and finding dispositions. It shall obtain and retain acceptance decisions from the designated review authority against agreed success criteria, prevent progression with blocking findings, and record conditional limits, closure actions, owners and dates. & All scoped phases, technical management \citep[Secs.~6.2--6.7]{nasa2016systems}. \\
+MR-01 & The EPS engineering enterprise shall obtain MCR acceptance at the end of Pre-Phase A for a mission concept whose EPS feasibility is justified against agreed stakeholder expectations and mission constraints, supported by initial ConOps, technical budgets, assumptions, risks and a preliminary verification and validation approach. & Pre-Phase A \citep[Sec.~3.3]{nasa2016systems}. \\
+MR-02 & The enterprise shall obtain SRR acceptance during Phase A for validated EPS requirements and interfaces traced to the mission concept and allocated spacecraft requirements, with measurable criteria consistent with stakeholder expectations. & Phase A \citep[Secs.~3.4 and~4.1--4.2]{nasa2016systems}. \\
+MR-03 & The enterprise shall obtain MDR/SDR acceptance at the end of Phase A for a credible EPS architecture with requirement allocations and justified alternatives. & Phase A \citep[Sec.~3.4]{nasa2016systems}. \\
+MR-04 & The enterprise shall obtain PDR acceptance at the end of Phase B for a sized, compatible preliminary EPS design supported by sizing and trades, margins, risk dispositions, controlled interfaces and verification and validation plans against applicable requirements and agreed technical resource and risk limits. & Phase B \citep[Sec.~3.5]{nasa2016systems}. \\
+MR-05 & The enterprise shall obtain scoped CDR acceptance during adapted Phase C, before deliverable coding, for complete detailed EPS model and software designs, interface specifications and implementation, integration and verification and validation plans. & Adapted C \citep[Secs.~3.6 and~6.7, Table~6.7-1]{nasa2016systems}. EPS modeling \citep[Sec.~2]{review-0573}. Simulation-first design \citep[slides~13,~18]{handpicked-0002}. \\
+MR-06 & The enterprise shall obtain scoped SIR acceptance at the end of adapted Phase C for released EPS models and declared control and interface software for host execution, applicable MIL/SIL evidence, compatible interfaces and ready integration configurations and procedures. & Adapted C \citep[Secs.~3.6 and~6.7, Table~6.7-1]{nasa2016systems}. Virtual commissioning \citep[slide~4]{handpicked-0002} and SIL without physical hardware \citep[p.~3]{handpicked-0001}. \\
 \end{longtable}
 }
 
@@ -54,7 +53,7 @@ MR-05 & The enterprise shall establish and maintain coherent phase baselines thr
 MOE-01 & Engineering burden: active person-hours and elapsed hours for correct requirements, design, change and review tasks, with waiting and unattended execution reported separately. \\
 MOE-02 & Early issue detection: expert-confirmed issues found before scoped final design, critical misses and unnecessary investigations against a declared reference issue set. \\
 MOE-03 & Evidence and review usefulness: applicable requirement and expectation coverage, critical review defects, reviewer interpretation accuracy and successful independent reconstruction. \\
-MOE-04 & Adoption and affordability: person-hours to learn and complete correct tasks and adapt to a mission, and direct framework usage cost in CAD over a declared period and price date. \\
+MOE-04 & Adoption burden: person-hours to learn and complete correct tasks and adapt to a mission. \\
 \end{longtable}
 }
 
@@ -73,9 +72,9 @@ MOE-04 & Adoption and affordability: person-hours to learn and complete correct 
 \endhead
 \bottomrule
 \endfoot
-MOE-01 & \ConcernRef{C-PM-01}, \ConcernRef{C-PM-02}, \ConcernRef{C-SE-03} & Requirements effort, budgets and subsystem changes. \\
+MOE-01 & \ConcernRef{C-PM-01}, \ConcernRef{C-SE-03} & Requirements effort and subsystem changes. \\
 MOE-02 & \ConcernRef{C-PM-03}, \ConcernRef{C-EPS-01} & Late redesign and repeated verification burden. \\
 MOE-03 & \ConcernRef{C-SE-02}, \ConcernRef{C-EPS-11} & Communicating evidence and designs during reviews. \\
-MOE-04 & \ConcernRef{C-PM-01}, \ConcernRef{C-PM-05} & Learning and tool costs under C-PM-01, and mission adaptation. \\
+MOE-04 & \ConcernRef{C-PM-01}, \ConcernRef{C-PM-05} & Learning, tool adoption and mission adaptation effort. \\
 \end{longtable}
 }

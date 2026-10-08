@@ -29,9 +29,9 @@ CURRENT_FILES = tuple(f'{n}.sysml' for n in (
     '08-physical-vocabulary', '09-scenarios', '10-interface-views',
     '11-logical-responsibilities')) + tuple(
     f'candidates/{n}.sysml' for n in ('comet', 'custom', 'git-yaml', 'nanospace', 'valispace'))
-SC_MRS = {1: {1, 5}, 2: {1, 2, 5}, 3: {2, 3, 5},
-          4: {2, 3, 4, 5}, 5: {1, 2, 3, 4, 5}}
-FR_IDS = {f"FR_{n:02}" for n in range(1, 40)} | {"FR_41", "FR_42"}
+SC_MRS = {1: {1}, 2: {2, 3, 4, 5}, 3: {3, 4},
+          4: {5, 6}, 5: {1, 2, 3, 4, 5, 6}}
+FR_IDS = {f"FR_{n:02}" for n in range(1, 43) if n not in (12, 40)}
 
 
 def require(condition: bool, message: str) -> None:
@@ -192,7 +192,13 @@ def main() -> int:
     spec.loader.exec_module(tool)
     result = tool.validate([root / n for n in CURRENT_FILES], [],
                            warnings_as_errors=True, config=config)
-    model, api = tool.require_semantic_model(result)
+    try:
+        model, api = tool.require_semantic_model(result)
+    except tool.ToolError as error:
+        if error.exit_code == 1:
+            details = '; '.join(d.message for d in result.diagnostics[:6])
+            raise ValueError('Native model invalid: ' + (details or str(error))) from error
+        raise RuntimeError('Native tooling unavailable: ' + str(error)) from error
     elements = list(model.nodes(api.Element, include_subtypes=True))
     by_qn = {str(e.qualified_name): e for e in elements if e.qualified_name}
     compiler = api.Compiler()
@@ -321,7 +327,12 @@ def main() -> int:
     require({e.name for e in interfaces} == {"IF01", "IF02", "IF03", "IF04", "IF06"},
             "Wrong active interfaces, IF-05 must remain absent")
     exact_flows = [e for e in elements if type(e).__name__ == "FlowUsage" and e.owner in interfaces]
-    require(len(exact_flows) == 15, "Incomplete typed interface exchanges")
+    expected_flows = {f'FrameworkContext::Context::{interface}::{name}' for interface, names in {
+        'IF01': ('engineeringInputs', 'engineeringOutputs'), 'IF02': ('sourceData', 'sourceRequest'),
+        'IF03': ('analysisPlan', 'analysisRequest', 'analysisResult', 'analysisStatus', 'epsResponses', 'spacecraftInputs'),
+        'IF04': ('codingRequest', 'codingStatus', 'interfaceSpecification', 'softwareProduct', 'softwareResult'),
+        'IF06': ('reviewFindingsDecisions', 'reviewPackage')}.items() for name in names}
+    require(len(exact_flows) == 17 and {qn(f) for f in exact_flows} == expected_flows, "Incomplete typed interface exchanges")
     for flow in exact_flows:
         check_typed_flow(flow)
     forbidden = {"FrameworkDomain::TestingFacilityTechnician", "FrameworkDomain::EPSHardware",
@@ -336,13 +347,13 @@ def main() -> int:
 
     requirements = [e for e in elements if type(e).__name__ == "RequirementUsage"
                     and qn(e.owner) == "FrameworkRequirements"]
-    require({e.name for e in requirements} == FR_IDS, "Current FR set changed or FR-40 restored")
+    require({e.name for e in requirements} == FR_IDS, "Current FR set changed or retired FR-12/FR-40 restored")
     prose = re.sub(r"\s+", " ", report.read_text())
     checks = [e for e in elements if isinstance(e, api.MetadataUsage)
               and any(qn(t) == "FrameworkRequirements::PlannedRequirementCheck" for t in e.types)]
     derivations = [e for e in elements if type(e).__name__ == "ConnectionUsage"
                    and qn(e).startswith("FrameworkRequirements::derive_MR_")]
-    require(len(derivations) == 83, "Incomplete MR derivations")
+    require(len(derivations) == 169, "Incomplete MR derivations")
     parent_map = {r: set() for r in requirements}
     for d in derivations:
         # Syside resolves source/target reference subsetting to actual requirements.
@@ -354,11 +365,15 @@ def main() -> int:
         parent_map[children[0]].add(parents[0].name[-2:])
     for r in requirements:
         text = " ".join(" ".join(r.texts).split())
-        require(text.count(" shall ") == 1 and text in prose, f"{r.name}: report/model statement disagreement")
+        require(text.startswith('The framework shall ') and text in prose, f"{r.name}: report/model statement disagreement")
         require(parent_map[r], "Requirement has no current MR parent")
-        row = re.search(rf"FR-{r.name[-2:]}\\par MR-([\d, ]+) &", prose)
-        require(row is not None and set(re.findall(r"\d{2}", row[1])) == parent_map[r],
-                f"{r.name}: report/model MR disagreement")
+        rows = re.findall(rf"^FR-{r.name[-2:]} & [^\n]* & ([\d, -]+) \\\\", report.read_text(), re.M)
+        require(len(rows) == 1, f"{r.name}: missing/duplicate current report row")
+        expected_parents = set()
+        for first, last in re.findall(r"(\d{2})(?:--(\d{2}))?", rows[0]):
+            require(int(last or first) >= int(first), 'Reversed current MR parent range')
+            expected_parents.update(f'{n:02}' for n in range(int(first), int(last or first) + 1))
+        require(expected_parents == parent_map[r], f"{r.name}: report/model MR disagreement")
         attached = [c for c in checks if r in c.annotated_elements]
         require(len(attached) == 1, "Requirement lacks planned method/check")
         c = fields(attached[0])
@@ -424,12 +439,14 @@ def main() -> int:
                       "review_control": review_control,
                       "V42": "report FR-42 statement and native/ledger procedure agree, planned, not executed"}
     if args.negative_cases:
-        result['negative_cases'] = negative_checks(root, args.tool, config, report, args.ledger)
+        result['negative_cases'] = negative_checks(root, args.tool, config, report, args.ledger, baseline_checked=True)
+        result['negative_baseline_passed'] = True
     print(json.dumps(result, indent=2))
     return 0
 
 
-def negative_checks(root, tool, config, report, ledger):
+def negative_checks(root, tool, config, report, ledger, *, baseline_checked=False):
+    require(baseline_checked, 'A passing current scenario baseline is required before mutation')
     cases = [
         ('actor-allocation', '09-scenarios.sysml', "allocate SC02::'FW: check and recommend' to framework;", "allocate SC02::'FW: check and recommend' to epsEngineer;"),
         ('typed-flow', '09-scenarios.sysml', "flow exchange1 of MissionDefinition from 'SE: define mission'.mission to 'FW: plan concepts'.mission;", "flow exchange1 of HostSoftwareProduct from 'SE: define mission'.mission to 'FW: plan concepts'.mission;"),
@@ -488,17 +505,21 @@ def negative_checks(root, tool, config, report, ledger):
                 shutil.copy2(root/source, path)
             path = target/filename
             text = path.read_text()
-            require(text.count(old) == 1, 'Negative mutation must match once: '+name)
-            path.write_text(text.replace(old,new))
+            matches = text.count(old)
+            require(old != new and matches == 1, 'Negative mutation must change exactly one selector: '+name)
+            path.write_text(text.replace(old,new,1))
             run = subprocess.run(['uv','run',str(Path(__file__).resolve()),'--tool',str(tool.resolve()),
                                   '--model-root',str(target),'--report',str(report.resolve()),
                                   '--config',str(config.resolve()), '--ledger',str(ledger.resolve())],
                                  capture_output=True,text=True)
-            require(run.returncode == 1 and bool(run.stderr.strip()), 'Negative case not meaningfully rejected: '+name)
+            require(run.returncode == 1 and run.stderr.strip().startswith('FAIL:') and
+                    'Traceback' not in run.stderr and 'Native tooling unavailable' not in run.stderr,
+                    'Negative case not meaningfully rejected: '+name)
             if expected_reason:
                 require('FAIL: ' + expected_reason[0] in run.stderr,
                         f'Negative case did not reach the expected semantic check: {name}: {run.stderr[-350:]}')
             outcomes.append({'case':name,'rejected':True,'reason':run.stderr[-350:].strip(),
+                             'mutation_matches': matches, 'native_check_executed': True,
                              'native_validation_passed': True if expected_reason else None})
     return outcomes
 
@@ -506,6 +527,6 @@ def negative_checks(root, tool, config, report, ledger):
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
-    except (ValueError, KeyError, AttributeError, OSError, StopIteration) as error:
+    except (ValueError, KeyError, AttributeError, OSError, StopIteration, RuntimeError) as error:
         print(f"FAIL: {error}", file=sys.stderr)
         raise SystemExit(1)

@@ -1,5 +1,5 @@
-// Shared vocabulary, preserved as-is roles and separate proposed to-be context.
-// TODO: Re-derive downstream interfaces/functions and replace the old facility context.
+// Shared vocabulary and concise observed/proposed engineering domains.
+// TODO: Propagate required F Prime and whole-CUBICS Omniverse exchanges to downstream interfaces/functions.
 package FrameworkDomain {
     private import ScalarValues::*;
 
@@ -22,17 +22,19 @@ package FrameworkDomain {
         attribute failureBehavior : String;
     }
 
-    // Existing role definitions remain available for the unchanged concern model.
+    // Four engineering roles may share occupants.
     part def Person;
     part def Role { ref part occupant : Person [0..1]; }
     part def ProjectManager :> Role;
     part def SystemsEngineer :> Role;
     part def EPSEngineer :> Role;
     part def NonEPSEngineer :> Role;
-    part def TestingFacilityTechnician :> Role;
     part def EngineeringEnterprise;
     part def EPSHardware;
     part def FlightSoftware;
+    part def FPrimeFlightSoftware :> FlightSoftware {
+        doc /* F Prime is the required CUBICS flight software framework. Host simulation is distinct from target flight qualification. */
+    }
     part def GroundSoftware;
     part def ResearchDeliverables;
     part def Engineers {
@@ -66,7 +68,7 @@ package FrameworkDomain {
         doc /* Compatibility name for an interface specification. No physical execution or target deployment obligation is implied. */
     }
     item def ComponentCharacterization :> EngineeringArtifact;
-    item def BOMCostRAM :> EngineeringArtifact;
+    item def ComponentResourceAssessment :> EngineeringArtifact;
     item def ScenarioAnalysisPlan :> EngineeringArtifact;
     item def RunPackage :> EngineeringArtifact;
     item def ModelCredibility :> EngineeringArtifact;
@@ -77,20 +79,9 @@ package FrameworkDomain {
     item def FrameworkEvaluation :> EngineeringArtifact;
 
     // Structured values use explicit fixed units. No measured or target value is assigned.
-    // Effort, elapsed time, framework cost and EPS cost remain distinct data types.
+    // Active effort and elapsed time remain distinct.
     attribute def ActiveEffort { attribute personHours : Real; }
     attribute def ElapsedTime { attribute hours : Real; }
-    attribute def FrameworkUsageCost {
-        attribute canadianDollars : Real;
-        attribute declaredPeriod : String;
-        attribute priceDate : String;
-    }
-    attribute def EPSAcquisitionEstimate {
-        attribute canadianDollars : Real;
-        attribute estimateScope : String;
-        attribute priceDate : String;
-        doc /* Sourced estimate only. Hardware procurement is excluded. */
-    }
     attribute def VoltageResidual { attribute volts : Real; }
     attribute def TemperatureResidual { attribute kelvinDifference : Real; }
     attribute def EnergyResidual { attribute wattHours : Real; }
@@ -132,7 +123,7 @@ package FrameworkDomain {
     }
 
     // Temporary signatures preserve downstream imports while OOSEM derivation is revised.
-    // They impose no tool choice. IF-05 has no port on the proposed framework.
+    // Their detailed exchanges will be refined from the retained FR input/output sets.
     item def Submission01 :> EngineeringArtifact;
     item def Response01 :> EngineeringArtifact;
     port def P01 { in item submission : Submission01; out item response : Response01; }
@@ -163,19 +154,6 @@ package FrameworkDomain {
         end client : ~P04;
         end framework : P04;
         doc /* Model and declared host-software exchange only. No PIL, HIL or target processor timing/power qualification. */
-    }
-    item def Submission05 :> EngineeringArtifact;
-    item def Response05 :> EngineeringArtifact;
-    port def P05 {
-        in item submission : Submission05;
-        out item response : Response05;
-        out item plannedProcedure : VerificationSpecification;
-        in item suppliedObservations : ObservationPackage;
-    }
-    interface def <'IF-05'> I05 {
-        end client : ~P05;
-        end framework : P05;
-        doc /* Obsolete facility-exchange signature retained solely for downstream imports. No instance or facility obligation belongs to the revised to-be domain. */
     }
     item def Submission06 :> EngineeringArtifact;
     item def Response06 :> EngineeringArtifact;
@@ -216,16 +194,13 @@ package FrameworkDomain {
     }
 
     package AsIs {
-        part def TestingFacility;
         part def OperationalDomain {
             ref part enterprise : EngineeringEnterprise [0..1];
             ref part engineers : Engineers [0..1];
-            ref part technician : TestingFacilityTechnician [0..*];
-            ref part facility : TestingFacility [0..*];
             ref part hardware : EPSHardware [0..*];
             ref part flightSoftware : FlightSoftware [0..*];
             ref part groundSoftware : GroundSoftware [0..*];
-            doc /* Context vocabulary for the preserved observations and concerns. References assert no staffing, available equipment or accepted lifecycle. Technician and facility concerns remain solely as-is. */
+            doc /* ASCEND-associated students wishing to participate in CUBICS follow no systems engineering method. Payload power requirements are verified only after fabrication. They value simulating rocket requirements before fabrication and want the same capability for power. No staffing or lifecycle maturity is asserted. */
         }
         part domain : OperationalDomain;
     }
@@ -260,14 +235,19 @@ package FrameworkDomain {
             doc /* Software environments for model construction, analysis, MIL and SIL. Physical EPS components and target processors are not executing participants. */
         }
         part def HostSoftwareDevelopmentEnvironment;
+        part def CUBICSSimulationEnvironment :> ModelSoftwareAnalysisEnvironment {
+            doc /* Required connection to NVIDIA Omniverse, intended to simulate the entire CUBICS spacecraft. EPS models and interfaces exchange power-related subsystem behavior and mission conditions. Zhu et al. (handpicked-0001, physical PDF pp.4--5) map battery telemetry and multiphysics results to an Omniverse scene through semantic mappings and read/write APIs. This supplies a potential coupling mechanism, with no evidence of a CubeSat deployment. */
+        }
         part def EPSEngineeringEnterprise :> EngineeringEnterprise {
             part engineers : Engineers;
             part framework : FutureFramework;
             ref part analysisEnvironments : ModelSoftwareAnalysisEnvironment [0..*];
             ref part codingEnvironments : HostSoftwareDevelopmentEnvironment [0..*];
+            ref part cubicsSimulation : CUBICSSimulationEnvironment;
+            ref part flightSoftware : FPrimeFlightSoftware;
             ref item phaseProducts : EngineeringArtifact [0..*];
             ref item baselines : PhaseBaseline [0..*];
-            doc /* Engineers, framework and supporting model/software environments collaborate to achieve MR-01--05. Hardware alternatives are engineered representations. There is no technician, testing facility, physical safety authority or executing EPS hardware. */
+            doc /* Engineers and the framework develop EPS models and software with supporting environments. F Prime and the whole-CUBICS Omniverse connection are mission constraints. Hardware alternatives are modeled representations. Power, energy and technical resource budgets remain in scope. Physical hardware execution is excluded. */
         }
         part def OperationalDomain {
             part enterprise : EPSEngineeringEnterprise;

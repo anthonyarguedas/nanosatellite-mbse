@@ -1,69 +1,35 @@
 \section{Define Logical Architecture}
 \label{section:define-logical-architecture}
 
-OOSEM decomposes required system behavior into logical components, separating external interface, application and infrastructure responsibilities. This intermediate design defines cooperation while allowing later tool and deployment choices \citep[Sec.~17.3.4]{friedenthal2014practical}. The allocated FRs provide each component's requirement basis. Their parent MRs are given in Table~\ref{tab:framework-requirements}.
-
-\subsection{Derivation and responsibility}
-
-Eight components separate engineering meaning, execution and shared control. L04 groups mission assumptions, component occurrences, sizing, resource estimates and detailed interfaces because changes affect the same EPS design. L05 coordinates execution, while L06 assesses model credibility. Successful execution alone establishes no predictive validity. L07 combines phase-product assessment and review preparation because applicable criteria and unresolved findings determine what a package supports. L02 owns active assistance and contextual recommendations. L03 owns requirement meaning and allocation. L01 manages external exchange and presentation. L08 supplies shared configuration, currency and preservation services.
-
-Table~\ref{tab:logical-responsibilities} gives every primary FR allocation once. The FR--MR links complete the mission derivation path. Supporting allocations supply information or control services. These planned responsibilities assert no requirement satisfaction or executed verification.
+OOSEM allocates required behavior to cooperating logical components before selecting implementation tools and deployment \citep[Sec.~17.3.4]{friedenthal2014practical}. Table~\ref{tab:logical-responsibilities} groups the 40 FRs by their engineering inputs and outputs. Figure~\ref{fig:framework-logical} shows selected exchanges. These allocations define planned responsibilities.
 
 {\small
 \setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.08}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.63\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.25\linewidth-2\tabcolsep\relax}@{}}
-\caption{Logical responsibilities and complete primary allocation of the 41 current FRs.}\label{tab:logical-responsibilities}\\
+\renewcommand{\arraystretch}{1.05}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.21\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.52\linewidth-2\tabcolsep\relax}@{}}
+\caption{Six logical components, complete primary FR allocations and interface directions.}\label{tab:logical-responsibilities}\\
 \toprule
-\textbf{ID} & \textbf{Responsibility and principal information} & \textbf{Primary FR numbers} \\
+\textbf{Logical component} & \textbf{FR numbers} & \textbf{Inputs $\rightarrow$ outputs} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{ID} & \textbf{Responsibility and principal information} & \textbf{Primary FR numbers} \\
+\textbf{Logical component} & \textbf{FR numbers} & \textbf{Inputs $\rightarrow$ outputs} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-L01 & \textit{Engineering exchange (external interface).} Connect engineers, sources, model tools, the host toolchain and reviewers through IF-01--04 and IF-06. Check transfers before registration. Present assistance and baseline-linked views. & 08, 37 \\
-L02 & \textit{Active engineering assistance (application).} Check drafts, explain deterministic and probable findings, recommend methods/models and next activities, acknowledge triggers and retain engineer dispositions. & 02, 03, 29, 39, 41 \\
-L03 & \textit{Requirements and allocation (application).} Retain requirement meaning and unresolved fields. Propose spacecraft/EPS/component allocations and retrieve forward/reverse engineering links. & 01, 04, 17 \\
-L04 & \textit{Mission and EPS design (application).} Own mission/ConOps inputs, modeled design variants, component occurrences, BOMs, budgets, sizing, resource estimates and trades. Define detailed control and interface meanings and selected profile mappings. & 12--15, 20, 25, 33--35 \\
-L05 & \textit{Analysis and host work (application).} Compose coupled analyses and applicable RAM representations. Plan numerical/resource settings, coordinate external analysis, MIL, authorized host coding/builds and SIL, and compare independently replayed results. & 10, 16, 18, 19, 23, 24, 26, 27, 36 \\
-L06 & \textit{Model credibility (application).} Check numerical/results suitability, histories and timing. Own intended use, fidelity, omissions, validity, uncertainty and proposed calibration, separately from independent assessment. & 21, 22, 31, 32 \\
-L07 & \textit{Phase-product assessment and review (application).} Plan EPS verification and validation, assess applicable criteria, expose critical gaps, prepare phase packages and record designated-authority review dispositions. & 11, 28, 38, 42 \\
-L08 & \textit{Configuration and currency (infrastructure).} Preserve exact revisions and raw results, detect reciprocal impacts, invalidate affected outputs, check latest context and detailed design authority, retain authorized successors and provide replay dependencies. & 05--07, 09, 30 \\
+L01 Requirements and guidance & 01--04, 17, 29, 39, 41 & Drafts, sources, phase/context, trace queries and engineer decisions $\rightarrow$ requirements, allocations, links, explained guidance and dispositions. \\
+L02 Mission and EPS design & 13--15, 20, 25, 33, 35 & Mission/ConOps, component/design data, requirements and control definitions $\rightarrow$ EPS designs, mass/volume estimates, power/energy budgets, sizing, trades and interface specifications. \\
+L03 Simulation and software integration & 10, 16, 18, 19, 23, 24, 26, 27, 34, 36 & Models, scenarios, released interfaces/code and run settings $\rightarrow$ numerical whole-CUBICS Omniverse exchanges, F Prime mappings/build requests, histories, RAM, MIL/SIL and replay results with limits. \\
+L04 Model credibility & 21, 22, 31, 32 & Conclusions, histories, reference data and validity/timing rules $\rightarrow$ credibility gaps, timing/quality findings, raw values/masks and calibration proposals. \\
+L05 Evidence and technical review & 11, 28, 37, 38, 42 & Requirements/expectations, evidence, baselines, criteria and authority decisions $\rightarrow$ V\&V plans, views, gaps, prepared review packages and recorded dispositions. \\
+L06 Configuration and controlled exchange & 05--09, 30 & Raw transfers, changes, dependencies and authorized decisions $\rightarrow$ admitted/rejected records, exact baselines, run provenance, impacts and stale/reassessment status. \\
 \end{longtable}
 }
 
-L02--L07 own engineering meaning. L08 preserves their identified records and dependencies. L01 presents views and exchanges controlled revisions with external tools. Engineers and review authorities grant their respective approvals. Computing, storage, algorithms and transport remain physical architecture choices.
-
-Framework diagrams are rendered from SysML v2 using Syside Modeler. The \texttt{\^{}} prefix marks inherited features. The \texttt{::>} notation identifies a referenced feature.
-
-\begin{figure}[p]
+\begin{figure}[htbp]
 \centering
-\makebox[\linewidth][c]{\includegraphics[width=1.20\linewidth,height=0.88\textheight,keepaspectratio]{fig/sysml/lifecycle/07-report-views-defined-view-reportviews-logicalview.pdf}}
-\caption{Logical components and their connections to L01. Section~\ref{subsection:logical-exchanges} describes the internal engineering exchanges.}
+\includegraphics[width=\linewidth]{fig/logical-architecture.pdf}
+\caption{Logical components and selected exchanges. Solid arrows carry information. Dashed arrows carry control.}
 \label{fig:framework-logical}
 \end{figure}
-
-\subsection{Information, control and authority}
-\label{subsection:logical-exchanges}
-
-The main engineering thread carries L04 design information to L05 analysis planning, raw results to L06 credibility assessment, and supported evidence to L07 phase-product assessment. L07 sends checked review records to L08 for preservation. L08 sends changed context and dependencies to L02 for reassessment. L01 also supplies reference data to L06. Each exchange identifies its subject, revision and producer. Currency means applicability to current revisions.
-
-\paragraph{Assistance and human disposition.}
-L01 checks incoming drafts and requests. L08 resolves the latest context before L02 checks drafts and recommends methods. L08 checks currency before presentation and immediately before application. Edits invalidate affected pending and current guidance. Delayed replies remain stale. L02 records engineer dispositions and rationale. Only authorized, current corrections accepted or modified and requested for application reach L03 derivation. Rejection or deferral preserves the draft. Independent reviewers validate the resulting requirements \citep[Sec.~4.2 and Appendix~C]{nasa2016systems}.
-
-\paragraph{Analysis and controlled software work.}
-L04 supplies mission, component and allocation quantities for design studies. L05 plans coupled analyses, discipline mappings and applicable RAM work, then coordinates external execution. L08 preserves all run statuses and exact dependencies. L06 assesses numerical behavior, histories and validity for the intended use. Calibration proposals remain separate from independent model assessment. L07 compares applicable supported evidence with EPS requirements and expectations. Critical gaps prevent unqualified conformity claims. L04 separates mandatory feasibility from preference ranking \citep[Secs.~2--4]{review-0289,review-0573} \citep[pp.~7--9]{handpicked-0001}.
-
-L04 defines detailed control, interfaces and the selected host integration profile. L05 coordinates MIL, host coding/builds and matching SIL. Before coding, L08 checks the engineer-authorized release for the exact current design/interface revisions, declared software scope, release conditions and blocking findings. General CDR acceptance supplies no substitute authorization. L06 assesses result suitability and L07 assesses requirement/ConOps outcomes and MIL/SIL differences. Engineer product disposition precedes SIR preparation \citep[Secs.~3.6 and~5.3--5.4]{nasa2016systems}.
-
-\paragraph{Changes, reconstruction and review.}
-L08 detects reciprocal impacts across EPS/non-EPS products and evidence. A current authorized change acceptance creates a distinct successor. Declined, interrupted or unauthorized changes preserve the predecessor. L02 updates activity guidance and L05 repeats affected assessments. Code revisions return through the detailed design release gate. Unaffected evidence is reused only within its current applicability \citep[Secs.~6.2--6.6]{nasa2016systems} \citep[Sec.~3.2]{review-0340}.
-
-For replay, L08 resolves controlled dependencies, environment and instructions. L05 compares returned raw outputs using rules fixed before replay and retains failures and missing dependencies. Reconstruction establishes reproducibility within those rules. Model validity and EPS conformity require separate assessments.
-
-L07 assembles a review package and checks entrance criteria. The designated authority decides progression. L07 checks authority, current baseline and agreed success criteria. Blocking findings prevent progression. Conditional decisions retain limits, closure actions, owners and dates. Inconsistent, unauthorized or stale decisions remain rejected and change no state. L08 preserves admitted review records and predecessor decisions. Closing conditions requires evidence and renewed authorized review \citep[Sec.~6.7]{nasa2016systems}.
-
-Section~\ref{section:integrate-and-verify-system} gives planned verification methods and procedures for the allocated FRs and their interactions.
