@@ -33,10 +33,7 @@ The entire report must be written in good prose.
 Nobody, not even the stakeholders, will read the report if the prose is bad, even if the framework is useful or interesting.
 Some people will still not read the prose even if it's good, so the diagrams must be good as well.
 Using Syside SysML v2 renders is a bad idea. They contain little information, are hard to read, and are honestly ugly. SysML v1-inspired or purely illustrative diagrams should be used instead.
-Maintain a consistent visual language: monochrome, serif, academic figures.
-
-## Figure visual language
-
+Maintain a consistent visual language:
 - Use monochrome vector diagrams, Times New Roman text, white backgrounds, thin black outlines and square corners. Reserve light gray for external participants.
 - Keep black-box views opaque. Show logical parts inside the framework only in architecture views, with external participants outside.
 - Give each interface one rectangular boundary port. Put its IF identifier on the rectangle and pass all its exchange routes through it.
