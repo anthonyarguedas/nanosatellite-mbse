@@ -1,7 +1,7 @@
 \section{Define Logical Architecture}
 \label{section:define-logical-architecture}
 
-OOSEM allocates required behavior to cooperating logical components before selecting implementation tools and deployment \citep[Sec.~17.3.4]{friedenthal2014practical}. Table~\ref{tab:logical-responsibilities} groups the 40 FRs by their engineering inputs and outputs. Figure~\ref{fig:framework-logical} shows selected exchanges. These allocations define planned responsibilities.
+OOSEM allocates required behavior to cooperating logical components before selecting implementation tools and deployment \citep[Sec.~17.3.4]{friedenthal2014practical}. Table~\ref{tab:logical-responsibilities} groups the 40 FRs by their engineering inputs and outputs. Figure~\ref{fig:framework-logical} presents three coordinated views. The first shows the six components and all 20 directed logical exchange bundles. The second connects engineering use, sources and technical review to their responsible components. The third connects numerical and host software tools to L03 Simulation and software integration. Together they show the five active external interfaces and all 17 directed flows. These allocations define planned responsibilities.
 
 {\small
 \setlength{\tabcolsep}{4pt}
@@ -27,9 +27,28 @@ L06 Configuration and controlled exchange & 05--09, 30 & Raw transfers, changes,
 \end{longtable}
 }
 
-\begin{figure}[htbp]
+The views use named information and control flows at the level of component responsibilities, following the logical decomposition and interface examples in OOSEM \citep[Figs.~17.17, 17.23--17.25]{friedenthal2014practical}. Related records share an arrow within their defined exchange bundle. The configuration view repeats each component with its full name to show its separate exchanges with L06 Configuration and controlled exchange. Each view encloses its participating logical parts within the Framework. External participants remain outside. Each interface is labeled on its shared rectangular boundary port. Boundary ports connect to concrete parts through the native refinements or port delegations. Branch labels distinguish raw transfer checks, specific engineering inputs, projected component properties and returned advice or assessments. Detailed field contracts remain in the authoritative system model.
+
+Requests and human decision records carry information. Solid, dotted and dash-dot patterns distinguish nearby information exchanges. The dashed routes from L06 Configuration and controlled exchange carry context, admission and release control. Engineers authorize changes and detailed design releases. L04 Model credibility supplies calibration proposals through controlled change assessment. L05 Evidence and technical review prepares review evidence and records the designated authority's decisions. Preservation, admission and tool execution confer no engineering approval or satisfaction. IF-05 is retired and has no participant, port or flow.
+
+\begin{landscape}
+\captionsetup{font=small,skip=4pt}
+\foreach \LogicalPanel in {1,...,3}{%
+\begin{figure}[p]
+\ifnum\LogicalPanel=1\relax\else\ContinuedFloat\fi
 \centering
-\includegraphics[width=\linewidth]{fig/logical-architecture.pdf}
-\caption{Logical components and selected exchanges. Solid arrows carry information. Dashed arrows carry control.}
+\includegraphics[page=\LogicalPanel,width=\linewidth,height=\dimexpr\textheight-80pt\relax,keepaspectratio]{fig/logical-architecture.pdf}
+\ifnum\LogicalPanel=1\relax
+\caption[Logical architecture: component cooperation.]{Logical architecture: component cooperation. Solid, dotted and dash-dot arrows distinguish information exchanges. Dashed arrows carry context, admission and release control. Preservation and admission confer no engineering approval. Boundary and tool views follow.}
 \label{fig:framework-logical}
+\else
+\ifnum\LogicalPanel=2\relax
+\caption[]{Logical architecture: engineering, sources and review (continued). Interface labels lie on the shared port rectangles. Boundary ports refine exchanges to named logical parts. Solid and dotted arrows distinguish information exchanges. Engineers authorize changes and detailed design releases. The designated review authority grants acceptance. The framework records decisions.}
+\else
+\caption[]{Logical architecture: numerical and host tool integration (continued). Each interface is labeled on its shared boundary port. Arrows delegate all directed flows to L03 Simulation and software integration. Solid, dotted and dash-dot arrows carry information, including authorized requests and returned status. The framework manages numerical coupling. No direct host-to-Omniverse connection is implied. Host assessment supplies no target qualification. IF-05 is retired. Tool execution and successful builds confer no engineering approval.}
+\fi
+\fi
 \end{figure}
+\clearpage
+}
+\end{landscape}

@@ -1,10 +1,61 @@
 {
-  "kind": "Authored illustrative black-box system context",
-  "producer": "framework-context.py using Python XML authoring and rsvg-convert",
+  "artifact_sha256": {
+    "svg": "82bac2ef87d70c5a4d27469c51ece6c806d00886da3b296c9972ebc7f50940dd",
+    "pdf": "ed3157415405834e8742b384a4bfd6579f0f53587ea11d1153c8dc67ac4b85f2",
+    "png": "73182e719b8dbe1b06ed5ed2f219712a5ac5daca39c1d33eb5d042377cdcddd4"
+  },
+  "svg_sha256_used_for_pdf": "82bac2ef87d70c5a4d27469c51ece6c806d00886da3b296c9972ebc7f50940dd",
+  "font": {
+    "family": "Times New Roman",
+    "files": {
+      "normal": {
+        "path": "/System/Library/Fonts/Supplemental/Times New Roman.ttf",
+        "sha256": "f3b4ffff71c2a0c7227d37497683b2498fb2d0a4e8beae26f022e3ccfcaabfa3"
+      },
+      "bold": {
+        "path": "/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf",
+        "sha256": "50f5b1f27b7d34621090e437e8b1dd4510a22d2823fc876b3286bed327b64bbb"
+      }
+    }
+  },
+  "dimensions": {
+    "pdf_pt": [
+      690,
+      606
+    ],
+    "png_px": [
+      1380,
+      1212
+    ]
+  },
+  "checks": {
+    "monochrome_paint_checked": true,
+    "serif_labels_checked": true,
+    "square_block_corners_checked": true,
+    "large_arrowheads_checked": true,
+    "foreground_arrowheads_checked": true,
+    "single_painted_head_per_terminal_path_checked": true,
+    "interface_labels_on_ports_checked": true,
+    "pdf_text_within_page": true,
+    "exact_svg_preserved_during_conversion": true,
+    "black_box_has_no_internal_interface_blocks": true,
+    "five_external_participants_outside": true,
+    "all_17_flows_grouped_once_by_interface_and_direction": true,
+    "shared_ports_and_directed_actor_boundary_endpoints_checked": true,
+    "one_rectangular_port_per_interface": true,
+    "distinct_neighboring_exchange_patterns": true,
+    "native_model_check": "Not performed. Illustration only.",
+    "simulation_execution": "Not performed."
+  },
   "rendering": "rsvg-convert version 2.62.2\n\nlibraries used:\n  cairo 1.18.4\n  pango 1.57.1\n  harfbuzz 14.2.0\n  fontconfig 2.17.1",
+  "SOURCE_DATE_EPOCH": 0,
+  "kind": "Authored illustrative black-box framework context with labeled boundary ports",
+  "producer": "framework-context.py using the shared monochrome serif diagram style",
   "native_syside_render": false,
   "executed_simulation": false,
-  "typed_counterpart": "FrameworkContext::Context",
+  "generator_sha256": "6c1855b411b42e4bafc5d321d794aca681ecc97083fbdc0e563f16ac47f71c0c",
+  "style_sha256": "d207e6a5ec4a0bb5f561e9f132291ba723e8fd8000c7c15c9548c640a819be7c",
+  "source_contract_status": "Retained inventory. Original modeling sources are absent. No new native validation.",
   "interface_counterparts": {
     "IF01": {
       "label": "IF-01",
@@ -47,11 +98,7 @@
         "analysisRequest",
         "analysisPlan",
         "epsResponses"
-      ],
-      "numerical_counterparts": {
-        "AnalysisPort::spacecraftInputs": "ReferenceData (in)",
-        "AnalysisPort::epsResponses": "AnalysisResult (out)"
-      }
+      ]
     },
     "IF04": {
       "label": "IF-04",
@@ -83,56 +130,7 @@
       ]
     }
   },
-  "model_reference_files": [
-    {
-      "path": "final_report/sysml/06-system-context.sysml",
-      "sha256": "3da81465191f3ba50f7aaf2c5f98069e8de6182d7780a28f4e031537536f2bc2"
-    },
-    {
-      "path": "final_report/sysml/10-interface-views.sysml",
-      "sha256": "ec79d15f6806449ebc37e231d25cd92cc3354e2ca02e526c92f6519a2131d50c"
-    }
-  ],
-  "normative_inputs": [
-    "Stakeholder constraints supplied in the figure task",
-    "Approved task4-turn01-plan.md handoff"
-  ],
-  "coordination_note": "Required external platform labels and the spacecraftInputs/epsResponses features incorporate approved companion model changes. Those changes are not represented as having been natively rendered or executed.",
-  "dimensions": {
-    "svg_px": [
-      1600,
-      570
-    ],
-    "png_px": [
-      1600,
-      570
-    ],
-    "pdf_pt": [
-      1200.0,
-      427.5
-    ]
-  },
-  "svg_sha256_used_for_pdf": "a7a6baa926d2cdf83eda1c109b204b8204e245dc23e65b6a6e15c9f429f4c3f3",
-  "svg_sha256_used_for_png": "a7a6baa926d2cdf83eda1c109b204b8204e245dc23e65b6a6e15c9f429f4c3f3",
-  "artifact_sha256": {
-    "svg": "a7a6baa926d2cdf83eda1c109b204b8204e245dc23e65b6a6e15c9f429f4c3f3",
-    "pdf": "4b8b0dad5c9205e718a351db19e79932e5c70a6e8fff3be6f34aa60f4eb676e0",
-    "png": "a23f3a9a206c701374d5f362f887d78c74d8801aa33d30d31149da852c89918d"
-  },
   "reproduction": [
-    "python3 final_report/fig/framework-context.py --jobdir /absolute/external/check-directory"
-  ],
-  "checks": {
-    "five_interface_ports": true,
-    "exact_svg_preserved_during_conversion": true,
-    "pdf_single_page": true,
-    "extractable_pdf_text_within_page_and_label_regions": true,
-    "png_dimensions": [
-      1600,
-      570
-    ],
-    "png_visual_inspection": "Inspected the rendered PNG. No clipping, label overflow or arrow ambiguity observed.",
-    "native_model_check": "Not performed; illustration only",
-    "simulation_execution": "Not performed"
-  }
+    "python3 final_report/fig/framework-context.py --jobdir /absolute/external/check-dir"
+  ]
 }

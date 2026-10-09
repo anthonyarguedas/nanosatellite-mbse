@@ -1,149 +1,120 @@
 {
   "artifact": "logical-architecture",
-  "authoring": "Custom hand-positioned editable SVG with text elements. No graph layout generator.",
-  "native_syside": false,
-  "basis": "Approved provisional nodes and selected requirement-derived exchanges supplied in the diagram brief. Independent final FR I/O and model verification was outside this diagram-only turn.",
-  "physical_size_mm": {
-    "width": 165,
-    "height": 105
+  "kind": "Authored illustrative vector logical architecture",
+  "producer": "logical-architecture.py, three native-derived internal block style views",
+  "native_syside_render": false,
+  "executed_simulation": false,
+  "basis": "Retained inventory. Original modeling sources are absent. No new native validation.",
+  "inventory": "logical-architecture.inventory.json",
+  "counts": {
+    "peer_exchange_groups": 20,
+    "peer_field_mappings": 203,
+    "black_box_interfaces": 5,
+    "black_box_directed_flows": 17,
+    "boundary_refinement_routes": 18
+  },
+  "checks": {
+    "all_20_native_bundles_mapped_to_meaningful_arrows": true,
+    "all_203_field_mappings_retained_and_mapped_to_native_bundle": true,
+    "all_17_black_box_flows_displayed_once": true,
+    "all_5_active_interfaces_displayed": true,
+    "all_18_boundary_refinements_connected_to_actual_parts": true,
+    "full_canonical_name_in_every_component_box": true,
+    "Framework_containment_and_external_participants_checked": true,
+    "actual_peer_external_and_refinement_arrow_endpoints_checked": true,
+    "one_shared_port_rectangle_per_interface_checked": true,
+    "terminal_heads_exclude_intermediate_port_crossings_checked": true,
+    "native_delegation_to_actual_parts_checked": true,
+    "collapsed_boundary_pseudo_components_excluded": true,
+    "distinct_information_patterns_and_dashed_control_checked": true,
+    "authority_caption_notes_checked": true,
+    "implementation_field_labels_excluded": true,
+    "monochrome_paint_checked": true,
+    "serif_labels_checked": true,
+    "square_block_corners_checked": true,
+    "large_arrowheads_checked": true,
+    "foreground_arrowheads_checked": true,
+    "single_painted_head_per_terminal_path_checked": true,
+    "interface_labels_on_ports_checked": true,
+    "pdf_text_within_page": true,
+    "pdf_pages": 3,
+    "minimum_font_pt": 11,
+    "panel_physical_dimensions_pt": [
+      690,
+      420
+    ],
+    "publication_preview_dpi": 144,
+    "native_semantic_validation": "not run in this invocation"
+  },
+  "book_visual_examples": [
+    {
+      "figure": "17.25",
+      "principle": "Enclose logical parts in the system frame. Connect boundary ports to named parts. Concern views may repeat a subset of the same parts."
+    },
+    {
+      "figure": "17.17",
+      "principle": "External participants are separate from the system. Directed item flows cross explicit system ports."
+    },
+    {
+      "figure": "17.23",
+      "principle": "Keep the stable logical decomposition and distinguish component responsibilities."
+    }
+  ],
+  "dimensions": {
+    "each_panel_pt": [
+      690,
+      420
+    ],
+    "pdf_pages": 3
   },
   "font": {
-    "family": "Arial",
-    "minimum_pt": 8.5,
-    "component_name_pt": 9.75,
-    "sources": [
-      {
-        "weight": "regular",
-        "resolved_family": "Arial",
-        "source_file": "/System/Library/Fonts/Supplemental/Arial.ttf",
-        "source_sha256": "525979822591a3447cfc49d943d6f7683508e25543407871c0ed8fed05fd2bd9"
+    "family": "Times New Roman",
+    "files": {
+      "normal": {
+        "path": "/System/Library/Fonts/Supplemental/Times New Roman.ttf",
+        "sha256": "f3b4ffff71c2a0c7227d37497683b2498fb2d0a4e8beae26f022e3ccfcaabfa3"
       },
-      {
-        "weight": "bold",
-        "resolved_family": "Arial",
-        "source_file": "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
-        "source_sha256": "d72db21f9242aedd6b917d8549ad5921766b24d5f8d0becfda2ff4c620b3c2e0"
+      "bold": {
+        "path": "/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf",
+        "sha256": "50f5b1f27b7d34621090e437e8b1dd4510a22d2823fc876b3286bed327b64bbb"
       }
-    ],
-    "pdf_embedding": "ArialMT and Arial-BoldMT TrueType subsets. Four embedded Cairo Type 3 resources contain searchable space glyphs only (U+0020). No raster glyphs or images."
-  },
-  "renderers": {
-    "pdf": {
-      "version": "rsvg-convert version 2.62.2\n\nlibraries used:\n  cairo 1.18.4\n  pango 1.57.1\n  harfbuzz 14.2.0\n  fontconfig 2.17.1",
-      "command": "rsvg-convert --format=pdf --output=final_report/fig/logical-architecture.pdf final_report/fig/logical-architecture.svg"
     },
-    "png": {
-      "version": "pdftoppm version 26.04.0",
-      "command": "pdftoppm -r 180 -png -singlefile final_report/fig/logical-architecture.pdf final_report/fig/logical-architecture"
-    }
+    "minimum_pt": 11
   },
-  "selected_nodes": {
-    "L01": "Requirements and guidance",
-    "L02": "Mission and EPS design",
-    "L03": "Simulation and software integration",
-    "L04": "Model credibility",
-    "L05": "Evidence and technical review",
-    "L06": "Configuration and controlled exchange"
+  "generator_sha256": "060fcafc55defcf8ea529e9d5f80a1b68758e846b4279e39183957c662f934f4",
+  "style_sha256": "d207e6a5ec4a0bb5f561e9f132291ba723e8fd8000c7c15c9548c640a819be7c",
+  "source_model_sha256": {
+    "final_report/sysml/04-logical.sysml": "789a22cde3e2c962f258e6f7f9f9f91c7f0ae9b32b4192d6173aa0b9d050e9db",
+    "final_report/sysml/06-system-context.sysml": "fd89ef55d2fc57db91f743c1908af57e4ebfe4efaea411039367a4f1345a0829",
+    "final_report/sysml/10-interface-views.sysml": "271cd1dbea2c0ede498fc4000d4ff45c2b232576d4adc7ae5c6c4f93befadc01"
   },
-  "selected_edges": [
-    [
-      "L01",
-      "L02",
-      "requirements / allocations"
-    ],
-    [
-      "L02",
-      "L03",
-      "models / scenarios"
-    ],
-    [
-      "L03",
-      "L04",
-      "run histories"
-    ],
-    [
-      "L04",
-      "L05",
-      "model assessment"
-    ],
-    [
-      "L05",
-      "L06",
-      "baseline / decisions"
-    ],
-    [
-      "L06",
-      "L01",
-      "current context (dashed)"
-    ],
-    [
-      "L06",
-      "L03",
-      "release / revisions (dashed)"
-    ],
-    [
-      "L03",
-      "F Prime",
-      "requests"
-    ],
-    [
-      "F Prime",
-      "L03",
-      "products / results"
-    ],
-    [
-      "NVIDIA Omniverse",
-      "L03",
-      "whole-CUBICS scenarios"
-    ],
-    [
-      "L03",
-      "NVIDIA Omniverse",
-      "EPS states / results"
-    ]
+  "svg_sha256_used_for_pdf": "0ca75e514639fe21410149e04cc01ebb9183c1512a88f57b2b90b4c56b068cdc",
+  "artifact_sha256": {
+    "svg": "0ca75e514639fe21410149e04cc01ebb9183c1512a88f57b2b90b4c56b068cdc",
+    "pdf": "721af102db2b7bee54c899db4147e105a4a48f72b17a71b41597eb0aa8b1e7ff",
+    "png": "26c6f81b5e49afd2960c4f7fbb4b2803f7aba98127884b260900bad03992c4b9"
+  },
+  "coordinated_panel_sha256": {
+    "logical-architecture.svg": "0ca75e514639fe21410149e04cc01ebb9183c1512a88f57b2b90b4c56b068cdc",
+    "logical-architecture.png": "26c6f81b5e49afd2960c4f7fbb4b2803f7aba98127884b260900bad03992c4b9",
+    "logical-architecture-overview.pdf": "767a8bb5f028f2b21333c1f5b46fcdf8e13d499277b73f0290e97fc408dfc0f7",
+    "logical-architecture-panel-02.svg": "b8d649871d97b059fc39955f9a49e18dd3c9669fa2bbd775eaac842c9af7c8ae",
+    "logical-architecture-panel-02.png": "6e6a7819b564d113a1cfb838c383f397065954eb3cb1ee3f750bf4e7060f6e60",
+    "logical-architecture-panel-02.pdf": "592dd792267886a162275096a2b999de06787d3b75cb232b3a9ada104c285faf",
+    "logical-architecture-panel-03.svg": "78ae7a0e235faf3c8042b81cc0fb64bd59d6a9e12c42d7eb6e8c99859af97497",
+    "logical-architecture-panel-03.png": "472d7a21f6b320a505458978767ece09147383ff838f569c80f6c07e990f0926",
+    "logical-architecture-panel-03.pdf": "a6d40bbf7518fa5bec38c977aa675540bcfe4d264073145579ff37e8c6852dec",
+    "logical-architecture.pdf": "721af102db2b7bee54c899db4147e105a4a48f72b17a71b41597eb0aa8b1e7ff"
+  },
+  "pdf_composition": "pdfunite of exact rsvg-convert PDF conversions in panel order, with a deterministic nonsemantic trailer document ID. Page 1 corresponds to the base SVG",
+  "renderers": {
+    "svg_to_pdf": "rsvg-convert version 2.62.2\n\nlibraries used:\n  cairo 1.18.4\n  pango 1.57.1\n  harfbuzz 14.2.0\n  fontconfig 2.17.1",
+    "SOURCE_DATE_EPOCH": 0,
+    "pdf_command": "rsvg-convert each logical-architecture SVG to its panel PDF, then pdfunite in panel order",
+    "png_command": "pdftoppm -r 144 -png -singlefile <panel.pdf> <panel-stem>"
+  },
+  "reproduction": [
+    "python3 final_report/fig/logical-architecture.py --jobdir /absolute/external/check-dir"
   ],
-  "scope_notes": [
-    "F Prime host coding/build/SIL and NVIDIA Omniverse whole-CUBICS simulation are outside the framework. Both connect only to L03.",
-    "L06 preserves an exact human-authorized release. It does not grant its own release.",
-    "Other peer exchanges are deliberately omitted. The Omniverse exchange does not assert that it contains every numerical physics solver."
-  ],
-  "checks": {
-    "page_count": 1,
-    "physical_dimensions_mm": [
-      165,
-      105
-    ],
-    "searchable_text_elements": 39,
-    "minimum_declared_font_pt": 8.5,
-    "component_name_font_pt": 9.75,
-    "minimum_component_text_padding_mm": 1.684,
-    "text_bbox_overlaps": 0,
-    "text_arrow_stroke_bbox_intersections": 0,
-    "selected_exchange_paths": 11,
-    "exchange_arrow_crossings": 0,
-    "pdf_raster_images": 0,
-    "all_pdf_font_resources_embedded": true,
-    "supplementary_type3_font_resources": 4,
-    "supplementary_type3_space_glyphs_verified_no_raster": 4,
-    "publication_preview_dpi": 180,
-    "preview_pixels": [
-      1170,
-      745
-    ]
-  },
-  "visual_review": "The authoring agent and task6 coordinator independently read and inspected the final 180 dpi PDF-derived preview. All labels and arrow directions were legible at the declared 165 mm width.",
-  "independent_verification": {
-    "svg_and_artifact_hashes_match": true,
-    "font_source_hashes_match": true,
-    "minimum_font_pt_computed_from_svg": 8.5,
-    "independent_svg_to_pdf_to_png_reproduction": "Byte-identical 180 dpi PNG using the recorded renderer commands. PDF byte identity varies with Cairo creation metadata.",
-    "reproduced_png_sha256": "00c6f7c77cb6db59d816bdfd0232150eee68fe28a9e81065e76288949e9d3f80",
-    "upstream_staged_snapshot_unchanged": true,
-    "final_fr_model_consistency_checked": false
-  },
-  "sha256": {
-    "logical-architecture.svg": "93d102d8a9a2d467d748bf747ca13120aa90c7fe5d27f1202a38c5aa0aa92ac0",
-    "logical-architecture.pdf": "054177e3ad13658d89c754d11b9e39d62098d18061d8f16d74a362496c1ff2fe",
-    "logical-architecture.png": "00c6f7c77cb6db59d816bdfd0232150eee68fe28a9e81065e76288949e9d3f80"
-  }
+  "visual_review": "Inspect the regenerated panels and compiled report. Previews are PDF-derived."
 }
