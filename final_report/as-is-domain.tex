@@ -12,12 +12,16 @@ The Non-EPS Engineer represents other spacecraft subsystems and mission segments
 One person may hold several roles, as occurs in small satellite projects \citep{review-1438}.
 
 \subsection*{To-be constraints}
-CUBICS requires F Prime as its flight software framework.
-The EPS engineering framework must connect its EPS models and interfaces to NVIDIA Omniverse, which is intended to simulate the entire CUBICS spacecraft.
-The connection must represent EPS interactions with other subsystems and mission conditions.
-Zhu et al. map battery telemetry and multiphysics results to an Omniverse scene through semantic mappings and read/write APIs \citep[pp.~4--5]{handpicked-0001}.
-This provides a potential coupling mechanism.
-The study provides no evidence of a CubeSat deployment.
+ASCEND requires F Prime as its to-be flight software framework, following an external review on the state of the art on the subject.
+The EPS engineering framework must connect its EPS models and interfaces to NVIDIA Omniverse, which is a simulation suite suitable for highly robotized spacecraft like the one that could be developed in the future CUBICS mission.
+For example, Zhu et al. map battery telemetry and multiphysics results to an Omniverse three-dimensional scene through semantic mappings and read/write APIs \citep[pp.~4--5]{handpicked-0001},
+which can be leveraged for power-aware training of robot controllers in simulated physial environments.
+Furthermore, ASCEND members have an interest in adopting MBSE as part of the framework, even if they are aware of the learning curve (see \ConcernRef{C-SE-01.1.1}).
+According to OOSEM, the framework needs to respect these constraints but not to justify them, since they are external decisions.
+
+The F Prime and Omniverse constraints were considered in the black-box interfaces and system requirements of the framework, from which point the OOSEM method is used to influence the resulting logical and physical architectures.
+The MBSE constraint was reflected in the system requirements, which were optimized for coverage of the five MBSE phases, or capabilities, identified by Buruso et al. \cite{buruso2026modelbased}: requirements management; model development; simulation and analysis; configuration management and; collaboration and communication.
+Furthermore, the corpus of literature from which the physical architecture candidates were extracted from was obtained using MBSE keywords.
 
 \subsection{Stakeholder concerns}
 \label{sec:stakeholder-concerns}
@@ -26,9 +30,7 @@ OOSEM uses stakeholder concerns and their causes to identify improvement opportu
 The concerns combine the student observations with literature evidence.
 They motivate mission requirements and measures of effectiveness.
 
-% TODO: Propagate the scope cuts and required F Prime/whole-CUBICS Omniverse connection to downstream interfaces, scenarios, allocations, candidate descriptions and V&V.
-
-The root concerns are listed below by stakeholder. Appendix~\ref{appendix:stakeholder-concerns} gives the full hierarchy and contributing causes. Effort means person-time.
+The root concerns are listed below by stakeholder. Appendix~\ref{appendix:stakeholder-concerns} gives the full hierarchy and contributing causes.
 
 \ConcernRole{The Project Manager is concerned with:}
 % Baseline solucion.tex:31 (depth 0)

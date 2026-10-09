@@ -1,74 +1,76 @@
 \section{Synthesize Candidate Physical Architectures}
 \label{section:synthesize-physical-architectures}
 
-Six logical components define the same functional scope for five proposed configurations. Table~\ref{tab:framework-physical-alternatives} gives exactly five corpus-based choices per component. Each covers the stated subset. The additions column identifies missing work alongside the common completion below. Published cases support their own workflows. Connections between independent workflows remain proposed.
+Six logical components define the same functional scope for five proposed configurations. Table~\ref{tab:framework-physical-alternatives} gives exactly five corpus-based choices per component. Each covers the stated subset. The identified gaps column describes missing coverage and integration work alongside the common completion below. Analysis methods listed there are proposed choices for closing the gaps across the combined configurations. Published cases support their own workflows. Connections between independent workflows remain proposed.
 
 All configurations require F Prime host integration. EPS analyses must couple numerically to NVIDIA Omniverse simulation of the entire CUBICS spacecraft. Proposed adapters must preserve identities, units, modes, signal direction, time, reset behavior and configuration revisions. Software-in-the-loop (SIL) tests must exchange controller commands and plant feedback. Zhu demonstrates battery geometry/data mappings and numerical outputs to Omniverse. Whole-CUBICS coverage and a F Prime loop require further development \citep{handpicked-0001}. Janiak and Cristiano present industrial co-simulation and developing USD--FMI integration at minimum viable product/proof-of-concept stage \citep{handpicked-0002}.
 
 Virtual commissioning supports model and software engineering. Hardware fabrication or test authorization remains outside framework behavior. Simulation evidence grants neither hardware nor flight readiness.
 
+Physical synthesis compares models, algorithms, numerical libraries and solvers, exchange representations and transports under engineer-approved scenarios and criteria. Criteria cover intended use, represented mechanisms, data sufficiency and identifiability, prediction and diagnostic errors, and uncertainty interpretation. They also cover failure dependencies, recovery assumptions, numerical convergence, computing resources, runtime and coupling compatibility.
+
 {\small
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.02}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.07\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.52\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.41\linewidth-2\tabcolsep\relax}@{}}
-\caption{Thirty partial physical choices. All additions are proposed.}\label{tab:framework-physical-alternatives}\\
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.07\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.41\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.52\linewidth-2\tabcolsep\relax}@{}}
+\caption{Thirty partial physical choices and identified gaps. Methods to close the gaps are proposed.}\label{tab:framework-physical-alternatives}\\
 \toprule
-\textbf{ID} & \textbf{Source-supported subset} & \textbf{Required additions} \\
+\textbf{ID} & \textbf{Source-supported subset} & \textbf{Identified Gaps} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{ID} & \textbf{Source-supported subset} & \textbf{Required additions} \\
+\textbf{ID} & \textbf{Source-supported subset} & \textbf{Identified Gaps} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
 \multicolumn{3}{@{}l@{}}{\textbf{L01 Requirements and guidance}}\\*
 \multicolumn{3}{@{}l@{}}{FR-01--04, FR-17, FR-29, FR-39, FR-41, FR-47--48}\\*
-AR1 & COMET: shared requirements, parameters and numerical links \citep{deutsch2022comet}. & Add requirement-quality rules, contextual guidance and evidence traces. \\
-AR2 & Capella/Valispace: scripted function-description requirement imports and hierarchy checks \citep{citation-4690}. & Add persistent trace identities, guidance and conflict handling. \\
-AR3 & Nanospace authoring plus separate first-valid hierarchical task-network (HTN) planning \citep{review-0340}. & Integrate planner actions, richer requirement relations and reviewed guidance. \\
-AR4 & SeaLion: YAML needs/stories/data relationships and generated views \citep{chiu2023sealion}. & Add requirement semantics, quality checks and engineering guidance. \\
-AR5 & CubeSat System Reference Model (CSRM): tailored requirements, architecture and V\&V relationships \citep{kaslow2019csrm}. & Populate mission content and implement contextual guidance. \\
+AR1 & COMET: shared requirements, parameters and numerical links \citep{deutsch2022comet}. & Requirement-quality rules, contextual guidance and evidence traces. \\
+AR2 & Capella/Valispace: scripted function-description requirement imports and hierarchy checks \citep{citation-4690}. & Persistent trace identities, guidance and conflict handling. \\
+AR3 & Nanospace authoring plus separate first-valid hierarchical task-network (HTN) planning \citep{review-0340}. & Planner integration, richer requirement relations and reviewed guidance. \\
+AR4 & SeaLion: YAML needs/stories/data relationships and generated views \citep{chiu2023sealion}. & Requirement semantics, quality checks and engineering guidance. \\
+AR5 & CubeSat System Reference Model (CSRM): tailored requirements, architecture and V\&V relationships \citep{kaslow2019csrm}. & Mission content and executable contextual guidance. \\
 \midrule
 \multicolumn{3}{@{}l@{}}{\textbf{L02 Mission and EPS design}}\\*
 \multicolumn{3}{@{}l@{}}{FR-13--15, FR-20, FR-25, FR-33, FR-35}\\*
-EP1 & CSRM: mission components and physical-property rollups \citep{kaslow2019csrm}. & Add executable EPS/volume parametrics, selection and maintained component data. \\
-EP2 & COMET/Excel: state-dependent budgets and datasheet-linked catalogue \citep{deutsch2022comet}. & Add dynamic EPS analyses, volume estimates and catalogue currency. \\
-EP3 & GREATCUBE+: commercial off-the-shelf (COTS) matches, power/battery sizing and geometry concepts \citep{review-0711}. & Add broader mission coverage, maintained records and dynamic models. \\
-EP4 & Boan: load modes, ephemeris/flux files and Opalis energy sizing \citep{review-0289}. & Add requirement traces, technical mass/volume links and specialist analyses. \\
-EP5 & Casado: characterized EPS plant and orbital simulation \citep{review-0573}. & Add reusable component selection, aging/uncertainty and design estimates. \\
+EP1 & CSRM: mission components and physical-property rollups \citep{kaslow2019csrm}. & Executable EPS/volume parametrics, selection and maintained component data. \\
+EP2 & COMET/Excel: state-dependent budgets and datasheet-linked catalogue \citep{deutsch2022comet}. & Dynamic EPS analyses, volume estimates, catalogue currency and a sensitivity method such as parameter sweeps. \\
+EP3 & GREATCUBE+: commercial off-the-shelf (COTS) matches, power/battery sizing and geometry concepts \citep{review-0711}. & Broader mission coverage, maintained records and dynamic models. \\
+EP4 & Boan: load modes, ephemeris/flux files and Opalis energy sizing \citep{review-0289}. & Requirement traces, technical mass/volume links and specialist analyses. \\
+EP5 & Casado: characterized EPS plant and orbital simulation \citep{review-0573}. & Reusable component selection, aging/uncertainty and design estimates. \\
 \midrule
 \multicolumn{3}{@{}l@{}}{\textbf{L03 Simulation and software integration}}\\*
 \multicolumn{3}{@{}l@{}}{FR-10, FR-16, FR-18--19, FR-23--24, FR-26--27, FR-34, FR-36, FR-43--44}\\*
-IN1 & F Prime: architecture export and component unit-test mechanism \citep{review-0853}. & Implement mission behavior, plant feedback and system-level SIL. \\
-IN2 & Zhu: battery OpenUSD mappings and numerical outputs to Omniverse \citep{handpicked-0001}. & Extend to whole CUBICS and implement F Prime feedback. \\
-IN3 & Janiak/Cristiano: industrial Functional Mock-up Interface (FMI) co-simulation/virtual commissioning \citep{handpicked-0002}. & Adapt developing USD--FMI, spacecraft plants and time/port contracts. \\
-IN4 & Boan: file-based scenario/load/energy continuity \citep{review-0289}. & Add controller interfaces, synchronized exchange and verified SIL. \\
-IN5 & Casado: EPS twin, Python inputs and control/power hardware-in-the-loop comparisons \citep{review-0573}. & Provide a portable software plant and whole-system simulation adapters. \\
+IN1 & F Prime: architecture export and component unit-test mechanism \citep{review-0853}. & Mission behavior, plant feedback, system-level SIL and EPS/RAM analysis implementations. RAM representation choices include functional/component FMEA/FMECA, event/fault trees with minimal cut sets and series/parallel reliability block diagrams \citep[Secs.~3.1--3.3]{review-1158}\citep[Sec.~4.3]{citation-3814}. \\
+IN2 & Zhu: battery OpenUSD mappings, electrothermal outputs and SOH prediction with uncertainty indicators linked to Omniverse \citep[pp.~4--9]{handpicked-0001}. & Whole-CUBICS coverage, F Prime feedback and battery applicability beyond the demonstrated data. SOH choices include empirical degradation relations, physics-based models, learned predictors and hybrid methods such as physics-informed neural networks. Uncertainty choices include sensitivity bounds, probabilistic intervals and deep autoencoding Gaussian mixture scores \citep[pp.~7--9]{handpicked-0001}. Capacity retention and resistance growth are example health quantities. Estimates use checked electrical, thermal and use histories, supported degradation assumptions and reference conditions. Predictions also require a future use profile and horizon. \\
+IN3 & Janiak/Cristiano: industrial Functional Mock-up Interface (FMI) co-simulation/virtual commissioning \citep{handpicked-0002}. & Spacecraft plants, developing USD--FMI adapters and verified time/port contracts. Solver/library, transport and synchronization choices require convergence, resource/runtime and numerical-coupling assessment. RAM computational choices include Monte Carlo fault scenarios, Markov failure/recovery states and Bayesian propagation \citep[Appendix~A]{review-1158}\citep[Sec.~2]{citation-1752,review-0933}. Markov service-state definitions determine contributing state probabilities. Service definitions and recovery assumptions determine availability interpretation. Missing failure/recovery data leaves affected quantitative results unavailable. \\
+IN4 & Boan: file-based scenario/load/energy continuity \citep{review-0289}. & Controller interfaces, synchronized exchange and verified SIL. Detailed electrical, electrothermal, SOH, diagnostic and RAM methods require integration beyond scenario/energy continuity. Diagnostic choices include thresholded residuals, observers and dependency conflict sets with minimal hitting sets \citep[Secs.~1 and~3.3]{review-1251}. \\
+IN5 & Casado: EPS twin, Python inputs and control/power hardware-in-the-loop comparisons \citep{review-0573}. & Portable software plant and whole-system adapters. Model choices include empirical photovoltaic curves or single-diode representations, steady-state, averaged or switching conversion, and empirical, equivalent circuit, SPM or DFN battery representations. Thermal choices include lumped or spatial models. Coupled mechanisms and temporal resolution remain comparison variables \citep[Secs.~2--3]{review-0573}\citep[pp.~7--9]{handpicked-0001}. Declared fidelity must support the required loss, electrothermal, conducted-emission and protection-stress assessments. SOH, diagnosis and RAM require additional methods. \\
 \midrule
 \multicolumn{3}{@{}l@{}}{\textbf{L04 Model credibility}}\\*
 \multicolumn{3}{@{}l@{}}{FR-21--22, FR-31--32}\\*
-CR1 & Casado: EPS outputs compared with physical reference waveforms \citep{review-0573}. & Use identified supplied histories, portable comparisons and independent assessment. \\
-CR2 & Zhu: electrochemical/thermal calibration and physical-consistency checks \citep{handpicked-0001}. & Adapt cell/boundary assumptions and assess independently of calibration. \\
-CR3 & Djebko: root mean square error (RMSE) calibration and conditional valid-signal mappings \citep{review-1251}. & Add independent assessment, timing/uncertainty and retained validity masks. \\
-CR4 & UPPAAL CORA schedules with separate stochastic kinetic battery model (KiBaM) validation \citep{review-1303}. & Adapt scenario constraints and assess assumptions/model mismatch. \\
-CR5 & CSRM: model V\&V activities linked to requirements/objectives \citep{kaslow2019csrm}. & Add executable checks, numerical evidence and independent review. \\
+CR1 & Casado: EPS outputs compared with physical reference waveforms \citep{review-0573}. & Identified supplied histories, portable comparisons and independent assessment. Electrical calibration choices include manual fitting and two-step linear least squares \citep[Secs.~2.1 and~2.3]{review-0573}. \\
+CR2 & Zhu: electrochemical/thermal calibration and physical-consistency checks \citep{handpicked-0001}. & Cell/boundary applicability and assessment independent of calibration. Bayesian optimization is a calibration candidate \citep[p.~8]{handpicked-0001}. \\
+CR3 & Djebko: root mean square error (RMSE) calibration and conditional valid-signal mappings \citep{review-1251}. & Independent assessment, timing/uncertainty and retained validity masks. Calibration choices include manual fitting or cyclic genetic search with a hill climber. Parameter bounds and fitting objectives, including RMSE, require comparison \citep[Sec.~4.1]{review-1251}. \\
+CR4 & UPPAAL CORA schedules with separate stochastic kinetic battery model (KiBaM) validation \citep{review-1303}. & Scenario constraints and assessment of assumptions/model mismatch. \\
+CR5 & CSRM: model V\&V activities linked to requirements/objectives \citep{kaslow2019csrm}. & Executable checks, numerical evidence and independent review. \\
 \midrule
 \multicolumn{3}{@{}l@{}}{\textbf{L05 Evidence and technical review}}\\*
 \multicolumn{3}{@{}l@{}}{FR-11, FR-28, FR-37--38, FR-42}\\*
-EC1 & SeaLion: generated diagrams, tables and documents \citep{chiu2023sealion}. & Add EPS result ingestion, verdicts and review packages. \\
-EC2 & Latserus: requirement/procedure/verdict records and feedback concept \citep{citation-0569}. & Complete result write-back, criteria and reviewer acceptance. \\
-EC3 & Nanospace: shared intermediate results and dependency-guided reruns \citep{review-0340}. & Add preserved runs, requirement links and accepted EPS evidence. \\
-EC4 & COMET: numerical requirement--parameter compliance \citep{deutsch2022comet}. & Add dynamic/software evidence, EPS reports and review decisions. \\
-EC5 & Capella: requirement/review status and assembly/integration/verification/test plan traces \citep{citation-1573}. & Formalize the extension and ingest executed software/analysis evidence. \\
+EC1 & SeaLion: generated diagrams, tables and documents \citep{chiu2023sealion}. & EPS result ingestion, verdicts and review packages. \\
+EC2 & Latserus: requirement/procedure/verdict records and feedback concept \citep{citation-0569}. & Result write-back, criteria and reviewer acceptance. \\
+EC3 & Nanospace: shared intermediate results and dependency-guided reruns \citep{review-0340}. & Preserved runs, requirement links and accepted EPS evidence. \\
+EC4 & COMET: numerical requirement--parameter compliance \citep{deutsch2022comet}. & Dynamic/software evidence, EPS reports and review decisions. \\
+EC5 & Capella: requirement/review status and assembly/integration/verification/test plan traces \citep{citation-1573}. & Formalized extension and ingestion of executed software/analysis evidence. \\
 \midrule
 \multicolumn{3}{@{}l@{}}{\textbf{L06 Configuration and controlled exchange}}\\*
 \multicolumn{3}{@{}l@{}}{FR-05--09, FR-30, FR-45--46}\\*
-EC1 & SeaLion: Git history for YAML inputs and generated views \citep{chiu2023sealion}. & Add approved releases, technical authority and stale-view flags. \\
-EC2 & Latserus: managed requirement records and collaborative web views \citep{citation-0569}. & Add released configurations, change authority and result-currency checks. \\
-EC3 & Nanospace: common database/API and dependency paths \citep{review-0340}. & Add frozen releases, field authority and dependency-currency checks. \\
-EC4 & COMET: server synchronization and owner/state parameters \citep{deutsch2022comet}. & Add released snapshots, exchange authority and stale-import checks. \\
-EC5 & Capella: design changes traced into verification/test procedures \citep{citation-1573}. & Add released baselines, transfer authority and evidence-currency checks. \\
+EC1 & SeaLion: Git history for YAML inputs and generated views \citep{chiu2023sealion}. & Approved releases, technical authority and stale-view flags. \\
+EC2 & Latserus: managed requirement records and collaborative web views \citep{citation-0569}. & Released configurations, change authority and result-currency checks. \\
+EC3 & Nanospace: common database/API and dependency paths \citep{review-0340}. & Frozen releases, field authority and dependency-currency checks. \\
+EC4 & COMET: server synchronization and owner/state parameters \citep{deutsch2022comet}. & Released snapshots, exchange authority and stale-import checks. \\
+EC5 & Capella: design changes traced into verification/test procedures \citep{citation-1573}. & Released baselines, transfer authority and evidence-currency checks. \\
 \end{longtable}
 }
 

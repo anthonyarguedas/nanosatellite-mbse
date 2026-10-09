@@ -126,6 +126,142 @@ class DiagramTests(unittest.TestCase):
                     validate_style(root)
         self.assertIn('serif', FONT_STACK)
 
+    def test_scoped_views_preserve_generic_scenario_identity(self):
+        for name in ('requirements.tex', 'logical.tex'):
+            with self.subTest(source=name):
+                self.assertNotRegex((FIG.parent / name).read_text(), r'(?i)CUBICS')
+        actor_text = 'NVIDIA Omniverse spacecraft and subsystem simulations'
+        for name in ('framework-context', 'logical-architecture',
+                     'logical-architecture-panel-02', 'logical-architecture-panel-03'):
+            with self.subTest(figure=name):
+                root = ET.parse(FIG / (name+'.svg')).getroot()
+                self.assertNotRegex(' '.join(root.itertext()), r'(?i)whole[- ]CUBICS')
+                for actor in root.findall('./{*}g[@data-actor="tools"]'):
+                    self.assertEqual(' '.join(t.text or '' for t in actor.findall('./{*}text')),
+                                     actor_text)
+        self.assertEqual(self.logical.ACTORS['tools'], actor_text)
+        simulation = next(i for i in self.inventory['interfaces'] if i['id'] == 'IF-03')
+        self.assertEqual(simulation['actor_label'], actor_text)
+        for alias in self.inventory['external_aliases']:
+            self.assertNotRegex(alias['label'], r'(?i)CUBICS')
+
+    def test_normative_requirements_leave_concrete_realizations_open(self):
+        requirements = (FIG.parent / 'requirements.tex').read_text()
+        statements = dict(re.findall(r'^(FR-\d\d) & (.*?) & MR-', requirements, re.M))
+        expected = {f'FR-{n:02}' for n in range(1, 49) if n not in (12, 40)}
+        self.assertEqual(set(statements), expected)
+        forbidden = re.compile(
+            r'\b(?:SPM|DFN|PINN|FMEA|FMECA|RBD|RMSE|Markov|Bayesian)\b|'
+            r'Monte Carlo|single[- ]diode|physics[- ]informed|averaged|switching|'
+            r'equivalent circuit|empirical battery models|lumped thermal|Gaussian|'
+            r'two[- ]step|least squares|genetic|hill[- ]climber|hill climber|'
+            r'thresholded residuals|conflict sets|minimal hitting sets|minimal cut sets|'
+            r'event trees|fault trees|reliability block diagrams|sensitivity sweeps|'
+            r'sum the probabilities of service', re.I)
+        for identifier, statement in statements.items():
+            with self.subTest(requirement=identifier):
+                self.assertIsNone(forbidden.search(statement))
+        for capability in ('mission energy balance and survival autonomy',
+                           'photovoltaic I--V/P--V characteristics',
+                           'converter/regulator responses', 'conversion/distribution losses',
+                           'battery voltage and state of charge', 'electrothermal behavior',
+                           'SOH prediction with uncertainty indicators', 'conducted emissions',
+                           'stress on protection components', 'histories, dissipation, energy shortages'):
+            self.assertIn(capability, statements['FR-16'])
+        self.assertIn('alternative fault hypotheses, assessment evidence', statements['FR-19'])
+        self.assertIn('generate and execute', statements['FR-27'])
+        self.assertIn('minimal failure combinations', statements['FR-27'])
+        self.assertIn('time-dependent modeled service availability', statements['FR-27'])
+        self.assertIn('Missing failure or recovery data shall leave affected quantitative results unavailable.',
+                      statements['FR-27'])
+
+    def test_logical_health_ram_and_calibration_remain_candidate_realizations(self):
+        logical = (FIG.parent / 'logical.tex').read_text()
+        self.assertIn('mass, occupied volume and stack-height estimates', logical)
+        for wording in ('L03 executes electrical, energy and electrothermal analyses',
+                        'estimates and predicts battery SOH',
+                        'L04 checks input quality, proposes calibration and independently assesses credibility',
+                        'Physics-informed neural networks are one hybrid candidate.',
+                        'Calibration candidates include', 'Diagnostic candidates include',
+                        'RAM representation alternatives include', 'Computational alternatives include',
+                        'Physical architecture synthesis compares these realization choices'):
+            self.assertIn(wording, logical)
+
+    def test_eps_ram_execution_and_assessment_stay_inside_framework(self):
+        simulation = next(entry for entry in self.context.INTERFACES if entry['id'] == 'IF-03')
+        self.assertEqual(' '.join(simulation['actor_labels']),
+                         'NVIDIA Omniverse spacecraft and subsystem simulations')
+        self.assertNotIn('model tools', simulation['actor_labels'])
+        self.assertIn('Feasibility findings', simulation['in_labels'])
+        self.assertIn('feasibility findings', simulation['out_labels'])
+        root = ET.parse(FIG / 'logical-architecture-panel-03.svg').getroot()
+        labels = {text.text for text in root.findall('.//{*}text')}
+        for annotation in ('Execute EPS and RAM', 'Assess engineering criteria',
+                           'Coordinate and retain runs'):
+            self.assertNotIn(annotation, labels)
+        logical = (FIG.parent / 'logical.tex').read_text()
+        captions = ' '.join(re.findall(r'\\caption(?:\[[^\]]*\])?\{([^{}]*)\}', logical))
+        for wording in ('L03 executes EPS/RAM analyses and assesses engineering criteria.',
+                        'L04 assesses model credibility.',
+                        'Omniverse supplies external spacecraft and subsystem simulations.',
+                        'F Prime supplies host execution.',
+                        'The framework manages coupling and SIL assessment.',
+                        'No direct host-to-Omniverse connection is implied.'):
+            self.assertIn(wording, captions)
+        self.assertIn('L03 executes electrical, energy and electrothermal analyses', logical)
+        self.assertIn('diagnoses faults and assesses RAM and engineering limits.', logical)
+        self.assertEqual(self.logical.EXTERNAL_LABELS['X04.5'], 'Raw host SIL responses & limits')
+
+    def test_host_exchange_labels_clear_port_and_actor(self):
+        published = ET.parse(FIG / 'logical-architecture-panel-03.svg').getroot()
+        generated = self.logical.tool_page(copy.deepcopy(self.inventory)).root
+        for root in (published, generated):
+            checks = self.logical.tool_label_clearance_check(root)
+            self.assertTrue(checks['host_exchange_labels_clear_port_and_actor_checked'])
+            port = root.find('.//{*}rect[@data-interface="IF-04"][@data-port]')
+            actor = root.find('./{*}g[@data-actor="software"]/{*}rect')
+            port_right = float(port.attrib['x'])+float(port.attrib['width'])+float(port.attrib['stroke-width'])/2
+            actor_left = float(actor.attrib['x'])-float(actor.attrib['stroke-width'])/2
+            labels = root.findall('./{*}g[@data-interface="IF-04"]/{*}text')
+            self.assertGreaterEqual(len(labels), 10)
+            for text in labels:
+                self.assertEqual(float(text.attrib['font-size']), self.logical.FONT)
+                self.assertEqual(text.attrib['text-anchor'], 'start')
+                width = self.logical.METRICS.measure(text.text, self.logical.FONT)
+                self.assertGreaterEqual(float(text.attrib['x'])-port_right, 6-1e-6)
+                self.assertGreaterEqual(actor_left-float(text.attrib['x'])-width, 6-1e-6)
+
+    def test_host_label_check_rejects_insufficient_clearance_and_small_fonts(self):
+        original = ET.parse(FIG / 'logical-architecture-panel-03.svg').getroot()
+        for defect in ('port', 'actor', 'font'):
+            with self.subTest(defect=defect):
+                root = copy.deepcopy(original)
+                label = root.find('./{*}g[@id="X04.2"]/{*}text')
+                if defect == 'port':
+                    port = root.find('.//{*}rect[@data-interface="IF-04"][@data-port]')
+                    label.attrib['x'] = str(float(port.attrib['x'])+float(port.attrib['width'])+5.9)
+                    message = 'does not clear IF-04 port'
+                elif defect == 'actor':
+                    actor = root.find('./{*}g[@data-actor="software"]/{*}rect')
+                    width = self.logical.METRICS.measure(label.text, self.logical.FONT)
+                    label.attrib['x'] = str(float(actor.attrib['x'])-width-5.9)
+                    message = 'does not clear F Prime actor'
+                else:
+                    label.attrib['font-size'] = str(self.logical.FONT-1)
+                    message = 'Unreadable host exchange label'
+                with self.assertRaisesRegex(ValueError, message):
+                    self.logical.tool_label_clearance_check(root)
+
+    def test_context_rejects_label_route_overlap(self):
+        figure, inv = self.context.create_figure()
+        checks = self.context.context_check(figure, inv)
+        self.assertTrue(checks['exchange_labels_clear_their_routes'])
+        exchange = figure.root.find('./{*}g[@data-exchange-interface="IF-03"][@data-direction="out"]')
+        entry = next(entry for entry in self.context.INTERFACES if entry['id'] == 'IF-03')
+        exchange.findall('./{*}text')[-1].attrib['y'] = str(entry['out_y'])
+        with self.assertRaisesRegex(ValueError, 'label overlaps its route'):
+            self.context.context_check(figure, inv)
+
     def test_retained_logical_contract_coverage(self):
         self.logical.retained_inventory_check(self.inventory)
         incomplete = copy.deepcopy(self.inventory)

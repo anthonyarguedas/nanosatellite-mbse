@@ -33,12 +33,12 @@ INTERFACES = [
      'in_label_y': 79,
      'out_labels': ['Guidance and products'], 'out_label_y': 149},
     {'id': 'IF-03', 'port': 'p03', 'side': 'right', 'y': 188,
-     'name': ['Model analysis'], 'actor': 'tools',
-     'actor_labels': ['NVIDIA', 'Omniverse', 'whole-CUBICS', 'simulation and', 'model tools'],
+     'name': ['Spacecraft simulation', 'coupling'], 'actor': 'tools',
+     'actor_labels': ['NVIDIA', 'Omniverse', 'spacecraft and', 'subsystem', 'simulations'],
      'in_y': 270, 'out_y': 212,
-     'out_labels': ['Controlled models and', 'run requests/plans', 'EPS states and results'],
-     'out_label_y': 164,
-     'in_labels': ['Spacecraft/subsystem', 'histories', 'Raw results and status'],
+     'out_labels': ['Spacecraft models and', 'simulation requests', 'EPS states and', 'feasibility findings'],
+     'out_label_y': 150,
+     'in_labels': ['Spacecraft conditions', 'Feasibility findings', 'Histories and status'],
      'in_label_y': 228},
     {'id': 'IF-02', 'port': 'p02', 'side': 'left', 'y': 292,
      'name': ['Knowledge and', 'supplied data'], 'actor': 'sources',
@@ -53,7 +53,7 @@ INTERFACES = [
      'in_y': 474, 'out_y': 420,
      'out_labels': ['Authorized design', 'and interfaces', 'Coding/build/SIL', 'requests'],
      'out_label_y': 358,
-     'in_labels': ['Host products and logs', 'SIL results'], 'in_label_y': 442},
+     'in_labels': ['Host products and logs', 'Raw SIL responses'], 'in_label_y': 442},
     {'id': 'IF-06', 'port': 'p06', 'side': 'left', 'y': 500,
      'name': ['Technical review'], 'actor': 'reviewers',
      'actor_labels': ['Reviewers and', 'review', 'authority'],
@@ -68,7 +68,7 @@ def create_figure():
     figure.el('desc').text = (
         'The EPS engineering framework is an opaque black box. Five labeled '
         'port rectangles straddle its boundary. Engineers, knowledge sources, '
-        'reviewers, NVIDIA Omniverse and model tools, and the F Prime host toolchain '
+        'reviewers, NVIDIA Omniverse spacecraft and subsystem simulations, and the F Prime host toolchain '
         'remain outside. Each directed exchange has one head at its destination. '
         + ' '.join(f'{entry["id"]}: {" ".join(entry["name"])}.' for entry in INTERFACES))
     figure.text('Framework boundary and external exchanges', 8, 20, size=18, weight='bold')
@@ -174,6 +174,9 @@ def context_check(figure, inventory):
         require(port.attrib['data-interface'] == identifier and
                 px+pw/2 == (fx if left else fx+fw) and py < line_y < py+ph,
                 'Context route does not pass through its shared port')
+        require(all(float(text.attrib['y']) <= line_y-8
+                    for text in group.findall('./{*}text')),
+                'Context exchange label overlaps its route')
         native = next(interface for interface in inventory['interfaces'] if interface['id'] == identifier)
         require(set(port.attrib['data-features'].split(',')) ==
                 {flow['feature'] for flow in native['flows']}, 'Shared context port omits a flow feature')
@@ -183,6 +186,7 @@ def context_check(figure, inventory):
             'shared_ports_and_directed_actor_boundary_endpoints_checked': True,
             'one_rectangular_port_per_interface': True,
             'distinct_neighboring_exchange_patterns': True,
+            'exchange_labels_clear_their_routes': True,
             'native_model_check': 'Not performed. Illustration only.',
             'simulation_execution': 'Not performed.'}
 

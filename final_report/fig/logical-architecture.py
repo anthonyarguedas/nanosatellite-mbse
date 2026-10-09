@@ -40,14 +40,15 @@ GROUP_NAMES = {
     'L05': ['L05 Evidence and', 'technical review'],
     'L06': ['L06 Configuration and', 'controlled exchange'],
 }
-RESPONSIBILITIES = {'L01': 'Check and advise', 'L03': 'Coordinate and retain runs'}
+RESPONSIBILITIES = {'L01': 'Check and advise',
+    'L03': 'L03 executes EPS/RAM analyses and assesses engineering criteria.'}
 PORT_TYPES = {'p01': 'EngineeringUsePort', 'p02': 'KnowledgePort', 'p03': 'AnalysisPort',
               'p04': 'HostSoftwarePort', 'p06': 'TechnicalReviewPort'}
 PORT_FIELD_ALIASES = {'spacecraftInputs': '16.i01/18.i04', 'epsResponses': '18.o03',
     'analysisResponse': '18.i06', 'codingRequest': '36.o01/24.o01',
     'softwareProduct': '24.i01/36.o02', 'softwareResult': '24.o02', 'codingResponse': '36.i05'}
 ACTORS = {'engineers': 'Engineers and stakeholders', 'sources': 'Knowledge and data sources',
-    'tools': 'NVIDIA Omniverse whole-CUBICS / model tools', 'software': 'F Prime host toolchain',
+    'tools': 'NVIDIA Omniverse spacecraft and subsystem simulations', 'software': 'F Prime host toolchain',
     'reviewers': 'Reviewers and authority'}
 BOUNDARY_TYPES = {
     'engineeringCompatibility': 'EngineeringSubmission', 'guidanceSubmission': 'GuidanceRequest',
@@ -87,17 +88,17 @@ EXTERNAL_LABELS = {
     'X01.2': 'Guidance, studies, assessments & baseline/review results',
     'X02.1': 'Sources, methods, component properties & reference data',
     'X02.2': 'Bounded source queries',
-    'X03.1': 'Model/scenario analysis requests',
-    'X03.2': 'Execution plans & run configuration',
-    'X03.3': 'Execution status & mapping diagnostics',
-    'X03.4': 'Analysis results, histories & limits',
-    'X03.5': 'Whole-CUBICS spacecraft states, loads & environment',
-    'X03.6': 'EPS responses to the same whole-CUBICS scenario',
+    'X03.1': 'Spacecraft models & simulation requests',
+    'X03.2': 'Spacecraft run & coupling configuration',
+    'X03.3': 'Spacecraft execution & mapping diagnostics',
+    'X03.4': 'Spacecraft feasibility findings & limits',
+    'X03.5': 'Spacecraft states, subsystem loads & environment',
+    'X03.6': 'EPS states, dissipation & feasibility findings',
     'X04.1': 'Coding/build status & compatibility diagnostics',
     'X04.2': 'Authorized coding, host build & SIL requests',
     'X04.3': 'EPS interfaces & F Prime mapping',
     'X04.4': 'Host source, build products & exact revisions',
-    'X04.5': 'Host SIL results, MIL comparison & limits',
+    'X04.5': 'Raw host SIL responses & limits',
     'X06.1': 'Review findings & authority decisions',
     'X06.2': 'Review package, recorded disposition & conditions',
 }
@@ -199,6 +200,8 @@ def inventory():
         inv = json.loads(BASE.with_suffix('.inventory.json').read_text())
         retained_inventory_check(inv)
         inv['source_contract_status'] = 'Retained inventory. Original modeling sources are absent. No new native validation.'
+        for interface in inv['interfaces']:
+            interface['actor_label'] = ACTORS[interface['actor']]
         return inv
     ledger = json.loads((REPORT / 'traceability/logical-architecture.json').read_text())
     logical = (REPORT / 'sysml/04-logical.sysml').read_text()
@@ -536,22 +539,27 @@ def boundary_page(inv):
 
 
 def tool_page(inv):
-    page = Page('Logical architecture: numerical and host tool integration', 'All eleven tool flows cross Framework ports and delegate to the actual simulation and software part.')
+    page = Page('Logical architecture: spacecraft simulation and host integration', 'External spacecraft and host flows cross Framework ports. L03 executes EPS and RAM analyses and assesses engineering criteria.')
     frame = page.framework(280, 49, 174, 323, label_x=332)
     page.box('L03', 290, 80, 154, 280, frame, 'tools')
-    page.text('Coordinate and retain runs', 368.5, 270, anchor='middle', color=MUTED, parent=frame)
-    page.actor('tools', ['NVIDIA Omniverse', 'whole-CUBICS /', 'model tools'], 8, 80, 112, 280, label_y=205)
-    page.actor('software', ['F Prime host', 'toolchain'], 586, 80, 96, 280, label_y=211)
+    page.actor('tools', ['NVIDIA Omniverse', 'spacecraft and', 'subsystem simulations'], 8, 80, 112, 280, label_y=205)
+    software = page.actor('software', ['F Prime host', 'toolchain'], 586, 80, 96, 280, label_y=211)
+    actor_rect = software.find('./{*}rect')
+    actor_left = float(actor_rect.attrib['x'])-float(actor_rect.attrib['stroke-width'])/2
     for interface in inv['interfaces']:
         if interface['id'] not in ('IF-03', 'IF-04'):
             continue
         levels = [path_points(external_geometry(flow['id'], flow['direction']))[0][1]
                   for flow in interface['flows']]
-        page.port(interface, 280 if interface['port'] == 'p03' else 454, levels, frame)
+        port = page.port(interface, 280 if interface['port'] == 'p03' else 454, levels, frame)
+        left = interface['port'] == 'p03'
+        x, width = 129, 141
+        if not left:
+            # Keep six units beyond the painted port and actor edges.
+            x = float(port.attrib['x'])+float(port.attrib['width'])+float(port.attrib['stroke-width'])/2+6
+            width = actor_left-6-x
         for ordinal, flow in enumerate(interface['flows']):
-            left = interface['port'] == 'p03'
             y = 101+ordinal*47 if left else 111+ordinal*54
-            x, width = (129, 141) if left else (463, 113)
             labels = page.wrapped(EXTERNAL_LABELS[flow['id']], width)
             flow_group(page, interface, flow, external_geometry(flow['id'], flow['direction']), labels, x, y-8-12*(len(labels)-1))
     return page
@@ -573,6 +581,32 @@ def within(point, box):
 def on_edge(point, box):
     x, y, w, h = box
     return within(point, box) and min(abs(point[0]-x), abs(point[0]-x-w), abs(point[1]-y), abs(point[1]-y-h)) < .1
+
+
+def tool_label_clearance_check(root):
+    """Measure host labels against the painted shared port and actor edges."""
+    port = root.find('.//{*}rect[@data-interface="IF-04"][@data-port]')
+    actor = root.find('./{*}g[@data-actor="software"]/{*}rect')
+    require(port is not None and actor is not None, 'Missing host port or actor')
+    port_right = float(port.attrib['x'])+float(port.attrib['width'])+float(port.attrib['stroke-width'])/2
+    actor_left = float(actor.attrib['x'])-float(actor.attrib['stroke-width'])/2
+    groups = root.findall('./{*}g[@data-interface="IF-04"][@data-flow]')
+    require(len(groups) == 5, 'Missing host exchange labels')
+    for group in groups:
+        labels = group.findall('./{*}text')
+        require(labels, 'Missing host exchange label: '+group.attrib['id'])
+        for text in labels:
+            size = float(text.attrib['font-size'])
+            require(size >= FONT and 'transform' not in text.attrib, 'Unreadable host exchange label')
+            width = METRICS.measure(text.text or '', size, text.attrib.get('font-weight', 'normal'))
+            anchor = text.attrib.get('text-anchor', 'start')
+            x = float(text.attrib['x'])
+            left = x-width/2 if anchor == 'middle' else x-width if anchor == 'end' else x
+            require(left-port_right >= 6-1e-6,
+                    'Host exchange label does not clear IF-04 port: '+group.attrib['id'])
+            require(actor_left-left-width >= 6-1e-6,
+                    'Host exchange label does not clear F Prime actor: '+group.attrib['id'])
+    return {'host_exchange_labels_clear_port_and_actor_checked': True}
 
 
 def arrow_check(g, identifier, kind, style=None, head=True):
@@ -729,8 +763,13 @@ def display_check(inv, paths):
                                        (REPORT / 'logical.tex').read_text()))
     require(all(note in caption_text for note in AUTHORITY_NOTES),
             'Missing engineering authority note in figure captions')
-    require(all(wording in visible for wording in RESPONSIBILITIES.values()), 'Missing accepted responsibility wording')
-    return {'all_20_native_bundles_mapped_to_meaningful_arrows': True,
+    require(RESPONSIBILITIES['L01'] in visible and RESPONSIBILITIES['L03'] in caption_text,
+            'Missing accepted responsibility wording in diagram or caption')
+    require(all(annotation not in visible for annotation in ('Execute EPS and RAM', 'Assess engineering criteria')),
+            'Removed in-part behavior annotation reintroduced')
+    host_checks = tool_label_clearance_check(roots[2])
+    return {**host_checks, 'tool_execution_and_assessment_caption_checked': True,
+        'all_20_native_bundles_mapped_to_meaningful_arrows': True,
         'all_203_field_mappings_retained_and_mapped_to_native_bundle': sum(len(e['mappings']) for e in inv['peer_exchanges']) == 203,
         'all_17_black_box_flows_displayed_once': True, 'all_5_active_interfaces_displayed': True,
         'all_18_boundary_refinements_connected_to_actual_parts': True,
@@ -774,6 +813,10 @@ def main():
     job.mkdir(parents=True, exist_ok=True)
     METRICS = SerifMetrics()
     inv = inventory()
+    # Refresh presentation labels without changing retained native field contracts.
+    for alias in inv['external_aliases']:
+        if alias['endpoint_declaration'] == 'BoundaryViews::AnalysisPort::spacecraftInputs':
+            alias['label'] = 'Identified mission/scenario conditions'
     pages = [internal_page(inv), boundary_page(inv), tool_page(inv)]
     paths, pdfs, artifacts = [], [], {}
     for index, page in enumerate(pages, 1):
