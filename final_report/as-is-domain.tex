@@ -3,32 +3,40 @@
 \subsection*{As-is observations}
 ASCEND-associated students who wish to participate in CUBICS follow no systems engineering method.
 They verify payload power requirements only after fabrication.
-They value simulating rocket requirements before fabrication and want the same capability for power requirements.
-These observations describe those students' practices and expectations.
-
-\subsection*{Engineering roles}
-The framework serves four roles: Project Manager, Systems Engineer, EPS Engineer and Non-EPS Engineer.
-The Non-EPS Engineer represents other spacecraft subsystems and mission segments.
-One person may hold several roles, as occurs in small satellite projects \citep{review-1438}.
+They have experience in simulating rocket requirements before fabrication and want the same capability for power requirements.
 
 \subsection*{To-be constraints}
-ASCEND requires F Prime as its to-be flight software framework, following an external review on the state of the art on the subject.
-The EPS engineering framework must connect its EPS models and interfaces to NVIDIA Omniverse, which is a simulation suite suitable for highly robotized spacecraft like the one that could be developed in the future CUBICS mission.
-For example, Zhu et al. map battery telemetry and multiphysics results to an Omniverse three-dimensional scene through semantic mappings and read/write APIs \citep[pp.~4--5]{handpicked-0001},
+There are constraints imposed by the stakeholders on the framework, derived from their capability development objectives, expertise, and literature reviews with scopes external to the current document, that the OOSEM method allows to incorporate into the design.
+Given that these constraints impact the potential solution space considerably, OOSEM recommends validating them. The constraint validation performed for this framework is a concise summary of the rationale behind each constraint, how it will incorporated into the framework design, and its relation on the framework scope.
+
+ASCEND members have an interest in adopting MBSE for their design and development processes, even if they are aware of the learning curve (see \ConcernRef{C-SE-01.1.1}).
+This is inspired by a recent systematic literature review published in the flagship journal of the International Council on Systems Engineering \cite{buruso2026modelbased} that studies the application of MBSE methods, languages, and tools across the phases of requirements management and model development to reach simulation and analysis, configuration management, and collaboration and communication. It finds that requirements management and model development are the greatest current strengths of MBSE, well covered by established MBSE methodologies and languages, while the latter three phases have less MBSE adoption or success evidence yet present promising applications of toolsets integrated with MBSE methods.
+The MBSE constraint was reflected in the system requirements, which were optimized for coverage of the five MBSE phases.
+Furthermore, the corpus of literature from which the physical architecture candidates were extracted from was obtained using MBSE keywords.
+It was deemed feasible to adopt MBSE in the framework due to the fact that keyword searches returned multiple \cite{review-0764, review-0270, review-1563, review-0055} academic works at the intersection of MBSE and nanosatellite EPS. A related lineage developed the CubeSat System Reference Model (CSRM), a reusable logical architecture for CubeSat space and ground systems that includes EPS elements \cite{review-1646,review-1621,review-1494,review-1451,kaslow2019csrm,kaslow2020csrm,review-1051}. The CSRM has now has matured into an Object Management Group non-normative specification \cite{omg2025csrm}, at the same level as standards like the Unified Modeling Language and the Business Process Model and Notation.
+
+ASCEND requires F Prime as its to-be flight software framework, justified by the fact that it is open-source, maintained by NASA, space-proven, and boasts a proof-of-concept of software generation from MBSE models \cite{review-0853}.
+The EPS engineering framework must connect its EPS models and interfaces to NVIDIA Omniverse, which is a simulation suite suitable for roboticized CubeSat payloads and subsystems like the ones that could be developed in the future CUBICS mission according to its preliminary ConOps.
+There is an academic feasibility reference in Zhu et al., who map battery telemetry and multiphysics results to an Omniverse three-dimensional scene through semantic mappings and read/write APIs \citep[pp.~4--5]{handpicked-0001},
 which can be leveraged for power-aware training of robot controllers in simulated physial environments.
-Furthermore, ASCEND members have an interest in adopting MBSE as part of the framework, even if they are aware of the learning curve (see \ConcernRef{C-SE-01.1.1}).
-According to OOSEM, the framework needs to respect these constraints but not to justify them, since they are external decisions.
 
 The F Prime and Omniverse constraints were considered in the black-box interfaces and system requirements of the framework, from which point the OOSEM method is used to influence the resulting logical and physical architectures.
-The MBSE constraint was reflected in the system requirements, which were optimized for coverage of the five MBSE phases, or capabilities, identified by Buruso et al. \cite{buruso2026modelbased}: requirements management; model development; simulation and analysis; configuration management and; collaboration and communication.
-Furthermore, the corpus of literature from which the physical architecture candidates were extracted from was obtained using MBSE keywords.
+
+\subsection*{Engineering roles}
+The framework serves four roles, agreeing with responsibilities observed at ASCEND: Project Manager, Systems Engineer, EPS Engineer and Non-EPS Engineer.
+The Non-EPS Engineer represents other spacecraft subsystems and mission segments.
+One person may hold several roles, as occurs in small satellite projects \citep{review-1438}.
 
 \subsection{Stakeholder concerns}
 \label{sec:stakeholder-concerns}
 
-OOSEM uses stakeholder concerns and their causes to identify improvement opportunities.
-The concerns combine the student observations with literature evidence.
-They motivate mission requirements and measures of effectiveness.
+OOSEM uses stakeholder concerns and their causes to identify improvement opportunities, which motivate mission requirements and measures of effectiveness.
+Concerns were elicited from direct stakeholder communications about the shortcomings of their as-is capabilities, and about the challenges associated with applying the to-be constraints.
+They were also defined following a comparison of as-is practices with relevant references.
+
+A key reference was the CUBICS calls for oportunities, the first one released in 2022 and the latest in 2026.
+The 2022 version explicitly required applying teams to follow the NASS Systems Engineering Lifecycle. The 2026 call leave the lifecycle choice open if properly documented.
+Relevantly, the Canadian Space Agency
 
 The root concerns are listed below by stakeholder. Appendix~\ref{appendix:stakeholder-concerns} gives the full hierarchy and contributing causes.
 
