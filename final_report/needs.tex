@@ -17,11 +17,11 @@ The following success conditions apply to all six mission requirements. The ente
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.68\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.23\linewidth-2\tabcolsep\relax}@{}}
 \caption{Proposed mission requirements for the EPS engineering enterprise.}\label{tab:framework-mission-requirements}\\
 \toprule
-\textbf{ID} & \textbf{Enterprise mission requirement} & \textbf{Motivating sources/phases} \\
+\textbf{ID} & \textbf{Enterprise mission requirement} & \textbf{Rationale} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{ID} & \textbf{Enterprise mission requirement} & \textbf{Motivating sources/phases} \\
+\textbf{ID} & \textbf{Enterprise mission requirement} & \textbf{Rationale} \\
 \midrule
 \endhead
 \bottomrule
@@ -50,31 +50,17 @@ MR-06 & The enterprise shall obtain scoped SIR acceptance at the end of adapted 
 \endhead
 \bottomrule
 \endfoot
-MOE-01 & Engineering burden: active person-hours and elapsed hours for correct requirements, design, change and review tasks, with waiting and unattended execution reported separately. \\
-MOE-02 & Early issue detection: expert-confirmed issues found before scoped final design, critical misses and unnecessary investigations against a declared reference issue set. \\
-MOE-03 & Evidence and review usefulness: applicable requirement and expectation coverage, critical review defects, reviewer interpretation accuracy and successful independent reconstruction. \\
-MOE-04 & Adoption burden: person-hours to learn and complete correct tasks and adapt to a mission. \\
+MOE-01\phantomsection\label{moe:MOE-01} & Engineering burden: active person-hours and elapsed hours for correct requirements, design, change and review tasks, with waiting and unattended execution reported separately. \\
+MOE-02\phantomsection\label{moe:MOE-02} & Early issue detection: expert-confirmed issues found before scoped final design, critical misses and unnecessary investigations against a declared reference issue set. \\
+MOE-03\phantomsection\label{moe:MOE-03} & Evidence and review usefulness: applicable requirement and expectation coverage, critical review defects, reviewer interpretation accuracy and successful independent reconstruction. \\
+MOE-04\phantomsection\label{moe:MOE-04} & Adoption burden: person-hours to learn and complete correct tasks and adapt to a mission. \\
+MOE-05\phantomsection\label{moe:MOE-05} & Resource and access burden: monetary cost of required software, data and host computing over a fixed period, and required task attempts blocked by cost or access restrictions. Declare currency, price date, resource quantities and access terms. Report person-hours separately. \\
+MOE-06\phantomsection\label{moe:MOE-06} & Clarity of scope and evidence limits: reviewer accuracy in distinguishing supported model and host software conclusions from unresolved physical, operational or target claims. Also measure coverage of external evidence gaps with a recorded disposition and responsible authority. \\
 \end{longtable}
 }
 
-{\small
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.08}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.33\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.55\linewidth-2\tabcolsep\relax}@{}}
-\caption{Primary root concern contributions motivating the MOEs.}\label{tab:framework-moe-concerns}\\
-\toprule
-\textbf{MOE} & \textbf{Primary root concerns} & \textbf{Motivation} \\
-\midrule
-\endfirsthead
-\toprule
-\textbf{MOE} & \textbf{Primary root concerns} & \textbf{Motivation} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
-MOE-01 & \ConcernRef{C-PM-01}, \ConcernRef{C-SE-03} & Requirements effort and subsystem changes. \\
-MOE-02 & \ConcernRef{C-PM-03}, \ConcernRef{C-EPS-01} & Late redesign and repeated verification burden. \\
-MOE-03 & \ConcernRef{C-SE-02}, \ConcernRef{C-EPS-11} & Communicating evidence and designs during reviews. \\
-MOE-04 & \ConcernRef{C-PM-01}, \ConcernRef{C-PM-05} & Learning, tool adoption and mission adaptation effort. \\
-\end{longtable}
-}
+Appendix~\ref{appendix:framework-moe-concerns}, Table~\ref{tab:framework-moe-concerns}, lists every contributing concern for the six MOEs, with links to the full concern hierarchy.
+
+Contributions cover EPS models and declared host software. Physical campaigns, replica maintenance, operational troubleshooting and target qualification remain outside scope. MOE-06 measures whether these exclusions and external evidence gaps are clear to reviewers. It does not measure completion of excluded work. MOE-05 records financial and access burden separately from person-hours. Targets require stakeholder agreement. No achieved values are reported.
+
+% TODO: Extend verification-plan.tex's research evaluation protocol (currently MOE-01--04) to MOE-05 cost/access and MOE-06 scope/evidence references. Reconcile downstream evaluation ledgers and rerun integrated source identity checks. No new FR/MOP or empirical result is asserted here.

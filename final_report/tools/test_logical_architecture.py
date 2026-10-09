@@ -21,14 +21,20 @@ class LogicalSourceTests(unittest.TestCase):
         self.ledger = json.loads((REPORT / "traceability/logical-architecture.json").read_text())
         self.requirements = (REPORT / "requirements.tex").read_text()
         self.logical = (REPORT / "logical.tex").read_text()
+        self.io = (REPORT / 'fr-inputs-outputs.tex').read_text()
 
     def check(self):
-        return checker.validate_source_contract(self.ledger, self.requirements, self.logical)
+        return checker.validate_source_contract(self.ledger, self.requirements, self.logical, self.io)
 
     def test_current_contract(self):
         source = self.check()
         self.assertEqual(len(source), 40)
         self.assertEqual(sum(len(r["parents"]) for r in source.values()), 169)
+
+    def test_renderer_call_joins_appendix_without_api_change(self):
+        source = checker.validate_source_contract(self.ledger, self.requirements, self.logical)
+        self.assertEqual(len(source), 40)
+        self.assertEqual(source['FR-18']['inputs_verbatim'], self.check()['FR-18']['inputs_verbatim'])
 
     def test_name_id_first_frs_second_interfaces_third(self):
         table = checker.parse_logical_table(self.logical)

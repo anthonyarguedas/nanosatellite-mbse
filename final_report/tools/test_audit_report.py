@@ -26,7 +26,8 @@ class Fixture(unittest.TestCase):
     def setUp(self):
         directory = tempfile.TemporaryDirectory(); self.addCleanup(directory.cleanup)
         self.root = Path(directory.name)/'report'; self.root.mkdir()
-        for name in ('needs.tex', 'requirements.tex', 'verification-plan.tex', 'logical.tex', 'literatura.bib'):
+        for name in ('needs.tex', 'requirements.tex', 'apendice.tex', 'fr-inputs-outputs.tex',
+                     'verification-plan.tex', 'logical.tex', 'literatura.bib'):
             shutil.copy2(REPORT/name, self.root/name)
         for name in ('sysml', 'traceability', 'candidates'):
             shutil.copytree(REPORT/name, self.root/name, ignore=shutil.ignore_patterns('__pycache__'))
@@ -63,8 +64,8 @@ class SourceParsingTests(Fixture):
             a.current_trace(self.root)
 
     def test_missing_io(self):
-        self.replace('requirements.tex', '\\textit{Inputs:} Assistance trigger', '\\textit{Incoming:} Assistance trigger')
-        with self.assertRaisesRegex(AssertionError, 'Missing FR statement/IO'):
+        self.replace('fr-inputs-outputs.tex', 'FR-41 & Assistance trigger, current context and response limits. &', 'FR-41 & &')
+        with self.assertRaisesRegex(AssertionError, 'Missing FR IO'):
             a.report_requirements(self.root)
 
     def test_parent_endpoint(self):
@@ -73,7 +74,9 @@ class SourceParsingTests(Fixture):
             a.current_trace(self.root)
 
     def test_parent_range(self):
-        self.replace('requirements.tex', 'Recorded disposition, rationale and revision links. & 01--06', 'Recorded disposition, rationale and revision links. & 01--05')
+        old = a.load(self.root/'traceability/fr-rationale.json')['requirements']
+        cell = next(row['rationale_latex'] for row in old if row['id'] == 'FR-29')
+        self.replace('requirements.tex', cell, cell.replace('MR-01--06', 'MR-01--05'))
         with self.assertRaisesRegex(AssertionError, 'MR/FR derivation mismatch'):
             a.current_trace(self.root)
 
@@ -137,9 +140,92 @@ class MOPTests(Fixture):
             a.audit_mops(self.root, self.fr)
 
     def test_current_positive(self):
-        rows = a.audit_mops(self.root, self.fr)
+        records = a.load(self.root/'traceability/framework-baseline.json')['measures_of_performance']
+        rows = a.audit_mops(self.root, self.fr, records)
         self.assertEqual(len(rows), 40)
-        self.assertTrue(all(r['target'] == r['target_source'] == '' and r['achieved'] == 'unknown' for r in rows.values()))
+        self.assertEqual({mid for mid, row in rows.items() if row['target']}, set(a.MOP_TARGETS))
+        self.assertTrue(all(r['achieved'] == 'unknown' for r in rows.values()))
+        self.assertTrue(all(r['target'] == r['target_source'] == '' for mid, r in rows.items() if mid not in a.MOP_TARGETS))
+
+    def test_all_support_links_match_native_and_ledger(self):
+        records = a.load(self.root/'traceability/framework-baseline.json')['measures_of_performance']
+        rows = a.audit_mops(self.root, self.fr, records)
+        self.assertEqual(sum(len(r['moe_ids']) for r in rows.values()), 74)
+        self.assertEqual({mid for mid, r in rows.items() if 'MOE-05' in r['moe_ids']}, {'MOP-FR03', 'MOP-FR23'})
+        self.assertEqual({mid for mid, r in rows.items() if 'MOE-06' in r['moe_ids']}, {'MOP-FR11', 'MOP-FR21', 'MOP-FR37', 'MOP-FR38'})
+        self.assertEqual(len(a.report_moe_definitions(self.root)), 6)
+
+    def test_wrong_support_link(self):
+        self.replace('requirements.tex', r'reasons (\%). & & \hyperref[moe:MOE-03]{MOE-03}', r'reasons (\%). & & \hyperref[moe:MOE-02]{MOE-02}')
+        self.reject('Report/native MOP/MOE contribution mismatch')
+
+    def test_missing_support_link(self):
+        self.replace('requirements.tex', r'reasons (\%). & & \hyperref[moe:MOE-03]{MOE-03}', r'reasons (\%). & & ')
+        self.reject('Missing or malformed MOP/MOE link')
+
+    def test_extra_support_link(self):
+        self.replace('requirements.tex', r'reasons (\%). & & \hyperref[moe:MOE-03]{MOE-03}', r'reasons (\%). & & \hyperref[moe:MOE-03]{MOE-03}\newline \hyperref[moe:MOE-04]{MOE-04}')
+        self.reject('Report/native MOP/MOE contribution mismatch')
+
+    def test_duplicate_support_link(self):
+        self.replace('requirements.tex', r'reasons (\%). & & \hyperref[moe:MOE-03]{MOE-03}', r'reasons (\%). & & \hyperref[moe:MOE-03]{MOE-03}\newline \hyperref[moe:MOE-03]{MOE-03}')
+        self.reject('Duplicate MOP/MOE link')
+
+    def test_unknown_support_link(self):
+        self.replace('requirements.tex', r'reasons (\%). & & \hyperref[moe:MOE-03]{MOE-03}', r'reasons (\%). & & \hyperref[moe:MOE-99]{MOE-99}')
+        self.reject('Unknown report MOP/MOE endpoint')
+
+    def test_mislabelled_support_link(self):
+        self.replace('requirements.tex', r'reasons (\%). & & \hyperref[moe:MOE-03]{MOE-03}', r'reasons (\%). & & \hyperref[moe:MOE-03]{MOE-02}')
+        self.reject('Missing or malformed MOP/MOE link')
+
+    def test_missing_definition_anchor(self):
+        self.replace('needs.tex', r'MOE-05\phantomsection\label{moe:MOE-05}', 'MOE-05')
+        self.reject('Missing or mismatched MOE definition anchor')
+
+    def test_duplicate_definition_anchor(self):
+        self.replace('needs.tex', r'\label{moe:MOE-05}', r'\label{moe:MOE-05}\label{moe:MOE-05}')
+        self.reject('Missing or mismatched MOE definition anchor')
+
+    def test_anchor_outside_definition_is_rejected(self):
+        path = self.root/'needs.tex'
+        path.write_text(path.read_text() + r'\label{moe:MOE-05}')
+        self.reject('Duplicate or misplaced MOE anchor')
+
+    def test_subsection_before_complete_requirements_table(self):
+        path = self.root/'requirements.tex'; text = path.read_text()
+        begin = text.index(r'\subsection{Measures of performance}')
+        moved = text[begin:] + text[:begin]
+        path.write_text(moved)
+        self.reject('must follow the complete FR table')
+
+    def test_missing_mop(self):
+        self.replace('requirements.tex', 'FR-01\\newline MOP-FR01', 'FR-01\\newline removed-MOP-FR01')
+        self.reject('Exact per-FR MOP coverage required')
+
+    def test_altered_supported_target(self):
+        self.replace('requirements.tex', r'$\leq 20$~s (indexed lookup)\newline', r'$\leq 2$~s (indexed lookup)\newline')
+        self.reject('Unsupported or unsourced desired MOP range')
+
+    def test_missing_target_bibliography(self):
+        self.replace('literatura.bib', '@inproceedings{review-0764,', '@inproceedings{removed-reference,')
+        self.reject('Missing MOP target citation')
+
+    def test_native_supported_target_mismatch(self):
+        self.replace('sysml/03-requirements.sysml', r'attribute :>> target = "100\\% (lossless profiles)";', r'attribute :>> target = "99\\% (lossless profiles)";')
+        self.reject('False native MOP result/target')
+
+    def test_missing_target_evidence(self):
+        records = a.load(self.root/'traceability/framework-baseline.json')['measures_of_performance']
+        next(r for r in records if r['id'] == 'MOP-FR18')['target_evidence']['transfer_limit'] = ''
+        with self.assertRaisesRegex(AssertionError, 'Unsupported MOP target evidence'):
+            a.audit_mops(self.root, self.fr, records)
+
+    def test_target_is_not_qualified(self):
+        records = a.load(self.root/'traceability/framework-baseline.json')['measures_of_performance']
+        next(r for r in records if r['id'] == 'MOP-FR20')['target_evidence']['status'] = 'qualified'
+        with self.assertRaisesRegex(AssertionError, 'Unsupported MOP target evidence'):
+            a.audit_mops(self.root, self.fr, records)
 
     def test_nonempty_target(self):
         self.replace('requirements.tex', 'Method and model eligibility precision and recall, with rationale correctness (fractions). &', 'Method and model eligibility precision and recall, with rationale correctness (fractions). & 100\\%')
@@ -154,7 +240,7 @@ class MOPTests(Fixture):
         self.reject('MOP/FR identity mismatch')
 
     def test_native_target_default(self):
-        self.replace('sysml/03-requirements.sysml', 'attribute target : ScalarValues::String = "";', 'attribute target : ScalarValues::String = "100%";')
+        self.replace('sysml/03-requirements.sysml', 'attribute target : ScalarValues::String default = "";', 'attribute target : ScalarValues::String default = "100%";')
         self.reject('False native target/achieved default')
 
     def test_native_mop_result_override(self):
@@ -774,9 +860,9 @@ class PlannedEvidenceTests(Fixture):
             self.check()
 
     def test_current_moe_wording(self):
-        self.assertEqual(len(a.audit_moes(self.root, self.baseline['measures_of_effectiveness'])), 4)
+        self.assertEqual(len(a.audit_moes(self.root, self.baseline['measures_of_effectiveness'])), 6)
 
-    def test_financial_moe_cannot_remain_current(self):
+    def test_financial_cost_cannot_replace_adoption_effort(self):
         self.baseline['measures_of_effectiveness'][3]['observation_basis'] = 'Financial cost in CAD'
         with self.assertRaisesRegex(AssertionError, 'MOE wording or measured outcome mismatch'):
             a.audit_moes(self.root, self.baseline['measures_of_effectiveness'])
@@ -987,12 +1073,15 @@ class PublicationTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, 'Duplicate glossary acronym'):
             a.audit_glossary(self.glossary() + '\n\\syma{HTN}{definition}')
 
-    def test_86_pages(self):
-        self.assertEqual(a.audit_latex_log('Output written on main.pdf (86 pages, 123 bytes).'), 86)
+    def test_100_pages(self):
+        self.assertEqual(a.audit_latex_log('Output written on main.pdf (100 pages, 123 bytes).'), 100)
 
-    def test_87_pages(self):
-        with self.assertRaisesRegex(AssertionError, '86 page release target'):
-            a.audit_latex_log('Output written on main.pdf (87 pages, 123 bytes).')
+    def test_wrapped_output_path(self):
+        self.assertEqual(a.audit_latex_log('Output written on /long/path/bui\nld/main.pdf (98 pages, 123 bytes).'), 98)
+
+    def test_101_pages(self):
+        with self.assertRaisesRegex(AssertionError, '100 page ceiling'):
+            a.audit_latex_log('Output written on main.pdf (101 pages, 123 bytes).')
 
     def test_bad_latex_logs(self):
         for text in ('Overfull \\hbox (3pt too wide)', 'LaTeX Warning: There were undefined references.',

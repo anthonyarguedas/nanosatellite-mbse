@@ -186,21 +186,31 @@ package FrameworkNeeds {
         attribute learningAndTaskEffort : ActiveEffort [0..1];
         attribute missionAdaptationEffort : ActiveEffort [0..1];
     }
+    item <'MOE-05'> MOE_05 : EffectivenessMeasure {
+        doc /* Resource and access burden: monetary cost of required software, data and host computing over a fixed period, and required task attempts blocked by cost or access restrictions. Declare currency, price date, resource quantities and access terms. Report person-hours separately. */
+        attribute :>> observationBasis = "Fixed evaluation period, currency and price date, declared quantities of software, data and host computing, and access terms. Hardware procurement, savings from replica maintenance and avoided fabrication cost remain outside scope.";
+        attribute monetaryCost : Real [0..1];
+        attribute currency : String [0..1];
+        attribute priceDate : String [0..1];
+        attribute evaluationPeriod : String [0..1];
+        attribute resourceQuantitiesAndAccessTerms : String [0..1];
+        attribute blockedTaskAttempts : Integer [0..1];
+    }
+    item <'MOE-06'> MOE_06 : EffectivenessMeasure {
+        doc /* Clarity of scope and evidence limits: reviewer accuracy in distinguishing supported model and host software conclusions from unresolved physical, operational or target claims. Also measure coverage of external evidence gaps with a recorded disposition and responsible authority. */
+        attribute :>> observationBasis = "Independent questions on claim classification and an applicable checklist of external obligations. Retain exclusions, limits of supplied evidence, unresolved gaps and responsible authorities. Completion of excluded work remains outside this measure.";
+        attribute boundaryInterpretationAccuracy : CoverageFraction [0..1];
+        attribute externalGapDispositionCoverage : CoverageFraction [0..1];
+    }
     // Each MOE observes enterprise accomplishment across MR-01--06.
     #sourceTrace dependency effectiveness_MOE01 from MOE_01 to ToBe::EPSEngineeringEnterprise;
     #sourceTrace dependency effectiveness_MOE02 from MOE_02 to ToBe::EPSEngineeringEnterprise;
     #sourceTrace dependency effectiveness_MOE03 from MOE_03 to ToBe::EPSEngineeringEnterprise;
     #sourceTrace dependency effectiveness_MOE04 from MOE_04 to ToBe::EPSEngineeringEnterprise;
-    // Concern contributions explain quality of accomplishment, not one MR per concern.
-    #qualitativeContribution dependency burden_PM01 from FrameworkConcerns::C_PM_01 to MOE_01;
-    #qualitativeContribution dependency burden_SE03 from FrameworkConcerns::C_SE_03 to MOE_01;
-    #qualitativeContribution dependency detection_PM03 from FrameworkConcerns::C_PM_03 to MOE_02;
-    #qualitativeContribution dependency detection_EPS01 from FrameworkConcerns::C_EPS_01 to MOE_02;
-    #qualitativeContribution dependency review_SE02 from FrameworkConcerns::C_SE_02 to MOE_03;
-    #qualitativeContribution dependency review_EPS11 from FrameworkConcerns::C_EPS_11 to MOE_03;
-    #qualitativeContribution dependency adoption_PM011 from FrameworkConcerns::C_PM_01_1 to MOE_04;
-    #qualitativeContribution dependency adoption_PM012 from FrameworkConcerns::C_PM_01_2 to MOE_04;
-    #qualitativeContribution dependency adoption_PM05 from FrameworkConcerns::C_PM_05 to MOE_04;
+    #sourceTrace dependency effectiveness_MOE05 from MOE_05 to ToBe::EPSEngineeringEnterprise;
+    #sourceTrace dependency effectiveness_MOE06 from MOE_06 to ToBe::EPSEngineeringEnterprise;
+    // Every concern occurrence contributes explicitly in FrameworkConcerns.
+    // No duplicate primary-root-only contribution inventory is maintained here.
 
     item modelCredibilityMeasures : ModelCredibility {
         attribute voltageResidual : VoltageResidual [0..1];
@@ -214,6 +224,8 @@ package FrameworkNeeds {
     item distinctAssessmentSubjects : FrameworkEvaluation {
         doc /* Framework verification assesses framework requirements. Framework validation assesses engineer/reviewer suitability in representative use. EPS phase-product verification assesses applicable EPS requirements. EPS validation assesses stakeholder expectations and ConOps in representative, possibly simulated conditions, beginning early with phase products including models. Model credibility assesses intended use, numerical correctness, assumptions, calibration, independent validation data and uncertainty. Research evaluation assesses enterprise benefit and bounded transfer. Planned procedures remain specifications. Native syntax/semantic checks establish model quality within tool scope, not framework V&V or measured benefit. */
     }
+    // TODO: Extend the later research evaluation plan from MOE-01--04 to MOE-01--06.
+    // MOE-05 needs fixed costs/access terms. MOE-06 needs independent scope/evidence references.
     item researchEvaluationProtocol : FrameworkEvaluation {
         doc /* Two contrasting EPS cases are an evaluation protocol only. Fix cases, tasks, reference answers, participants, configurations, permitted adaptations, comparison rules before execution. Include failed checks, missing data, misleading suggestions, stale evidence and clean controls. Compare burden only for correct outcomes under comparable conditions. All achieved values are unknown. Targets, acceptable errors and review thresholds remain pending stakeholder agreement and intended-use justification. */
     }

@@ -23,6 +23,9 @@ import sys
 import tempfile
 import tomllib
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'tools'))
+import audit_report as report_tables
+
 CURRENT_FILES = tuple(f'{n}.sysml' for n in (
     '00-domain', '01-concerns', '02-needs-context', '03-requirements',
     '04-logical', '05-verification', '06-system-context', '07-report-views',
@@ -169,6 +172,30 @@ def check_review_control(elements, by, api):
             "truth_table_cases": count, "closed_prior_conditions_renewed_conditional": "remains conditional",
             "renewed_dispositions": {"accepted": "acceptedBaseline", "conditional": "conditional",
                                      "progressionBlocked": "progressionBlocked"}}
+
+
+def validate_report_contract(requirements_text, io_text, ledger):
+    published = report_tables.parse_fr_tables(requirements_text, io_text)
+    ledger_fr = report_tables.unique(ledger['framework_requirements'], 'ledger FR')
+    require(set(ledger_fr) == set(published), 'FR report/ledger active ID mismatch')
+    for rid, row in published.items():
+        for direction in ('inputs', 'outputs'):
+            require(row[direction] == ledger_fr[rid][direction], f'{rid}: report/ledger {direction} disagreement')
+    return published
+
+
+def report_parent_numbers(text, identifier):
+    rows = re.findall(rf'^FR-{identifier} & [^\n]*? & (MR-[^\n]*?)\.\\par ', text, re.M)
+    require(len(rows) == 1, f'FR-{identifier}: missing/duplicate current report row')
+    parents = []
+    for term in rows[0].split(','):
+        bounds = re.fullmatch(r'MR-(\d{2})(?:--(?:MR-)?(\d{2}))?', term.strip())
+        require(bounds is not None, 'Malformed current MR parent reference')
+        first, last = int(bounds[1]), int(bounds[2] or bounds[1])
+        require(last >= first, 'Reversed current MR parent range')
+        parents.extend(f'{n:02}' for n in range(first, last + 1))
+    require(len(parents) == len(set(parents)), 'Duplicate current MR parent reference')
+    return set(parents)
 
 
 def main() -> int:
@@ -348,7 +375,10 @@ def main() -> int:
     requirements = [e for e in elements if type(e).__name__ == "RequirementUsage"
                     and qn(e.owner) == "FrameworkRequirements"]
     require({e.name for e in requirements} == FR_IDS, "Current FR set changed or retired FR-12/FR-40 restored")
-    prose = re.sub(r"\s+", " ", report.read_text())
+    ledger = json.loads(args.ledger.read_text())
+    published = validate_report_contract(report.read_text(),
+                    (report.parent / report_tables.FR_IO_SOURCE).read_text(), ledger)
+    report_tables.audit_io_body(report.parent, published)
     checks = [e for e in elements if isinstance(e, api.MetadataUsage)
               and any(qn(t) == "FrameworkRequirements::PlannedRequirementCheck" for t in e.types)]
     derivations = [e for e in elements if type(e).__name__ == "ConnectionUsage"
@@ -365,14 +395,10 @@ def main() -> int:
         parent_map[children[0]].add(parents[0].name[-2:])
     for r in requirements:
         text = " ".join(" ".join(r.texts).split())
-        require(text.startswith('The framework shall ') and text in prose, f"{r.name}: report/model statement disagreement")
+        row = published[r.name.replace('_', '-')]
+        require(text.startswith('The framework shall ') and text == row['text'], f"{r.name}: report/model statement disagreement")
         require(parent_map[r], "Requirement has no current MR parent")
-        rows = re.findall(rf"^FR-{r.name[-2:]} & [^\n]* & ([\d, -]+) \\\\", report.read_text(), re.M)
-        require(len(rows) == 1, f"{r.name}: missing/duplicate current report row")
-        expected_parents = set()
-        for first, last in re.findall(r"(\d{2})(?:--(\d{2}))?", rows[0]):
-            require(int(last or first) >= int(first), 'Reversed current MR parent range')
-            expected_parents.update(f'{n:02}' for n in range(int(first), int(last or first) + 1))
+        expected_parents = {mid[-2:] for mid in row['parents']}
         require(expected_parents == parent_map[r], f"{r.name}: report/model MR disagreement")
         attached = [c for c in checks if r in c.annotated_elements]
         require(len(attached) == 1, "Requirement lacks planned method/check")
@@ -403,7 +429,6 @@ def main() -> int:
     require("deliverable coding is blocked" in " ".join(
         d.body for d in by_qn["ScenarioViews::SC04::'FW: block coding'"].documentation).lower(),
         "Missing unreleased-coding failure behavior")
-    ledger = json.loads(args.ledger.read_text())
     fr42 = by_qn["FrameworkRequirements::FR_42"]
     row42 = next(r for r in ledger["framework_requirements"] if r["id"] == "FR-42")
     require(row42["text"] == " ".join(" ".join(fr42.texts).split()),
@@ -435,7 +460,8 @@ def main() -> int:
                       "scenarios": 5, "summary_views": 5, "actor_allocations": len(tasks),
                       "guarded_alternatives": len(transitions), "scenario_typed_flows": len(scenario_flows),
                       "interface_typed_flows": len(exact_flows), "requirements": len(requirements),
-                      "mr_derivations": len(derivations), "retired_requirement": "FR-40",
+                      "mr_derivations": len(derivations), "joined_io_rows": len(published),
+                      "retired_requirement": "FR-40",
                       "review_control": review_control,
                       "V42": "report FR-42 statement and native/ledger procedure agree, planned, not executed"}
     if args.negative_cases:
@@ -527,6 +553,6 @@ def negative_checks(root, tool, config, report, ledger, *, baseline_checked=Fals
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
-    except (ValueError, KeyError, AttributeError, OSError, StopIteration, RuntimeError) as error:
+    except (AssertionError, ValueError, KeyError, AttributeError, OSError, StopIteration, RuntimeError) as error:
         print(f"FAIL: {error}", file=sys.stderr)
         raise SystemExit(1)

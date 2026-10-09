@@ -24,6 +24,9 @@ import sys
 import tempfile
 import tomllib
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'tools'))
+import audit_report as report_tables
+
 SOURCE_FILES = tuple(f"{n}.sysml" for n in (
     "00-domain", "01-concerns", "02-needs-context", "03-requirements",
     "06-system-context", "09-scenarios", "10-interface-views"))
@@ -82,14 +85,15 @@ def expand_numbers(cell):
     return numbers
 
 
-def parse_requirements(text):
-    # This parses TeX only. Native models are always parsed by Syside.
-    pattern = r"^FR-(\d{2}) & (.*?)\\par \\textit\{Inputs:\} (.*?)\\par \\textit\{Outputs:\} (.*?) & ([\d, -]+) \\\\"
-    rows = [{"FR": f"FR-{m[1]}", "statement": m[2], "inputs_verbatim": m[3],
-             "outputs_verbatim": m[4], "parents": [f"MR-{n:02}" for n in expand_numbers(m[5])]}
-            for m in re.finditer(pattern, text, re.M)]
-    require(rows, "No report requirement rows")
-    return unique_rows(rows, "FR", "report FR")
+def parse_requirements(text, io_text):
+    # Join published TeX tables. Native models are always parsed by Syside.
+    try:
+        rows = report_tables.parse_fr_tables(text, io_text)
+    except AssertionError as error:
+        raise ValueError(str(error)) from error
+    return {rid: {"FR": rid, "statement": row['text'],
+                  "inputs_verbatim": row['inputs'], "outputs_verbatim": row['outputs'],
+                  "parents": row['parents']} for rid, row in rows.items()}
 
 
 def parse_logical_table(text):
@@ -110,8 +114,10 @@ def expected_union(allocations, cid, direction):
     return fields
 
 
-def validate_source_contract(ledger, requirements_text, logical_text):
-    source = parse_requirements(requirements_text)
+def validate_source_contract(ledger, requirements_text, logical_text, io_text=None):
+    if io_text is None:
+        io_text = (Path(__file__).resolve().parent.parent / report_tables.FR_IO_SOURCE).read_text()
+    source = parse_requirements(requirements_text, io_text)
     active = {f"FR-{n:02}" for _, _, group in GROUPS.values() for n in group}
     require(set(source) == active and not RETIRED.intersection(source), "Missing or retired report FR")
     allocations = unique_rows(ledger["allocations"], "FR", "allocation")
@@ -662,7 +668,8 @@ def check_review_control(elements, by, api):
 def check(tool, root, ledger_path, report_path, *, core_only=False, source_only=False):
     ledger = json.loads(ledger_path.read_text())
     requirements = report_path.parent / "requirements.tex"
-    source = validate_source_contract(ledger, requirements.read_text(), report_path.read_text())
+    source = validate_source_contract(ledger, requirements.read_text(), report_path.read_text(),
+                                      (report_path.parent / report_tables.FR_IO_SOURCE).read_text())
     config = tomllib.loads((root / "logical-responsibilities.toml").read_text())
     require(config["validation"]["pending_native_is_failure"], "Pending architecture cannot pass")
     native = Native(tool, root, SOURCE_FILES if source_only else CORE_FILES if core_only else FILES)
@@ -694,14 +701,18 @@ def negative_checks(tool, root, ledger, report, *, core_only=False):
     require({r["family"] for r in cases} >= SAFETY_FAMILIES, "Missing safety negative cases")
     with tempfile.TemporaryDirectory(prefix="logical-negative-") as directory:
         base = Path(directory)
-        frozen_checker = base / "frozen-checker.py"
+        frozen_checker = base / "sysml/frozen-checker.py"
+        frozen_checker.parent.mkdir()
         shutil.copy2(Path(__file__).resolve(), frozen_checker)
+        (base / 'tools').mkdir()
+        shutil.copy2(Path(report_tables.__file__), base / 'tools/audit_report.py')
         frozen_ledger = base / "frozen-ledger.json"
         shutil.copy2(ledger, frozen_ledger)
         frozen_report = base / "report/logical.tex"
         frozen_report.parent.mkdir()
         shutil.copy2(report, frozen_report)
         shutil.copy2(report.parent / "requirements.tex", frozen_report.parent / "requirements.tex")
+        shutil.copy2(report.parent / report_tables.FR_IO_SOURCE, frozen_report.parent / report_tables.FR_IO_SOURCE)
         for key in ("source", "pdf"):
             destination = frozen_report.parent / data["figure"][key]
             destination.parent.mkdir(parents=True, exist_ok=True)

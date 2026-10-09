@@ -565,14 +565,18 @@ package FrameworkRequirements {
          * Retain failures, unsupported cases, abstentions and exclusions with their reasons.
          * Independent calculation agreement using the same model is distinct from physical prediction validity.
          * Per-case functional checks imply no automatic 100 percent or zero desired target.
+         * Explicit targets are proposed, scoped literature interpretations or benchmark reference bands.
+         * Untargeted parts of composite measures remain without a quantitative range.
          * MOE contributions are qualitative. MOE-04 concerns adoption burden only.
+         * MOE-05 links resource-aware eligibility and run-resource records to separate enterprise cost/access observations.
+         * MOE-06 links gap records, credibility limits, view interpretation and review content to separate scope/evidence observations.
          */
         attribute observationBasis : ScalarValues::String;
         attribute units : ScalarValues::String;
         attribute protocol : ScalarValues::String;
         attribute referenceConfiguration : ScalarValues::String;
-        attribute target : ScalarValues::String = "";
-        attribute targetSource : ScalarValues::String = "";
+        attribute target : ScalarValues::String default = "";
+        attribute targetSource : ScalarValues::String default = "";
         attribute achieved : ScalarValues::String = "unknown, no empirical evaluation";
     }
     item <'MOP-FR01'> MOP_FR01 : PerformanceMeasure {
@@ -614,8 +618,10 @@ package FrameworkRequirements {
     item <'MOP-FR07'> MOP_FR07 : PerformanceMeasure {
         attribute :>> observationBasis = "Baseline retrieval reliability. Share of retrieval requests that recover the exact applicable revisions, controlling decisions and history, with retrieval time reported separately.";
         attribute :>> units = "% of retrieval requests, seconds";
-        attribute :>> protocol = "Retrieve predecessor and successor baselines after later edits and a declared restore. Compare independent manifests and content.";
+        attribute :>> protocol = "Retrieve predecessor and successor baselines after later edits and a declared restore. Compare independent manifests and content. The delay target covers indexed single-baseline queries from submission to display under fixed record size and host settings. Archive restoration and new analysis are outside that delay target. The source recommends 20 seconds for browser parameter access. Applying the same ceiling to comparable indexed baseline access is a proposed engineering interpretation, not a reported baseline benchmark. Retrieval correctness has no percentage target.";
         attribute :>> referenceConfiguration = "FR-07 case set, declared workload and framework/tool/host configuration, independent reference revisions and comparison rules";
+        attribute :>> target = "$\\leq 20$~s (indexed lookup)";
+        attribute :>> targetSource = "\\citep[Sec.~2, RQ-4]{kanavouras2024lightweight}";
     }
     item <'MOP-FR08'> MOP_FR08 : PerformanceMeasure {
         attribute :>> observationBasis = "Transfer admission error. False acceptance of incompatible submissions and false rejection of compatible submissions, with controlled-content corruption counted separately.";
@@ -674,8 +680,10 @@ package FrameworkRequirements {
     item <'MOP-FR18'> MOP_FR18 : PerformanceMeasure {
         attribute :>> observationBasis = "Model-exchange fidelity. Share of reference mapping items whose numerical, quantity/unit, geometry, identity and time/mode meanings are preserved across required discipline profiles and whole-CUBICS Omniverse coupling.";
         attribute :>> units = "% of reference mapping items, unreported-loss count";
-        attribute :>> protocol = "Exercise incoming spacecraft/subsystem scenario histories and outgoing EPS states/results. Report every profile separately. Scene display alone supplies no numerical coupling evidence.";
+        attribute :>> protocol = "Exercise incoming spacecraft/subsystem scenario histories and outgoing EPS states/results. Report every profile separately. Scene display alone supplies no numerical coupling evidence. The desired share is an engineering translation of the literature recommendation to mirror every original data element without loss. Fix an independent list of all required mapping items for each declared lossless profile. Complete preservation means N correct items out of N required items. Required unsupported items remain gaps. Report lossy profiles separately, with no claim that they meet the lossless target. This target supplies no evidence of CUBICS or Omniverse compatibility.";
         attribute :>> referenceConfiguration = "FR-18 case set, declared workload and framework/tool/host configuration, independent reference revisions and comparison rules";
+        attribute :>> target = "100\\% (lossless profiles)";
+        attribute :>> targetSource = "\\citep[Sec.~3.6.4]{citation-2300}";
     }
     item <'MOP-FR19'> MOP_FR19 : PerformanceMeasure {
         attribute :>> observationBasis = "MIL orchestration accuracy. Share of prescribed MIL requests, returned stimuli/responses and criterion outcomes correctly coordinated and retained against independent run references.";
@@ -686,8 +694,10 @@ package FrameworkRequirements {
     item <'MOP-FR20'> MOP_FR20 : PerformanceMeasure {
         attribute :>> observationBasis = "Budget/sizing calculation agreement. Absolute errors against independent generation, demand, energy, array and battery calculations using identical declared inputs, equations and margins.";
         attribute :>> units = "W, Wh, square metres and Ah or selected sizing units, separately";
-        attribute :>> protocol = "Use multiple mission modes, eclipse and degradation cases, including infeasible inputs. Residuals assess framework calculation correctness rather than the adequacy of product capacity.";
+        attribute :>> protocol = "Use multiple mission modes, eclipse and degradation cases, including infeasible inputs. Residuals assess framework calculation correctness rather than the adequacy of product capacity. The numerical target is a proposed benchmark-reproduction band for the reported power, energy and effective-area outputs of Strobbe et al. Table III and Figure 7 only. Fix identical fixture inputs and equations and nearest rounding to the published 0.001 W, Wh or square metre increment before assessment. Half that increment gives a 0.0005 bound against the printed independent reference. This is a derived resolution-based band, not an author-recommended general arithmetic tolerance or physical validation. Other outputs, including Ah battery sizing, have no numerical target.";
         attribute :>> referenceConfiguration = "FR-20 case set, declared workload and framework/tool/host configuration, independent reference revisions and comparison rules";
+        attribute :>> target = "$\\leq 0.0005$ W, Wh, m\\textsuperscript{2} (fixture only)";
+        attribute :>> targetSource = "\\citep[Table~III]{review-0764}";
     }
     item <'MOP-FR21'> MOP_FR21 : PerformanceMeasure {
         attribute :>> observationBasis = "Credibility association quality. Share of conclusions with correct intended-use and credibility links, with precision/recall of validity and missing-evidence findings reported separately.";
@@ -770,8 +780,10 @@ package FrameworkRequirements {
     item <'MOP-FR34'> MOP_FR34 : PerformanceMeasure {
         attribute :>> observationBasis = "F Prime mapping fidelity. Share of independently specified interface mappings that preserve declared meanings, with compatibility, unsupported-behavior and unreported-loss errors counted separately.";
         attribute :>> units = "% of reference mapping items, counts";
-        attribute :>> protocol = "Pin F Prime/profile versions. Exercise component, port, topology, command, telemetry, event and parameter mappings, version changes and deliberately unsupported translations.";
+        attribute :>> protocol = "Pin F Prime/profile versions. Exercise component, port, topology, command, telemetry, event and parameter mappings, version changes and deliberately unsupported translations. The desired share covers component, port and topology architecture mappings only. It translates the literature condition that generated connections match the modeled architecture into N correct required architecture items out of N independently listed items. Required unsupported items remain gaps. Ground dictionaries and written behavior have no quantitative target from this source. The cited legacy plugin limitations establish no support for the selected future profile, whose versions and mappings require independent verification.";
         attribute :>> referenceConfiguration = "FR-34 case set, declared workload and framework/tool/host configuration, independent reference revisions and comparison rules";
+        attribute :>> target = "100\\% (architecture maps)";
+        attribute :>> targetSource = "\\citep[Sec.~3, p.~7]{review-0853}";
     }
     item <'MOP-FR35'> MOP_FR35 : PerformanceMeasure {
         attribute :>> observationBasis = "Control-behavior finding quality. Precision and recall of discrepancies in command preconditions, ordering/effects, rejection, transitions and protection/recovery responsibilities against independent references.";
@@ -824,6 +836,8 @@ package FrameworkRequirements {
     dependency MOPFR03_FR03 from MOP_FR03 to FR_03;
     #qualitativeContribution dependency MOPFR03_MOE02 from MOP_FR03 to FrameworkNeeds::MOE_02;
     #qualitativeContribution dependency MOPFR03_MOE03 from MOP_FR03 to FrameworkNeeds::MOE_03;
+    // Method eligibility considers available resources. This is not a direct cost/access measure.
+    #qualitativeContribution dependency MOPFR03_MOE05 from MOP_FR03 to FrameworkNeeds::MOE_05;
     dependency MOPFR04_FR04 from MOP_FR04 to FR_04;
     #qualitativeContribution dependency MOPFR04_MOE03 from MOP_FR04 to FrameworkNeeds::MOE_03;
     dependency MOPFR05_FR05 from MOP_FR05 to FR_05;
@@ -844,6 +858,8 @@ package FrameworkRequirements {
     dependency MOPFR11_FR11 from MOP_FR11 to FR_11;
     #qualitativeContribution dependency MOPFR11_MOE02 from MOP_FR11 to FrameworkNeeds::MOE_02;
     #qualitativeContribution dependency MOPFR11_MOE03 from MOP_FR11 to FrameworkNeeds::MOE_03;
+    // Correct gap associations retain the limits, owner and disposition needed for bounded conclusions.
+    #qualitativeContribution dependency MOPFR11_MOE06 from MOP_FR11 to FrameworkNeeds::MOE_06;
     dependency MOPFR13_FR13 from MOP_FR13 to FR_13;
     #qualitativeContribution dependency MOPFR13_MOE02 from MOP_FR13 to FrameworkNeeds::MOE_02;
     #qualitativeContribution dependency MOPFR13_MOE03 from MOP_FR13 to FrameworkNeeds::MOE_03;
@@ -871,11 +887,15 @@ package FrameworkRequirements {
     dependency MOPFR21_FR21 from MOP_FR21 to FR_21;
     #qualitativeContribution dependency MOPFR21_MOE02 from MOP_FR21 to FrameworkNeeds::MOE_02;
     #qualitativeContribution dependency MOPFR21_MOE03 from MOP_FR21 to FrameworkNeeds::MOE_03;
+    // Credibility links expose intended use, validity limits and missing independent evidence.
+    #qualitativeContribution dependency MOPFR21_MOE06 from MOP_FR21 to FrameworkNeeds::MOE_06;
     dependency MOPFR22_FR22 from MOP_FR22 to FR_22;
     #qualitativeContribution dependency MOPFR22_MOE02 from MOP_FR22 to FrameworkNeeds::MOE_02;
     #qualitativeContribution dependency MOPFR22_MOE03 from MOP_FR22 to FrameworkNeeds::MOE_03;
     dependency MOPFR23_FR23 from MOP_FR23 to FR_23;
     #qualitativeContribution dependency MOPFR23_MOE03 from MOP_FR23 to FrameworkNeeds::MOE_03;
+    // Resource/runtime records support separate enterprise resource quantities and costs.
+    #qualitativeContribution dependency MOPFR23_MOE05 from MOP_FR23 to FrameworkNeeds::MOE_05;
     dependency MOPFR24_FR24 from MOP_FR24 to FR_24;
     #qualitativeContribution dependency MOPFR24_MOE02 from MOP_FR24 to FrameworkNeeds::MOE_02;
     #qualitativeContribution dependency MOPFR24_MOE03 from MOP_FR24 to FrameworkNeeds::MOE_03;
@@ -914,8 +934,12 @@ package FrameworkRequirements {
     dependency MOPFR37_FR37 from MOP_FR37 to FR_37;
     #qualitativeContribution dependency MOPFR37_MOE03 from MOP_FR37 to FrameworkNeeds::MOE_03;
     #qualitativeContribution dependency MOPFR37_MOE04 from MOP_FR37 to FrameworkNeeds::MOE_04;
+    // Interpretation of linked engineering views supports understanding result scope and limits.
+    #qualitativeContribution dependency MOPFR37_MOE06 from MOP_FR37 to FrameworkNeeds::MOE_06;
     dependency MOPFR38_FR38 from MOP_FR38 to FR_38;
     #qualitativeContribution dependency MOPFR38_MOE03 from MOP_FR38 to FrameworkNeeds::MOE_03;
+    // Review content includes model limits, gaps and dispositions. Package coverage is not acceptance.
+    #qualitativeContribution dependency MOPFR38_MOE06 from MOP_FR38 to FrameworkNeeds::MOE_06;
     dependency MOPFR39_FR39 from MOP_FR39 to FR_39;
     #qualitativeContribution dependency MOPFR39_MOE02 from MOP_FR39 to FrameworkNeeds::MOE_02;
     #qualitativeContribution dependency MOPFR39_MOE03 from MOP_FR39 to FrameworkNeeds::MOE_03;

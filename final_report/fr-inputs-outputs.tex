@@ -1,0 +1,71 @@
+\clearpage
+\section{Framework requirement inputs and outputs}
+\label{appendix:framework-io}
+
+Table~\ref{tab:framework-io} lists the inputs and outputs of each FR in Table~\ref{tab:framework-requirements}. The IDs and groups follow the main requirement table. Inputs include submissions, controlled records and triggering events. Outputs include records, requests and status changes.
+
+{\small
+\setlength{\tabcolsep}{4pt}
+\setlength{\parskip}{0pt}
+\setlength{\LTpre}{0.4\baselineskip}
+\setlength{\LTpost}{0.4\baselineskip}
+\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.455\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.455\linewidth-2\tabcolsep\relax}@{}}
+\caption{Framework requirement inputs and outputs.}\label{tab:framework-io}\\
+\toprule
+\textbf{ID} & \textbf{Inputs} & \textbf{Outputs} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Inputs} & \textbf{Outputs} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\multicolumn{3}{@{}l}{\textbf{Requirements and explained assistance}} \\*
+FR-01 & Requirement submissions and source/parent revisions. & Retained requirement records and field resolution status. \\
+FR-02 & Draft edits/requests, current requirements, rules, sources and coverage references. & Explained findings, corrections/questions and assessment limits. \\
+FR-03 & Current phase/question, requirements, inputs, validity, resources and scope. & Cited method/model recommendations, alternatives and rejection records. \\
+FR-04 & Trace query, linked records and declared reference set. & Forward/reverse links, endpoint gaps and coverage. \\
+FR-17 & Spacecraft requirements, scenarios, quantities and derivation method. & Proposed EPS/component allocations, traces and dispositions. \\
+FR-29 & Suggestion/context revisions and authorized engineer decision. & Recorded disposition, rationale and revision links. \\
+FR-30 & Changed context revisions and affected assistance. & Stale status, blocked application and reassessment request. \\
+FR-39 & Phase, maturity, dependencies, findings and review criteria. & Proposed activities/reassessments, prerequisites and rationale. \\
+FR-41 & Assistance trigger, current context and response limits. & Acknowledgement, guidance/status and response timestamps. \\
+\multicolumn{3}{@{}l}{\textbf{Mission concepts and preliminary design}} \\*
+FR-25 & Mission expectations, constraints and nominal/degraded ConOps. & Revision-linked mission and ConOps records. \\
+FR-15 & Design parameters, component variants, extensions and allocations. & Configured EPS design representations. \\
+FR-13 & Modeled component and design data with sourced mass and volume properties. & Mass and volume estimates with uncertainty and unknowns. \\
+FR-14 & EPS alternatives, common mission/requirements and approved criteria. & Feasibility, ranking, sensitivity and selection rationale. \\
+FR-20 & Mission modes/loads, efficiencies, duty cycles, eclipse, battery limits, degradation and margins. & Power/energy budgets and array/battery sizing. \\
+\multicolumn{3}{@{}l}{\textbf{Simulation and model credibility}} \\*
+FR-16 & Whole-CUBICS mission/subsystem load and mode histories, orbit/attitude/illumination/thermal histories and EPS models. & Power/energy balance, bus quantities and battery state histories. \\
+FR-18 & Component/design model revisions, discipline and Omniverse coupling profiles, whole-CUBICS model/scenario revisions, spacecraft/subsystem scenario histories, directed mappings and returned tool responses. & Exchanged component/design models, mapped EPS analysis inputs, EPS states/results returned to the same whole-CUBICS scenario, mapping findings, execution status and transfer limitations. \\
+FR-21 & Conclusions, model scope, credibility evidence and error rules. & Conclusion-linked credibility records and explicit gaps. \\
+FR-22 & Current parameters and quality-checked supplied reference data. & Calibration proposals, residuals, uncertainty and affected analyses. \\
+FR-23 & Run settings, environment, resource limits and observations. & Run configuration/runtime records and numerical/resource findings. \\
+FR-26 & EPS requirements, ConOps, risks and failure/repair assumptions. & Applicable RAM methods, measures, coverage and exclusions. \\
+FR-27 & Functions, components, failure dependencies, data and transformation rules. & RAM representations/results with uncertainty and missing data. \\
+FR-31 & Exchanged/simulated/reference histories, scenario time references, sampling/exchange timing, synchronization rules and limits, and known delays. & Timing and synchronization records, checked alignments, timing gaps and limit findings. \\
+FR-32 & Exchanged/simulated/reference histories, entity/channel mappings, quantity/unit definitions, timing metadata and validity rules. & Admission/quality findings, preserved raw histories, invalid/missing/inactive status and processing masks. \\
+\multicolumn{3}{@{}l}{\textbf{Detailed interfaces and host software}} \\*
+FR-33 & Modeled EPS endpoint/port interfaces and command, telemetry, event and parameter definitions. & Revision-linked EPS interface and ground-definition specifications. \\
+FR-34 & EPS interface specification, software component/instance ownership and connectivity, required F Prime profile and supported representation/tool versions. & Checked F Prime mappings and definitions, compatibility findings and unsupported/lossy-translation records. \\
+FR-35 & Modeled command/control behavior and control/interface requirements. & Checked behavior specifications and discrepancy findings. \\
+FR-36 & Current authorized design/interface release, declared software scope, F Prime mappings, host/toolchain/dependency configuration and returned tool responses. & Authorized coding/build requests, retained source/build products, exact configuration records, logs and failures. \\
+FR-19 & Controller/plant models, mission scenarios and MIL criteria. & MIL requests, retained stimuli/responses and criterion outcomes/failures. \\
+FR-24 & Released F Prime host code/build, simulated EPS/subsystem products, whole-CUBICS scenario and coupling-profile revisions, matched MIL results and fixed comparison rules. & SIL requests, retained host responses, requirement/ConOps outcomes and MIL/SIL differences with execution status and limits. \\
+\multicolumn{3}{@{}l}{\textbf{Evidence, controlled changes and reviews}} \\*
+FR-28 & EPS requirements/expectations, assessment plans and observations. & Retained EPS V\&V plans, separate references and planned/executed status. \\
+FR-05 & Proposed change and current engineering dependencies. & Reciprocal impacts, unresolved dependencies and required reassessments. \\
+FR-06 & Predecessor baseline, change request and authorized change acceptance. & Successor baseline, preserved predecessor and product/evidence status. \\
+FR-07 & Product/evidence revisions, decisions and baseline retrieval request. & Retrievable exact baselines and revision/decision histories. \\
+FR-08 & Raw submissions and declared interface specification. & Admitted transfers or retained rejections with unchanged controlled content. \\
+FR-09 & Analysis/software results, exact dependencies, logs and status. & Configuration-linked results, provenance and execution status. \\
+FR-10 & Replay request, preserved run/dependencies, returned outputs and fixed comparison rules. & Replay inputs/instructions, comparisons and dependency/failure findings. \\
+FR-11 & Evidence/status, affected requirements/expectations and criticality rules. & Gap reports and blocked unsupported conformity claims. \\
+FR-37 & Controlled EPS baseline and view selection. & Readable baseline-linked engineering views. \\
+FR-38 & Phase baseline, review criteria and applicable records/evidence. & Prepared review package with coverage, limits and findings. \\
+FR-42 & Identified baseline, criteria and designated-authority review decision. & Recorded disposition, progression status and closure obligations. \\
+\end{longtable}
+}

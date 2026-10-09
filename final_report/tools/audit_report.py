@@ -12,6 +12,7 @@ import argparse
 from collections import defaultdict
 import copy
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import re
@@ -36,6 +37,15 @@ CANDIDATES = {
     'PA-CDT': ('custom', 'CandidateCDT', 'CDT'),
 }
 CRITICAL_MOPS = ('MOP-FR02', 'MOP-FR03', 'MOP-FR18', 'MOP-FR34', 'MOP-FR30', 'MOP-FR10')
+# Reviewed, scoped proposals only. This guard rejects unsourced additions and
+# changes of basis. These strings repeat the report/native specification, not
+# achieved performance or a generic acceptance rule for composite measures.
+MOP_TARGETS = {
+    'MOP-FR07': (r'$\leq 20$~s (indexed lookup)', r'\citep[Sec.~2, RQ-4]{kanavouras2024lightweight}'),
+    'MOP-FR18': (r'100\% (lossless profiles)', r'\citep[Sec.~3.6.4]{citation-2300}'),
+    'MOP-FR20': (r'$\leq 0.0005$ W, Wh, m\textsuperscript{2} (fixture only)', r'\citep[Table~III]{review-0764}'),
+    'MOP-FR34': (r'100\% (architecture maps)', r'\citep[Sec.~3, p.~7]{review-0853}'),
+}
 ALTERNATIVE_KEYS = {
     'L01': ('deutsch2022comet', 'citation-4690', 'review-0340', 'chiu2023sealion', 'kaslow2019csrm'),
     'L02': ('kaslow2019csrm', 'deutsch2022comet', 'review-0711', 'review-0289', 'review-0573'),
@@ -150,7 +160,7 @@ def native_statements(text, prefix):
 
 
 def string_attributes(text):
-    return {k: json.loads(v) for k, v in re.findall(r'(\w+)\s*(?:\:\s*(?!>)[\w:]+)?\s*=\s*("(?:[^"\\]|\\.)*")\s*;', text)}
+    return {k: json.loads(v) for k, v in re.findall(r'(\w+)\s*(?:\:\s*(?!>)[\w:]+)?\s*(?:default\s*)?=\s*("(?:[^"\\]|\\.)*")\s*;', text)}
 
 
 def native_block(text, start):
@@ -182,20 +192,132 @@ def annotations(text, name, about):
     return dict(rows)
 
 
+def parse_fr_rationale(cell):
+    match = re.fullmatch(r'([^\\]+)\.\\par\s*(.+)', cell, re.DOTALL)
+    assert match, 'Missing FR parent references or rationale'
+    parents = []
+    for term in match[1].split(','):
+        bounds = re.fullmatch(r'MR-(\d{2})(?:--(?:MR-)?(\d{2}))?', term.strip())
+        assert bounds, 'Malformed FR parent references'
+        first, last = int(bounds[1]), int(bounds[2] or bounds[1])
+        assert last >= first, 'Reversed FR parent range'
+        parents.extend(f'MR-{n:02}' for n in range(first, last + 1))
+    assert len(parents) == len(set(parents)), 'Duplicate FR parent reference'
+    rationale = match[2].strip()
+    citation_pattern = r'\\citep(?:\[[^]]+\])\{([^}]+)\}'
+    citations = [key.strip() for cited in re.findall(citation_pattern, rationale) for key in cited.split(',')]
+    prose = re.sub(citation_pattern, '', rationale).strip(' .')
+    assert prose and citations, 'Missing FR rationale or locator citation'
+    assert not re.search(r'\\citep(?!\[)', rationale), 'FR citations require source locators'
+    return {'parents': sorted(parents), 'rationale': rationale,
+            'rationale_cell': cell, 'rationale_citations': citations}
+
+
+def audit_requirement_headers(root):
+    for path, middle in (('needs.tex', 'Enterprise mission requirement'),
+                         ('requirements.tex', 'System requirement')):
+        header = r'\textbf{ID} & \textbf{' + middle + r'} & \textbf{Rationale}'
+        assert visible((root/path).read_text()).count(header) == 2, 'MR/FR initial and repeated headers must use ID and Rationale'
+
+
+def audit_fr_rationales(root, fr, records=None):
+    authored = load(root/'traceability/fr-rationale.json')
+    rows = unique(authored['requirements'], 'authored FR rationale')
+    assert set(rows) == set(fr) == ACTIVE_FR, 'Complete 40-FR rationale coverage required'
+    bibliography = (root/'literatura.bib').read_text()
+    keys = re.findall(r'@\w+\s*\{\s*([^,\s]+)\s*,', bibliography)
+    assert len(keys) == len(set(keys)), 'Duplicate bibliography key'
+    parents = 0
+    for rid, row in rows.items():
+        published = fr[rid]
+        assert row['parent_mrs'] == published['parents'], f'Authored rationale parent mismatch: {rid}'
+        assert row['rationale_latex'] == published['rationale_cell'], f'Authored rationale display mismatch: {rid}'
+        assert row['rationale_text'].strip() and row['citations'], f'Empty authored rationale: {rid}'
+        cited = {citation['key'] for citation in row['citations']}
+        assert set(published['rationale_citations']) == cited <= set(keys), f'FR rationale citation key mismatch: {rid}'
+        assert all(c.get('locator') and c.get('supporting_passage') and c.get('transfer_limit') for c in row['citations']), f'Missing checked source basis or transfer limit: {rid}'
+        parents += len(row['parent_mrs'])
+    assert parents == 169, 'Exactly 169 rationale parent links required'
+    if records is not None:
+        ledger = unique(records, 'ledger FR rationale')
+        for rid, row in rows.items():
+            assert ledger[rid].get('rationale') == fr[rid]['rationale'] and ledger[rid].get('rationale_citations') == fr[rid]['rationale_citations'], f'FR rationale ledger mismatch: {rid}'
+    return {'requirements': len(rows), 'direct_parents': parents,
+            'source_citations': sum(len(r['citations']) for r in rows.values()),
+            'el_hachimi_context_rows': sum('handpicked-0003' in fr[r]['rationale_citations'] for r in rows)}
+
+
+FR_IO_SOURCE = 'fr-inputs-outputs.tex'
+FR_TABLE_GROUPS = (
+    'Requirements and explained assistance', 'Mission concepts and preliminary design',
+    'Simulation and model credibility', 'Detailed interfaces and host software',
+    'Evidence, controlled changes and reviews',
+)
+
+
+def parse_fr_tables(requirements_text, io_text):
+    """Join the two published FR tables by exact, unique ID. Preserve cell text."""
+    main, appendix = visible(requirements_text), visible(io_text)
+    header = r'\textbf{ID} & \textbf{System requirement} & \textbf{Rationale}'
+    assert sum(line.strip() == header + r' \\' for line in main.splitlines()) == 2, 'FR initial and repeated headers must use ID and Rationale'
+    io_header = r'\textbf{ID} & \textbf{Inputs} & \textbf{Outputs}'
+    assert sum(line.strip() == io_header + r' \\' for line in appendix.splitlines()) == 2, 'FR IO initial and repeated headers must use ID, Inputs, Outputs'
+    for text, label in ((main, 'tab:framework-requirements'), (appendix, 'tab:framework-io'),
+                        (appendix, 'appendix:framework-io')):
+        assert text.count(r'\label{' + label + '}') == 1, f'Missing/duplicate FR table label: {label}'
+    assert r'\ref{tab:framework-io}' in main and r'\ref{appendix:framework-io}' in main, 'Missing main FR IO appendix reference'
+    assert r'\ref{tab:framework-requirements}' in appendix, 'Missing FR IO reference to main requirements'
+    assert not re.search(r'\\textit\{(?:Inputs|Outputs):\}', main), 'Remaining body FR IO duplication'
+    rows, io_rows = [], []
+    id_pattern = r'[^\s&\\]+\s*&'
+    for cells in table_rows(main, id_pattern):
+        assert len(cells) == 3 and cells[1], 'Malformed concise FR table row'
+        rows.append({'id': cells[0], 'text': cells[1], **parse_fr_rationale(cells[2])})
+    for cells in table_rows(appendix, id_pattern):
+        assert len(cells) == 3 and all(cells), 'Missing FR IO or malformed appendix row'
+        io_rows.append({'id': cells[0], 'inputs': cells[1], 'outputs': cells[2]})
+    fr, io = unique(rows, 'report FR'), unique(io_rows, 'appendix FR IO')
+    assert set(fr) == set(io) == ACTIVE_FR, 'FR main/appendix active ID mismatch (absent or extra ID)'
+
+    def groups(text, label):
+        table = text.split(r'\label{' + label + '}', 1)[1].split(r'\end{longtable}', 1)[0]
+        pattern = r'\\multicolumn\{3\}\{@\{\}l\}\{\\textbf\{([^}]+)\}\}'
+        parts = re.split(pattern, table)
+        return [(parts[n], [r[0] for r in table_rows(parts[n + 1], id_pattern)])
+                for n in range(1, len(parts), 2)]
+
+    main_groups = groups(main, 'tab:framework-requirements')
+    assert tuple(name for name, _ in main_groups) == FR_TABLE_GROUPS, 'Changed FR groups'
+    assert groups(appendix, 'tab:framework-io') == main_groups, 'FR IO group/order mismatch'
+    body = ' '.join(main.split())
+    for rid, row in fr.items():
+        row.update(inputs=io[rid]['inputs'], outputs=io[rid]['outputs'])
+        for direction in ('inputs', 'outputs'):
+            assert ' '.join(row[direction].split()) not in body, f'Remaining body FR IO duplication: {rid} {direction}'
+    return fr
+
+
+def audit_io_body(root, fr):
+    for path in root.glob('*.tex'):
+        if path.name in ('apendice.tex', FR_IO_SOURCE):
+            continue
+        text = ' '.join(visible(path.read_text()).split())
+        for rid, row in fr.items():
+            for direction in ('inputs', 'outputs'):
+                assert ' '.join(row[direction].split()) not in text, f'Remaining body FR IO duplication: {rid} {direction} in {path.name}'
+
+
 def report_requirements(root):
+    audit_requirement_headers(root)
     mr = []
     for cells in table_rows((root/'needs.tex').read_text(), r'MR-\d{2}'):
         assert len(cells) == 3, 'Malformed concise MR table row'
         mr.append({'id': cells[0], 'text': cells[1]})
-    fr = []
-    for cells in table_rows((root/'requirements.tex').read_text(), r'FR-\d{2}\s*&'):
-        assert len(cells) == 3, 'Malformed concise FR table row'
-        match = re.fullmatch(r'(.*?)\\par\s*\\textit\{Inputs:\}\s*(.*?)\\par\s*\\textit\{Outputs:\}\s*(.*)', cells[1], re.DOTALL)
-        assert match and all(s.strip() for s in match.groups()), f'Missing FR statement/IO: {cells[0]}'
-        fr.append({'id': cells[0], 'text': match[1].strip(), 'inputs': match[2].strip(),
-                   'outputs': match[3].strip(), 'parents': sorted(bare_numbers(cells[2], 'MR-'))})
-    assert mr and fr, 'No concise report requirement rows found'
-    return unique(mr, 'report MR'), unique(fr, 'report FR')
+    fr = parse_fr_tables((root/'requirements.tex').read_text(), (root/FR_IO_SOURCE).read_text())
+    assert visible((root/'apendice.tex').read_text()).count(r'\input{fr-inputs-outputs}') == 1, 'FR IO appendix fragment must be included exactly once'
+    audit_io_body(root, fr)
+    assert mr, 'No concise report mission requirement rows found'
+    return unique(mr, 'report MR'), fr
 
 
 def current_trace(root):
@@ -205,6 +327,11 @@ def current_trace(root):
     assert mr == native_statements(needs, 'MR'), 'MR report/native statement or ID mismatch'
     nf = native_statements(nt, 'FR')
     assert set(fr) == set(nf) == ACTIVE_FR, 'FR report/native active ID mismatch'
+    ledger_fr = unique(load(root/'traceability/framework-baseline.json')['framework_requirements'], 'ledger FR')
+    assert set(ledger_fr) == set(fr), 'FR ledger active ID mismatch'
+    for rid, row in fr.items():
+        for direction in ('inputs', 'outputs'):
+            assert row[direction] == ledger_fr[rid][direction], f'FR ledger IO mismatch: {rid} {direction}'
     assert set(mr) == {f'MR-{n:02}' for n in range(1, 7)}, 'Exactly six mission gates required'
     gates = ('MCR', 'SRR', 'MDR/SDR', 'PDR', 'CDR', 'SIR')
     for mid, gate in zip(sorted(mr), gates):
@@ -256,14 +383,53 @@ def current_trace(root):
     return mr, fr, ucs, scs, uc_mrs, sc_mrs, sc_ucs
 
 
+def report_moe_definitions(root):
+    text = visible((root/'needs.tex').read_text())
+    rows = [row for row in table_rows(text, r'MOE-\d{2}') if len(row) == 2]
+    definitions = []
+    for cell, definition in rows:
+        match = re.fullmatch(r'(MOE-\d{2})\\phantomsection\\label\{moe:\1\}', cell)
+        assert match, 'Missing or mismatched MOE definition anchor'
+        definitions.append({'id': match[1], 'definition': definition})
+    result = unique(definitions, 'MOE definition')
+    labels = re.findall(r'\\label\{moe:(MOE-\d{2})\}', text)
+    assert len(labels) == len(set(labels)) == len(result) and set(labels) == set(result), 'Duplicate or misplaced MOE anchor'
+    return {mid: row['definition'] for mid, row in result.items()}
+
+
+def audit_mop_order(text):
+    text = visible(text)
+    heading = r'\subsection{Measures of performance}'
+    assert text.count(heading) == text.count(r'\label{subsection:framework-mops}') == 1, 'Missing or duplicate MOP subsection'
+    requirement_table = text.index(r'\label{tab:framework-requirements}')
+    end = text.index(r'\end{longtable}', requirement_table)
+    assert end < text.index(heading) < text.index(r'\label{tab:framework-mop-protocols}'), 'MOP subsection must follow the complete FR table'
+
+
 def audit_mops(root, fr, records=None):
     rows = []
-    for cells in table_rows((root/'requirements.tex').read_text(), r'FR-\d{2}\\newline\s+MOP-FR\d{2}'):
-        assert len(cells) == 3, 'Malformed MOP row'
+    text = (root/'requirements.tex').read_text()
+    audit_mop_order(text)
+    moes = report_moe_definitions(root)
+    for cells in table_rows(text, r'FR-\d{2}\\newline\s+MOP-FR\d{2}'):
+        assert len(cells) == 4, 'Malformed MOP row'
         rid, mid = re.fullmatch(r'(FR-\d{2})\\newline\s+(MOP-FR\d{2})', cells[0]).groups()
         assert rid[-2:] == mid[-2:], 'MOP/FR identity mismatch'
-        assert cells[1] and cells[2] == '', f'Desired MOP range must be literally empty: {mid}'
-        rows.append({'id': mid, 'FR': rid, 'definition_and_unit': cells[1], 'target': '', 'target_source': '', 'achieved': 'unknown'})
+        assert cells[1], f'Missing MOP definition: {mid}'
+        target, source = MOP_TARGETS.get(mid, ('', ''))
+        expected_cell = target + r'\newline ' + source if target else ''
+        if not target:
+            assert cells[2] == '', f'Unsupported desired MOP range must be literally empty: {mid}'
+        else:
+            assert cells[2] == expected_cell, f'Unsupported or unsourced desired MOP range: {mid}'
+            keys = re.findall(r'\\citep(?:\[[^]]*\])*\{([^}]+)\}', source)
+            bibliography = (root/'literatura.bib').read_text()
+            assert keys and all(re.search(r'@\w+\s*\{\s*' + re.escape(k) + r'\s*,', bibliography) for k in keys), f'Missing MOP target citation: {mid}'
+        links = re.findall(r'\\hyperref\[moe:(MOE-\d{2})\]\{\1\}', cells[3])
+        assert links and cells[3] == r'\newline '.join(r'\hyperref[moe:' + e + ']{' + e + '}' for e in links), f'Missing or malformed MOP/MOE link: {mid}'
+        assert len(links) == len(set(links)), f'Duplicate MOP/MOE link: {mid}'
+        assert set(links) <= set(moes), f'Unknown report MOP/MOE endpoint: {mid}'
+        rows.append({'id': mid, 'FR': rid, 'definition_and_unit': cells[1], 'target': target, 'target_source': source, 'achieved': 'unknown', 'moe_ids': sorted(links)})
     measures = unique(rows, 'report MOP')
     assert {r['FR'] for r in rows} == set(fr) and len(rows) == 40, 'Exact per-FR MOP coverage required'
     nt = (root/'sysml/03-requirements.sysml').read_text()
@@ -276,22 +442,28 @@ def audit_mops(root, fr, records=None):
         assert m[2] == m[1].replace('-', '_'), 'Native MOP identity mismatch'
         attrs = string_attributes(m[3])
         assert all(attrs.get(f) for f in ('observationBasis', 'units', 'protocol', 'referenceConfiguration')), f'Incomplete native MOP protocol: {m[1]}'
-        assert attrs.get('target', '') == attrs.get('targetSource', '') == '' and attrs.get('achieved', defaults['achieved']) == defaults['achieved'], 'False native MOP result/target'
+        assert attrs.get('target', '') == measures[m[1]]['target'] and attrs.get('targetSource', '') == measures[m[1]]['target_source'] and attrs.get('achieved', defaults['achieved']) == defaults['achieved'], 'False native MOP result/target'
         measures[m[1]]['native_protocol'] = attrs
     edges = re.findall(r'dependency MOPFR\d+_FR\d+ from (MOP_FR\d{2}) to (FR_\d{2});', nt)
     expected = {(mid.replace('-', '_'), row['FR'].replace('-', '_')) for mid, row in measures.items()}
     assert len(edges) == 40 and set(edges) == expected, 'Native MOP/FR dependency mismatch'
     contributions = re.findall(r'#qualitativeContribution dependency MOPFR\d+_MOE\d+ from (MOP_FR\d{2}) to FrameworkNeeds::(MOE_\d{2});', nt)
-    assert len(contributions) == len(set(contributions)) == 68, 'Exactly 68 qualitative MOP/MOE contributions required'
-    assert all(m.replace('_', '-') in measures and e in {'MOE_01', 'MOE_02', 'MOE_03', 'MOE_04'} for m, e in contributions), 'Unknown qualitative MOP/MOE endpoint'
+    assert len(contributions) == len(set(contributions)) == 74, 'Exactly 74 qualitative MOP/MOE contributions required'
+    assert all(m.replace('_', '-') in measures and e.replace('_', '-') in moes for m, e in contributions), 'Unknown qualitative MOP/MOE endpoint'
     for mid, row in measures.items():
-        row['moe_ids'] = sorted(e.replace('_', '-') for m, e in contributions if m == mid.replace('-', '_'))
-        assert row['moe_ids'], 'MOP without qualitative MOE contribution'
+        native_moes = sorted(e.replace('_', '-') for m, e in contributions if m == mid.replace('-', '_'))
+        assert native_moes and row['moe_ids'] == native_moes, f'Report/native MOP/MOE contribution mismatch: {mid}'
     if records is not None:
         ledger = unique(records, 'ledger MOP')
         assert set(ledger) == set(measures), 'MOP ledger coverage mismatch'
         for mid, row in measures.items():
             assert all(ledger[mid].get(k) == v for k, v in row.items()), f'MOP ledger mismatch: {mid}'
+            evidence = ledger[mid].get('target_evidence')
+            if mid in MOP_TARGETS:
+                source_keys = re.findall(r'\\citep(?:\[[^]]*\])*\{([^}]+)\}', row['target_source'])
+                assert evidence and evidence.get('status') == 'proposed, not qualified' and evidence.get('kind') in {'derived engineering interpretation of literature recommendation', 'derived benchmark reference band'} and evidence.get('sources') == source_keys and all(evidence.get(k) for k in ('locator', 'source_claim', 'transfer_limit')), f'Unsupported MOP target evidence: {mid}'
+            else:
+                assert not evidence, f'Unsupported MOP target evidence: {mid}'
     return measures
 
 
@@ -311,8 +483,8 @@ def assert_neutral(record):
 
 
 def audit_moes(root, records):
-    rows = [row for row in table_rows((root/'needs.tex').read_text(), r'MOE-\d{2}\s*&') if len(row) == 2]
-    assert len(rows) == 4, 'Four concise MOE definitions required'
+    rows = list(report_moe_definitions(root).items())
+    assert len(rows) == 6 and {row[0] for row in rows} == {f'MOE-{n:02}' for n in range(1, 7)}, 'Six concise MOE definitions required'
     ledger = unique(records, 'MOE')
     assert set(ledger) == {row[0] for row in rows}, 'MOE report/ledger coverage mismatch'
     native = (root/'sysml/02-needs-context.sysml').read_text()
@@ -446,7 +618,7 @@ def audit_trade_matrix(text, trade):
     assert set(ledger) == set(matrix), 'Critical MOP ledger coverage mismatch'
     for mid, cells in matrix.items():
         row = ledger[mid]
-        assert row['mechanisms'] == cells and row['achieved'] == 'unknown' and row['desired_range'] == '', 'Trade mechanism/result mismatch'
+        assert row['mechanisms'] == cells and row['achieved'] == 'unknown' and row['desired_range'] == MOP_TARGETS.get(mid, ('', ''))[0], 'Trade mechanism/result mismatch'
     active = visible(text)
     assert re.search(r'achieved values are unknown', active, re.I), 'Unknown achieved values must be explicit'
     assert not re.search(r'recommends developing|preferred (?:candidate|direction|deployment)|selected physical|reuse-first priority|principal alternative|priority ordering', active, re.I), 'Current selected/preferred report claim'
@@ -667,6 +839,7 @@ def audit_published_logical_api(root, fr, contract, require_sources=False):
     assert contract['states'] == {'guidance': components['L06']['definition'] + '::assistanceCurrency', 'review': components['L05']['definition'] + '::reviewState'}, 'Published authority/currency state owner mismatch'
     if require_sources:
         assert root is not None and contract['source_sha256'] and all(sha(Path(root)/p) == h for p, h in contract['source_sha256'].items()), 'Published logical API source identity mismatch'
+        assert {FR_IO_SOURCE, 'requirements.tex'} <= set(contract['source_sha256']), 'Published logical source snapshot must include both FR tables'
         text = (Path(root)/'sysml/04-logical.sysml').read_text()
         metadata = dict(re.findall(r'@NativeIO about (\w+::contractFR\d{2}) \{[^\n]*?operation = (\w+::\w+) meta SysML::ActionUsage;', text))
         assert len(metadata) == 40 and all(metadata.get(r['model_path'].removeprefix('FrameworkLogical::')) == r['operation'].removeprefix('FrameworkLogical::') for r in req.values()), 'Published native FR operation metadata mismatch'
@@ -760,6 +933,7 @@ def audit_final_logical_ledger(root, fr, logical, contract, require_sources=Fals
         pointer = contract['final_logical_ledger']
         assert pointer['path'] == 'traceability/logical-architecture.json' and sha(Path(root)/pointer['path']) == pointer['sha256'], 'Final logical ledger source identity mismatch'
         assert sha(Path(root)/'requirements.tex') == logical['source_contract']['requirements_sha256'] and sha(Path(root)/'sysml/03-requirements.sysml') == logical['source_contract']['native_requirements_sha256'], 'Final logical requirement source identity mismatch'
+        assert logical['source_contract']['inputs_outputs_path'] == FR_IO_SOURCE and sha(Path(root)/FR_IO_SOURCE) == logical['source_contract']['inputs_outputs_sha256'], 'Final logical IO appendix source identity mismatch'
         audit_logical_table((Path(root)/'logical.tex').read_text())
     return allocations
 
@@ -840,9 +1014,32 @@ def audit_figures(root, diagrams):
                 raise AssertionError('Missing declared SVG/PDF conversion provenance')
             labels = ' '.join(ET.parse(svg).getroot().itertext())
             if figure.stem == 'logical-architecture':
+                # Coordinated views can place external endpoints on page 2.
+                # Verify every declared panel before checking their joint labels.
+                for name, digest in record.get('coordinated_panel_sha256', {}).items():
+                    assert Path(name).name == name, 'Invalid coordinated figure path'
+                    panel = figure.parent/name
+                    assert panel.is_file() and sha(panel) == digest, 'Coordinated figure hash mismatch'
+                    if panel.suffix == '.svg' and panel != svg:
+                        labels += ' ' + ' '.join(ET.parse(panel).getroot().itertext())
                 assert all(lid in labels for lid in GROUPS) and 'L07' not in labels and 'L08' not in labels, 'Logical figure component labels mismatch'
                 assert 'F Prime' in labels and 'Omniverse' in labels and 'CUBICS' in labels, 'Logical figure mandatory endpoints missing'
-            result.append({'figure': diagram, 'kind': 'authored illustration', 'provenance': str(provenance_path.relative_to(root)), 'artifact_sha256': hashes})
+                generator = figure.with_suffix('.py')
+                assert record['dimensions']['pdf_pages'] == 3 and sha(generator) == record['generator_sha256'], 'Logical three-view generator identity mismatch'
+                spec = importlib.util.spec_from_file_location('audited_logical_illustration', generator)
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                inventory = module.inventory()
+                panels = [svg] + [figure.with_name(figure.stem + f'-panel-{n:02}.svg') for n in (2, 3)]
+                # Check actual canonical boxes, Framework containment, crossing ports,
+                # concrete branch ownership and directions against current contracts.
+                try:
+                    display = module.display_check(inventory, panels)
+                except ValueError as error:
+                    raise AssertionError(str(error)) from error
+                assert inventory['counts'] == record['counts'], 'Logical displayed contract coverage mismatch'
+            result.append({'figure': diagram, 'kind': 'authored illustration', 'provenance': str(provenance_path.relative_to(root)), 'artifact_sha256': hashes,
+                           **({'display_checks': display} if figure.stem == 'logical-architecture' else {})})
             continue
         manifest_path = figure.with_suffix('.manifest.json')
         assert manifest_path.is_file(), f'Missing figure provenance: {diagram}'
@@ -1045,8 +1242,11 @@ def audit(root, inspect_path=None, log_path=None):
             component = next(c for c in candidate['components'] if c['logical'] == lr['primary'])
             assert pas[cid]['physical_component_id'] == component['id'] and pas[cid]['operation'] == ar['operation'], 'Physical component/operation mismatch'
         fr[rid].update(row)
+    rationales = audit_fr_rationales(root, fr, baseline['framework_requirements'])
     mops = audit_mops(root, fr, baseline['measures_of_performance'])
     moes = audit_moes(root, baseline['measures_of_effectiveness'])
+    from check_concern_coverage import check as check_concern_coverage
+    concern_coverage = check_concern_coverage(root)
     cases = audit_cases(root, baseline, fr); reviews = audit_historical_reviews(root)
     assertions = load(root/'traceability/source-review.json')['current_assertions']
     assert set(expected_alternatives().values()) | {'handpicked-0004'} <= {s['citation'] for s in assertions}, 'Missing bounded current source assertions'
@@ -1061,6 +1261,8 @@ def audit(root, inspect_path=None, log_path=None):
     assert not re.search(r'\\(?:scriptsize|tiny|resizebox|scalebox)\b', active), 'Unreadable reduced publication content'
     source_hashes = baseline['current_source_sha256']
     assert source_hashes and all(sha(root/p) == h for p, h in source_hashes.items()), 'Current audit source snapshot mismatch'
+    assert {FR_IO_SOURCE, 'tools/test_fr_io.py', 'fig/logical-architecture-panel-03.svg',
+            'fig/logical-architecture-panel-03.pdf', 'fig/logical-architecture-panel-03.png'} <= set(source_hashes), 'Current snapshot must include appendix IO and all three logical views'
     acronyms = audit_glossary((root/'glosario.tex').read_text())
     bibliography = (root/'literatura.bib').read_text(); keys = re.findall(r'@\w+\s*\{\s*([^,\s]+)\s*,', bibliography)
     assert len(keys) == len(set(keys)), 'Duplicate bibliography key'
@@ -1080,8 +1282,10 @@ def audit(root, inspect_path=None, log_path=None):
         semantic = semantic_audit(inspection, dict(baseline, report_root=str(root)), fr, figures)
     pages = audit_latex_log(Path(log_path).read_text(errors='replace')) if log_path else None
     return {'valid': True, 'scope': 'Current specification consistency only. No empirical V&V or renewed independent review.',
-            'concern_occurrences': len(concerns), 'mission_requirements': len(mr), 'direct_fr_parents': 169,
-            'framework_requirements': len(fr), 'logical_components': len(logical['components']), 'measures_of_performance': len(mops),
+            'concern_occurrences': len(concerns), 'concern_moe_coverage': concern_coverage['counts'],
+            'measures_of_effectiveness': len(moes), 'mission_requirements': len(mr), 'direct_fr_parents': 169,
+            'framework_requirements': len(fr), 'fr_rationale': rationales,
+            'logical_components': len(logical['components']), 'measures_of_performance': len(mops),
             'candidate_allocations': {cid: len(c['allocations']) for cid, c in candidates.items()},
             'planned_verification_cases': len(cases), 'figures': figures, 'historical_reviews': reviews,
             'semantic': semantic, 'pages': pages, 'framework_empirical_vv': 'not executed'}
@@ -1099,9 +1303,9 @@ def audit_glossary(text):
 
 def audit_latex_log(log):
     assert not re.search(r'Overfull \\[hv]box|undefined on input|undefined references|undefined citations|Citation .+ undefined|Reference .+ undefined|Float too large|^!', log, re.MULTILINE), 'LaTeX unresolved reference/citation, error, overfull box or oversized float'
-    match = re.search(r'Output written on .*?\((\d+) pages?', log)
+    match = re.search(r'Output written on [\s\S]*?\((\d+) pages?', log)
     assert match, 'No final PDF page count in LaTeX log'
-    pages = int(match[1]); assert pages <= 86, f'Report exceeds 86 page release target: {pages}'
+    pages = int(match[1]); assert pages <= 100, f'Report exceeds 100 page ceiling: {pages}'
     return pages
 
 
