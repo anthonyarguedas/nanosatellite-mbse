@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a structure aware retrieval corpus from directly included SLR reports."""
+"""Build a structure aware retrieval corpus from SLR reports and standards."""
 
 from __future__ import annotations
 
@@ -16,6 +16,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from typing import Iterable, Iterator
 
+import yaml
+
 from diagram_corpus import build_diagram_chunks
 from diagram_pipeline import EXTRACTION_SCHEMA_VERSION
 
@@ -24,6 +26,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
 DATA_DIR = SCRIPT_DIR / "data"
 INCLUDED_REPORTS_PATH = REPO_ROOT / "SLR/SLR1/included_reports.json"
+STANDARDS_DIR = REPO_ROOT / "SLR/SLR1/pdfs/standards"
 REPORT_MARKDOWN_RE = re.compile(r"^([a-z][a-z0-9_]*)-report-([0-9]+)\.md$")
 PAGE_RE = re.compile(r"<!--\s*PDF_PAGE:\s*([1-9][0-9]*)\s*-->")
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
@@ -951,6 +954,77 @@ def included_publication_year(record: dict) -> int | None:
     return int(match.group(0)) if match else None
 
 
+def standard_sources() -> Iterator[tuple[dict, Path, str]]:
+    """Discover standards collection Markdown and retain its source metadata."""
+    seen_ids: set[str] = set()
+    for path in sorted(STANDARDS_DIR.rglob("*.md")):
+        try:
+            path.resolve().relative_to(REPO_ROOT.resolve())
+        except (OSError, ValueError) as error:
+            raise ValueError(f"Standard path leaves the repository: {path}") from error
+        report_id = f"standard-{path.stem}"
+        if report_id in seen_ids:
+            raise ValueError(f"Duplicate standard report ID: {report_id}")
+        seen_ids.add(report_id)
+        markdown = path.read_text(encoding="utf-8", errors="replace")
+        frontmatter = re.match(r"\A---\s*\n(.*?)\n---\s*(?:\n|\Z)", markdown, re.DOTALL)
+        try:
+            metadata = yaml.safe_load(frontmatter.group(1)) if frontmatter else {}
+        except yaml.YAMLError as error:
+            raise ValueError(f"Invalid standard frontmatter in {path}: {error}") from error
+        metadata = metadata if metadata is not None else {}
+        if not isinstance(metadata, dict):
+            raise ValueError(f"Expected standard frontmatter to be a mapping: {path}")
+        heading = next(
+            (
+                match.group(2)
+                for line in strip_frontmatter(markdown).splitlines()
+                if (match := HEADING_RE.match(line.strip()))
+            ),
+            path.stem,
+        )
+        title = str(metadata.get("title") or heading).strip()
+        year = included_publication_year(
+            {
+                "date": metadata.get("publication_year")
+                or metadata.get("year")
+                or metadata.get("edition")
+                or metadata.get("revision")
+            }
+        )
+        authors = metadata.get("authors") or []
+        if not isinstance(authors, list):
+            raise ValueError(f"Standard {report_id} authors must be a list")
+        report = {
+            "report_id": report_id,
+            "namespace": "standard",
+            "corpus_collection": "standards",
+            "screening_record_id": None,
+            "screening_decision": None,
+            "title": title,
+            "authors": authors,
+            "publication_year": year,
+            "publication_type": metadata.get("publication_type") or "reference_document",
+            "venue": metadata.get("venue"),
+            "doi": metadata.get("doi"),
+            "source_url": metadata.get("source_url")
+            or metadata.get("url")
+            or metadata.get("source"),
+        }
+        for key in (
+            "canonical_url",
+            "edition",
+            "revision",
+            "availability",
+            "status_label",
+            "document_type",
+            "source_note",
+        ):
+            if key in metadata:
+                report[key] = metadata[key]
+        yield report, path, "standards_markdown"
+
+
 def expected_sources() -> Iterator[tuple[dict, Path | None, str]]:
     selected_sources = included_report_sources()
     candidates = candidate_records_by_report_id()
@@ -1003,6 +1077,8 @@ def expected_sources() -> Iterator[tuple[dict, Path | None, str]]:
         }
         yield report, path, source_kind
 
+    yield from standard_sources()
+
 
 def build(args: argparse.Namespace) -> dict:
     reports: list[dict] = []
@@ -1030,6 +1106,15 @@ def build(args: argparse.Namespace) -> dict:
             units,
             max_words=args.max_words,
         )
+        if report.get("corpus_collection") == "standards":
+            source_context = [f"Source code: {path.stem}"]
+            for key in ("edition", "availability", "document_type"):
+                if report.get(key):
+                    source_context.append(f"{key.capitalize()}: {report[key]}")
+            for chunk in [*chunks, *equation_chunks]:
+                chunk["embedding_text"] = (
+                    "\n".join(source_context) + "\n" + chunk["embedding_text"]
+                )
         digest = hashlib.sha256(
             SPACE_RE.sub(" ", strip_frontmatter(markdown)).encode("utf-8")
         ).hexdigest()
@@ -1087,8 +1172,12 @@ def build(args: argparse.Namespace) -> dict:
 
     exact_duplicates = [ids for ids in content_hashes.values() if len(ids) > 1]
     manifest = {
-        "schema_version": "slr1-embedding-corpus/v3",
-        "selection_rule": "listed in SLR/SLR1/included_reports.json",
+        "schema_version": "slr1-embedding-corpus/v4",
+        "selection_rule": "listed in SLR/SLR1/included_reports.json or Markdown in SLR/SLR1/pdfs/standards",
+        "standards_source": {
+            "path": str(STANDARDS_DIR.relative_to(REPO_ROOT)),
+            "rule": "all Markdown files, including previews, excerpts, guidance, and access notes",
+        },
         "selection_source": {
             "path": str(INCLUDED_REPORTS_PATH.relative_to(REPO_ROOT)),
             "sha256": hashlib.sha256(INCLUDED_REPORTS_PATH.read_bytes()).hexdigest(),
@@ -1119,7 +1208,13 @@ def build(args: argparse.Namespace) -> dict:
             ],
         },
         "counts": {
-            "directly_included_records": len(reports) + len(missing),
+            "directly_included_records": sum(
+                report.get("corpus_collection") != "standards"
+                for report in [*reports, *missing]
+            ),
+            "standards_indexed": sum(
+                report.get("corpus_collection") == "standards" for report in reports
+            ),
             "reports_indexed": len(reports),
             "reports_missing": len(missing),
             "units": len(all_units),

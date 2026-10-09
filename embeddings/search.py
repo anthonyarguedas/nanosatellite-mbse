@@ -120,6 +120,16 @@ REPORT_MARKDOWN_RE = re.compile(r"^([a-z][a-z0-9_]*)-report-([0-9]+)\.md$")
 SEARCH_MODES = ("hybrid", "vector", "jev", "visual", "bm25", "regex")
 RERANKABLE_MODES = {"hybrid", "vector", "jev", "bm25", "regex"}
 REVIEW_FILTERS = ("include", "exclude", "only")
+STANDARD_FILTERS = ("include", "exclude", "only")
+SOURCE_METADATA_FIELDS = (
+    "corpus_collection",
+    "edition",
+    "revision",
+    "availability",
+    "status_label",
+    "document_type",
+    "source_note",
+)
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
 SERVED_SUFFIXES = IMAGE_SUFFIXES | {".pdf"}
 
@@ -544,6 +554,8 @@ def canonical_report_code(report_id: str) -> str:
     namespace, separator, number = report_id.partition("-")
     if not separator or not number:
         return report_id
+    if namespace == "standard":
+        return number
     prefix = "candidate" if namespace == "citation" else namespace
     return f"{prefix}-report-{number}"
 
@@ -890,6 +902,29 @@ def review_filter_allows(report: dict, review_filter: str) -> bool:
     return True
 
 
+def normalize_standard_filter(value: str) -> str:
+    value = value.casefold()
+    if value not in STANDARD_FILTERS:
+        available = ", ".join(STANDARD_FILTERS)
+        raise SearchError(f"Unknown standards filter {value!r}. Choose: {available}.")
+    return value
+
+
+def standard_filter_allows(report: dict, standard_filter: str) -> bool:
+    """Filter the standards collection, including its guidance and source notes."""
+    is_standard = report.get("corpus_collection") == "standards"
+    if standard_filter == "exclude":
+        return not is_standard
+    if standard_filter == "only":
+        return is_standard
+    return True
+
+
+def report_source_metadata(report: dict) -> dict:
+    """Keep edition and source availability visible in text and image results."""
+    return {key: report[key] for key in SOURCE_METADATA_FIELDS if key in report}
+
+
 def repository_path(value: str) -> Path | None:
     """Return an existing repository file without allowing path traversal."""
     path = Path(value)
@@ -1058,7 +1093,7 @@ class SearchService:
         return self._bm25_data
 
     def _jev_content_filter(self, chunks: list[dict]):
-        """Load complete cached Jev content scores for Qwen result filtering."""
+        """Filter cached metadata while admitting standards awaiting classification."""
         import numpy as np
 
         if not self.jev_index_path.exists():
@@ -1082,29 +1117,33 @@ class SearchService:
         except sqlite3.Error as error:
             raise SearchError(f"Cannot read the Jev content index: {error}") from error
 
-        missing = [
+        # Standards can be queried before their billable classifications exist.
+        missing_reports = [
             str(chunk["chunk_id"])
             for chunk in chunks
             if str(chunk["chunk_id"]) not in cached_content
+            and not str(chunk.get("report_id") or "").startswith("standard-")
         ]
-        if missing:
+        if missing_reports:
             raise SearchError(
-                f"The Jev content index lacks {len(missing)} of {len(chunks)} chunks. "
-                "Run any Jev search to finish classifying the corpus."
+                f"The Jev content index lacks {len(missing_reports)} of {len(chunks)} chunks. "
+                "Run build_jev_content_index.py to finish classifying the corpus."
             )
+        if any(not math.isfinite(value) for value in cached_content.values()):
+            raise SearchError("The Jev content index contains invalid Noul scores.")
         scores = np.asarray(
-            [cached_content[str(chunk["chunk_id"])] for chunk in chunks],
+            [cached_content.get(str(chunk["chunk_id"]), np.nan) for chunk in chunks],
             dtype=np.float32,
         )
-        if not np.isfinite(scores).all():  # pragma: no cover - cache invariant
-            raise SearchError("The Jev content index contains invalid Noul scores.")
-        eligible = scores >= JEV_CONTENT_THRESHOLD
+        unclassified = np.isnan(scores)
+        eligible = unclassified | (scores >= JEV_CONTENT_THRESHOLD)
         eligible_count = int(np.count_nonzero(eligible))
         return scores, eligible, {
             "source": "jev_content_noul",
             "model_id": JEV_MODEL_ID,
             "threshold": JEV_CONTENT_THRESHOLD,
-            "classified_chunks": len(chunks),
+            "classified_chunks": len(cached_content),
+            "unclassified_chunks": int(np.count_nonzero(unclassified)),
             "eligible_chunks": eligible_count,
             "excluded_chunks": len(chunks) - eligible_count,
         }
@@ -1467,8 +1506,10 @@ class SearchService:
         pdf = originating_pdf(source_path)
         image_url = file_url(image) if image is not None else None
         pdf_url = file_url(pdf, chunk.get("page_start")) if pdf is not None else None
-        source_url = image_url if image is not None else pdf_url
-        source_label = "Open image" if image is not None else "Open PDF"
+        source_url = image_url or pdf_url or report.get("source_url")
+        source_label = (
+            "Open image" if image_url else "Open PDF" if pdf_url else "Open source"
+        )
         result = {
             "rank": rank,
             "score": score,
@@ -1486,6 +1527,7 @@ class SearchService:
                 "doi": report.get("doi"),
             },
             "source_path": source_path,
+            "document_url": report.get("source_url"),
             "section": chunk["section"],
             "page_start": chunk["page_start"],
             "page_end": chunk["page_end"],
@@ -1496,6 +1538,7 @@ class SearchService:
             "pdf_url": pdf_url,
             "source_url": source_url,
             "source_label": source_label,
+            **report_source_metadata(report),
         }
         for optional_field in (
             "diagram_id",
@@ -1520,7 +1563,7 @@ class SearchService:
             result["regex_score"] = regex_score
         if jev_score is not None:
             result["jev_score"] = jev_score
-        if meaningful_content_noul is not None:
+        if meaningful_content_noul is not None and math.isfinite(meaningful_content_noul):
             result["meaningful_content_noul"] = meaningful_content_noul
         return result
 
@@ -1565,6 +1608,7 @@ class SearchService:
                 "doi": report.get("doi"),
             },
             "source_path": record.get("source_path", ""),
+            "document_url": report.get("source_url"),
             "section": record.get("section") or "Document",
             "page_start": record.get("page_start"),
             "page_end": record.get("page_end"),
@@ -1577,6 +1621,7 @@ class SearchService:
             "source_url": file_url(image),
             "source_label": "Open image",
             "is_mbse_diagram": record.get("is_mbse_diagram", False),
+            **report_source_metadata(report),
         }
         for optional_field in (
             "diagram_id",
@@ -1952,6 +1997,7 @@ class SearchService:
         reranker: str = "qwen",
         images_only: bool = False,
         review_filter: str = "include",
+        standard_filter: str = "include",
     ) -> dict:
         import numpy as np
 
@@ -1960,6 +2006,7 @@ class SearchService:
             report_id
             for report_id, report in reports.items()
             if review_filter_allows(report, review_filter)
+            and standard_filter_allows(report, standard_filter)
         }
         dense_scores = None
         lexical_scores = None
@@ -2145,10 +2192,9 @@ class SearchService:
                     for index, chunk in enumerate(chunks)
                 }
                 for result in results:
-                    if result["chunk_id"] in scores_by_chunk:
-                        result["meaningful_content_noul"] = scores_by_chunk[
-                            result["chunk_id"]
-                        ]
+                    score = scores_by_chunk.get(result["chunk_id"])
+                    if score is not None and math.isfinite(score):
+                        result["meaningful_content_noul"] = score
             return {
                 "question": question,
                 "mode": mode,
@@ -2297,6 +2343,7 @@ class SearchService:
         reranker: str = "qwen",
         images_only: bool = False,
         reviews: str = "include",
+        standards: str = "include",
     ) -> dict:
         question = question.strip()
         if not question:
@@ -2312,6 +2359,7 @@ class SearchService:
         mode = normalize_mode(mode)
         reranker = normalize_reranker(reranker)
         review_filter = normalize_review_filter(reviews)
+        standard_filter = normalize_standard_filter(standards)
         report_query = (report or "").strip()
         with self._search_lock:
             _, reports = self._load_corpus()
@@ -2335,9 +2383,18 @@ class SearchService:
                 reranker=reranker,
                 images_only=images_only,
                 review_filter=review_filter,
+                standard_filter=standard_filter,
                 report_id=report_id,
             )
         payload["reviews"] = review_filter
+        payload["standards"] = standard_filter
+        unclassified = (payload.get("content_filter") or {}).get("unclassified_chunks", 0)
+        if unclassified:
+            payload.setdefault("warnings", []).append(
+                f"{unclassified} standards chunks await Jev content classification "
+                "and remain searchable. Run build_jev_content_index.py "
+                "when credits are available."
+            )
         payload["report_filter"] = (
             report_summary(selected_report) if selected_report is not None else None
         )
@@ -2384,6 +2441,7 @@ def main(args: argparse.Namespace) -> int:
                 reranker=args.reranker,
                 images_only=args.images_only,
                 reviews=args.reviews,
+                standards=args.standards,
                 report=args.report,
             )
             for question in questions
@@ -2445,6 +2503,7 @@ def make_gui_handler(
     reranker: str = "qwen",
     images_only: bool = False,
     reviews: str = "include",
+    standards: str = "include",
     rerank_depth_default: int = 50,
     max_per_report_default: int = 2,
 ):
@@ -2495,6 +2554,7 @@ def make_gui_handler(
                         parameters, "images_only", images_only
                     ),
                     reviews=parameters.get("reviews", [reviews])[0],
+                    standards=parameters.get("standards", [standards])[0],
                     report=parameters.get("report", [""])[0],
                 )
             except SearchError as error:
@@ -2584,6 +2644,7 @@ def serve_gui(args: argparse.Namespace) -> int:
         reranker=args.reranker,
         images_only=args.images_only,
         reviews=args.reviews,
+        standards=args.standards,
         rerank_depth_default=args.rerank_depth,
         max_per_report_default=args.max_per_report,
     )
@@ -2632,6 +2693,12 @@ def parse_args() -> argparse.Namespace:
         choices=REVIEW_FILTERS,
         default="include",
         help="Include reviews, exclude reviews, or search reviews only.",
+    )
+    parser.add_argument(
+        "--standards",
+        choices=STANDARD_FILTERS,
+        default="include",
+        help="Include the standards collection, exclude it, or search it only.",
     )
     parser.add_argument(
         "--no-visual",

@@ -675,6 +675,14 @@
               <label class="mode"><input type="radio" name="reviews" value="only"><span>Only</span></label>
             </div>
           </fieldset>
+          <fieldset>
+            <legend>Standards</legend>
+            <div class="modes">
+              <label class="mode"><input type="radio" name="standards" value="include" checked><span>Include</span></label>
+              <label class="mode"><input type="radio" name="standards" value="exclude"><span>Exclude</span></label>
+              <label class="mode"><input type="radio" name="standards" value="only"><span>Only</span></label>
+            </div>
+          </fieldset>
           <div class="slider-control">
             <label class="slider-label" for="top-k">Chunks <output id="top-k-value" for="top-k">12</output></label>
             <input id="top-k" name="top_k" type="range" min="1" max="50" value="12">
@@ -739,6 +747,10 @@
 
     function selectedReviews() {
       return document.querySelector('input[name="reviews"]:checked').value;
+    }
+
+    function selectedStandards() {
+      return document.querySelector('input[name="standards"]:checked').value;
     }
 
     function modeSupportsReranking(mode) {
@@ -1099,6 +1111,10 @@
       if (result.pdf_url) {
         links.append(externalLink("Open PDF", result.pdf_url));
       }
+      const documentUrl = result.document_url || result.source_url;
+      if (!result.pdf_url && documentUrl && documentUrl !== result.image_url) {
+        links.append(externalLink("Open source", documentUrl));
+      }
       if (!links.childElementCount) {
         links.append(element("span", "source-link", "Source unavailable"));
       }
@@ -1277,6 +1293,10 @@
         reportButton,
         document.createTextNode(` · ${pageRange(result)} · ${result.chunk_type}`)
       );
+      if (result.status_label) {
+        metadata.append(document.createTextNode(` · ${result.status_label}`));
+        metadata.title = result.source_note || "";
+      }
       item.append(metadata);
 
       if (result.display_type === "image" && result.image_url) {
@@ -1330,16 +1350,24 @@
       const contentFilter = payload.content_filter
         ? ` · ${formatNumber(payload.content_filter.excluded_chunks)} metadata chunks omitted`
         : "";
+      const pendingContent = payload.content_filter?.unclassified_chunks
+        ? ` · ${formatNumber(payload.content_filter.unclassified_chunks)} standards chunks unclassified`
+        : "";
       const imageFilter = payload.images_only ? " · images only" : "";
       const reviewFilter = payload.reviews === "exclude"
         ? " · reviews excluded"
         : payload.reviews === "only"
           ? " · reviews only"
           : "";
+      const standardFilter = payload.standards === "exclude"
+        ? " · standards excluded"
+        : payload.standards === "only"
+          ? " · standards only"
+          : "";
       const fallback = payload.visual_search_requested && !payload.visual_search
         ? " · visual index skipped"
         : "";
-      status.textContent = `${payload.results.length} ${payload.results.length === 1 ? "result" : "results"} · ${payload.mode}${ranking}${jev}${contentFilter}${imageFilter}${reviewFilter}${fallback}${reportSuffix}`;
+      status.textContent = `${payload.results.length} ${payload.results.length === 1 ? "result" : "results"} · ${payload.mode}${ranking}${jev}${contentFilter}${pendingContent}${imageFilter}${reviewFilter}${standardFilter}${fallback}${reportSuffix}`;
     }
 
     function updateSearchControls() {
@@ -1397,6 +1425,7 @@
           top_k: topK.value,
           images_only: imagesOnly.checked ? "1" : "0",
           reviews: selectedReviews(),
+          standards: selectedStandards(),
           rerank: canRerank && reranker !== "off" ? "1" : "0",
         });
         if (canRerank && reranker !== "off") {

@@ -30,6 +30,7 @@ class PrepareCorpusTests(unittest.TestCase):
         actual = {
             report["report_id"]: path
             for report, path, _source_kind in expected_sources()
+            if report.get("corpus_collection") != "standards"
         }
 
         self.assertEqual(actual, selected)
