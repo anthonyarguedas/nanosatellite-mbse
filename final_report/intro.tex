@@ -15,23 +15,29 @@ The factors at play include reusable launch platforms, standardization of space 
 
 The CubeSat format within the nanosatellite class is a prime example of architecture standardization.
 These systems consist of modular units of 10-by-10-by-10 centimeter cubes at around 1.33 kilograms, which have been proven to be integratable at up to 16 units \cite{kulu_nanosats_database} and have supported a plethora of scientific and commercial payloads ranging from orbital laboratories to internet network nodes.
-This reusability and predictability allows CubeSat missions to achieve lead times well bwlow the multi-year timelines of the traditional space sector.
-The Spie Satelles 3U mission, for example, reported a 5-month period between the first discussion of stakeholder objectives and launch, aided by concurrent engineering (CE) of the various mission components, lean design processes, and reuse of existing subsystems.
 
 Unfortunately, CubeSats historically suffer from a high failure rate, and thus not only fall short of fulfilling mission needs but become a worrying source of space debris at the crowded low earth orbits that they usually launch to.
-The causes can be traced back to a lack of expertise, coordination, or consistency in the systems engineering teams behind the mission, often based at universities that are new entrants to the sector as opposed to incumbents with space heritage, or, at a technical level, attributed to electrical power systems (EPS) as a centralized point of unrecoverable failure.
+The causes can be traced back to a lack of expertise, coordination, or consistency in the engineering teams behind the mission, often based at universities that are new entrants to the sector as opposed to incumbents with space heritage, or, at a technical level, attributed to electrical power systems (EPS) as a centralized point of unrecoverable failure.
 
-Achieving fast CubeSat lead times while assuring a reliable EPS is of great interest to the (ASCEND) research group at the École de technologie supérieure in Montréal, Canada, where this project takes place.
-Dr. Jesús González Llorente, ASCEND lead an academic advisor of this project, pursues a line of research concerned with on reliable space systems, and has authored multiple academic publications targeting the design and validation of nanosatellite electrical power systems.
+This project takes place at the (ASCEND) research group at the École de technologie supérieure in Montréal, Canada.
+Dr. Jesús González Llorente, ASCEND lead an academic advisor of this project, pursues a line of research concerned with reliable space systems, and has authored multiple academic publications targeting the design and validation of nanosatellite electrical power systems.
 
-ASCEND is pursuing participation in a CubeSat Initiative in Canada for STEM (CUBICS) project co-developed across two universities and involving diverse engineering teams,
-with a technology demonstration proposal in the works.
-This type of proposal requires a wide and deep exploration of demonstration concepts, that to be feasible within the CUBICS time budget of 3 years will require early validation and rapid iteration of technolgy candidates.
-The current project is intended as a precedent for that large-scale ambition, covering the electrical power subsystem in its lifecycle phases prior to commissiong or developing hardware (early phases), and is founded in the experience gained in previous EPS design efforts at ASCEND. Therefore, the particular problem addressed by this project is:
+ASCEND is pursuing participation in a CubeSat Initiative in Canada for STEM (CUBICS) mission co-developed across two universities and involving mostly student volunteers in engineering and coordination roles.
+This endeavor requires a wide and deep exploration of solution candidates, coupled with robust tradeoff analysis, verification, and validation of said candidates to deliver a reliable CubeSat.
+Furthermore, the CUBICS financial and time budget requires that any requirement non-conformities need to be detected as early as possible, preferrably prior to hardware fabrication which is one of the costliest phases of the entire engineering lifecycle, and is associated with a large iteration period.
+All of the above needs to achieved by a highly motivated and capable yet inexperienced cohort of student volunteers.
+
+The current project is intended as a precedent for the CUBICS ambition, which is referred to as capability development. It covers the electrical power subsystem in its lifecycle phases prior to commissiong or developing hardware, and is founded in the experience gained in previous EPS design efforts at ASCEND.
+The problem that motivated the current project is:
 
 \begin{quote}
 Evidence fragmentation during the early lifecycle phases of nanosatellite electrical power systems hinders the traceability between needs and requirements, architecture decisions, and the analytical evidence that supports them. Furthermore, it hinfers the reproducibility of analyses and the capability to detect design inconsistencies before advacing to physical verification and validation phases.
 \end{quote}
+
+This project applied the Object-Oriented Systems Engineering Method to the above problem.
+The as-is EPS design and development practices of the stakeholders and their shortcomings were assessed, and a to-be set of capabilities was derived from best practices identified in the academic literature.
+After multiple discussions with stakeholders, a set of concerns about the as-is capabilities and the potential transition to the to-be capabilities was constructed.
+Identified concerns relate to the high effort to define verification activities for EPS component requirements, the high effort to maintain traceability from requirements to design decisions, the high cost and effort of redesign after hardware fabrication, and several other factors.
 
 The main objective of this project is:
 
@@ -39,11 +45,17 @@ The main objective of this project is:
 To develop a model-based systems engineering framework oriented at the early justification of nanosatellite electrical power systems through traceable and reproducible evidence.
 \end{quote}
 
-An MBSE framework is defined following Buruso et al. \cite{buruso2026modelbased} as the integration of MBSE methods, MBSE languages, and MBSE tools within and throughout the relevant lifecycle phases. The secondary objectives of this project are: to characterize the needs, requirements, interfaces and technical criteria of nanosatellite EPS; to define the operational flow of modeling, analysis, and evidence management of the MBSE framework; to model a generic EPS architecture with functions, logical and physical components, interfaces, modes and states, and requirements; to characterize early EPS verification and validation within the EPS framework; to evaluate the framework on two contrasting EPS case studies.
+An MBSE framework is defined following Buruso et al. \cite{buruso2026modelbased} as the integration of MBSE methods, MBSE languages, and tools within and throughout the relevant lifecycle phases.
+The prescription of MBSE in the main objective is a constraint imposed by ASCEND expertise and capability development interests.
+However, multiple methods, languages, and tools from within the ample MBSE literature were considered as candidate building blocks for the framework, and the selections implemented into the solution were justified following the OOSEM method.
 
-The objectives delimit the project from a research perspective, and were written prior to fully applying a formal systems engineering approach to the problem.
-The lifecycle of the framework, which crucially must be distinguished from the lifecycle of its EPS system of interest, follows the Object-Oriented Systems Engineering Methodology (OOSEM) \cite{friedenthal2014practical}. The engineering process is formalized by using the Systems Modeling Language version 2 (SysML v2) to represent requirements and their solution. Candidate solutions remain free to implement other methods, languages, formats, and tools as part of their behavior.
+The secondary objectives of this project are: to characterize the needs, requirements, interfaces and technical criteria of nanosatellite EPS; to define the operational flow of modeling, analysis, and evidence management of the MBSE framework; to model a generic EPS architecture with functions, logical and physical components, interfaces, modes and states, and requirements; to characterize early EPS verification and validation within the EPS framework; to evaluate the framework on two contrasting EPS case studies.
+Therefore, the current project does not aim to only design or develop an EPS for ASCEND, but to improve the EPS design and development capabilities at the research group, so that they can be leveraged to bring the future CUBICS mission to fruition.
 
-It will be verified that the framework satifies the requirements imposed on it, including, among other, to maintaince valid evidence chains, to reproduce EPS analyses, identify and manage critical discrepancies, and to complete the two case studies without introducing post hoc modifications to the framework.
+It will be verified that the framework satifies the requirements imposed on it, including, among others, to maintain valid evidence chains, to reproduce EPS analyses, identify and manage critical discrepancies, and to complete two case studies without introducing post hoc modifications to the framework.
 The fulfillment of requirements is associated to quantitative metrics, which include the time taken to correctly process a change, the effort (person-hours) required to adapt the framework to a case study, the effort needed to reproduce an analysis independently, adoption effort, and the accuracy to detect inconsistencies (compared to a qualified person).
-The two case studies will allow to determine whether the same framework core can be applied to contrasting EPS configurations, preserving the traceability and reproducibility of the generated evidence.
+The two case studies will allow to determine whether the same framework core can be applied to contrasting EPS configurations, preserving the traceability and reproducibility of the generated evidence, which is key for the usefulness of the framework in the future CUBICS endeavor.
+
+The remainder of this document is organized as follows: 
+
+% The intro must close with a paragraph stating what was the main engineering contribution of the project. This is best written when the project is complete, so not yet.
