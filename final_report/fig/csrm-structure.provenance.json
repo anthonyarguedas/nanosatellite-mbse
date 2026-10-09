@@ -1,0 +1,289 @@
+{
+  "basis": "Selected part definitions from the translated 2025 CSRM architecture",
+  "model_sha256": "c385532d15efc9134aec8f106df2883dd6c02313a68037f609498097a1d22b52",
+  "generator_sha256": "fd6f5486a1e88b3610c9ad527e30d98f11cac6beab83e757beffb8b19138025c",
+  "shared_style_sha256": "d207e6a5ec4a0bb5f561e9f132291ba723e8fd8000c7c15c9548c640a819be7c",
+  "checks": {
+    "selected_native_parts_checked": 25,
+    "cube_sat_subsystems_checked": 9,
+    "eps_component_groups_checked": 6,
+    "no_invented_exchange_arrows": true
+  },
+  "native_parts": {
+    "CubeSat Domain": [
+      [
+        "external Constraints",
+        "External Constraints",
+        "1..1"
+      ],
+      [
+        "external Environment",
+        "External Environment",
+        "1..1"
+      ],
+      [
+        "cubeSat Mission Enterprise",
+        "CubeSat Mission",
+        "1..1"
+      ]
+    ],
+    "CubeSat Mission": [
+      [
+        "ground Station Services",
+        "Ground Station Services",
+        "1..1"
+      ],
+      [
+        "",
+        "Transport, Launch, and Deploy Services",
+        "1..1"
+      ],
+      [
+        "space Segment",
+        "Space Segment",
+        "1..1"
+      ],
+      [
+        "ground Segment",
+        "Ground Segment",
+        "1..1"
+      ],
+      [
+        "GPS",
+        "GNSS",
+        "1..1"
+      ]
+    ],
+    "Space Segment": [
+      [
+        "cubeSat",
+        "CubeSat",
+        "1..*"
+      ],
+      [
+        "cubeSat Orbit",
+        "CubeSat Orbit",
+        "1..*"
+      ]
+    ],
+    "CubeSat": [
+      [
+        "mission Payload1",
+        "Mission Payload Subsystem",
+        "1..1"
+      ],
+      [
+        "command and Data Handling Subsystem1",
+        "Command and Data Handling Subsystem",
+        "1..1"
+      ],
+      [
+        "communication Subsystem1",
+        "Communication Subsystem",
+        "1..1"
+      ],
+      [
+        "attitude Determination and Control Subsystem1",
+        "Attitude Determination and Control Subsystem",
+        "1..1"
+      ],
+      [
+        "guidance Navigation and Control Subsystem",
+        "Guidance Navigation and Control Subsystem",
+        "1..1"
+      ],
+      [
+        "structures and Mechanisms Subsystem1",
+        "Structures and Mechanisms Subsystem",
+        "1..1"
+      ],
+      [
+        "power Subsystem1",
+        "Power Subsystem",
+        "1..1"
+      ],
+      [
+        "propulsion Subsystem1",
+        "Propulsion Subsystem",
+        "1..1"
+      ],
+      [
+        "thermal Subsystem1",
+        "Thermal Subsystem",
+        "1..1"
+      ]
+    ],
+    "Power Subsystem": [
+      [
+        "batteries",
+        "Batteries",
+        "1..1"
+      ],
+      [
+        "regulators and Converters",
+        "Regulators and Converters",
+        "1..1"
+      ],
+      [
+        "solar Arrays",
+        "Solar Arrays",
+        "1..1"
+      ],
+      [
+        "power Circuits and Switches",
+        "Power Circuits and Switches",
+        "1..1"
+      ],
+      [
+        "processor and Memory",
+        "Processor and Memory",
+        "1..1"
+      ],
+      [
+        "software",
+        "Software",
+        "1..1"
+      ]
+    ],
+    "orbit_reference": [
+      "Orbit",
+      "CubeSat Orbit",
+      "1..1"
+    ]
+  },
+  "outputs": {
+    "csrm-mission-structure": {
+      "artifact_sha256": {
+        "svg": "47a7de5f70e67732397102c3046ee19143e466a9d3aa42253e0501975a203ae3",
+        "pdf": "ed27c2671e0e1bd03b442532581078a80c6a1fbb0aa7d0a8513976acee39e2c7",
+        "png": "784b2ada2df4ab69425721f1879313f99db8d1f82b305aaca802f2c429b59410"
+      },
+      "svg_sha256_used_for_pdf": "47a7de5f70e67732397102c3046ee19143e466a9d3aa42253e0501975a203ae3",
+      "font": {
+        "family": "Times New Roman",
+        "files": {
+          "normal": {
+            "path": "/System/Library/Fonts/Supplemental/Times New Roman.ttf",
+            "sha256": "f3b4ffff71c2a0c7227d37497683b2498fb2d0a4e8beae26f022e3ccfcaabfa3"
+          },
+          "bold": {
+            "path": "/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf",
+            "sha256": "50f5b1f27b7d34621090e437e8b1dd4510a22d2823fc876b3286bed327b64bbb"
+          }
+        }
+      },
+      "dimensions": {
+        "pdf_pt": [
+          690,
+          420
+        ],
+        "png_px": [
+          1380,
+          840
+        ]
+      },
+      "checks": {
+        "monochrome_paint_checked": true,
+        "serif_labels_checked": true,
+        "square_block_corners_checked": true,
+        "large_arrowheads_checked": true,
+        "foreground_arrowheads_checked": true,
+        "single_painted_head_per_terminal_path_checked": true,
+        "interface_labels_on_ports_checked": true,
+        "pdf_text_within_page": true,
+        "exact_svg_preserved_during_conversion": true
+      },
+      "rendering": "rsvg-convert version 2.62.2\n\nlibraries used:\n  cairo 1.18.4\n  pango 1.57.1\n  harfbuzz 14.2.0\n  fontconfig 2.17.1",
+      "SOURCE_DATE_EPOCH": 0
+    },
+    "csrm-cubesat-subsystems": {
+      "artifact_sha256": {
+        "svg": "f55b811b88d4c32a6e90194e04b54ab691eca371493ad60543d2f607e350c1d2",
+        "pdf": "84b813396542db98995bba1c14d4ea8274ca873b977762adba2fba1ee69230a3",
+        "png": "fbadc5889b05a141be91bafb7ca800fc65d84d97b481c903fa23cf40a19f5f5d"
+      },
+      "svg_sha256_used_for_pdf": "f55b811b88d4c32a6e90194e04b54ab691eca371493ad60543d2f607e350c1d2",
+      "font": {
+        "family": "Times New Roman",
+        "files": {
+          "normal": {
+            "path": "/System/Library/Fonts/Supplemental/Times New Roman.ttf",
+            "sha256": "f3b4ffff71c2a0c7227d37497683b2498fb2d0a4e8beae26f022e3ccfcaabfa3"
+          },
+          "bold": {
+            "path": "/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf",
+            "sha256": "50f5b1f27b7d34621090e437e8b1dd4510a22d2823fc876b3286bed327b64bbb"
+          }
+        }
+      },
+      "dimensions": {
+        "pdf_pt": [
+          690,
+          340
+        ],
+        "png_px": [
+          1380,
+          680
+        ]
+      },
+      "checks": {
+        "monochrome_paint_checked": true,
+        "serif_labels_checked": true,
+        "square_block_corners_checked": true,
+        "large_arrowheads_checked": true,
+        "foreground_arrowheads_checked": true,
+        "single_painted_head_per_terminal_path_checked": true,
+        "interface_labels_on_ports_checked": true,
+        "pdf_text_within_page": true,
+        "exact_svg_preserved_during_conversion": true
+      },
+      "rendering": "rsvg-convert version 2.62.2\n\nlibraries used:\n  cairo 1.18.4\n  pango 1.57.1\n  harfbuzz 14.2.0\n  fontconfig 2.17.1",
+      "SOURCE_DATE_EPOCH": 0
+    },
+    "csrm-eps-components": {
+      "artifact_sha256": {
+        "svg": "3ead8237cf79287ef9e3e9e86c54af4db198e62d8eaa2e1aee9792560c6988bd",
+        "pdf": "4d6799670957b12f7a230107fb4cb98a90b3e1e55fe88305e6a50c09fac03fe9",
+        "png": "0b714abd316caa982c58e87b8d219732769e95a3cf5e617d692a23d45d72136e"
+      },
+      "svg_sha256_used_for_pdf": "3ead8237cf79287ef9e3e9e86c54af4db198e62d8eaa2e1aee9792560c6988bd",
+      "font": {
+        "family": "Times New Roman",
+        "files": {
+          "normal": {
+            "path": "/System/Library/Fonts/Supplemental/Times New Roman.ttf",
+            "sha256": "f3b4ffff71c2a0c7227d37497683b2498fb2d0a4e8beae26f022e3ccfcaabfa3"
+          },
+          "bold": {
+            "path": "/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf",
+            "sha256": "50f5b1f27b7d34621090e437e8b1dd4510a22d2823fc876b3286bed327b64bbb"
+          }
+        }
+      },
+      "dimensions": {
+        "pdf_pt": [
+          690,
+          262
+        ],
+        "png_px": [
+          1380,
+          524
+        ]
+      },
+      "checks": {
+        "monochrome_paint_checked": true,
+        "serif_labels_checked": true,
+        "square_block_corners_checked": true,
+        "large_arrowheads_checked": true,
+        "foreground_arrowheads_checked": true,
+        "single_painted_head_per_terminal_path_checked": true,
+        "interface_labels_on_ports_checked": true,
+        "pdf_text_within_page": true,
+        "exact_svg_preserved_during_conversion": true
+      },
+      "rendering": "rsvg-convert version 2.62.2\n\nlibraries used:\n  cairo 1.18.4\n  pango 1.57.1\n  harfbuzz 14.2.0\n  fontconfig 2.17.1",
+      "SOURCE_DATE_EPOCH": 0
+    }
+  },
+  "limitations": "Source and drawing checks only. No runtime evaluation or claim of translation completeness."
+}

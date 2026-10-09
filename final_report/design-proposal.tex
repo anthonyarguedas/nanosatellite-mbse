@@ -2,10 +2,49 @@
 \label{ch:design-proposal}
 
 \section{Generic CubeSat Structure}
+\input{generic-cubesat-structure}
 
 \section{Orbit Requirements and Power Budget}
 
-\section{Generic EPS Structure and Topology Variation Points}
+Preliminary EPS sizing will follow El Hachimi et al. \citep[Secs.~2--3, Eqs.~(1)--(10)]{handpicked-0003}.
+
+With altitude $h$ in km, Earth radius $R_e=6378~\mathrm{km}$ and gravitational parameter $\mu=398601~\mathrm{km^3/s^2}$, the orbit, sunlight and eclipse periods (s) are:
+\begin{align}
+    T_o &= 2\pi\sqrt{\frac{(R_e+h)^3}{\mu}},
+    \label{eq:orbit-period} \\
+    T_s &= \left(\frac{1}{2}+\frac{\psi}{\pi}\right)T_o,
+    \label{eq:sunlight-period} \\
+    T_e &= \left(\frac{1}{2}-\frac{\psi}{\pi}\right)T_o,
+    \label{eq:eclipse-period} \\
+    \psi &= \arccos\left(\frac{R_e}{R_e+h}\right).
+    \label{eq:eclipse-geometry}
+\end{align}
+
+Subsystem powers and duty cycles give the sunlight and eclipse energies $E_s$ and $E_e$. With corresponding energy path efficiencies $X_s$ and $X_e$, the minimum solar panel power is:
+\begin{equation}
+    P_{\mathrm{sp}_{\min}} = \frac{\frac{E_s}{X_s}+\frac{E_e}{X_e}}{T_s}.
+    \label{eq:minimum-panel-power}
+\end{equation}
+
+Solar cell power at end of life (subscript EOL) uses maximum power point voltage $V_{\mathrm{mp}_{\mathrm{EOL}}}$ and current $I_{\mathrm{mp}_{\mathrm{EOL}}}$. The required cell count is $N_{\mathrm{sc}}$:
+\begin{align}
+    P_{\mathrm{sc}_{\mathrm{EOL}}} &= V_{\mathrm{mp}_{\mathrm{EOL}}} I_{\mathrm{mp}_{\mathrm{EOL}}},
+    \label{eq:solar-cell-eol-power} \\
+    N_{\mathrm{sc}} &= \frac{P_{\mathrm{sp}_{\min}}}{P_{\mathrm{sc}_{\mathrm{EOL}}}}.
+    \label{eq:solar-cell-count}
+\end{align}
+
+For mission lifetime $N_{\mathrm{lifetime}}$ in years, $N_{\mathrm{day/year}}$ days per year and $N_{\mathrm{orbit/day}}$ orbits per day, the required cycle count sets the depth of discharge limit $\mathrm{DoD}$. Battery energy includes degradation margin $M$:
+\begin{align}
+    N_{\mathrm{cycle}} &= N_{\mathrm{lifetime}}\cdot N_{\mathrm{day/year}}\cdot N_{\mathrm{orbit/day}},
+    \label{eq:battery-mission-cycles} \\
+    N_{\mathrm{cycle}} &= a\cdot \mathrm{DoD}^{b},
+    \label{eq:battery-cycle-life} \\
+    E_{\mathrm{Battery}} &= \frac{E_e}{\mathrm{DoD}}(1+M).
+    \label{eq:battery-energy}
+\end{align}
+
+
 
 \section{EPS Component Selection}
 
