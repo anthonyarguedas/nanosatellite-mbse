@@ -119,6 +119,7 @@ QUOTED_PHRASE_RE = re.compile(r'"([^"]+)"')
 REPORT_MARKDOWN_RE = re.compile(r"^([a-z][a-z0-9_]*)-report-([0-9]+)\.md$")
 SEARCH_MODES = ("hybrid", "vector", "jev", "visual", "bm25", "regex")
 RERANKABLE_MODES = {"hybrid", "vector", "jev", "bm25", "regex"}
+IMAGE_FILTERS = ("include", "exclude", "only")
 REVIEW_FILTERS = ("include", "exclude", "only")
 STANDARD_FILTERS = ("include", "exclude", "only")
 SOURCE_METADATA_FIELDS = (
@@ -882,6 +883,14 @@ def normalize_reranker(reranker: str) -> str:
         available = ", ".join(RERANKERS)
         raise SearchError(f"Unknown reranker {reranker!r}. Choose: {available}.")
     return reranker
+
+
+def normalize_image_filter(value: str) -> str:
+    value = value.casefold()
+    if value not in IMAGE_FILTERS:
+        available = ", ".join(IMAGE_FILTERS)
+        raise SearchError(f"Unknown image filter {value!r}. Choose: {available}.")
+    return value
 
 
 def normalize_review_filter(value: str) -> str:
@@ -1996,12 +2005,14 @@ class SearchService:
         report_id: str | None,
         reranker: str = "qwen",
         images_only: bool = False,
+        image_filter: str = "include",
         review_filter: str = "include",
         standard_filter: str = "include",
     ) -> dict:
         import numpy as np
 
         chunks, reports = self._load_corpus()
+        images_only = images_only or image_filter == "only"
         allowed_report_ids = {
             report_id
             for report_id, report in reports.items()
@@ -2012,7 +2023,21 @@ class SearchService:
         lexical_scores = None
         regex_match_scores = None
         jev_content_scores = None
-        content_eligible = None
+        image_eligible = (
+            np.array(
+                [
+                    not chunk.get("image_refs")
+                    or originating_image(chunk, reports.get(chunk["report_id"], {}))
+                    is None
+                    for chunk in chunks
+                ],
+                dtype=bool,
+            )
+            if image_filter == "exclude"
+            else None
+        )
+        content_eligible = image_eligible
+        include_visual = include_visual and image_filter != "exclude"
         content_filter = None
         device = None
         visual_device = None
@@ -2023,6 +2048,8 @@ class SearchService:
                 content_eligible,
                 content_filter,
             ) = self._jev_content_filter(chunks)
+            if image_eligible is not None:
+                content_eligible = content_eligible & image_eligible
             dense_scores, device = self._dense_scores(question)
         if mode in {"bm25", "hybrid"}:
             lexical_scores = bm25_scores(question, *self._get_bm25_data())
@@ -2034,6 +2061,8 @@ class SearchService:
                 chunks,
             )
             content_eligible = content_scores >= JEV_CONTENT_THRESHOLD
+            if image_eligible is not None:
+                content_eligible = content_eligible & image_eligible
             eligible_rows = np.flatnonzero(content_eligible)
             if rerank:
                 results, _, _, warnings = self._hybrid_results(
@@ -2130,6 +2159,14 @@ class SearchService:
                 "results": results,
             }
         if mode == "visual":
+            if image_filter == "exclude":
+                return {
+                    "question": question,
+                    "mode": mode,
+                    "images_only": False,
+                    "reranked": False,
+                    "results": [],
+                }
             visual_scores, records, visual_device = self._visual_scores(question)
             order = np.argsort(-visual_scores, kind="stable")
             results = []
@@ -2233,6 +2270,7 @@ class SearchService:
                 ),
                 reranker=reranker,
                 images_only=images_only,
+                content_eligible=content_eligible,
                 allowed_report_ids=allowed_report_ids,
             )
             return {
@@ -2273,6 +2311,8 @@ class SearchService:
         results = []
         report_counts: Counter[str] = Counter()
         for row_index in order:
+            if content_eligible is not None and not content_eligible[int(row_index)]:
+                continue
             chunk = chunks[int(row_index)]
             chunk_report_id = chunk["report_id"]
             if report_id is not None and chunk_report_id != report_id:
@@ -2344,6 +2384,7 @@ class SearchService:
         images_only: bool = False,
         reviews: str = "include",
         standards: str = "include",
+        images: str = "include",
     ) -> dict:
         question = question.strip()
         if not question:
@@ -2358,6 +2399,11 @@ class SearchService:
             raise SearchError("The reranking depth must be at least 1.")
         mode = normalize_mode(mode)
         reranker = normalize_reranker(reranker)
+        image_filter = normalize_image_filter(images)
+        if images_only:
+            if image_filter == "exclude":
+                raise SearchError("Images only and images excluded cannot be combined.")
+            image_filter = "only"
         review_filter = normalize_review_filter(reviews)
         standard_filter = normalize_standard_filter(standards)
         report_query = (report or "").strip()
@@ -2381,11 +2427,13 @@ class SearchService:
                 rerank=rerank and mode in RERANKABLE_MODES,
                 rerank_depth=rerank_depth,
                 reranker=reranker,
-                images_only=images_only,
+                images_only=image_filter == "only",
+                image_filter=image_filter,
                 review_filter=review_filter,
                 standard_filter=standard_filter,
                 report_id=report_id,
             )
+        payload["images"] = image_filter
         payload["reviews"] = review_filter
         payload["standards"] = standard_filter
         unclassified = (payload.get("content_filter") or {}).get("unclassified_chunks", 0)
@@ -2440,6 +2488,7 @@ def main(args: argparse.Namespace) -> int:
                 rerank_depth=args.rerank_depth,
                 reranker=args.reranker,
                 images_only=args.images_only,
+                images=args.images,
                 reviews=args.reviews,
                 standards=args.standards,
                 report=args.report,
@@ -2504,6 +2553,7 @@ def make_gui_handler(
     images_only: bool = False,
     reviews: str = "include",
     standards: str = "include",
+    images: str = "include",
     rerank_depth_default: int = 50,
     max_per_report_default: int = 2,
 ):
@@ -2553,6 +2603,7 @@ def make_gui_handler(
                     images_only=query_boolean(
                         parameters, "images_only", images_only
                     ),
+                    images=parameters.get("images", [images])[0],
                     reviews=parameters.get("reviews", [reviews])[0],
                     standards=parameters.get("standards", [standards])[0],
                     report=parameters.get("report", [""])[0],
@@ -2643,6 +2694,7 @@ def serve_gui(args: argparse.Namespace) -> int:
         rerank=not args.no_rerank,
         reranker=args.reranker,
         images_only=args.images_only,
+        images=args.images,
         reviews=args.reviews,
         standards=args.standards,
         rerank_depth_default=args.rerank_depth,
@@ -2704,6 +2756,12 @@ def parse_args() -> argparse.Namespace:
         "--no-visual",
         action="store_true",
         help="Exclude ColPali image retrieval from hybrid search.",
+    )
+    parser.add_argument(
+        "--images",
+        choices=IMAGE_FILTERS,
+        default="include",
+        help="Include images, exclude images, or search images only.",
     )
     parser.add_argument(
         "--images-only",

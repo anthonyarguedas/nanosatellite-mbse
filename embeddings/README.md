@@ -19,7 +19,7 @@ Available modes, in descending order of observed performance:
 - `bm25`: finds exact acronyms, tool names, numbers, and technical terms. Double-quoted terms receive an exact phrase bonus.
 - `regex`: finds case insensitive Python regular expression matches in the original chunk text.
 
-Use `--no-visual` for hybrid ablation runs. Every text mode supports Qwen or Jev reranking. Use `--no-rerank` to keep its first stage order. Change the candidate count with `--rerank-depth`. The final weighted rank fusion gives the reranker three times the weight of initial retrieval. Use `--images-only` to keep results linked to source images. Use `--reviews include` (the default), `--reviews exclude`, or `--reviews only` to control whether publication-type reviews appear. Use `--standards include` (the default), `--standards exclude`, or `--standards only` for the standards collection. The filters apply together. Restrict a standards search to one document with its filename code, such as `--report cds-14.1`.
+Use `--no-visual` for hybrid ablation runs. Every text mode supports Qwen or Jev reranking. Use `--no-rerank` to keep its first stage order. Change the candidate count with `--rerank-depth`. The final weighted rank fusion gives the reranker three times the weight of initial retrieval. Use `--images include` (the default), `--images exclude`, or `--images only` to control results linked to source images. `--images-only` remains an alias for `--images only`. Use `--reviews include` (the default), `--reviews exclude`, or `--reviews only` to control whether publication-type reviews appear. Use `--standards include` (the default), `--standards exclude`, or `--standards only` for the standards collection. The filters apply together. Restrict a standards search to one document with its filename code, such as `--report cds-14.1`.
 
 ```bash
 echo "What electrical safety requirements apply to CubeSats?" \
@@ -54,7 +54,13 @@ cd embeddings
 ```
 
 The GUI opens at `http://127.0.0.1:8765`.
-It defaults to Vector search and also provides Hybrid, Jev Noul, BM25, and Regex methods. Choose Off, Qwen, or Jev reranking for any method. The Images only filter replaces the standalone Visual method in the GUI. The Reviews control can include reviews, exclude them, or return reviews only. The Standards control provides the same choices for the standards collection. The index status panel reports text, visual, and Jev cache coverage. Image results show the original file, its caption or Luna extraction when available, and a link to the source PDF.
+It defaults to Vector search and also provides Hybrid, Jev Noul, BM25, and Regex methods. Choose Off, Qwen, or Jev reranking for any method. The Images control can include images, exclude them, or return images only. It replaces the standalone Visual method in the GUI. The Reviews control can include reviews, exclude them, or return reviews only. The Standards control provides the same choices for the standards collection.
+
+Mode, reranker, chunk count, and filters sit in the left sidebar. The search bar and report filter stay above the results while scrolling. On narrow screens, the sidebar becomes a collapsed Search options panel. Index status shares the header row with the report and figure counts. Expand it to view text, visual, and Jev cache coverage.
+
+The Search button highlights when the controls differ from the displayed results. Press Search to apply changes. Selecting or clearing a report also requires a new search. The highlight clears after a successful search or when the controls return to the values used for the displayed results.
+
+Image results show the original file, its caption or Luna extraction when available, and a link to the source PDF.
 
 Treat retrieved chunks as evidence candidates. Check important claims in the source Markdown.
 

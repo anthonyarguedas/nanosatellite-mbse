@@ -57,25 +57,70 @@
     }
 
     .app {
-      width: min(100% - 32px, 960px);
+      width: min(100% - 32px, 1240px);
       margin: 0 auto;
-      padding: 32px 0 72px;
+      padding: 24px 0 72px;
+    }
+
+    .search-layout {
+      display: grid;
+      grid-template-columns: 216px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .search-content {
+      min-width: 0;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 8px;
+      max-height: calc(100vh - 16px);
+      overflow-y: auto;
+      padding: 8px 16px 8px 2px;
+      border-right: 1px solid var(--line);
+    }
+
+    .sidebar-summary {
+      display: none;
+    }
+
+    .sidebar-controls {
+      display: grid;
+      gap: 14px;
     }
 
     .topbar {
       position: sticky;
       top: 0;
       z-index: 1;
-      padding: 0 0 20px;
+      padding: 8px 0 10px;
       background: var(--background);
       border-bottom: 1px solid var(--line);
     }
 
+    .page-header {
+      position: relative;
+    }
+
     .brand-row {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
+      gap: 8px 16px;
       align-items: baseline;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
+    }
+
+    .corpus-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px 16px;
+      align-items: baseline;
+      color: var(--muted);
+      font-size: 11px;
     }
 
     .brand {
@@ -92,8 +137,27 @@
     }
 
     .index-health {
-      margin-bottom: 16px;
-      padding: 10px;
+      font-size: inherit;
+    }
+
+    .index-health-summary {
+      font-size: inherit;
+      cursor: pointer;
+    }
+
+    .index-overview {
+      margin-left: 8px;
+    }
+
+    .index-health-body {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      z-index: 3;
+      width: min(760px, calc(100vw - 32px));
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      padding: 8px;
       border: 1px solid var(--line);
       background: var(--surface);
     }
@@ -106,7 +170,14 @@
       align-items: baseline;
     }
 
-    .index-health-title,
+    .index-health-head {
+      justify-content: flex-end;
+    }
+
+    .index-health-title {
+      font: inherit;
+    }
+
     .index-name {
       color: var(--strong);
       font-size: 11px;
@@ -199,8 +270,8 @@
     #query {
       min-width: 0;
       flex: 1;
-      height: 46px;
-      padding: 0 14px;
+      height: 38px;
+      padding: 0 12px;
       border: 1px solid var(--line);
       border-radius: 0;
       outline: none;
@@ -217,7 +288,8 @@
     }
 
     .search-button {
-      min-width: 94px;
+      min-width: 110px;
+      padding: 0 10px;
       border: 1px solid var(--strong);
       border-radius: 0;
       background: var(--strong);
@@ -231,13 +303,30 @@
       color: var(--strong);
     }
 
+    .search-button.is-stale {
+      border-color: var(--match-background);
+      background: var(--match-background);
+    }
+
+    .search-button.is-stale:hover,
+    .search-button.is-stale:focus-visible {
+      background: var(--background);
+      color: var(--match-background);
+    }
+
+    .search-stale {
+      margin-left: 6px;
+      font-size: 10px;
+    }
+
     .controls {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 16px 24px;
-      align-items: end;
-      margin-top: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .search-controls > fieldset:first-child .modes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     fieldset {
@@ -250,7 +339,7 @@
     legend,
     .slider-label {
       display: block;
-      margin-bottom: 7px;
+      margin-bottom: 4px;
       color: var(--muted);
       font-size: 11px;
       letter-spacing: 0.08em;
@@ -260,7 +349,7 @@
     .modes {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 4px;
     }
 
     .mode {
@@ -276,10 +365,11 @@
 
     .mode span {
       display: block;
-      padding: 5px 9px;
+      padding: 3px 6px;
       border: 1px solid var(--line);
       color: var(--muted);
       font-size: 12px;
+      text-align: center;
     }
 
     .mode input:checked + span {
@@ -303,19 +393,15 @@
     }
 
     .slider-control {
-      min-width: 210px;
+      min-width: 0;
     }
 
     .report-control {
-      margin-top: 14px;
-    }
-
-    .report-control-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: baseline;
-      margin-bottom: 7px;
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr) max-content;
+      gap: 3px 10px;
+      align-items: center;
+      margin-top: 8px;
     }
 
     .report-label {
@@ -348,8 +434,9 @@
 
     #report-filter {
       width: 100%;
-      height: 38px;
-      padding: 0 12px;
+      min-width: 0;
+      height: 32px;
+      padding: 0 10px;
       border: 1px solid var(--line);
       border-radius: 0;
       outline: none;
@@ -366,11 +453,18 @@
     }
 
     .report-filter-status {
-      min-height: 1.5em;
-      margin: 5px 0 0;
+      grid-column: 2;
+      min-width: 0;
+      margin: 0;
       color: var(--muted);
       font-size: 11px;
-      overflow-wrap: anywhere;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .report-filter-status:empty {
+      display: none;
     }
 
     .slider-label {
@@ -386,8 +480,9 @@
     }
 
     input[type="range"] {
+      display: block;
       width: 100%;
-      height: 16px;
+      height: 27px;
       margin: 0;
       appearance: none;
       background: transparent;
@@ -429,8 +524,9 @@
 
     .results-header {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
-      gap: 16px;
+      gap: 8px 16px;
       align-items: baseline;
       padding: 20px 0 10px;
     }
@@ -591,13 +687,61 @@
       color: var(--text);
     }
 
+    @media (max-width: 760px) {
+      .corpus-meta {
+        justify-content: flex-start;
+      }
+
+      .search-layout {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .sidebar {
+        position: static;
+        max-height: none;
+        overflow: visible;
+        padding: 0;
+        border: 0;
+      }
+
+      .sidebar-summary {
+        display: list-item;
+        padding: 6px 8px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--muted);
+        font-size: 11px;
+        cursor: pointer;
+      }
+
+      .sidebar-controls {
+        padding: 12px 0;
+      }
+
+      .search-controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .search-controls > fieldset:first-child {
+        grid-column: 1 / -1;
+      }
+
+      .search-controls > fieldset:first-child .modes {
+        display: flex;
+      }
+
+      .filter-controls {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+    }
+
     @media (max-width: 620px) {
       .app {
-        width: min(100% - 24px, 960px);
+        width: min(100% - 24px, 1240px);
         padding-top: 20px;
       }
 
-      .controls,
       .result-head,
       .result-footer {
         align-items: stretch;
@@ -622,93 +766,116 @@
 </head>
 <body>
   <main class="app">
-    <header class="topbar">
+    <header class="page-header">
       <div class="brand-row">
         <p class="brand">SLR / SEARCH</p>
-        <span id="corpus-count" class="corpus-count">local retrieval</span>
+        <div class="corpus-meta">
+          <span id="corpus-count" class="corpus-count">local retrieval</span>
+          <details id="index-health" class="index-health">
+            <summary class="index-health-summary">
+              <span class="index-health-title">Index status</span>
+              <span id="index-overview" class="index-overview" aria-live="polite">Checking indexes…</span>
+            </summary>
+            <div class="index-health-body">
+              <div class="index-health-head">
+                <button id="index-refresh" class="index-refresh" type="button">Refresh</button>
+              </div>
+              <div id="index-cards" class="index-cards" aria-live="polite">
+                <p class="index-loading">Checking indexes…</p>
+              </div>
+            </div>
+          </details>
+        </div>
       </div>
-      <section id="index-health" class="index-health" aria-live="polite">
-        <div class="index-health-head">
-          <span class="index-health-title">Index status</span>
-          <button id="index-refresh" class="index-refresh" type="button">Refresh</button>
-        </div>
-        <div id="index-cards" class="index-cards">
-          <p class="index-loading">Checking indexes…</p>
-        </div>
-      </section>
-      <form id="search-form" role="search">
-        <div class="search-line">
-          <input id="query" name="q" type="search" autocomplete="off" autofocus
-                 placeholder="Search the corpus" aria-label="Search query" required>
-          <button id="search-button" class="search-button" type="submit">Search</button>
-        </div>
-        <div class="controls">
-          <fieldset>
-            <legend>Method</legend>
-            <div class="modes">
-              <label class="mode"><input type="radio" name="mode" value="hybrid"><span>Hybrid</span></label>
-              <label class="mode"><input type="radio" name="mode" value="vector" checked><span>Vector</span></label>
-              <label class="mode"><input type="radio" name="mode" value="jev"><span>Jev Noul</span></label>
-              <label class="mode"><input type="radio" name="mode" value="bm25"><span>BM25</span></label>
-              <label class="mode"><input type="radio" name="mode" value="regex"><span>Regex</span></label>
-            </div>
-          </fieldset>
-          <fieldset id="reranker-control">
-            <legend>Reranker</legend>
-            <div class="modes">
-              <label class="mode"><input type="radio" name="reranker" value="off"><span>Off</span></label>
-              <label class="mode"><input type="radio" name="reranker" value="qwen" checked><span>Qwen</span></label>
-              <label class="mode"><input type="radio" name="reranker" value="jev"><span>Jev</span></label>
-            </div>
-          </fieldset>
-          <fieldset>
-            <legend>Filter</legend>
-            <div class="modes">
-              <label class="mode"><input id="images-only" type="checkbox"><span>Images only</span></label>
-            </div>
-          </fieldset>
-          <fieldset>
-            <legend>Reviews</legend>
-            <div class="modes">
-              <label class="mode"><input type="radio" name="reviews" value="include" checked><span>Include</span></label>
-              <label class="mode"><input type="radio" name="reviews" value="exclude"><span>Exclude</span></label>
-              <label class="mode"><input type="radio" name="reviews" value="only"><span>Only</span></label>
-            </div>
-          </fieldset>
-          <fieldset>
-            <legend>Standards</legend>
-            <div class="modes">
-              <label class="mode"><input type="radio" name="standards" value="include" checked><span>Include</span></label>
-              <label class="mode"><input type="radio" name="standards" value="exclude"><span>Exclude</span></label>
-              <label class="mode"><input type="radio" name="standards" value="only"><span>Only</span></label>
-            </div>
-          </fieldset>
-          <div class="slider-control">
-            <label class="slider-label" for="top-k">Chunks <output id="top-k-value" for="top-k">12</output></label>
-            <input id="top-k" name="top_k" type="range" min="1" max="50" value="12">
-          </div>
-        </div>
-        <div class="report-control">
-          <div class="report-control-head">
-            <label class="report-label" for="report-filter">Report filter</label>
-            <button id="report-clear" class="report-clear" type="button" disabled>Clear</button>
-          </div>
-          <input id="report-filter" name="report" type="search" list="report-options"
-                 autocomplete="off" placeholder="All reports, or enter a report code or title"
-                 aria-describedby="report-filter-status">
-          <datalist id="report-options"></datalist>
-          <p id="report-filter-status" class="report-filter-status" aria-live="polite">All reports</p>
-        </div>
-      </form>
     </header>
-
-    <section class="results-header" aria-live="polite">
-      <h1>Results</h1>
-      <p id="status">Enter a query to search the corpus.</p>
-    </section>
-    <ol id="results" aria-live="polite">
-      <li class="empty">Choose a method, enter a query, then press Search.</li>
-    </ol>
+    <form id="search-form" role="search">
+      <div class="search-layout">
+        <aside class="sidebar" aria-label="Search options">
+          <details id="search-options" open>
+            <summary class="sidebar-summary">Search options</summary>
+            <div class="sidebar-controls">
+              <div class="controls search-controls">
+                <fieldset>
+                  <legend>Mode</legend>
+                  <div class="modes">
+                    <label class="mode"><input type="radio" name="mode" value="hybrid"><span>Hybrid</span></label>
+                    <label class="mode"><input type="radio" name="mode" value="vector" checked><span>Vector</span></label>
+                    <label class="mode"><input type="radio" name="mode" value="jev"><span>Jev Noul</span></label>
+                    <label class="mode"><input type="radio" name="mode" value="bm25"><span>BM25</span></label>
+                    <label class="mode"><input type="radio" name="mode" value="regex"><span>Regex</span></label>
+                  </div>
+                </fieldset>
+                <fieldset id="reranker-control">
+                  <legend>Reranker</legend>
+                  <div class="modes">
+                    <label class="mode"><input type="radio" name="reranker" value="off"><span>Off</span></label>
+                    <label class="mode"><input type="radio" name="reranker" value="qwen" checked><span>Qwen</span></label>
+                    <label class="mode"><input type="radio" name="reranker" value="jev"><span>Jev</span></label>
+                  </div>
+                </fieldset>
+                <div class="slider-control">
+                  <label class="slider-label" for="top-k">Chunks <output id="top-k-value" for="top-k">12</output></label>
+                  <input id="top-k" name="top_k" type="range" min="1" max="50" value="12">
+                </div>
+              </div>
+              <div class="controls filter-controls">
+                <fieldset>
+                  <legend>Images</legend>
+                  <div class="modes">
+                    <label class="mode"><input type="radio" name="images" value="include" checked><span>Include</span></label>
+                    <label class="mode"><input type="radio" name="images" value="exclude"><span>Exclude</span></label>
+                    <label class="mode"><input type="radio" name="images" value="only"><span>Only</span></label>
+                  </div>
+                </fieldset>
+                <fieldset>
+                  <legend>Reviews</legend>
+                  <div class="modes">
+                    <label class="mode"><input type="radio" name="reviews" value="include" checked><span>Include</span></label>
+                    <label class="mode"><input type="radio" name="reviews" value="exclude"><span>Exclude</span></label>
+                    <label class="mode"><input type="radio" name="reviews" value="only"><span>Only</span></label>
+                  </div>
+                </fieldset>
+                <fieldset>
+                  <legend>Standards</legend>
+                  <div class="modes">
+                    <label class="mode"><input type="radio" name="standards" value="include" checked><span>Include</span></label>
+                    <label class="mode"><input type="radio" name="standards" value="exclude"><span>Exclude</span></label>
+                    <label class="mode"><input type="radio" name="standards" value="only"><span>Only</span></label>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </details>
+        </aside>
+        <section class="search-content" aria-label="Search results">
+          <div class="topbar">
+            <div class="search-line">
+              <input id="query" name="q" type="search" autocomplete="off" autofocus
+                     placeholder="Search the corpus" aria-label="Search query" required>
+              <button id="search-button" class="search-button" type="submit">
+                <span id="search-button-label">Search</span><span id="search-stale" class="search-stale" hidden aria-hidden="true">●</span>
+              </button>
+            </div>
+            <div class="report-control">
+              <label class="report-label" for="report-filter">Report filter</label>
+              <input id="report-filter" name="report" type="search" list="report-options"
+                     autocomplete="off" placeholder="All reports, or enter a report code or title"
+                     aria-describedby="report-filter-status">
+              <button id="report-clear" class="report-clear" type="button" disabled>Clear</button>
+              <datalist id="report-options"></datalist>
+              <p id="report-filter-status" class="report-filter-status" aria-live="polite"></p>
+            </div>
+          </div>
+          <section class="results-header" aria-live="polite">
+            <h1>Results</h1>
+            <p id="status">Enter a query to search the corpus.</p>
+          </section>
+          <ol id="results" aria-live="polite">
+            <li class="empty">Choose a mode, enter a query, then press Search.</li>
+          </ol>
+        </section>
+      </div>
+    </form>
   </main>
 
   <script>
@@ -717,10 +884,14 @@
     const topK = document.querySelector("#top-k");
     const topKValue = document.querySelector("#top-k-value");
     const button = document.querySelector("#search-button");
+    const buttonLabel = document.querySelector("#search-button-label");
+    const staleIndicator = document.querySelector("#search-stale");
+    const optionSidebar = document.querySelector("#search-options");
     const results = document.querySelector("#results");
     const status = document.querySelector("#status");
     const corpusCount = document.querySelector("#corpus-count");
     const indexHealth = document.querySelector("#index-health");
+    const indexOverview = document.querySelector("#index-overview");
     const indexCards = document.querySelector("#index-cards");
     const indexRefresh = document.querySelector("#index-refresh");
     const reportFilter = document.querySelector("#report-filter");
@@ -728,8 +899,9 @@
     const reportFilterStatus = document.querySelector("#report-filter-status");
     const reportClear = document.querySelector("#report-clear");
     const rerankerControl = document.querySelector("#reranker-control");
-    const imagesOnly = document.querySelector("#images-only");
     let requestNumber = 0;
+    let displayedSearch = null;
+    let searchInProgress = false;
     let indexRefreshTimer = null;
     let mathGeneration = 0;
     let requestedMathGeneration = -1;
@@ -743,6 +915,10 @@
 
     function selectedReranker() {
       return document.querySelector('input[name="reranker"]:checked').value;
+    }
+
+    function selectedImages() {
+      return document.querySelector('input[name="images"]:checked').value;
     }
 
     function selectedReviews() {
@@ -953,26 +1129,59 @@
       } else if (value) {
         reportFilterStatus.textContent = "Press Search to resolve this report code or title.";
       } else {
-        reportFilterStatus.textContent = "All reports";
+        reportFilterStatus.textContent = "";
       }
+      reportFilterStatus.title = reportFilterStatus.textContent;
     }
 
-    function selectReport(report, submit = false) {
+    function selectReport(report) {
       selectedReport = report;
       reportFilter.value = report ? report.code : "";
       renderReportFilterStatus();
-      if (submit && query.value.trim()) {
-        form.requestSubmit();
-      }
+      updateSearchStaleness();
     }
 
     function syncReportFilter() {
       selectedReport = findCatalogReport(reportFilter.value);
       renderReportFilterStatus();
+      updateSearchStaleness();
     }
 
     function activeReportQuery() {
       return selectedReport?.report_id || reportFilter.value.trim();
+    }
+
+    function searchParameters() {
+      const mode = selectedMode();
+      const reranker = selectedReranker();
+      const canRerank = modeSupportsReranking(mode);
+      const parameters = new URLSearchParams({
+        q: query.value.trim(),
+        mode,
+        top_k: topK.value,
+        images: selectedImages(),
+        reviews: selectedReviews(),
+        standards: selectedStandards(),
+        rerank: canRerank && reranker !== "off" ? "1" : "0",
+      });
+      if (canRerank && reranker !== "off") {
+        parameters.set("reranker", reranker);
+      }
+      const report = activeReportQuery();
+      if (report) {
+        parameters.set("report", report);
+      }
+      return parameters;
+    }
+
+    function updateSearchStaleness() {
+      const stale = displayedSearch !== null
+        && searchParameters().toString() !== displayedSearch;
+      button.classList.toggle("is-stale", stale);
+      staleIndicator.hidden = !stale;
+      button.title = stale ? "Settings changed. Press Search to update the results." : "";
+      const label = searchInProgress ? "Searching" : "Search";
+      button.setAttribute("aria-label", stale ? `${label} (results are out of date)` : label);
     }
 
     async function loadReportOptions() {
@@ -999,6 +1208,7 @@
       } catch (error) {
         const message = error instanceof Error ? error.message : "Report lookup failed.";
         reportFilterStatus.textContent = `${message} Report codes remain available.`;
+        reportFilterStatus.title = reportFilterStatus.textContent;
       }
     }
 
@@ -1059,14 +1269,17 @@
     function renderIndexStatus(payload) {
       indexHealth.className = `index-health state-${payload.overall}`;
       corpusCount.textContent = `${formatNumber(payload.corpus.reports)} reports · ${formatNumber(payload.corpus.figures)} figures`;
-      const cards = [
-        indexCard("Text", payload.text, "text"),
-        indexCard("Visual", payload.visual, "visual"),
+      const indexes = [
+        ["Text", payload.text, "text"],
+        ["Visual", payload.visual, "visual"],
       ];
       if (payload.jev) {
-        cards.push(indexCard("Jev Noul", payload.jev, "jev"));
+        indexes.push(["Jev Noul", payload.jev, "jev"]);
       }
-      indexCards.replaceChildren(...cards);
+      indexOverview.textContent = indexes
+        .map(([name, index]) => `${name}: ${index.state}`)
+        .join(" · ");
+      indexCards.replaceChildren(...indexes.map(([name, index, kind]) => indexCard(name, index, kind)));
       if (indexRefreshTimer) {
         clearTimeout(indexRefreshTimer);
         indexRefreshTimer = null;
@@ -1089,6 +1302,7 @@
       } catch (error) {
         const message = error instanceof Error ? error.message : "Index status failed.";
         indexHealth.className = "index-health state-error";
+        indexOverview.textContent = "Unavailable";
         indexCards.replaceChildren(element("p", "index-loading", message));
       } finally {
         indexRefresh.disabled = false;
@@ -1285,8 +1499,7 @@
             source_code: result.report_code || result.report_id,
             title: result.title,
             year: result.citation?.year,
-          },
-          true
+          }
         );
       });
       metadata.append(
@@ -1331,7 +1544,6 @@
     }
 
     function render(payload) {
-      selectReport(payload.report_filter || null);
       const reportSuffix = payload.report_filter
         ? ` · ${payload.report_filter.code}`
         : "";
@@ -1353,7 +1565,11 @@
       const pendingContent = payload.content_filter?.unclassified_chunks
         ? ` · ${formatNumber(payload.content_filter.unclassified_chunks)} standards chunks unclassified`
         : "";
-      const imageFilter = payload.images_only ? " · images only" : "";
+      const imageFilter = payload.images === "exclude"
+        ? " · images excluded"
+        : payload.images === "only" || payload.images_only
+          ? " · images only"
+          : "";
       const reviewFilter = payload.reviews === "exclude"
         ? " · reviews excluded"
         : payload.reviews === "only"
@@ -1382,9 +1598,23 @@
 
     reportFilter.addEventListener("input", syncReportFilter);
     reportFilter.addEventListener("change", syncReportFilter);
-    reportClear.addEventListener("click", () => selectReport(null, true));
+    reportClear.addEventListener("click", () => selectReport(null));
+    form.addEventListener("input", updateSearchStaleness);
+    form.addEventListener("change", updateSearchStaleness);
 
     indexRefresh.addEventListener("click", () => loadIndexStatus(true));
+    document.addEventListener("click", (event) => {
+      if (!indexHealth.contains(event.target)) {
+        indexHealth.open = false;
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && indexHealth.open) {
+        event.preventDefault();
+        indexHealth.open = false;
+        indexHealth.querySelector("summary").focus();
+      }
+    });
 
     topK.addEventListener("input", () => {
       topKValue.value = topK.value;
@@ -1395,7 +1625,14 @@
       mode.addEventListener("change", updateSearchControls);
     });
 
+    const narrowLayout = window.matchMedia("(max-width: 760px)");
+    function updateOptionsLayout() {
+      optionSidebar.open = !narrowLayout.matches;
+    }
+    narrowLayout.addEventListener("change", updateOptionsLayout);
+    updateOptionsLayout();
     updateSearchControls();
+    updateSearchStaleness();
     loadIndexStatus();
     loadReportOptions();
 
@@ -1408,51 +1645,47 @@
       }
 
       const currentRequest = ++requestNumber;
+      const parameters = searchParameters();
+      searchInProgress = true;
       button.disabled = true;
-      button.textContent = "Searching";
+      buttonLabel.textContent = "Searching";
+      updateSearchStaleness();
       status.textContent = selectedMode() === "jev"
         ? "Scoring uncached chunks with Jev…"
         : "Searching…";
       results.setAttribute("aria-busy", "true");
 
       try {
-        const mode = selectedMode();
-        const reranker = selectedReranker();
-        const canRerank = modeSupportsReranking(mode);
-        const parameters = new URLSearchParams({
-          q: value,
-          mode,
-          top_k: topK.value,
-          images_only: imagesOnly.checked ? "1" : "0",
-          reviews: selectedReviews(),
-          standards: selectedStandards(),
-          rerank: canRerank && reranker !== "off" ? "1" : "0",
-        });
-        if (canRerank && reranker !== "off") {
-          parameters.set("reranker", reranker);
-        }
-        const report = activeReportQuery();
-        if (report) {
-          parameters.set("report", report);
-        }
         const response = await fetch(`/api/search?${parameters}`);
         const payload = await response.json();
         if (!response.ok) {
           throw new Error(payload.error || "Search failed.");
         }
         if (currentRequest === requestNumber) {
+          if (activeReportQuery() === (parameters.get("report") || "")) {
+            selectReport(payload.report_filter || null);
+            parameters.delete("report");
+            if (activeReportQuery()) {
+              parameters.set("report", activeReportQuery());
+            }
+          }
           render(payload);
+          displayedSearch = parameters.toString();
         }
       } catch (error) {
         if (currentRequest === requestNumber) {
           const message = error instanceof Error ? error.message : "Search failed.";
-          showMessage(message, true);
-          status.textContent = "Search failed";
+          if (displayedSearch === null) {
+            showMessage(message, true);
+          }
+          status.textContent = `Search failed: ${message}`;
         }
       } finally {
         if (currentRequest === requestNumber) {
+          searchInProgress = false;
           button.disabled = false;
-          button.textContent = "Search";
+          buttonLabel.textContent = "Search";
+          updateSearchStaleness();
           results.removeAttribute("aria-busy");
         }
       }

@@ -55,7 +55,9 @@ class SearchTests(unittest.TestCase):
         self.assertIn('name="mode" value="vector" checked', html)
         self.assertIn('name="mode" value="jev"', html)
         self.assertNotIn('name="mode" value="visual"', html)
-        self.assertIn('id="images-only" type="checkbox"', html)
+        self.assertIn('name="images" value="include" checked', html)
+        self.assertIn('name="images" value="exclude"', html)
+        self.assertIn('name="images" value="only"', html)
         self.assertIn('name="reviews" value="include" checked', html)
         self.assertIn('name="reviews" value="exclude"', html)
         self.assertIn('name="reviews" value="only"', html)
@@ -67,6 +69,47 @@ class SearchTests(unittest.TestCase):
             '["hybrid", "vector", "jev", "bm25", "regex"].includes(mode)',
             html,
         )
+
+    def test_gui_keeps_collapsed_index_status_outside_sticky_controls(self) -> None:
+        html = GUI_PATH.read_text(encoding="utf-8")
+        page_header, sticky_controls = html.split('<div class="topbar">', 1)
+        opening_tag = page_header.split('<details id="index-health"', 1)[1].split(
+            ">", 1
+        )[0]
+
+        self.assertNotIn(" open", opening_tag)
+        self.assertIn('<summary class="index-health-summary">', page_header)
+        self.assertIn('id="index-overview"', page_header)
+        self.assertNotIn('id="index-health"', sticky_controls)
+        self.assertNotIn('id="index-cards"', sticky_controls)
+        corpus_meta = page_header.split('<div class="corpus-meta">', 1)[1].split(
+            "</header>", 1
+        )[0]
+        self.assertIn('id="corpus-count"', corpus_meta)
+        self.assertIn('id="index-health"', corpus_meta)
+
+    def test_gui_separates_sidebar_options_from_sticky_query_and_report(self) -> None:
+        html = GUI_PATH.read_text(encoding="utf-8")
+        sidebar = html.split('<aside class="sidebar"', 1)[1].split("</aside>", 1)[0]
+        sticky_controls = html.split('<div class="topbar">', 1)[1].split(
+            '<section class="results-header"', 1
+        )[0]
+
+        for marker in (
+            'name="mode"',
+            'name="reranker"',
+            'id="top-k"',
+            'name="images"',
+            'name="reviews"',
+            'name="standards"',
+        ):
+            self.assertIn(marker, sidebar)
+            self.assertNotIn(marker, sticky_controls)
+        for marker in ('id="query"', 'id="report-filter"', 'id="report-clear"'):
+            self.assertIn(marker, sticky_controls)
+            self.assertNotIn(marker, sidebar)
+        self.assertIn('id="search-stale"', sticky_controls)
+        self.assertIn('button.classList.toggle("is-stale", stale)', html)
 
     def test_jev_query_is_in_the_noul_instructions(self) -> None:
         query = "How is a CubeSat power budget verified?"
