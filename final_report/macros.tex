@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Author:  Pablo Alvarado
 %
-% Escuela de Electrónica
-% Instituto Tecnológico de Costa Rica
+% School of Electronics
+% Costa Rica Institute of Technology
 %
 % Phone:   +506 550 2106
 % Fax:     +506 591 6629
@@ -11,15 +11,15 @@
 % $Id: macros.tex 1497 2010-08-09 17:04:26Z palvarado $
 %
 
-%Versión modificada por Yeiner Arias para uso en
-%la Escuela de Imgeniería Mecatrónica
+% Modified by Yeiner Arias for use in
+% the School of Mechatronics Engineering
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Configuration of the exercises package, which is used to collect all
 % problems and answers in the document.
 \usepackage[exercisedelayed,answerdelayed,lastexercise]{exercise}
 \renewcounter{Exercise}[chapter]
-\renewcommand{\ExerciseName}{Problema}
+\renewcommand{\ExerciseName}{Problem}
 \renewcommand{\theExercise}{\thechapter.\arabic{Exercise}}
 \newcommand{\ExerciseLabel}{Exercise.\theExercise}
 \renewcommand{\ExerciseHeader}%
@@ -36,15 +36,7 @@
 \newcommand{\ifbook}[2]{\ifthenelse{\boolean{bookmode}}{#1}{#2}}
 
 % include all required packages here
-\usepackage[spanish,english]{babel}     % supports english, but default is 
-                                        % spanish...
-\newcommand*{\SelectSpanish}{%          % well, the last line indeed selects
-  \hyphenrules{spanish}%                % english over spanish, but with this
-  \languageshorthands{spanish}%         % command we turn it around.
-  \captionsspanish                      % The reason: hyperref has some
-  \datespanish                          % problems with the spanish babel,
-}                                       % so we use some trick here so that it
-\AtBeginDocument{\SelectSpanish}        % thinks it is english.
+\usepackage[english]{babel}            % English captions, dates and hyphenation
 
 \usepackage{makeidx}                    % to create index file
 
@@ -98,8 +90,8 @@
 }
 
 %% fix the title for examples
-\renewcommand{\examplelistname}{Índice de ejemplos}
-\renewcommand{\examplename}{Ejemplo}
+\renewcommand{\examplelistname}{List of Examples}
+\renewcommand{\examplename}{Example}
 
 
 \usepackage{url}                        % allows linebreaks at certain
@@ -140,7 +132,7 @@
 \usepackage[pdftex,%
             pdftitle={\pdfTitle},%
             pdfauthor={\pdfAuthor},%
-            pdfsubject={Notas de Clase},%
+            pdfsubject={Graduation Project Report},%
             pdfkeywords={\pdfKeywords},%
             naturalnames=true,
             linktocpage,
@@ -164,7 +156,7 @@
 \usepackage[pdftex,%
             pdftitle={\pdfTitle},%
             pdfauthor={\pdfAuthor},%
-            pdfsubject={Notas de clase},%
+            pdfsubject={Graduation Project Report},%
             pdfkeywords={\pdfKeywords},%
             naturalnames=true,
             linktocpage,hyperindex,
@@ -208,7 +200,7 @@
 \usepackage[ps2pdf,%
             pdftitle={\pdfTitle}%
             pdfauthor={\pdfAuthor},%
-            pdfsubject={Notas de clase},%
+            pdfsubject={Graduation Project Report},%
             pdfkeywords={\pdfKeywords},%
             % plainpages=false,
             linktocpage,
@@ -221,7 +213,7 @@
 \usepackage[ps2pdf,%
             pdftitle={\pdfTitle}%
             pdfauthor={\pdfAuthor},%
-            pdfsubject={Notas de clase},%
+            pdfsubject={Graduation Project Report},%
             pdfkeywords={\pdfKeywords},%
             % plainpages=false,
             linktocpage,
@@ -287,11 +279,11 @@
 %
 % header and footer layout (needs package fancyhdr)
 %
-\newcommand{\copyrightfooter}{\tiny{\copyright 2005-2010 --- P.~Alvarado %
-    \qquad Uso exclusivo ITCR}}
+\newcommand{\copyrightfooter}{\tiny{\copyright 2005--2010, P.~Alvarado %
+    \qquad ITCR use only}}
 %
 \newcommand{\draftfoot}%
-  {\ifdraft{\textcolor{dkblue}{\tiny\textsl{Borrador: \today}}{}}
+  {\ifdraft{\textcolor{dkblue}{\tiny\textsl{Draft: \today}}{}}
            {}
 }
 
@@ -316,8 +308,8 @@
 \renewcommand{\footrulewidth}{0pt}
 
 
-% Activa el color de las filas de las tablas
-%	#1	Posición inicial del inicio de colores
+% Enable table row colors
+%	#1	First row to color
 \newcommand{\enabletablerowcolor}[1][]{%
 	\ifx\hfuzz#1\hfuzz%
 		\settablerowcolors{2}%
@@ -326,7 +318,7 @@
 	\fi%
 }
 
-% Desactiva el color de las filas de las tablas
+% Disable table row colors
 \newcommand{\disabletablerowcolor}{\rowcolors{2}{}{}}
 
 %
@@ -352,8 +344,6 @@
     \caption[#1]{#2}%
   }
 }
-\addto\extrasspanish{\renewcommand{\tablename}{Tabla}}
-\addto\extrasspanish{\renewcommand{\listtablename}{\'Indice de tablas}}
 
 %
 % paragraph layout

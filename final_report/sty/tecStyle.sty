@@ -72,8 +72,8 @@
 \RequirePackage{ifthen}
 \RequirePackage{color}
 \RequirePackage{theorem}    % for theorems, definitions and so on
-% different languages
-\RequirePackage[english,spanish]{babel}
+% English document language
+\RequirePackage[english]{babel}
 
 \message{2009/02/15 tecStyle}
 
@@ -82,10 +82,8 @@
 
 % Abbreviations
 
-\iflanguage{english}{
-% some abbreviations
 \newcommand{\examplename}{Example}
-\newcommand{\examplelistname}{Example list}
+\newcommand{\examplelistname}{List of Examples}
 \newcommand{\examplesolution}{Solution}
 \newcommand{\ie}{i.\,e.\ }
 \newcommand{\etal}{et al.\ }
@@ -93,18 +91,6 @@
 \newcommand{\etc}{etc.\ }
 \newcommand{\quot}[1]{``#1''}             % normal quotation
 \newcommand{\dqt}[1]{\quot{#1}}
-}{}
-
-\iflanguage{spanish}{
-% algunas abreviaciones
-\newcommand{\examplename}{Ejemplo}
-\newcommand{\examplelistname}{Índice de ejemplos}
-\newcommand{\examplesolution}{Solución}
-\newcommand{\etal}{et al.\ }
-\newcommand{\etc}{etc.\ }
-\newcommand{\quot}[1]{``#1''}             % normal quotation
-\newcommand{\dqt}[1]{\quot{#1}}
-}{}
 
 % todo-command + requirements 
 \newcommand{\leftmarginlabel}{%
@@ -170,7 +156,7 @@
 % Environment for Definitions
 \newcounter{Def}
 \theoremstyle{plain}
-\newtheorem{definition}[Def]{Definición}
+\newtheorem{definition}[Def]{Definition}
 
 
 % Indexing support
@@ -196,7 +182,7 @@
 \newcommand{\boxcomment}[1]{}
 \newcommand{\explain}[1]{}
 \newcommand{\chk}[1]{}
-\newcommand{\todohdr}{Por hacer:}
+\newcommand{\todohdr}{To do:}
 \newcommand{\TODO}[2][\todohdr]{}
 \definecolor{todocolor}{gray}{0.6}
 
@@ -270,7 +256,7 @@
 \end{minipage}}\addcontentsline{todo}{todo}{#1}}
 }
 
-\newcommand{\todoname}{Revisar}
+\newcommand{\todoname}{Review}
 \newcommand{\listoftodo}{\chapter*{\todoname}\@starttoc{todo}\markboth{\todoname}{\todoname}\addcontentsline{toc}{chapter}{\todoname}}
 \newcommand*\l@todo[2]{\noindent\makebox[\linewidth]{#1\dotfill\makebox[2em][r]{#2}}\par}
 
