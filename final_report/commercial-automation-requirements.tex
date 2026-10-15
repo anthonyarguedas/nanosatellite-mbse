@@ -1,0 +1,127 @@
+% Separate comparison table. Deliberately not included in main.tex.
+% Same three-column longtable recipe as the framework FR table.
+% Required packages: array, longtable, booktabs and hyperref.
+% CR identifiers are comparison requirements, not approved additions to the FRs.
+% Scope was checked against the FRs, logical/physical designs and V&V plan.
+% Sources checked on 15 October 2026. Hyperlinks avoid changes to the report bibliography.
+
+{\small
+\setlength{\tabcolsep}{4pt}
+\setlength{\parskip}{0pt}
+\setlength{\LTpre}{0.4\baselineskip}
+\setlength{\LTpost}{0.4\baselineskip}
+\renewcommand{\arraystretch}{1.06}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.63\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.29\linewidth-2\tabcolsep\relax}@{}}
+\caption[Additional commercial AI and automation requirements.]{Additional requirements for AI and verification automation beyond the current FRs. Some mechanisms already appear in candidate descriptions. Circuit and PCB rows extend the framework's design scope. Existing authorization and evidence limits still apply. Portal denotes current Altium Requirements Portal. Product licenses and beta labels qualify the cited capabilities. Established CAD automation is distinguished from AI. Portal AI quotas depend on the \href{https://www.altium.com/capabilities/requirements/requirements-management}{subscription}. Sources accessed 15 October 2026.}\label{tab:commercial-automation-requirements}\\
+\toprule
+\textbf{ID} & \textbf{System requirement} & \textbf{Rationale} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{System requirement} & \textbf{Rationale} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\multicolumn{3}{@{}l}{\textbf{Parameter changes and unattended verification}} \\*
+CR-01 &
+The framework shall represent numerical values in requirement text as references to shared parameters and automatically refresh dependent formulas and displayed references after an authorized parameter change, without separate edits to each dependent record. &
+\textit{Portal:} live \href{https://www.altium.com/documentation/altium-365/requirements-portal/requirements-module/creating-requirements}{parameter references} and \href{https://www.altium.com/documentation/altium-365/requirements-portal/valis-calculations}{formula dependencies}. A battery count change updates linked quantities and prose together. FR-13/20 and native parametrics already specify calculations. Automatic propagation into requirement text adds an explicit update obligation. \\
+CR-02 &
+The framework shall let engineers define Boolean verification rules over requirement and design parameters and automatically reevaluate each affected rule after an input change, publishing its numerical check result separately from the overall requirement V\&V status. &
+\textit{Portal:} \href{https://www.altium.com/documentation/altium-365/requirements-portal/verification-validation-module/flow-4-manual-rules-verification-flow}{parameter rules} and \href{https://www.altium.com/documentation/altium-365/requirements-portal}{continuous checks}. The \href{https://www.altium.com/documentation/altium-365/requirements-portal/new}{14 April 2026 release} separates rule results from overall V\&V status. FR-05 identifies impacts. FR-30/45/46 refresh assistance. Automatic numerical rechecking after a parameter edit adds an execution obligation. \\
+CR-03 &
+The framework shall run a workflow configured by an engineer from an authorized parameter edit or scheduled trigger, executing registered analyses, updating linked requirement checks, refreshing configured documents and notifying assigned engineers without separate commands for each action. &
+\textit{Legacy Valispace:} \href{https://www.altium.com/documentation/altium-365/requirements-systems-portal/automations}{trigger rules} and \href{https://www.altium.com/documentation/altium-365/requirements-systems-portal/integrations/simscale}{scripted simulation/report integration}. The \href{https://www.valispace.com/wp-content/uploads/2024/03/change-management.gif}{battery module animation} advertises six reruns and 72 checks in 42~s. These figures supply no benchmark evidence. Authored scripts and solver access remain prerequisites. FR-05/39/46 leave numerical workflow triggers unstated. Current Portal general automations are \href{https://www.altium.com/capabilities/requirements/requirements-management}{forthcoming}. \\
+% The official animation depicts battery modules changing from 3 to 4, six
+% simulations rerun, 15 documents updated, 72 requirements verified and 19
+% engineers notified. It identifies no models, criteria or execution records.
+% Legacy scripting requires authored code, configured triggers and credentials.
+% The SimScale example also requires a SimScale Professional license and API key.
+\multicolumn{3}{@{}l}{\textbf{AI capture and specification management}} \\*
+CR-04 &
+The framework shall use AI to extract candidate structured requirements from supported PDF, Word, Excel and CSV specifications, present the extracted records and field mappings for review, and offer conversion of detected numerical values into shared parameters before an authorized import. &
+\textit{Portal:} the \href{https://www.altium.com/documentation/altium-365/requirements-portal/requirements-module/import-requirements}{AI importer} proposes records, field mappings and parameter extraction. This reduces manual transcription of source specifications. FR-01/08 retain or check structured records. AI extraction from source documents adds an intake workflow. Extraction accuracy still requires assessment. \\
+CR-05 &
+The framework shall answer natural-language questions about requirements using the selected project, specification, filters and rows as context, returning matching requirement identifiers, counts or summaries and highlighting the corresponding records. &
+\textit{Portal:} \href{https://www.altium.com/documentation/altium-365/requirements-portal/agentic-requirements-engineering}{Engineering Assistant} queries use the active selection and highlight related records. Engineers can ask about unverified battery requirements. FR-04 retrieves traces and FR-37 generates views. A conversational interface over requirement data adds interaction scope. \\
+CR-06 &
+The framework shall translate a natural-language request into proposed creation, modification or deletion of requirements and supported verification activities, procedure steps or items, display the change preview, and apply the changes only after authorized engineer acceptance. &
+\textit{Portal:} \href{https://www.altium.com/documentation/altium-365/requirements-portal/agentic-requirements-engineering}{Engineering Assistant} now covers requirement and V\&V records, including procedure descriptions and expected results. FR-02/17 address corrections and allocations. FR-28 retains plans. Conversational record authoring adds behavior. Generated plans and status edits supply no executed verification evidence. \\
+CR-07 &
+The framework shall let engineers maintain reusable AI task instructions with a name, applicability description and procedure, and automatically select and apply the relevant instructions from the request intent and current context while preserving review of proposed changes. &
+\textit{Portal:} \href{https://www.altium.com/documentation/altium-365/requirements-portal/agentic-requirements-engineering}{AI skills} package writing standards, classification and other tasks for automatic selection. FR-03 recommends engineering methods. An editable library governing assistant task execution adds a separate capability. Instruction reuse establishes no deterministic output or correctness guarantee. \\
+\multicolumn{3}{@{}l}{\textbf{CATIA Stimulus: automation through executable constraints}} \\*
+CR-08 &
+The framework shall let engineers author functional requirements as executable constraints over signals, modes and time using defined textual patterns, including reusable patterns composed from existing constraints, while retaining their requirement identities. &
+\textit{Stimulus:} \href{https://www.incose.org/wp-content/uploads/2026/01/demoday_012-catia_stimulus.pdf#page=7}{executable templates} and \href{https://www.microconsult.de/en/debugging-embedded-systems-requirements-before-the-design-begins/}{custom patterns (2016)}. Engineers formalize conditions and deadlines. FR-01 stores statements and FR-35 checks modeled control. An executable requirement language adds scope. Formalization correctness needs separate assessment. \\
+CR-09 &
+The framework shall simulate the permitted behavior of a formalized requirement set and scenario assumptions before a design implementation is available, identifying encountered contradictions and displaying the conflicting requirements and relevant signal histories. &
+\textit{Stimulus for Requirements:} \href{https://www.3ds.com/edu/education/academics/solutions/catia-stimulus}{simulation before design} and \href{https://www.incose.org/wp-content/uploads/2026/01/demoday_012-catia_stimulus.pdf#page=7}{constraint conflict diagnosis}. FR-02 checks drafts. FR-16 simulates EPS models. This adds execution of the specification itself. Explored traces establish no exhaustive consistency proof. \\
+CR-10 &
+The framework shall generate and execute multiple test input sequences from engineer-defined scenario constraints and input domains, within declared campaign limits, without requiring individual test vectors to be enumerated manually. &
+\textit{Stimulus for Test:} \href{https://www.3ds.com/products/catia/stimulus}{generated test inputs} and automated execution. FR-19/24 execute declared MIL/SIL scenarios. Automatic exploration of admissible input combinations adds test-generation behavior. Engineers supply interfaces, environment constraints and campaign settings. Generated tests establish no complete state space coverage. \\
+CR-11 &
+The framework shall reuse the same executable requirement definitions as passive response monitors for the corresponding model or host software, reporting requirement violations without separately authored expected output sequences for each generated test. &
+\textit{Stimulus for Test:} \href{https://www.incose.org/wp-content/uploads/2026/01/demoday_012-catia_stimulus.pdf#page=6}{model/software observation} and \href{https://www.linkedin.com/pulse/requirements-in-the-loop-ril-simulation-future-systems-yves-g%C3%A9nevaux}{passive monitor semantics (2019)}. FR-19/24 assess fixed stimuli and expected responses. Reusing one formal definition avoids separate test logic. Monitors observe actual outputs. They impose no constraints on the producing implementation. \\
+CR-12 &
+The framework shall execute a configured campaign of multiple constrained test scenarios with a specified number of generated input sequences per scenario and consolidate the resulting requirement outcomes and coverage across the campaign. &
+\textit{Stimulus:} the \href{https://3dswym.3dexperience.3ds.com/post/catia-mbse-cyber-systems/automatic-test-campaign-with-stimulus_KjnfdsT7Qy2JtwSFZ6uiRg}{June 2026 campaign demonstration} describes scenario selection, vector counts, execution and consolidated results. FR-19/24 cover scenario execution. This adds campaign coordination and automatic aggregation. The source establishes no automatic launch after every code or requirement change. \\
+CR-13 &
+The framework shall report which executable requirements were activated during each test run and across a generated test campaign, identifying requirements left unexercised separately from violation outcomes. &
+\textit{Stimulus:} \href{https://www.3ds.com/products/catia/stimulus}{coverage tracking} and the \href{https://www.linkedin.com/pulse/requirements-in-the-loop-ril-simulation-future-systems-yves-g%C3%A9nevaux}{activation definition (2019)}. FR-04/28 address trace and plan coverage. Observed requirement activation adds a different measure. A linked or passing requirement need not have exercised its triggering conditions. Activation establishes no correctness proof. \\
+CR-14 &
+The framework shall apply the executable requirement monitors to imported input/output logs with time information without rerunning the producing system, reporting detected requirement violations against the recorded history. &
+\textit{Stimulus:} \href{https://www.3ds.com/products/catia/stimulus}{recorded log requirement checking}. This covers imported data, with no physical test execution. FR-31/32 check history quality and FR-19 supports fault diagnosis. Evaluating recorded behavior against executable requirements adds an offline verification route. Missing logged signals limit which requirements can be assessed. \\
+\multicolumn{3}{@{}l}{\textbf{Native circuit and PCB automation (established capabilities)}} \\*
+CR-15 &
+The framework shall let engineers attach live requirement references to schematic or PCB objects, points and regions, navigate between each reference and its requirement, and view or update the linked verification activity status from the CAD environment. &
+\textit{Altium Designer:} \href{https://www.altium.com/documentation/altium-designer/requirements}{Requirements in a Design}. FR-04/37 require traces and views. This adds references anchored to actual CAD objects. Setup requires a linked Portal block and design project. Status selection is an engineer action. A placed reference supplies no automatic electrical compliance evidence. \\
+CR-16 &
+The framework shall maintain reusable electrical and layout constraint sets for identified CAD nets, classes, differential pairs and layers, apply accepted set changes to their assigned objects, and transfer reviewed constraints between schematic and PCB representations. &
+\textit{Altium Constraint Manager:} \href{https://www.altium.com/documentation/altium-designer/sch-pcb/constraint-manager}{constraint sets and transfer}. FR-08/33 address exchanges and modeled interfaces. This adds rules usable by CAD tools and their propagation. Engineers define the constraints. Transfer uses an explicit engineering change order. Requirement prose is not automatically converted into layout rules. \\
+CR-17 &
+The framework shall execute configured PCB geometry, connectivity and electrical layout rule checks during supported edits and in requested batches, linking detected violations to their rule, affected objects, board location and available measured values. &
+\textit{Altium:} \href{https://www.altium.com/documentation/altium-designer/pcb/drc/setting-up-running}{online and batch DRC}. \textit{Siemens:} \href{https://www.siemens.com/en-us/products/pcb/hyperlynx/electrical-design-rule-check/}{HyperLynx electrical DRC} adds checks of return paths and plane crossings. CR-02 checks parameter predicates. This adds inspection of actual copper geometry. Coverage depends on enabled rules. Layout findings establish no numerical emission or mission compliance result. \\
+CR-18 &
+The framework shall search configured simulation-model sources for schematic components without models, assign candidate models with explicit mappings between component and model pins, and report unresolved assignments and parsing or mapping errors before numerical execution. &
+\textit{Altium Simulation Dashboard:} \href{https://www.altium.com/documentation/altium-designer/circuit-simulation/verifying-preparing-project}{Assign Automatically}. FR-03 recommends models and FR-18 exchanges them. Automatic attachment to schematic instances adds setup automation. Available libraries and cloud access constrain coverage. A successful pin mapping establishes no physical model credibility under FR-21. \\
+CR-19 &
+The framework shall derive supported electrical analysis topologies and geometric models from native schematic connectivity and PCB copper data, using supplied material, source, load and device-model inputs, and link assessment findings to the original nets and board locations. &
+\textit{Altium:} \href{https://www.altium.com/documentation/altium-designer/analyzing-pcb/pi-analysis/power-analyzer-keysight/quickstart-guide}{Power Analyzer by Keysight} supports DC power networks. \textit{Siemens:} \href{https://blogs.sw.siemens.com/electronic-systems-design/2023/04/04/analyze-your-pcb-design-with-hyperlynx-boardsim-in-the-pads-professional-premium-flow/}{HyperLynx BoardSim} supports layout-derived electrical models. FR-16 already requires analyses. Native CAD extraction adds setup behavior. Licenses, models, metadata and engineer configuration remain prerequisites. \\
+CR-20 &
+The framework shall audit schematic connections using electrical part models derived from manufacturer datasheets, identifying missing mandatory connections or external components, incompatible pin functions or voltage levels, and symbol pin mismatches, with findings linked to the affected circuit objects. &
+\textit{Siemens:} \href{https://www.siemens.com/en-us/products/pcb/hyperlynx/schematic-analysis/}{HyperLynx Schematic Analysis} supplies model-based checks. \textit{Flux:} \href{https://docs.flux.ai/tutorials/ai-design-reviews}{AI reviews} cover narrower, manually launched checks. FR-02 checks prose and FR-16 assesses EPS behavior. Static pin/net auditing adds circuit verification. Available part models and datasheets limit coverage. \\
+\multicolumn{3}{@{}l}{\textbf{AI design generation and analysis automation}} \\*
+CR-21 &
+The framework shall translate an engineer's natural-language design instruction into proposed changes to components, properties and electrical connections in an editable schematic, using the active circuit context, and apply the changes after engineer approval. &
+\textit{Flux:} the \href{https://docs.flux.ai/reference/copilot}{design assistant} reads schematics, parts and connections and offers direct edits. CR-06 edits requirement and V\&V records. This adds circuit authoring actions. AI usage quotas apply. Current documentation warns of limited layout understanding. Proposed changes still require engineering review. \\
+CR-22 &
+The framework shall synthesize candidate component-level circuits and a bill of materials from a functional architecture and declared electrical constraints using supported circuit and component models, and export editable schematics for further CAD development. &
+\textit{CELUS:} \href{https://www.celus.io/news/reducing-bom-cost-early-a-practical-walkthrough-with-the-celus-design-platform}{architecture resolution}. \textit{Circuit Mind ACE:} \href{https://www.circuitmind.io/product}{circuit synthesis}. These are separate platforms, not native Altium agents. FR-14/15/20 cover trades, configurations and sizing. Connected schematic generation adds design scope. Supported model libraries constrain applicability. Vendor claims of error-free circuits supply no independent verification evidence. \\
+CR-23 &
+The framework shall generate candidate PCB component placements, power/ground copper and critical net routes from supplied connectivity, footprints, board outline, layer stack, fixed placements and declared constraints, returning editable geometry and unresolved design findings for engineer review. &
+\textit{Cadence Allegro X AI:} \href{https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-x-design-platform.html}{placement, planes and critical routing}. \textit{Altium ActiveRoute:} \href{https://www.altium.com/documentation/altium-designer/pcb/routing/activeroute}{narrower selected signal routing}. FR-13/15 provide estimates and representations. Editable copper synthesis adds scope. Tool/service access and board setup are required. Complete board closure and flight suitability require separate assessment. \\
+CR-24 &
+The framework shall construct an executable circuit-analysis setup from an engineer's natural-language request and the identified schematic, execute the supported analysis, and return the generated netlist or code, numerical measures and requested plots. &
+\textit{Flux:} \href{https://docs.flux.ai/reference/simulator-tool}{SPICE Simulator (beta)} and \href{https://docs.flux.ai/reference/code-tool}{Code Tool}. FR-03 recommends methods and FR-16 executes analyses. This adds generation of the analysis setup. SPICE model coverage, runtime and memory are limited. Generated setups and results require independent checking under FR-21. \\
+CR-25 &
+The framework shall automatically retry supported circuit analyses after diagnosing syntax, convergence or time step errors, reporting each correction to netlist syntax or numerical settings with its new run outcome under the authorized retry scope. &
+\textit{Flux Simulator (beta):} \href{https://docs.flux.ai/reference/simulator-tool}{automatic error handling}. FR-09/23 retain failed runs and numerical settings. Automatic diagnosis, correction and retry add recovery behavior. Engineering values and acceptance limits remain controlled. A converged retry supplies no independent evidence of prediction validity or conformity. \\
+CR-26 &
+The framework shall propose a decoupling network by automatically choosing and simulating successive component values and populated locations from a declared candidate set, using previous results to guide the next choice under fixed objectives, constraints and a run limit. &
+\textit{Cadence SystemPI with Optimality:} \href{https://community.cadence.com/cadence_blogs_8/b/pcb/posts/how-to-use-ai-to-optimize-your-power-delivery-network}{reinforcement learning for decoupling search}. FR-14 compares alternatives and sensitivities. Adaptive selection of new circuit candidates adds search behavior. A configured testbench, candidate models and solver licenses are prerequisites. The source establishes no guarantee of global optimality or automatic CAD updates. \\
+% Recent announcement boundaries, checked 15 October 2026:
+% Altium Design Rule Sets / Force Batch Check is Open Beta in 26.10.1.
+% It is distinct from the established Constraint Manager Constraint Sets.
+% Octopart Discover remains Coming Soon on its current product page:
+% https://www.altium.com/octopart-discover
+% Cadence AuraStack availability and Siemens Fuse's expanded self-verifying
+% workflows are not credited as released functionality in these requirements.
+% https://www.cadence.com/en_US/home/company/newsroom/press-releases/pr/2026/cadence-introduces-aurastack-ai-super-agent-the-worlds-first.html
+% https://news.siemens.com/en-us/siemens-nvidia-dac-2026/
+% Altium-hosted episodes on CELUS, Circuit Mind, DeepPCB/Cooper, atopile and
+% Altium Cruncher describe separate suppliers or community workflows.
+% Hosting a demonstration establishes no native Altium product entitlement.
+\end{longtable}
+}
