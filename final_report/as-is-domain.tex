@@ -50,6 +50,32 @@ Qualification testing can be reduced where justified by the accepted mission ris
 Verification and validation still address mission objectives and applicable requirements, including functional, interface and safety checks \citep[Sec.~3.3.1 and Table~4-1]{csa2020tailoring}.
 Frequent engineering discussions and peer reviews provide oversight, supported by recorded tailoring decisions, residual risks and required approvals \citep[Sec.~3.4.1]{csa2020tailoring}\citep[Sec.~3.11.3]{nasa2016systems}.
 
+Normative documents provide requirements directly applicable to the EPS \citep[Sec.~2.3]{calpoly2022cds}.
+They also constrain other subsystems, whose interfaces and operating needs lead to derived EPS requirements \citep[Secs.~4.2--4.3]{nasa2016systems}.
+United Nations guidance and United States regulations provide comparative references for battery safety, passivation and disposal \citep{unoosa2010debris,fcc2026satellitecommunications}.
+Canadian licensing requires five-year disposal and at least 90\% probability of disposal success \citep[Decisions~D10--D11]{ised2026debris}.
+
+The CubeSat Design Specification and EXOpod Nova manual provide preliminary guidance on power isolation, inhibits and charging access \citep{calpoly2022cds,exolaunch2024exopodnova}.
+JSC-20793 Rev.~D addresses battery hazards and testing for crewed applications \citep{nasa2017batterysafety}.
+These references inform ASCEND's EPS capability objectives.
+Canadian licensing and future launcher requirements govern their applicability to CUBICS \citep[Secs.~3.2 and~6.2]{csa2026cubics}.
+Other subsystems contribute derived EPS requirements through their supply voltages, power consumption and operating schedules \citep[Secs.~2--4]{handpicked-0003}\citep[Sec.~2]{review-0289}.
+
+The Object Management Group's CSRM Profile 1.1 specification complements these engineering sources with standardized categories for mission, spacecraft, subsystem and component requirements \citep[Sec.~6.1]{omg2025csrm}.
+It relates requirements to the architectural elements that satisfy them and to verification activities with recorded outcomes \citep[Secs.~6.3--6.4]{omg2025csrm}.
+These relationships support tracing normative and derived EPS requirements through design and verification.
+
+EPS development workflows link mission inputs and power budgeting to architecture, design, integration and verification within the spacecraft lifecycle \citep{handpicked-0003,review-0289}.
+These workflows can be understood as an EPS development lifecycle embedded within the tailored spacecraft lifecycle, progressing from applicable normative and derived requirements to a design validated against them.
+El Hachimi et al. cover the progression through functional and environmental qualification, while Boan demonstrates the preliminary stages through iterative sizing and energy balance simulations \citep[Secs.~2--5]{handpicked-0003}\citep[Secs.~2--4]{review-0289}.
+
+Digital twin research supports obtaining part of this verification evidence without fabricating the complete EPS.
+Casado et al. use models validated against physical measurements to simulate EPS behavior over a complete orbital cycle \citep[Secs.~3--4]{review-0573}.
+Complementary battery digital twin work by Zhu et al. (2025) describes virtual testing and software-in-the-loop verification without physical prototypes, followed by hardware-in-the-loop testing \citep[p.~3]{handpicked-0001}.
+This is consistent with the tailored lifecycle, since NASA recognizes modeling and simulation as verification by analysis and recommends selecting methods according to project constraints and accepted risk \citep[Sec.~5.3.1.2]{nasa2016systems}.
+The CSRM specification likewise includes verification under simulated or modeled conditions within its definition of analysis \citep[Sec.~6.6.8]{omg2025csrm}.
+Selected requirements can therefore be verified before fabrication using credible models, while retaining the physical safety and qualification tests required by the mission and launcher \citep[Sec.~5.3.1.2]{nasa2016systems}\citep[Secs.~2.3 and~3]{calpoly2022cds}.
+
 \subsection{Stakeholder concerns}
 \label{sec:stakeholder-concerns}
 

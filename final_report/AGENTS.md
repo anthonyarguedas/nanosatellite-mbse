@@ -18,7 +18,7 @@ The final report will never mention specific local files or artifacts, since the
 Supplementary information, if relevant, can be supplied in appendices.
 
 `final_report/main.tex` lists all sections of the final report.
-The full report, excluding cover, indexes, formalities, and appendices, must not be over 70 pages.
+The full report, excluding cover, indexes, formalities, tables containing mission and system requirements, MOEs, or MOPs, and appendices, must not be over 70 pages.
 Appendices can only include minimal prose, thus they are mostly tables and figures.
 The report is very long, so under no circumstances can it all be written in a single try.
 Do not edit parts of the report that you were not asked to edit.
