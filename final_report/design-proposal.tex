@@ -44,9 +44,328 @@ For mission lifetime $N_{\mathrm{lifetime}}$ in years, $N_{\mathrm{day/year}}$ d
     \label{eq:battery-energy}
 \end{align}
 
+\section{EPS Components and Loads Generic Models}
+\label{section:eps-generic-models}
 
+The framework will define reusable models for the six CSRM EPS component groups and for the loads they supply. These models will provide the schema for browsing COTS products and assembling candidate EPS configurations. A catalog entry will describe a particular product and revision. A part usage in a candidate architecture will reference that entry and specify its quantity, supported configuration, installation and connections. One integrated EPS board can implement several CSRM groups. Logical role allocations will reference the same physical usage. Its physical properties will be accounted for once.
+
+\paragraph{Common characterization.}
+Luccisano et al. contribute shared component identity, manufacturer, mass, power by operating mode and margins. Their distinction between aggregate and detailed component budgets supports explicit accounting boundaries \citep[Secs.~3.1--3.2]{luccisano2024formalization}. Ceglarek and Bertrand contribute a catalog built from manufacturer datasheets with controlled parameter meanings and units. Their experience with inconsistent datasheets motivates retaining the original value and its reviewed interpretation \citep[Sec.~3]{review-0257}. The proposed schema will extend these contributions with source revisions, operating conditions, uncertainty, supported configurations and interface descriptions. These extensions will make catalog comparisons assessable.
+
+\paragraph{Solar arrays and batteries.}
+El Hachimi et al. supply the solar maximum power point and EOL properties, battery energy and cycle-life criteria, and examples of named cells and their arrangements \citep[Secs.~3 and~6.2]{handpicked-0003}. Casado et al. contribute solar current--voltage curves with irradiance and temperature conditions, battery discharge curves and internal resistance \citep[Secs.~2.1 and~2.3]{review-0573}. Boan contributes the series/parallel configuration and mission illumination needed to assess a selected assembly \citep[Sec.~3]{review-0289}. These sources motivate separate cell and assembly records, conditional electrical characteristics and installation geometry. Wijaya et al. contribute fixed commercial product properties alongside sized alternatives. Purchased panels and packs will retain their specified dimensions, mass and ratings \citep[Sec.~III.A--B, Appendix]{review-0145}.
+
+\paragraph{Regulators, converters, power circuits and switches.}
+El Hachimi et al. contribute conditioning and bus alternatives, converter input compatibility, independently controlled outputs, protection thresholds, timing and autonomous protection functions \citep[Secs.~4 and~7.1--7.6]{handpicked-0003}. Casado et al. contribute regulator operating modes and transitions, protected output rails, and distribution efficiency estimates based on measurements \citep[Secs.~2.2 and~2.4]{review-0573}. The models will therefore distinguish conversion capabilities, electrical operating limits, loss data, channel organization and protection behavior. A controller integrated circuit record will retain its required external circuit. Its ratings alone will establish no complete converter or protected output.
+
+\paragraph{Processor, memory and software.}
+El Hachimi et al. contribute the EPS processor and memory roles, telemetry, output control and hardware/software protection responsibilities \citep[Secs.~7.2--7.5]{handpicked-0003}. Halvorson and Thomas distinguish architecture and interface definitions from implemented behavior and software build dependencies \citep[Secs.~3--4]{review-0853}. The framework will extend these contributions with host compatibility, memory requirements, task timing and versioned service definitions. Software will reference its execution host. Its execution power and physical mass will be included in that host's accounting boundary.
+
+\paragraph{Loads.}
+Luccisano et al. contribute power states and their allocation to operating modes \citep[Secs.~3.1--3.2]{luccisano2024formalization}. Casado et al. contribute electrical load profiles and their supply through regulated and unregulated lines \citep[Sec.~2.4]{review-0573}. El Hachimi et al. add maximum-load and protection cases \citep[Secs.~7.4--7.5 and~8.1.4]{handpicked-0003}. The generic load model will combine mode consumption, voltage tolerance, startup pulses, scheduling and shedding constraints. The same description will apply to spacecraft loads and to EPS consumers such as processors and battery heaters.
+
+Figure~\ref{fig:eps-component-models} summarizes the proposed definitions. SysML v2 part definitions will describe hardware and software categories. Attribute definitions will describe structured specifications and physical quantities. Port definitions will describe connection points, and interface definitions will constrain compatible connections \citep[Secs.~7.7, 7.11--7.14 and~9.8]{omg2026sysml2}. Directed command and telemetry items will use requester/provider port conjugation. Physical electrical interfaces will use across voltage and through current quantities with a declared sign convention. Tables~\ref{tab:eps-catalog-records}--\ref{tab:eps-specialized-properties} define the schema summarized in the figure. These definitions are a proposed enrichment of the adopted CSRM structure. In the diagram, each port rectangle carries its reusable type identifier. Multiplicities describe declared connection points, with zero permitting an absent feature. The diagram selects no products or wiring.
+
+\begin{landscape}
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=\dimexpr\textheight-40pt\relax,keepaspectratio]{fig/eps-component-models.pdf}
+\caption[Generic EPS component and load definitions.]{Proposed EPS component and load definitions. Tables~\ref{tab:eps-catalog-records}--\ref{tab:eps-specialized-properties} specify the shared records, port types and properties. Gray identifies external loads.}
+\label{fig:eps-component-models}
+\end{figure}
+\clearpage
+\end{landscape}
+
+\subsection{Catalog records and configured part usages}
+\label{subsection:eps-catalog-records}
+
+A generic attribute definition will group each structured record in Table~\ref{tab:eps-catalog-records}. Text, Boolean values, enumerations, integers and quantity values will retain their types. Numerical specifications can be scalars, intervals, curves or tables. Quantity values will retain their original units and a consistent internal representation using the SysML v2 quantities and units library. Energy in Wh and charge in Ah will be convertible to J and C. Temperature values will retain their scale. Counts will be integers and efficiencies and duty fractions will be dimensionless.
+
+Every specification will distinguish minimum, typical, maximum, measured and estimated values. Its conditions will identify applicable temperature, irradiance, lifetime, radiation exposure, state of charge, load and pulse duration. A model reference will identify its parameters, validity domain and supported effects. The status of a field will be available, missing or not applicable, with rationale for the latter two. Each required property will have one specification record. An absent value will retain its missing or not-applicable status. Curves and tables will identify independent variables, dependent quantities and interpolation domains. Optional model data will support progressively richer assessments. Missing data will remain visible in catalog browsing and in the scope of any resulting assessment.
+
+{\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.78\linewidth-2\tabcolsep\relax}@{}}
+\caption{Shared catalog and configuration records.}\label{tab:eps-catalog-records}\\
+\toprule
+\textbf{Record} & \textbf{Fields and meaning} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Record} & \textbf{Fields and meaning} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Catalog entry & Record identifier and revision, manufacturer, part number, variant, product revision, product level (cell, component, assembly, board or software), provided functions and CSRM roles, included components, supported configurations and compatible accessories. Procurement fields contain supplier, dated price, currency, availability, lead time and lifecycle status. Software entries also identify release, license and supported host/driver versions. \\
+Sourced specification & Property identifier, typed value or bound/table, unit and original representation, value meaning, reference conditions, source document/revision/location, observation or retrieval date, uncertainty and review disposition. A numerical model additionally identifies its equations or curves, parameter set and validity domain. \\
+Hardware properties & Mass (kg), envelope dimensions (m), keep-out and mounting geometry, connector and terminal pin maps, operating/storage temperature limits (K), thermal contacts and applicable thermal model. Qualification and radiation records identify tested article/revision, conditions, exposure, outcomes and evidence. Flight heritage is recorded with its configuration and environment. \\
+Accounting boundary & For each mass, volume, price or consumption specification, identify whether it covers the complete product or named internal components. Record included consumers and losses. Assemblies retain their own identity and references to their contents. Software physical resources belong to its host. \\
+Configured usage & Unique installed-part identity, catalog-entry revision, quantity, supported configuration and settings, location/orientation, deployment state, selected ports and function/requirement allocations. Array placement includes active face normals, usable area and packing fraction. Load and software assignments identify their supplying channel and execution host, respectively. \\
+Connection & Endpoint identities and physical terminal/return mapping, harness or adapter identity, resistance (\(\Omega\)) and current rating (A) under stated conditions. Data connections add protocol/version, endpoint roles, signal levels, rate (bit/s), addressing and timing. Discrete lines add polarity, default/fault state and inhibit logic. Each physical auxiliary item has its own usage or an identified assembly accounting boundary. \\
+Mission scenario & Orbit and attitude history, illumination, temperatures or thermal boundary conditions, lifetime case, load modes and schedules, allowed transitions, initial battery state, discharge/reserve criteria, assessment duration and energy-closure tolerance (J). Allocations identify mass, volume, installation envelope, cost and required service behavior. Each scenario and criterion retains its source and revision. Assessment scope identifies lifecycle phase, intended use, required evidence and accepted modeling assumptions. \\
+\end{longtable}
+}
+
+Catalog definitions will separate supported configurations from installed choices. A finished panel or battery pack will retain its fixed internal arrangement. A configurable product will expose only the arrangements supported by its supplier. An assembly built from catalog cells will identify the cells and additional protection, interconnects and packaging. Its resulting characteristics will be derived at the assembly level. Individual component records will remain browseable alongside complete EPS boards.
+
+\subsection{Reusable interface definitions}
+\label{subsection:eps-port-types}
+
+Table~\ref{tab:eps-port-types} specifies four reusable interface types. Separate SysML v2 port and interface definitions will specify each entry's endpoints and connection constraints. Their identifiers are local to the EPS design model and distinct from the framework interfaces in Chapter~\ref{ch:solucion}. Each interface usage will connect declared port usages. Physical endpoint descriptions will retain the connector, pin and return mapping. A software service will bind to its host's physical endpoint. A product can provide no data interface, as with a passive cell. Port multiplicities will be resolved for the selected product and configuration.
+
+{\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.78\linewidth-2\tabcolsep\relax}@{}}
+\caption{EPS port and interface types.}\label{tab:eps-port-types}\\
+\toprule
+\textbf{Type} & \textbf{Port features and interface meaning} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Type} & \textbf{Port features and interface meaning} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+IF-E: electrical & A DC terminal pair has voltage \(v\) (V) relative to its declared return, current \(i\) (A) positive into its owner, source/sink/bidirectional capability, and operating and absolute limits. An ideal interface relates across voltages and through currents. Harnesses, switches, converters and isolating devices retain their own voltage drops and return relationships. \\
+IF-T: thermal & A thermal boundary has temperature \(T\) (K), heat flow \(\dot Q\) (W) positive into its owner, and contact/boundary identity. Thermal contacts and models specify resistance or conductance and applicable boundary conditions. The catalog records supported thermal contacts separately from mission temperatures. \\
+IF-D: data service & A provider receives Command and Configuration items and emits Telemetry and Event items. A requester uses the conjugated directions. Item definitions contain identifier, target/channel, payload types, quantities/units, permitted ranges, time/validity meaning and applicable sampling, response or deadline criteria. Hardware transport records contain protocol/version, pin mapping, electrical levels, rate, endpoint roles and address. Software refers to that transport through its host. \\
+IF-C: discrete control & A directed control, enable or inhibit signal has logical meaning, electrical input/output limits, polarity, pin/return mapping, default and fault state, response time and applicable inhibit truth table. Hardware protection and flight inhibits retain their authority and autonomy from software commands. \\
+\end{longtable}
+}
+
+\subsection{Component and load properties}
+\label{subsection:eps-specialized-properties}
+
+Table~\ref{tab:eps-specialized-properties} gives the specialized attributes and port usages. Product levels, chemistries, topologies, modes, load laws and reset policies will use enumerations. Counts and memory sizes will use integers. Capabilities will use Boolean values or sets of named options. Versions and document identifiers will use text. Configurations, channels, tasks and geometry will use structured records or collections with declared multiplicities. Every numerical characteristic uses the record for sourced specifications. Temperature and lifetime dependence can be represented by bounded tables or applicable models. A property used for preliminary sizing can therefore be replaced by richer characterized data while preserving its quantity, source and interface meaning.
+
+{\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.78\linewidth-2\tabcolsep\relax}@{}}
+\caption{Specialized EPS component and load definitions.}\label{tab:eps-specialized-properties}\\
+\toprule
+\textbf{Definition} & \textbf{Attributes and port usages} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Definition} & \textbf{Attributes and port usages} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Solar Arrays & Product level, cell technology, supported series/parallel counts \(N_s,N_p\), active area \(A\) (m\(^{2}\)), \(V_{\mathrm{mp}},V_{\mathrm{oc}}\) (V), \(I_{\mathrm{mp}},I_{\mathrm{sc}}\) (A), current--voltage/model data and temperature/degradation characteristics at identified beginning/end-of-life conditions. Panel definitions identify independent sections, bypass/reverse-blocking features and supported deployment states. Installed orientation and packing belong to the usage. Ports: DC output IF-E [1..*], thermal IF-T [0..*] and monitoring IF-D [0..*]. \\
+Batteries & Product level, chemistry, supported \(N_s,N_p\), minimum/nominal/maximum voltage (V), rated charge \(Q\) (C, commonly Ah), rated energy \(E\) (J, commonly Wh), charge/discharge current limits (A) with pulse durations (s), separate charging/discharging temperature limits, cycle-life versus DoD data, retained-energy/charge factors \(f_E,f_Q\), energy efficiencies \(\eta_c,\eta_d\), coulombic efficiencies \(\eta_{Q,c},\eta_{Q,d}\), internal resistance (\(\Omega\)) and voltage/discharge model. Pack features identify balancing, protection, sensing and heaters included in the product. Ports: bidirectional DC IF-E [1..*], thermal IF-T [0..*] and monitoring IF-D [0..*]. \\
+Regulators and Converters & Conversion/charging roles, buck/boost/buck--boost/linear or direct-transfer implementation, DET/MPPT capabilities, input operating interval and absolute limit (V), tracking interval (V), permissible source current (A), output voltage/ripple (V), continuous/pulse input and output limits (A, s), startup conditions and conversion envelope \(\mathcal C\). Loss or efficiency maps \(P_{\mathrm{loss}}\), \(\eta\) identify voltage, current, temperature, mode and whether idle power \(P_0\) (W) is included. Charger data identify chemistry, supported cell counts, voltage/current limits, termination and temperature rules. Ports: DC input and output IF-E [1..*] each, with reverse transfer explicitly declared, thermal IF-T [0..*], service IF-D [0..*] and enable IF-C [0..*]. \\
+Power Circuits and Switches & Circuit role, channel count and independently controlled/protected groups, default states, voltage and continuous/pulse current ratings (V, A, s), on resistance (\(\Omega\)), idle power (W), sensing ranges/accuracy, reverse-current blocking and supported inhibits. Protection data contain threshold bounds (V, A, K), trip-time curves (s), hysteresis, safe operating area, reset/retry policy and hardware/software responsibility. The usage sets values within these supported ranges. Ports: DC input and output IF-E [1..*] each, thermal IF-T [0..*], service IF-D [0..*] and control/inhibit IF-C [0..*]. Harness records use the applicable circuit and connection properties. \\
+Processor and Memory & Processor architecture, clock rate (Hz), available program/data memory (byte), supply interval (V), consumption by mode (W), physical link definitions, timers, watchdog and sensing/input/output channel capabilities. Resource availability identifies reservations by supplied firmware. Ports: supply IF-E [1..*], thermal IF-T [0..*], service IF-D [0..*] and discrete input/output IF-C [0..*]. \\
+Software & Release, compatible host/firmware/driver versions, required program/data memory (byte), task periods, execution bounds and deadlines (s) for the declared host, supported commands/telemetry/events, parameter ranges, mode transitions, sequencing, shedding and recovery behavior. A reference identifies execution hosts of type Processor and Memory [1..*] and task/resource allocations. Logical service ports are IF-D [1..*]. Physical mass, electrical consumption and thermal dissipation are assigned to the host. \\
+Load & Required supply interval (V), load law (constant power, constant current, resistance or characterized curve), \(P_{\ell m}\) (W), \(I_{\ell m}\) (A) or \(R_{\ell m}\) (\(\Omega\)) by mode \(m\), startup/pulse amplitude and duration (A, s), startup time (s), schedule/duty fraction, default state, shedding priority and essential-service constraints. Heat dissipation or a thermal model identifies the thermal load. Startup/pulse intervals identify whether they replace or supplement steady consumption. Ports: supply IF-E [1..*], thermal IF-T [0..*], service IF-D [0..*] and enable IF-C [0..*]. \\
+\end{longtable}
+}
 
 \section{EPS Component Selection}
+\label{section:eps-component-selection}
+
+Selection will operate on the definitions in Section~\ref{section:eps-generic-models}. Jacobs and Selva provide forward evaluation of selected products and backward enumeration of catalog combinations, with critical requirements filtering the feasible set before cost comparison \citep[Sec.~2]{citation-1136}. Wijaya et al. contribute architecture choices and dependencies followed by numerical evaluation \citep[Secs.~4.1--4.4]{review-0055}. Their COTS study distinguishes fixed purchased properties from continuously sized components \citep[Sec.~III]{review-0145}. GREATCUBE+ contributes repeated compatibility assessment after component replacement \citep[Secs.~2.2.1--2.2.2]{review-0711}. Boan contributes the electrical configuration and mission energy-balance iteration \citep[Secs.~3--4]{review-0289}. The following equations and algorithm synthesize these contributions for the proposed schema. Applicable criteria and evidence levels will follow the declared lifecycle phase and intended use. Preliminary electrical feasibility and component qualification will retain distinct assessment scopes.
+
+\subsection{Catalog browsing and architecture alternatives}
+
+Browsing will support filters for CSRM role, product level, manufacturer, supported topology, electrical ranges, environmental conditions, physical envelope, interfaces and procurement constraints. Results will expose the source and conditions of each compared value. Unknown properties will be shown separately from known violations. A typical rating will establish no guaranteed limit unless an engineer accepts a sourced conservative bound. Datasheet maxima, operating limits and measured performance will retain their distinct meanings.
+
+A candidate \(d\) will comprise topology choices, catalog revisions, integer quantities, supported configurations, connections, assignments of loads to channels and allocations of software to hosts. Topology choices will follow Figure~\ref{fig:csrm-eps-topology}: DET or MPPT conditioning, centralized or distributed transfer, bus regulation, and direct or converted supply for each output rail. Direct and converted outputs can coexist. Product capabilities and dependencies will restrict these combinations. Required functions, external controller circuitry and auxiliaries must be covered by identified installed usages. Logical role coverage alone will establish no current capacity, fault independence or geometric fit.
+
+Finished product properties will remain fixed during selection. Series/parallel changes will be permitted for configurable products and assemblies of catalog cells. Supplier configurations or engineer-declared assembly bounds will keep the enumeration finite. A product substitution will trigger renewed sizing, loss, interface and scenario assessments. New conditions or load schedules will remain explicit scenario revisions.
+
+\subsection{Generation and storage configuration}
+
+Equations~\eqref{eq:minimum-panel-power}--\eqref{eq:battery-energy} will provide preliminary screens for each candidate. The solar cell count will be recalculated from the selected cell's EOL data and rounded upward for physical assembly. For identical cells distributed over sections \(g\), the installed count will satisfy the preliminary lower bound
+\begin{equation}
+    \sum_g N_{s,g}^{\mathrm{pv}}N_{p,g}^{\mathrm{pv}}\geq\left\lceil N_{\mathrm{sc}}\right\rceil,
+    \qquad N_{s,g}^{\mathrm{pv}},N_{p,g}^{\mathrm{pv}}\in\mathbb Z_{>0}.
+    \label{eq:pv-integer-configuration}
+\end{equation}
+Sections on differently illuminated faces will be evaluated separately. Installed cell count will be followed by an illumination-dependent generation assessment. With irradiance, temperature and orientation from scenario \(\sigma\), the selected current--voltage model and operating point give each section's available source power \(P_{g,\mathrm{avail}}(t,\sigma)\). At the same source boundary as Equation~\eqref{eq:minimum-panel-power}, a screen using average power during sunlight is
+\begin{equation}
+    \frac{1}{T_s}\int_{\mathrm{sunlight}}\sum_g P_{g,\mathrm{avail}}(t,\sigma)\,dt
+    \geq P_{\mathrm{sp}_{\min}}.
+    \label{eq:array-generation-screen}
+\end{equation}
+This screen will use the candidate's attainable operating point under DET or MPPT and its applicable path efficiencies \(X_s,X_e\). Stored energy, charge acceptance and load peaks will be assessed separately below.
+
+For a matched section connected to MPPT input \(r\), the following conservative checks will use extrema over the applicable temperature, irradiance and lifetime conditions:
+\begin{align}
+    [N_s^{\mathrm{pv}}V_{\mathrm{mp}}^{\mathrm{lo}},
+     N_s^{\mathrm{pv}}V_{\mathrm{mp}}^{\mathrm{hi}}]
+    &\subseteq[V_{\mathrm{track},r}^{\mathrm{lo}},V_{\mathrm{track},r}^{\mathrm{hi}}],
+    \label{eq:mppt-voltage-compatibility}\\
+    N_s^{\mathrm{pv}}V_{\mathrm{oc}}^{\mathrm{hi}}&\leq V_{\mathrm{abs},r},
+    \qquad N_p^{\mathrm{pv}}I_{\mathrm{sc}}^{\mathrm{hi}}\leq I_{\mathrm{source,allow},r}.
+    \label{eq:pv-input-ratings}
+\end{align}
+Here \(V_{\mathrm{abs},r}\) is the absolute input limit and \(I_{\mathrm{source,allow},r}\) is the permissible source current from the converter specification. Startup and operating-voltage limits will also be checked. Shared trackers will require a compatible combined current--voltage characteristic. DET configurations will instead use the array characteristic at the battery/bus operating voltage, including blocking and wiring drops.
+
+For an assembly of identical battery cells, the initial estimates will be
+\begin{equation}
+    \begin{aligned}
+        E_{\mathrm{pack,BOL}}&=N_s^{\mathrm{bat}}N_p^{\mathrm{bat}}E_{\mathrm{cell,BOL}},\\
+        Q_{\mathrm{pack,BOL}}&=N_p^{\mathrm{bat}}Q_{\mathrm{cell,BOL}}.
+    \end{aligned}
+    \label{eq:battery-assembly-capacity}
+\end{equation}
+\begin{equation}
+    \begin{aligned}
+        \relax[V_{\mathrm{pack}}^{\mathrm{lo}},V_{\mathrm{pack}}^{\mathrm{hi}}]
+        &=[N_s^{\mathrm{bat}}V_{\mathrm{cell}}^{\mathrm{lo}},N_s^{\mathrm{bat}}V_{\mathrm{cell}}^{\mathrm{hi}}],\\
+        I_{\mathrm{pack,allow}}&=N_p^{\mathrm{bat}}I_{\mathrm{cell,allow}}.
+    \end{aligned}
+    \label{eq:battery-assembly-ratings}
+\end{equation}
+Current limits will retain separate charging, discharging and pulse conditions. The DoD limit will use the selected cell's cycle-life data under applicable conditions. Coefficients \(a,b\) in Equation~\eqref{eq:battery-cycle-life} will retain their sourced fit domain. Packaging, interconnects, balancing and protection can further restrict these cell-based estimates. A finished pack will use its supplier's pack ratings. The preliminary capacity screen will compare \(E_{\mathrm{pack,BOL}}\) with \(E_{\mathrm{Battery}}\). EOL assessment will use the specified retained capacity or an applicable aging model, with \(E_{\mathrm{pack,EOL}}=f_EE_{\mathrm{pack,BOL}}\) where that factor is valid. Margin \(M\) will be applied once in preliminary sizing. The physical EOL model will use retained capacity without applying \(M\) again. The selected chemistry, cell count, charging voltage/current, temperature restrictions and termination rules will be matched to the charger.
+
+\subsection{Connections, loads and operating limits}
+
+At an ideal IF-E connection, consistent terminal and return mapping will give
+\begin{equation}
+    v_a=v_b,\qquad i_a+i_b=0.
+    \label{eq:electrical-interface-conservation}
+\end{equation}
+Current is positive into each connected part. A physical path will include its declared losses. For a resistive supply-and-return path,
+\begin{equation}
+    V_\ell=V_r-I_{\mathrm{path}}R_{\mathrm{path}},
+    \label{eq:load-path-drop}
+\end{equation}
+where \(V_r\) is the supplying rail voltage and \(R_{\mathrm{path}}\) includes the relevant harness, contact and conducting-switch resistance once. Shared paths will carry the sum of their branch currents. Isolation and differing returns will require an explicitly modeled interface or adapter.
+
+The load law in Table~\ref{tab:eps-specialized-properties} will determine current at the actual terminal voltage:
+\begin{equation}
+    I_\ell(V_\ell,m)=
+    \begin{cases}
+        P_{\ell m}/V_\ell, & \text{constant power},\\
+        I_{\ell m}, & \text{constant current},\\
+        V_\ell/R_{\ell m}, & \text{resistive load}.
+    \end{cases}
+    \label{eq:generic-load-law}
+\end{equation}
+A characterized load will use its supplied curve or model instead. Mode schedules and pulse records will identify simultaneous demand. For every active load and applicable scenario,
+\begin{equation}
+    V_\ell^{\mathrm{req,lo}}\leq V_\ell(t,\sigma)\leq V_\ell^{\mathrm{req,hi}},
+    \qquad
+    \sum_{\ell\in\mathcal L_r}I_\ell(t,\sigma)
+    \leq I_{r,\mathrm{allow}}(T,\text{duration}).
+    \label{eq:rail-load-compatibility}
+\end{equation}
+\(\mathcal L_r\) contains loads assigned to rail or channel \(r\). Shared channel groups and converter inputs will be checked against their aggregate ratings. Continuous operation and startup/pulse events will use their respective limits. A converter's operating tuple \((V_{\mathrm{in}},V_{\mathrm{out}},I_{\mathrm{out}},T)\) must lie within its sourced conversion envelope \(\mathcal C_r\). This will include dropout, conversion-ratio and startup restrictions.
+
+Demand will be propagated upstream through the selected paths using
+\begin{equation}
+    P_{\mathrm{in},r}=P_{\mathrm{out},r}+P_{\mathrm{loss},r}.
+    \label{eq:conversion-loss-accounting}
+\end{equation}
+An efficiency specification implies \(P_{\mathrm{loss},r}=P_{\mathrm{out},r}(\eta_r^{-1}-1)\) within its stated domain. Separate idle power will be added only when excluded from that efficiency. Zero-load and disabled states will use their own consumption data. An aggregate board-input specification and its included internal loads will contribute once. The same rule will prevent software execution from becoming an additional physical load alongside its host.
+
+Protection assessment will compare legitimate steady and pulse demand with the no-trip region, then compare fault interruption with the protected path's current, energy and safe-operating-area limits. Threshold tolerances and interruption times will be evaluated together against the protected path's continuous, pulse and safe-operating-area limits. Pulse tolerance, trip delay, hysteresis, retry and default states will be checked separately. Declared hardware protection and flight inhibits must remain effective under the specified processor/software failure conditions.
+
+Hardware temperatures will remain within the applicable operating intervals. Battery charging and discharging will use their distinct temperature restrictions. Qualification and radiation evidence will be assessed against the mission environment and exact product configuration. An environmental evidence gap will remain an unresolved assessment, with no inferred qualification from flight heritage alone.
+
+IF-D and IF-C checks will compare directed features, quantities, identifiers, pin assignments, logic levels, protocols, versions, address allocation, timing and startup/fault behavior. A common connector shape or protocol name will establish no complete compatibility. Software-host checks will include architecture, supplied firmware and drivers, available memory and execution assumptions. For tasks \(a\) allocated to host \(h\), preliminary resource screens will be
+\begin{equation}
+    \sum_{a\in\mathcal A_h}B_a^{\mathrm{data}}\leq B_h^{\mathrm{available}},
+    \qquad
+    \sum_{a\in\mathcal A_h}\frac{C_a}{T_a}\leq U_h^{\mathrm{allocated}},
+    \label{eq:software-resource-screen}
+\end{equation}
+where \(B_a^{\mathrm{data}}\) is required data memory, \(C_a\) is execution time on the declared host, \(T_a\) is task period and \(U_h^{\mathrm{allocated}}\) is the allocated processor utilization. Program storage will be checked similarly. These screens will establish no deadline guarantee. Scheduling and service-response evidence will be assessed against the declared deadlines. Supplied opaque firmware will require applicable vendor or assessment evidence for the claimed services and timing.
+
+\subsection{Mission energy balance and resource budgets}
+
+Surviving configurations will be assessed over the mission scenarios using their selected component models. Solar geometry, temperature, battery voltage, converter operating points and loss maps will remain coupled. At a common reference boundary outside the battery terminals, let \(P_g\) be solar power available after conditioning and \(P_d\) the upstream demand of all loads and distribution paths, including EPS consumption. Both powers will include the applicable external path losses. Battery internal losses will be represented by its efficiencies or selected battery model. The net available power is \(P_\Delta=P_g-P_d\). A preliminary energy model will use
+\begin{align}
+    P_{\mathrm{dis},k}&=\max(-P_{\Delta,k},0),
+    \label{eq:battery-discharge-demand}\\
+    P_{\mathrm{ch},k}&=\min\left\{\max(P_{\Delta,k},0),\,
+    P_{\mathrm{ch,allow},k},\,
+    \frac{E_{\max}-E_k}{\eta_{c,k}\Delta t},\,
+    \frac{v_{b,k}(Q_{\max}-Q_k)}{\eta_{Q,c}\Delta t}\right\},
+    \label{eq:battery-charge-acceptance}\\
+    E_{k+1}&=E_k+\left(\eta_{c,k}P_{\mathrm{ch},k}
+    -\frac{P_{\mathrm{dis},k}}{\eta_{d,k}}\right)\Delta t.
+    \label{eq:battery-energy-propagation}
+\end{align}
+Here energy is in J, power in W and \(\Delta t\) in s. \(v_{b,k}\) is battery terminal voltage at step \(k\). \(E_{\max}\) is a conservative fixed energy capacity for the run's temperature/lifetime case. Charge acceptance \(P_{\mathrm{ch,allow}}\) will include battery and charger voltage, current, temperature and termination limits. Unused solar surplus will follow the selected circuit's curtailment or shunt capability. Resulting voltage and heat will be assessed. Required discharge above a battery or path limit will be a failure. Energy shortages will be retained as failures. Assessment will stop at an invalid battery state. Terminal-voltage and transient assessments will use the applicable battery and circuit models.
+
+Charge-based state of charge \(z\) will remain distinct from normalized stored energy. With battery-port current \(i_b\) positive into the battery, a coulomb-counting model will use
+\begin{equation}
+    \begin{aligned}
+        Q_{k+1}&=Q_k+\left(\eta_{Q,c}\max(i_{b,k},0)
+        -\frac{\max(-i_{b,k},0)}{\eta_{Q,d}}\right)\Delta t,\\
+        z_k&=Q_k/Q_{\max}.
+    \end{aligned}
+    \label{eq:battery-charge-propagation}
+\end{equation}
+\(Q\) is remaining charge in C and \(Q_{\max}\) is its applicable retained capacity. Current will be obtained from the battery terminal voltage and charge/discharge power. The energy and charge models will require consistent characterized data, including their respective efficiencies. Full-charge limits will constrain both states. A richer battery model can replace these preliminary balances while retaining the same interface and loss boundaries. An energy-only assessment will leave charge-based DoD and voltage criteria unassessed without an applicable mapping.
+
+For nominal repeating conditions, the criteria will include
+\begin{equation}
+    z_k\geq1-\mathrm{DoD}_{\max},\qquad
+    E_{\mathrm{end}}\geq E_{\mathrm{start}}-\epsilon_E,
+    \label{eq:nominal-energy-feasibility}
+\end{equation}
+with declared initial state and numerical energy-closure tolerance \(\epsilon_E\). Survival and recovery cases will use their own allowed duration, initial state, essential loads and minimum reserve. They will retain any authorized exceptional discharge separately from nominal cycle-life criteria. Load shedding will follow the declared service and priority constraints.
+
+For uniquely accounted physical or procurement usages \(j\), quantity \(q_j\) will give
+\begin{equation}
+    \begin{aligned}
+        m_{\mathrm{EPS}}&=\sum_jq_jm_j\leq m_{\mathrm{allocated}},\\
+        V_{\mathrm{occupied}}&=\sum_jq_jV_j\leq V_{\mathrm{allocated}},\\
+        C_{\mathrm{EPS}}&=\sum_jq_jc_j+C_{\mathrm{additional}}.
+    \end{aligned}
+    \label{eq:eps-product-budgets}
+\end{equation}
+\(m_j,V_j,c_j\) denote product mass, occupied envelope volume and unit price, respectively. The budget will include required harnesses, adapters, packaging and protection. \(C_{\mathrm{additional}}\) will contain separately declared integration, licensing or qualification costs excluded from product prices. Currency conversion will retain its rate and date. Missing prices or effort estimates will limit the cost comparison. Volume totals will be followed by installation-envelope, keep-out, mounting, connector-access and stack-height checks. Aggregate and internal component properties will follow their accounting boundaries independently for each budget.
+
+\input{eps-requirements}
+
+\subsection{Candidate evaluation and selection algorithm}
+
+Table~\ref{tab:eps-parameter-requirements} supplies the parametric EPS constraints used in this evaluation. Each applicable criterion will return pass, fail or unassessed, with its source, conditions and evidence. Let \(\Sigma\) be the declared scenario set and \(g_i\) its numerical constraint residuals. The feasible set will be
+\begin{equation}
+    \mathcal F=\left\{d:\ \begin{aligned}
+        &g_i(d,\sigma)\leq0\quad\text{for all applicable }i\text{ and }\sigma\in\Sigma,\\
+        &\text{all required discrete checks pass,}\\
+        &\text{all required assessments are complete and applicable}
+    \end{aligned}\right\}.
+    \label{eq:eps-feasible-catalog-set}
+\end{equation}
+Failed convergence or invalid model use will leave the affected criterion unassessed. A known violation will reject the candidate for the declared requirements. Incomplete candidates will remain available for browsing with their missing evidence identified.
+
+Algorithm~\ref{alg:eps-cots-selection} will support both evaluation of an engineer's configuration and generation of catalog alternatives. Enumeration will cover the declared finite discrete choices. Any continuous settings will use a declared evaluation or optimization method inside the supported operating envelope. The method will report the explored scope, convergence and remaining limits. It will make no global-optimum claim for an incomplete search.
+
+\begin{algorithm}[H]
+\caption{Proposed EPS catalog evaluation and selection.}
+\label{alg:eps-cots-selection}
+\begin{algorithmic}[1]
+\Require Revisioned catalog, load/scenario records, requirements, allocations and approved comparison criteria.
+\State Normalize quantities and retain sources, conditions, accounting boundaries and missing-data states.
+\State Retrieve products by required roles and supported capabilities. Retain incomplete matches separately.
+\State Generate permitted topology alternatives and bounded product configurations, or accept an engineer's candidate.
+\For{each candidate configuration}
+    \State Allocate functions, loads, channels, hosts and auxiliaries. Resolve declared ports and connections.
+    \State Check supported configurations, function coverage, physical/electrical interfaces and environmental evidence.
+    \State Recalculate integer cell arrangements, candidate path losses, sizing and product budgets.
+    \State Assess operating limits, protection, software resources, geometry and nominal/survival scenarios.
+    \State Record each criterion as pass, fail or unassessed with its evidence and model-validity scope.
+    \State Retain feasible candidates, incomplete candidates and rejected candidates with distinct outcomes.
+\EndFor
+\State Compare feasible candidates on the approved measures and expose their margins and sensitivity.
+\State Record the authorized engineer's selection, rationale, exact product/configuration revisions and remaining risks.
+\end{algorithmic}
+\end{algorithm}
+
+A cost-led comparison will select a minimum-cost member of \(\mathcal F\). A trade study can instead retain non-dominated alternatives for cost, mass and minimum energy reserve above the scenario's required reserve. Preference weights and criteria will be engineer approved. Mandatory failures will exclude a candidate before preference ranking. The selected model will contain a bill of materials, quantities and settings, electrical connections, load/channel and software/host allocations, and links to the requirements and assessments it supports. A catalog match or a passed preliminary screen will retain its analysis scope. It will establish no hardware qualification or completed flight verification.
 
 \section{EPS Verification and Validation}
 
