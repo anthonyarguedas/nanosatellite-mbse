@@ -27,9 +27,8 @@ There is an academic feasibility reference in Zhu et al., who map battery teleme
 which can be leveraged for power-aware training of robot controllers in simulated physial environments.
 The F Prime and Omniverse constraints were considered in the black-box interfaces and system requirements of the framework, from which point the OOSEM method is used to influence the resulting logical and physical architectures.
 
-\subsection{To-be enterprise}
-After observing as-is stakeholder practices and recording them objectively, the OOSEM method suggests analyzing the capabilities of external enterprises from which missing capabilities and even the state-of-the-art can be identified.
-This is an open-ended analysis of what the relevant enterprise wants to become in comparison to others, which can be later formalized into mission requirements following the OOSEM method.
+\subsection{Existing enterprises and systems}
+After observing as-is stakeholder practices and recording them objectively, the OOSEM method suggests analyzing the capabilities of existing external enterprises and systems, from which capability gaps or the lag behind the state-of-the-art can be identified and later formalized into mission requirements.
 Sources for this comparison include the academic literature, crucial for ASCEND as a research group, and normative documents.
 
 Key normative references were the CUBICS announcements of opportunity, first released in 2022 and most recently in 2026 \citep{csa2022cubics,csa2026cubics}.
@@ -69,9 +68,18 @@ EPS development workflows link mission inputs and power budgeting to architectur
 These workflows can be understood as an EPS development lifecycle embedded within the tailored spacecraft lifecycle, progressing from applicable normative and derived requirements to a design validated against them.
 El Hachimi et al. cover the progression through functional and environmental qualification, while Boan demonstrates the preliminary stages through iterative sizing and energy balance simulations \citep[Secs.~2--5]{handpicked-0003}\citep[Secs.~2--4]{review-0289}.
 
-Digital twin research supports obtaining part of this verification evidence without fabricating the complete EPS.
+Analysis of system models provides verification evidence during preliminary design.
+Strobbe et al. link an EPS MBSE model to power budget calculations and propagate parameter changes to identify violated requirement constraints \citep[Secs.~III--IV]{review-0764}.
+Jbara automates power and other spacecraft budget calculations and accepts or rejects candidate component selections against numerical limits \citep[Secs.~4--5]{review-0270}.
+Wijaya et al. generate alternative architectures, couple subsystem sizing calculations and compare their mass, power and dimensional results with mission requirements \citep[Sec.~5.2]{review-0055}.
+Their simplified sizing models support preliminary trends and relative trade-offs \citep[Sec.~6.1]{review-0055}.
+
+Honor{\'e}-Livermore and Haskins demonstrate a complementary dependability approach by linking failure modes to functions, components and mission success criteria \citep[Secs.~5--6]{review-0913}.
+Their failure mode, effects and criticality analysis informs design changes and risk reduction priorities, with test and verification scenarios outside the study's scope \citep[Secs.~6--7]{review-0913}.
+
+In complementary approach, digital twin research supports obtaining verification evidence without fabricating the complete EPS.
 Casado et al. use models validated against physical measurements to simulate EPS behavior over a complete orbital cycle \citep[Secs.~3--4]{review-0573}.
-Complementary battery digital twin work by Zhu et al. (2025) describes virtual testing and software-in-the-loop verification without physical prototypes, followed by hardware-in-the-loop testing \citep[p.~3]{handpicked-0001}.
+Related battery digital twin work by Zhu et al. (2025) describes virtual testing and software-in-the-loop verification without physical prototypes, followed by hardware-in-the-loop testing \citep[p.~3]{handpicked-0001}.
 This is consistent with the tailored lifecycle, since NASA recognizes modeling and simulation as verification by analysis and recommends selecting methods according to project constraints and accepted risk \citep[Sec.~5.3.1.2]{nasa2016systems}.
 The CSRM specification likewise includes verification under simulated or modeled conditions within its definition of analysis \citep[Sec.~6.6.8]{omg2025csrm}.
 Selected requirements can therefore be verified before fabrication using credible models, while retaining the physical safety and qualification tests required by the mission and launcher \citep[Sec.~5.3.1.2]{nasa2016systems}\citep[Secs.~2.3 and~3]{calpoly2022cds}.
@@ -79,8 +87,8 @@ Selected requirements can therefore be verified before fabrication using credibl
 \subsection{Stakeholder concerns}
 \label{sec:stakeholder-concerns}
 
-OOSEM uses stakeholder concerns and their causes to identify improvement opportunities, which motivate mission requirements and measures of effectiveness.
-Concerns were elicited from direct stakeholder communications about the shortcomings of their as-is capabilities, and about the challenges associated with applying the to-be constraints and improvements.
+OOSEM uses stakeholder concerns and their causes to motivate mission requirements and measures of effectiveness.
+Concerns were elicited from direct stakeholder communications about the gaps in their as-is capabilities, and about paths towards realizing the to-be constraints and improvements to their enterprise, recognizing that any capability development comes with challenges.
 
 The root concerns are listed below by stakeholder. Appendix~\ref{appendix:stakeholder-concerns} gives the full hierarchy and contributing causes.
 
@@ -145,3 +153,4 @@ The root concerns are listed below by stakeholder. Appendix~\ref{appendix:stakeh
 \ConcernSummary{C-NE-01}{the high cost and effort to verify a subsystem design;}
 % Baseline solucion.tex:163 (depth 0)
 \ConcernSummary{C-NE-02}{the high effort to integrate EPS services with flight software frameworks such as cFS and F-Prime \citep[Secs.~3--5]{review-0853}\citep[Sec.~III.B]{citation-0136};}
+NA
