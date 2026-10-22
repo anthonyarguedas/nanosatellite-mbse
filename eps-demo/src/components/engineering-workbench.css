@@ -1,0 +1,687 @@
+/* Information exchanges, revisioned results, and the compact operating-case workspace. */
+.architecture-pane .architecture-export { width: 100%; justify-content: center; margin: 0 0 11px; font-size: 11px; }
+.mission-helper-entry { margin: 16px 0 20px; padding: 12px 14px; border: 1px solid #455462; border-radius: 8px; background: #19222b; }
+.mission-helper-entry > summary { display: flex; align-items: center; gap: 9px; cursor: pointer; list-style: none; color: #d3e0e9; font-size: 12px; font-weight: 500; line-height: 1.6; }
+.mission-helper-entry > summary::-webkit-details-marker { display: none; }
+.mission-helper-entry > summary::after { content: '+'; margin-left: auto; color: #a0b8ca; }
+.mission-helper-entry[open] > summary::after { content: '−'; }
+.mission-helper-entry > .body-copy { margin-top: 12px; }
+.mission-origin-source { display: block; margin-top: 9px; color: #b3d2e8; font-size: 11px; line-height: 1.65; overflow-wrap: anywhere; }
+.mission-origin-source:hover { text-decoration: underline; }
+.graph-page {
+  padding: 20px 22px 10px;
+}
+.graph-intro {
+  margin-bottom: 14px;
+}
+.graph-intro h1 {
+  font-size: 26px;
+}
+.graph-page .key-stat {
+  padding: 11px 14px;
+}
+.graph-page .key-stat strong {
+  margin-top: 8px;
+}
+.graph-page .stage-progress {
+  padding: 15px 0;
+}
+.graph-panel {
+  min-height: 530px;
+}
+.graph-canvas {
+  min-height: 455px;
+}
+.graph-panel-header strong {
+  font-size: 11px;
+}
+.graph-hint {
+  font-size: 10.5px;
+  color: #a7b7c8;
+}
+.graph-hint.historical {
+  color: #d4b17a;
+}
+.react-flow__node-workflow,
+.workflow-node {
+  width: 196px;
+}
+.workflow-node {
+  min-height: 130px;
+  padding: 10px 11px 9px;
+}
+.node-top {
+  height: 24px;
+}
+.node-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+}
+.workflow-node h3 {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.node-value {
+  font-size: 11.5px;
+  color: #b0bdcc;
+  line-height: 1.4;
+}
+.node-bottom {
+  margin-top: 8px;
+  padding-top: 7px;
+  gap: 5px;
+}
+.workflow-node .status-badge.small {
+  font-size: 9px;
+}
+.workflow-node .status-badge.small svg {
+  width: 9px;
+  height: 9px;
+}
+.node-req {
+  font-size: 11.5px;
+  color: #b1beb5;
+  letter-spacing: -0.15px;
+}
+.node-caption {
+  font-size: 8px;
+  color: #8c9baa;
+}
+.workflow-node.locked h3 {
+  color: #a5afbc;
+}
+.workflow-node.locked .node-value {
+  color: #8592a3;
+}
+.workflow-node.locked .node-req {
+  color: #8e9bad;
+}
+.node-history-label {
+  font-size: 8px;
+  color: #d4b17a;
+  margin-left: auto;
+}
+.node-history-label + .node-state-icon {
+  margin-left: 0;
+}
+.saved-value-prefix {
+  color: #d4b17a;
+}
+.graph-legend {
+  color: #9caabd;
+  font-size: 9px;
+  flex-wrap: wrap;
+  max-width: 285px;
+  gap: 6px 12px;
+}
+.graph-legend small {
+  flex-basis: 100%;
+  color: #7e90a4;
+  font-size: 8px;
+  line-height: 1.6;
+}
+.graph-panel-footer {
+  color: #91a1b4;
+  font-size: 9px;
+}
+.graph-panel-footer > span:last-child {
+  font-size: 9px;
+}
+.react-flow__edge .react-flow__edge-textwrapper {
+  cursor: pointer;
+  pointer-events: all;
+}
+
+/* All six logical roles remain legible without implying electrical verification. */
+.architecture-header {
+  padding: 18px 17px 12px;
+}
+.architecture-header > p {
+  font-size: 10px;
+  color: #94a2b4;
+  margin-top: 9px;
+  line-height: 1.5;
+}
+.architecture-title .eyebrow {
+  font-size: 8px;
+  color: #98a6b7;
+}
+.architecture-evolution {
+  margin: 14px 0;
+}
+.architecture-evolution > span {
+  font-size: 9px;
+  color: #899bb0;
+}
+.architecture-root {
+  font-size: 11px;
+}
+.architecture-root > span:last-child {
+  font-size: 9px;
+  color: #91a3b8;
+}
+.architecture-role {
+  padding: 9px 10px 7px;
+}
+.role-heading strong {
+  font-size: 11px;
+  color: #d2dce7;
+}
+.role-value {
+  font-size: 11px;
+  color: #b0bfce;
+  margin-top: 5px;
+}
+.role-state {
+  font-size: 10px;
+  color: #a6b8c8;
+  margin-top: 3px;
+}
+.role-index {
+  color: #7e92aa;
+  font-size: 7px;
+}
+.role-allocation {
+  font-size: 9px;
+}
+.usage-ref {
+  font-size: 8px;
+}
+.shared-usage {
+  font-size: 8px;
+  color: #9cb9a7;
+}
+.architecture-explainer {
+  font-size: 10.5px;
+  color: #a8b7c8;
+}
+.architecture-totals small {
+  font-size: 9px;
+  color: #96a9bf;
+}
+.mass-disclosure {
+  font-size: 8px;
+  color: #b1a58c;
+}
+.preliminary-note {
+  font-size: 10px;
+}
+.preliminary-note > span > span {
+  font-size: 10px;
+  color: #a6b6c8;
+}
+
+/* The wrapper leaves the vertical workspace to the timeline-first scenario editor. */
+.scenarios-page {
+  padding-top: 17px;
+}
+.scenario-workspace-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 47px;
+}
+.scenario-view-title {
+  flex: 0 0 auto;
+}
+.scenario-view-title .eyebrow {
+  font-size: 8px;
+  color: #93a2b6;
+  letter-spacing: 1px;
+}
+.scenario-view-title h1 {
+  font-size: 18px;
+  line-height: 1.4;
+  margin-top: 3px;
+  letter-spacing: -0.5px;
+}
+.scenario-workspace-header > .scenario-switcher {
+  flex: 1;
+  min-width: 190px;
+  max-width: 355px;
+  margin: 0;
+}
+.scenario-workspace-header .field {
+  margin: 0;
+}
+.scenario-workspace-header .field > label {
+  font-size: 9px;
+  margin-bottom: 4px;
+}
+.scenario-workspace-header select {
+  height: 33px;
+  font-size: 11px;
+}
+.scenario-view-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+}
+.scenario-view-actions .button {
+  height: 33px;
+  font-size: 10px;
+  padding: 0 10px;
+}
+.scenario-view-actions .status-badge {
+  font-size: 8px;
+}
+.scenario-basis-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 10px;
+  color: #95a7bb;
+  line-height: 1.65;
+  margin: 11px 0 15px;
+}
+.scenario-basis-note > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #b59d7c;
+}
+.scenario-basis-note a {
+  white-space: nowrap;
+  color: #bba78f;
+  text-decoration: underline;
+  text-decoration-color: #5c5144;
+  text-underline-offset: 3px;
+  margin-left: 4px;
+}
+.scenarios-page > .notice {
+  margin-bottom: 13px;
+}
+
+/* Drawer navigation separates current editable inputs from parameter-level evidence. */
+.sheet {
+  background-color: #191f27;
+}
+.sheet-content {
+  padding-top: 15px;
+}
+.sheet-heading {
+  padding-top: 17px;
+  padding-bottom: 16px;
+}
+.sheet-heading h2 {
+  font-size: 22px;
+}
+.sheet-heading .eyebrow {
+  font-size: 8px;
+}
+.sheet-top .text-button {
+  font-size: 10px;
+}
+.requirement-chips {
+  margin-bottom: 13px;
+}
+.requirement-chips > span:not(.evaluated-time) {
+  font-size: 8.5px;
+}
+.evaluated-time {
+  font-size: 8px;
+  color: #91a4bb;
+}
+.inspector-subtitle {
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.inspector-mode-tabs {
+  display: flex;
+  position: sticky;
+  top: -15px;
+  z-index: 6;
+  background: #191f27;
+  border-bottom: 1px solid #3c4a5b;
+  margin: 0 -3px 14px;
+  padding-top: 5px;
+  gap: 17px;
+}
+.inspector-mode-tabs button {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  background: transparent;
+  color: #8fa3ba;
+  font-size: 10px;
+  padding: 9px 0 11px;
+  border-bottom: 2px solid transparent;
+}
+.inspector-mode-tabs button.active {
+  color: #e2c0aa;
+  border-bottom-color: #d49770;
+}
+.freshness-disclaimer {
+  font-size: 9px;
+  line-height: 1.65;
+  color: #94b4a2;
+  margin: 0 0 14px;
+}
+.sheet .dependency-chips {
+  margin-bottom: 17px;
+}
+.dependency-chips button {
+  font-size: 9px;
+  padding: 4px 6px;
+}
+.field > label {
+  font-size: 10px;
+  color: #b1bfd0;
+}
+.field small {
+  font-size: 9px;
+  color: #8ca1b8;
+}
+.number-input input {
+  font-size: 12px;
+}
+.section-caption {
+  font-size: 10px;
+  color: #8ca1b8;
+}
+.body-copy {
+  font-size: 11.5px;
+}
+.node-work-view[hidden],
+.calculation-section[hidden] {
+  display: none;
+}
+.node-work-view > .metric-grid,
+.node-work-view > .orbit-visual,
+.node-work-view > .full-width,
+.node-work-view > .check-list,
+.node-work-view > .text-button {
+  margin-bottom: 18px;
+}
+.parameter-trace-link {
+  font-size: 10px;
+  line-height: 1.75;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #344353;
+  width: 100%;
+}
+.calculation-section {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+.calculation-section > .calculation-trace {
+  margin-top: 0;
+  margin-bottom: 23px;
+}
+.received-exchanges {
+  margin-bottom: 24px;
+}
+.received-exchanges > h3 {
+  font-size: 12px;
+  color: #c4d2e2;
+  margin: 0 0 12px;
+}
+.received-exchange {
+  border-left: 2px solid #58796c;
+  padding: 10px 12px;
+  margin-bottom: 7px;
+  border-radius: 0 5px 5px 0;
+  background: #202c35;
+}
+.received-exchange > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.received-exchange > div > span {
+  font: 10px var(--mono);
+  color: #b8c9d9;
+}
+.received-exchange .text-button {
+  font-size: 9px;
+  color: #a4b8cd;
+}
+.received-exchange p {
+  font-size: 10px;
+  color: #c0d0df;
+  line-height: 1.7;
+  margin-top: 8px;
+}
+.received-exchange small {
+  display: block;
+  font-size: 9px;
+  color: #839bb4;
+  line-height: 1.8;
+  margin-top: 5px;
+}
+.received-exchange.historical {
+  border-color: #bb985e;
+  background: #302b22;
+}
+.received-exchange.historical p {
+  color: #d0b583;
+}
+.run-setup {
+  border: 1px solid #3c4a5c;
+  border-radius: 5px;
+  background: #1e2935;
+  margin-bottom: 15px;
+}
+.run-setup > summary {
+  padding: 10px 11px;
+  font-size: 10px;
+  line-height: 1.6;
+  color: #a5b7cc;
+  cursor: pointer;
+}
+.run-setup > div {
+  padding: 7px 12px 12px;
+  border-top: 1px solid #36475b;
+}
+.run-setup .scenario-switcher {
+  margin: 10px 0 14px;
+}
+.run-setup .text-button {
+  font-size: 10px;
+}
+.saved-run-metrics .metric {
+  padding: 10px;
+}
+.saved-run-metrics .metric > span {
+  font-size: 9px;
+}
+.saved-run-metrics .metric > strong {
+  font-size: 13px;
+}
+.saved-result-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #3c5061;
+  border-radius: 5px;
+  background: #202c36;
+  margin-bottom: 13px;
+  color: #92adbf;
+}
+.saved-result-label > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.saved-result-label > div {
+  min-width: 0;
+}
+.saved-result-label strong {
+  font-size: 9px;
+  font-weight: 500;
+  color: #becddd;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.saved-result-label span {
+  display: block;
+  font-size: 10px;
+  line-height: 1.65;
+  color: #a6bbcf;
+  margin-top: 3px;
+}
+.saved-result-label small {
+  display: block;
+  font-size: 9px;
+  line-height: 1.7;
+  font-family: var(--mono);
+  color: #829bb2;
+  overflow-wrap: anywhere;
+}
+.saved-result-label.historical {
+  border-color: #6c573a;
+  background: #302b22;
+  color: #c8aa77;
+}
+.saved-result-label.historical strong,
+.saved-result-label.historical span {
+  color: #d2bb97;
+}
+.saved-result-label.historical small {
+  color: #ad9678;
+}
+.legacy-result-note {
+  font-size: 10px;
+  line-height: 1.8;
+  color: #b8a278;
+  margin: 0 0 13px;
+}
+.demand-result {
+  margin: 17px 0;
+}
+.energy-plots .notice {
+  font-size: 10px;
+}
+.energy-plots .notice strong {
+  font-size: 10px;
+}
+.plot-heading strong {
+  font-size: 11px;
+}
+.plot-axis-label {
+  font-size: 8px;
+  flex-wrap: wrap;
+}
+.legend-key {
+  font-size: 8px;
+  flex-wrap: wrap;
+}
+.energy-plots .legend-key {
+  justify-content: flex-end;
+}
+
+.sheet .check-title {
+  font-size: 9.5px;
+}
+.check-item.long-id .check-summary {
+  grid-template-columns: 16px minmax(0, 1fr) auto 12px;
+  row-gap: 3px;
+}
+.check-item.long-id .check-id {
+  grid-column: 2;
+  grid-row: 1;
+  font-size: 8px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.check-item.long-id .check-title {
+  grid-column: 2;
+  grid-row: 2;
+}
+.check-item.long-id .check-summary > svg:first-child {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  align-self: center;
+}
+.check-item.long-id .verdict {
+  grid-column: 3;
+  grid-row: 1 / 3;
+  align-self: center;
+}
+.check-item.long-id .check-summary > svg:last-child {
+  grid-column: 4;
+  grid-row: 1 / 3;
+  align-self: center;
+}
+
+.sheet .specification > summary {
+  font-size: 10px;
+}
+.sheet .specification > summary strong {
+  font-size: 11px;
+}
+.sheet .specification > summary .spec-meaning {
+  font-size: 7px;
+}
+.sheet .specification-detail dl {
+  font-size: 10px;
+  grid-template-columns: 67px 1fr;
+}
+.sheet .source-card > a:first-child {
+  font-size: 11px;
+}
+.sheet .source-card > small {
+  font-size: 9px;
+}
+.sheet .source-card > span,
+.sheet .source-card > .source-url {
+  font-size: 8px;
+}
+.sheet .allocation-controls .field > label {
+  font-size: 9px;
+}
+.sheet .allocation-controls .select-wrap select {
+  font-size: 10px;
+}
+.sheet .allocation-disclosure {
+  font-size: 9px;
+}
+
+@media (max-width: 1370px) {
+  .graph-panel-footer > span:last-child {
+    font-size: 8px;
+  }
+  .scenario-workspace-header {
+    gap: 12px;
+  }
+  .scenario-view-title h1 {
+    font-size: 17px;
+  }
+  .scenario-view-title .eyebrow {
+    font-size: 7px;
+  }
+  .scenario-view-actions .status-badge {
+    display: none;
+  }
+  .scenario-workspace-header > .scenario-switcher {
+    min-width: 200px;
+  }
+}
+@media (max-width: 1190px) {
+  .scenario-workspace-header {
+    flex-wrap: wrap;
+    gap: 10px 15px;
+  }
+  .scenario-view-title {
+    flex: 1;
+  }
+  .scenario-workspace-header > .scenario-switcher {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+  }
+  .scenario-view-actions .button {
+    padding: 0 9px;
+  }
+  .graph-hint {
+    display: none;
+  }
+  .graph-panel-footer > span:last-child {
+    display: none;
+  }
+}

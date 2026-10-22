@@ -1,0 +1,1397 @@
+{
+  "schemaVersion": 1,
+  "generator": "Orbitwork logical KiCad export 1",
+  "scope": "Review-only logical COTS interconnect drawing. Named sheet ports express proposed functional associations, not manufacturer terminals, electrical nets or an approved harness. No PCB, internal COTS circuit reconstruction, electrical compatibility, manufacturing or flight-readiness claim.",
+  "catalogRevision": "2026-10-17.1-manufacturer-pdfs",
+  "architectureFingerprint": "orbitwork-60e5c772-318d-485b-8de7-2878b4f02801",
+  "freshness": {
+    "requiredCurrentNodes": [
+      "mission",
+      "orbit",
+      "scenarios",
+      "budget",
+      "solar",
+      "battery",
+      "topology",
+      "candidates"
+    ],
+    "records": {
+      "mission": {
+        "revision": 1,
+        "evaluatedRevision": 1,
+        "evaluatedAt": "2026-10-17T07:39:50.057Z"
+      },
+      "orbit": {
+        "revision": 1,
+        "evaluatedRevision": 1,
+        "evaluatedAt": "2026-10-17T07:39:50.057Z"
+      },
+      "scenarios": {
+        "revision": 1,
+        "evaluatedRevision": 1,
+        "evaluatedAt": "2026-10-17T07:39:50.057Z"
+      },
+      "budget": {
+        "revision": 1,
+        "evaluatedRevision": 1,
+        "evaluatedAt": "2026-10-17T07:39:50.057Z"
+      },
+      "solar": {
+        "revision": 1,
+        "evaluatedRevision": 1,
+        "evaluatedAt": "2026-10-17T07:39:50.057Z"
+      },
+      "battery": {
+        "revision": 1,
+        "evaluatedRevision": 1,
+        "evaluatedAt": "2026-10-17T07:39:50.057Z"
+      },
+      "topology": {
+        "revision": 1,
+        "evaluatedRevision": 1,
+        "evaluatedAt": "2026-10-17T07:39:50.057Z"
+      },
+      "candidates": {
+        "revision": 1,
+        "evaluatedRevision": 1,
+        "evaluatedAt": "2026-10-17T07:39:50.057Z"
+      },
+      "simulation": {
+        "revision": 1,
+        "evaluatedRevision": null,
+        "evaluatedAt": null
+      },
+      "assessment": {
+        "revision": 1,
+        "evaluatedRevision": null,
+        "evaluatedAt": null
+      }
+    },
+    "catalogRevisionBinding": "Workspace records contain no catalog revision. Export freezes the supplied entries. Reevaluate candidates after catalog changes."
+  },
+  "drawing": {
+    "root": "orbitwork-review.kicad_sch",
+    "representation": "Hierarchical sheets with abstract named passive ports. No component symbols, pin numbers or footprints.",
+    "associationOrigin": "Proposed role-to-role templates, not sourced manufacturer connectivity. All links require engineering review.",
+    "placement": "Deterministic role grid. Integrated usages share one sheet.",
+    "routing": "Orthogonal grid search avoiding sheet bodies and existing logical wires. No PCB routing.",
+    "coordinateUnits": "mm",
+    "associations": [
+      {
+        "id": "solar-intent",
+        "name": "L_SOLAR_POWER",
+        "from": "azur-3g30c-advanced-81780",
+        "to": "gomspace-p80-config1",
+        "internal": false,
+        "points": [
+          {
+            "x": 116.84,
+            "y": 60.96
+          },
+          {
+            "x": 167.64,
+            "y": 60.96
+          }
+        ]
+      },
+      {
+        "id": "battery-intent",
+        "name": "L_STORAGE_PATH",
+        "from": "gomspace-bp8-100wh-8s1p",
+        "to": "gomspace-p80-config1",
+        "internal": false,
+        "points": [
+          {
+            "x": 116.84,
+            "y": 142.24
+          },
+          {
+            "x": 165.1,
+            "y": 142.24
+          },
+          {
+            "x": 165.1,
+            "y": 66.04
+          },
+          {
+            "x": 167.64,
+            "y": 66.04
+          }
+        ]
+      },
+      {
+        "id": "bus-intent",
+        "name": "L_POWER_TRANSFER",
+        "from": "gomspace-p80-config1",
+        "to": "gomspace-p80-config1",
+        "internal": true
+      },
+      {
+        "id": "load-intent",
+        "name": "L_LOAD_SERVICE",
+        "from": "gomspace-p80-config1",
+        "to": "@scenario-demand",
+        "internal": false,
+        "points": [
+          {
+            "x": 259.08,
+            "y": 60.96
+          },
+          {
+            "x": 307.34,
+            "y": 60.96
+          },
+          {
+            "x": 307.34,
+            "y": 142.24
+          },
+          {
+            "x": 309.88,
+            "y": 142.24
+          }
+        ]
+      },
+      {
+        "id": "control-intent",
+        "name": "L_CONTROL_SERVICE",
+        "from": "gomspace-p80-config1",
+        "to": "gomspace-p80-config1",
+        "internal": true
+      }
+    ],
+    "unresolvedLogicalAssociations": []
+  },
+  "usages": [
+    {
+      "usageId": "Usage 1",
+      "productId": "azur-3g30c-advanced-81780",
+      "catalogEntryRevision": "catalog-record-1; product hardware revision not stated",
+      "allocatedRoles": [
+        "solar"
+      ],
+      "quantity": 3,
+      "installedConfiguration": null,
+      "sourceSheet": "usage-1.kicad_sch",
+      "product": {
+        "id": "azur-3g30c-advanced-81780",
+        "revision": "catalog-record-1; product hardware revision not stated",
+        "manufacturer": "AZUR SPACE Solar Power GmbH",
+        "name": "3G30C-Advanced bare cell (8 × 8 cm)",
+        "partNumber": "81780",
+        "level": "cell",
+        "roles": [
+          "solar"
+        ],
+        "description": "InGaP/GaAs/Ge bare triple-junction cell, 60.35 cm² active area. Includes a sourced radiation endpoint for a conditional EOL sizing case.",
+        "specs": {
+          "powerBolW": {
+            "value": 2.4192,
+            "unit": "W",
+            "meaning": "typical",
+            "status": "available",
+            "original": "BOL Cell Vmp 2400 mV × Imp 1008 mA",
+            "conditions": "Bare cell, BOL, AM0 WRC spectrum, 1367 W/m², 28 °C, CASOLBA 2005 standard.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Typical Electrical Performance, Cell columns",
+            "rationale": "Arithmetic product of the same BOL table column, with mV and mA converted to V and A."
+          },
+          "powerEolW": {
+            "value": 2.15118,
+            "unit": "W",
+            "meaning": "typical",
+            "status": "available",
+            "original": "1E15 Cell Vmp 2220 mV × Imp 969 mA",
+            "conditions": "Bare cell, manufacturer radiation endpoint 1E15 1 MeV e−/cm², AM0 WRC, 1367 W/m², 28 °C. Conditional EOL case, not mission lifetime.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Typical Electrical Performance, Cell columns",
+            "rationale": "Arithmetic product of sourced irradiated MPP values. No extrapolation from BOL and no additional degradation factor."
+          },
+          "vmpBolV": {
+            "value": 2.4,
+            "unit": "V",
+            "meaning": "typical",
+            "status": "available",
+            "original": "BOL Cell Vmp = 2400 mV",
+            "conditions": "Bare cell, BOL, AM0 WRC spectrum, 1367 W/m², 28 °C, CASOLBA 2005 standard.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Typical Electrical Performance, Cell columns"
+          },
+          "impBolA": {
+            "value": 1.008,
+            "unit": "A",
+            "meaning": "typical",
+            "status": "available",
+            "original": "BOL Cell Imp = 1008 mA",
+            "conditions": "Bare cell, BOL, AM0 WRC spectrum, 1367 W/m², 28 °C, CASOLBA 2005 standard.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Typical Electrical Performance, Cell columns"
+          },
+          "vmpEolV": {
+            "value": 2.22,
+            "unit": "V",
+            "meaning": "typical",
+            "status": "available",
+            "original": "1E15 Cell Vmp = 2220 mV",
+            "conditions": "Bare cell, manufacturer radiation endpoint 1E15 1 MeV e−/cm², AM0 WRC, 1367 W/m², 28 °C. Conditional EOL case, not mission lifetime.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Typical Electrical Performance, Cell columns"
+          },
+          "impEolA": {
+            "value": 0.969,
+            "unit": "A",
+            "meaning": "typical",
+            "status": "available",
+            "original": "1E15 Cell Imp = 969 mA",
+            "conditions": "Bare cell, manufacturer radiation endpoint 1E15 1 MeV e−/cm², AM0 WRC, 1367 W/m², 28 °C. Conditional EOL case, not mission lifetime.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Typical Electrical Performance, Cell columns"
+          },
+          "vocV": {
+            "value": 2.7,
+            "unit": "V",
+            "meaning": "typical",
+            "status": "available",
+            "original": "BOL Cell Voc = 2700 mV",
+            "conditions": "Bare cell, BOL, AM0 WRC spectrum, 1367 W/m², 28 °C, CASOLBA 2005 standard.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Typical Electrical Performance, Cell columns"
+          },
+          "iscA": {
+            "value": 1.04,
+            "unit": "A",
+            "meaning": "typical",
+            "status": "available",
+            "original": "BOL Cell Isc = 1040 mA",
+            "conditions": "Bare cell, BOL, AM0 WRC spectrum, 1367 W/m², 28 °C, CASOLBA 2005 standard.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Typical Electrical Performance, Cell columns"
+          },
+          "energyWh": {
+            "value": null,
+            "unit": "Wh",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "energyWh characterizes another product role. No substitute rating inferred."
+          },
+          "chargeAh": {
+            "value": null,
+            "unit": "Ah",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "chargeAh characterizes another product role. No substitute rating inferred."
+          },
+          "voltageMinV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "voltageMinV characterizes another product role. No substitute rating inferred."
+          },
+          "voltageNominalV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "voltageNominalV characterizes another product role. No substitute rating inferred."
+          },
+          "voltageMaxV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "voltageMaxV characterizes another product role. No substitute rating inferred."
+          },
+          "massKg": {
+            "value": 0.0052,
+            "unit": "kg",
+            "meaning": "typical",
+            "status": "available",
+            "original": "Average Weight ≤ 86 mg/cm² / 5.2 grams",
+            "conditions": "Bare cell. Statement concerns average weight.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Design and Mechanical Data, 3G30C-Adv. Bare Cell column",
+            "rationale": "5.2 g / 1000. Typical category preserves population-average scope. The original ≤ qualifier is not an individual mass guarantee."
+          },
+          "widthM": {
+            "value": 0.08,
+            "unit": "m",
+            "meaning": "nominal",
+            "status": "available",
+            "original": "80.00 (± 0.1) × 80.00 (± 0.1) mm",
+            "conditions": "Bare cell outer dimensions. Each in-plane dimension tolerance ±0.0001 m.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Design and Mechanical Data, 3G30C-Adv. Bare Cell column"
+          },
+          "heightM": {
+            "value": 0.08,
+            "unit": "m",
+            "meaning": "nominal",
+            "status": "available",
+            "original": "80.00 (± 0.1) × 80.00 (± 0.1) mm",
+            "conditions": "Second in-plane dimension, not installed spacecraft height. Tolerance ±0.0001 m.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Design and Mechanical Data, 3G30C-Adv. Bare Cell column"
+          },
+          "depthM": {
+            "value": 0.00015,
+            "unit": "m",
+            "meaning": "nominal",
+            "status": "available",
+            "original": "Thickness 150 (± 50) µm",
+            "conditions": "Bare cell thickness. Tolerance ±0.00005 m.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Design and Mechanical Data, 3G30C-Adv. Bare Cell column"
+          },
+          "inputMinV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "inputMinV characterizes another product role. No substitute rating inferred."
+          },
+          "inputMaxV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "inputMaxV characterizes another product role. No substitute rating inferred."
+          },
+          "maxInputW": {
+            "value": null,
+            "unit": "W",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "maxInputW characterizes another product role. No substitute rating inferred."
+          },
+          "maxChargeA": {
+            "value": null,
+            "unit": "A",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "maxChargeA characterizes another product role. No substitute rating inferred."
+          },
+          "maxDischargeA": {
+            "value": null,
+            "unit": "A",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "maxDischargeA characterizes another product role. No substitute rating inferred."
+          },
+          "efficiency": {
+            "value": 0.293,
+            "unit": "1",
+            "meaning": "typical",
+            "status": "available",
+            "original": "BOL Cell η (1367 W/m²) = 29.3 %",
+            "conditions": "Bare cell, BOL, AM0 WRC spectrum, 1367 W/m², 28 °C, CASOLBA 2005 standard. Photovoltaic efficiency, not conditioning efficiency.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Typical Electrical Performance, Cell columns"
+          },
+          "priceUsd": {
+            "value": null,
+            "unit": "USD",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "azur-3g30-2025",
+            "location": "Complete reviewed datasheet",
+            "rationale": "No dated manufacturer price in the reviewed PDF. No reseller or search-snippet price adopted."
+          },
+          "cycleLife": {
+            "value": null,
+            "unit": "cycles",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "cycleLife characterizes another product role. No substitute rating inferred."
+          },
+          "vocEolV": {
+            "value": 2.519,
+            "unit": "V",
+            "meaning": "typical",
+            "status": "available",
+            "original": "1E15 Cell Voc = 2519 mV",
+            "conditions": "Bare cell, manufacturer radiation endpoint 1E15 1 MeV e−/cm², AM0 WRC, 1367 W/m², 28 °C. Conditional EOL case, not mission lifetime.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Typical Electrical Performance, Cell columns"
+          },
+          "iscEolA": {
+            "value": 1.002,
+            "unit": "A",
+            "meaning": "typical",
+            "status": "available",
+            "original": "1E15 Cell Isc = 1002 mA",
+            "conditions": "Bare cell, manufacturer radiation endpoint 1E15 1 MeV e−/cm², AM0 WRC, 1367 W/m², 28 °C. Conditional EOL case, not mission lifetime.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Typical Electrical Performance, Cell columns"
+          },
+          "activeAreaM2": {
+            "value": 0.006035,
+            "unit": "m²",
+            "meaning": "specified",
+            "status": "available",
+            "original": "Cell Area 60.35 cm²",
+            "conditions": "Bare-cell active area, distinct from rectangular envelope.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Design and Mechanical Data, 3G30C-Adv. Bare Cell column"
+          },
+          "eolFluencePerCm2": {
+            "value": 1000000000000000,
+            "unit": "e−/cm²",
+            "meaning": "specified",
+            "status": "available",
+            "original": "1E15, fluence 1 MeV e− [e/cm²]",
+            "conditions": "Bare cell, manufacturer radiation endpoint 1E15 1 MeV e−/cm², AM0 WRC, 1367 W/m², 28 °C. Conditional EOL case, not mission lifetime.",
+            "sourceId": "azur-3g30-2025",
+            "location": "p. 2, Typical Electrical Performance, Cell columns"
+          }
+        },
+        "sources": [
+          {
+            "id": "azur-3g30-2025",
+            "title": "30% Triple-Junction (TJ) III-V Bare Solar Cells & Assemblies, TJ 3G30-Advanced (8x8)",
+            "url": "https://www.azurspace.com/media/uploads/file_links/file/bdb_00010892-01-00_tj3g30-advanced_8x8.pdf",
+            "revision": "DB 00010892-01, issue date 2025-04-11",
+            "location": "PDF pp. 1–2. Product identifiers p. 1. Mechanical and typical electrical tables p. 2.",
+            "retrievedAt": "2026-10-17"
+          }
+        ],
+        "supportedConfigurations": [
+          "One bare cell, material 81780, drawing ZP-0005107. Array wiring, packaging, bypass diode and coverglass are external design items."
+        ],
+        "accountingBoundary": "One bare cell only. Mass and dimensions exclude the external bypass diode, interconnects, coverglass, substrate/panel, harness and installation. The 81752 CIC assembly is a different product and is excluded.",
+        "caveats": [
+          "EOL fields select the manufacturer table endpoint at 1 × 10^15 1 MeV electrons/cm². This is not a calendar lifetime or a prediction for the demo orbit.",
+          "Electrical values are typical population performance, not guaranteed lower bounds. Mission temperature, shielding, attitude and radiation equivalence need assessment.",
+          "Do not substitute the CIC current column for this bare-cell record.",
+          "Mass is an average-weight statement with an upper bound on the average, not a guaranteed individual-cell maximum."
+        ]
+      }
+    },
+    {
+      "usageId": "Usage 2",
+      "productId": "gomspace-bp8-100wh-8s1p",
+      "catalogEntryRevision": "catalog-record-1; product hardware revision not stated",
+      "allocatedRoles": [
+        "battery"
+      ],
+      "quantity": 1,
+      "installedConfiguration": null,
+      "sourceSheet": "usage-2.kicad_sch",
+      "product": {
+        "id": "gomspace-bp8-100wh-8s1p",
+        "revision": "catalog-record-1; product hardware revision not stated",
+        "manufacturer": "GomSpace A/S",
+        "name": "NanoPower BP8 100 Wh (8S1P)",
+        "partNumber": "NanoPower BP8 100 Wh (ordering designation, numeric P/N not stated)",
+        "level": "pack",
+        "roles": [
+          "battery"
+        ],
+        "description": "Eight-series lithium-ion pack with integrated protection, balancing, telemetry and heaters. Catalog energy uses the recommended operating range, not the 100 Wh headline.",
+        "specs": {
+          "powerBolW": {
+            "value": null,
+            "unit": "W",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "powerBolW characterizes another product role. No substitute rating inferred."
+          },
+          "powerEolW": {
+            "value": null,
+            "unit": "W",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "powerEolW characterizes another product role. No substitute rating inferred."
+          },
+          "vmpBolV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "vmpBolV characterizes another product role. No substitute rating inferred."
+          },
+          "impBolA": {
+            "value": null,
+            "unit": "A",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "impBolA characterizes another product role. No substitute rating inferred."
+          },
+          "vmpEolV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "vmpEolV characterizes another product role. No substitute rating inferred."
+          },
+          "impEolA": {
+            "value": null,
+            "unit": "A",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "impEolA characterizes another product role. No substitute rating inferred."
+          },
+          "vocV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "vocV characterizes another product role. No substitute rating inferred."
+          },
+          "iscA": {
+            "value": null,
+            "unit": "A",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "iscA characterizes another product role. No substitute rating inferred."
+          },
+          "energyWh": {
+            "value": 86,
+            "unit": "Wh",
+            "meaning": "typical",
+            "status": "available",
+            "original": "EBAT Power capacity, VBAT = 23.6 V to 32.0 V, Typ 86 Wh",
+            "conditions": "Recommended operating voltage range. Test temperature, discharge rate and aging state not stated. No EOL interpretation.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 5 (PDF p. 9), Table 2.2"
+          },
+          "chargeAh": {
+            "value": 3,
+            "unit": "Ah",
+            "meaning": "nominal",
+            "status": "available",
+            "original": "8S1P nominal 3500 mAh (3000 mAh in recommended operating range)",
+            "conditions": "Recommended operating range, 8S1P. This charge capacity is distinct from energy capacity.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 1 (PDF p. 5), Highlighted features",
+            "rationale": "3000 mAh / 1000. One parallel string, so pack Ah equals the stated cell/string Ah."
+          },
+          "voltageMinV": {
+            "value": 23.6,
+            "unit": "V",
+            "meaning": "minimum",
+            "status": "available",
+            "original": "VOP recommended operating voltage, Min 23.6 V",
+            "conditions": "One BP8 8S1P pack. Electrical table. Temperature/rate/pulse-duration derating not stated for this row.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 5 (PDF p. 9), Table 2.2"
+          },
+          "voltageNominalV": {
+            "value": 28.8,
+            "unit": "V",
+            "meaning": "typical",
+            "status": "available",
+            "original": "VOP recommended operating voltage, Typ 28.8 V",
+            "conditions": "One BP8 8S1P pack. Electrical table. Temperature/rate/pulse-duration derating not stated for this row.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 5 (PDF p. 9), Table 2.2"
+          },
+          "voltageMaxV": {
+            "value": 32,
+            "unit": "V",
+            "meaning": "maximum",
+            "status": "available",
+            "original": "VOP recommended operating voltage, Max 32.0 V",
+            "conditions": "One BP8 8S1P pack. Electrical table. Temperature/rate/pulse-duration derating not stated for this row.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 5 (PDF p. 9), Table 2.2"
+          },
+          "massKg": {
+            "value": 0.486,
+            "unit": "kg",
+            "meaning": "specified",
+            "status": "available",
+            "original": "Mass 486 g",
+            "conditions": "Complete pack. Tolerance not stated.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 11 (PDF p. 15), Table 4.1"
+          },
+          "widthM": {
+            "value": 0.0948,
+            "unit": "m",
+            "meaning": "specified",
+            "status": "available",
+            "original": "94.8 × 95 × 42 (L × W × H) mm",
+            "conditions": "Pack envelope. Catalog axis maps to manufacturer L. No installation orientation or keep-out inferred.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 11 (PDF p. 15), Table 4.1"
+          },
+          "heightM": {
+            "value": 0.095,
+            "unit": "m",
+            "meaning": "specified",
+            "status": "available",
+            "original": "94.8 × 95 × 42 (L × W × H) mm",
+            "conditions": "Pack envelope. Catalog axis maps to manufacturer W. No installation orientation or keep-out inferred.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 11 (PDF p. 15), Table 4.1"
+          },
+          "depthM": {
+            "value": 0.042,
+            "unit": "m",
+            "meaning": "specified",
+            "status": "available",
+            "original": "94.8 × 95 × 42 (L × W × H) mm",
+            "conditions": "Pack envelope. Catalog axis maps to manufacturer H. No installation orientation or keep-out inferred.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 11 (PDF p. 15), Table 4.1"
+          },
+          "inputMinV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "inputMinV characterizes another product role. No substitute rating inferred."
+          },
+          "inputMaxV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "inputMaxV characterizes another product role. No substitute rating inferred."
+          },
+          "maxInputW": {
+            "value": null,
+            "unit": "W",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "maxInputW characterizes another product role. No substitute rating inferred."
+          },
+          "maxChargeA": {
+            "value": 3.4,
+            "unit": "A",
+            "meaning": "maximum",
+            "status": "available",
+            "original": "ICHG Charge current, Max 3.4 A",
+            "conditions": "One BP8 8S1P pack. Electrical table. Temperature/rate/pulse-duration derating not stated for this row.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 5 (PDF p. 9), Table 2.2"
+          },
+          "maxDischargeA": {
+            "value": 4,
+            "unit": "A",
+            "meaning": "maximum",
+            "status": "available",
+            "original": "IOUT Discharge current, Max 4.0 A",
+            "conditions": "One BP8 8S1P pack. Electrical table. Temperature/rate/pulse-duration derating not stated for this row.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 5 (PDF p. 9), Table 2.2"
+          },
+          "efficiency": {
+            "value": null,
+            "unit": "1",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "Complete reviewed datasheet",
+            "rationale": "No scalar battery energy or coulombic efficiency given. Separate charge/discharge models remain missing."
+          },
+          "priceUsd": {
+            "value": null,
+            "unit": "USD",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "Complete reviewed datasheet",
+            "rationale": "No dated manufacturer price in the reviewed PDF. No reseller or search-snippet price adopted."
+          },
+          "cycleLife": {
+            "value": null,
+            "unit": "cycles",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "Complete reviewed datasheet",
+            "rationale": "No cycle-life versus DoD data with temperature, C-rate, cutoffs and retained-capacity criterion. Mission cycle qualification remains unassessed."
+          },
+          "nameplateEnergyWh": {
+            "value": 100,
+            "unit": "Wh",
+            "meaning": "nominal",
+            "status": "available",
+            "original": "Nominal capacity of 100 Wh (86 Wh in recommended operating range)",
+            "conditions": "Nameplate/full capacity case. Not the adopted recommended-range energy and not EOL.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 1 (PDF p. 5), Highlighted features"
+          },
+          "nameplateChargeAh": {
+            "value": 3.5,
+            "unit": "Ah",
+            "meaning": "nominal",
+            "status": "available",
+            "original": "Nominal capacity 3500 mAh",
+            "conditions": "Nameplate/full capacity case, one 8S1P pack.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 1 (PDF p. 5), Highlighted features"
+          },
+          "heaterPowerW": {
+            "value": 6,
+            "unit": "W",
+            "meaning": "typical",
+            "status": "available",
+            "original": "PH Heater power usage, Typ 6.0 W",
+            "conditions": "Heater on. Separate from electronics standby consumption. Thermal duty cycle not supplied.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 5 (PDF p. 9), Table 2.2"
+          },
+          "standbyCurrentA": {
+            "value": 0.005,
+            "unit": "A",
+            "meaning": "typical",
+            "status": "available",
+            "original": "IS Standby current usage, VBAT=32 V, ENA active, Typ 5.0 mA",
+            "conditions": "VBAT 32 V, ENA active. Heater power is separate.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "printed p. 5 (PDF p. 9), Table 2.2"
+          },
+          "retainedEnergyFraction": {
+            "value": null,
+            "unit": "1",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "Complete reviewed datasheet",
+            "rationale": "No applicable EOL retained-energy factor versus cycles, temperature and lifetime is stated."
+          },
+          "retainedChargeFraction": {
+            "value": null,
+            "unit": "1",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "Complete reviewed datasheet",
+            "rationale": "No applicable EOL retained-charge factor is stated."
+          },
+          "chargeEfficiency": {
+            "value": null,
+            "unit": "1",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "Complete reviewed datasheet",
+            "rationale": "No separately characterized battery charge-energy efficiency is stated."
+          },
+          "dischargeEfficiency": {
+            "value": null,
+            "unit": "1",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "Complete reviewed datasheet",
+            "rationale": "No separately characterized battery discharge-energy efficiency is stated."
+          },
+          "coulombicChargeEfficiency": {
+            "value": null,
+            "unit": "1",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "Complete reviewed datasheet",
+            "rationale": "No charge coulombic-efficiency characterization is stated."
+          },
+          "coulombicDischargeEfficiency": {
+            "value": null,
+            "unit": "1",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "Complete reviewed datasheet",
+            "rationale": "No discharge coulombic-efficiency characterization is stated."
+          },
+          "cycleLifeModel": {
+            "value": null,
+            "unit": "1",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-bp8-1.2.0",
+            "location": "Complete reviewed datasheet",
+            "rationale": "No DoD–cycle-life fit coefficients or validity domain. No coefficients invented."
+          }
+        },
+        "sources": [
+          {
+            "id": "gomspace-bp8-1.2.0",
+            "title": "NanoPower BP8 100 Wh Datasheet",
+            "url": "https://gomspace.com/wp-content/uploads/2025/08/gs-ds-nanopower-bp8-100-Wh-2.pdf",
+            "revision": "DS 1069134, revision 1.2.0, 2026-04-10",
+            "location": "Printed pp. 1–13 (PDF pp. 5–17). Tables 2.1–2.2, pp. 5–6. Table 4.1, p. 11.",
+            "retrievedAt": "2026-10-17"
+          }
+        ],
+        "supportedConfigurations": [
+          "Factory 8S1P pack. One pack in this record. Two packs may be paralleled using the manufacturer’s wiring and manual. No series reconfiguration inferred."
+        ],
+        "accountingBoundary": "One complete BP8 pack including cells, protection, balancing, telemetry electronics and heater. EPS/P80, harness, mating connectors and spacecraft structure are external. Pack electronics and heater mass are not additional installed products.",
+        "caveats": [
+          "86 Wh is typical over 23.6–32.0 V. It is not guaranteed minimum usable energy and is not an EOL capacity.",
+          "The 100 Wh and 3.5 Ah headline values use a different/full capacity case. They are retained separately and not substituted into the recommended-range energy field.",
+          "Cycle-life domain and aging/efficiency models are missing. Telemetry SoC capability does not supply a charge-state model for the demo.",
+          "Protection thresholds differ from recommended operating limits. Absolute maxima must not be treated as the normal operating interval."
+        ]
+      }
+    },
+    {
+      "usageId": "Usage 3",
+      "productId": "gomspace-p80-config1",
+      "catalogEntryRevision": "catalog-record-1; product hardware revision not stated",
+      "allocatedRoles": [
+        "conditioning",
+        "distribution",
+        "processor"
+      ],
+      "quantity": 1,
+      "installedConfiguration": null,
+      "sourceSheet": "usage-3.kicad_sch",
+      "product": {
+        "id": "gomspace-p80-config1",
+        "revision": "catalog-record-1; product hardware revision not stated",
+        "manufacturer": "GomSpace A/S",
+        "name": "NanoPower P80 (configuration 1)",
+        "partNumber": "NanoPower P80, configuration 1 (ordering designation, numeric P/N not stated)",
+        "level": "board",
+        "roles": [
+          "conditioning",
+          "distribution",
+          "processor"
+        ],
+        "description": "EPS board-stack assembly, fixed here to 1 PMU + 1 ACU + 1 PDU. Provides MPPT boost conditioning, protected distribution and documented MCUs. Battery is external.",
+        "specs": {
+          "powerBolW": {
+            "value": null,
+            "unit": "W",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "powerBolW characterizes another product role. No substitute rating inferred."
+          },
+          "powerEolW": {
+            "value": null,
+            "unit": "W",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "powerEolW characterizes another product role. No substitute rating inferred."
+          },
+          "vmpBolV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "vmpBolV characterizes another product role. No substitute rating inferred."
+          },
+          "impBolA": {
+            "value": null,
+            "unit": "A",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "impBolA characterizes another product role. No substitute rating inferred."
+          },
+          "vmpEolV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "vmpEolV characterizes another product role. No substitute rating inferred."
+          },
+          "impEolA": {
+            "value": null,
+            "unit": "A",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "impEolA characterizes another product role. No substitute rating inferred."
+          },
+          "vocV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "vocV characterizes another product role. No substitute rating inferred."
+          },
+          "iscA": {
+            "value": null,
+            "unit": "A",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "iscA characterizes another product role. No substitute rating inferred."
+          },
+          "energyWh": {
+            "value": null,
+            "unit": "Wh",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "energyWh characterizes another product role. No substitute rating inferred."
+          },
+          "chargeAh": {
+            "value": null,
+            "unit": "Ah",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "chargeAh characterizes another product role. No substitute rating inferred."
+          },
+          "voltageMinV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed pp. 7–8 (PDF pp. 14–15), Table 2.2",
+            "rationale": "PMU VIN minimum column is blank. BP8 recommended minimum is not imported as a P80 minimum."
+          },
+          "voltageNominalV": {
+            "value": 28.8,
+            "unit": "V",
+            "meaning": "typical",
+            "status": "available",
+            "original": "PMU VIN Operating voltage, Typ 28.8 V",
+            "conditions": "Shared battery/system bus, not the PV tracking input.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed pp. 7–8 (PDF pp. 14–15), Table 2.2"
+          },
+          "voltageMaxV": {
+            "value": 33.6,
+            "unit": "V",
+            "meaning": "maximum",
+            "status": "available",
+            "original": "PMU VIN Operating voltage, Max 33.6 V",
+            "conditions": "Shared battery/system bus, not a separate PV absolute maximum.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed pp. 7–8 (PDF pp. 14–15), Table 2.2"
+          },
+          "massKg": {
+            "value": 0.3608,
+            "unit": "kg",
+            "meaning": "specified",
+            "status": "available",
+            "original": "Config 1, Mass 360.8 g",
+            "conditions": "Complete configuration-1 P80 assembly, battery excluded. Tolerance not stated.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed p. 22 (PDF p. 29), Table 4.1, configuration 1 row"
+          },
+          "widthM": {
+            "value": 0.095,
+            "unit": "m",
+            "meaning": "specified",
+            "status": "available",
+            "original": "Config 1, Length 95.0 mm, Width 95.0 mm, Height 38.8 mm",
+            "conditions": "Enclosed assembly. Catalog axis maps to manufacturer Length. Mounting/connector keep-outs not inferred.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed p. 22 (PDF p. 29), Table 4.1, configuration 1 row"
+          },
+          "heightM": {
+            "value": 0.095,
+            "unit": "m",
+            "meaning": "specified",
+            "status": "available",
+            "original": "Config 1, Length 95.0 mm, Width 95.0 mm, Height 38.8 mm",
+            "conditions": "Enclosed assembly. Catalog axis maps to manufacturer Width. Mounting/connector keep-outs not inferred.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed p. 22 (PDF p. 29), Table 4.1, configuration 1 row"
+          },
+          "depthM": {
+            "value": 0.0388,
+            "unit": "m",
+            "meaning": "specified",
+            "status": "available",
+            "original": "Config 1, Length 95.0 mm, Width 95.0 mm, Height 38.8 mm",
+            "conditions": "Enclosed assembly. Catalog axis maps to manufacturer Height. Mounting/connector keep-outs not inferred.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed p. 22 (PDF p. 29), Table 4.1, configuration 1 row"
+          },
+          "inputMinV": {
+            "value": null,
+            "unit": "V",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed pp. 3, 7–8",
+            "rationale": "No minimum operating/startup MPPT input voltage stated. The 9.5 V fallback set point is not a minimum tracking limit."
+          },
+          "inputMaxV": {
+            "value": 25,
+            "unit": "V",
+            "meaning": "maximum",
+            "status": "available",
+            "original": "ACU VPV PV input voltage, Max 25.0 V",
+            "conditions": "Per PV input. Footnote additionally requires PV open-circuit voltage VOC < maximum rated VBAT. Distinct from bus VIN.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed pp. 7–8 (PDF pp. 14–15), Table 2.2"
+          },
+          "maxInputW": {
+            "value": null,
+            "unit": "W",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed pp. 7–8 (PDF pp. 14–15), Table 2.2",
+            "rationale": "No aggregate allowable PV input-power rating stated. Channel count × voltage maximum × current maximum is not adopted as a power rating."
+          },
+          "maxChargeA": {
+            "value": null,
+            "unit": "A",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "maxChargeA characterizes another product role. No substitute rating inferred."
+          },
+          "maxDischargeA": {
+            "value": null,
+            "unit": "A",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "maxDischargeA characterizes another product role. No substitute rating inferred."
+          },
+          "efficiency": {
+            "value": null,
+            "unit": "1",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed p. 8 (PDF p. 15), §2.3.1 and Figure 2.1",
+            "rationale": "Figure 2.1 has typical PDU regulated-channel efficiency curves, not one applicable total conditioning efficiency. Curves not digitized or flattened."
+          },
+          "priceUsd": {
+            "value": null,
+            "unit": "USD",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "Complete reviewed datasheet",
+            "rationale": "No dated manufacturer price in the reviewed PDF. No reseller or search-snippet price adopted."
+          },
+          "cycleLife": {
+            "value": null,
+            "unit": "cycles",
+            "meaning": "specified",
+            "status": "not-applicable",
+            "original": "Not applicable to this product boundary.",
+            "conditions": "This record describes only the stated product and role boundary.",
+            "sourceId": null,
+            "location": "Catalog role/boundary review",
+            "rationale": "cycleLife characterizes another product role. No substitute rating inferred."
+          },
+          "conditioningMode": {
+            "value": "MPPT boost",
+            "unit": "1",
+            "meaning": "specified",
+            "status": "available",
+            "original": "ACU: 2×6 Maximum Power Point Tracking (MPPT) boost converters",
+            "conditions": "Configuration 1, one ACU. Hardware fallback is a separate state.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed p. 1 (PDF p. 8), Highlighted features"
+          },
+          "pvInputChannels": {
+            "value": 12,
+            "unit": "count",
+            "meaning": "specified",
+            "status": "available",
+            "original": "2×6 MPPT boost converters",
+            "conditions": "One ACU in configuration 1.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed pp. 1–2, Figure 1.3"
+          },
+          "maxPvInputCurrentA": {
+            "value": 1.1,
+            "unit": "A",
+            "meaning": "maximum",
+            "status": "available",
+            "original": "IPV PV input current per channel (0–11), ITOT < 12 A, Max 1.1 A",
+            "conditions": "Per ACU channel. Total bus current constraint remains applicable.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed pp. 7–8 (PDF pp. 14–15), Table 2.2"
+          },
+          "idlePowerW": {
+            "value": 1.25,
+            "unit": "W",
+            "meaning": "typical",
+            "status": "available",
+            "original": "PMU PIDL 500 mW + ACU PIDL 300 mW + PDU PIDL 450 mW",
+            "conditions": "Configuration 1. PMU/ACU all features enabled. PDU all channels disabled. No output load. Not an efficiency term.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed pp. 7–8 (PDF pp. 14–15), Table 2.2",
+            "rationale": "Sum of three included submodules = 1250 mW. Do not add MCU/firmware execution consumption again."
+          },
+          "processorDescription": {
+            "value": "Integrated MCUs with hardware, bus and ground watchdogs",
+            "unit": "1",
+            "meaning": "specified",
+            "status": "available",
+            "original": "Hardware watchdog monitors each microcontroller unit (MCU); bus and ground watchdogs described",
+            "conditions": "P80 submodule controllers. Available host resources are not characterized for extra application tasks.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "printed p. 3 (PDF p. 10), §1.3.5–1.3.6"
+          },
+          "firmwareRelease": {
+            "value": null,
+            "unit": "1",
+            "meaning": "specified",
+            "status": "missing",
+            "original": "Not stated, or not sufficiently resolved for this field.",
+            "conditions": "No applicable characterized value adopted.",
+            "sourceId": "gomspace-p80-2.3.0",
+            "location": "Complete reviewed datasheet",
+            "rationale": "No versioned firmware release, host-resource or task timing evidence. Software allocation remains unresolved."
+          }
+        },
+        "sources": [
+          {
+            "id": "gomspace-p80-2.3.0",
+            "title": "NanoPower P80 Datasheet",
+            "url": "https://gomspace.com/wp-content/uploads/2025/09/Data-Sheet-NanoPower-P80.pdf",
+            "revision": "DS 1047423, revision 2.3.0, 2024-09-24",
+            "location": "Printed pp. 1–23 (PDF pp. 8–30). Tables 1.1–1.2 pp. 5–6. Table 2.2 pp. 7–8. Table 4.1 p. 22.",
+            "retrievedAt": "2026-10-17"
+          }
+        ],
+        "supportedConfigurations": [
+          "Configuration 1 only: 1×PMU, 1×ACU, 1×PDU in enclosure. ACU has 12 PV inputs in two banks of six MPPT boost converters.",
+          "PDU channel-to-regulator assignments are factory hardware configuration. Regulated and raw-battery outputs coexist. Other P80 stack configurations have different mass/envelopes and are outside this record."
+        ],
+        "accountingBoundary": "One complete configuration-1 assembly including PMU, ACU, PDU, enclosure and internal electronics. All conditioning/distribution/processor allocations reference this same physical usage and contribute its 0.3608 kg once. BP8 battery, external harness, mating connectors and spacecraft mounting are separate.",
+        "caveats": [
+          "Canonical level board represents a multi-board enclosed assembly here, not a single PCB. Configuration 1 must remain fixed for these physical values.",
+          "The datasheet explicitly excludes BP8 from the P80 EPS boundary (printed p. 2). Do not add a battery role or battery capacity to P80.",
+          "25 V PV input maximum is distinct from the additional Voc < max(VBAT) condition. No minimum/startup/tracking envelope or aggregate input-power limit is inferred.",
+          "Regulator efficiency is supplied as typical curves versus load and battery voltage, not one guaranteed system efficiency. No scalar is adopted.",
+          "MCUs and watchdogs are explicit. MCU model, memory, compute headroom and firmware release/timing evidence are missing. No independent software role is claimed."
+        ]
+      }
+    }
+  ],
+  "unallocatedRoles": [
+    "software"
+  ],
+  "scenario": {
+    "id": "illustrative-nominal",
+    "revision": 1,
+    "provenance": "Authored demonstration inputs. No mission or manufacturer load profile is claimed.",
+    "loads": [
+      {
+        "id": "illustrative-load",
+        "name": "Illustrative spacecraft load",
+        "subsystem": "aggregate",
+        "color": "#ffffff",
+        "activePowerW": 4,
+        "idlePowerW": 2,
+        "railV": 5,
+        "essential": true,
+        "windows": [
+          {
+            "id": "active",
+            "start": 0.1,
+            "end": 0.3
+          }
+        ]
+      }
+    ],
+    "loadChannelAssignments": null
+  },
+  "physicalRouting": {
+    "status": "blocked",
+    "boardGenerated": false,
+    "prerequisites": [
+      {
+        "description": "Engineer-reviewed exact connector variants and terminal, return, isolation and inhibit pin maps, bound to each product revision.",
+        "status": "missing-in-typed-architecture"
+      },
+      {
+        "description": "Engineer-reviewed installed quantities and supported assembly configurations. Cell counts alone do not define series/parallel wiring.",
+        "status": "missing-in-typed-architecture"
+      },
+      {
+        "description": "Verified connector footprints, pad-to-terminal mapping, orientation, mounting and keep-out geometry.",
+        "status": "missing-in-typed-architecture"
+      },
+      {
+        "description": "Approved pin-level netlist, load-to-channel assignments and auxiliary circuits or harnesses with their ratings.",
+        "status": "missing-in-typed-architecture"
+      },
+      {
+        "description": "Board outline, layer stack, installation constraints, net current and voltage limits, copper widths and clearances.",
+        "status": "missing-in-typed-architecture"
+      },
+      {
+        "description": "A configured external router, followed by unresolved-net review and applicable electrical and physical rule checks.",
+        "status": "missing-in-typed-architecture"
+      }
+    ],
+    "unresolvedPhysicalNets": "Unknown. No physical netlist or terminal mapping exists. Logical associations are not physical nets."
+  },
+  "validation": {
+    "syntax": "Run local kicad-validate.mjs on this export to parse and render it.",
+    "erc": "Not run by browser export. ERC on abstract sheets cannot assess product electrical compatibility.",
+    "drc": "Not applicable to this drawing. No PCB exists."
+  },
+  "warnings": [
+    "Review-only logical COTS interconnect drawing. Named sheet ports express proposed functional associations, not manufacturer terminals, electrical nets or an approved harness. No PCB, internal COTS circuit reconstruction, electrical compatibility, manufacturing or flight-readiness claim.",
+    "Product hardware revisions that are unstated in the catalog remain unknown. Catalog record revisions are preserved verbatim.",
+    "Candidate records do not bind a catalog revision. Reevaluate candidates after catalog changes. This export freezes the supplied catalog and selected entries.",
+    "3G30C-Advanced bare cell (8 × 8 cm): preliminary match is incomplete. priceUsd (no cost ranking) installed orientation, temperature/lifetime applicability and interconnection input tracking/open-circuit/current compatibility guaranteed EOL lower bound under applicable conditions cell assembly series/parallel arrangement, interconnects, bypass/blocking protection, packaging and installation evidence",
+    "NanoPower BP8 100 Wh (8S1P): preliminary match is incomplete. priceUsd (no cost ranking) sourced retained energy/charge and applicable temperature/lifetime bounds charger policy, voltage mapping and installed interfaces conservative sourced BOL energy rating cycleLife",
+    "NanoPower P80 (configuration 1): preliminary match is incomplete. priceUsd (no cost ranking) installed array voltage/current extrema and channel allocation conversion/startup envelope and charger compatibility inputMinV: missing or not applicable maxInputW: missing or not applicable guaranteed maxInputW limit or source input",
+    "Unallocated roles: software. No COTS hardware is invented for these roles."
+  ]
+}

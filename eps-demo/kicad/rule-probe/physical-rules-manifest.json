@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "supportedKiCad": "10.x, exercised with 10.0.7",
+  "scope": "Engineer-approved physical rule sidecars for KiCad 10. These enforce only supplied geometric bounds. No current-to-width or voltage-to-clearance derivation is performed. No PCB is generated. No complete EPS predicate, electrical compatibility or flight qualification is established.",
+  "architectureFingerprint": "synthetic-rule-probe",
+  "catalogRevision": "synthetic-test-only",
+  "physicalNetlistRevision": "synthetic-nets-only",
+  "approval": {
+    "status": "approved",
+    "engineer": "SYNTHETIC TEST ONLY, no engineering authority",
+    "date": "2026-10-17"
+  },
+  "sources": [
+    {
+      "id": "synthetic",
+      "url": "https://example.org/synthetic-test",
+      "revision": "test-1",
+      "location": "Regression fixture, no manufacturer evidence"
+    }
+  ],
+  "fabrication": {
+    "sourceIds": [
+      "synthetic"
+    ],
+    "minimumTrackWidthMm": 0.1,
+    "minimumClearanceMm": 0.1,
+    "minimumViaDiameterMm": 0.4,
+    "minimumDrillMm": 0.2,
+    "minimumAnnularWidthMm": 0.1,
+    "minimumEdgeClearanceMm": 0.1
+  },
+  "rules": [
+    {
+      "ruleName": "EPS_POWER_track_width",
+      "constraint": "track_width",
+      "netclass": "EPS_POWER",
+      "approvedDimension": {
+        "minimumMm": 0.8,
+        "requirementIds": [
+          "EPS-07"
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
+        "rationale": "Arbitrary regression test value. No actual EPS derivation or approval.",
+        "derivation": {
+          "method": "SYNTHETIC TEST ONLY",
+          "conditions": "SYNTHETIC TEST ONLY",
+          "margin": "SYNTHETIC TEST ONLY"
+        },
+        "preferredMm": 0.8
+      }
+    },
+    {
+      "ruleName": "EPS_POWER_via_diameter",
+      "constraint": "via_diameter",
+      "netclass": "EPS_POWER",
+      "approvedDimension": {
+        "minimumMm": 0.8,
+        "requirementIds": [
+          "EPS-07"
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
+        "rationale": "Arbitrary regression test value. No actual EPS derivation or approval.",
+        "derivation": {
+          "method": "SYNTHETIC TEST ONLY",
+          "conditions": "SYNTHETIC TEST ONLY",
+          "margin": "SYNTHETIC TEST ONLY"
+        },
+        "preferredMm": 0.8
+      }
+    },
+    {
+      "ruleName": "EPS_POWER_via_drill",
+      "constraint": "hole_size",
+      "netclass": "EPS_POWER",
+      "approvedDimension": {
+        "minimumMm": 0.4,
+        "requirementIds": [
+          "EPS-07"
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
+        "rationale": "Arbitrary regression test value. No actual EPS derivation or approval.",
+        "derivation": {
+          "method": "SYNTHETIC TEST ONLY",
+          "conditions": "SYNTHETIC TEST ONLY",
+          "margin": "SYNTHETIC TEST ONLY"
+        },
+        "preferredMm": 0.4,
+        "maximumMm": 0.4
+      }
+    },
+    {
+      "ruleName": "EPS_POWER_clearance",
+      "constraint": "clearance",
+      "netclass": "EPS_POWER",
+      "approvedDimension": {
+        "minimumMm": 0.5,
+        "requirementIds": [
+          "EPS-03"
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
+        "rationale": "Arbitrary regression test value. No actual EPS derivation or approval.",
+        "derivation": {
+          "method": "SYNTHETIC TEST ONLY",
+          "conditions": "SYNTHETIC TEST ONLY",
+          "margin": "SYNTHETIC TEST ONLY"
+        }
+      }
+    },
+    {
+      "ruleName": "board_edge_clearance",
+      "constraint": "edge_clearance",
+      "netclass": null,
+      "approvedDimension": {
+        "minimumMm": 0.5,
+        "requirementIds": [
+          "EPS-20"
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
+        "rationale": "Arbitrary regression test value. No actual EPS derivation or approval.",
+        "derivation": {
+          "method": "SYNTHETIC TEST ONLY",
+          "conditions": "SYNTHETIC TEST ONLY",
+          "margin": "SYNTHETIC TEST ONLY"
+        }
+      }
+    }
+  ],
+  "netAssignments": [
+    {
+      "netclass": "EPS_POWER",
+      "exactNets": [
+        "EPS_BUS"
+      ]
+    }
+  ],
+  "unresolvedNets": [
+    "GND"
+  ],
+  "unresolvedDerivations": "No missing dimensions are synthesized. This export accepts reviewed dimensions only. The engineer remains responsible for the derivations and their scope.",
+  "generatedBoard": false,
+  "ruleApplicationValidated": false,
+  "erc": "not-run",
+  "drc": "not-run",
+  "warnings": [
+    "Engineer-approved physical rule sidecars for KiCad 10. These enforce only supplied geometric bounds. No current-to-width or voltage-to-clearance derivation is performed. No PCB is generated. No complete EPS predicate, electrical compatibility or flight qualification is established.",
+    "Use these sidecars only after reconciling exact nets, reviewed geometry and fabrication settings in a physical KiCad project. Do not overwrite an existing project without merging its settings.",
+    "Netclass width and via sizes are routing defaults. The custom rules enforce their stated limits. Later matching clearance rules have priority. This generator orders them from smaller to larger bounds.",
+    "The installed CLI can silently ignore malformed custom rules. Run Check rule syntax in KiCad and verify expected rule violations on a deliberately perturbed fixture. A CLI exit code alone is insufficient.",
+    "Known EPS failures remain failed after a DRC pass. Energy, operating limits, protection behavior, temperatures, full installation fit and qualification remain external assessments.",
+    "No EPS-derived netclass is assigned to: GND. Only explicit fabrication defaults apply."
+  ]
+}
