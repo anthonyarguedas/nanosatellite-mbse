@@ -5,9 +5,9 @@
 The mission consists of a main CubeSat and a camera payload. The payload takes pictures of the CubeSat from the point of view of a proximal spacecraft that can be used by stakeholders to develop and test object recognition, pose estimation, depth estimation, proximity operations, docking, etc. algorithms and systems, which in turn have applications in active debris removal, and in-orbit maintenance, manufacturing, and assembly.
 As the mission experiences different space conditions throughout its orbit and lifespan, different picture datasets can be created.
 
-The ideal case is that we can take a picture of the main CubeSat from any point on a ball centered on it, at any orientation. The required poses could be requested by the stakeholders as a function of time and current pose.
+The ideal case is that we can take a picture of the main CubeSat from any point on a ball centered on it, at any orientation. The required poses could be requested by the stakeholders as a function of time and current pose, for example to simulate an active control trajectory.
 
-There is no other proposed data collection task proposed for the payload. Gyroscope or accelerometer data is measured only to move the camera to the requested poses (e.g. by applying inverse kinematics). Stakeholders would only need to know that the pose was reached with an approved tolerance.
+There is no other proposed data collection task proposed for the payload. Gyroscope or accelerometer data is measured only to move the camera to the requested poses (e.g. by applying inverse kinematics). Stakeholders would only need to know that the pose was reached with an approved tolerance, because they need it as the ground truth of the dataset.
 
 ## Problem definition
 

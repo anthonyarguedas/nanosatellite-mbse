@@ -1,0 +1,43 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\title{TBD}
+
+\begin{document}
+
+Canada will remain a leading spacefaring nation, establishes the Canadian Space Agency in its Space Strategy for Canada, by participating in the next effort to push humanity into space: the Lunar Gateway Mission \cite{csaspacestrategy}.
+Building on the success of the Canadarms, Canada's participation will materialize as a next-generation artificial intelligence-enabled deep-space robotic system for the Lunar Gateway Mission, a milestone that will allow Canada to strengthen its position as a world leader in AI-enabled space robotics and position Canadian firms as global leaders in the future on-orbit servicing market \cite{csaspacestrategy}.
+
+On-orbit servicing, in particular, is embedded within one ambitious future concept of operations for the Lunar Gateway where it interacts with other spacecraft and their payloads for applications including refueling, inspection, assembly, and maintenance \cite{rhodes2023gatewayrefueling, davis2019onorbitservicing}.
+In such scenarios, servicing is generally thought to be preceded by rendezvous and proximity operations, and may be both preceeded and succeeded by a capture/release phase like docking, grappling or berthing \cite{confers2019missionphases}.
+Proximity operations is a particularly challenging phase that in turn comprises the awareness and navigation capabilties leveraged when two spacecraft operate close to each other \cite{faraco2024syntheticstereo,  park2022speedplus, musallam2023cubesatcdt, sam2026spacecraftsegmentation}.
+
+The research community argues that awareness in proximity operations, the capability supported by this project, should be adaptable to targets ranging from cooperative spacecraft to non-cooperative debris. This must be accomplished without compromising robustness to the tight energy constraints of spaceborne systems and the ample variations in space conditions such as lighting and electromagnetic noise \cite{sam2026spacecraftsegmentation, park2022speedplus, musallam2023cubesatcdt, woffinden2017issselfie}.
+
+Cameras, particularly the common monocular, red-green-blue light intesity sensing type, have been put forward as the sensor of choice for proximity operations awareness owing to their relative energy efficiency, high frame rate, and low cost \cite{park2022speedplus, musallam2023cubesatcdt}.
+Space institutions have consequently challenged researchers to exploit images as the input for awareness problems like pose estimation and object detection, as evidenced by the 2019 and 2021 editions of the Satellite Pose Estimation Competition hosted by NASA and ESA \cite{park2022speedplus}, and NASA's 2024 Pose Bowl Spacecraft Detection and Pose Estimation Challenge \cite{sam2026spacecraftsegmentation}.
+The academic community has applied solutions including the feature-based Optical Flow, Structure from Motion \cite{faraco2024syntheticstereo}, and Scale Invariant Feature Transform (SIFT) \cite{faraco2024syntheticstereo}, and varied \cite{park2022speedplus, musallam2023cubesatcdt, sam2026spacecraftsegmentation} Convolutional Neural Networks (CNNs) which are trained on large volumes of annotated images.
+
+Researchers have concluded that the quality of images available to tune or train the pose estimation and object detections models is a significant predictor of their performance, where quality in this domain is determined by whether the images are synthetic, lab-generated, or orbital \cite{park2022speedplus, musallam2023cubesatcdt, sam2026spacecraftsegmentation}.
+Identified shortcomings of synthetic datasets include not resembling the visual features \cite {park2022speedplusm, musallam2023cubesatcdt} and variability in illumination of orbital images \cite{park2022speedplus, musallam2023cubesatcdt}.
+Interestingly, one paper added more than thirty thousand synthetic images to a spacecraft segmentation dataset and obtained a negligible improvement in performance \cite{sam2026spacecraftsegmentation}.
+
+Authors have thus turned to enriching image datasets with images generated in the laboratory.
+Setups with spacecraft mockups and cameras mounted on robotic arms plus light boxes and sun lamps as illumination sources have been used to generate pose ground truth labels for predefined, controlled trajectories with many degrees of freedom that simulate those of spacecraft engaged in proximity operations \cite{park2022speedplus, musallam2023cubesatcdt}.
+These experimental pose and timestamp annotations have been leveraged to provide more accurate and smooth estimations using CNNs \cite{musallam2023cubesatcdt}, and to measure the domain gap of models trained entirely on synthetic data, which can be similar when using either lab-generated or orbital images as the reference \cite{park2022speedplus}.
+
+However, lab-generated images have been deemed insufficient for validation of pose estimation under real space conditions \cite{pauly2023survey}, even by the same authors that have published them \cite{park2026flightready}.
+Criticisms include unrealistic illumination conditions \cite{woffinden2017issselfie, park2022speedplus}, materials \cite{park2022speedplus, musallam2023cubesatcdt}, and proximity operations trajectories \cite{black2021flightready}, and the presence of visual artifacts \cite{park2022speedplus}.
+
+Orbital image datasets are scarce, as their size is counted in the tens instead of the thousands and tens of thousands for lab-generated and synthetic images, respectively \cite{sam2026spacecraftsegmentation, musallam2023cubesatcdt, musallam2023cubesatcdt}.
+Existing sources have been generated using cameras mounted on a tethered daughter satellite \cite{nohmi2009stars} and an extendable boom on a CubeSat \cite{taylor2025tpa1}, for example.
+They originally supported applications such as tether deployment validation \cite{nohmi2009stars} and material degradation and micrometeoroid impact sensing \cite{taylor2025tpa1}, yet multiple authors leverage them for pose estimation and object detection given the aforementioned data scarcity, recognizing the lack of pose ground truths \cite{musallam2023cubesatcdt, schubert2021pipeline} and limited pose diversity \cite{musallam2023cubesatcdt}.
+
+A notable exception, the ISS Selfie initiative mounted a camera on the International Space Station's (ISS) Canada-made Canadarm2 and Dextre robot arms \cite{woffinden2017issselfie} to generate more than 49 hours of proximity operations simulation video annotated with time and pose information.
+This data was used to demonstrate the validation of SIFT-based pose estimation algorithms, and thus motivate future on-orbit servicing proposals for the ISS \cite{woffinden2017issselfie}.
+Unfortunately, this dataset has hardly been exploited after its publication, likely due to it not being transferable to the CubeSat form factor on which space research is primarily carried out.
+
+\bibliographystyle{plainurl}
+\bibliography{references}
+
+\end{document}
