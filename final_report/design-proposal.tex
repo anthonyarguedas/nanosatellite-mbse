@@ -6,6 +6,12 @@
 
 \section{Orbit Requirements and Power Budget}
 
+\subsection{Mission analogues from operational descriptions}
+
+When orbit information is unavailable, the framework will accept a plain text concept of operations. It will encode that text and revisioned descriptions of existing missions as semantic embeddings (numerical text vectors), then rank analogues by cosine similarity. Each result will identify the exact mission, source revision and parameter epoch. It will present sourced altitude values or ranges, orbit context and missing fields, while distinguishing flown conditions from intended or study assumptions. Similarity will provide retrieval ranks rather than suitability probabilities. An engineer will review alternatives and explicitly accept each parameter transferred into the mission model. Acceptance will create a mission revision and invalidate dependent results through the normal dependency process. Independent analysis will assess launch opportunities, coverage, revisit, resolution, illumination and orbital constraints. A mission description will establish no unique orbit or validation of its feasibility.
+
+\subsection{Preliminary EPS sizing}
+
 Preliminary EPS sizing will follow El Hachimi et al. \citep[Secs.~2--3, Eqs.~(1)--(10)]{handpicked-0003}.
 
 With altitude $h$ in km, Earth radius $R_e=6378~\mathrm{km}$ and gravitational parameter $\mu=398601~\mathrm{km^3/s^2}$, the orbit, sunlight and eclipse periods (s) are:
@@ -366,6 +372,15 @@ Algorithm~\ref{alg:eps-cots-selection} will support both evaluation of an engine
 \end{algorithm}
 
 A cost-led comparison will select a minimum-cost member of \(\mathcal F\). A trade study can instead retain non-dominated alternatives for cost, mass and minimum energy reserve above the scenario's required reserve. Preference weights and criteria will be engineer approved. Mandatory failures will exclude a candidate before preference ranking. The selected model will contain a bill of materials, quantities and settings, electrical connections, load/channel and software/host allocations, and links to the requirements and assessments it supports. A catalog match or a passed preliminary screen will retain its analysis scope. It will establish no hardware qualification or completed flight verification.
+
+\subsection{KiCad design handoff}
+\label{subsection:eps-kicad-handoff}
+
+The framework will translate current COTS allocations into a KiCad review schematic. It will retain catalog revisions, quantities, sources and one physical usage for each integrated board. Automatic placement and wire routing will connect named logical ports. The drawing will expose missing terminal mappings and will establish no manufacturer circuit reconstruction.
+
+Physical carrier board routing will require reviewed pin and return maps, footprints, approved connectivity, installation geometry and board constraints. The pipeline will freeze the architecture, import approved physical rules, generate board data, exchange routing data with an external autorouter, and retain electrical and design rule reports with unresolved connections.
+
+EPS requirements will inform trace widths, via geometry and spacing through reviewed derivations with declared stackup, thermal conditions, fabrication limits and insulation criteria. KiCad will check supplied connectivity and geometry. Mission energy, operating limits, protection behavior and complete installation fit will retain separate assessments. A board rule pass will leave known EPS failures unchanged and will establish no flight qualification.
 
 \section{EPS Verification and Validation}
 

@@ -1,0 +1,530 @@
+{
+  "basis": "Proposed report synthesis for a reusable COTS database; only the six group names are CSRM-derived",
+  "view": "SysML v2-style part definition/library illustration; not a selected wiring topology",
+  "limitations": "No compiled/executable SysML v2 conformance, solver evaluation, selected configuration, physical path, isolation or redundancy is claimed.",
+  "generator_sha256": "f05d6adfc121d6ca29906f0904f4c2831a0b23dd47bd95198b34c760c7ad771a",
+  "shared_style_sha256": "d207e6a5ec4a0bb5f561e9f132291ba723e8fd8000c7c15c9548c640a819be7c",
+  "csrm_name_basis": {
+    "csrm-structure.py": "fd6f5486a1e88b3610c9ad527e30d98f11cac6beab83e757beffb8b19138025c",
+    "csrm-eps-components.svg": "3ead8237cf79287ef9e3e9e86c54af4db198e62d8eaa2e1aee9792560c6988bd"
+  },
+  "shared_records": [
+    {
+      "id": "catalog_identity",
+      "title": "Catalog identity",
+      "lines": [
+        "ID; manufacturer; part/revision; roles"
+      ]
+    },
+    {
+      "id": "sourced_values",
+      "title": "Sourced values",
+      "lines": [
+        "value/unit; conditions; source; status"
+      ]
+    },
+    {
+      "id": "hardware_data",
+      "title": "Hardware data (hardware only)",
+      "lines": [
+        "mass/envelope; pins; environment"
+      ]
+    }
+  ],
+  "interface_types": {
+    "IF-E": "DC terminal pair; V across, I positive into owner; return/polarity and pins declared",
+    "IF-T": "Thermal boundary; T and heat flow positive into owner; boundary/contact and optional model",
+    "IF-D": "Provider accepts commands/configuration and emits telemetry/events; requester conjugates directed items; transport on host for software",
+    "IF-C": "Discrete hardware control/inhibit; direction, logic, defaults/faults, pins and response declared"
+  },
+  "component_definitions": [
+    {
+      "id": "solar-arrays",
+      "name": "Solar Arrays",
+      "properties": [
+        {
+          "id": "configuration",
+          "summary": "cell/panel; technology; Ns/Np : Integer"
+        },
+        {
+          "id": "photovoltaic",
+          "summary": "Vmp, Imp, Voc, Isc [V, A]; area [m\u00b2]"
+        },
+        {
+          "id": "conditions",
+          "summary": "at T, irradiance, BOL/EOL"
+        },
+        {
+          "id": "models",
+          "summary": "I\u2013V/model; temperature/degradation"
+        },
+        {
+          "id": "installed_usage",
+          "summary": "deployed/stowed geometry: usage"
+        }
+      ],
+      "ports": [
+        {
+          "id": "dc-output",
+          "role": "dc output",
+          "type": "IF-E",
+          "multiplicity": "1..*",
+          "side": "left",
+          "row": 0
+        },
+        {
+          "id": "thermal",
+          "role": "thermal",
+          "type": "IF-T",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 0
+        },
+        {
+          "id": "monitor",
+          "role": "monitor",
+          "type": "IF-D",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 1
+        }
+      ],
+      "shared_records": [
+        "catalog_identity",
+        "sourced_values",
+        "hardware_data"
+      ]
+    },
+    {
+      "id": "batteries",
+      "name": "Batteries",
+      "properties": [
+        {
+          "id": "configuration",
+          "summary": "cell/pack; chemistry; Ns/Np : Integer"
+        },
+        {
+          "id": "ratings",
+          "summary": "Vmin/nom/max [V]; Q [Ah]; E [Wh]"
+        },
+        {
+          "id": "current_limits",
+          "summary": "current limits [A]; pulse duration [s]"
+        },
+        {
+          "id": "life_limits",
+          "summary": "charge/discharge T limits; life/DoD"
+        },
+        {
+          "id": "degradation",
+          "summary": "resistance [\u03a9]; capacity retention"
+        }
+      ],
+      "ports": [
+        {
+          "id": "dc-bidirectional",
+          "role": "bidir. dc",
+          "type": "IF-E",
+          "multiplicity": "1..*",
+          "side": "left",
+          "row": 0
+        },
+        {
+          "id": "thermal",
+          "role": "thermal",
+          "type": "IF-T",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 0
+        },
+        {
+          "id": "monitor",
+          "role": "monitor",
+          "type": "IF-D",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 1
+        }
+      ],
+      "shared_records": [
+        "catalog_identity",
+        "sourced_values",
+        "hardware_data"
+      ]
+    },
+    {
+      "id": "regulators-converters",
+      "name": "Regulators and Converters",
+      "properties": [
+        {
+          "id": "role",
+          "summary": "role; buck/boost/buck-boost"
+        },
+        {
+          "id": "input",
+          "summary": "DET/MPPT; input/absolute/MPPT [V]"
+        },
+        {
+          "id": "output",
+          "summary": "Vout, ripple [V]; Iin,Iout [A]; pulse [s]"
+        },
+        {
+          "id": "losses_limits",
+          "summary": "\u03b7(V,I,T); idle [W]; startup/charge limits"
+        },
+        {
+          "id": "bidirectional",
+          "summary": "bidirectional capability (declared)"
+        }
+      ],
+      "ports": [
+        {
+          "id": "dc-input",
+          "role": "input dc",
+          "type": "IF-E",
+          "multiplicity": "1..*",
+          "side": "left",
+          "row": 0
+        },
+        {
+          "id": "dc-output",
+          "role": "output dc",
+          "type": "IF-E",
+          "multiplicity": "1..*",
+          "side": "left",
+          "row": 1
+        },
+        {
+          "id": "thermal",
+          "role": "thermal",
+          "type": "IF-T",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 0
+        },
+        {
+          "id": "service",
+          "role": "service",
+          "type": "IF-D",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 1
+        },
+        {
+          "id": "enable",
+          "role": "enable",
+          "type": "IF-C",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 2
+        }
+      ],
+      "shared_records": [
+        "catalog_identity",
+        "sourced_values",
+        "hardware_data"
+      ]
+    },
+    {
+      "id": "power-circuits-switches",
+      "name": "Power Circuits and Switches",
+      "properties": [
+        {
+          "id": "configuration",
+          "summary": "role/channels; independent control"
+        },
+        {
+          "id": "ratings",
+          "summary": "ratings [V, A]; pulse [s]; Ron [\u03a9]"
+        },
+        {
+          "id": "protection",
+          "summary": "threshold [V,A,K]; delay [s]; hysteresis"
+        },
+        {
+          "id": "reset_inhibits",
+          "summary": "defaults/reset; reverse blocking/inhibits"
+        },
+        {
+          "id": "sensing",
+          "summary": "sensing ranges/accuracy"
+        }
+      ],
+      "ports": [
+        {
+          "id": "dc-input",
+          "role": "input dc",
+          "type": "IF-E",
+          "multiplicity": "1..*",
+          "side": "left",
+          "row": 0
+        },
+        {
+          "id": "dc-output",
+          "role": "output dc",
+          "type": "IF-E",
+          "multiplicity": "1..*",
+          "side": "left",
+          "row": 1
+        },
+        {
+          "id": "thermal",
+          "role": "thermal",
+          "type": "IF-T",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 0
+        },
+        {
+          "id": "service",
+          "role": "service",
+          "type": "IF-D",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 1
+        },
+        {
+          "id": "control-inhibit",
+          "role": "control/inhibit",
+          "type": "IF-C",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 2
+        }
+      ],
+      "shared_records": [
+        "catalog_identity",
+        "sourced_values",
+        "hardware_data"
+      ]
+    },
+    {
+      "id": "processor-memory",
+      "name": "Processor and Memory",
+      "properties": [
+        {
+          "id": "processor",
+          "summary": "processor architecture; clock [Hz]"
+        },
+        {
+          "id": "memory",
+          "summary": "program/data memory [byte]"
+        },
+        {
+          "id": "supply",
+          "summary": "supply [V]; power by mode [W]"
+        },
+        {
+          "id": "data_links",
+          "summary": "links: protocol/version, pins, logic, rate"
+        },
+        {
+          "id": "peripherals",
+          "summary": "timers; watchdog; sensing channels"
+        }
+      ],
+      "ports": [
+        {
+          "id": "supply",
+          "role": "supply dc",
+          "type": "IF-E",
+          "multiplicity": "1..*",
+          "side": "left",
+          "row": 0
+        },
+        {
+          "id": "thermal",
+          "role": "thermal",
+          "type": "IF-T",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 0
+        },
+        {
+          "id": "data-service",
+          "role": "data service",
+          "type": "IF-D",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 1
+        },
+        {
+          "id": "discrete-io",
+          "role": "discrete I/O",
+          "type": "IF-C",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 2
+        }
+      ],
+      "shared_records": [
+        "catalog_identity",
+        "sourced_values",
+        "hardware_data"
+      ]
+    },
+    {
+      "id": "software",
+      "name": "Software",
+      "properties": [
+        {
+          "id": "compatibility",
+          "summary": "release; host/firmware/driver support"
+        },
+        {
+          "id": "resources_timing",
+          "summary": "memory [byte]; timing/deadlines [s]"
+        },
+        {
+          "id": "service",
+          "summary": "commands/telemetry/events"
+        },
+        {
+          "id": "protection_configuration",
+          "summary": "protection/configuration ranges"
+        },
+        {
+          "id": "behavior",
+          "summary": "mode/sequence/recovery behavior"
+        }
+      ],
+      "reference": "ref host : Processor and Memory [1..*]",
+      "exclusion": "no independent hardware mass/power",
+      "ports": [
+        {
+          "id": "logical-service",
+          "role": "logical service",
+          "type": "IF-D",
+          "multiplicity": "1..*",
+          "side": "right",
+          "row": 0
+        }
+      ],
+      "shared_records": [
+        "catalog_identity",
+        "sourced_values"
+      ]
+    },
+    {
+      "id": "load",
+      "name": "Load",
+      "external": true,
+      "properties": [
+        {
+          "id": "demand",
+          "summary": "required voltage [V]; load law: constant power/current/resistance"
+        },
+        {
+          "id": "transients",
+          "summary": "mode power/current [W, A]; inrush/pulse amplitude/duration [A, s]"
+        },
+        {
+          "id": "operation",
+          "summary": "schedule/duty; startup [s]; shedding priority/default state"
+        }
+      ],
+      "ports": [
+        {
+          "id": "supply",
+          "role": "supply dc",
+          "type": "IF-E",
+          "multiplicity": "1..*",
+          "side": "right",
+          "row": 0
+        },
+        {
+          "id": "thermal",
+          "role": "thermal",
+          "type": "IF-T",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 1
+        },
+        {
+          "id": "data-service",
+          "role": "data service",
+          "type": "IF-D",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 2
+        },
+        {
+          "id": "enable",
+          "role": "enable",
+          "type": "IF-C",
+          "multiplicity": "0..*",
+          "side": "right",
+          "row": 3
+        }
+      ],
+      "shared_records": [
+        "catalog_identity",
+        "sourced_values",
+        "hardware_data"
+      ]
+    }
+  ],
+  "checks": {
+    "csrm_eps_groups": 6,
+    "external_loads": 1,
+    "shared_record_types": 3,
+    "property_groups": 33,
+    "boundary_port_declarations": 25,
+    "interface_type_counts": {
+      "IF-C": 4,
+      "IF-D": 7,
+      "IF-E": 8,
+      "IF-T": 6
+    },
+    "all_labels_at_least_11_pt": true,
+    "text_within_blocks_and_page": true,
+    "no_overlapping_labels": true,
+    "no_connectors_or_exchange_arrows": true,
+    "software_logical_service_only": true,
+    "host_is_reference_not_composition": true
+  },
+  "output": {
+    "artifact_sha256": {
+      "svg": "f840c914f2b56f203a747a89f137c58867e0bed9b34d54859358733bb75717ff",
+      "pdf": "dfb4f8bc2ec127aae1789497a7f2e241ebc8313d37e199ae362f2682a1e28a70",
+      "png": "71dffb249521db715263a42521323368074bb25135d5b334d0b92575781720de"
+    },
+    "svg_sha256_used_for_pdf": "f840c914f2b56f203a747a89f137c58867e0bed9b34d54859358733bb75717ff",
+    "font": {
+      "family": "Times New Roman",
+      "files": {
+        "normal": {
+          "path": "/System/Library/Fonts/Supplemental/Times New Roman.ttf",
+          "sha256": "f3b4ffff71c2a0c7227d37497683b2498fb2d0a4e8beae26f022e3ccfcaabfa3"
+        },
+        "bold": {
+          "path": "/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf",
+          "sha256": "50f5b1f27b7d34621090e437e8b1dd4510a22d2823fc876b3286bed327b64bbb"
+        }
+      }
+    },
+    "dimensions": {
+      "pdf_pt": [
+        690,
+        470
+      ],
+      "png_px": [
+        1380,
+        940
+      ]
+    },
+    "checks": {
+      "monochrome_paint_checked": true,
+      "serif_labels_checked": true,
+      "square_block_corners_checked": true,
+      "large_arrowheads_checked": true,
+      "foreground_arrowheads_checked": true,
+      "single_painted_head_per_terminal_path_checked": true,
+      "interface_labels_on_ports_checked": true,
+      "pdf_text_within_page": true,
+      "exact_svg_preserved_during_conversion": true
+    },
+    "rendering": "rsvg-convert version 2.62.2\n\nlibraries used:\n  cairo 1.18.4\n  pango 1.57.1\n  harfbuzz 14.2.0\n  fontconfig 2.17.1",
+    "SOURCE_DATE_EPOCH": 0
+  }
+}
