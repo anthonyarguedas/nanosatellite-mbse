@@ -1,4 +1,6 @@
 import type { Catalog, NodeId, Product, Role, Workspace } from '../types';
+import { nodeStatuses } from '../workflow.ts';
+import { allocationIssues, getAllocationQuantity } from '../engine/allocations.ts';
 
 export interface KiCadFile { name: string; content: string }
 export interface KiCadExport { files: KiCadFile[]; warnings: string[]; scope: string }
@@ -28,11 +30,15 @@ export const PHYSICAL_GATES = [
 export function getKiCadReadiness(workspace: Workspace, catalog: Catalog): KiCadReadiness {
   const blockers: string[] = [];
   const warnings = [KICAD_SCOPE, 'Product hardware revisions that are unstated in the catalog remain unknown. Catalog record revisions are preserved verbatim.',
-    'Candidate records do not bind a catalog revision. Reevaluate candidates after catalog changes. This export freezes the supplied catalog and selected entries.'];
+    'Frozen concept counts do not establish installed arrangements. Review drawings preserve their allocation receipts and the supplied catalog.'];
   if (workspace.schemaVersion !== 1) blockers.push('Unsupported workspace schema.');
+  blockers.push(...allocationIssues(workspace, catalog), ...workspace.catalogReview ?? []);
+  let statuses: ReturnType<typeof nodeStatuses> | undefined;
+  try { statuses = nodeStatuses(workspace); }
+  catch { blockers.push('Workspace inputs or dependency records are malformed.'); }
   for (const id of REQUIRED) {
     const record = workspace.records?.[id];
-    if (!record || !Number.isSafeInteger(record.revision) || record.revision < 0 || record.evaluatedRevision !== record.revision || !record.evaluatedAt) {
+    if (!record || !Number.isSafeInteger(record.revision) || record.revision < 0 || record.evaluatedRevision !== record.revision || !record.evaluatedAt || statuses?.[id] !== 'complete') {
       blockers.push(`${id} is uncomputed or stale. Reevaluate COTS suggestions and their prerequisites.`);
     }
   }
@@ -51,20 +57,21 @@ export function getKiCadReadiness(workspace: Workspace, catalog: Catalog): KiCad
   for (const role of allocated) {
     const id = workspace.selections[role]!;
     const product = catalog.products.find(item => item.id === id);
-    if (!product || !product.roles.includes(role)) {
+    if (!product || !product.roles.includes(role) || product.catalogUse === 'reference-only') {
       blockers.push(`${role}: selected product is absent or does not provide this role.`);
       continue;
     }
     if (!product.revision.trim()) blockers.push(`${product.name}: exact catalog record revision is missing.`);
+    const quantity = getAllocationQuantity(workspace, id);
+    if (quantity === null) blockers.push(`${product.name}: confirm a frozen concept allocation quantity in product evidence before exporting. Legacy selections do not establish a count.`);
     const suggestions = workspace.analysis.suggestions?.filter(item => item.productId === id) ?? [];
-    const suggestion = role === 'solar' || role === 'battery' || role === 'conditioning'
-      ? suggestions.find(item => item.role === role)
-      : suggestions.find(item => product.roles.includes(item.role));
+    const suggestion = suggestions.find(item => item.role === role);
     if (!suggestion || suggestion.outcome === 'rejected' || suggestion.checks.some(item => item.verdict === 'fail')) {
       blockers.push(`${product.name}: no applicable non-rejected current suggestion for ${role}.`);
     } else {
       if (!Number.isSafeInteger(suggestion.quantity) || suggestion.quantity < 1) blockers.push(`${product.name}: suggested quantity must be a positive integer.`);
       if (suggestion.outcome === 'incomplete') warnings.push(`${product.name}: preliminary match is incomplete. ${suggestion.missing.join(' ')}`);
+      if (quantity !== null && quantity !== suggestion.quantity) warnings.push(`${product.name}: frozen allocation count ${quantity} differs from current screening count ${suggestion.quantity}. The drawing retains the allocated count. Review the sizing findings.`);
     }
     if (new Set(suggestions.map(item => item.quantity)).size > 1) blockers.push(`${product.name}: inconsistent suggested quantities require review.`);
     if (!product.sources.length) warnings.push(`${product.name}: no source URL supplied.`);
@@ -130,7 +137,7 @@ function makeDrawing(workspace: Workspace, catalog: Catalog) {
     const product = catalog.products.find(item => item.id === id)!;
     const roles = ROLES.filter(item => workspace.selections[item] === id);
     const slot = Math.min(...roles.map(item => SLOTS[item]));
-    const quantity = workspace.analysis.suggestions!.find(item => item.productId === id)!.quantity;
+    const quantity = getAllocationQuantity(workspace, id)!;
     nodes.push({ id, file: `usage-${nodes.length + 1}.kicad_sch`, label: `Usage ${nodes.length + 1}`, roles, product, quantity,
       x: SLOT_X[slot % 3], y: SLOT_Y[Math.floor(slot / 3)], ports: [] });
   }
@@ -298,7 +305,7 @@ export function buildKiCadExport(workspace: Workspace, catalog: Catalog): KiCadE
       placement: 'Deterministic role grid. Integrated usages share one sheet.', routing: 'Orthogonal grid search avoiding sheet bodies and existing logical wires. No PCB routing.',
       coordinateUnits: 'mm', associations: associations.map(edge => ({ ...edge, points: edge.points?.map(p => ({ x: mm(p.x), y: mm(p.y) })) })), unresolvedLogicalAssociations: unrouted.map(item => item.id) },
     usages: nodes.filter(n => n.product).map(n => ({ usageId: n.label, productId: n.id, catalogEntryRevision: n.product!.revision, allocatedRoles: n.roles,
-      quantity: n.quantity, installedConfiguration: null, sourceSheet: n.file, product: n.product })),
+      quantity: n.quantity, allocationReceipt: workspace.allocations?.find(receipt => receipt.productId === n.id), installedConfiguration: null, sourceSheet: n.file, product: n.product })),
     unallocatedRoles: ROLES.filter(role => !workspace.selections[role]),
     scenario: { id: scenario.id, revision: scenario.revision, provenance: scenario.provenance, loads: scenario.loads, loadChannelAssignments: null },
     physicalRouting: { status: 'blocked', boardGenerated: false, prerequisites: PHYSICAL_GATES.map(description => ({ description, status: 'missing-in-typed-architecture' })),

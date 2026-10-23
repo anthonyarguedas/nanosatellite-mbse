@@ -16,17 +16,17 @@ import { nodeStatuses } from '../workflow';
   it('retains the evaluated reserve instead of relabeling an old energy curve with an edited criterion', () => {
     const original = evaluateReady(createExampleWorkspace());
     const oldSimulation = original.analysis.simulation!;
-    expect(oldSimulation.reserveWh).toBeCloseTo(1.6);
+    expect(oldSimulation.reserveWh).toBeCloseTo(17.2);
     const changed = changeInputs(original, inputs => {
       inputs.scenarios[0].minimumEnergyFraction = 0.5;
       inputs.scenarios[0].revision += 1;
       return inputs;
     });
     expect(nodeStatuses(changed).simulation).toBe('stale');
-    expect(changed.analysis.simulation!.reserveWh).toBeCloseTo(1.6);
+    expect(changed.analysis.simulation!.reserveWh).toBeCloseTo(17.2);
     expect(changed.analysis.simulation!.scenarioRevision).toBe(1);
     const next = evaluateReady(changed);
-    expect(next.analysis.simulation!.reserveWh).toBeCloseTo(3.2);
+    expect(next.analysis.simulation!.reserveWh).toBeCloseTo(34.4);
     expect(next.analysis.simulation!.scenarioRevision).toBe(2);
     expect(next.analysis.simulation!.durationS).toBe(next.analysis.orbit!.periodS);
   });

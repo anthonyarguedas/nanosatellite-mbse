@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import type { Analysis, Catalog, Check } from '../../types';
+import type { AllocationReceipt, Analysis, Catalog, Check, Product, Role } from '../../types';
 import { assessDesign, calculateBudget, simulateOrbit, sizeBattery, sizeSolar, suggestProducts } from '../index';
 import { inputs, orbit, product, scenario, spec } from './fixtures';
 
 const catalog = (...products: Catalog['products']): Catalog => ({ revision: 'test', products });
 const check = (checks: Check[], id: string) => checks.find(item => item.id === id)!;
+const receipt = (p: Product, roles: Role[] = p.roles, quantity = 1): AllocationReceipt[] => [{ productId: p.id, productRevision: p.revision, catalogRevision: 'test', roles, quantity, origin: 'engineer-allocation', rationale: 'Synthetic explicit test allocation.', allocatedAt: '2026-10-17T00:00:00Z' }];
 function sizedAnalysis(): Analysis {
   const i = inputs();
   const budget = calculateBudget(i.scenarios[0], orbit);
@@ -179,31 +180,52 @@ describe('requirements and physical accounting', () => {
   });
   it('deduplicates one integrated board allocated to four roles and leaves auxiliaries unknown', () => {
     const p = product({ id: 'board', level: 'board', roles: ['battery', 'conditioning', 'distribution', 'processor'], specs: { massKg: spec(0.2, 'kg') } });
-    const result = assessDesign(inputs(), {}, catalog(p), { battery: p.id, conditioning: p.id, distribution: p.id, processor: p.id });
+    const result = assessDesign(inputs(), {}, catalog(p), { battery: p.id, conditioning: p.id, distribution: p.id, processor: p.id }, receipt(p));
     expect(check(result, 'KNOWN-MASS').detail).toMatch(/subtotal 0.20000000 kg/);
     expect(check(result, 'KNOWN-MASS').verdict).toBe('pass');
     expect(check(result, 'EPS-19').verdict).toBe('unassessed');
     expect(check(result, 'EPS-19').detail).toMatch(/Auxiliaries/);
   });
-  it('counts suggested whole-panel quantity without scaling product properties', () => {
+  it('counts frozen whole-panel quantity without scaling product properties or following new suggestions', () => {
+    const p = product();
+    const a = sizedAnalysis();
+    a.suggestions = suggestProducts(catalog(p), inputs(), a);
+    a.suggestions[0].quantity = 8;
+    const result = assessDesign(inputs(), a, catalog(p), { solar: p.id }, receipt(p, ['solar'], 2));
+    expect(check(result, 'KNOWN-MASS').detail).toMatch(/subtotal 0.40000000 kg/);
+    expect(p.specs.massKg.value).toBe(0.2);
+  });
+  it('screens the frozen allocated panel count, not the larger passing alternative', () => {
+    const p = product();
+    const a = sizedAnalysis();
+    a.suggestions = suggestProducts(catalog(p), inputs(), a);
+    expect(a.suggestions[0].quantity).toBe(2);
+    expect(a.suggestions[0].outcome).toBe('preliminary-match');
+    const result = assessDesign(inputs(), a, catalog(p), { solar: p.id }, receipt(p, ['solar'], 1));
+    expect(check(result, 'EPS-02').verdict).toBe('fail');
+    expect(check(result, 'EPS-02').detail).toMatch(/1 whole product/);
+    expect(a.suggestions[0].quantity).toBe(2);
+  });
+  it('does not invent legacy quantities from selections or current alternatives', () => {
     const p = product();
     const a = sizedAnalysis();
     a.suggestions = suggestProducts(catalog(p), inputs(), a);
     const result = assessDesign(inputs(), a, catalog(p), { solar: p.id });
-    expect(check(result, 'KNOWN-MASS').detail).toMatch(/subtotal 0.40000000 kg/);
-    expect(p.specs.massKg.value).toBe(0.2);
+    expect(check(result, 'KNOWN-MASS').verdict).toBe('unassessed');
+    expect(check(result, 'KNOWN-MASS').detail).toMatch(/unknown quantity/);
+    expect(check(result, 'KNOWN-MASS').detail).toMatch(/frozen allocation quantity missing/);
   });
   it('fails a known minimum/actual mass excess, but not a typical unknown bound', () => {
     const p = product({ specs: { massKg: spec(2, 'kg') } });
-    expect(check(assessDesign(inputs(), {}, catalog(p), { solar: p.id }), 'EPS-19').verdict).toBe('fail');
+    expect(check(assessDesign(inputs(), {}, catalog(p), { solar: p.id }, receipt(p)), 'EPS-19').verdict).toBe('fail');
     p.specs.massKg.meaning = 'typical';
-    const result = assessDesign(inputs(), {}, catalog(p), { solar: p.id });
+    const result = assessDesign(inputs(), {}, catalog(p), { solar: p.id }, receipt(p));
     expect(check(result, 'EPS-19').verdict).toBe('unassessed');
     expect(check(result, 'KNOWN-MASS').verdict).toBe('unassessed');
   });
   it('keeps missing mass explicit and fails an unsupported role allocation', () => {
     const p = product({ specs: { massKg: spec(null, 'kg') } });
-    const result = assessDesign(inputs(), {}, catalog(p), { solar: p.id, battery: p.id });
+    const result = assessDesign(inputs(), {}, catalog(p), { solar: p.id, battery: p.id }, receipt(p, ['solar', 'battery']));
     expect(check(result, 'KNOWN-MASS').verdict).toBe('unassessed');
     expect(check(result, 'KNOWN-MASS').detail).toMatch(/massKg/);
     expect(check(result, 'EPS-01').verdict).toBe('fail');

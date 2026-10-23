@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import missionData from '../data/missions.json';
 import { catalog } from '../data/catalog';
 import { changeInputs, createExampleWorkspace, evaluateReady } from '../state/model';
-import { parseWorkspace, serializeWorkspace } from '../state/serialization';
+import { parseWorkspace, restoreWorkspace, serializeWorkspace } from '../state/serialization';
 import { nodeStatuses } from '../workflow';
 import { acceptAltitude } from './retrieval';
 import { applyMissionAnalogue, missionReceipt } from './integration';
@@ -46,6 +46,28 @@ function accepted() {
     const reworded = changeInputs(original, inputs => { inputs.mission.conOps = 'A different mission concept.'; return inputs; });
     expect(reworded.inputs.mission.orbitSuggestion).toBeUndefined();
     expect(original.inputs.mission.orbitSuggestion).toBeDefined();
+  });
+  it('detaches cleared mission-source references while keeping the authored design restorable', () => {
+    const acceptedWorkspace = changeInputs(createExampleWorkspace(), inputs => applyMissionAnalogue(inputs, accepted(), query));
+    const missionSourceIds = acceptedWorkspace.inputs.mission.orbitSuggestion!.parameterSourceIds;
+    const altitude = acceptedWorkspace.provenance!.find(record => record.parameter === 'mission.altitudeKm')!;
+    altitude.sourceIds = [...missionSourceIds];
+    const baseline = acceptedWorkspace.provenance!.find(record => record.parameter === 'topology.idlePowerW')!;
+    const catalogSourceIds = [...baseline.sourceIds];
+    baseline.sourceIds.push(...missionSourceIds);
+    const imported = restoreWorkspace(JSON.parse(serializeWorkspace(acceptedWorkspace, catalog.revision)));
+    const reworded = changeInputs(imported, inputs => { inputs.mission.conOps = 'A revised mission concept.'; return inputs; });
+    expect(reworded.inputs.mission.orbitSuggestion).toBeUndefined();
+    expect(reworded.inputs.mission.altitudeKm).toBe(515);
+    const retainedAltitude = reworded.provenance!.find(record => record.parameter === 'mission.altitudeKm')!;
+    expect(retainedAltitude.kind).toBe('engineering-assumption');
+    expect(retainedAltitude.sourceIds).toEqual([]);
+    expect(retainedAltitude.conditions).toContain('Source references detached');
+    expect(reworded.provenance!.find(record => record.parameter === 'topology.idlePowerW')!.sourceIds).toEqual(catalogSourceIds);
+    const restored = restoreWorkspace(JSON.parse(serializeWorkspace(reworded, catalog.revision)));
+    expect(restored.inputs).toEqual(reworded.inputs);
+    expect(restored.provenance).toEqual(reworded.provenance);
+    expect(restored.allocations).toEqual(reworded.allocations);
   });
   it('rejects mismatched source values and corrupted imported acceptance receipts', () => {
     expect(() => missionReceipt({ ...accepted(), altitudeKm: 999 }, query)).toThrow(/sourced scalar/);

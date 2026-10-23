@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -17,6 +17,7 @@ import type {
   NodeDefinition,
   NodeId,
   Product,
+  Role,
   TabId,
 } from "../types";
 import { NODE_DEFINITIONS } from "../workflow";
@@ -33,13 +34,15 @@ import {
   number,
   ROLE_NAMES,
   ScenarioSwitcher,
-  SelectField,
   Sheet,
   StatusBadge,
   unit,
 } from "./ui";
 import type { WorkspaceController } from "./ui";
 import { applyMissionAnalogue } from "../mission-assist/integration";
+import { TopologyChoices } from "./TopologyChoices";
+import { InputBasis } from "./InputBasis";
+import type { VariationId } from './design-canvas-model';
 
 const MissionAssist = lazy(() => import("../mission-assist"));
 
@@ -58,7 +61,7 @@ export function canEvaluate(api: WorkspaceController, id: NodeId) {
 function downstream(id: NodeId): NodeDefinition[] {
   const affected = new Set<NodeId>([id]);
   NODE_DEFINITIONS.forEach((node) => {
-    if (node.dependencies.some((dependency) => affected.has(dependency)))
+    if ([...node.dependencies, ...node.evidenceDependencies ?? []].some((dependency) => affected.has(dependency)))
       affected.add(node.id);
   });
   return NODE_DEFINITIONS.filter(
@@ -81,7 +84,7 @@ function CandidateChoices({
         <CircleHelp size={28} />
         <h3>Ready to find hardware?</h3>
         <p>
-          Run this node to compare the current sizing and topology against
+          Calculate this activity to compare the current sizing and topology against
           sourced catalog records. Missing evidence stays visible.
         </p>
       </div>
@@ -127,7 +130,7 @@ function CandidateChoices({
                         : s.outcome === "rejected"
                           ? "rejected"
                           : "preliminary match"}
-                      {s.quantity > 1 ? ` · ×${s.quantity}` : ""}
+                      {s.quantity > 1 ? ` · screening count ${s.quantity}` : ""}
                     </option>
                   ))}
                 </select>
@@ -137,6 +140,7 @@ function CandidateChoices({
         })}
       </div>
       <p className="section-caption">
+        Screening counts are sizing estimates, not installed quantities.
         Applying a suggestion uses sourced fields where available and can mark
         dependent analyses stale. A preliminary allocation is not qualification.
       </p>
@@ -152,7 +156,7 @@ function CandidateChoices({
             >
               <div className="candidate-item-top">
                 <span>
-                  {ROLE_NAMES[suggestion.role]} · ×{suggestion.quantity}
+                  {ROLE_NAMES[suggestion.role]} · screening count {suggestion.quantity}
                 </span>
                 <SuggestionBadge suggestion={suggestion} />
               </div>
@@ -168,6 +172,7 @@ function CandidateChoices({
               {product && (
                 <button
                   className="text-button"
+                  data-focus-key={`product-${product.id}-${suggestion.role}`}
                   onClick={() => onInspect(product)}
                 >
                   Inspect specifications
@@ -181,7 +186,7 @@ function CandidateChoices({
     </>
   );
 }
-const SCOPES: Record<NodeId, string> = {
+export const SCOPES: Record<NodeId, string> = {
   mission:
     "Engineer-authored mission assumptions. Altitude and lifetime are inputs, not inferred mission requirements.",
   orbit:
@@ -189,7 +194,7 @@ const SCOPES: Record<NodeId, string> = {
   scenarios:
     "Mission activities may be sourced. All numerical powers, rail assignments, phase windows, illumination, and energy criteria are explicit study assumptions. Windows are fractions of one orbit. Active power replaces idle power. Overlapping windows for a load are unioned.",
   budget:
-    "Scheduled constant-power loads integrated over sunlight and eclipse. Average energy does not establish rail, pulse, current, or protection compliance.",
+    "Scheduled constant-power loads and the additional EPS baseline are integrated over sunlight and eclipse. Average energy does not establish rail, pulse, current, or protection compliance.",
   solar:
     "Preliminary source-boundary EOL generation screen. Cell count is rounded up. It establishes no series/parallel arrangement, pointing, packing, or input-voltage compatibility. Xs and Xe belong to sizing only.",
   battery:
@@ -205,6 +210,9 @@ const SCOPES: Record<NodeId, string> = {
 };
 export function NodeInspector({
   id,
+  role,
+  variation,
+  onCatalog,
   api,
   catalog,
   onClose,
@@ -213,6 +221,9 @@ export function NodeInspector({
   onNode,
 }: {
   id: NodeId;
+  role?: Role;
+  variation?: VariationId;
+  onCatalog?: (role?: Role) => void;
   api: WorkspaceController;
   catalog: Catalog;
   onClose: () => void;
@@ -220,7 +231,16 @@ export function NodeInspector({
   onInspect: (product: Product) => void;
   onNode: (id: NodeId) => void;
 }) {
-  const [view, setView] = useState<"work" | "parameters">("work");
+  useEffect(() => {
+    if (!variation) return;
+    const frame = requestAnimationFrame(() => {
+      const target = document.querySelector<HTMLElement>(`[data-topology-axis="${variation}"]`);
+      target?.focus({ preventScroll: true });
+      target?.scrollIntoView({ block: 'center' });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [variation]);
+  const allocatedProduct = role ? catalog.products.find(product => product.id === api.workspace.selections[role]) : undefined;
   const definition = NODE_DEFINITIONS.find((node) => node.id === id)!;
   const { inputs, analysis } = api.workspace;
   const savedSimulationScenario = inputs.scenarios.find(
@@ -233,6 +253,7 @@ export function NodeInspector({
   const missing = api.missing[id] ?? [];
   const canRun = canEvaluate(api, id);
   const affected = downstream(id);
+  const blockedDependency = definition.dependencies.find(dependency => api.statuses[dependency] !== 'complete');
   const editMission = (
     key: "name" | "altitudeKm" | "lifetimeYears",
     value: string | number | null,
@@ -262,8 +283,8 @@ export function NodeInspector({
   const evaluatedAt = api.workspace.records[id]?.evaluatedAt;
   return (
     <Sheet
-      title={definition.title}
-      eyebrow={`NODE ${String(NODE_DEFINITIONS.findIndex((node) => node.id === id) + 1).padStart(2, "0")} / ${definition.stage}`}
+      title={role ? ROLE_NAMES[role] : definition.title}
+      eyebrow={role ? 'CSRM LOGICAL ROLE · LIVE EPS' : 'ENGINEERING ACTIVITY · PRELIMINARY MODEL'}
       onClose={onClose}
       footer={
         <>
@@ -277,7 +298,7 @@ export function NodeInspector({
               </small>
             </div>
             <button
-              className="button primary"
+              className="button secondary"
               disabled={!canRun}
               onClick={() => api.runNode(id)}
             >
@@ -286,47 +307,13 @@ export function NodeInspector({
                 ? "Recompute"
                 : status === "complete"
                   ? "Run again"
-                  : "Run node"}
+                  : "Calculate activity"}
             </button>
           </div>
         </>
       }
     >
-      <p className="inspector-subtitle">{definition.subtitle}</p>
-      <div className="requirement-chips">
-        {definition.requirements.map((requirement) => (
-          <span key={requirement}>{requirement}</span>
-        ))}
-        {evaluatedAt && (
-          <span className="evaluated-time">
-            <Clock3 size={11} />
-            Last run{" "}
-            {new Date(evaluatedAt).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </span>
-        )}
-      </div>
-      <div
-        className="inspector-mode-tabs"
-        role="group"
-        aria-label="Inspector detail view"
-      >
-        <button
-          className={view === "work" ? "active" : ""}
-          onClick={() => setView("work")}
-        >
-          Inputs & results
-        </button>
-        <button
-          className={view === "parameters" ? "active" : ""}
-          onClick={() => setView("parameters")}
-        >
-          <BookOpen size={13} />
-          Parameters & equations
-        </button>
-      </div>
+      <p className="inspector-subtitle">{role ? 'Logical role allocation, associated model inputs and available evidence.' : definition.subtitle}</p>
       {status === "complete" && (
         <p className="freshness-disclaimer">
           Calculation current. Requirement verification is assessed separately.
@@ -354,31 +341,21 @@ export function NodeInspector({
         </Notice>
       )}
       {missing.length > 0 && (
-        <Notice kind="warning" title="Inputs needed to unlock this node">
+        <Notice kind="warning" title="Inputs needed for this activity">
           <ul className="plain-list">
             {missing.map((reason, index) => (
               <li key={index}>{reason}</li>
             ))}
           </ul>
+          {blockedDependency && <button className="text-button" data-focus-key={`node-${blockedDependency}`} onClick={() => onNode(blockedDependency)}>Inspect {NODE_DEFINITIONS.find(node => node.id === blockedDependency)?.title}<ArrowRight size={13} /></button>}
         </Notice>
       )}
-      {definition.dependencies.length > 0 && (
-        <div className="dependency-chips">
-          <span>Depends on</span>
-          {definition.dependencies.map((dep) => (
-            <button
-              key={dep}
-              className={api.statuses[dep]}
-              onClick={() => onNode(dep)}
-            >
-              <i />
-              {NODE_DEFINITIONS.find((node) => node.id === dep)?.title}
-              <ArrowUpRight size={10} />
-            </button>
-          ))}
-        </div>
-      )}
-      <div className="node-work-view" hidden={view !== "work"}>
+      <div className="node-work-view">
+        {role && <section className="inspector-section role-allocation-context"><h3>Current role allocation</h3>
+          {allocatedProduct ? <><button className="role-evidence-button" data-focus-key={`product-${allocatedProduct.id}`} onClick={() => onInspect(allocatedProduct)}><strong>{allocatedProduct.name}</strong><span>Inspect sourced evidence <ArrowUpRight size={13} /></span></button><p className="section-caption">A shared board remains one physical usage across its allocated roles. Role coverage does not prove electrical capacity or compatibility.</p></> : <Notice title="No product allocated">This is a logical reference role. A physical implementation has not been selected.</Notice>}
+          <button className="button secondary full-width" data-focus-key="role-catalog" onClick={() => onCatalog ? onCatalog(role) : onNavigate('catalog')}>Compare products for this role<ArrowRight size={13} /></button>
+          {(role === 'processor' || role === 'software') && <Notice kind="warning" title="Resources and services unassessed">Allocation does not establish memory capacity, task timing, host compatibility, protection autonomy or implemented software behavior.</Notice>}
+        </section>}
         {id === "mission" && (
           <>
             <details className="mission-helper-entry">
@@ -524,6 +501,7 @@ export function NodeInspector({
         {id === "budget" && (
           <>
             <ScenarioSwitcher api={api} compact />
+            <NumberField label="Additional EPS baseline" value={inputs.topology.idlePowerW} suffix="W" min={0} onChange={value => editTopology({ idlePowerW: value })} hint="Added once to scheduled spacecraft loads in both sizing and simulation. Review operating-state applicability and excluded heater demand." />
             {analysis.budget ? (
               <>
                 <div className="metric-grid two">
@@ -586,7 +564,7 @@ export function NodeInspector({
                 </div>
                 <div>
                   <small>Rounded cell count</small>
-                  <strong>{analysis.solar.cellCount}</strong>
+                  <strong>{analysis.solar.cellCount ?? "Unresolved"}</strong>
                 </div>
               </div>
             )}
@@ -702,6 +680,7 @@ export function NodeInspector({
             </section>
             <section className="inspector-section">
               <h3>Installed storage & energy model</h3>
+              {inputs.battery.capacityWh === null && <Notice kind="warning" title="Pack usable energy is unresolved">Preliminary sizing and catalog screening can continue. Simulation needs characterized capacity or an explicit study assumption below. You can also compare another pack. No previous product rating is reused.</Notice>}
               <div className="form-grid">
                 <NumberField
                   label="BOL pack energy"
@@ -709,6 +688,7 @@ export function NodeInspector({
                   suffix="Wh"
                   min={0.001}
                   onChange={(value) => editBattery("capacityWh", value)}
+                  hint="A manual value is recorded as an engineering assumption. The selected product's missing catalog evidence remains unresolved."
                 />
                 <NumberField
                   label="Retained energy factor, fE"
@@ -718,6 +698,9 @@ export function NodeInspector({
                   max={1}
                   onChange={(value) => editBattery("retainedEnergy", value)}
                 />
+              </div>
+              <details className="disclosure battery-energy-assumptions"><summary>Charge / discharge assumptions & power limits</summary>
+              <div className="form-grid">
                 <NumberField
                   label="Charge energy efficiency"
                   value={inputs.battery.chargeEfficiency}
@@ -751,6 +734,7 @@ export function NodeInspector({
                   onChange={(value) => editBattery("maxDischargeW", value)}
                 />
               </div>
+              </details>
               <p className="section-caption">
                 EOL capacity = BOL pack energy × retained energy. The
                 preliminary margin is not applied again.
@@ -762,42 +746,7 @@ export function NodeInspector({
           <>
             <section className="inspector-section">
               <h3>Power architecture choices</h3>
-              <SelectField
-                label="Conditioning strategy"
-                value={inputs.topology.conditioning}
-                onChange={(value) =>
-                  editTopology({ conditioning: value as "MPPT" | "DET" })
-                }
-              >
-                <option value="MPPT">
-                  MPPT · maximum power point tracking
-                </option>
-                <option value="DET">DET · direct energy transfer</option>
-              </SelectField>
-              <div className="form-grid">
-                <SelectField
-                  label="Power transfer"
-                  value={inputs.topology.distribution}
-                  onChange={(value) =>
-                    editTopology({
-                      distribution: value as "centralized" | "distributed",
-                    })
-                  }
-                >
-                  <option value="centralized">Centralized</option>
-                  <option value="distributed">Distributed</option>
-                </SelectField>
-                <SelectField
-                  label="Bus regulation"
-                  value={inputs.topology.bus}
-                  onChange={(value) =>
-                    editTopology({ bus: value as "regulated" | "unregulated" })
-                  }
-                >
-                  <option value="regulated">Regulated</option>
-                  <option value="unregulated">Unregulated</option>
-                </SelectField>
-              </div>
+              <TopologyChoices topology={inputs.topology} onChange={editTopology} />
             </section>
             <section className="inspector-section">
               <div className="section-heading">
@@ -841,11 +790,11 @@ export function NodeInspector({
         )}
         {id === "candidates" && (
           <>
-            <CandidateChoices
+            {!role && <CandidateChoices
               api={api}
               catalog={catalog}
               onInspect={onInspect}
-            />
+            />}
             <button
               className="button secondary full-width"
               onClick={() => onNavigate("catalog")}
@@ -963,19 +912,12 @@ export function NodeInspector({
             </button>
           </>
         )}
-        <button
-          className="text-button parameter-trace-link"
-          onClick={() => setView("parameters")}
-        >
-          <BookOpen size={14} />
-          Inspect parameter dependencies and model scope
-          <ArrowRight size={13} />
-        </button>
       </div>
-      <section
-        className="inspector-section calculation-section"
-        hidden={view !== "parameters"}
-      >
+      <InputBasis workspace={api.workspace} catalog={catalog} node={id} />
+      <details className="inspector-section calculation-section disclosure" data-testid="calculation-details">
+        <summary>Equations, dependencies & model scope</summary>
+        <div className="requirement-chips">{definition.requirements.map(requirement => <span key={requirement}>{requirement}</span>)}{evaluatedAt && <span className="evaluated-time"><Clock3 size={11} />Last run {new Date(evaluatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>}</div>
+        {definition.dependencies.length > 0 && <div className="dependency-chips"><span>Depends on</span>{definition.dependencies.map(dep => <button key={dep} className={api.statuses[dep]} data-focus-key={`node-${dep}`} onClick={() => onNode(dep)}><i />{NODE_DEFINITIONS.find(node => node.id === dep)?.title}<ArrowUpRight size={10} /></button>)}</div>}
         {definition.dependencies.length > 0 && (
           <section className="received-exchanges">
             <h3>Engineering information received</h3>
@@ -1039,7 +981,7 @@ export function NodeInspector({
             </>
           )}
         </details>
-      </section>
+      </details>
     </Sheet>
   );
 }

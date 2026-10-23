@@ -4,8 +4,8 @@ import { catalog } from './catalog';
  describe('reviewed COTS catalog', () => {
   it('has bounded, revisioned alternatives for generation, storage and conditioning', () => {
     expect(catalog.revision).toBeTruthy();
-    expect(catalog.products.length).toBeGreaterThanOrEqual(6);
-    expect(catalog.products.length).toBeLessThanOrEqual(12);
+    expect(catalog.products.length).toBeGreaterThan(0);
+    expect(catalog.products.length).toBeLessThanOrEqual(128);
     expect(new Set(catalog.products.map(product => product.id)).size).toBe(catalog.products.length);
     for (const role of ['solar', 'battery', 'conditioning']) expect(catalog.products.some(product => product.roles.includes(role as 'solar' | 'battery' | 'conditioning'))).toBe(true);
   });

@@ -29,7 +29,7 @@ function newId(prefix: string): string {
 }
 
 /** Local drafts allow clearing/retyping. Only finite, bounded values reach the parent. */
-function NumberField({ label, accessibleLabel, value, min = 0, max, step = 0.1, unit, integer, onCommit }: {
+export function ScenarioNumberField({ label, accessibleLabel, value, min = 0, max, step = 0.1, unit, integer, onCommit }: {
   label: string; accessibleLabel?: string; value: number; min?: number; max?: number;
   step?: number; unit?: string; integer?: boolean; onCommit: (value: number) => void;
 }): JSX.Element {
@@ -63,7 +63,7 @@ function NumberField({ label, accessibleLabel, value, min = 0, max, step = 0.1, 
           onChange={(event) => { dirty.current = true; setDraft(event.target.value); setMessage(''); }} onBlur={commit}
           onKeyDown={(event) => {
             if (event.key === 'Enter') { event.preventDefault(); commit(); }
-            if (event.key === 'Escape') {
+            if (event.key === 'Escape' && dirty.current) {
               event.preventDefault(); dirty.current = false; setDraft(numberText(value)); setMessage('');
             }
           }} />
@@ -73,6 +73,8 @@ function NumberField({ label, accessibleLabel, value, min = 0, max, step = 0.1, 
     </label>
   );
 }
+
+const NumberField = ScenarioNumberField;
 
 function PhaseBands({ sunlightFraction }: { sunlightFraction?: number }): JSX.Element {
   return <div className="scenario-phase-bands" aria-hidden="true">
@@ -101,7 +103,7 @@ function TimelineAxis({ periodS, sunlightFraction }: { periodS?: number; sunligh
   </div>;
 }
 
-function PowerPreview({ loads, sunlightFraction }: { loads: Load[]; sunlightFraction?: number }): JSX.Element {
+export function PowerPreview({ loads, sunlightFraction, expanded = false }: { loads: Load[]; sunlightFraction?: number; expanded?: boolean }): JSX.Element {
   const { segments, averageW, peakW } = powerPreview(loads);
   const ceiling = Math.max(1, peakW * 1.15);
   const x = (phase: number) => 40 + phase * 920;
@@ -109,7 +111,7 @@ function PowerPreview({ loads, sunlightFraction }: { loads: Load[]; sunlightFrac
   const line = segments.map((segment, index) => `${index === 0 ? 'M' : 'L'} ${x(segment.start)} ${y(segment.powerW)} L ${x(segment.end)} ${y(segment.powerW)}`).join(' ');
   const fill = `M 40 98 ${line.replace(/^M/, 'L')} L 960 98 Z`;
   const titleId = useId();
-  return <details className="scenario-preview" aria-label="Instantaneous load power preview">
+  return <details open={expanded || undefined} className="scenario-preview" aria-label="Instantaneous load power preview">
     <summary className="scenario-preview-summary">
       <span><Activity size={14} /> Aggregate power preview</span>
       <span className="scenario-preview-toggle">Load boundary <ChevronDown className="scenario-details-chevron" size={14} /></span>
@@ -244,8 +246,9 @@ function LoadEditor({ load, periodS, sunlightFraction, helpId, drag, onLoad, onW
   </article>;
 }
 
-export function ScenarioEditor({ scenario, orbit, onChange }: {
+export function ScenarioEditor({ scenario, orbit, onChange, section = 'all', loadId, windowId }: {
   scenario: Scenario; orbit?: OrbitResult; onChange: (scenario: Scenario) => void;
+  section?: 'all' | 'load' | 'power' | 'window' | 'preview'; loadId?: string; windowId?: string;
 }): JSX.Element {
   const scenarioRef = useRef(scenario);
   const onChangeRef = useRef(onChange);
@@ -327,13 +330,14 @@ export function ScenarioEditor({ scenario, orbit, onChange }: {
     window.addEventListener('pointerup', finish);
     window.addEventListener('pointercancel', finish);
     window.addEventListener('blur', release);
-    window.addEventListener('keydown', escape);
+    // A drag owns the first Escape before the containing contextual sheet.
+    window.addEventListener('keydown', escape, true);
     return () => {
       window.removeEventListener('pointermove', apply);
       window.removeEventListener('pointerup', finish);
       window.removeEventListener('pointercancel', finish);
       window.removeEventListener('blur', release);
-      window.removeEventListener('keydown', escape);
+      window.removeEventListener('keydown', escape, true);
       const active = dragRef.current;
       dragRef.current = null;
       if (active?.target.hasPointerCapture?.(active.pointerId)) active.target.releasePointerCapture(active.pointerId);
@@ -373,6 +377,38 @@ export function ScenarioEditor({ scenario, orbit, onChange }: {
     setAnnouncement(`${load.name} window: ${phasePercent(next.start)} to ${phasePercent(next.end)} of orbit.`);
   };
 
+  if (section !== 'all') {
+    const load = scenario.loads.find(l => l.id === loadId);
+    const win = load?.windows.find(w => w.id === windowId);
+    if (section === 'preview') return <PowerPreview loads={scenario.loads} sunlightFraction={sunlightFraction} expanded />;
+    if (!load) return <p>Select a load in the graph.</p>;
+    if (section === 'load') return <div className="focused-load">
+      <label className="field">Load name<input type="text" aria-label="Load name" value={load.name} onChange={e=>changeLoad(load.id,l=>({...l,name:e.target.value}))}/></label>
+      <label className="field">Subsystem<input type="text" aria-label="Load subsystem" value={load.subsystem} onChange={e=>changeLoad(load.id,l=>({...l,subsystem:e.target.value}))}/></label>
+      <label className="field">Timeline color<input type="color" aria-label="Load color" value={load.color} onChange={e=>changeLoad(load.id,l=>({...l,color:e.target.value}))}/></label>
+      <label className="checkbox-label"><input type="checkbox" checked={load.essential} onChange={e=>changeLoad(load.id,l=>({...l,essential:e.target.checked}))}/>Essential service label</label>
+      <p className="body-copy">Service metadata only. Automatic shedding and rail behavior remain unassessed.</p>
+      <button className="button secondary" data-action="remove-load" onClick={()=>change(s=>({...s,loads:s.loads.filter(l=>l.id!==load.id)}))}><Trash2 size={14}/>Remove load</button>
+    </div>;
+    if (section === 'power') return <div className="focused-load"><div className="form-grid">
+      <NumberField label="Active power" unit="W" value={load.activePowerW} onCommit={v=>changeLoad(load.id,l=>({...l,activePowerW:v}))}/>
+      <NumberField label="Idle power" unit="W" value={load.idlePowerW} onCommit={v=>changeLoad(load.id,l=>({...l,idlePowerW:v}))}/>
+      <NumberField label="Rail voltage" unit="V" min={.001} value={load.railV} onCommit={v=>changeLoad(load.id,l=>({...l,railV:v}))}/>
+      </div><p>Duty {phasePercent(dutyFraction(load.windows))}. Active power replaces idle power. Overlapping windows count once.</p></div>;
+    if (!win) return <p>Select a window in the graph.</p>;
+    const laneStyle = {left:`${win.start*100}%`,width:`${(win.end-win.start)*100}%`,top:'7px'};
+    return <div className="focused-window scenario-editor">
+      <p className="scenario-sr-only" id={helpId}>{timelineHelp}</p><TimelineAxis periodS={periodS} sunlightFraction={sunlightFraction}/>
+      <div className="scenario-lane" data-scenario-track="true" style={{height:58}}><PhaseBands sunlightFraction={sunlightFraction}/><div className={`scenario-window ${win.end-win.start<=.065?'scenario-window-short':''} ${drag?'scenario-window-dragging':''}`} style={laneStyle}>
+        <button className="scenario-window-move" role="slider" aria-label="Move selected window" aria-valuemin={0} aria-valuemax={(1-win.end+win.start)*100} aria-valuenow={win.start*100} aria-valuetext={`${phasePercent(win.start)} to ${phasePercent(win.end)}`} aria-describedby={helpId} onPointerDown={e=>beginDrag(e,load,win,'move')} onKeyDown={e=>windowKey(e,load,win,'move')}><GripVertical size={14}/></button>
+        {(['start','end'] as const).map(edge=><button key={edge} className={`scenario-window-handle scenario-window-handle-${edge}`} role="slider" aria-label={`${edge} of selected window`} aria-valuemin={edge==='start'?0:(win.start+MIN_WINDOW_FRACTION)*100} aria-valuemax={edge==='start'?(win.end-MIN_WINDOW_FRACTION)*100:100} aria-valuenow={win[edge]*100} onPointerDown={e=>beginDrag(e,load,win,edge)} onKeyDown={e=>windowKey(e,load,win,edge)}><span/></button>)}
+      </div></div><div className="form-grid">
+      <NumberField label="Start" accessibleLabel="Window start (%)" unit="%" value={win.start*100} max={(win.end-MIN_WINDOW_FRACTION)*100} onCommit={v=>changeWindow(load.id,win.id,w=>resizeWindow(w,'start',v/100))}/>
+      <NumberField label="End" accessibleLabel="Window end (%)" unit="%" value={win.end*100} min={(win.start+MIN_WINDOW_FRACTION)*100} max={100} onCommit={v=>changeWindow(load.id,win.id,w=>resizeWindow(w,'end',v/100))}/></div>
+      <p>{phasePercent(win.end-win.start)} of one orbit{periodS?` · ${phaseTime(win.start,periodS)} to ${phaseTime(win.end,periodS)}`:''}. Arrow keys move or resize. Shift uses 0.1%. Escape cancels a drag.</p>
+      <button className="button secondary" data-action="remove-window" onClick={()=>changeLoad(load.id,l=>({...l,windows:l.windows.filter(w=>w.id!==win.id)}))}><Trash2 size={14}/>Remove window</button><div role="status" className="sr-only">{announcement}</div>
+    </div>;
+  }
   return <section className={`scenario-editor ${drag ? 'scenario-is-dragging' : ''}`} aria-label="Scenario duty cycle editor">
     <header className="scenario-editor-header">
       <div className="scenario-heading-content">

@@ -6,17 +6,17 @@ import type { KiCadExport, ReviewedPhysicalRules } from '../kicad';
 import { Notice, Sheet } from './ui';
 import './kicad-panel.css';
 
-function saveBlob(blob: Blob, name: string) {
+export function saveBlob(blob: Blob, name: string) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url; link.download = name; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-function saveProject(result: KiCadExport, name: string) {
+export function saveProject(result: KiCadExport, name: string) {
   const bytes = createKiCadZip(result.files);
   saveBlob(new Blob([bytes], { type: 'application/zip' }), name);
 }
-function ruleTemplate(workspace: Workspace, catalog: Catalog) {
+export function ruleTemplate(workspace: Workspace, catalog: Catalog) {
   const dimension = (ids: string[]) => ({ minimumMm: null, requirementIds: ids, sourceIds: ['reviewed-source'], rationale: '', derivation: { method: '', conditions: '', margin: '' } });
   return {
     scope: 'INPUT TEMPLATE ONLY. No physical values or approval are supplied. Fill from reviewed engineering evidence. This is not a flight design or a PCB.',
@@ -28,7 +28,7 @@ function ruleTemplate(workspace: Workspace, catalog: Catalog) {
     edgeClearance: dimension(['EPS-20']),
   };
 }
-function checkedRules(value: unknown, catalog: Catalog): ReviewedPhysicalRules {
+export function checkedRules(value: unknown, catalog: Catalog): ReviewedPhysicalRules {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('The rule profile must be a JSON object. Start from the rule input template.');
   const input = value as Record<string, unknown>;
   if (input.schemaVersion !== 1) throw new Error('Unsupported rule profile. Expected schemaVersion 1.');
@@ -65,9 +65,9 @@ export function KiCadPanel({ workspace, catalog, onClose, onNode }: { workspace:
       <div className={readiness.ready ? 'available' : ''}><Network size={17} /><span>Review drawing<strong>{readiness.ready ? 'Ready to export' : 'Needs current allocations'}</strong></span>{readiness.ready ? <Check size={15} /> : <LockKeyhole size={14} />}</div>
       <div><CircuitBoard size={17} /><span>Physical PCB routing<strong>Missing physical design inputs</strong></span><LockKeyhole size={14} /></div>
     </div>
-    <Notice kind="warning" title="Review drawing, with explicit limits">Named ports describe functional intent. They are not manufacturer pin numbers or verified electrical nets. No COTS internal circuit or physical PCB is generated.</Notice>
+    <Notice kind="warning" title="Review drawing, with explicit limits">Named ports describe functional intent. They are not manufacturer pin numbers or verified electrical nets. Drawing quantities come from screening counts, not established installation quantities. No COTS internal circuit or physical PCB is generated.</Notice>
     {!readiness.ready && <section className="inspector-section"><h3>Complete these prerequisites</h3><ul className="plain-list">{readiness.blockers.map(item => <li key={item}>{item}</li>)}</ul><button className="button secondary full-width" onClick={() => onNode('candidates')}>Inspect COTS suggestions<ArrowRight size={13} /></button></section>}
-    <section className="inspector-section"><h3>The review pipeline</h3><ol className="kicad-panel__pipeline"><li><span>01</span><div><strong>Freeze current allocations</strong><p>Exact catalog revisions, sources and quantities. Integrated roles share one physical usage.</p></div></li><li><span>02</span><div><strong>Place and route the drawing</strong><p>Logical associations avoid sheets and existing wires. Any unresolved association stays in the manifest.</p></div></li><li><span>03</span><div><strong>Inspect in KiCad</strong><p>Open the schematic and child sheets together. The local validation command retains rendered sheets, netlist and electrical rule findings.</p></div></li></ol><p className="section-caption">The exported README includes the local validation command. An electrical check on opaque sheets does not assess the actual COTS circuit.</p></section>
+    <section className="inspector-section"><h3>The review pipeline</h3><ol className="kicad-panel__pipeline"><li><span>01</span><div><strong>Freeze current allocations</strong><p>Exact catalog revisions, sources and screening counts. Integrated roles share one physical usage.</p></div></li><li><span>02</span><div><strong>Place and route the drawing</strong><p>Logical associations avoid sheets and existing wires. Any unresolved association stays in the manifest.</p></div></li><li><span>03</span><div><strong>Inspect in KiCad</strong><p>Open the schematic and child sheets together. The local validation command retains rendered sheets, netlist and electrical rule findings.</p></div></li></ol><p className="section-caption">The exported README includes the local validation command. An electrical check on opaque sheets does not assess the actual COTS circuit.</p></section>
     <details className="disclosure"><summary>What blocks physical autorouting?</summary><ul className="plain-list">{readiness.physicalGates.map(item => <li key={item}>{item}</li>)}</ul><p className="body-copy">The current catalog does not establish these inputs. A configured external PCB router would follow the reviewed physical netlist and board constraints.</p></details>
     <section className="inspector-section"><div className="section-heading"><h3>Requirements → physical rules</h3><Cable size={15} /></div><p className="body-copy">Selected EPS requirements can inform reviewed track widths, via geometry and spacing. Current, voltage and temperature alone do not define safe geometric rules.</p><Notice>Energy balance, operating envelopes, protection behavior and full installation fit remain external assessments. Passing board checks leaves known EPS failures unchanged.</Notice>
       <details className="disclosure"><summary>Import an approved rule profile</summary><p className="body-copy">Supply a physical netlist revision, exact nets, fabrication minima, source references, derived dimensions and explicit engineer approval. The template contains no assumed physical values.</p><div className="kicad-panel__actions"><button className="button secondary small" disabled={!readiness.ready} onClick={() => saveBlob(new Blob([JSON.stringify(ruleTemplate(workspace, catalog), null, 2)], { type: 'application/json' }), 'orbitwork-rule-input-template.json')}><FileJson size={14} />Input template</button><button className="button secondary small" disabled={!readiness.ready} onClick={() => fileInput.current?.click()}><Upload size={14} />Import reviewed JSON</button></div><input type="file" className="sr-only" accept=".json,application/json" aria-label="Import approved KiCad rule profile" tabIndex={-1} ref={fileInput} onChange={event => { const file = event.target.files?.[0]; event.target.value = ''; if (file) void importRules(file); }} /><p className="section-caption">Profiles bind to this exact architecture fingerprint. A source substitution or reevaluation requires review of that binding.</p><code className="kicad-panel__fingerprint">{fingerprint}</code>

@@ -22,6 +22,10 @@ Energy is presented in Wh. Time integration converts W·s to Wh using 3600 s/h. 
 
 `solar.installedPowerW` is the engineer-declared available EOL source power during sunlight. `topology.efficiency` is a constant conditioning efficiency. The scenario illumination factor scales source availability. EPS idle demand is added once at the common external battery boundary. Loads are constant-power values at that same simplified boundary.
 
+The preliminary budget includes the same additional `topology.idlePowerW` baseline once. It is read directly as an authored budget input, not from the downstream topology result. Baseline edits invalidate budget and both sizing results without creating a graph cycle. Null baseline demand blocks that budget. Zero demand requires an explicit input.
+
+Preliminary battery requirements depend on eclipse energy, DoD, margin, lifetime and orbit, not installed capacity or battery characterization. Missing pack energy leaves `requiredWh` and mission cycles available while `eolCapacityWh` is null. Simulation separately requires capacity, retention, energy efficiencies and charge/discharge power bounds. Solar-power requirements likewise remain available without a selected-cell EOL pair. Its derived cell power/count fields are null. Missing hardware evidence still limits assessments and is not repaired by a different product's rating.
+
 The preliminary sunlight/eclipse efficiencies `Xs` and `Xe` belong to the sizing screen. They are not multiplied into the time simulation again. The battery model separately applies charge and discharge energy efficiencies.
 
 The energy simulation does not derive the available power of a real installed panel from orientation, temperature, an I–V curve, DET bus voltage or shared MPPT tracker behavior. DET propagation is gated until such a model exists. Changing logical transfer/bus choices alone does not solve a detailed circuit.
@@ -42,17 +46,27 @@ The scenario's initial and minimum fractions refer to **normalized stored energy
 | EPS-19 | Known physical mass subtotal with integrated-board deduplication. Missing auxiliaries, mass, volume or allocations remain visible. |
 | EPS-20 | No installation geometry or array packing solution. Unassessed. |
 
+## Product comparison coverage
+
+The catalog has three distinct covered comparison options for each of the six CSRM component groups. Profiles check sourced functions, configuration, physical/electrical facts and relevant software identity/interfaces. They count core facts separately from richer characterization and architecture assessments. Three covered entries establish a useful comparison set, not three fully feasible installed EPS designs.
+
+The storage choices are individual characterized cells. DC load-regulator choices are not solar trackers or chargers. Controller board variants have different documented power architectures. Software includes embedded firmware and external OBC services/libraries with explicit host dependencies. Nominal energy, conditional thermal/current points and unknown timing retain their meanings.
+
 ## Revision semantics
 
 Every graph node has an input revision and an evaluated revision. An input change increments the originating node and all transitive descendants once. Previously evaluated outputs stay visible with a stale label. New outputs with missing prerequisites stay locked. Evaluation requires valid inputs and current dependencies. Run-ready evaluation walks the DAG in topological order.
 
 Energy plots retain the evaluated scenario revision, reserve and requested duration. Power-budget plots retain their original orbit timing. A stale history uses that saved context. It does not silently adopt newly edited criteria.
 
-Mission analogue acceptance changes only the numerical altitude and retains an evidence receipt. ConOps drafts are saved as mission context. Altitude or ConOps edits clear an inconsistent prior receipt. Vector similarity is a retrieval rank and supplies no orbital suitability verdict.
+Mission analogue acceptance changes only the numerical altitude and retains an evidence receipt. ConOps drafts are saved as mission context. Altitude or ConOps edits clear an inconsistent prior receipt. Assumption references that depended on removed mission evidence are explicitly detached with an applicability warning. Retained study values remain restorable. Vector similarity is a retrieval rank and supplies no orbital suitability verdict.
 
-Product allocation requires current catalog screening and excludes known rejected suggestions. An allocation may still have missing evidence. A product substitution renews applicable sizing and scenario assessments. Replacing a product with identical numerical properties still invalidates the assessment subject.
+Product allocation requires current catalog screening and excludes known rejected suggestions. Apply freezes the proposed whole-product count, exact product/catalog revision, allocated roles and allocation rationale in a receipt. Integrated boards share one receipt. Screening another scenario preserves that count. Requirement screens and known mass use frozen quantities, not newly suggested counts. Legacy selections without receipts retain unknown quantities rather than acquiring an invented count. A receipt remains a concept allocation, not a complete physical usage/BOM, wiring decision or qualification. Missing auxiliaries and geometry remain explicit.
 
-JSON import reconstructs known authored fields, validates structure and identifiers, and discards imported calculation caches. The current local catalog supplies product data after import. Exports include catalog revision, selected source records, node revisions and scope. No imported passing verdict is accepted as new evidence.
+Parameter provenance distinguishes exact transferred catalog values from authored engineering assumptions. Typical values remain typical, not conservative guarantees. Manual edits remove inconsistent source claims. Product-bound ratings and assumptions cannot migrate to a replacement. Unbound assumptions remain assumptions with an applicability-review warning after allocation changes. Replacing a product with identical numerical properties still invalidates the assessment subject.
+
+Simulation is a nonblocking evidence dependency of requirement review: missing/stale simulation leaves energy predicates unassessed while current sizing/catalog/resource evidence is shown. Historical curves remain visible but are excluded from the new review. Evaluating simulation invalidates an earlier partial review even without an input edit. Nonblocking evidence edges participate in transitive invalidation.
+
+JSON import reconstructs known authored fields, validates receipt product/role/quantity identity and matching parameter provenance, and discards imported calculation caches. Assumption source references must resolve to current catalog sources or accepted mission evidence. The current local catalog supplies product data after import. Exact product snapshots preserve unchanged choices across catalog editions. Local reload keeps inputs and historical allocations when records change, flags review and blocks simulation/handoff. Explicit reallocation creates current snapshots. Strict incompatible file imports preserve the already open design. Authored inputs and optional metadata restore without automatic calculation or replacement. Explicit Recalculate is required. Only the bundled example/Load example constructs the fully evaluated demonstration. Exports include catalog revision, selected source records, node revisions and scope. No imported passing verdict is accepted as new evidence.
 
 ## Deliberate exclusions
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { calculateBudget, calculateOrbit, sizeBattery, sizeSolar } from '../index';
+import { calculateBudget, calculateOrbit, simulateOrbit, sizeBattery, sizeSolar } from '../index';
 import { inputs, load, orbit, scenario } from './fixtures';
 
 describe('orbit geometry from the proposal', () => {
@@ -96,14 +96,45 @@ describe('preliminary sizing boundaries', () => {
     i.solar.sunlightEfficiency = value;
     expect(() => sizeSolar(i, calculateBudget(i.scenarios[0], orbit), orbit)).toThrow(/Xs/);
   });
-  it('rejects invalid battery margin, retention, capacity and lifetime', () => {
-    for (const field of ['margin', 'retainedEnergy', 'capacityWh'] as const) {
-      const i = inputs();
-      i.battery[field] = -1;
-      expect(() => sizeBattery(i, calculateBudget(i.scenarios[0], orbit), orbit)).toThrow();
-    }
+  it('rejects invalid sizing inputs; physical capability is independently gated by simulation', () => {
     const i = inputs();
+    i.battery.margin = -1;
+    expect(() => sizeBattery(i, calculateBudget(i.scenarios[0], orbit), orbit)).toThrow(/margin/);
+    i.battery.margin = 0.2;
+    const expected = sizeBattery(i, calculateBudget(i.scenarios[0], orbit), orbit).requiredWh;
+    for (const field of ['retainedEnergy', 'capacityWh'] as const) {
+      const invalid = inputs();
+      invalid.battery[field] = -1;
+      const sizing = sizeBattery(invalid, calculateBudget(invalid.scenarios[0], orbit), orbit);
+      expect(sizing.requiredWh).toBe(expected);
+      expect(sizing.eolCapacityWh).toBeNull();
+      expect(() => simulateOrbit(invalid, invalid.scenarios[0], orbit)).toThrow();
+    }
     i.mission.lifetimeYears = null;
     expect(() => sizeBattery(i, calculateBudget(i.scenarios[0], orbit), orbit)).toThrow(/lifetime/);
+  });
+  it('sizes requirements without installed pack/cell characterization', () => {
+    const i = inputs();
+    const budget = calculateBudget(i.scenarios[0], orbit);
+    const required = sizeBattery(i, budget, orbit);
+    Object.assign(i.battery, { capacityWh: null, retainedEnergy: null, chargeEfficiency: null, dischargeEfficiency: null, maxChargeW: null, maxDischargeW: null });
+    expect(sizeBattery(i, budget, orbit)).toEqual({ ...required, eolCapacityWh: null });
+    i.solar.cellEolV = null;
+    const solar = sizeSolar(i, budget, orbit);
+    expect(solar.minimumPowerW).toBeGreaterThan(0);
+    expect(solar.cellPowerW).toBeNull();
+    expect(solar.cellCount).toBeNull();
+    expect(solar.rawCellCount).toBeNull();
+  });
+  it('includes the additional EPS baseline exactly in budget energy and peaks', () => {
+    const s = scenario();
+    const loadsOnly = calculateBudget(s, orbit);
+    const withEps = calculateBudget(s, orbit, 1.25);
+    expect(withEps.sunlightWh - loadsOnly.sunlightWh).toBeCloseTo(1.25 * orbit.sunlightS / 3600, 14);
+    expect(withEps.eclipseWh - loadsOnly.eclipseWh).toBeCloseTo(1.25 * orbit.eclipseS / 3600, 14);
+    expect(withEps.peakW - loadsOnly.peakW).toBe(1.25);
+    expect(withEps.additionalEpsPowerW).toBe(1.25);
+    expect(() => calculateBudget(s, orbit, -1)).toThrow(/EPS/);
+    expect(() => calculateBudget(s, orbit, null as unknown as number)).toThrow(/EPS/);
   });
 });

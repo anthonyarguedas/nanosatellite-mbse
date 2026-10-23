@@ -10,6 +10,7 @@ export default defineConfig({
       output: {
         codeSplitting: {
           groups: [
+            { name: 'catalog', test: /[\\/]src[\\/]data[\\/]catalog\.json$/, priority: 40 },
             { name: 'react', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/, priority: 30 },
             { name: 'workflow', test: /node_modules[\\/]@xyflow[\\/]/, priority: 20 },
             { name: 'charts', test: /node_modules[\\/]recharts[\\/]/, priority: 10 },

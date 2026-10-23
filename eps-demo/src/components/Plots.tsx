@@ -234,7 +234,7 @@ export function DemandPlot({
         <div className="plot-heading">
           <div>
             <Activity size={14} />
-            <strong>Scheduled load demand</strong>
+            <strong>{budget.additionalEpsPowerW ? "Spacecraft loads + EPS baseline" : "Scheduled load demand"}</strong>
           </div>
           <span>W</span>
         </div>
@@ -305,13 +305,21 @@ export function EnergyPlots({
   scenario,
   compact = false,
   stale = false,
+  section = 'all',
+  units,
+  onUnitsChange,
 }: {
   simulation: SimulationResult;
+  section?: 'all' | 'power' | 'energy' | 'outcome';
+  units?: 'percent' | 'wh';
+  onUnitsChange?: (value:'percent'|'wh')=>void;
   scenario?: Scenario;
   compact?: boolean;
   stale?: boolean;
 }) {
-  const [mode, setMode] = useState<"percent" | "wh">("percent");
+  const [localMode, setLocalMode] = useState<"percent" | "wh">("percent");
+  const mode=units??localMode;
+  const setMode=onUnitsChange??setLocalMode;
   const data = useMemo(
     () =>
       simulation.points.map((point) => ({
@@ -391,12 +399,12 @@ export function EnergyPlots({
           originally assessed.
         </p>
       )}
-      <Notice kind="warning" title="Energy-only model">
+      {section === 'all' && <Notice kind="warning" title="Energy-only model">
         Normalized stored energy is not charge-based state of charge. Voltage,
         charge reserve, thermal behavior and detailed interfaces remain outside
         this model.
-      </Notice>
-      <div className="plot-card">
+      </Notice>}
+      {(section === 'all' || section === 'power') && <div className="plot-card">
         <div className="plot-heading">
           <div>
             <Sun size={14} />
@@ -461,8 +469,8 @@ export function EnergyPlots({
             </ComposedChart>
           </ResponsiveContainer>
         </div>
-      </div>
-      <div className="plot-card">
+      </div>}
+      {(section === 'all' || section === 'energy') && <div className="plot-card">
         <div className="plot-heading">
           <div>
             <BatteryCharging size={14} />
@@ -555,8 +563,8 @@ export function EnergyPlots({
             )}
           </span>
         </div>
-      </div>
-      <div className="metric-grid three">
+      </div>}
+      {(section === 'all' || section === 'outcome') && <div className="metric-grid three">
         <Metric
           label="Minimum energy"
           value={unit(simulation.minEnergyWh, "Wh")}
@@ -571,7 +579,7 @@ export function EnergyPlots({
           value={unit(simulation.shortageWh, "Wh")}
           className={simulation.shortageWh > 0 ? "danger-text" : ""}
         />
-      </div>
+      </div>}
       {simulation.stoppedAtS !== null && (
         <Notice kind="danger" title="Simulation stopped">
           An invalid battery state was reached at{" "}

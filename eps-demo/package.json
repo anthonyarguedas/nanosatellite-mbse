@@ -12,7 +12,9 @@
     "kicad:export": "node scripts/kicad-export.mjs",
     "kicad:validate": "node scripts/kicad-validate.mjs",
     "kicad:rules": "node scripts/kicad-rules.mjs",
-    "test:catalog": "node src/data/validate-catalog.mjs",
+    "test:catalog": "node --experimental-strip-types src/data/validate-catalog.mjs",
+    "catalog:coverage": "node --experimental-strip-types src/data/catalog-coverage.mjs",
+    "catalog:coverage:strict": "node --experimental-strip-types src/data/catalog-coverage.mjs --strict",
     "test": "vitest run"
   },
   "dependencies": {

@@ -45,8 +45,8 @@ export function AssessmentView({
     <div className="tab-page assessment-page">
       <div className="page-intro">
         <div>
-          <span className="eyebrow">EVIDENCE & VERIFICATION</span>
-          <h1>Know what your design supports.</h1>
+          <span className="eyebrow">DECLARED CRITERIA & REMAINING EVIDENCE</span>
+          <h3>Active-scenario assessment</h3>
           <p>
             Trace every result to its criterion, assumptions, and remaining
             evidence.
@@ -54,6 +54,7 @@ export function AssessmentView({
         </div>
         <button
           className="button primary"
+          data-action="run-assessment"
           disabled={!canEvaluate(api, "assessment")}
           onClick={() => api.runNode("assessment")}
         >
@@ -115,6 +116,8 @@ export function AssessmentView({
           >
             <button
               className={section === "requirements" ? "active" : ""}
+              data-report-section="requirements"
+              aria-pressed={section === "requirements"}
               onClick={() => setSection("requirements")}
             >
               <ShieldCheck size={14} />
@@ -122,6 +125,8 @@ export function AssessmentView({
             </button>
             <button
               className={section === "energy" ? "active" : ""}
+              data-report-section="energy"
+              aria-pressed={section === "energy"}
               onClick={() => setSection("energy")}
             >
               <Activity size={14} />

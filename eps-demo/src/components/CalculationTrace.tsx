@@ -1,10 +1,10 @@
 import type { NodeId, Workspace } from '../types';
 import './calculation-trace.css';
 
-interface Step { label: string; inputs: string; relation: string; output: string }
+export interface Step { label: string; inputs: string; relation: string; output: string }
 const format = (value: number | null | undefined, suffix = '', digits = 2) => value == null || !Number.isFinite(value) ? 'missing' : `${value.toFixed(digits)}${suffix}`;
 
-function stepsFor(id: NodeId, workspace: Workspace): Step[] {
+export function stepsFor(id: NodeId, workspace: Workspace): Step[] {
   const { inputs, analysis } = workspace;
   const scenario = inputs.scenarios.find(item => item.id === inputs.activeScenarioId);
   switch (id) {
@@ -16,9 +16,9 @@ function stepsFor(id: NodeId, workspace: Workspace): Step[] {
     ];
     case 'scenarios': return [{ label: 'Scheduled demand', inputs: `${scenario?.loads.length ?? 0} constant-power loads`, relation: 'Active power inside the union of windows. Idle power outside.', output: scenario?.name ?? 'No active scenario' }];
     case 'budget': return [
-      { label: 'Sunlight energy', inputs: 'Orbit sunlight interval + component schedules', relation: 'Eₛ = ∫sun Σ Pℓ(mode, t) dt', output: format(analysis.budget?.sunlightWh, ' Wh') },
-      { label: 'Eclipse energy', inputs: 'Orbit eclipse interval + component schedules', relation: 'Eₑ = ∫eclipse Σ Pℓ(mode, t) dt', output: format(analysis.budget?.eclipseWh, ' Wh') },
-      { label: 'Coincident load peak', inputs: 'All simultaneous active/idle states', relation: 'Ppeak = maxₜ Σ Pℓ(mode, t)', output: format(analysis.budget?.peakW, ' W') },
+      { label: 'Sunlight energy', inputs: 'Sunlight interval + scheduled loads + additional EPS baseline', relation: 'Eₛ = ∫sun (Σ Pℓ(mode, t) + PEPS) dt', output: format(analysis.budget?.sunlightWh, ' Wh') },
+      { label: 'Eclipse energy', inputs: 'Eclipse interval + scheduled loads + additional EPS baseline', relation: 'Eₑ = ∫eclipse (Σ Pℓ(mode, t) + PEPS) dt', output: format(analysis.budget?.eclipseWh, ' Wh') },
+      { label: 'Coincident demand peak', inputs: 'All simultaneous load states + additional EPS baseline once', relation: 'Ppeak = maxₜ (Σ Pℓ(mode, t) + PEPS)', output: format(analysis.budget?.peakW, ' W') },
     ];
     case 'solar': return [
       { label: 'Minimum source power', inputs: `Eₛ, Eₑ, Tₛ; Xₛ = ${format(inputs.solar.sunlightEfficiency)}, Xₑ = ${format(inputs.solar.eclipseEfficiency)}`, relation: 'Pmin = (Eₛ/Xₛ + Eₑ/Xₑ) / Tₛ', output: format(analysis.solar?.minimumPowerW, ' W') },

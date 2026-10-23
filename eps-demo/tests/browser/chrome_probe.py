@@ -35,13 +35,23 @@ def owned_path(value: str | Path) -> Path:
 
 def local_url(value: str) -> str:
     parsed = urlsplit(value)
-    if (parsed.scheme != "http" or parsed.hostname != "127.0.0.1" or parsed.port not in {5173, 4173}
-            or parsed.username is not None or parsed.password is not None):
-        raise argparse.ArgumentTypeError("Use the parent-supplied local http:// ready URL.")
     try:
-        parsed.port
+        port = parsed.port
     except ValueError as error:
         raise argparse.ArgumentTypeError(str(error)) from error
+    if (parsed.scheme != "http" or parsed.hostname != "127.0.0.1" or port is None or not 1024 <= port <= 65535
+            or parsed.username is not None or parsed.password is not None):
+        raise argparse.ArgumentTypeError("Use an explicit http://127.0.0.1:PORT ready URL with an unprivileged port and no credentials.")
+    return value
+
+
+def viewport(value: str) -> str:
+    match = re.fullmatch(r"(\d{3,4})x(\d{3,4})", value)
+    if not match:
+        raise argparse.ArgumentTypeError("Use a viewport such as 1440x1000 or 390x844.")
+    width, height = map(int, match.groups())
+    if not 320 <= width <= 3840 or not 400 <= height <= 2160:
+        raise argparse.ArgumentTypeError("Viewport bounds are 320–3840 pixels wide and 400–2160 pixels high.")
     return value
 
 
@@ -87,8 +97,9 @@ DIAGNOSTICS = r"""(() => {
 
 class Probe:
     """Small live helpers. Browser functions are supplied by browser_harness -c."""
-    def __init__(self, output: Path, tab: str):
+    def __init__(self, output: Path, tab: str, screenshots: bool = True):
         self.output, self.tab = output, tab
+        self.screenshots = screenshots
         self.journal: list[dict] = []
         self.sequence = 0
         self.browser_log = []
@@ -106,13 +117,17 @@ class Probe:
         self.sequence += 1
         safe = re.sub(r"[^a-zA-Z0-9_-]+", "-", label).strip("-") or "snapshot"
         stem = f"{self.sequence:02d}-{safe}"
-        # Wait only for finite UI transitions, never React Flow's infinite edge animation.
-        js("""(async()=>{await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
-          await Promise.all(document.getAnimations().filter(a=>a.effect?.getComputedTiming().iterations!==Infinity)
-            .map(a=>Promise.race([a.finished.catch(()=>{}),new Promise(r=>setTimeout(r,350))])));return true;})()""")
-        # Viewport PNG is authoritative for clipping/overlap review.
-        capture_screenshot(path=str(self.output / f"{stem}.png"))
+        # A hidden shared-browser tab may suspend requestAnimationFrame entirely.
+        # State waits belong to actions. Snapshot never awaits animation promises.
+        time.sleep(0.1)
+        # Always preserve DOM/geometry evidence before optional screenshot IPC.
         self.save(f"{stem}.json", js(DOM_PROJECTION))
+        if self.screenshots:
+            try:
+                capture_screenshot(path=str(self.output / f"{stem}.png"))
+            except Exception as error:
+                self.screenshots = False  # Never retry a failed screenshot in this run.
+                self.save('screenshot-failure.json', {"message": str(error)})
         self.save("diagnostics.json", js("window.__orbitworkProbeDiagnostics || null"))
         self.browser_log.extend(e for e in drain_events() if e.get('method') in {
             'Log.entryAdded', 'Runtime.exceptionThrown', 'Network.loadingFailed'} or (
@@ -201,7 +216,7 @@ def run_probe(config: dict):
     output = owned_path(config["output"])
     # No context creation, target enumeration, anchor reuse, or tab activation.
     tab = new_tab()  # no URL means always create a fresh target in the default context
-    probe = Probe(output, tab)
+    probe = Probe(output, tab, screenshots=config.get("screenshots", True))
     try:
         cdp("Page.enable")
         cdp("Runtime.enable")
@@ -218,6 +233,9 @@ def run_probe(config: dict):
             raise TimeoutError("Ready URL did not finish loading. No navigation retry was attempted.")
         if not wait_for_element("#root > *", timeout=10, visible=True):
             raise TimeoutError("React root did not render. Inspect the captured error state.")
+        # Keep native focus events working after navigation without activating
+        # Chrome or selecting a different agent's visible tab.
+        cdp("Emulation.setFocusEmulationEnabled", enabled=True)
         probe.snapshot("entry")
         if config.get("actions"):
             path = owned_path(config["actions"])
@@ -238,9 +256,10 @@ def run_probe(config: dict):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url", required=True, type=local_url, help="Explicit server-ready URL from parent")
-    parser.add_argument("--viewport", choices=["1440x1000", "1280x900"], default="1440x1000")
+    parser.add_argument("--viewport", type=viewport, default="1440x1000", help="WIDTHxHEIGHT, including narrow layouts")
     parser.add_argument("--label", default="discovery")
     parser.add_argument("--actions", help="Owned Python action file, created after live exploration")
+    parser.add_argument("--no-screenshots", action="store_true", help="Record DOM/geometry without screenshot IPC")
     args = parser.parse_args()
     if args.actions:
         try:
@@ -259,7 +278,7 @@ def main():
     output = owned_path(ROOT / "artifacts" / f"{stamp}-{label}-{args.viewport}")
     output.mkdir(parents=True, exist_ok=False)
     config = {"url": args.url, "width": width, "height": height, "output": str(output),
-              "actions": str(actions) if actions else None}
+              "actions": str(actions) if actions else None, "screenshots": not args.no_screenshots}
     (output / "run.json").write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
     env = os.environ.copy()
     env["ORBITWORK_PROBE_CONFIG"] = json.dumps(config)

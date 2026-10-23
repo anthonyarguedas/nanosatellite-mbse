@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { simulateOrbit } from './engine';
 import { descendants, inputIssues, missingForNodes, NODE_DEFINITIONS, nodeStatuses } from './workflow';
 import { changeInputs, createExampleWorkspace, createWorkspace, emptyInputs, evaluateNode, evaluateReady } from './state/model';
+import { preliminaryWorkspace } from './state/test-fixtures';
 
  describe('revisioned dependency graph', () => {
   it('starts a blank design with explicit missing-input explanations', () => {
@@ -12,7 +13,7 @@ import { changeInputs, createExampleWorkspace, createWorkspace, emptyInputs, eva
     expect(missingForNodes(workspace).budget.join(' ')).toContain('Orbit geometry');
   });
   it('unlocks catalog screening after the example preliminary nodes are evaluated', () => {
-    const workspace = createExampleWorkspace();
+    const workspace = preliminaryWorkspace();
     expect(nodeStatuses(workspace).candidates).toBe('ready');
     expect(nodeStatuses(workspace).simulation).toBe('locked');
     expect(nodeStatuses(workspace).solar).toBe('complete');
@@ -41,11 +42,11 @@ import { changeInputs, createExampleWorkspace, createWorkspace, emptyInputs, eva
     expect(nodeStatuses(original).budget).toBe('complete');
   });
   it('null inputs lock new outputs and leave computed ones visibly stale', () => {
-    const original = createExampleWorkspace();
-    const updated = changeInputs(original, inputs => { inputs.solar.cellEolV = null; return inputs; });
+    const original = preliminaryWorkspace();
+    const updated = changeInputs(original, inputs => { inputs.solar.sunlightEfficiency = null; return inputs; });
     expect(nodeStatuses(updated).solar).toBe('stale');
     expect(nodeStatuses(updated).candidates).toBe('locked');
-    expect(missingForNodes(updated).solar[0]).toContain('EOL');
+    expect(missingForNodes(updated).solar[0]).toContain('Xs');
     expect(() => evaluateNode(updated, 'solar')).toThrow();
   });
   it('does not invalidate a no-op input update', () => {

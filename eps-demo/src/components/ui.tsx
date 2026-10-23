@@ -1,5 +1,6 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useId, useRef, useState } from "react";
 import type { ReactNode } from "react";
+import { hiddenByClosedDisclosure } from './focus-visibility';
 import {
   AlertCircle,
   ArrowLeft,
@@ -9,6 +10,8 @@ import {
   CircleHelp,
   Clock3,
   LockKeyhole,
+  Maximize2,
+  Minimize2,
   X,
   XCircle,
 } from "lucide-react";
@@ -259,13 +262,27 @@ export function Metric({
     </div>
   );
 }
+export const SheetNavigationContext = createContext<{ backLabel?: string; focusSelector?: string; nested?: boolean; modal?: boolean; expanded?: boolean; onToggleExpanded?: () => void; onDismiss?: () => void }>({});
+
+/** The same breakpoint drives background inertness and dialog keyboard semantics. */
+export function useNarrowInspector() {
+  const [narrow, setNarrow] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 900px)').matches);
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 900px)');
+    const update = () => setNarrow(query.matches);
+    update(); query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+  return narrow;
+}
+
 export function Sheet({
   title,
   eyebrow,
   children,
   footer,
   onClose,
-  backLabel = "Back to workbench",
+  backLabel,
 }: {
   title: string;
   eyebrow?: string;
@@ -274,6 +291,10 @@ export function Sheet({
   onClose: () => void;
   backLabel?: string;
 }) {
+  const navigation = useContext(SheetNavigationContext);
+  const navigationRef = useRef(navigation);
+  const modal = navigation.modal ?? true;
+  const nested = navigation.nested ?? Boolean(backLabel ?? navigation.backLabel);
   const ref = useRef<HTMLDivElement>(null);
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
@@ -281,18 +302,30 @@ export function Sheet({
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null;
     const element = ref.current;
-    element?.querySelector<HTMLElement>("button")?.focus();
+    const returnTarget = navigationRef.current.focusSelector;
+    const target = returnTarget ? element?.querySelector<HTMLElement>(returnTarget) : null;
+    if (target) {
+      // Returning to a dependency inside a disclosure should restore its context too.
+      let parent = target.parentElement;
+      while (parent && element?.contains(parent)) {
+        if (parent instanceof HTMLDetailsElement) parent.open = true;
+        parent = parent.parentElement;
+      }
+      target.focus();
+    }
+    if (!element?.contains(document.activeElement)) element?.querySelector<HTMLElement>("button")?.focus();
     const handleKey = (e: KeyboardEvent) => {
+      if (e.defaultPrevented) return;
       if (e.key === "Escape") {
         e.preventDefault();
         closeRef.current();
       }
-      if (e.key === "Tab" && element) {
+      if (modal && e.key === "Tab" && element) {
         const items = Array.from(
           element.querySelectorAll<HTMLElement>(
             'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), summary, [tabindex="0"]',
           ),
-        ).filter((item) => item.getClientRects().length > 0);
+        ).filter((item) => item.getClientRects().length > 0 && !hiddenByClosedDisclosure(item) && getComputedStyle(item).visibility !== 'hidden');
         const first = items[0];
         const last = items[items.length - 1];
         if (e.shiftKey && document.activeElement === first) {
@@ -304,38 +337,43 @@ export function Sheet({
         }
       }
     };
-    document.addEventListener("keydown", handleKey);
+    const keyboardTarget = modal ? document : element;
+    keyboardTarget?.addEventListener('keydown', handleKey as EventListener);
     return () => {
-      document.removeEventListener("keydown", handleKey);
-      if (previous?.isConnected) previous.focus();
+      keyboardTarget?.removeEventListener('keydown', handleKey as EventListener);
+      // App restores the canvas trigger on root dismissal. Nested Back restores
+      // its explicit focus key. Never steal canvas focus during a root switch.
+      if (modal && previous?.isConnected && !previous.closest('[inert]')) previous.focus();
     };
-  }, []);
+  }, [modal]);
   return (
     <div className="sheet-layer">
-      <button
+      {modal && <button
         className="sheet-scrim"
-        aria-label="Close inspector"
+        tabIndex={-1}
+        aria-hidden="true"
         onClick={onClose}
-      />
+      />}
       <div
         className="sheet"
         role="dialog"
-        aria-modal="true"
+        aria-modal={modal}
         aria-labelledby={id}
         ref={ref}
       >
         <div className="sheet-top">
-          <button className="text-button" onClick={onClose}>
+          {nested ? <button className="text-button" data-action="context-back" onClick={onClose}>
             <ArrowLeft size={14} />
-            {backLabel}
-          </button>
-          <button
+            {backLabel ?? navigation.backLabel ?? 'Back'}
+          </button> : <span className="inspector-top-label">{modal ? 'DESIGN CONTEXT' : 'INSPECTOR'}</span>}
+          <div className="inspector-window-actions">{!modal && navigation.onToggleExpanded && <button className="icon-button" aria-label={navigation.expanded ? 'Collapse inspector' : 'Expand inspector'} onClick={navigation.onToggleExpanded}>{navigation.expanded ? <Minimize2 size={15} /> : <Maximize2 size={15} />}</button>}<button
             className="icon-button"
-            aria-label="Close inspector"
-            onClick={onClose}
+            aria-label="Close current context"
+            data-action="context-close"
+            onClick={navigation.onDismiss ?? onClose}
           >
             <X size={17} />
-          </button>
+          </button></div>
         </div>
         <header className="sheet-heading">
           {eyebrow && <span className="eyebrow">{eyebrow}</span>}

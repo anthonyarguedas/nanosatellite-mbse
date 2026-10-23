@@ -10,7 +10,7 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
   { id: 'topology', title: 'Power architecture', subtitle: 'Conditioning & transfer', stage: '03 / Architecture', dependencies: ['solar', 'battery'], requirements: ['EPS-01', 'EPS-04'], equation: 'Pᵢₙ = Pₒᵤₜ + Ploss' },
   { id: 'candidates', title: 'COTS suggestions', subtitle: 'Bounded catalog screening', stage: '03 / Architecture', dependencies: ['solar', 'battery', 'topology'], requirements: ['EPS-01', 'EPS-03', 'EPS-05'], equation: 'Enumerate → screen → retain evidence gaps' },
   { id: 'simulation', title: 'Orbital energy balance', subtitle: 'Stored energy over time', stage: '04 / Assessment', dependencies: ['orbit', 'scenarios', 'solar', 'battery', 'topology', 'candidates'], requirements: ['EPS-10', 'EPS-11', 'EPS-12'], equation: 'Eₖ₊₁ = Eₖ + (ηc Pch − Pdis / ηd) Δt' },
-  { id: 'assessment', title: 'Requirement review', subtitle: 'Evidence & unresolved checks', stage: '04 / Assessment', dependencies: ['candidates', 'simulation'], requirements: ['EPS-01…20'], equation: 'Criterion → pass / fail / unassessed' },
+  { id: 'assessment', title: 'Requirement review', subtitle: 'Evidence & unresolved checks', stage: '04 / Assessment', dependencies: ['candidates'], evidenceDependencies: ['simulation'], requirements: ['EPS-01…20'], equation: 'Criterion → pass / fail / unassessed' },
 ];
 
 export const NODE_IDS = NODE_DEFINITIONS.map(node => node.id);
@@ -53,29 +53,35 @@ export function inputIssues(id: NodeId, inputs: DesignInputs): string[] {
       }
       return issues;
     }
+    // This authored demand is read directly, not from the downstream topology result: no DAG cycle.
+    case 'budget': return bounded(inputs.topology.idlePowerW, 'Additional EPS baseline demand (W)', 0, 10000);
     case 'solar': return [
       ...bounded(inputs.solar.sunlightEfficiency, 'Sunlight path efficiency Xs', 0, 1, true),
       ...bounded(inputs.solar.eclipseEfficiency, 'Eclipse path efficiency Xe', 0, 1, true),
-      ...bounded(inputs.solar.cellEolV, 'Cell EOL maximum-power voltage (V)', 0, 1000, true),
-      ...bounded(inputs.solar.cellEolA, 'Cell EOL maximum-power current (A)', 0, 1000, true),
+      ...(inputs.solar.cellEolV === null ? [] : bounded(inputs.solar.cellEolV, 'Cell EOL maximum-power voltage (V)', 0, 1000, true)),
+      ...(inputs.solar.cellEolA === null ? [] : bounded(inputs.solar.cellEolA, 'Cell EOL maximum-power current (A)', 0, 1000, true)),
     ];
     case 'battery': return [
       ...bounded(inputs.battery.dod, 'Preliminary design DoD fraction', 0, 1, true),
       ...bounded(inputs.battery.margin, 'Preliminary degradation margin', 0, 10),
-      ...bounded(inputs.battery.capacityWh, 'BOL battery capacity (Wh)', 0, 100000, true),
+    ];
+    case 'candidates': return inputs.solar.installedPowerW === null ? []
+      : bounded(inputs.solar.installedPowerW, 'Installed source EOL power (W)', 0, 100000);
+    case 'assessment': return [
+      ...(inputs.solar.installedPowerW === null ? [] : bounded(inputs.solar.installedPowerW, 'Installed source EOL power (W)', 0, 100000)),
+      ...(inputs.battery.capacityWh === null ? [] : bounded(inputs.battery.capacityWh, 'BOL battery capacity (Wh)', 0, 100000, true)),
+      ...(inputs.topology.massAllocationKg === null ? [] : bounded(inputs.topology.massAllocationKg, 'EPS mass allocation (kg)', 0, 1000)),
+    ];
+    case 'simulation': return [
+      ...bounded(inputs.solar.installedPowerW, 'Installed source EOL power (W)', 0, 100000),
+      ...bounded(inputs.topology.efficiency, 'Conditioning efficiency', 0, 1, true),
+      ...bounded(inputs.topology.idlePowerW, 'Additional EPS baseline demand (W)', 0, 10000),
+      ...bounded(inputs.battery.capacityWh, 'BOL battery capacity (Wh): selected pack evidence or an explicit engineering assumption is required for simulation', 0, 100000, true),
       ...bounded(inputs.battery.retainedEnergy, 'Retained energy fraction', 0, 1, true),
       ...bounded(inputs.battery.chargeEfficiency, 'Battery charging energy efficiency', 0, 1, true),
       ...bounded(inputs.battery.dischargeEfficiency, 'Battery discharging energy efficiency', 0, 1, true),
       ...bounded(inputs.battery.maxChargeW, 'Charge acceptance limit (W)', 0, 100000),
       ...bounded(inputs.battery.maxDischargeW, 'Discharge power limit (W)', 0, 100000),
-    ];
-    case 'topology': return [
-      ...bounded(inputs.topology.efficiency, 'Conditioning efficiency', 0, 1, true),
-      ...bounded(inputs.topology.idlePowerW, 'Aggregate EPS idle power (W)', 0, 10000),
-      ...bounded(inputs.topology.massAllocationKg, 'EPS mass allocation (kg)', 0, 1000, true),
-    ];
-    case 'simulation': return [
-      ...bounded(inputs.solar.installedPowerW, 'Installed source EOL power (W)', 0, 100000),
       ...(inputs.topology.conditioning === 'DET' ? ['DET simulation needs a characterized array I–V operating point. Select MPPT for this demo energy model.'] : []),
     ];
     default: return [];
@@ -88,7 +94,7 @@ export function nodeStatuses(workspace: Workspace): Record<NodeId, NodeStatus> {
     const record = workspace.records[definition.id];
     const hasEvaluation = record.evaluatedRevision !== null;
     const dependenciesCurrent = definition.dependencies.every(id => statuses[id] === 'complete');
-    const valid = inputIssues(definition.id, workspace.inputs).length === 0;
+    const valid = inputIssues(definition.id, workspace.inputs).length === 0 && !(definition.id === 'simulation' && workspace.catalogReview?.length);
     if (hasEvaluation && (record.evaluatedRevision !== record.revision || !dependenciesCurrent || !valid)) statuses[definition.id] = 'stale';
     else if (!valid || !dependenciesCurrent) statuses[definition.id] = 'locked';
     else statuses[definition.id] = hasEvaluation ? 'complete' : 'ready';
@@ -99,6 +105,7 @@ export function nodeStatuses(workspace: Workspace): Record<NodeId, NodeStatus> {
 export function missingForNodes(workspace: Workspace, statuses = nodeStatuses(workspace)): Record<NodeId, string[]> {
   return Object.fromEntries(NODE_DEFINITIONS.map(node => [node.id, [
     ...inputIssues(node.id, workspace.inputs),
+    ...(node.id === 'simulation' && workspace.catalogReview?.length ? ['Changed catalog records require explicit allocation review before simulation.', ...workspace.catalogReview] : []),
     ...node.dependencies.filter(id => statuses[id] !== 'complete').map(id => `${NODE_BY_ID[id].title} is ${statuses[id]}. Evaluate it first.`),
   ]])) as Record<NodeId, string[]>;
 }
@@ -106,7 +113,7 @@ export function missingForNodes(workspace: Workspace, statuses = nodeStatuses(wo
 export function descendants(id: NodeId): NodeId[] {
   const affected = new Set<NodeId>([id]);
   for (const node of NODE_DEFINITIONS) {
-    if (node.dependencies.some(dependency => affected.has(dependency))) affected.add(node.id);
+    if ([...node.dependencies, ...node.evidenceDependencies ?? []].some(dependency => affected.has(dependency))) affected.add(node.id);
   }
   return [...affected];
 }

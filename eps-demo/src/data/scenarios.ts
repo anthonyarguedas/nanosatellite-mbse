@@ -39,7 +39,7 @@ export const EXAMPLE_SCENARIOS: Scenario[] = [
   },
   {
     id: 'birds4-stress', name: 'BIRDS-4 · Overlapping missions', kind: 'nominal', revision: 1,
-    description: 'A hypothetical two-orbit stress case. Extended camera, APRS and actuator operation coincide. It demonstrates energy depletion and is not a historical BIRDS-4 schedule.',
+    description: 'A hypothetical two-orbit stress case. Extended camera, APRS and actuator operation coincide. With the illustrative default COTS allocation, generation and replenishment fail even though the oversized pack avoids depletion during this interval. Not a historical BIRDS-4 schedule.',
     illuminationFactor: 1, initialEnergyFraction: 0.72, minimumEnergyFraction: 0.35, durationOrbits: 2,
     loads: stressLoads, provenance,
   },

@@ -1,5 +1,6 @@
 import type { Analysis, Catalog, Check, DesignInputs, Product, Specification, Suggestion } from '../types';
 import { activeScenario, numberInRange } from './validation';
+import { isLoadConverter, productCoverage } from '../catalog/coverage';
 
 export interface NumericEvidence { value?: number; spec?: Specification; sourceIds: string[]; issue?: string }
 const UNITS: Record<string, string> = {
@@ -14,11 +15,12 @@ export function numericEvidence(product: Product, key: string): NumericEvidence 
   if (!spec || spec.status !== 'available' || spec.value === null) return missing('missing or not applicable');
   if (typeof spec.value !== 'number' || !Number.isFinite(spec.value) || spec.value < 0) return missing('no valid nonnegative scalar');
   if (UNITS[key] && spec.unit !== UNITS[key]) return missing(`expected ${UNITS[key]}, received ${spec.unit || 'no unit'}`);
-  if (!spec.sourceId || !product.sources.some(source => source.id === spec.sourceId && source.url && source.revision)
+  const sourceIds = [spec.sourceId, ...spec.additionalSourceIds ?? []];
+  if (!spec.sourceId || sourceIds.some(id => !product.sources.some(source => source.id === id && source.url && source.revision))
     || !spec.original.trim() || !spec.conditions.trim() || !spec.location.trim()) {
     return missing('source ID, revision, original value, conditions or document location is missing');
   }
-  return { value: spec.value, spec, sourceIds: [spec.sourceId] };
+  return { value: spec.value, spec, sourceIds: [...new Set(sourceIds as string[])] };
 }
 
 export const lowerBound = (spec?: Specification): boolean => spec?.meaning === 'minimum' || spec?.meaning === 'specified';
@@ -76,7 +78,7 @@ function outcome(checks: Check[], structurallyIncomplete = false): Suggestion['o
 }
 
 /** One suggestion per product/role. Scope: panels 1..8, bare cells 1..256, finished packs/boards exactly one. */
-export function suggestProducts(catalog: Catalog, inputs: DesignInputs, analysis: Analysis): Suggestion[] {
+export function suggestProducts(catalog: Catalog, inputs: DesignInputs, analysis: Analysis, frozenQuantities: Readonly<Record<string, number>> = {}): Suggestion[] {
   if (catalog.products.length > 128) throw new Error('This bounded demo supports at most 128 catalog products. Narrow the catalog explicitly.');
   const suggestions: Suggestion[] = [];
   const scenario = activeScenario(inputs);
@@ -89,6 +91,10 @@ export function suggestProducts(catalog: Catalog, inputs: DesignInputs, analysis
   for (const product of [...catalog.products].sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0)) {
     if (ids.has(product.id)) throw new Error(`Catalog contains duplicate product id ${product.id}.`);
     ids.add(product.id);
+    if (product.catalogUse === 'reference-only') continue;
+    const frozen = frozenQuantities[product.id];
+    const maximum = product.level === 'cell' ? 256 : product.level === 'panel' ? 8 : 1;
+    if (frozen !== undefined && (!Number.isSafeInteger(frozen) || frozen < 1 || frozen > maximum)) throw new Error(`${product.id}: invalid frozen allocation quantity.`);
     const commonMissing: string[] = [];
     if (!product.supportedConfigurations.length) commonMissing.push('supportedConfigurations');
     if (!product.accountingBoundary.trim()) commonMissing.push('accountingBoundary');
@@ -96,7 +102,7 @@ export function suggestProducts(catalog: Catalog, inputs: DesignInputs, analysis
     if (product.roles.includes('solar')) {
       const evidence = solarEvidence(product);
       const max = product.level === 'cell' ? 256 : 8;
-      const quantity = quantityFor(requiredSolar, evidence.value, illumination, max);
+      const quantity = frozen ?? quantityFor(requiredSolar, evidence.value, illumination, max);
       const check = atLeast('CATALOG-SOLAR-POWER', 'Cited EOL solar generation screen', evidence, requiredSolar, quantity, illumination);
       const missing = [...commonMissing, 'installed orientation, temperature/lifetime applicability and interconnection', 'input tracking/open-circuit/current compatibility'];
       if (evidence.issue) missing.push(evidence.issue);
@@ -115,10 +121,13 @@ export function suggestProducts(catalog: Catalog, inputs: DesignInputs, analysis
     if (product.roles.includes('battery')) {
       const evidence = numericEvidence(product, 'energyWh');
       const cell = product.level === 'cell';
-      const quantity = cell ? quantityFor(requiredBattery, evidence.value, 1, 256) : 1;
+      const quantity = frozen ?? (cell ? quantityFor(requiredBattery, evidence.value, 1, 256) : 1);
       const check = atLeast('CATALOG-BATTERY-CAPACITY', 'Preliminary BOL energy capacity', evidence, requiredBattery, quantity);
       check.scope = 'BOL energy versus preliminary requirement with M once. This is not a guaranteed EOL capacity or charge/cycle-life pass.';
-      const missing = [...commonMissing, 'sourced retained energy/charge and applicable temperature/lifetime bounds', 'charger policy, voltage mapping and installed interfaces'];
+      const missing = [...commonMissing, 'temperature/lifetime applicability, charger matching, voltage mapping and installed interfaces'];
+      for (const key of ['retainedEnergyFraction', 'retainedChargeFraction', 'chargeEfficiency', 'dischargeEfficiency']) {
+        if (numericEvidence(product, key).value === undefined) missing.push(key);
+      }
       if (evidence.issue) missing.push(evidence.issue);
       if (requiredBattery === undefined) missing.push('analysis.battery.requiredWh');
       if (check.verdict === 'unassessed' && evidence.spec) missing.push('conservative sourced BOL energy rating');
@@ -132,7 +141,15 @@ export function suggestProducts(catalog: Catalog, inputs: DesignInputs, analysis
         reason: `${result}: ${cell ? 'finite 1..256 bare-cell preliminary energy count' : 'one fixed finished pack/board with unchanged internal arrangement'}. BOL energy never establishes guaranteed EOL performance. Cycle life and charge state remain unassessed. No cost ranking.`,
       });
     }
-    if (product.roles.includes('conditioning')) {
+    if (product.roles.includes('conditioning') && isLoadConverter(product)) {
+      const coverage = productCoverage(product, 'conditioning');
+      suggestions.push({ productId: product.id, role: 'conditioning', quantity: 1, outcome: 'incomplete',
+        checks: [{ id: 'CATALOG-LOAD-CONVERTER-INTERFACES', title: 'Assigned load-converter path', verdict: 'unassessed',
+          detail: 'This product regulates a DC load rail. It is not a PV receiver or charger. Assigned rail input/output, load current and installed connections are not evaluated. Array source power is not its input demand.' }],
+        missing: [...coverage.core.filter(item => !item.covered).flatMap(item => item.issues), 'installed DC rail assignment, voltage/current and interface applicability'],
+        reason: 'One fixed purchased load converter. Sourced comparison coverage does not establish a solar MPPT/DET or charger implementation.' });
+    }
+    if (product.roles.includes('conditioning') && !isLoadConverter(product)) {
       const evidence = numericEvidence(product, 'maxInputW');
       const source = inputs.solar.installedPowerW;
       if (source !== null) numberInRange(source, 'Installed available EOL source power');
@@ -157,6 +174,16 @@ export function suggestProducts(catalog: Catalog, inputs: DesignInputs, analysis
       const result = outcome(checks);
       suggestions.push({ productId: product.id, role: 'conditioning', quantity: 1, outcome: result, checks, missing,
         reason: `${result}: one fixed board. Any scalar power check leaves voltage, topology, current, protection and charger compatibility unresolved. No cost ranking.` });
+    }
+    for (const role of ['distribution', 'processor', 'software'] as const) {
+      if (!product.roles.includes(role)) continue;
+      const coverage = productCoverage(product, role);
+      const missing = [...coverage.identityIssues, ...coverage.core.filter(item => !item.covered).flatMap(item => item.issues),
+        ...coverage.richer.filter(item => !item.covered).map(item => `${item.label}: richer characterization missing`)];
+      suggestions.push({ productId: product.id, role, quantity: frozen ?? 1, outcome: 'incomplete', missing,
+        checks: [{ id: `CATALOG-${role.toUpperCase()}-SCOPE`, title: `${role} architecture assessment`, verdict: 'unassessed',
+          detail: 'Documented role allocation only. Installed interfaces, resources, service behavior and compatibility are not evaluated by this demo.', sourceIds: product.sources.map(source => source.id) }],
+        reason: 'One fixed product, exact documented role. Comparison coverage is separate from architecture feasibility. No synthetic compatibility or resource pass.' });
     }
   }
   return suggestions;

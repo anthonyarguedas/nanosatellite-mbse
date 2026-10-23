@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createExampleWorkspace } from './model';
+import { changeInputs, createExampleWorkspace } from './model';
 import { parseWorkspace, serializeWorkspace } from './serialization';
 
  describe('design file boundary', () => {
@@ -38,8 +38,7 @@ import { parseWorkspace, serializeWorkspace } from './serialization';
     expect(restored.inputs).not.toHaveProperty('polluted');
   });
   it('accepts missing numeric values as null so the graph can request them', () => {
-    const original = createExampleWorkspace();
-    original.inputs.mission.altitudeKm = null;
+    const original = changeInputs(createExampleWorkspace(), inputs => { inputs.mission.altitudeKm = null; return inputs; });
     expect(parseWorkspace(original).inputs.mission.altitudeKm).toBeNull();
   });
 });

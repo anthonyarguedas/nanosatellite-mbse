@@ -3,7 +3,7 @@ import { catalog } from '../data/catalog';
 import { missingForNodes, nodeStatuses } from '../workflow';
 import type { DesignInputs, NodeId, Role, Scenario, Workspace } from '../types';
 import { activeScenario, applyProduct, changeInputs, createExampleWorkspace, createWorkspace, emptyInputs, evaluateNode, evaluateReady } from './model';
-import { parseWorkspace, serializeWorkspace } from './serialization';
+import { restoreWorkspace, serializeWorkspace } from './serialization';
 
 const STORAGE_KEY = 'orbitwork.eps-demo.v1';
 interface State { workspace: Workspace; error: string | null }
@@ -14,19 +14,12 @@ function reducer(state: State, action: Action): State {
   try { return { workspace: action.apply(state.workspace), error: null }; }
   catch (error) { return { ...state, error: error instanceof Error ? error.message : 'The calculation could not be completed.' }; }
 }
-function checkSelections(selections: Partial<Record<Role, string>>): Partial<Record<Role, string>> {
-  for (const [role, id] of Object.entries(selections)) {
-    const product = catalog.products.find(item => item.id === id);
-    if (!product || !product.roles.includes(role as Role)) throw new Error(`The saved ${role} allocation is absent or unsupported in this catalog revision. Load the example or select a current product.`);
-  }
-  return selections;
-}
 function initialize(): State {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      const { inputs, selections } = parseWorkspace(JSON.parse(saved));
-      return { workspace: { ...createWorkspace(inputs), selections: checkSelections(selections) }, error: null };
+      const workspace = restoreWorkspace(JSON.parse(saved), catalog, true);
+      return { workspace, error: null };
     }
   } catch {
     return { workspace: createExampleWorkspace(), error: 'The saved local design could not be restored. The example was loaded. Your other files are unchanged.' };
@@ -44,11 +37,11 @@ export function useWorkspace() {
   useEffect(() => {
     try {
       // Persist the authored model. Results are recalculated after reload or JSON import.
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ schemaVersion: 1, inputs: workspace.inputs, selections: workspace.selections, catalogRevision: catalog.revision }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ schemaVersion: 1, inputs: workspace.inputs, selections: workspace.selections, allocations: workspace.allocations, provenance: workspace.provenance, catalogRevision: catalog.revision, catalogReview: workspace.catalogReview }));
     } catch {
       dispatch({ type: 'error', error: 'Local storage is unavailable or full. Keep working and export JSON to save this design.' });
     }
-  }, [workspace.inputs, workspace.selections]);
+  }, [workspace.inputs, workspace.selections, workspace.allocations, workspace.provenance, workspace.catalogReview]);
 
   const runNode = useCallback((id: NodeId) => dispatch({ type: 'change', apply: current => evaluateNode(current, id) }), []);
   const runAll = useCallback(() => dispatch({ type: 'change', apply: evaluateReady }), []);
@@ -86,8 +79,7 @@ export function useWorkspace() {
   const restore = useCallback(async (file: File) => {
     try {
       if (file.size > 2_000_000) throw new Error('Design files must be smaller than 2 MB.');
-      const { inputs, selections } = parseWorkspace(JSON.parse(await file.text()));
-      dispatch({ type: 'replace', workspace: { ...createWorkspace(inputs), selections: checkSelections(selections) } });
+      dispatch({ type: 'replace', workspace: restoreWorkspace(JSON.parse(await file.text())) });
     } catch (error) {
       dispatch({ type: 'error', error: error instanceof Error ? error.message : 'The design file could not be read.' });
     }

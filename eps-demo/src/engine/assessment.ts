@@ -1,5 +1,6 @@
-import type { Analysis, Catalog, Check, DesignInputs, Product, Role } from '../types';
-import { lowerBound, numericEvidence, upperBound } from './catalog';
+import type { AllocationReceipt, Analysis, Catalog, Check, DesignInputs, Product, Role } from '../types';
+import { allocationIssues, EPS_ROLES, getAllocationQuantity } from './allocations';
+import { lowerBound, numericEvidence, suggestProducts, upperBound } from './catalog';
 import { activeScenario, finiteResult, numberInRange } from './validation';
 
 const REQUIREMENTS: [string, string, string][] = [
@@ -27,7 +28,7 @@ const REQUIREMENTS: [string, string, string][] = [
 
 /** Always returns EPS-01..20 plus explicitly scoped subchecks. No complete-feasibility assertion. */
 export function assessDesign(
-  inputs: DesignInputs, analysis: Analysis, catalog: Catalog, selections: Partial<Record<Role, string>>,
+  inputs: DesignInputs, analysis: Analysis, catalog: Catalog, selections: Partial<Record<Role, string>>, allocations?: AllocationReceipt[],
 ): Check[] {
   const checks = REQUIREMENTS.map(([id, title, detail]): Check => ({
     id, title, verdict: 'unassessed', detail,
@@ -92,15 +93,21 @@ export function assessDesign(
   });
   if (batteryVerdict === 'fail') set('EPS-08', { verdict: 'fail', detail: 'Installed BOL battery energy is below the preliminary capacity requirement.' });
 
+  const allocationSubject = { selections, allocations };
+  const receiptIssues = allocationIssues(allocationSubject, catalog);
   const selectedProducts = new Map<string, Product>();
   const missingProducts: string[] = [];
   const roleViolations: string[] = [];
-  for (const [role, id] of Object.entries(selections) as [Role, string][]) {
+  for (const role of EPS_ROLES) {
+    const id = selections[role];
+    if (!id) continue;
     const product = catalog.products.find(candidate => candidate.id === id);
     if (!product) { missingProducts.push(id); continue; }
     selectedProducts.set(id, product);
     if (!product.roles.includes(role)) roleViolations.push(`${id} does not declare role ${role}`);
-    for (const suggestion of analysis.suggestions ?? []) {
+    const quantity = getAllocationQuantity(allocationSubject, id);
+    const allocatedScreens = quantity === null ? [] : suggestProducts({ revision: catalog.revision, products: [product] }, inputs, analysis, { [id]: quantity });
+    for (const suggestion of allocatedScreens) {
       if (suggestion.productId !== id || suggestion.role !== role) continue;
       const failure = suggestion.checks.find(check => check.verdict === 'fail');
       if (failure && role === 'solar') set('EPS-02', { verdict: 'fail', detail: failure.detail, sourceIds: failure.sourceIds });
@@ -108,7 +115,7 @@ export function assessDesign(
       if (failure && role === 'conditioning') set('EPS-03', { verdict: 'fail', detail: failure.detail, sourceIds: failure.sourceIds });
     }
   }
-  if (roleViolations.length) set('EPS-01', { verdict: 'fail', detail: roleViolations.join('. ') });
+  if (roleViolations.length || receiptIssues.length) set('EPS-01', { verdict: 'fail', detail: [...roleViolations, ...receiptIssues].join('. ') });
   else if (missingProducts.length) set('EPS-01', { detail: `Catalog entries missing: ${missingProducts.join(', ')}. Installed usages and external circuitry remain unassessed.` });
 
   const battery = selections.battery ? selectedProducts.get(selections.battery) : undefined;
@@ -120,16 +127,22 @@ export function assessDesign(
 
   let subtotal = 0;
   let knownLowerSubtotal = 0;
-  let allMassBounds = selectedProducts.size > 0 && missingProducts.length === 0;
+  let allMassBounds = [...selectedProducts.values()].some(product => product.level !== 'software') && missingProducts.length === 0;
   const massMissing = [...missingProducts.map(id => `${id}: catalog entry missing`)];
   const massSources = new Set<string>();
   const accounted: string[] = [];
   for (const product of selectedProducts.values()) {
-    // Canonical selections contain IDs, not usages. Use current non-rejected suggestion quantities only as a declared candidate subtotal.
-    const quantities = (analysis.suggestions ?? []).filter(suggestion => suggestion.productId === product.id
-      && selections[suggestion.role] === product.id && suggestion.outcome !== 'rejected'
-      && Number.isSafeInteger(suggestion.quantity) && suggestion.quantity > 0).map(suggestion => suggestion.quantity);
-    const quantity = quantities.length ? Math.max(...quantities) : 1;
+    if (product.level === 'software') {
+      accounted.push(`${product.id}: logical software, physical resources belong to its host (host allocation/resources unassessed)`);
+      continue;
+    }
+    const quantity = getAllocationQuantity(allocationSubject, product.id);
+    if (quantity === null) {
+      allMassBounds = false;
+      accounted.push(`unknown quantity × ${product.id}`);
+      massMissing.push(`${product.id}: frozen allocation quantity missing (legacy selections are not resized from suggestions)`);
+      continue;
+    }
     const mass = numericEvidence(product, 'massKg');
     accounted.push(`${quantity} × ${product.id}`);
     if (mass.value === undefined) {
@@ -146,7 +159,7 @@ export function assessDesign(
   const massFail = allocation !== null && knownLowerSubtotal > allocation;
   const massVerdict = massFail ? 'fail'
     : allocation !== null && allMassBounds && subtotal <= allocation ? 'pass' : 'unassessed';
-  const massDetail = `Known selected-product mass subtotal ${subtotal.toPrecision(8)} kg${allocation !== null ? ` versus ${allocation} kg allocation` : ', allocation missing'}. Each product ID is physical once across logical roles: ${accounted.join(', ') || 'none selected'}. Quantities use current non-rejected suggestions, otherwise one unit per selected ID. ${massMissing.length ? `Missing: ${massMissing.join('; ')}. ` : ''}Auxiliaries, explicit installed usages, full volume and geometry remain unknown.`;
+  const massDetail = `Known selected-product mass subtotal ${subtotal.toPrecision(8)} kg${allocation !== null ? ` versus ${allocation} kg allocation` : ', allocation missing'}. Each product ID is physical once across logical roles: ${accounted.join(', ') || 'none selected'}. Quantities come only from frozen allocation receipts; current suggestions never resize allocated hardware. ${massMissing.length ? `Missing: ${massMissing.join('; ')}. ` : ''}Auxiliaries, explicit installed usages, full volume and geometry remain unknown.`;
   extras.push({
     id: 'KNOWN-MASS', title: 'Deduplicated known product mass subtotal', verdict: massVerdict, detail: massDetail,
     sourceIds: [...massSources], scope: 'Selected candidate subtotal only. No full EPS-19 pass. Typical mass is indicative and cannot establish a guaranteed limit.',

@@ -30,9 +30,18 @@ export function fixture(): { workspace: Workspace; catalog: Catalog } {
         { productId: 'test-solar', role: 'solar', outcome: 'incomplete', quantity: 2, reason: 'Test only', checks: [], missing: ['installed array wiring'] },
         { productId: 'test-pack', role: 'battery', outcome: 'incomplete', quantity: 1, reason: 'Test only', checks: [], missing: ['pin mapping'] },
         { productId: 'test-board', role: 'conditioning', outcome: 'incomplete', quantity: 1, reason: 'Test only', checks: [], missing: ['pin mapping'] },
+        { productId: 'test-board', role: 'distribution', outcome: 'incomplete', quantity: 1, reason: 'Test only', checks: [], missing: ['channel mapping'] },
+        { productId: 'test-board', role: 'processor', outcome: 'incomplete', quantity: 1, reason: 'Test only', checks: [], missing: ['host resources'] },
       ],
     },
     selections: { solar: 'test-solar', battery: 'test-pack', conditioning: 'test-board', distribution: 'test-board', processor: 'test-board' },
+    allocations: ['test-solar', 'test-pack', 'test-board'].map(productId => ({
+      productId, productRevision: common.revision, catalogRevision: 'synthetic-catalog-1',
+      roles: products.find(product => product.id === productId)!.roles,
+      quantity: productId === 'test-solar' ? 2 : 1, origin: 'engineer-allocation',
+      rationale: 'Explicit synthetic concept count. No installed arrangement or physical evidence.',
+      allocatedAt: '2026-10-17T00:00:00Z',
+    })),
   };
   return { workspace, catalog: { revision: 'synthetic-catalog-1', products } };
 }

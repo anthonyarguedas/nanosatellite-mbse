@@ -5,6 +5,7 @@ import { efficiency, finiteResult, numberInRange, validateBudget, validateOrbit,
 export { suggestProducts } from './catalog';
 export { simulateOrbit } from './simulation';
 export { assessDesign } from './assessment';
+export { getAllocationQuantity, allocationIssues } from './allocations';
 
 /** El Hachimi model in design-proposal.tex. Circular orbit, fixed maximum eclipse geometry. */
 export function calculateOrbit(altitudeKm: number): OrbitResult {
@@ -19,9 +20,10 @@ export function calculateOrbit(altitudeKm: number): OrbitResult {
   return { periodS, sunlightS, eclipseS, orbitsPerDay: 86400 / periodS, sunlightFraction, psiRad };
 }
 
-export function calculateBudget(scenario: Scenario, orbit: OrbitResult): BudgetResult {
+export function calculateBudget(scenario: Scenario, orbit: OrbitResult, additionalEpsPowerW = 0): BudgetResult {
   validateOrbit(orbit);
   validateScenario(scenario);
+  numberInRange(additionalEpsPowerW, 'Additional EPS baseline demand (W)');
   const events = phaseEvents(scenario, orbit);
   let sunlightWh = 0;
   let eclipseWh = 0;
@@ -31,7 +33,7 @@ export function calculateBudget(scenario: Scenario, orbit: OrbitResult): BudgetR
     const start = events[i];
     const end = events[i + 1];
     const phase = start + (end - start) / 2;
-    const powerW = finiteResult(demandAtPhase(scenario, phase), 'Aggregate load power');
+    const powerW = finiteResult(demandAtPhase(scenario, phase) + additionalEpsPowerW, 'Aggregate load and EPS power');
     const wh = powerW * (end - start) * orbit.periodS / 3600;
     if (phase < orbit.sunlightFraction) sunlightWh += wh;
     else eclipseWh += wh;
@@ -41,7 +43,7 @@ export function calculateBudget(scenario: Scenario, orbit: OrbitResult): BudgetR
   }
   const totalWh = finiteResult(sunlightWh + eclipseWh, 'Load energy');
   return { sunlightWh, eclipseWh, totalWh, averageW: finiteResult(totalWh / (orbit.periodS / 3600), 'Average load power'), peakW, samples,
-    orbitPeriodS: orbit.periodS, sunlightFraction: orbit.sunlightFraction, scenarioId: scenario.id, scenarioRevision: scenario.revision };
+    orbitPeriodS: orbit.periodS, sunlightFraction: orbit.sunlightFraction, scenarioId: scenario.id, scenarioRevision: scenario.revision, additionalEpsPowerW };
 }
 
 export function sizeSolar(inputs: DesignInputs, budget: BudgetResult, orbit: OrbitResult): SolarResult {
@@ -49,10 +51,14 @@ export function sizeSolar(inputs: DesignInputs, budget: BudgetResult, orbit: Orb
   validateBudget(budget);
   const xs = efficiency(inputs.solar.sunlightEfficiency, 'Sunlight path efficiency Xs');
   const xe = efficiency(inputs.solar.eclipseEfficiency, 'Eclipse path efficiency Xe');
-  const v = numberInRange(inputs.solar.cellEolV, 'Cell EOL maximum power voltage', 0, Infinity, true);
-  const a = numberInRange(inputs.solar.cellEolA, 'Cell EOL maximum power current', 0, Infinity, true);
   const minimumPowerW = finiteResult((budget.sunlightWh / xs + budget.eclipseWh / xe)
     / (orbit.sunlightS / 3600), 'Preliminary solar power');
+  // Missing selected-cell characterization cannot prevent calculation of the generation requirement.
+  if (inputs.solar.cellEolV === null || inputs.solar.cellEolA === null) {
+    return { minimumPowerW, cellPowerW: null, cellCount: null, rawCellCount: null };
+  }
+  const v = numberInRange(inputs.solar.cellEolV, 'Cell EOL maximum power voltage', 0, Infinity, true);
+  const a = numberInRange(inputs.solar.cellEolA, 'Cell EOL maximum power current', 0, Infinity, true);
   const cellPowerW = finiteResult(v * a, 'Cell EOL power');
   const rawCellCount = finiteResult(minimumPowerW / cellPowerW, 'Preliminary cell count');
   const cellCount = Math.ceil(rawCellCount);
@@ -65,13 +71,17 @@ export function sizeBattery(inputs: DesignInputs, budget: BudgetResult, orbit: O
   validateBudget(budget);
   const dod = efficiency(inputs.battery.dod, 'Preliminary charge DoD assumption');
   const margin = numberInRange(inputs.battery.margin, 'Preliminary battery margin M');
-  const capacity = numberInRange(inputs.battery.capacityWh, 'Battery BOL capacity (Wh)', 0, Infinity, true);
-  const retained = efficiency(inputs.battery.retainedEnergy, 'Retained energy factor fE');
   const lifetime = numberInRange(inputs.mission.lifetimeYears, 'Mission lifetime (years)', 0, Infinity, true);
+  // Installed capability is a separate optional comparison, never an input to requiredWh or cycles.
+  const capacity = inputs.battery.capacityWh;
+  const retained = inputs.battery.retainedEnergy;
+  const eolCapacityWh = capacity !== null && retained !== null && Number.isFinite(capacity) && capacity > 0
+    && Number.isFinite(retained) && retained > 0 && retained <= 1 && Number.isFinite(capacity * retained)
+    ? capacity * retained : null;
   return {
     requiredWh: finiteResult(budget.eclipseWh / dod * (1 + margin), 'Preliminary battery energy'),
     cycles: finiteResult(lifetime * 365.25 * orbit.orbitsPerDay, 'Mission cycle count'),
-    eolCapacityWh: finiteResult(capacity * retained, 'Battery EOL capacity'),
+    eolCapacityWh,
     dod,
   };
 }

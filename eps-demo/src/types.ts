@@ -11,17 +11,25 @@ export interface Source {
   revision: string;
   location: string;
   retrievedAt: string;
+  /** Reviewed authority and exact source bytes. Optional for legacy evidence. */
+  publisher?: string;
+  kind?: 'manufacturer' | 'maintainer' | 'test-report';
+  sha256?: string;
 }
 export interface Specification {
   value: number | string | number[] | null;
   unit: string;
-  meaning: 'minimum' | 'typical' | 'maximum' | 'nominal' | 'estimated' | 'specified';
+  meaning: 'minimum' | 'typical' | 'maximum' | 'nominal' | 'estimated' | 'specified' | 'measured';
   status: 'available' | 'missing' | 'not-applicable';
   original: string;
   conditions: string;
   sourceId: string | null;
+  /** Additional cited documents for reviewed multi-document facts. No expression execution. */
+  additionalSourceIds?: string[];
   location: string;
   rationale?: string;
+  /** Arrays retain their actual semantics. Numerical engine remains scalar-only. */
+  valueForm?: 'scalar' | 'interval' | 'min-typ-max' | 'set';
 }
 export interface Product {
   id: string;
@@ -29,7 +37,7 @@ export interface Product {
   manufacturer: string;
   name: string;
   partNumber: string;
-  level: 'cell' | 'panel' | 'pack' | 'board' | 'software';
+  level: 'cell' | 'panel' | 'pack' | 'board' | 'component' | 'assembly' | 'software';
   roles: Role[];
   description: string;
   specs: Record<string, Specification>;
@@ -37,6 +45,8 @@ export interface Product {
   supportedConfigurations: string[];
   accountingBoundary: string;
   caveats: string[];
+  /** Published mission assemblies remain browseable context, not selectable procurement options. */
+  catalogUse?: 'comparison-option' | 'reference-only';
 }
 export interface Catalog {
   revision: string;
@@ -116,13 +126,13 @@ export interface DesignInputs {
   };
 }
 export interface OrbitResult { periodS: number; sunlightS: number; eclipseS: number; orbitsPerDay: number; sunlightFraction: number; psiRad: number }
-export interface BudgetResult { sunlightWh: number; eclipseWh: number; totalWh: number; averageW: number; peakW: number; samples: { phase: number; powerW: number }[]; orbitPeriodS?: number; sunlightFraction?: number; scenarioId?: string; scenarioRevision?: number }
-export interface SolarResult { minimumPowerW: number; cellPowerW: number; cellCount: number; rawCellCount: number }
-export interface BatteryResult { requiredWh: number; cycles: number; eolCapacityWh: number; dod: number }
+export interface BudgetResult { sunlightWh: number; eclipseWh: number; totalWh: number; averageW: number; peakW: number; samples: { phase: number; powerW: number }[]; orbitPeriodS?: number; sunlightFraction?: number; scenarioId?: string; scenarioRevision?: number; additionalEpsPowerW?: number }
+export interface SolarResult { minimumPowerW: number; cellPowerW: number | null; cellCount: number | null; rawCellCount: number | null }
+export interface BatteryResult { requiredWh: number; cycles: number; eolCapacityWh: number | null; dod: number }
 export interface Check { id: string; title: string; verdict: Verdict; detail: string; equation?: string; scope?: string; sourceIds?: string[] }
 export interface Suggestion {
   productId: string;
-  role: 'solar' | 'battery' | 'conditioning';
+  role: Role;
   outcome: 'preliminary-match' | 'incomplete' | 'rejected';
   quantity: number;
   reason: string;
@@ -157,11 +167,43 @@ export interface Analysis {
   checks?: Check[];
 }
 export interface NodeRecord { revision: number; evaluatedRevision: number | null; evaluatedAt: string | null }
+/** One concept allocation per product, shared by every selected logical role. Not a pin-level usage or approved BOM. */
+export interface AllocationReceipt {
+  productId: string;
+  productRevision: string;
+  catalogRevision: string;
+  roles: Role[];
+  quantity: number;
+  origin: 'engineer-allocation' | 'bundled-example';
+  rationale: string;
+  allocatedAt: string;
+  /** Canonical reviewed product record at allocation, for safe additive catalog updates. */
+  productSnapshot?: string;
+}
+export type NumericInputPath = `mission.${'altitudeKm' | 'lifetimeYears'}`
+  | `solar.${keyof DesignInputs['solar']}` | `battery.${keyof DesignInputs['battery']}`
+  | `topology.${'efficiency' | 'idlePowerW' | 'massAllocationKg'}`;
+/** Authored interpretation, not a new manufacturer specification or engineering approval. */
+export interface ParameterProvenance {
+  parameter: NumericInputPath;
+  value: number;
+  kind: 'catalog-value' | 'engineering-assumption';
+  rationale: string;
+  conditions: string;
+  sourceIds: string[];
+  productId?: string;
+  productRevision?: string;
+}
 export interface Workspace {
   schemaVersion: 1;
   inputs: DesignInputs;
   records: Record<NodeId, NodeRecord>;
   analysis: Analysis;
   selections: Partial<Record<Role, string>>;
+  /** Absent in legacy designs: no quantity or provenance is inferred on import. */
+  allocations?: AllocationReceipt[];
+  provenance?: ParameterProvenance[];
+  /** Preserved authored facts need explicit review after a changed catalog record. */
+  catalogReview?: string[];
 }
-export interface NodeDefinition { id: NodeId; title: string; subtitle: string; stage: string; dependencies: NodeId[]; requirements: string[]; equation: string }
+export interface NodeDefinition { id: NodeId; title: string; subtitle: string; stage: string; dependencies: NodeId[]; evidenceDependencies?: NodeId[]; requirements: string[]; equation: string }

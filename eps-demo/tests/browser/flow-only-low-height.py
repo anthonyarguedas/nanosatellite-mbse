@@ -1,0 +1,11 @@
+"""Verify accessible pane overflow at short viewport height instead of clipping."""
+probe.wait_js("document.querySelectorAll('[data-activity]').length===10")
+js("document.querySelector('[data-activity=scenarios]').focus({preventScroll:true})")
+p=js("(()=>{const r=document.querySelector('[data-activity=scenarios]').getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()")
+click_at_xy(p['x'],p['y'])
+probe.wait_js("document.querySelector('[data-pane-task]')?.dataset.paneTask==='scenarios'")
+geometry=js("(()=>{const e=document.querySelector('.sheet-content');return {height:e.clientHeight,scroll:e.scrollHeight,overflow:getComputedStyle(e).overflowY}})()")
+probe.check('low-height overflow remains accessible',geometry['scroll']>geometry['height'] and geometry['overflow']=='auto',geometry)
+probe.point('[data-action=remove-scenario]')
+probe.check('offscreen controls remain reachable by native scrolling',js("document.querySelector('.sheet-content').scrollTop>0"))
+probe.save('low-height.json',geometry)

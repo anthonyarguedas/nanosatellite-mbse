@@ -29,11 +29,11 @@ const blob = new Blob([bytes], { type: 'application/zip' });
 
 The exporter is synchronous, pure TypeScript and browser compatible. It has no runtime dependencies or backend. The ZIP helper produces a deterministic uncompressed archive. The GUI can download the Blob and display the scope and warnings. `buildKiCadExport` throws an actionable error for stale or uncomputed prerequisites, missing outputs, absent allocations, unsupported products, rejected suggestions, known failed suggestion checks and invalid quantities.
 
-Current records are required through **candidates**, including every upstream node. Simulation and assessment are unnecessary for this limited drawing. Incomplete product matches remain visibly incomplete. Only allocated catalog products are exported. Integrated roles share one usage and quantity. Proposed internal role associations are recorded without fake external wires. The scenario demand sheet is explicitly authored logical demand, not another COTS product.
+Current records and valid inputs are required through **candidates**, including every upstream node. Simulation and assessment are unnecessary for this limited drawing. Missing pack energy can leave simulation unavailable while permitting a logical review. Incomplete product matches remain visibly incomplete. Only allocated catalog products are exported. Integrated roles share one usage and frozen concept quantity. Proposed internal role associations are recorded without fake external wires. The scenario demand sheet is explicitly authored logical demand, not another COTS product.
 
-The manifest preserves exact catalog entry revisions, source URLs/document revisions, supported options, accounting boundaries, quantities, scenario provenance, missing roles, unresolved associations and all physical gates. Unstated hardware revisions remain unknown. A suggested cell count supplies no series/parallel arrangement. The snapshot contains the selected catalog records and calculation records for traceability.
+The manifest preserves exact catalog entry revisions, source URLs/document revisions, supported options, accounting boundaries, frozen quantities and allocation receipts, scenario provenance, missing roles, unresolved associations and all physical gates. Changing a scenario never replaces an allocated count with a new screening suggestion. Legacy selections without recorded counts block export until the engineer explicitly confirms each product allocation. Unstated hardware revisions remain unknown. A suggested cell count supplies no series/parallel arrangement. The snapshot contains the selected catalog records and calculation records for traceability.
 
-**Contract limitation:** candidate records do not store the catalog revision used during screening. Reevaluate candidates after catalog changes. The export freezes the supplied catalog and warns about this limitation. Its architecture fingerprint is a deterministic traceability identifier, not a cryptographic signature or authenticated engineer approval.
+Allocation receipts bind exact product and catalog revisions. Missing or inconsistent receipts block export. Candidate calculation records still have no separate catalog-revision field, so screening must be repeated after catalog changes. The architecture fingerprint is a deterministic traceability identifier. It provides no cryptographic signature or authenticated engineer approval.
 
 ## Local pipeline
 
@@ -54,9 +54,15 @@ npm test -- src/kicad/__tests__
 
 `KICAD_CLI` can override CLI discovery. Validation defaults to the installed macOS application, then PATH. The example script uses Vite only as a local module loader for the engine. It also accepts an explicit engine index path as its third argument.
 
-### Verified example
+### Current BIRDS-4 study
 
-`kicad/sample/` contains the generated project, schematic and child sheets, ZIP, manifest, architecture and catalog snapshots. Its authored scenario uses actual engine calculations. It allocates three AZUR cells, one BP8 pack and one P80 configuration 1 usage. That P80 usage supplies conditioning, distribution and processor roles. This count is preliminary screening data. It specifies no cell arrangement, selected harness or complete electrical compatibility.
+Load the BIRDS-4-inspired example from the canvas Project menu. Its three AZUR cells, BP8 pack and P80 assembly have explicit frozen concept counts. The overlapping-mission case proposes five cells during screening while the review drawing retains the three allocated cells. The known mass and energy findings remain separate from drawing readiness.
+
+The current UI-generated project was parsed and rendered with KiCad 10.0.7. Its five sheets contain zero physical components and six expected dangling hierarchical-label ERC findings. No PCB or physical DRC result is produced.
+
+### Historical review artifact
+
+`kicad/sample/` contains the generated project, schematic and child sheets, ZIP, manifest, architecture and catalog snapshots. Its authored scenario uses actual engine calculations. It allocates three AZUR cells, one BP8 pack and one P80 configuration 1 usage. That P80 usage supplies conditioning, distribution and processor roles. This historical artifact predates frozen allocation receipts. Its count records preliminary screening data. Regenerate with the current example script to obtain explicit concept-count receipts. Neither artifact establishes a cell arrangement, selected harness or complete electrical compatibility.
 
 `kicad/sample/validation/validation.json` records KiCad 10.0.7 invocations. All five sheets parsed and rendered. The netlist contains **zero physical components**. ERC returned **5** with **six dangling hierarchical label errors** because opaque usages contain no pin-level circuit. There are no off-grid wire warnings. All three external logical associations routed. Physical nets remain unknown. Physical DRC was **not run**. No ERC/DRC pass is claimed.
 

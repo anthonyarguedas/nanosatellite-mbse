@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { catalog } from '../data/catalog';
 import { nodeStatuses } from '../workflow';
-import { applyProduct, changeInputs, createExampleWorkspace, evaluateReady } from './model';
+import { applyProduct, changeInputs, evaluateReady } from './model';
+import { preliminaryWorkspace, unallocatedCurrentWorkspace } from './test-fixtures';
 
-const current = () => evaluateReady(createExampleWorkspace());
+const current = unallocatedCurrentWorkspace;
 const azur = 'azur-3g30c-advanced-81780';
 const cesi = 'cesi-ctj30-26p5';
 const bp8 = 'gomspace-bp8-100wh-8s1p';
@@ -12,7 +13,7 @@ const integrated = 'isis-iceps2-type-a';
 
  describe('explicit COTS allocation and replacement', () => {
   it('blocks application before screening and after upstream changes', () => {
-    expect(() => applyProduct(createExampleWorkspace(), 'solar', azur)).toThrow(/stale or missing/);
+    expect(() => applyProduct(preliminaryWorkspace(), 'solar', azur)).toThrow(/stale or missing/);
     const stale = changeInputs(current(), inputs => { inputs.mission.altitudeKm = 450; return inputs; });
     expect(() => applyProduct(stale, 'solar', azur)).toThrow(/stale or missing/);
   });
@@ -33,7 +34,10 @@ const integrated = 'isis-iceps2-type-a';
     expect(next.inputs.solar.cellEolV).toBeNull();
     expect(next.inputs.solar.cellEolA).toBeNull();
     expect(next.selections.solar).toBe(cesi);
-    expect(nodeStatuses(evaluateReady(next)).candidates).toBe('stale');
+    const refreshed = evaluateReady(next);
+    expect(nodeStatuses(refreshed).candidates).toBe('complete');
+    expect(refreshed.analysis.solar!.cellCount).toBeNull();
+    expect(refreshed.analysis.solar!.minimumPowerW).toBeGreaterThan(0);
   });
   it('keeps a finished pack rating fixed and a missing integrated-pack rating missing', () => {
     const withPack = applyProduct(current(), 'battery', bp8);

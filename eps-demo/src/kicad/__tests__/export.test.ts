@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildKiCadExport, createKiCadZip, getKiCadReadiness } from '../index';
 import { fixture, REQUIRED_NODES } from './fixtures';
+import type { Workspace } from '../../types';
 
 const manifest = (files: { name: string; content: string }[]) => JSON.parse(files.find(f => f.name === 'manifest.json')!.content);
 
@@ -18,6 +19,20 @@ describe('KiCad logical review export', () => {
       expect(() => buildKiCadExport(workspace, catalog)).toThrow(/uncomputed/);
     });
   }
+  it('checks canonical input validity rather than trusting current-looking revision records', () => {
+    const { workspace, catalog } = fixture();
+    workspace.inputs.mission.altitudeKm = null;
+    expect(workspace.records.candidates.evaluatedRevision).toBe(workspace.records.candidates.revision);
+    expect(getKiCadReadiness(workspace, catalog).ready).toBe(false);
+    expect(() => buildKiCadExport(workspace, catalog)).toThrow(/uncomputed or stale/);
+  });
+  it('reports malformed dependency records without crashing readiness inspection', () => {
+    const { workspace, catalog } = fixture();
+    delete (workspace.records as Partial<Workspace['records']>).mission;
+    const readiness = getKiCadReadiness(workspace, catalog);
+    expect(readiness.ready).toBe(false);
+    expect(readiness.blockers.join(' ')).toContain('malformed');
+  });
   it('needs current output and an applicable non-rejected suggestion', () => {
     const { workspace, catalog } = fixture();
     delete workspace.analysis.suggestions;
@@ -45,6 +60,26 @@ describe('KiCad logical review export', () => {
     workspace.selections.solar = 'test-solar';
     workspace.analysis.suggestions![0].quantity = 0;
     expect(() => buildKiCadExport(workspace, catalog)).toThrow(/positive integer/);
+  });
+  it('requires explicit counts for legacy selections instead of installing current suggestions', () => {
+    const { workspace, catalog } = fixture();
+    delete workspace.allocations;
+    expect(getKiCadReadiness(workspace, catalog).ready).toBe(false);
+    expect(() => buildKiCadExport(workspace, catalog)).toThrow(/frozen concept allocation quantity/);
+  });
+  it('freezes allocation counts independently of subsequent screening quantities', () => {
+    const { workspace, catalog } = fixture();
+    workspace.analysis.suggestions![0].quantity = 99;
+    const result = buildKiCadExport(workspace, catalog);
+    const usage = manifest(result.files).usages.find((item: { productId: string }) => item.productId === 'test-solar');
+    expect(usage.quantity).toBe(2);
+    expect(usage.allocationReceipt.quantity).toBe(2);
+    expect(result.warnings.join(' ')).toContain('differs from current screening count 99');
+  });
+  it('rejects an allocation receipt bound to a different catalog revision', () => {
+    const { workspace, catalog } = fixture();
+    workspace.allocations![0].catalogRevision = 'superseded';
+    expect(() => buildKiCadExport(workspace, catalog)).toThrow(/revision is absent or mismatched/);
   });
   it('exports selected usages only, deduplicates an integrated board and preserves source evidence', () => {
     const { workspace, catalog } = fixture();
@@ -85,11 +120,13 @@ describe('KiCad logical review export', () => {
   it('marks unallocated roles and does not fabricate links to missing COTS modules', () => {
     const { workspace, catalog } = fixture();
     workspace.selections = { solar: 'test-solar' };
+    workspace.allocations = workspace.allocations?.filter(receipt => receipt.productId === 'test-solar');
     const m = manifest(buildKiCadExport(workspace, catalog).files);
     expect(m.usages).toHaveLength(1);
     expect(m.drawing.associations).toHaveLength(0);
     expect(m.unallocatedRoles).toContain('conditioning');
     workspace.selections = {};
+    workspace.allocations = [];
     expect(() => buildKiCadExport(workspace, catalog)).toThrow(/at least one/);
   });
   it('is deterministic and safely quotes authored text', () => {
