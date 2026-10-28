@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ground station connections</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6f9;color:#172d42;font:15px Arial,sans-serif}
+nav{position:sticky;top:0;z-index:2;padding:14px 20px;background:white;border-bottom:1px solid #d5dfe8;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+button,a{border:1px solid #ccd8e2;border-radius:7px;background:white;color:#172d42;padding:8px 12px;text-decoration:none;cursor:pointer}
+button.active{background:#172d42;color:white}main{padding:18px;overflow:auto}#surface{min-width:1000px;margin:auto}img{display:block;width:100%;height:auto}a:hover,button:hover{border-color:#007f83}
+</style><nav><button data-image="rf" class="active">70 cm RF</button><button data-image="13cm-rx">13 cm RX</button><button data-image="tracking">Tracking</button><button data-image="power">Power</button><button id="smaller">−</button><button id="larger">+</button><a id="png" href="ground-station-diagram/rf.png">PNG</a><a id="svg" href="ground-station-diagram/rf.svg">SVG</a><a href="ground-station-diagram/image-sources.csv">Photo sources</a></nav>
+<main><div id="surface"><img id="diagram" src="ground-station-diagram/rf.svg" alt="RF connections"></div></main><script>
+let zoom=1;const image=document.querySelector('#diagram'),surface=document.querySelector('#surface');document.querySelectorAll('[data-image]').forEach(button=>button.onclick=()=>{const name=button.dataset.image;image.src='ground-station-diagram/'+name+'.svg';image.alt=name+' connections';document.querySelector('#png').href='ground-station-diagram/'+name+'.png';document.querySelector('#svg').href=image.getAttribute('src');document.querySelectorAll('[data-image]').forEach(b=>b.classList.toggle('active',b===button));});document.querySelector('#larger').onclick=()=>{zoom=Math.min(3,zoom+.25);surface.style.width=(100*zoom)+'%';};document.querySelector('#smaller').onclick=()=>{zoom=Math.max(.75,zoom-.25);surface.style.width=(100*zoom)+'%';};
+</script></html>
