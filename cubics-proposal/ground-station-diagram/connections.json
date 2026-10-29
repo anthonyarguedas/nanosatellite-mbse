@@ -2,15 +2,18 @@
   "rf": {
     "size": [
       2840,
-      935
+      1200
     ],
     "photos": [
       "atten",
       "coax_relay",
       "dcw",
+      "dummy",
       "filter70",
+      "isolator",
       "lime_front",
       "pa",
+      "polarization",
       "sdr_case",
       "sp70",
       "surge",
@@ -51,11 +54,11 @@
           ]
         ],
         "kind": "rf",
-        "cable": "N \u2194 N outdoor coax\nRF + switched 12 V\nlength TBD",
+        "cable": "Nm50ftNm400 / 50 ft\nN-male \u2194 N-male\nRF + switched 12 V",
         "label_box": [
-          868.0,
+          867.5,
           129,
-          1012.0,
+          1012.5,
           191
         ],
         "bidirectional": true,
@@ -294,11 +297,33 @@
       {
         "points": [
           [
-            700,
+            550,
+            707
+          ],
+          [
+            370,
+            707
+          ]
+        ],
+        "kind": "tx",
+        "cable": "N-male \u2194 N-male\n18 in coax",
+        "label_box": [
+          396.0,
+          652,
+          524.0,
+          693
+        ],
+        "bidirectional": false,
+        "dashed": false
+      },
+      {
+        "points": [
+          [
+            220,
             585
           ],
           [
-            700,
+            220,
             425
           ],
           [
@@ -333,15 +358,45 @@
           ]
         ],
         "kind": "tx",
-        "cable": "NC \u2192 50 ohm termination (TBD)",
+        "cable": "NC \u2192 50 ohm termination (not in BOM)",
         "label_box": [
           1690,
           850,
-          1934.0,
+          1985.0,
           871
         ],
         "bidirectional": false,
         "dashed": false
+      },
+      {
+        "points": [
+          [
+            220,
+            830
+          ],
+          [
+            220,
+            1050
+          ],
+          [
+            2620,
+            1050
+          ],
+          [
+            2620,
+            830
+          ]
+        ],
+        "kind": "tx",
+        "cable": "Manual test substitution at F1 output: disconnect the antenna path.\nThe N-male dummy load mates directly to the F1 N-female output.",
+        "label_box": [
+          1134.5,
+          989,
+          1705.5,
+          1036
+        ],
+        "bidirectional": false,
+        "dashed": true
       }
     ],
     "label_boxes": [
@@ -355,11 +410,11 @@
         ]
       },
       {
-        "text": "N \u2194 N outdoor coax\nRF + switched 12 V\nlength TBD",
+        "text": "Nm50ftNm400 / 50 ft\nN-male \u2194 N-male\nRF + switched 12 V",
         "box": [
-          868.0,
+          867.5,
           129,
-          1012.0,
+          1012.5,
           191
         ]
       },
@@ -436,6 +491,15 @@
         ]
       },
       {
+        "text": "N-male \u2194 N-male\n18 in coax",
+        "box": [
+          396.0,
+          652,
+          524.0,
+          693
+        ]
+      },
+      {
         "text": "N-male \u2194 N-male coax, 18 in",
         "box": [
           1302.0,
@@ -445,12 +509,21 @@
         ]
       },
       {
-        "text": "NC \u2192 50 ohm termination (TBD)",
+        "text": "NC \u2192 50 ohm termination (not in BOM)",
         "box": [
           1690,
           850,
-          1934.0,
+          1985.0,
           871
+        ]
+      },
+      {
+        "text": "Manual test substitution at F1 output: disconnect the antenna path.\nThe N-male dummy load mates directly to the F1 N-female output.",
+        "box": [
+          1134.5,
+          989,
+          1705.5,
+          1036
         ]
       }
     ],
@@ -492,6 +565,12 @@
         340
       ],
       [
+        70,
+        585,
+        370,
+        830
+      ],
+      [
         550,
         585,
         850,
@@ -514,13 +593,19 @@
         585,
         2290,
         830
+      ],
+      [
+        2470,
+        585,
+        2770,
+        830
       ]
     ]
   },
   "13cm-rx": {
     "size": [
       2840,
-      820
+      860
     ],
     "photos": [
       "bias13",
@@ -588,7 +673,7 @@
           ]
         ],
         "kind": "rf",
-        "cable": "N \u2194 N outdoor coax\nSMA/N adapter at LNA\nRF + 5 V / length TBD",
+        "cable": "Nm50ftNm400 / 50 ft\nSMA/N adapter at LNA\nRF + 5 V bias",
         "label_box": [
           1345.0,
           132,
@@ -735,16 +820,30 @@
       {
         "points": [
           [
-            1660,
-            560
+            1810,
+            670
           ],
           [
-            1660,
-            450
-          ],
+            1990,
+            670
+          ]
+        ],
+        "kind": "power",
+        "cable": "5 V DC\n5.5 \u00d7 2.1 mm",
+        "label_box": [
+          1850.5,
+          613,
+          1949.5,
+          656
+        ],
+        "bidirectional": false,
+        "dashed": false
+      },
+      {
+        "points": [
           [
             2140,
-            450
+            560
           ],
           [
             2140,
@@ -752,12 +851,12 @@
           ]
         ],
         "kind": "power",
-        "cable": "5 V DC feed lead (TBD)\n5.5 \u00d7 2.1 mm jack \u2194 SMA-male",
+        "cable": "Adapter lead TBD\nBarrel center \u2192 SMA center (+5 V)\nSleeve \u2192 SMA shell (ground)",
         "label_box": [
-          1775.0,
-          393,
-          2015.0,
-          436
+          2180,
+          404,
+          2443.984375,
+          469
         ],
         "bidirectional": false,
         "dashed": false
@@ -783,7 +882,7 @@
         ]
       },
       {
-        "text": "N \u2194 N outdoor coax\nSMA/N adapter at LNA\nRF + 5 V / length TBD",
+        "text": "Nm50ftNm400 / 50 ft\nSMA/N adapter at LNA\nRF + 5 V bias",
         "box": [
           1345.0,
           132,
@@ -828,12 +927,21 @@
         ]
       },
       {
-        "text": "5 V DC feed lead (TBD)\n5.5 \u00d7 2.1 mm jack \u2194 SMA-male",
+        "text": "5 V DC\n5.5 \u00d7 2.1 mm",
         "box": [
-          1775.0,
-          393,
-          2015.0,
-          436
+          1850.5,
+          613,
+          1949.5,
+          656
+        ]
+      },
+      {
+        "text": "Adapter lead TBD\nBarrel center \u2192 SMA center (+5 V)\nSleeve \u2192 SMA shell (ground)",
+        "box": [
+          2180,
+          404,
+          2443.984375,
+          469
         ]
       }
     ],
@@ -885,13 +993,19 @@
         620,
         1330,
         720
+      ],
+      [
+        1990,
+        560,
+        2290,
+        740
       ]
     ]
   },
   "tracking": {
     "size": [
       2840,
-      1055
+      1120
     ],
     "photos": [
       "ars",
@@ -922,11 +1036,11 @@
           ]
         ],
         "kind": "usb",
-        "cable": "Cat 6 / RJ45\nN6PATCH10BK",
+        "cable": "Cat 6 / RJ45, 10 ft\nN6PATCH10BK",
         "label_box": [
           260,
           253,
-          376.96875,
+          397.0,
           296
         ],
         "bidirectional": true,
@@ -1010,11 +1124,11 @@
           ]
         ],
         "kind": "control",
-        "cable": "8-pin DIN cable\nEA4TX Yaesu DIN8",
+        "cable": "ARS-AZELDIN8\n8-pin DIN cable",
         "label_box": [
-          1348.5078125,
+          1361.5,
           473,
-          1491.4921875,
+          1478.5,
           514
         ],
         "bidirectional": true,
@@ -1032,11 +1146,11 @@
           ]
         ],
         "kind": "control",
-        "cable": "2 \u00d7 Yaesu cables\nAZ + EL, 5/6 wires",
+        "cable": "2 \u00d7 DXE-YRC-050PE\n50 ft / AZ + EL",
         "label_box": [
-          1835.0,
+          1823.0,
           473,
-          1965.0,
+          1977.0,
           514
         ],
         "bidirectional": true,
@@ -1106,11 +1220,11 @@
           ]
         ],
         "kind": "usb",
-        "cable": "USB 3 extension\nUSB3AAEXT1M",
+        "cable": "Data Alliance UDA\n15 cm USB 3, right-angle",
         "label_box": [
-          872.5,
+          841.0,
           273,
-          997.5,
+          1029.0,
           316
         ],
         "bidirectional": true,
@@ -1119,11 +1233,15 @@
       {
         "points": [
           [
-            700,
-            655
+            370,
+            620
           ],
           [
-            700,
+            450,
+            620
+          ],
+          [
+            450,
             725
           ],
           [
@@ -1135,15 +1253,15 @@
             785
           ]
         ],
-        "kind": "usb",
-        "cable": "USB data cable\nmodule connector TBD",
+        "kind": "control",
+        "cable": "Adafruit 3894, 200 mm JST-PH lead\nPi: 3.3 V GPIO + 3.3 V + GND \u2192 STEMMA",
         "label_box": [
-          849.5,
+          652.5,
           668,
-          1020.5,
+          977.5,
           711
         ],
-        "bidirectional": true,
+        "bidirectional": false,
         "dashed": false
       },
       {
@@ -1158,7 +1276,7 @@
           ]
         ],
         "kind": "control",
-        "cable": "Dry-contact PTT\ncustom DB9 loom (TBD)",
+        "cable": "COM/NO PTT\ncustom DB9 loom (TBD)",
         "label_box": [
           1339.0,
           842,
@@ -1193,11 +1311,11 @@
     ],
     "label_boxes": [
       {
-        "text": "Cat 6 / RJ45\nN6PATCH10BK",
+        "text": "Cat 6 / RJ45, 10 ft\nN6PATCH10BK",
         "box": [
           260,
           253,
-          376.96875,
+          397.0,
           296
         ]
       },
@@ -1229,20 +1347,20 @@
         ]
       },
       {
-        "text": "8-pin DIN cable\nEA4TX Yaesu DIN8",
+        "text": "ARS-AZELDIN8\n8-pin DIN cable",
         "box": [
-          1348.5078125,
+          1361.5,
           473,
-          1491.4921875,
+          1478.5,
           514
         ]
       },
       {
-        "text": "2 \u00d7 Yaesu cables\nAZ + EL, 5/6 wires",
+        "text": "2 \u00d7 DXE-YRC-050PE\n50 ft / AZ + EL",
         "box": [
-          1835.0,
+          1823.0,
           473,
-          1965.0,
+          1977.0,
           514
         ]
       },
@@ -1265,25 +1383,25 @@
         ]
       },
       {
-        "text": "USB 3 extension\nUSB3AAEXT1M",
+        "text": "Data Alliance UDA\n15 cm USB 3, right-angle",
         "box": [
-          872.5,
+          841.0,
           273,
-          997.5,
+          1029.0,
           316
         ]
       },
       {
-        "text": "USB data cable\nmodule connector TBD",
+        "text": "Adafruit 3894, 200 mm JST-PH lead\nPi: 3.3 V GPIO + 3.3 V + GND \u2192 STEMMA",
         "box": [
-          849.5,
+          652.5,
           668,
-          1020.5,
+          977.5,
           711
         ]
       },
       {
-        "text": "Dry-contact PTT\ncustom DB9 loom (TBD)",
+        "text": "COM/NO PTT\ncustom DB9 loom (TBD)",
         "box": [
           1339.0,
           842,
@@ -1385,12 +1503,14 @@
   "power": {
     "size": [
       2840,
-      775
+      1445
     ],
     "photos": [
       "ars",
       "bias13",
       "coax_relay",
+      "dc_jack",
+      "dc_protection",
       "dcw",
       "hub",
       "lana",
@@ -1568,9 +1688,9 @@
         "cable": "USB-C\n5.1 V / 3 A",
         "label_box": [
           278,
-          418,
+          439,
           350.984375,
-          459
+          480
         ],
         "bidirectional": false,
         "dashed": false
@@ -1590,9 +1710,9 @@
         "cable": "Included DC cable",
         "label_box": [
           738,
-          439,
+          460,
           870.0,
-          459
+          480
         ],
         "bidirectional": false,
         "dashed": false
@@ -1609,12 +1729,12 @@
           ]
         ],
         "kind": "power",
-        "cable": "5 V DC feed lead (TBD)\n2.1 mm jack \u2194 SMA-male",
+        "cable": "5 V adapter lead (TBD)\nLimit branch below 500 mA\n2.1 mm jack \u2194 SMA-male",
         "label_box": [
           1198,
           418,
-          1382.0,
-          459
+          1391.0,
+          480
         ],
         "bidirectional": false,
         "dashed": false
@@ -1634,9 +1754,9 @@
         "cable": "12 V fused loom (TBD)\n5.5 \u00d7 2.1 mm input",
         "label_box": [
           1658,
-          418,
+          439,
           1820.0,
-          459
+          480
         ],
         "bidirectional": false,
         "dashed": false
@@ -1653,12 +1773,12 @@
           ]
         ],
         "kind": "power",
-        "cable": "24 V PA lead (TBD)\n5.5 \u00d7 2.5 mm input",
+        "cable": "24 V center-positive\n5.5 \u00d7 2.5 mm plug",
         "label_box": [
           2118,
-          418,
-          2258.96875,
-          459
+          439,
+          2259.0,
+          480
         ],
         "bidirectional": false,
         "dashed": false
@@ -1675,12 +1795,86 @@
           ]
         ],
         "kind": "power",
-        "cable": "2 \u00d7 Yaesu motor cables\npower + position feedback",
+        "cable": "2 \u00d7 DXE-YRC-050PE\n50 ft / AZ + EL",
         "label_box": [
           2578,
-          418,
-          2764.0,
-          459
+          439,
+          2732.0,
+          480
+        ],
+        "bidirectional": false,
+        "dashed": false
+      },
+      {
+        "points": [
+          [
+            2090,
+            735
+          ],
+          [
+            2090,
+            840
+          ],
+          [
+            285,
+            840
+          ],
+          [
+            285,
+            960
+          ]
+        ],
+        "kind": "power",
+        "cable": "Custom PA loom: DXE-PW-16 red/black 16 AWG, six feet of two-conductor wire.\nFit the 5 A fuse near J24, before PROT1. The 712A jack is rated 5 A at nominal 24 V.",
+        "label_box": [
+          846.046875,
+          781,
+          1523.953125,
+          826
+        ],
+        "bidirectional": false,
+        "dashed": false
+      },
+      {
+        "points": [
+          [
+            500,
+            1100
+          ],
+          [
+            700,
+            1100
+          ]
+        ],
+        "kind": "power",
+        "cable": "16 AWG DC\n+ / return",
+        "label_box": [
+          554.0078125,
+          1043,
+          645.9921875,
+          1086
+        ],
+        "bidirectional": false,
+        "dashed": false
+      },
+      {
+        "points": [
+          [
+            1130,
+            1100
+          ],
+          [
+            1330,
+            1100
+          ]
+        ],
+        "kind": "power",
+        "cable": "Protected 24 V\n3.3 A max load",
+        "label_box": [
+          1174.015625,
+          1043,
+          1285.984375,
+          1086
         ],
         "bidirectional": false,
         "dashed": false
@@ -1754,54 +1948,81 @@
         "text": "USB-C\n5.1 V / 3 A",
         "box": [
           278,
-          418,
+          439,
           350.984375,
-          459
+          480
         ]
       },
       {
         "text": "Included DC cable",
         "box": [
           738,
-          439,
+          460,
           870.0,
-          459
+          480
         ]
       },
       {
-        "text": "5 V DC feed lead (TBD)\n2.1 mm jack \u2194 SMA-male",
+        "text": "5 V adapter lead (TBD)\nLimit branch below 500 mA\n2.1 mm jack \u2194 SMA-male",
         "box": [
           1198,
           418,
-          1382.0,
-          459
+          1391.0,
+          480
         ]
       },
       {
         "text": "12 V fused loom (TBD)\n5.5 \u00d7 2.1 mm input",
         "box": [
           1658,
-          418,
+          439,
           1820.0,
-          459
+          480
         ]
       },
       {
-        "text": "24 V PA lead (TBD)\n5.5 \u00d7 2.5 mm input",
+        "text": "24 V center-positive\n5.5 \u00d7 2.5 mm plug",
         "box": [
           2118,
-          418,
-          2258.96875,
-          459
+          439,
+          2259.0,
+          480
         ]
       },
       {
-        "text": "2 \u00d7 Yaesu motor cables\npower + position feedback",
+        "text": "2 \u00d7 DXE-YRC-050PE\n50 ft / AZ + EL",
         "box": [
           2578,
-          418,
-          2764.0,
-          459
+          439,
+          2732.0,
+          480
+        ]
+      },
+      {
+        "text": "Custom PA loom: DXE-PW-16 red/black 16 AWG, six feet of two-conductor wire.\nFit the 5 A fuse near J24, before PROT1. The 712A jack is rated 5 A at nominal 24 V.",
+        "box": [
+          846.046875,
+          781,
+          1523.953125,
+          826
+        ]
+      },
+      {
+        "text": "16 AWG DC\n+ / return",
+        "box": [
+          554.0078125,
+          1043,
+          645.9921875,
+          1086
+        ]
+      },
+      {
+        "text": "Protected 24 V\n3.3 A max load",
+        "box": [
+          1174.015625,
+          1043,
+          1285.984375,
+          1086
         ]
       }
     ],
@@ -1877,6 +2098,30 @@
         550,
         2730,
         735
+      ],
+      [
+        70,
+        960,
+        500,
+        1240
+      ],
+      [
+        700,
+        960,
+        1130,
+        1240
+      ],
+      [
+        1330,
+        960,
+        1760,
+        1240
+      ],
+      [
+        1960,
+        960,
+        2740,
+        1240
       ]
     ]
   }
