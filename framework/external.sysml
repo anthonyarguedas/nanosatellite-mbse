@@ -3,6 +3,16 @@ package External {
         part def RegulatoryAgencyStakeholder;
         package RegulatoryAgencyStakeholderConcerns {}
     }
+    package LaunchProviders {
+        part def LaunchProvider;
+        package LaunchProviderConcerns {}
+        package LaunchProviderRequirements {}
+    }
+    package Partners {
+        part def Partner;
+        package PartnerConcerns {}
+        package PartnerRequirements {}
+    }
     package MissionStakeholders {
         part def MissionStakeholder;
 

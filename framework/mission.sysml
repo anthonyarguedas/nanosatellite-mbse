@@ -80,6 +80,7 @@ package SpaceSegment {
     }
 }
 package GroundSegment {
+    part def GroundStation;
     part def PlanAndScheduleSubsystem;
     part def SpacecraftCommandSubsystem;
     part def GroundEquipmentControlSubsystem;
