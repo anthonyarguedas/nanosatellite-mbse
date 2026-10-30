@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#386254">
+  <title>Requirements</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23386254'/%3E%3Cpath d='M7 9h18M7 16h18M7 23h18M12 9v14M20 9v14' stroke='white' fill='none'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <main id="workspace" class="workspace" role="tabpanel" aria-label="Requirements workspace" inert>
+    <section class="sheet stakeholders" aria-labelledby="stakeholders-title" data-table="stakeholders">
+      <div class="table-top">
+        <h1 id="stakeholders-title">Stakeholders and Third Parties</h1>
+        <button class="menu-toggle" aria-label="Stakeholder table actions" aria-expanded="false"><span class="chevron"></span></button>
+        <button class="add-row" aria-label="Add stakeholder row" title="Add row">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="table-menu" hidden>
+          <button data-action="add">Insert row</button>
+        </div>
+      </div>
+      <div class="table-frame">
+        <table aria-label="Stakeholders and third parties">
+          <colgroup><col class="row-actions-col"><col class="stakeholder-id"><col class="stakeholder-name"><col class="stakeholder-type"></colgroup>
+          <thead><tr>
+            <th scope="col" class="row-actions-heading" aria-label="Row actions"></th>
+            <th scope="col"><button data-sort="id" title="Sort by ID">ID</button></th>
+            <th scope="col"><button data-sort="name" title="Sort by name">Name</button></th>
+            <th scope="col"><button data-sort="type" title="Sort by type">Type</button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="sheet statements" aria-labelledby="statements-title" data-table="statements">
+      <div class="table-top">
+        <h2 id="statements-title">Stakeholder Requirements</h2>
+        <button class="menu-toggle" aria-label="Requirements table actions" aria-expanded="false"><span class="chevron"></span></button>
+        <button class="add-row" aria-label="Add requirement row" title="Add row">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="table-menu" hidden>
+          <button data-action="add">Insert row</button>
+        </div>
+      </div>
+      <div class="table-frame">
+        <table aria-label="Stakeholder requirements">
+          <colgroup></colgroup>
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <nav id="tabs" class="sheet-tabs" role="tablist" aria-label="Model tabs"></nav>
+  <div id="source-editor" class="popover" role="dialog" aria-label="Link source rows" hidden>
+    <div class="popover-heading"><strong>Link source rows</strong><button type="button" data-close aria-label="Close sources">×</button></div>
+    <input id="source-search" type="search" placeholder="Find a row by ID or text" aria-label="Find source rows" autocomplete="off">
+    <div id="source-choices"></div>
+  </div>
+  <div id="verification-editor" class="popover" role="dialog" aria-label="Edit verification condition" hidden>
+    <div class="popover-heading"><strong>SysML condition</strong><button type="button" data-close aria-label="Close verification">×</button></div>
+    <input id="verification-condition" aria-label="Verification expression" placeholder="x <= 10 and mass <= REQ002.mass" spellcheck="false" autocomplete="off" maxlength="5000">
+    <p>Use this row’s variable names or <code>REQ002.mass</code>. The checkmark is calculated from this SysML expression.</p>
+    <p id="verification-result" aria-live="polite"></p>
+  </div>
+  <form id="variable-editor" class="popover" aria-label="Variable column" hidden>
+    <div class="popover-heading"><strong id="variable-title">Add variable</strong><button type="button" data-close aria-label="Close variable editor">×</button></div>
+    <label>Name<input id="variable-name" required maxlength="40" autocomplete="off" spellcheck="false"></label>
+    <label>Type<select id="variable-type"><option value="float">Float</option><option value="integer">Integer</option></select></label>
+    <p id="variable-error" class="error-text" aria-live="polite"></p>
+    <button id="variable-submit" class="primary" type="submit">Add column</button>
+  </form>
+  <div class="notice" role="status" aria-live="polite"><span id="status">Opening mission model…</span><button id="retry" hidden>Retry</button></div>
+</body>
+</html>
