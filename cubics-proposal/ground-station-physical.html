@@ -16,7 +16,7 @@ nav a:hover,button:hover{border-color:#007f83}a{color:#2166b0}a:focus-visible,bu
 </style>
 </head>
 <body>
-<header><h1>Ground station connections</h1><p>Components and quantities from <a href="ground-station-bom.tsv">ground-station-bom.tsv</a>. The SDR RX port uses a manual patch to select the band.</p></header>
+<header><h1>Ground station connections</h1><p>Components and quantities from <a href="ground-station-bom.tsv">ground-station-bom.tsv</a>. SDR1 is dedicated to 70 cm half-duplex TX/RX. SDR2 is dedicated to 13 cm RX only. Both RF paths remain connected.</p></header>
 <nav aria-label="Diagram views">
 <button data-image="rf" class="active" aria-pressed="true">70 cm RF</button>
 <button data-image="13cm-rx" aria-pressed="false">13 cm RX</button>
@@ -40,10 +40,10 @@ nav a:hover,button:hover{border-color:#007f83}a{color:#2166b0}a:focus-visible,bu
 <tr><td><a href="https://www.mouser.ca/en/ProductDetail/Raspberry-Pi/SC0218?qs=T%252BzbugeAwjigiNOW4n9AiA%3D%3D" target="_blank" rel="noopener">Raspberry Pi 15 W USB-C power supply</a></td><td>1</td><td>11.52</td><td>11.52</td><td>US plug, black.</td></tr>
 <tr><td><a href="https://www.mouser.ca/en/ProductDetail/Kingston/SDCIT2-32GB?qs=4ASt3YYao0WSUCIgqT4pCg%3D%3D" target="_blank" rel="noopener">Kingston Industrial 32 GB microSD SDCIT2/32GB</a></td><td>1</td><td>227.26</td><td>227.26</td><td>In stock. Tax and shipping extra.</td></tr>
 <tr><td><a href="https://www.mouser.ca/en/ProductDetail/Adafruit/4553?qs=rI7uf1IzohRHTNTxAMzr1w%3D%3D" target="_blank" rel="noopener">Flirc Raspberry Pi 4 case</a></td><td>1</td><td>26.91</td><td>26.91</td><td>Listed as Adafruit 4553.</td></tr>
-<tr><td><a href="https://www.mouser.ca/en/ProductDetail/Lime-Microsystems/CS-LIME-26?qs=vvQtp7zwQdOcdpWKMDcSLA%3D%3D" target="_blank" rel="noopener">LimeSDR Mini 2.0</a></td><td>1</td><td>917.02</td><td>917.02</td><td></td></tr>
-<tr><td><a href="https://www.mouser.ca/en/ProductDetail/Hammond-Manufacturing/1590B?qs=lxPAlgZqN%2FxgBbfB6QYdmg%3D%3D" target="_blank" rel="noopener">Hammond 1590B aluminum enclosure</a></td><td>1</td><td>15.88</td><td>15.88</td><td>SDR case. Custom cutouts and thermal mounting.</td></tr>
-<tr><td><a href="https://www.mouser.ca/en/ProductDetail/StarTech/ST4300USB3?qs=PBDs2xEllI%2F5oAzkhtmeOg%3D%3D" target="_blank" rel="noopener">StarTech ST4300USB3 powered USB 3 hub</a></td><td>1</td><td>101.17</td><td>101.17</td><td></td></tr>
-<tr><td><a href="https://www.data-alliance.net/usb-right-angle-90-degree-extension-cable-3-0/" target="_blank" rel="noopener">Data Alliance UDA USB 3.0 right-angle extension cable, 15 cm</a></td><td>1</td><td>4.20</td><td>4.20</td><td>USB-A male to female, rated 5 Gbps. 15 cm. USD 2.99. CAD estimate at 1.4036 CAD/USD, excluding tax, shipping, duties and conversion fees.</td></tr>
+<tr><td><a href="https://www.mouser.ca/en/ProductDetail/Lime-Microsystems/CS-LIME-26?qs=vvQtp7zwQdOcdpWKMDcSLA%3D%3D" target="_blank" rel="noopener">LimeSDR Mini 2.0</a></td><td>2</td><td>917.02</td><td>1,834.04</td><td>SDR1: dedicated 70 cm half-duplex TX/RX. SDR2: dedicated 13 cm RX only, with TX disabled and its TX port unused. Fixed RF connections for both bands. Select each radio by its unique serial number. In stock, checked 2026-10-29.</td></tr>
+<tr><td><a href="https://www.mouser.ca/en/ProductDetail/Hammond-Manufacturing/1590B?qs=lxPAlgZqN%2FxgBbfB6QYdmg%3D%3D" target="_blank" rel="noopener">Hammond 1590B aluminum enclosure</a></td><td>2</td><td>15.88</td><td>31.76</td><td>One case per LimeSDR. Custom cutouts and thermal mounting.</td></tr>
+<tr><td><a href="https://www.mouser.ca/en/ProductDetail/StarTech/ST4300USB3?qs=PBDs2xEllI%2F5oAzkhtmeOg%3D%3D" target="_blank" rel="noopener">StarTech ST4300USB3 powered USB 3 hub</a></td><td>1</td><td>101.17</td><td>101.17</td><td>Dedicated to SDR1 and SDR2. Connect ARS-USB-AE directly to a Raspberry Pi USB 2 port. Use the supplied hub AC adapter. Verify USB power and throughput under load.</td></tr>
+<tr><td><a href="https://www.data-alliance.net/usb-right-angle-90-degree-extension-cable-3-0/" target="_blank" rel="noopener">Data Alliance UDA USB 3.0 right-angle extension cable, 15 cm</a></td><td>2</td><td>4.20</td><td>8.40</td><td>One per LimeSDR, from the powered hub. USB-A male to female, rated 5 Gbps. 15 cm. USD 2.99 each. CAD estimate at 1.4036 CAD/USD, excluding tax, shipping, duties and conversion fees.</td></tr>
 <tr><td><a href="https://www.mouser.ca/en/ProductDetail/StarTech/N6PATCH10BK?qs=PBDs2xEllI85Ovx20ntxiw%3D%3D" target="_blank" rel="noopener">StarTech N6PATCH10BK Cat 6 cable, 10 ft</a></td><td>1</td><td>12.96</td><td>12.96</td><td></td></tr>
 <tr><td><a href="https://www.mouser.ca/en/ProductDetail/MEAN-WELL/GST25A12-P1J?qs=drgMNd%252BkGPOZvAMo4Zl%2F5Q%3D%3D" target="_blank" rel="noopener">MEAN WELL GST25A12-P1J 12 V 2.08 A supply</a></td><td>1</td><td>20.59</td><td>20.59</td><td></td></tr>
 <tr><td><a href="https://www.mouser.ca/en/ProductDetail/StarTech/PXT101?qs=PBDs2xEllI9TxDVWFCrQTA%3D%3D" target="_blank" rel="noopener">StarTech PXT101 IEC C13 power cord</a></td><td>2</td><td>19.38</td><td>38.76</td><td>Accessory and PA supplies.</td></tr>
@@ -88,7 +88,7 @@ nav a:hover,button:hover{border-color:#007f83}a{color:#2166b0}a:focus-visible,bu
 <tr><td><a href="https://www.data-alliance.net/sma-male-to-sma-male-cable-3-inch-4-in-6-in-8-in-10-in-12-in-14-in-16-inch/" target="_blank" rel="noopener">Data Alliance SMA-male to SMA-male coax cable, 12 in</a></td><td>2</td><td>5.02</td><td>10.04</td><td>13 cm RX. Price for SKU Sm12iSm100, 12-inch length, Standard SMA. USD 3.58 each. CAD estimate at 1.4036 CAD/USD, excluding tax, shipping, duties and conversion fees.</td></tr>
 <tr><td><a href="https://www.dxengineering.com/parts/msq-ps70cm" target="_blank" rel="noopener">M2 PS-70CM polarity switch kit</a></td><td>1</td><td>505.28</td><td>505.28</td><td>RHCP/LHCP switching. USD 359.99. CAD estimate at 1.4036 CAD/USD, excluding tax, shipping, duties and conversion fees.</td></tr>
 </tbody>
-<tfoot><tr><th scope="row" colspan="3">BOM total (CAD)</th><td>13,765.18</td><td></td></tr></tfoot>
+<tfoot><tr><th scope="row" colspan="3">BOM total (CAD)</th><td>14,702.28</td><td></td></tr></tfoot>
 </table></div>
 </details>
 </section>

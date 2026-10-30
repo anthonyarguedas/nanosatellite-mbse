@@ -203,13 +203,13 @@ def rf_diagram():
     d.card('dcw', 'SEQ1', 'SSB DCW 2004 B', 1510, y, detail='Bias tee + sequencer')
     d.card('coax_relay', 'R1', 'Tohtsu CX520D', 1990, y, detail='Antenna T/R relay')
     d.card('lime_front', 'SDR1', 'LimeSDR Mini 2.0', 2470, y,
-           pair='sdr_case', detail='Custom Hammond 1590B case')
+           pair='sdr_case', detail='70 cm TX/RX / 1590B case')
     for start, end, cable in [
         (370,550,'N-male ↔ N-male\n18 in coax'),
         (850,1030,'Nm50ftNm400 / 50 ft\nN-male ↔ N-male\nRF + switched 12 V'),
         (1330,1510,'N-male ↔ N-male\n3 ft coax + 12 V bias'),
         (1810,1990,'N-male ↔ N-male\n18 in coax'),
-        (2290,2470,'N-male ↔ SMA-male\n2 ft manual RX patch'),
+        (2290,2470,'N-male ↔ SMA-male\n2 ft fixed RX cable'),
     ]:
         d.edge([(start,205),(end,205)], cable=cable, at=((start+end)/2,187),
                both=(end!=2470), size=16)
@@ -249,14 +249,17 @@ def rf_diagram():
 
 
 def tracking_diagram():
-    d = Diagram('tracking', 1120)
+    d = Diagram('tracking', 1160)
     d.plain('PROVIDED', 'Live Ethernet connection',70,70,height=100)
-    d.card('lime_front','SDR1','LimeSDR Mini 2.0',1030,50,height=225,kind='usb')
+    d.card('lime_front','SDR1','LimeSDR Mini 2.0',1030,50,height=225,kind='usb',
+           detail='Dedicated 70 cm TX/RX')
+    d.card('lime_front','SDR2','LimeSDR Mini 2.0',1510,50,height=225,kind='usb',
+           detail='Dedicated 13 cm RX only')
     d.card('yagi','A1 + A2','M2 436CP30\nWiMo HELIX-13',2470,50,height=225,
            kind='mechanical',detail='70 cm + 13 cm antennas',pair='helix')
     d.card('pi','PC1','Raspberry Pi 4, 4 GB',70,400,height=255,kind='usb',
            pair='pi_case',detail='Pi board + Flirc case')
-    d.card('hub','H1','StarTech ST4300USB3',550,400,height=255,kind='usb',detail='Powered USB hub')
+    d.card('hub','H1','StarTech ST4300USB3',550,400,height=255,kind='usb',detail='Powered hub / SDR1 + SDR2 only')
     d.card('ars','ARS1','EA4TX ARS-USB-AE',1030,400,height=255,kind='control',detail='Rotator interface')
     d.card('rotator_controller','YC1','Yaesu G-5500DC',1510,400,height=255,
            kind='control',detail='Indoor control box')
@@ -271,10 +274,9 @@ def tracking_diagram():
     d.card('coax_relay','R1 + R2','Tohtsu CX520D × 2',1990,785,height=220,
            kind='control',detail='RF relay coils',pair='coax_relay')
     d.edge([(220,170),(220,400)],'usb','Cat 6 / RJ45, 10 ft\nN6PATCH10BK',(260,292),both=True,size=17,anchor='start')
-    d.edge([(220,785),(220,655)],'mechanical','microSD slot\nno cable',(260,730),size=17,anchor='start')
+    d.edge([(220,785),(220,655)],'mechanical','microSD slot\nno cable',(180,730),size=17,anchor='end')
     for start,end,kind,cable in [
         (370,550,'usb','USB 3 upstream\nsupplied with hub'),
-        (850,1030,'usb','USB cable\nsupplied with ARS'),
         (1330,1510,'control','ARS-AZELDIN8\n8-pin DIN cable'),
         (1810,1990,'control','2 × DXE-YRC-050PE\n50 ft / AZ + EL'),
         (2290,2470,'mechanical','1.625 in center\nmechanical clamp'),
@@ -284,16 +286,21 @@ def tracking_diagram():
                dashed=(kind=='mechanical'),size=16)
     d.edge([(2620,400),(2620,275)],'mechanical','Antenna clamps',
            (2585,341),arrow=False,dashed=True,size=17,anchor='end')
-    d.edge([(700,400),(700,330),(1180,330),(1180,275)],'usb',
+    d.edge([(650,400),(650,330),(1180,330),(1180,275)],'usb',
            'Data Alliance UDA\n15 cm USB 3, right-angle',(935,312),both=True,size=17)
-    d.edge([(370,620),(450,620),(450,725),(1180,725),(1180,785)],'control',
+    d.edge([(750,400),(750,360),(1660,360),(1660,275)],'usb',
+           'Data Alliance UDA\n15 cm USB 3, right-angle',(1420,342),both=True,size=17)
+    d.edge([(350,655),(350,690),(1180,690),(1180,655)],'usb',
+           'USB cable supplied with ARS',(750,677),both=True,size=17)
+    d.edge([(300,655),(300,755),(1180,755),(1180,785)],'control',
            'Adafruit 3894, 200 mm JST-PH lead\nPi: 3.3 V GPIO + 3.3 V + GND → STEMMA',
-           (815,707),size=17)
+           (815,739),size=17)
     d.edge([(1330,895),(1510,895)],'control','COM/NO PTT\ncustom DB9 loom (TBD)',
            (1420,877),size=15)
     d.edge([(1810,895),(1990,895)],'control','Sequenced coil wires\ncustom harness (TBD)',
            (1900,877),size=15)
     d.text(70,1080,'G-5500DC motor cables: remove controller plugs and wire to screw terminals. PTT1 uses Pi GPIO, power and ground.',19)
+    d.text(70,1115,'Select each SDR by its unique serial number. ARS1 connects directly to a PC1 USB 2 port. Coordinate jobs with the shared rotator.',19)
     return d
 
 
@@ -304,17 +311,19 @@ def rx13_diagram():
     d.card('lana','LNA2','Nooelec LaNA',1030,70,detail='5 V masthead receive LNA')
     d.card('surge','G2','Alpha Delta ATT3G50',1510,70,detail='DC-pass surge protector')
     d.card('bias13','BIAS2','Mini-Circuits ZFBT-6GW+',1990,70,detail='5 V bias tee / 500 mA abs max')
-    d.card('lime_front','SDR1','LimeSDR Mini 2.0',2470,70,
-           detail='Shared RX / manual band patch')
+    d.card('lime_front','SDR2','LimeSDR Mini 2.0',2470,70,
+           pair='sdr_case', detail='13 cm RX only / 1590B case')
     for start,end,cable in [
         (370,550,'N-male ↔ N-male\n18 in + N/SMA adapter'),
         (850,1030,'SMA-male ↔ SMA-male\n12 in coax'),
         (1330,1510,'Nm50ftNm400 / 50 ft\nSMA/N adapter at LNA\nRF + 5 V bias'),
         (1810,1990,'N-male ↔ SMA-male\n3 ft coax + 5 V bias'),
-        (2290,2470,'SMA-male ↔ SMA-male\n12 in manual RX patch'),
+        (2290,2470,'SMA-male ↔ SMA-male\n12 in fixed RX cable'),
     ]:
         d.edge([(start,205),(end,205)],'rf',cable,((start+end)/2,187),size=15)
     d.text(2479,231,'RX',15,COLORS['rf'],'bold')
+    d.text(2635,359,'TX unused',15,COLORS['muted'],'bold')
+    d.text(2470,395,'Configure SDR2 for RX only.',17)
     d.ground(1660,340)
     d.card('psu13','P13','MEAN WELL GST25U05-P1J',1510,560,
            height=220,kind='power',detail='5 V / 4 A supply')
@@ -333,7 +342,7 @@ def rx13_diagram():
 
 
 def power_diagram():
-    d = Diagram('power', 1445)
+    d = Diagram('power', 1485)
     width = 360
     d.edge([(250,60),(2550,60)],'power',arrow=False)
     d.label(1410,40,'120 V AC grounded outlets','power',20)
@@ -350,7 +359,8 @@ def power_diagram():
            kind='power',detail='AC-powered control box')
     d.card('pi','PC1','Raspberry Pi 4',70,550,width=width,height=185,
            kind='power',detail='Pi 3.3 V rail also powers PTT1')
-    d.card('hub','H1','Powered USB hub',530,550,width=width,height=185,kind='power')
+    d.card('hub','H1','Powered USB hub',530,550,width=width,height=185,
+           kind='power',detail='USB power for SDR1 and SDR2')
     d.card('bias13','BIAS2 + LNA2','ZFBT-6GW+ + LaNA',990,550,width=width,height=185,
            kind='power',detail='LNA power carried over RF coax',pair='lana')
     d.rect(1450,550,width,185)
@@ -398,6 +408,7 @@ def power_diagram():
     d.text(70,1320,'PA protection is a candidate assembly. Stock DC2418A-A settings require SMD rework and bench qualification before operation.',19)
     d.text(70,1355,'Review OV tolerance, startup behavior, overcurrent settings and enclosure cooling. SEQ1 with R1/R2 provides RF mute and switching.',19)
     d.text(70,1405,'Unlisted work: 12 V fused loom, 5 V adapter and current limiter, relay harness, R2 NC termination, polarity control and earth bonds.',18)
+    d.text(70,1450,'H1 has a 10 W USB power budget. Two LimeSDRs need up to 9 W combined. ARS1 USB connects directly to PC1. Verify under load.',19)
     return d
 
 
@@ -431,7 +442,7 @@ nav a:hover,button:hover{border-color:#007f83}a{color:#2166b0}a:focus-visible,bu
 </style>
 </head>
 <body>
-<header><h1>Ground station connections</h1><p>Components and quantities from <a href="ground-station-bom.tsv">ground-station-bom.tsv</a>. The SDR RX port uses a manual patch to select the band.</p></header>
+<header><h1>Ground station connections</h1><p>Components and quantities from <a href="ground-station-bom.tsv">ground-station-bom.tsv</a>. SDR1 is dedicated to 70 cm half-duplex TX/RX. SDR2 is dedicated to 13 cm RX only. Both RF paths remain connected.</p></header>
 <nav aria-label="Diagram views">
 <button data-image="rf" class="active" aria-pressed="true">70 cm RF</button>
 <button data-image="13cm-rx" aria-pressed="false">13 cm RX</button>

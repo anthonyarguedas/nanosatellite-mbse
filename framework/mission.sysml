@@ -1,62 +1,81 @@
 part def Orbit {
     private import ScalarValues::*;
     attribute orbitType : String;
-    attribute orbitHeight : Positive;
+    doc /* Circular preliminary orbit. Legacy orbitHeight retains km meaning.
+     * Runtime uses altitude_km. An instance using both must keep them aligned.
+     * Positive is not a ScalarValues type in the installed standard library.
+     */
+    attribute orbitHeight : Real = altitude_km;
+    attribute altitude_km : Real;
+    attribute earthRadius_km : Real;
+    attribute gravitationalParameter_km3_s2 : Real;
+    attribute altitude : ISQ::LengthValue = altitude_km * 1000[SI::m];
+    assert constraint positiveOrbitHeight { orbitHeight > 0 }
+    assert constraint validCentralBody {
+        earthRadius_km > 0 and gravitationalParameter_km3_s2 > 0
+    }
 }
 package SpaceSegment {
     part def CubeSat {
-        part def SharedProcessorAndMemory;
-        part def PayloadSubsystem {
-            part def Instrument;
-            part def ProcessorAndMemory;
+        attribute modeSchedule : EPSModel::ModeSchedule[0..1];
+        attribute powerAccounting : EPSModel::AccountingPlan[0..1];
+        part sharedProcessorAndMemory : SharedProcessorAndMemory[0..1];
+        doc /* Shared processing is optional. Bind any present subsystem shared
+         * reference to this one canonical resource. Designs may use dedicated
+         * processors instead. Power accounting uses disjoint covered sets.
+         */
+        part def SharedProcessorAndMemory :> EPSModel::ProcessorMemory;
+        part def PayloadSubsystem :> EPSModel::Subsystem {
+            part def Instrument :> EPSModel::Load;
+            part def ProcessorAndMemory :> EPSModel::ProcessorMemory;
         }
-        part def CommandAndDataHandlingSubsystem {
-            part def CommandTelemetryAndDataBus;
-            part def ProcessorAndMemory;
+        part def CommandAndDataHandlingSubsystem :> EPSModel::Subsystem {
+            part def CommandTelemetryAndDataBus :> EPSModel::Load;
+            part def ProcessorAndMemory :> EPSModel::ProcessorMemory;
         }
-        part def CommunicationSubsystem {
-            part def ProcessorAndMemory;
-            part def ReceiveAntennaAndEquipment;
-            part def TransmitAntennaAndEquipment;
+        part def CommunicationSubsystem :> EPSModel::Subsystem {
+            part def ProcessorAndMemory :> EPSModel::ProcessorMemory;
+            part def ReceiveAntennaAndEquipment :> EPSModel::Load;
+            part def TransmitAntennaAndEquipment :> EPSModel::Load;
         }
-        part def AttitudeDeterminationAndControlSubsystem {
-            part def Software;
-            part def Actuator;
-            part def Sensor;
-            part sharedProcessorAndMemory : SharedProcessorAndMemory;
+        part def AttitudeDeterminationAndControlSubsystem :> EPSModel::Subsystem {
+            part def Software :> EPSModel::Software;
+            part def Actuator :> EPSModel::Load;
+            part def Sensor :> EPSModel::Load;
+            ref part sharedProcessorAndMemory : SharedProcessorAndMemory[0..1];
         }
-        part def GuidanceNavigationAndControlSubsystem {
-            part def Accelerometer;
-            part def GNSSReceiver;
-            part def Software;
-            part sharedProcessorAndMemory : SharedProcessorAndMemory;
+        part def GuidanceNavigationAndControlSubsystem :> EPSModel::Subsystem {
+            part def Accelerometer :> EPSModel::Load;
+            part def GNSSReceiver :> EPSModel::Load;
+            part def Software :> EPSModel::Software;
+            ref part sharedProcessorAndMemory : SharedProcessorAndMemory[0..1];
         }
-        part def StructuresAndMechanismsSubsystem {
-            part def ActuatedMount;
-            part def DeployableMount;
-            part def StaticMount;
+        part def StructuresAndMechanismsSubsystem :> EPSModel::Subsystem {
+            part def ActuatedMount :> EPSModel::Load;
+            part def DeployableMount :> EPSModel::DeploymentActuator;
+            part def StaticMount :> EPSModel::HardwareComponent;
         }
-        part def ThermalSubsystem {
-            part def ThermalSensor;
-            part def ThermalSource;
-            part def ThermalSink;
-            part def ProcessorAndMemory;
-            part def Software;
+        part def ThermalSubsystem :> EPSModel::Subsystem {
+            part def ThermalSensor :> EPSModel::Load;
+            part def ThermalSource :> EPSModel::Load;
+            part def ThermalSink :> EPSModel::HardwareComponent;
+            part def ProcessorAndMemory :> EPSModel::ProcessorMemory;
+            part def Software :> EPSModel::Software;
         }
-        part def PropulsionSubsystem {
-            part def PropellantStorage;
-            part def PropellantControl;
-            part def Thrusters;
-            part def Software;
-            part def ProcessorAndMemory;
+        part def PropulsionSubsystem :> EPSModel::Subsystem {
+            part def PropellantStorage :> EPSModel::HardwareComponent;
+            part def PropellantControl :> EPSModel::Load;
+            part def Thrusters :> EPSModel::Load;
+            part def Software :> EPSModel::Software;
+            part def ProcessorAndMemory :> EPSModel::ProcessorMemory;
         }
-        part def PowerSubsystem {
-            part def Batteries;
-            part def SolarArrays;
-            part def ProcessorAndMemory;
-            part def RegulatorsAndConverters;
-            part def PowerCircuitsAndSwitches;
-            part def Software;
+        part def PowerSubsystem :> EPSModel::Subsystem {
+            part def Batteries :> EPSModel::Battery;
+            part def SolarArrays :> EPSModel::SolarArray;
+            part def ProcessorAndMemory :> EPSModel::ProcessorMemory;
+            part def RegulatorsAndConverters :> EPSModel::RegulatorConverter;
+            part def PowerCircuitsAndSwitches :> EPSModel::PowerCircuitSwitch;
+            part def Software :> EPSModel::Software;
         }
     }
 }
