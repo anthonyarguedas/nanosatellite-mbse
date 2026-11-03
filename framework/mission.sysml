@@ -4,6 +4,8 @@ part def Orbit {
     doc /* Circular preliminary orbit. Legacy orbitHeight retains km meaning.
      * Runtime uses altitude_km. An instance using both must keep them aligned.
      * Positive is not a ScalarValues type in the installed standard library.
+     * FrameworkRequirements::OrbitPeriod and IlluminationPeriods define the
+     * reusable preliminary equations. Mission usages bind their inputs here.
      */
     attribute orbitHeight : Real = altitude_km;
     attribute altitude_km : Real;

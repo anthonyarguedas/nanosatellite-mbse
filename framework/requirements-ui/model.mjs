@@ -1,3 +1,6 @@
+import { parseExpression } from './verification.mjs';
+
+export const WORKSPACE_VERSION = 8;
 export const stakeholderTypes = [
   { name: 'Regulatory Agency', model: 'External::RegulatoryAgencyStakeholders::RegulatoryAgencyStakeholder' },
   { name: 'Mission Stakeholder', model: 'External::MissionStakeholders::MissionStakeholder' },
@@ -12,9 +15,9 @@ export const domainTypes = [
 ];
 export const statementKinds = ['Requirement', 'Need', 'Objective', 'Concern', 'Constraint'];
 export const defaultVariables = () => ['x', 'y', 'z', 'a'].map(name => ({ name, type: 'float' }));
-const prefixes = { Requirement: 'REQ', Need: 'NED', Objective: 'OBJ', Concern: 'CON', Constraint: 'CST' };
-const reserved = new Set('true false and or xor implies not if then else null constructor prototype __proto__ id key name type text kind verified sources source condition parameters externalId displayName statementKind statementText manualVerification verificationExpression verificationCondition tableName subject stakeholder context owner definition affected affectedElements'.split(' '));
-export const allRows = workspace => [...workspace.stakeholders, ...(workspace.elements ?? []), ...workspace.statements];
+const prefixes = { Requirement: 'REQ', Need: 'NED', Objective: 'OBJ', Concern: 'CON', Constraint: 'CST', Component: 'CMP' };
+const reserved = new Set('pi sqrt arccos floor abs min max true false and or xor implies not if then else null constructor prototype __proto__ id key name type text kind verified sources source condition parameters formulas origin sourceReference acceptance externalId displayName statementKind statementText manualVerification verificationExpression verificationCondition tableName subject stakeholder context owner definition affected affectedElements product requirements components'.split(' '));
+export const allRows = workspace => [...workspace.stakeholders, ...(workspace.elements ?? []), ...workspace.statements, ...(workspace.components ?? [])];
 
 export function nextId(workspace, kind = 'Stakeholder', hint = '') {
   const ids = new Set(allRows(workspace).map(row => row.id));
@@ -43,28 +46,143 @@ function elementKey(workspace, hint) {
   while (keys.has(key)) key = `${base}_${suffix++}`;
   return key;
 }
-export function addElementChildren(workspace, parent, catalog = domainTypes) {
-  if (parent.owner !== 'mission' || !catalog.find(type => type.model === parent.definition)?.expandable) return;
-  if (workspace.elements.some(row => row.owner === parent.key)) return;
-  for (const type of catalog.filter(type => type.parent === parent.definition)) {
-    workspace.elements.push({ key: elementKey(workspace, `${parent.key}-${type.model.split('::').at(-1)}`),
-      id: nextId(workspace, 'Element', type.id ?? type.name), name: type.name, owner: parent.key, definition: type.model });
+export function addElementChildren(workspace, parent, catalog = domainTypes, seed = true) {
+  if (catalog.find(type => type.model === parent.definition)?.expandable
+      && !workspace.elements.some(row => row.owner === parent.key)) {
+    for (const type of catalog.filter(type => type.parent === parent.definition)) {
+      const child = { key: elementKey(workspace, `${parent.key}-${type.model.split('::').at(-1)}`),
+        id: nextId(workspace, 'Element', type.id ?? type.name), name: type.name, owner: parent.key, definition: type.model };
+      workspace.elements.push(child);
+      addElementChildren(workspace, child, catalog, false);
+    }
+  }
+  if (seed && workspace.version === WORKSPACE_VERSION) {
+    const descendants = new Set([parent.key]);
+    for (const row of workspace.elements) if (descendants.has(row.owner)) descendants.add(row.key);
+    seedRequirements(workspace, catalog, workspace.elements.filter(row => descendants.has(row.key)));
   }
 }
 function seedElements(workspace, catalog) {
   for (const type of catalog.filter(type => !type.parent)) {
     const row = { key: elementKey(workspace, `domain-${type.role}`), id: nextId(workspace, 'Element', type.id), name: type.name, owner: 'mission', definition: type.model };
     workspace.elements.push(row);
-    addElementChildren(workspace, row, catalog);
+    addElementChildren(workspace, row, catalog, false);
   }
   return workspace;
 }
+
+export function seedRequirements(workspace, catalog, owners = workspace.elements) {
+  const created = [];
+  for (const owner of owners) {
+    for (const template of catalog.find(type => type.model === owner.definition)?.requirements ?? []) {
+      const context = template.context === 'mission' ? 'mission' : owner.key;
+      if (workspace.statements.some(row => row.definition === template.model && row.context === context
+          && (context !== 'mission' || row.affected.includes(owner.key)))) continue;
+      for (const name of Object.keys(template.parameters)) {
+        const type = template.integers?.includes(name) ? 'integer' : 'float';
+        const existing = workspace.variables.find(variable => variable.name === name);
+        if (existing && existing.type !== type) throw new Error(`Generic parameter ${name} requires a ${type} column. Rename the existing column before upgrading.`);
+        if (!existing) workspace.variables.push({ name, type });
+      }
+      const row = { key: elementKey(workspace, `generic-${owner.id}-${template.name}`),
+        id: allRows(workspace).some(row => row.id === template.id) ? nextId(workspace, 'Requirement', template.id.slice(0, 3)) : template.id,
+        context, kind: 'Requirement', definition: template.model, origin: template.origin,
+        text: template.text, condition: template.condition, sources: [],
+        affected: context === 'mission' ? [owner.key] : workspace.elements.filter(element => element.owner === owner.key
+          && template.affected.includes(element.definition.split('::').at(-1))).map(element => element.key),
+        parameters: { ...template.parameters } };
+      workspace.statements.push(row);
+      created.push({ row, derivesFrom: template.derivesFrom ?? [] });
+    }
+  }
+  for (const { row, derivesFrom } of created) {
+    const substitute = expression => expression.replace(/@([A-Za-z_][A-Za-z0-9_]*)\./g, (_, name) => {
+      const matches = workspace.statements.filter(other => other.definition === `FrameworkRequirements::${name}`);
+      const local = matches.filter(other => other.context === row.context
+        && (row.context !== 'mission' || other.affected.some(key => row.affected.includes(key))));
+      const mission = matches.filter(other => other.context === 'mission');
+      const target = local.length === 1 ? local[0] : mission.length === 1 ? mission[0] : null;
+      if (!target) return 'UNBOUND.';
+      if (!row.sources.includes(target.key) && row.key !== target.key) row.sources.push(target.key);
+      return `${target.id}.`;
+    });
+    for (const name of derivesFrom) substitute(`@${name}.`);
+    row.condition = substitute(row.condition);
+    for (const [name, value] of Object.entries(row.parameters)) {
+      if (value === null) continue;
+      const expression = substitute(String(value));
+      // Ambiguous upstream instances stay unset until an engineer chooses a
+      // value or expression in the cell.
+      row.parameters[name] = expression.includes('UNBOUND.') ? null : expression;
+    }
+  }
+  for (const row of workspace.statements) {
+    for (const variable of workspace.variables) if (!Object.hasOwn(row.parameters, variable.name)) row.parameters[variable.name] = null;
+  }
+  return workspace;
+}
+
 export function emptyWorkspace(catalog = domainTypes) {
-  return seedElements({ version: 4, variables: defaultVariables(), stakeholders: [], elements: [], statements: [] }, catalog);
+  return seedRequirements(seedElements({ version: WORKSPACE_VERSION, variables: defaultVariables(), stakeholders: [], elements: [], statements: [], components: [] }, catalog), catalog);
 }
 export function validVariableName(name) {
   return typeof name === 'string' && /^[A-Za-z_][A-Za-z0-9_]{0,39}$/.test(name)
-    && !reserved.has(name) && !/^[A-Z]{3}\d{3}$/.test(name);
+    && !reserved.has(name) && !Object.hasOwn(Object.prototype, name) && !/^[A-Z]{3}\d{3}$/.test(name);
+}
+
+// Delimiters belong to requirement prose. Expressions use the bare names.
+export function requirementMarkers(text) {
+  const segments = text.split('$$'), names = [], errors = [];
+  for (let index = 1; index < segments.length; index += 2) {
+    if (index + 1 >= segments.length) { errors.push('Close each variable name with $$.'); break; }
+    const name = segments[index].trim();
+    if (!validVariableName(name)) errors.push(`“${name || '(empty)'}” is not a supported SysML variable name.`);
+    else if (!names.includes(name)) names.push(name);
+  }
+  return { names, errors };
+}
+
+export function declareRequirementVariables(workspace, row) {
+  const markers = requirementMarkers(row.text);
+  const existing = new Set(workspace.variables.map(variable => variable.name));
+  const additions = markers.names.filter(name => !existing.has(name));
+  if (workspace.variables.length + additions.length > 64) throw new Error('A workspace can contain up to 64 variable names.');
+  for (const name of additions) {
+    workspace.variables.push({ name, type: 'float' });
+    for (const statement of workspace.statements) statement.parameters[name] = null;
+  }
+  return markers;
+}
+
+export function requirementParameterNames(workspace, row, catalog = domainTypes) {
+  const marked = requirementMarkers(row.text).names;
+  const retained = new Set(Object.entries(row.parameters).filter(([, value]) => typeof value === 'string' && value.trim()).map(([name]) => name));
+  const template = catalog.flatMap(type => type.requirements ?? []).find(template => template.model === row.definition);
+  Object.keys(template?.parameters ?? {}).forEach(name => retained.add(name));
+  // Keep old placeholders and existing equation inputs accessible without
+  // exposing every shared variable in the workbook.
+  for (const match of row.text.matchAll(/\{([A-Za-z_][A-Za-z0-9_]*)\}/g)) retained.add(match[1]);
+  for (const expression of [row.condition, ...Object.values(row.parameters)]) {
+    if (typeof expression !== 'string' || !expression.trim()) continue;
+    try {
+      const stack = [parseExpression(expression)];
+      while (stack.length) {
+        const node = stack.pop();
+        if (node.kind === 'variable') retained.add(node.name);
+        else if (node.kind === 'binary') stack.push(node.left, node.right);
+        else if (node.kind === 'unary') stack.push(node.operand);
+        else if (node.kind === 'call') stack.push(...node.args);
+      }
+    } catch { /* Invalid drafts keep their populated cells visible. */ }
+  }
+  return [...marked, ...workspace.variables.map(variable => variable.name).filter(name => retained.has(name) && !marked.includes(name))];
+}
+
+export function interpolateRequirement(text, values = {}) {
+  return text.replace(/\$\$([\s\S]*?)\$\$|\{([A-Za-z_][A-Za-z0-9_]*)\}/g, (token, marked, legacy) => {
+    const name = marked === undefined ? legacy : marked.trim();
+    return validVariableName(name) && typeof values[name] === 'number' && Number.isFinite(values[name]) ? String(values[name]) : token;
+  });
 }
 
 export function tabsFor(workspace, catalog = domainTypes) {
@@ -72,24 +190,37 @@ export function tabsFor(workspace, catalog = domainTypes) {
     { key: 'external', label: 'External', leftTitle: 'Stakeholders and Third Parties', requirementsTitle: 'Stakeholder Requirements', prefix: 'REQ' },
     { key: 'mission', label: 'Mission', leftTitle: 'Mission Domain Elements', requirementsTitle: 'Mission Requirements', affectedLabel: 'Affected domain elements', prefix: 'MIS' },
   ];
-  for (const element of workspace.elements.filter(row => row.owner === 'mission')) {
+  const elements = workspace.elements.filter(row => catalog.find(type => type.model === row.definition)?.expandable);
+  const labelFor = element => {
     const type = catalog.find(type => type.model === element.definition);
-    if (!type?.expandable) continue;
-    const label = element.name || type.name;
-    const duplicate = workspace.elements.some(row => row.key !== element.key && row.owner === 'mission' && row.name === label);
+    return element.name && element.name !== type.name ? element.name : type.tabLabel ?? type.name;
+  };
+  for (const element of elements) {
+    const type = catalog.find(type => type.model === element.definition), label = labelFor(element);
+    const duplicate = elements.some(row => row.key !== element.key && labelFor(row) === label);
     tabs.push({ key: element.key, label: duplicate ? `${label} (${element.id})` : label,
-      leftTitle: `${label} ${type.role === 'payload' ? 'Elements' : 'Subsystems'}`,
-      requirementsTitle: `${label} Requirements`, affectedLabel: type.role === 'payload' ? 'Affected elements' : 'Affected subsystems', prefix: type.prefix });
+      leftTitle: `${label} ${type.role === 'eps' ? 'Components' : type.role === 'payload' ? 'Elements' : 'Subsystems'}`,
+      requirementsTitle: `${label} ${type.role === 'eps' ? 'Parametric Requirements' : 'Requirements'}`,
+      affectedLabel: type.role === 'eps' ? 'Affected components' : type.role === 'payload' ? 'Affected elements' : 'Affected subsystems', prefix: type.prefix });
   }
   return tabs;
 }
 export function allowedDefinitions(workspace, owner, catalog = domainTypes) {
   if (owner === 'mission') return catalog.filter(type => !type.parent);
-  const parent = workspace.elements.find(row => row.key === owner && row.owner === 'mission');
+  const parent = workspace.elements.find(row => row.key === owner);
   return parent && catalog.find(type => type.model === parent.definition)?.expandable
     ? catalog.filter(type => type.parent === parent.definition) : [];
 }
 export const contextForRow = row => row.context ?? row.owner ?? 'external';
+
+export function rewriteRowReferences(workspace, renames) {
+  const rewrite = expression => expression.replace(/\b[A-Z]{3}\d{3}(?=\s*\.)/g, id => renames.get(id) ?? id);
+  for (const row of workspace.statements) {
+    row.condition = rewrite(row.condition);
+    row.parameters = Object.fromEntries(Object.entries(row.parameters).map(([name, expression]) => [name,
+      typeof expression === 'string' ? rewrite(expression) : expression]));
+  }
+}
 
 // Upgrade existing files without changing stable row keys, values or links.
 export function migrateWorkspace(data, catalog = domainTypes) {
@@ -112,14 +243,36 @@ export function migrateWorkspace(data, catalog = domainTypes) {
   }
   if (data?.version === 2) data = seedElements({ ...data, version: 3, elements: [],
     statements: data.statements.map(row => ({ ...row, context: 'external', affected: [] })) }, catalog);
-  if (data?.version !== 3) return data;
-  return { ...data, version: 4, statements: data.statements.map(row => {
+  if (data?.version === 3) data = { ...data, version: 4, statements: data.statements.map(row => {
     const { verified, ...rest } = row;
     if (typeof verified !== 'boolean') throw new Error(`${row.id}: invalid legacy verification flag.`);
     // Preserve old checked rows as an explicit SysML literal. Unchecked rows
     // without a condition remain unverified, with no inferred false constraint.
     return { ...rest, condition: !row.condition.trim() && verified ? 'true' : row.condition };
   }) };
+  if (data?.version === 4) {
+    const upgraded = { ...data, version: 5, elements: [...data.elements] };
+    // Seed newly supported component tables once. Later deletions stay deleted.
+    for (const parent of data.elements.filter(row => row.owner !== 'mission')) addElementChildren(upgraded, parent, catalog);
+    data = upgraded;
+  }
+  if (data?.version === 5) data = { ...data, version: 6, components: [] };
+  if (data?.version === 6) data = seedRequirements(structuredClone({ ...data, version: 7 }), catalog);
+  if (data?.version === 7) {
+    const upgraded = structuredClone({ ...data, version: WORKSPACE_VERSION });
+    upgraded.statements = upgraded.statements.map(({ formulas, ...row }) => {
+      const parameters = { ...row.parameters, ...formulas };
+      for (const [name, value] of Object.entries(parameters)) {
+        if (typeof value === 'number') {
+          if (!Number.isFinite(value)) throw new Error(`${row.id}.${name}: legacy values must be finite.`);
+          parameters[name] = String(value);
+        }
+      }
+      return { ...row, parameters };
+    });
+    return upgraded;
+  }
+  return data;
 }
 
 // Sources are rows anywhere in the workbook. Assignment is a separate link.
@@ -137,17 +290,28 @@ export function availableSources(workspace, statementKey) {
 export function assignableElements(workspace, statement) {
   return statement.context === 'external' ? [] : workspace.elements.filter(row => row.owner === statement.context);
 }
-export function numeric(value, variable, id = 'This row') {
-  if (value === null || value === undefined || String(value).trim() === '') return null;
-  if (!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(String(value).trim()) || !Number.isFinite(Number(value))) throw new Error(`${id}: ${variable.name} must be a finite number or empty.`);
-  const number = Number(value);
-  if (variable.type === 'integer' && !Number.isSafeInteger(number)) throw new Error(`${id}: ${variable.name} must be a safe integer or empty.`);
-  return number;
+export function componentRequirements(workspace, component) {
+  return workspace.statements.filter(row => row.context === component.owner && row.kind === 'Requirement');
 }
-export function validateWorkspace(workspace, catalog = domainTypes) {
+export function componentCheck(component, checks) {
+  if (!component.requirements.length) return { state: 'unset', message: 'Link at least one requirement to verify this component.' };
+  const states = component.requirements.map(key => checks.get(key)?.state ?? 'pending');
+  if (states.every(state => state === 'pass')) return { state: 'pass', message: 'All affected requirements are verified.' };
+  if (states.includes('error')) return { state: 'error', message: 'An affected requirement has a verification error.' };
+  if (states.includes('fail')) return { state: 'fail', message: 'An affected requirement is false.' };
+  if (states.includes('unset')) return { state: 'unset', message: 'An affected requirement has no verification condition.' };
+  return { state: 'pending', message: 'Waiting for affected requirements to be verified.' };
+}
+export function parameterExpression(value, variable, id = 'This row') {
+  if (value === null) return null;
+  if (typeof value !== 'string' || value.length > 5000 || /[\r\n]/.test(value)) throw new Error(`${id}: ${variable.name} must be a single line of SysML expression text (up to 5,000 characters) or empty.`);
+  return value.trim() ? value : null;
+}
+export function validateWorkspace(workspace, catalog = domainTypes, products = null) {
   const fail = message => { throw new Error(message); };
-  if (!workspace || workspace.version !== 4 || !Array.isArray(workspace.stakeholders) || !Array.isArray(workspace.elements)
-      || !Array.isArray(workspace.statements) || !Array.isArray(workspace.variables)) fail('Invalid workspace format.');
+  if (workspace && workspace.version !== WORKSPACE_VERSION) fail(`Workspace format ${workspace.version} differs from app format ${WORKSPACE_VERSION}. Restart the requirements UI server and reload this page.`);
+  if (!workspace || !Array.isArray(workspace.stakeholders) || !Array.isArray(workspace.elements)
+      || !Array.isArray(workspace.statements) || !Array.isArray(workspace.variables) || !Array.isArray(workspace.components)) fail('Invalid workspace format.');
   if (workspace.variables.length > 64) fail('A workspace can contain up to 64 variable columns.');
   const variableNames = new Set();
   for (const variable of workspace.variables) {
@@ -177,22 +341,45 @@ export function validateWorkspace(workspace, catalog = domainTypes) {
     if (!allowedDefinitions(workspace, row.owner, catalog).some(type => type.model === row.definition)) fail(`${row.id}: choose a type from the generic mission model for this table.`);
   }
   const contexts = new Set(tabsFor(workspace, catalog).map(tab => tab.key));
+  const templates = new Map(catalog.flatMap(type => type.requirements ?? []).map(template => [template.model, template]));
   for (const row of workspace.statements) {
     if (!/^[A-Z]{3}\d{3}$/.test(row.id)) fail('Statement IDs must be three uppercase letters and three digits, such as REQ001.');
     if (!contexts.has(row.context)) fail(`${row.id}: the tab does not exist.`);
     if (!statementKinds.includes(row.kind)) fail(`${row.id}: choose a statement type.`);
     if (typeof row.text !== 'string' || row.text.length > 50000) fail(`${row.id}: invalid statement.`);
+    if (row.definition && (!templates.has(row.definition) || row.kind !== 'Requirement')) fail(`${row.id}: choose a generic requirement definition.`);
+    if (row.definition) {
+      const template = templates.get(row.definition);
+      const owner = workspace.elements.find(element => element.key === row.context);
+      if (template.context === 'mission' ? row.context !== 'mission' : catalog.find(type => type.model === owner?.definition)?.role !== 'eps') fail(`${row.id}: the generic requirement belongs to a different table.`);
+    }
+    if (row.origin !== undefined && (typeof row.origin !== 'string' || row.origin.length > 2000)) fail(`${row.id}: invalid requirement provenance.`);
+    if (Object.hasOwn(row, 'formulas')) fail(`${row.id}: store every parameter expression in its cell. Separate formula maps are no longer supported.`);
     if (Object.hasOwn(row, 'verified')) fail(`${row.id}: verification is computed from a SysML condition. Manual flags are not supported.`);
     if (typeof row.condition !== 'string' || row.condition.length > 5000 || /[\r\n]/.test(row.condition)) fail(`${row.id}: verification must be a single line of SysML (up to 5,000 characters).`);
     if (!Array.isArray(row.sources) || new Set(row.sources).size !== row.sources.length || row.sources.some(source => !keys.has(source))) fail(`${row.id}: choose existing source rows without duplicates.`);
     const assignable = new Set(assignableElements(workspace, row).map(element => element.key));
     if (!Array.isArray(row.affected) || new Set(row.affected).size !== row.affected.length || row.affected.some(key => !assignable.has(key))) fail(`${row.id}: affected elements must belong to the left table of this tab.`);
     if (!row.parameters || typeof row.parameters !== 'object' || Object.keys(row.parameters).some(name => !variableNames.has(name))) fail(`${row.id}: invalid variables.`);
+    const markers = requirementMarkers(row.text);
+    if (markers.errors.length) fail(`${row.id}: ${markers.errors[0]}`);
+    if (markers.names.some(name => !variableNames.has(name))) fail(`${row.id}: declare each $$variable$$ before saving.`);
     for (const variable of workspace.variables) {
       const value = row.parameters[variable.name];
-      if (value !== null && (typeof value !== 'number' || !Number.isFinite(value))) fail(`${row.id}: variables must be finite numbers or empty.`);
-      numeric(value, variable, row.id);
+      parameterExpression(value, variable, row.id);
+      const nativeType = templates.get(row.definition)?.attributes?.[variable.name];
+      if (nativeType === 'Integer' && variable.type !== 'integer') fail(`${row.id}: ${variable.name} must remain an Integer.`);
+      if (nativeType === 'Boolean' && value !== null && value.trim()) fail(`${row.id}: ${variable.name} is a native Boolean assessment input, not a numeric column.`);
     }
+  }
+  for (const row of workspace.components) {
+    if (!/^[A-Z]{3}\d{3}$/.test(row.id)) fail('Component IDs must be three uppercase letters and three digits, such as CMP001.');
+    const owner = workspace.elements.find(element => element.key === row.owner);
+    if (!owner || catalog.find(type => type.model === owner.definition)?.role !== 'eps') fail(`${row.id}: COTS components must belong to an EPS tab.`);
+    if (typeof row.product !== 'string' || !/^[a-z0-9_]+$/.test(row.product) || (products && !products.some(product => product.id === row.product))) fail(`${row.id}: choose a component from the COTS catalog.`);
+    if (Object.hasOwn(row, 'verified')) fail(`${row.id}: component verification is computed from its affected requirements.`);
+    const requirements = new Set(componentRequirements(workspace, row).map(statement => statement.key));
+    if (!Array.isArray(row.requirements) || new Set(row.requirements).size !== row.requirements.length || row.requirements.some(key => !requirements.has(key))) fail(`${row.id}: choose requirements from this EPS tab without duplicates.`);
   }
   const statements = new Map(workspace.statements.map(row => [row.key, row]));
   const visited = new Set(), visiting = new Set();

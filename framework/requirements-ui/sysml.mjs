@@ -2,14 +2,14 @@ import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, readFile, rename, stat, unlink, writeFile } from 'node:fs/promises';
 import { basename, dirname } from 'node:path';
 import { domainTypes, emptyWorkspace, migrateWorkspace, stakeholderTypes, tabsFor, validateWorkspace } from './model.mjs';
-import { expressionType, parseExpression, printExpression, validateReferences } from './verification.mjs';
+import { createEvaluator, expressionType, parseExpression, printExpression, validateReferences } from './verification.mjs';
 
 const begin = '// <requirements-ui>';
 const end = '// </requirements-ui>';
 const dataBegin = '/* requirements-ui:data\n';
 const dataEnd = '\nrequirements-ui:end-data */';
 const revisionOf = source => createHash('sha256').update(source).digest('hex');
-const identifier = (table, key) => `${table === 'stakeholders' ? 'stakeholder' : table === 'elements' ? 'element' : 'statement'}_${key.replace(/[-_]/g, char => char === '-' ? '_h' : '_u')}`;
+const identifier = (table, key) => `${table === 'stakeholders' ? 'stakeholder' : table === 'elements' ? 'element' : table === 'components' ? 'component' : 'statement'}_${key.replace(/[-_]/g, char => char === '-' ? '_h' : '_u')}`;
 const literal = value => JSON.stringify(value);
 
 function managedRange(source) {
@@ -20,23 +20,24 @@ function managedRange(source) {
   return [starts[0].index, ends[0].index + end.length];
 }
 
-export function readWorkspace(source, catalog = domainTypes) {
+export function readWorkspace(source, catalog = domainTypes, products = null) {
   const range = managedRange(source);
   if (!range) return emptyWorkspace(catalog);
   const block = source.slice(...range).replaceAll('\r\n', '\n');
   const start = block.indexOf(dataBegin), finish = block.indexOf(dataEnd);
   if (start === -1 || finish === -1) throw new Error('The requirements-ui data is missing.');
-  return validateWorkspace(migrateWorkspace(JSON.parse(block.slice(start + dataBegin.length, finish)), catalog), catalog);
+  return validateWorkspace(migrateWorkspace(JSON.parse(block.slice(start + dataBegin.length, finish)), catalog), catalog, products);
 }
 
-export function renderManaged(workspace, { packageName = 'MissionRequirements', catalog = domainTypes } = {}) {
-  validateWorkspace(workspace, catalog);
+export function renderManaged(workspace, { packageName = 'MissionRequirements', catalog = domainTypes, products = null, includeData = true, strict = false } = {}) {
+  validateWorkspace(workspace, catalog, products);
   if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(packageName)) throw new Error('Invalid mission package name.');
   const metadata = JSON.stringify(workspace, null, 2).replaceAll('*/', '\\u002a/');
-  const lines = [begin,
-    '// Mission data managed by requirements-ui. Generic definitions are imported.',
-    '// The JSON preserves UI data. The SysML elements below are generated from it.',
-    dataBegin + metadata + dataEnd,
+  const lines = [
+    ...(includeData ? [begin,
+      '// Mission data managed by requirements-ui. Generic definitions are imported.',
+      '// The JSON preserves UI data. The SysML elements below are generated from it.',
+      dataBegin + metadata + dataEnd] : ['// Mission-specific export. Load with the generic framework/*.sysml libraries.']),
     `package ${packageName} {`,
     '    private import External::*;',
     '    private import Orbit;',
@@ -51,12 +52,24 @@ export function renderManaged(workspace, { packageName = 'MissionRequirements', 
       namesById.set(row.id, identifier(table, row.key));
     }
   }
+  const elements = new Map(workspace.elements.map(row => [row.key, row]));
   const elementNames = new Map(workspace.elements.map(row => [row.key, identifier('elements', row.key)]));
-  for (const row of workspace.elements) {
-    const name = row.owner === 'mission' ? elementNames.get(row.key) : `${elementNames.get(row.owner)}::${elementNames.get(row.key)}`;
+  const elementPath = row => {
+    if (names.has(row.key)) return names.get(row.key);
+    const name = row.owner === 'mission' ? elementNames.get(row.key) : `${elementPath(elements.get(row.owner))}::${elementNames.get(row.key)}`;
     names.set(row.key, name);
     namesById.set(row.id, name);
-  }
+    return name;
+  };
+  workspace.elements.forEach(elementPath);
+  const templates = new Map(catalog.flatMap(type => type.requirements ?? []).map(template => [template.model, template]));
+  const evaluator = createEvaluator(workspace);
+  const checkResolved = evaluate => {
+    try { evaluate(); }
+    catch (error) { if (!error.pending) throw error; }
+  };
+  const productsById = new Map((products ?? []).map(product => [product.id, product]));
+  for (const row of workspace.components) names.set(row.key, `${names.get(row.owner)}::${identifier('components', row.key)}`);
   const partExpression = key => names.get(key).replaceAll('::', '.');
   const contexts = new Map(tabsFor(workspace, catalog).map(tab => [tab.key, tab.label]));
   for (const row of workspace.stakeholders) {
@@ -69,31 +82,70 @@ export function renderManaged(workspace, { packageName = 'MissionRequirements', 
     lines.push(`${indent}part ${elementNames.get(row.key)} : ${row.definition} {`,
       `${indent}    attribute externalId : String = ${literal(row.id)};`,
       `${indent}    attribute displayName : String = ${literal(row.name)};`);
+    if (row.definition === 'Orbit') {
+      const period = workspace.statements.find(statement => statement.definition === 'FrameworkRequirements::OrbitPeriod' && statement.affected.includes(row.key));
+      if (period) for (const name of ['altitude_km', 'earthRadius_km', 'gravitationalParameter_km3_s2']) {
+        lines.push(`${indent}    attribute :>> ${name} = ${names.get(period.key)}.'${name}';`);
+      }
+    }
     for (const child of workspace.elements.filter(child => child.owner === row.key)) emitElement(child, indent + '    ');
+    for (const component of workspace.components.filter(component => component.owner === row.key)) {
+      lines.push(`${indent}    part ${identifier('components', component.key)} : ${productsById.get(component.product)?.model ?? 'EPSModel::HardwareComponent'} {`,
+        `${indent}        attribute externalId : String = ${literal(component.id)};`,
+        `${indent}        attribute :>> catalog_product_id = ${literal(component.product)};`,
+        `${indent}        attribute :>> physical_resource_id = ${literal(component.key)};`, `${indent}    }`);
+    }
     lines.push(`${indent}}`);
   };
   for (const row of workspace.elements.filter(row => row.owner === 'mission')) emitElement(row, '    ');
   for (const row of workspace.statements) {
     const keyword = row.kind === 'Requirement' ? 'requirement' : 'attribute';
     const conditional = Boolean(row.condition.trim());
-    lines.push(`    ${keyword} ${names.get(row.key)} {`,
+    lines.push(`    ${keyword} ${names.get(row.key)}${row.definition ? ` : ${row.definition}` : ''} {`,
       `        attribute externalId : String = ${literal(row.id)};`,
       `        attribute tableName : String = ${literal(contexts.get(row.context))};`,
       `        attribute statementKind : String = ${literal(row.kind)};`,
       `        attribute statementText : String = ${literal(row.text)};`,
       `        attribute verificationExpression : String[0..1]${conditional ? ` = ${literal(row.condition)}` : ''};`);
+    if (row.origin) lines.push(`        attribute sourceReference : String = ${literal(row.origin)};`);
     for (const variable of workspace.variables) {
-      const value = row.parameters[variable.name];
-      lines.push(`        attribute '${variable.name}' : ${variable.type === 'integer' ? 'Integer' : 'Real'}[0..1]${value === null ? '' : ` = ${value}`};`);
+      const source = row.parameters[variable.name];
+      const populated = source !== null && Boolean(source.trim());
+      const inherited = Object.hasOwn(templates.get(row.definition)?.attributes ?? {}, variable.name);
+      if (row.definition && !inherited && !populated) continue;
+      let binding = '';
+      if (populated) {
+        try {
+          const ast = validateReferences(parseExpression(source), workspace);
+          if (expressionType(ast) !== 'number') throw new Error('A parameter expression must produce a number.');
+          checkResolved(() => evaluator.parameter(row, variable.name));
+          const expression = printExpression(ast, (id, name) => `${namesById.get(id)}.'${name}'`);
+          if (variable.type === 'integer' && ast.kind !== 'literal') {
+            // Integer cells accept equations involving Real values. The native
+            // binding retains an integrality predicate, so conversion cannot
+            // silently round a fractional result when inputs become available.
+            binding = ` = RealFunctions::ToInteger(${expression})`;
+            lines.push(`        assert constraint { ${expression} == RealFunctions::ToInteger(${expression}) }`);
+          } else binding = ` = ${expression}`;
+        } catch (error) {
+          if (strict) throw new Error(`${row.id}.${variable.name}: ${error.message}`);
+          lines.push(`        doc /* Invalid parameter expression for ${variable.name}. See the stored UI data. */`);
+        }
+      }
+      if (inherited) {
+        if (binding) lines.push(`        attribute :>> '${variable.name}'${binding};`);
+      } else lines.push(`        attribute '${variable.name}' : ${variable.type === 'integer' ? 'Integer' : 'Real'}[0..1]${binding};`);
     }
     if (row.affected.length) lines.push(`        ref part affectedElements[0..*] = (${row.affected.map(partExpression).join(', ')});`);
     if (conditional) {
       try {
         const ast = validateReferences(parseExpression(row.condition), workspace);
         if (expressionType(ast) !== 'boolean') throw new Error('The condition must produce a Boolean.');
+        if (strict) checkResolved(() => evaluator.expression(ast, row));
         const expression = printExpression(ast, (id, name) => `${namesById.get(id)}.'${name}'`);
         lines.push(`        ${row.kind === 'Requirement' ? 'require' : 'assert'} constraint verificationCondition { ${expression} }`);
-      } catch {
+      } catch (error) {
+        if (strict) throw new Error(`${row.id}: ${error.message}`);
         lines.push('        doc /* The UI reports an invalid or unresolved verification expression. */');
       }
     }
@@ -102,8 +154,15 @@ export function renderManaged(workspace, { packageName = 'MissionRequirements', 
   for (const row of workspace.statements) {
     for (const source of row.sources) lines.push(`    dependency from ${names.get(row.key)} to ${names.get(source)};`);
   }
-  lines.push('}', end);
+  for (const row of workspace.components) {
+    for (const requirement of row.requirements) lines.push(`    dependency from ${names.get(row.key)} to ${names.get(requirement)};`);
+  }
+  lines.push('}', ...(includeData ? [end] : []));
   return lines.join('\n');
+}
+
+export function renderExport(workspace, options = {}) {
+  return renderManaged(workspace, { ...options, includeData: false, strict: true }) + '\n';
 }
 
 export function updateSource(source, workspace, options) {
@@ -114,7 +173,7 @@ export function updateSource(source, workspace, options) {
   return source.slice(0, range[0]) + block + source.slice(range[1]);
 }
 
-export function createStore(modelPath, { catalog = domainTypes } = {}) {
+export function createStore(modelPath, { catalog = domainTypes, products = null } = {}) {
   let queue = Promise.resolve();
   const modelName = basename(modelPath);
   const stem = basename(modelPath, '.sysml').replace(/[^A-Za-z0-9_]/g, '_');
@@ -124,7 +183,7 @@ export function createStore(modelPath, { catalog = domainTypes } = {}) {
     catch (error) {
       if (error.code !== 'ENOENT') throw error;
       await mkdir(dirname(modelPath), { recursive: true });
-      await writeFile(modelPath, renderManaged(emptyWorkspace(catalog), { packageName, catalog }) + '\n', { flag: 'wx' }).catch(error => {
+      await writeFile(modelPath, renderManaged(emptyWorkspace(catalog), { packageName, catalog, products }) + '\n', { flag: 'wx' }).catch(error => {
         if (error.code !== 'EEXIST') throw error;
       });
       return readFile(modelPath, 'utf8');
@@ -132,14 +191,14 @@ export function createStore(modelPath, { catalog = domainTypes } = {}) {
   };
   const read = async () => {
     const source = await sourceFile();
-    return { workspace: readWorkspace(source, catalog), revision: revisionOf(source), modelName };
+    return { workspace: readWorkspace(source, catalog, products), revision: revisionOf(source), modelName };
   };
   const save = (workspace, revision) => {
     const operation = queue.then(async () => {
-      validateWorkspace(workspace, catalog);
+      validateWorkspace(workspace, catalog, products);
       const source = await sourceFile();
       if (revision !== revisionOf(source)) throw Object.assign(new Error(`${modelName} changed. Reload before saving to avoid overwriting changes.`), { status: 409 });
-      const updated = updateSource(source, workspace, { packageName, catalog });
+      const updated = updateSource(source, workspace, { packageName, catalog, products });
       const temporary = `${modelPath}.${randomUUID()}.tmp`;
       try {
         const { mode } = await stat(modelPath);

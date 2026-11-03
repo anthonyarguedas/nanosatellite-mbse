@@ -20,7 +20,12 @@ package External {
         package MissionNeeds {}
         package MissionObjectives {}
         package MissionConstraints {}
-        package MissionRequirements {}
+        package MissionRequirements {
+            doc /* Stakeholder statements and accepted mission values belong in
+             * mission instance packages. FrameworkRequirements supplies reusable
+             * orbit sizing and EPS requirements without mission-specific inputs.
+             */
+        }
     }
     package CubeSatDeployerSystems {
         part def CubeSatDeployer;

@@ -1,4 +1,12 @@
-const binaryOperators = new Set(['+', '-', '*', '/', '<', '<=', '>', '>=', '==', '!=', 'and', 'or', 'xor', 'implies']);
+const binaryOperators = new Set(['+', '-', '*', '/', '^', '**', '<', '<=', '>', '>=', '==', '!=', 'and', 'or', 'xor', 'implies']);
+const functions = {
+  sqrt: { arity: 1, evaluate: Math.sqrt, model: 'RealFunctions::sqrt' },
+  arccos: { arity: 1, evaluate: Math.acos, model: 'TrigFunctions::arccos' },
+  floor: { arity: 1, evaluate: Math.floor, model: 'RealFunctions::floor' },
+  abs: { arity: 1, evaluate: Math.abs, model: 'RealFunctions::abs' },
+  min: { arity: 2, evaluate: Math.min, model: 'RealFunctions::min' },
+  max: { arity: 2, evaluate: Math.max, model: 'RealFunctions::max' },
+};
 
 // A deliberately small SysML expression grammar. No JavaScript is executed.
 export function parseExpression(source) {
@@ -10,8 +18,8 @@ export function parseExpression(source) {
     const space = rest.match(/^\s+/);
     if (space) { position += space[0].length; continue; }
     const match = rest.match(/^(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?/)
-      ?? rest.match(/^[A-Za-z_][A-Za-z0-9_]*/)
-      ?? rest.match(/^(?:<=|>=|==|!=|[+*/<>()!\-.])/);
+      ?? rest.match(/^[A-Za-z_][A-Za-z0-9_]*(?:::[A-Za-z_][A-Za-z0-9_]*)*/)
+      ?? rest.match(/^(?:<=|>=|==|!=|\*\*|[+*/^,<>()!\-.])/);
     if (!match) throw new Error(`Unexpected character at position ${position + 1}.`);
     tokens.push({ value: match[0], position: position + 1 });
     position += match[0].length;
@@ -31,8 +39,18 @@ export function parseExpression(source) {
     else if (/^(?:\d|\.\d)/.test(value)) {
       if (!Number.isFinite(Number(value))) throw new Error('Numeric literals must be finite.');
       node = { kind: 'literal', value: Number(value) };
-    } else if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(value) && !binaryOperators.has(value) && value !== 'not') {
-      if (peek() === '.') {
+    } else if (/^[A-Za-z_][A-Za-z0-9_]*(?:::[A-Za-z_][A-Za-z0-9_]*)*$/.test(value) && !binaryOperators.has(value) && value !== 'not') {
+      if (value === 'pi' || value === 'TrigFunctions::pi') node = { kind: 'constant', name: 'pi' };
+      else if (peek() === '(') {
+        const name = Object.hasOwn(functions, value) ? value : Object.keys(functions).find(name => functions[name].model === value);
+        if (!name) throw new Error(`Unsupported function “${value}”.`);
+        take();
+        const args = [implies()];
+        while (peek() === ',') { take(); args.push(implies()); }
+        expect(')');
+        if (args.length !== functions[name].arity) throw new Error(`${value} requires ${functions[name].arity} argument(s).`);
+        node = { kind: 'call', name, args };
+      } else if (peek() === '.') {
         take();
         const name = take();
         if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(name)) throw new Error('Expected a variable name after the row ID.');
@@ -49,13 +67,22 @@ export function parseExpression(source) {
       depth--;
       return node;
     }
-    return primary();
+    return power();
   }
   const chain = (next, operators) => () => {
     let node = next();
     while (operators.includes(peek())) node = { kind: 'binary', operator: take(), left: node, right: next() };
     return node;
   };
+  function power() {
+    const left = primary();
+    if (!['^', '**'].includes(peek())) return left;
+    const operator = take();
+    if (++depth > 64) throw new Error('The expression is nested too deeply.');
+    const node = { kind: 'binary', operator, left, right: unary() };
+    depth--;
+    return node;
+  }
   const multiply = chain(unary, ['*', '/']);
   const add = chain(multiply, ['+', '-']);
   const compare = chain(add, ['<', '<=', '>', '>=', '==', '!=']);
@@ -87,13 +114,19 @@ export function validateReferences(ast, workspace) {
       if (node.kind === 'reference' && !ids.has(node.id)) throw new Error(`Unknown row “${node.id}”.`);
     } else if (node.kind === 'binary') stack.push(node.left, node.right);
     else if (node.kind === 'unary') stack.push(node.operand);
+    else if (node.kind === 'call') stack.push(...node.args);
   }
   return ast;
 }
 
 export function expressionType(ast) {
   if (ast.kind === 'literal') return typeof ast.value;
-  if (ast.kind === 'variable' || ast.kind === 'reference') return 'number';
+  if (ast.kind === 'variable' || ast.kind === 'reference' || ast.kind === 'constant') return 'number';
+  if (ast.kind === 'call') {
+    if (!Object.hasOwn(functions, ast.name) || ast.args.length !== functions[ast.name].arity) throw new Error('Unsupported function.');
+    for (const arg of ast.args) if (expressionType(arg) !== 'number') throw new Error('Functions require numeric operands.');
+    return 'number';
+  }
   const requireType = (node, type) => {
     if (expressionType(node) !== type) throw new Error(`This operator requires ${type === 'number' ? 'numeric' : 'Boolean'} operands.`);
   };
@@ -115,7 +148,7 @@ export function expressionType(ast) {
   return ['<', '<=', '>', '>='].includes(ast.operator) ? 'boolean' : 'number';
 }
 
-export function evaluateExpression(ast, workspace, row) {
+export function evaluateExpression(ast, workspace, row, resolving = new Set(), cache = new Map()) {
   validateReferences(ast, workspace);
   expressionType(ast);
   const variables = new Map(workspace.variables.map(variable => [variable.name, variable]));
@@ -125,19 +158,42 @@ export function evaluateExpression(ast, workspace, row) {
     return value;
   };
   const valueOf = (target, name) => {
-    const raw = target.parameters[name];
-    if (raw === null || raw === undefined || String(raw).trim() === '') {
-      const error = new Error(`${target.id}.${name} is unset.`);
-      error.pending = true;
-      throw error;
+    const key = `${target.id}.${name}`, cached = cache.get(key);
+    if (cached) {
+      if (cached.error) throw cached.error;
+      return cached.value;
     }
-    const value = Number(raw);
-    if (!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(String(raw).trim()) || !Number.isFinite(value)) throw new Error(`${target.id}.${name} must be a finite number.`);
-    if (variables.get(name).type === 'integer' && !Number.isSafeInteger(value)) throw new Error(`${target.id}.${name} must be a safe integer.`);
-    return value;
+    if (resolving.has(key)) throw new Error(`Cyclic parameter expression at ${key}.`);
+    if (resolving.size >= 64) throw new Error('Parameter expressions are nested too deeply.');
+    resolving.add(key);
+    try {
+      const raw = target.parameters[name];
+      if (raw === null || raw === undefined || (typeof raw === 'string' && !raw.trim())) {
+        const error = new Error(`${key} is unset.`);
+        error.pending = true;
+        throw error;
+      }
+      if (typeof raw !== 'string') throw new Error(`${key} must contain SysML expression text.`);
+      const ast = parseExpression(raw);
+      if (expressionType(ast) !== 'number') throw new Error(`${key} must produce a number.`);
+      const value = evaluateExpression(ast, workspace, target, resolving, cache);
+      if (typeof value !== 'number' || !Number.isFinite(value)) throw new Error(`${key} must produce a finite number.`);
+      if (variables.get(name).type === 'integer' && !Number.isSafeInteger(value)) throw new Error(`${key} must produce a safe integer.`);
+      cache.set(key, { value });
+      return value;
+    } catch (error) {
+      cache.set(key, { error });
+      throw error;
+    } finally { resolving.delete(key); }
   };
   function visit(node) {
     if (node.kind === 'literal') return node.value;
+    if (node.kind === 'constant') return Math.PI;
+    if (node.kind === 'call') {
+      const result = functions[node.name].evaluate(...node.args.map(visit));
+      if (!Number.isFinite(result)) throw new Error(`${node.name} is outside its finite domain.`);
+      return result;
+    }
     if (node.kind === 'variable') return valueOf(row, node.name);
     if (node.kind === 'reference') return valueOf(rows.get(node.id), node.name);
     if (node.kind === 'unary') {
@@ -166,21 +222,45 @@ export function evaluateExpression(ast, workspace, row) {
     if (node.operator === '-') result = left - right;
     if (node.operator === '*') result = left * right;
     if (node.operator === '/') result = left / right;
+    if (node.operator === '^' || node.operator === '**') result = left ** right;
     if (!Number.isFinite(result)) throw new Error('Arithmetic must produce a finite number.');
     return result;
   }
   return visit(ast);
 }
 
-export function evaluateChecks(workspace) {
-  return workspace.statements.map(row => {
-    if (!row.condition.trim()) return { key: row.key, state: 'unset', message: 'No SysML condition. Enter a Boolean expression to verify this row.' };
+// One evaluation pass shares cached results across parameter cells and checks.
+// A fresh evaluator is created whenever the workspace changes.
+export function createEvaluator(workspace) {
+  const resolving = new Set(), cache = new Map();
+  const expression = (ast, row) => evaluateExpression(ast, workspace, row, resolving, cache);
+  const parameter = (row, name) => expression({ kind: 'variable', name }, row);
+  const checkParameter = (row, name) => {
+    const raw = row.parameters[name];
+    if (raw === null || (typeof raw === 'string' && !raw.trim())) return { state: 'unset', value: null, message: 'No SysML parameter expression.' };
     try {
-      const result = evaluateExpression(parseExpression(row.condition), workspace, row);
-      if (typeof result !== 'boolean') throw new Error('The condition must produce true or false.');
-      return { key: row.key, state: result ? 'pass' : 'fail', message: row.condition };
+      const value = parameter(row, name);
+      return { state: 'value', value, message: `= ${value}` };
     } catch (error) {
-      return { key: row.key, state: error.pending ? 'pending' : 'error', message: String(error.message).slice(0, 300) };
+      return { state: error.pending ? 'pending' : 'error', value: null, message: String(error.message).slice(0, 300) };
+    }
+  };
+  return { expression, parameter, checkParameter };
+}
+
+export function evaluateChecks(workspace) {
+  const evaluator = createEvaluator(workspace);
+  return workspace.statements.map(row => {
+    const parameters = Object.fromEntries(workspace.variables.map(variable => [variable.name, evaluator.checkParameter(row, variable.name)]));
+    const values = Object.fromEntries(Object.entries(parameters).map(([name, result]) => [name, result.value]));
+    const computed = { values, parameters };
+    if (!row.condition.trim()) return { key: row.key, ...computed, state: 'unset', message: 'No SysML condition. Enter a Boolean expression to verify this row.' };
+    try {
+      const result = evaluator.expression(parseExpression(row.condition), row);
+      if (typeof result !== 'boolean') throw new Error('The condition must produce true or false.');
+      return { key: row.key, ...computed, state: result ? 'pass' : 'fail', message: row.condition };
+    } catch (error) {
+      return { key: row.key, ...computed, state: error.pending ? 'pending' : 'error', message: String(error.message).slice(0, 300) };
     }
   });
 }
@@ -188,6 +268,12 @@ export function evaluateChecks(workspace) {
 // Print only parsed nodes. User text is never inserted into executable model syntax.
 export function printExpression(ast, reference = (id, name) => `${id}.'${name}'`) {
   if (ast.kind === 'literal') return String(ast.value);
+  if (ast.kind === 'constant') return 'TrigFunctions::pi';
+  if (ast.kind === 'call') {
+    const args = ast.args.map(arg => printExpression(arg, reference));
+    if (ast.name === 'arccos') args[0] = `(${args[0]} as TrigFunctions::UnitBoundedReal)`;
+    return `${functions[ast.name].model}(${args.join(', ')})`;
+  }
   if (ast.kind === 'variable') return `'${ast.name}'`;
   if (ast.kind === 'reference') return reference(ast.id, ast.name);
   if (ast.kind === 'unary') return `(${ast.operator} ${printExpression(ast.operand, reference)})`;

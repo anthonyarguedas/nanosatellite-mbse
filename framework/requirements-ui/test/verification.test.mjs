@@ -7,8 +7,8 @@ function example(condition = '') {
   return {
     variables: [{ name: 'x', type: 'float' }, { name: 'mass', type: 'float' }, { name: 'count', type: 'integer' }],
     statements: [
-      { key: 'r1', id: 'REQ001', condition, parameters: { x: 3, mass: 2.5, count: 4 } },
-      { key: 'r2', id: 'REQ002', condition: 'true', parameters: { x: 6, mass: 5, count: null } },
+      { key: 'r1', id: 'REQ001', condition, parameters: { x: '3', mass: '2.5', count: '4' } },
+      { key: 'r2', id: 'REQ002', condition: 'true', parameters: { x: '6', mass: '5', count: null } },
     ],
   };
 }
@@ -34,6 +34,16 @@ test('numeric literals support exponents, unary signs and leading decimals', () 
   assert.equal(check('x == +3 and -x == -3 and .5 * 1e1 == 5').state, 'pass');
 });
 
+test('sizing math uses a fixed function set, radians and finite domains', () => {
+  assert.equal(check('sqrt(9) == 3 and arccos(1) == 0 and pi > 3').state, 'pass');
+  assert.equal(check('-floor(-2.1) == 3 and min(2, 3) == 2 and max(2, 3) == 3').state, 'pass');
+  assert.equal(check('-2 ^ 2 == -4 and 2 ^ -2 == 0.25 and 2 ^ 3 ^ 2 == 512').state, 'pass');
+  for (const expression of ['sqrt(-1) > 0', 'arccos(2) > 0', '(-2) ^ 0.5 > 0', 'sqrt(true) > 0', 'false and sqrt(true) > 0']) {
+    assert.equal(check(expression).state, 'error', expression);
+  }
+  assert.match(printExpression(parseExpression('arccos(x) > 0')), /as TrigFunctions::UnitBoundedReal/);
+});
+
 test('conditions must have a Boolean result and operands have matching types', () => {
   for (const expression of ['x + 1', '1 and true', 'false and 1', 'not x', 'x == true', '0 < x < 10']) {
     assert.equal(check(expression).state, 'error', expression);
@@ -56,7 +66,7 @@ test('unknown rows and columns are errors, even in an unused branch', () => {
 
 test('invalid and nonfinite values, arithmetic and integer values are errors', () => {
   const workspace = example('count > 0');
-  workspace.statements[0].parameters.count = 1.5;
+  workspace.statements[0].parameters.count = '1.5';
   assert.equal(evaluateChecks(workspace)[0].state, 'error');
   workspace.statements[0].parameters.count = 'invalid';
   assert.equal(evaluateChecks(workspace)[0].state, 'error');
@@ -75,7 +85,7 @@ test('verification requires a SysML condition and ignores injected manual flags'
   assert.equal(evaluateChecks(workspace)[1].state, 'pass');
 });
 
-test('calls, assignment, JavaScript operators and object access are rejected', () => {
+test('unapproved calls, assignment, JavaScript operators and object access are rejected', () => {
   const expressions = [
     'alert(1)', 'Math.max(x, 1) > 0', 'x = 1', 'x += 1', 'x === 3', 'x > 0 && true',
     'while (true) {}', '(()=>true)()', 'return true;', 'REQ002["mass"] > 0',
@@ -101,7 +111,7 @@ test('AST printing produces SysML with explicit grouping and row bindings', () =
 });
 
 test('the browser interpreter and worker contain no dynamic code execution', async () => {
-  for (const file of ['../verification.mjs', '../public/verification-worker.js', '../public/app.js']) {
+  for (const file of ['../verification.mjs', '../public/verification-worker.js', '../public/app.js', '../public/requirement-editor.js']) {
     const source = await readFile(new URL(file, import.meta.url), 'utf8');
     assert.doesNotMatch(source, /\beval\s*\(|\bnew\s+Function\b/);
   }

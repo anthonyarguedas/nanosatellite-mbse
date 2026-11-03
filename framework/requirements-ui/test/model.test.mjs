@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  availableSources, emptyWorkspace, migrateWorkspace, nextId, numeric, parseTSV,
-  stakeholderTypes, statementKinds, validVariableName, validateWorkspace,
+  availableSources, emptyWorkspace, migrateWorkspace, nextId, parameterExpression, parseTSV,
+  stakeholderTypes, statementKinds, validVariableName, validateWorkspace, WORKSPACE_VERSION,
 } from '../model.mjs';
 import { readWorkspace, renderManaged, updateSource } from '../sysml.mjs';
+import { createEvaluator } from '../verification.mjs';
 
 function example() {
   return {
@@ -12,14 +13,14 @@ function example() {
     elements: [],
     stakeholders: [{ key: 's1', id: 'OPS', name: 'Mission team', type: 'Mission Stakeholder' }],
     statements: [
-      { key: 'n1', id: 'NED001', context: 'external', affected: [], sources: ['s1'], kind: 'Need', text: 'Observe for {x} months.', condition: '', parameters: { x: 12, y: null, z: null, a: null } },
-      { key: 'r1', id: 'REQ001', context: 'external', affected: [], sources: ['n1', 's1'], kind: 'Requirement', text: 'The mission shall last {x} months.', condition: 'true', parameters: { x: 12, y: -1.5, z: 0, a: null } },
+      { key: 'n1', id: 'NED001', context: 'external', affected: [], sources: ['s1'], kind: 'Need', text: 'Observe for {x} months.', condition: '', parameters: { x: '12', y: null, z: null, a: null } },
+      { key: 'r1', id: 'REQ001', context: 'external', affected: [], sources: ['n1', 's1'], kind: 'Requirement', text: 'The mission shall last {x} months.', condition: 'true', parameters: { x: '12', y: '-1.5', z: '0', a: null } },
     ],
   };
 }
 
 test('empty and populated workspaces validate', () => {
-  assert.equal(validateWorkspace(emptyWorkspace()).version, 4);
+  assert.equal(validateWorkspace(emptyWorkspace()).version, WORKSPACE_VERSION);
   assert.deepEqual(validateWorkspace(example()), example());
 });
 
@@ -65,25 +66,27 @@ test('multiple source paths in an acyclic graph validate', () => {
   assert.doesNotThrow(() => validateWorkspace(workspace));
 });
 
-test('numeric columns support floats, integers, zero, negatives and unset values', () => {
-  assert.deepEqual(validateWorkspace(example()).statements[1].parameters, { x: 12, y: -1.5, z: 0, a: null });
-  assert.equal(numeric('1.2e3', { name: 'count', type: 'integer' }), 1200);
-  assert.equal(numeric('', { name: 'mass', type: 'float' }), null);
-  assert.throws(() => numeric('1.5', { name: 'count', type: 'integer' }), /safe integer/);
-  assert.throws(() => numeric('9007199254740992', { name: 'count', type: 'integer' }), /safe integer/);
-  for (const value of ['12', NaN, Infinity, undefined]) {
+test('every parameter stores expression text, including literals, equations and invalid drafts', () => {
+  assert.deepEqual(validateWorkspace(example()).statements[1].parameters, { x: '12', y: '-1.5', z: '0', a: null });
+  const variable = { name: 'count', type: 'integer' };
+  for (const expression of ['1.2e3', 'NED001.x * 2', '  2 + 3  ', 'invalid(', '1.5']) assert.equal(parameterExpression(expression, variable), expression);
+  assert.equal(parameterExpression('', variable), null);
+  assert.equal(parameterExpression('  ', variable), null);
+  for (const value of [12, NaN, Infinity, undefined, {}, '1\n+2', ' '.repeat(5001)]) {
     const workspace = example(); workspace.statements[0].parameters.x = value;
-    assert.throws(() => validateWorkspace(workspace), /finite numbers/);
+    assert.throws(() => validateWorkspace(workspace), /SysML expression text/);
   }
 });
 
 test('dynamic variable columns validate names, types and values', () => {
   const workspace = example();
   workspace.variables.push({ name: 'cell_count', type: 'integer' });
-  workspace.statements.forEach(row => { row.parameters.cell_count = 3; });
+  workspace.statements.forEach(row => { row.parameters.cell_count = 'x / 4'; });
   assert.doesNotThrow(() => validateWorkspace(workspace));
-  workspace.statements[0].parameters.cell_count = 3.2;
-  assert.throws(() => validateWorkspace(workspace), /safe integer/);
+  assert.equal(createEvaluator(workspace).parameter(workspace.statements[0], 'cell_count'), 3);
+  workspace.statements[0].parameters.cell_count = '3.2';
+  assert.doesNotThrow(() => validateWorkspace(workspace));
+  assert.throws(() => createEvaluator(workspace).parameter(workspace.statements[0], 'cell_count'), /safe integer/);
   for (const name of ['and', 'not', 'REQ001', 'id', 'text', '__proto__', 'bad-name', '2mass']) assert.equal(validVariableName(name), false);
   for (const name of ['mass', 'cell_count', '_margin']) assert.equal(validVariableName(name), true);
   workspace.variables.push({ name: 'x', type: 'float' });
@@ -112,7 +115,7 @@ test('old data preserves checked status as a SysML literal while retaining value
   assert.equal(upgraded.statements[0].id, 'REQ001');
   assert.deepEqual(upgraded.statements[0].sources, ['s1']);
   assert.equal(Object.hasOwn(upgraded.statements[0], 'verified'), false);
-  assert.equal(upgraded.statements[0].parameters.x, 2);
+  assert.equal(upgraded.statements[0].parameters.x, '2');
   assert.equal(upgraded.statements[0].condition, 'true');
   assert.deepEqual(readWorkspace(`// <requirements-ui>\n/* requirements-ui:data\n${JSON.stringify(old)}\nrequirements-ui:end-data */\n// </requirements-ui>`), upgraded);
 });
@@ -124,7 +127,7 @@ test('version 3 manual checks migrate to condition-only verification without los
   old.statements[1] = { ...old.statements[1], verified: false, condition: '' };
   old.statements.push({ ...old.statements[1], key: 'r2', id: 'REQ002', verified: true, condition: 'x < 0' });
   const migrated = validateWorkspace(migrateWorkspace(old));
-  assert.equal(migrated.version, 4);
+  assert.equal(migrated.version, WORKSPACE_VERSION);
   assert.deepEqual(migrated.statements.map(row => row.condition), ['true', '', 'x < 0']);
   assert.ok(migrated.statements.every(row => !Object.hasOwn(row, 'verified')));
   assert.deepEqual(migrated.statements.map(row => row.parameters), old.statements.map(row => row.parameters));
