@@ -561,7 +561,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:minimum-panel-power; EPSModel::ModeLoadProfile and AccountingPlan"
     },
     {
       "key": "generic-EPS-MinimumPanelPower",
@@ -640,7 +641,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:minimum-panel-power (handpicked-0003)"
     },
     {
       "key": "generic-EPS-SolarCellPower",
@@ -715,7 +717,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:solar-cell-eol-power"
     },
     {
       "key": "generic-EPS-SolarCellCount",
@@ -793,7 +796,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:solar-cell-count, eq:pv-integer-configuration"
     },
     {
       "key": "generic-EPS-MissionCycles",
@@ -870,7 +874,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:battery-mission-cycles"
     },
     {
       "key": "generic-EPS-CycleLife",
@@ -947,7 +952,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:battery-cycle-life; EPS-09"
     },
     {
       "key": "generic-EPS-MinimumBatteryEnergy",
@@ -1026,7 +1032,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:battery-energy; EPS-08"
     },
     {
       "key": "generic-EPS-BatteryCapacityScreen",
@@ -1103,7 +1110,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:battery-assembly-capacity; EPS-08"
     },
     {
       "key": "generic-EPS-EPS02",
@@ -1181,7 +1189,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/eps-requirements.tex#EPS-02; eq:array-generation-screen, eq:pv-integer-configuration"
     },
     {
       "key": "generic-EPS-EPS08",
@@ -1259,7 +1268,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/eps-requirements.tex#EPS-08; eq:battery-energy, eq:battery-assembly-capacity, eq:battery-assembly-ratings"
     },
     {
       "key": "generic-EPS-EPS09",
@@ -1337,7 +1347,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/eps-requirements.tex#EPS-09; eq:battery-mission-cycles, eq:battery-cycle-life"
     },
     {
       "key": "generic-EPS-EPS11",
@@ -1413,7 +1424,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/eps-requirements.tex#EPS-11; eq:nominal-energy-feasibility"
     },
     {
       "key": "generic-EPS-EPS19",
@@ -1492,7 +1504,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/eps-requirements.tex#EPS-19; eq:eps-product-budgets"
     },
     {
       "key": "generic-EPS-EPS21",
@@ -1568,7 +1581,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:software-resource-screen; Software-host checks"
     },
     {
       "key": "generic-EPS-EnergyPathEfficiencyBounds",
@@ -1646,7 +1660,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:minimum-panel-power"
     },
     {
       "key": "generic-EPS-CycleFitDomain",
@@ -1723,7 +1738,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:battery-cycle-life"
     },
     {
       "key": "generic-EPS-CycleLimitedDoD",
@@ -1800,7 +1816,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:battery-cycle-life"
     },
     {
       "key": "generic-EPS-BatteryRetainedEnergy",
@@ -1877,7 +1894,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:battery-assembly-capacity"
     },
     {
       "key": "generic-EPS-EPS47",
@@ -1954,7 +1972,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/eps-requirements.tex#EPS-09"
     },
     {
       "key": "generic-EPS-EPS52",
@@ -2032,7 +2051,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/eps-requirements.tex#EPS-11; eq:nominal-energy-feasibility"
     },
     {
       "key": "generic-EPS-EPS53",
@@ -2110,7 +2130,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/eps-requirements.tex#EPS-11"
     },
     {
       "key": "generic-EPS-EPS78",
@@ -2191,7 +2212,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/eps-requirements.tex#EPS-19; eq:eps-product-budgets"
     },
     {
       "key": "generic-EPS-EPS88",
@@ -2269,7 +2291,8 @@
         "available_program_bytes": "EPS021.available_program_bytes",
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:software-resource-screen"
     },
     {
       "key": "generic-EPS-EPS89",
@@ -2347,7 +2370,8 @@
         "available_program_bytes": null,
         "required_utilization": "EPS021.required_utilization",
         "allocated_utilization": "EPS021.allocated_utilization"
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:software-resource-screen"
     },
     {
       "key": "generic-ORB-OrbitPeriodClosure",
@@ -2424,7 +2448,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period"
     },
     {
       "key": "generic-ORB-IlluminationPeriods",
@@ -2501,7 +2526,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period, eq:eclipse-geometry"
     },
     {
       "key": "generic-ORB-OrbitPeriod",
@@ -2576,7 +2602,8 @@
         "available_program_bytes": null,
         "required_utilization": null,
         "allocated_utilization": null
-      }
+      },
+      "rationale": "final_report/design-proposal.tex#eq:orbit-period (handpicked-0003, Eqs. 1-4)"
     }
   ]
 }
@@ -2709,6 +2736,7 @@ package MissionRequirements {
         attribute statementText : String = "The preliminary load budget shall allocate $$sunlight_energy_J$$ during $$sunlight_s$$ of sunlight and $$eclipse_energy_J$$ during $$eclipse_s$$ of eclipse.";
         attribute verificationExpression : String[0..1] = "sunlight_power_W >= 0 and eclipse_power_W >= 0 and sunlight_duty >= 0 and sunlight_duty <= 1 and eclipse_duty >= 0 and eclipse_duty <= 1 and sunlight_s > 0 and eclipse_s > 0 and sunlight_energy_J == sunlight_power_W * sunlight_duty * sunlight_s and eclipse_energy_J == eclipse_power_W * eclipse_duty * eclipse_s";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:minimum-panel-power; EPSModel::ModeLoadProfile and AccountingPlan";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:minimum-panel-power; EPSModel::ModeLoadProfile and AccountingPlan";
         attribute :>> 'sunlight_s' = statement_generic_hORB_hIlluminationPeriods.'sunlight_s';
         attribute :>> 'eclipse_s' = statement_generic_hORB_hIlluminationPeriods.'eclipse_s';
         attribute :>> 'sunlight_energy_J' = (('sunlight_power_W' * 'sunlight_duty') * 'sunlight_s');
@@ -2723,6 +2751,7 @@ package MissionRequirements {
         attribute statementText : String = "The solar panels shall provide at least $$panel_min_W$$ at the declared source boundary.";
         attribute verificationExpression : String[0..1] = "sunlight_energy_J >= 0 and eclipse_energy_J >= 0 and sunlight_s > 0 and sunlight_efficiency > 0 and sunlight_efficiency <= 1 and eclipse_efficiency > 0 and eclipse_efficiency <= 1 and panel_min_W == (sunlight_energy_J / sunlight_efficiency + eclipse_energy_J / eclipse_efficiency) / sunlight_s";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:minimum-panel-power (handpicked-0003)";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:minimum-panel-power (handpicked-0003)";
         attribute :>> 'sunlight_s' = statement_generic_hORB_hIlluminationPeriods.'sunlight_s';
         attribute :>> 'sunlight_energy_J' = statement_generic_hEPS_hLoadEnergy.'sunlight_energy_J';
         attribute :>> 'eclipse_energy_J' = statement_generic_hEPS_hLoadEnergy.'eclipse_energy_J';
@@ -2737,6 +2766,7 @@ package MissionRequirements {
         attribute statementText : String = "The selected solar cell shall provide EOL maximum power $$cell_eol_W$$ from maximum power point voltage $$cell_eol_V$$ and current $$cell_eol_A$$.";
         attribute verificationExpression : String[0..1] = "cell_eol_V > 0 and cell_eol_A > 0 and cell_eol_W == cell_eol_V * cell_eol_A";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:solar-cell-eol-power";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:solar-cell-eol-power";
         attribute :>> 'cell_eol_W' = ('cell_eol_V' * 'cell_eol_A');
         ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays);
         require constraint verificationCondition { ((('cell_eol_V' > 0) and ('cell_eol_A' > 0)) and ('cell_eol_W' == ('cell_eol_V' * 'cell_eol_A'))) }
@@ -2748,6 +2778,7 @@ package MissionRequirements {
         attribute statementText : String = "The array shall install $$installed_cells$$, at least the minimum $$minimum_cells$$ obtained by rounding calculated count $$required_cells$$ upward.";
         attribute verificationExpression : String[0..1] = "panel_min_W >= 0 and cell_eol_W > 0 and required_cells == panel_min_W / cell_eol_W and minimum_cells == -floor(-required_cells) and installed_cells > 0 and installed_cells >= minimum_cells";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:solar-cell-count, eq:pv-integer-configuration";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:solar-cell-count, eq:pv-integer-configuration";
         attribute :>> 'panel_min_W' = statement_generic_hEPS_hMinimumPanelPower.'panel_min_W';
         attribute :>> 'cell_eol_W' = statement_generic_hEPS_hSolarCellPower.'cell_eol_W';
         attribute :>> 'required_cells' = ('panel_min_W' / 'cell_eol_W');
@@ -2763,6 +2794,7 @@ package MissionRequirements {
         attribute statementText : String = "For one nominal cycle per orbit, the battery shall support at least $$required_cycles$$ over $$lifetime_years$$, using $$days_per_year$$ and $$orbits_per_day$$ derived from period $$orbit_period_s$$.";
         attribute verificationExpression : String[0..1] = "orbit_period_s > 0 and lifetime_years > 0 and days_per_year > 0 and orbits_per_day == 86400 / orbit_period_s and required_cycles == lifetime_years * days_per_year * orbits_per_day";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-mission-cycles";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-mission-cycles";
         attribute :>> 'orbit_period_s' = statement_generic_hORB_hOrbitPeriod.'orbit_period_s';
         attribute :>> 'orbits_per_day' = (86400 / 'orbit_period_s');
         attribute :>> 'required_cycles' = (('lifetime_years' * 'days_per_year') * 'orbits_per_day');
@@ -2776,6 +2808,7 @@ package MissionRequirements {
         attribute statementText : String = "The selected maximum depth of discharge $$dod_max$$ shall support $$supported_cycles$$, at least the required $$required_cycles$$.";
         attribute verificationExpression : String[0..1] = "required_cycles > 0 and cycle_a > 0 and cycle_b < 0 and fit_dod_min > 0 and fit_dod_min <= fit_dod_max and fit_dod_max <= 1 and dod_max >= fit_dod_min and dod_max <= fit_dod_max and dod_cycle_limit == (required_cycles / cycle_a) ^ (1 / cycle_b) and supported_cycles == cycle_a * dod_max ^ cycle_b and supported_cycles >= required_cycles";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-cycle-life; EPS-09";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-cycle-life; EPS-09";
         attribute :>> 'required_cycles' = statement_generic_hEPS_hMissionCycles.'required_cycles';
         attribute :>> 'dod_cycle_limit' = (('required_cycles' / 'cycle_a') ^ (1 / 'cycle_b'));
         attribute :>> 'supported_cycles' = ('cycle_a' * ('dod_max' ^ 'cycle_b'));
@@ -2789,6 +2822,7 @@ package MissionRequirements {
         attribute statementText : String = "The battery shall provide at least $$battery_min_J$$ of BOL energy for eclipse demand $$eclipse_energy_J$$ at maximum DoD $$dod_max$$ and degradation margin $$degradation_margin$$.";
         attribute verificationExpression : String[0..1] = "eclipse_energy_J >= 0 and dod_max > 0 and dod_max <= 1 and degradation_margin >= 0 and battery_min_J == eclipse_energy_J / dod_max * (1 + degradation_margin) and required_cycles > 0 and cycle_a > 0 and cycle_b < 0 and fit_dod_min > 0 and fit_dod_min <= fit_dod_max and fit_dod_max <= 1 and dod_max >= fit_dod_min and dod_max <= fit_dod_max and supported_cycles == cycle_a * dod_max ^ cycle_b and supported_cycles >= required_cycles";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-energy; EPS-08";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-energy; EPS-08";
         attribute :>> 'eclipse_energy_J' = statement_generic_hEPS_hLoadEnergy.'eclipse_energy_J';
         attribute :>> 'required_cycles' = statement_generic_hEPS_hMissionCycles.'required_cycles';
         attribute :>> 'cycle_a' = statement_generic_hEPS_hCycleLife.'cycle_a';
@@ -2808,6 +2842,7 @@ package MissionRequirements {
         attribute statementText : String = "The selected battery shall have BOL energy $$pack_bol_J$$, at least the preliminary minimum $$battery_min_J$$.";
         attribute verificationExpression : String[0..1] = "battery_min_J >= 0 and pack_bol_J > 0 and pack_bol_J >= battery_min_J and retained_energy_factor > 0 and retained_energy_factor <= 1 and pack_eol_J == retained_energy_factor * pack_bol_J";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-assembly-capacity; EPS-08";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-assembly-capacity; EPS-08";
         attribute :>> 'battery_min_J' = statement_generic_hEPS_hMinimumBatteryEnergy.'battery_min_J';
         attribute :>> 'pack_eol_J' = ('retained_energy_factor' * 'pack_bol_J');
         ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
@@ -2820,6 +2855,7 @@ package MissionRequirements {
         attribute statementText : String = "EPS-02. The solar arrays shall provide at least $$panel_min_W$$ of average source power from $$sunlight_generation_J$$ over $$sunlight_s$$ of sunlight at each section's attainable DET or MPPT operating point under applicable illumination and EOL conditions.";
         attribute verificationExpression : String[0..1];
         attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-02; eq:array-generation-screen, eq:pv-integer-configuration";
+        attribute rationale : String = "final_report/eps-requirements.tex#EPS-02; eq:array-generation-screen, eq:pv-integer-configuration";
         attribute :>> 'sunlight_s' = statement_generic_hORB_hIlluminationPeriods.'sunlight_s';
         attribute :>> 'panel_min_W' = statement_generic_hEPS_hMinimumPanelPower.'panel_min_W';
         ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays);
@@ -2831,6 +2867,7 @@ package MissionRequirements {
         attribute statementText : String = "EPS-08. The battery pack BOL energy $$pack_bol_J$$ shall meet minimum energy $$battery_min_J$$ from preliminary battery sizing.";
         attribute verificationExpression : String[0..1];
         attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-08; eq:battery-energy, eq:battery-assembly-capacity, eq:battery-assembly-ratings";
+        attribute rationale : String = "final_report/eps-requirements.tex#EPS-08; eq:battery-energy, eq:battery-assembly-capacity, eq:battery-assembly-ratings";
         attribute :>> 'battery_min_J' = statement_generic_hEPS_hMinimumBatteryEnergy.'battery_min_J';
         attribute :>> 'pack_bol_J' = statement_generic_hEPS_hBatteryCapacityScreen.'pack_bol_J';
         ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
@@ -2842,6 +2879,7 @@ package MissionRequirements {
         attribute statementText : String = "EPS-09. For nominal operation, the battery pack shall support $$supported_cycles$$, at least the required $$required_cycles$$ at the selected DoD and applicable conditions.";
         attribute verificationExpression : String[0..1];
         attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-09; eq:battery-mission-cycles, eq:battery-cycle-life";
+        attribute rationale : String = "final_report/eps-requirements.tex#EPS-09; eq:battery-mission-cycles, eq:battery-cycle-life";
         attribute :>> 'required_cycles' = statement_generic_hEPS_hMissionCycles.'required_cycles';
         attribute :>> 'dod_max' = statement_generic_hEPS_hCycleLife.'dod_max';
         attribute :>> 'supported_cycles' = statement_generic_hEPS_hCycleLife.'supported_cycles';
@@ -2854,6 +2892,7 @@ package MissionRequirements {
         attribute statementText : String = "EPS-11. The EPS shall replenish the battery from starting energy $$energy_start_J$$ and charge based SOC $$soc_start$$ over every specified nominal repeating interval.";
         attribute verificationExpression : String[0..1];
         attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-11; eq:nominal-energy-feasibility";
+        attribute rationale : String = "final_report/eps-requirements.tex#EPS-11; eq:nominal-energy-feasibility";
         ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays);
     }
     requirement statement_generic_hEPS_hEPS19 : FrameworkRequirements::EPS19 {
@@ -2863,6 +2902,7 @@ package MissionRequirements {
         attribute statementText : String = "EPS-19. Total EPS mass $$mass_kg$$ shall remain within allocation $$mass_allocation_kg$$.";
         attribute verificationExpression : String[0..1];
         attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-19; eq:eps-product-budgets";
+        attribute rationale : String = "final_report/eps-requirements.tex#EPS-19; eq:eps-product-budgets";
         ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hProcessorAndMemory, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hRegulatorsAndConverters, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hPowerCircuitsAndSwitches);
     }
     requirement statement_generic_hEPS_hEPS21 : FrameworkRequirements::EPS21 {
@@ -2872,6 +2912,7 @@ package MissionRequirements {
         attribute statementText : String = "EPS-21. Each software execution host shall provide $$required_data_bytes$$ of data memory within an allocation of $$available_data_bytes$$.";
         attribute verificationExpression : String[0..1];
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:software-resource-screen; Software-host checks";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:software-resource-screen; Software-host checks";
         ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hProcessorAndMemory, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSoftware);
     }
     requirement statement_generic_hEPS_hEnergyPathEfficiencyBounds : FrameworkRequirements::EnergyPathEfficiencyBounds {
@@ -2881,6 +2922,7 @@ package MissionRequirements {
         attribute statementText : String = "Sunlight path efficiency $$sunlight_efficiency$$ and eclipse path efficiency $$eclipse_efficiency$$ shall lie in (0,1].";
         attribute verificationExpression : String[0..1] = "sunlight_efficiency > 0 and sunlight_efficiency <= 1 and eclipse_efficiency > 0 and eclipse_efficiency <= 1";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:minimum-panel-power";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:minimum-panel-power";
         attribute :>> 'sunlight_efficiency' = statement_generic_hEPS_hMinimumPanelPower.'sunlight_efficiency';
         attribute :>> 'eclipse_efficiency' = statement_generic_hEPS_hMinimumPanelPower.'eclipse_efficiency';
         ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hRegulatorsAndConverters);
@@ -2893,6 +2935,7 @@ package MissionRequirements {
         attribute statementText : String = "Maximum DoD $$dod_max$$ shall lie in (0,1] and the sourced fit interval [$$fit_dod_min$$,$$fit_dod_max$$] for power law coefficients $$cycle_a$$ and $$cycle_b$$.";
         attribute verificationExpression : String[0..1] = "cycle_a > 0 and cycle_b < 0 and fit_dod_min > 0 and fit_dod_min <= fit_dod_max and fit_dod_max <= 1 and dod_max >= fit_dod_min and dod_max <= fit_dod_max";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-cycle-life";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-cycle-life";
         attribute :>> 'cycle_a' = statement_generic_hEPS_hCycleLife.'cycle_a';
         attribute :>> 'cycle_b' = statement_generic_hEPS_hCycleLife.'cycle_b';
         attribute :>> 'dod_max' = statement_generic_hEPS_hCycleLife.'dod_max';
@@ -2908,6 +2951,7 @@ package MissionRequirements {
         attribute statementText : String = "Maximum DoD $$dod_max$$ shall not exceed fitted cycle limit $$dod_cycle_limit$$.";
         attribute verificationExpression : String[0..1] = "dod_max > 0 and dod_max <= 1 and dod_cycle_limit > 0 and dod_max <= dod_cycle_limit";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-cycle-life";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-cycle-life";
         attribute :>> 'dod_max' = statement_generic_hEPS_hCycleLife.'dod_max';
         attribute :>> 'dod_cycle_limit' = statement_generic_hEPS_hCycleLife.'dod_cycle_limit';
         ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
@@ -2920,6 +2964,7 @@ package MissionRequirements {
         attribute statementText : String = "Battery EOL energy $$pack_eol_J$$ shall equal BOL energy $$pack_bol_J$$ multiplied by retained energy factor $$retained_energy_factor$$ in (0,1].";
         attribute verificationExpression : String[0..1] = "pack_bol_J > 0 and retained_energy_factor > 0 and retained_energy_factor <= 1 and pack_eol_J == retained_energy_factor * pack_bol_J";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-assembly-capacity";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-assembly-capacity";
         attribute :>> 'pack_bol_J' = statement_generic_hEPS_hBatteryCapacityScreen.'pack_bol_J';
         attribute :>> 'retained_energy_factor' = statement_generic_hEPS_hBatteryCapacityScreen.'retained_energy_factor';
         attribute :>> 'pack_eol_J' = statement_generic_hEPS_hBatteryCapacityScreen.'pack_eol_J';
@@ -2933,6 +2978,7 @@ package MissionRequirements {
         attribute statementText : String = "EPS-47. Nominal cycle DoD $$nominal_dod$$ shall not exceed maximum DoD $$dod_max$$.";
         attribute verificationExpression : String[0..1];
         attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-09";
+        attribute rationale : String = "final_report/eps-requirements.tex#EPS-09";
         attribute :>> 'dod_max' = statement_generic_hEPS_hEPS09.'dod_max';
         attribute :>> 'nominal_dod' = statement_generic_hEPS_hEPS09.'nominal_dod';
         ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
@@ -2944,6 +2990,7 @@ package MissionRequirements {
         attribute statementText : String = "EPS-52. Ending energy $$energy_end_J$$ shall be at least starting energy $$energy_start_J$$ minus nonnegative numerical closure tolerance $$closure_tolerance_J$$ over each nominal repeating interval.";
         attribute verificationExpression : String[0..1];
         attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-11; eq:nominal-energy-feasibility";
+        attribute rationale : String = "final_report/eps-requirements.tex#EPS-11; eq:nominal-energy-feasibility";
         attribute :>> 'energy_start_J' = statement_generic_hEPS_hEPS11.'energy_start_J';
         attribute :>> 'energy_end_J' = statement_generic_hEPS_hEPS11.'energy_end_J';
         attribute :>> 'closure_tolerance_J' = statement_generic_hEPS_hEPS11.'closure_tolerance_J';
@@ -2956,6 +3003,7 @@ package MissionRequirements {
         attribute statementText : String = "EPS-53. Ending charge based SOC $$soc_end$$ shall be at least starting SOC $$soc_start$$ over each nominal repeating interval.";
         attribute verificationExpression : String[0..1];
         attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-11";
+        attribute rationale : String = "final_report/eps-requirements.tex#EPS-11";
         attribute :>> 'soc_start' = statement_generic_hEPS_hEPS11.'soc_start';
         attribute :>> 'soc_end' = statement_generic_hEPS_hEPS11.'soc_end';
         ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays);
@@ -2967,6 +3015,7 @@ package MissionRequirements {
         attribute statementText : String = "EPS-78. Occupied EPS volume $$volume_m3$$ shall remain within allocation $$volume_allocation_m3$$.";
         attribute verificationExpression : String[0..1];
         attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-19; eq:eps-product-budgets";
+        attribute rationale : String = "final_report/eps-requirements.tex#EPS-19; eq:eps-product-budgets";
         attribute :>> 'volume_m3' = statement_generic_hEPS_hEPS19.'volume_m3';
         attribute :>> 'volume_allocation_m3' = statement_generic_hEPS_hEPS19.'volume_allocation_m3';
         ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hProcessorAndMemory, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hRegulatorsAndConverters, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hPowerCircuitsAndSwitches);
@@ -2978,6 +3027,7 @@ package MissionRequirements {
         attribute statementText : String = "EPS-88. Each software execution host shall provide $$required_program_bytes$$ of program storage within an allocation of $$available_program_bytes$$.";
         attribute verificationExpression : String[0..1];
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:software-resource-screen";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:software-resource-screen";
         assert constraint { statement_generic_hEPS_hEPS21.'required_program_bytes' == RealFunctions::ToInteger(statement_generic_hEPS_hEPS21.'required_program_bytes') }
         attribute :>> 'required_program_bytes' = RealFunctions::ToInteger(statement_generic_hEPS_hEPS21.'required_program_bytes');
         assert constraint { statement_generic_hEPS_hEPS21.'available_program_bytes' == RealFunctions::ToInteger(statement_generic_hEPS_hEPS21.'available_program_bytes') }
@@ -2991,6 +3041,7 @@ package MissionRequirements {
         attribute statementText : String = "EPS-89. The sum of each allocated task's execution time divided by its period shall give required utilization $$required_utilization$$, at most allocation $$allocated_utilization$$.";
         attribute verificationExpression : String[0..1];
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:software-resource-screen";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:software-resource-screen";
         attribute :>> 'required_utilization' = statement_generic_hEPS_hEPS21.'required_utilization';
         attribute :>> 'allocated_utilization' = statement_generic_hEPS_hEPS21.'allocated_utilization';
         ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hProcessorAndMemory, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSoftware);
@@ -3002,6 +3053,7 @@ package MissionRequirements {
         attribute statementText : String = "The positive sunlight and eclipse periods shall sum to $$orbit_period_s$$ within numerical tolerance.";
         attribute verificationExpression : String[0..1] = "orbit_period_s > 0 and sunlight_s > 0 and eclipse_s > 0 and abs(sunlight_s + eclipse_s - orbit_period_s) <= 1e-9 * orbit_period_s";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period";
         attribute :>> 'orbit_period_s' = statement_generic_hORB_hIlluminationPeriods.'orbit_period_s';
         attribute :>> 'sunlight_s' = statement_generic_hORB_hIlluminationPeriods.'sunlight_s';
         attribute :>> 'eclipse_s' = statement_generic_hORB_hIlluminationPeriods.'eclipse_s';
@@ -3015,6 +3067,7 @@ package MissionRequirements {
         attribute statementText : String = "The preliminary circular orbit at altitude $$altitude_km$$ shall provide $$sunlight_s$$ of sunlight and $$eclipse_s$$ of eclipse per $$orbit_period_s$$ orbit, using Earth radius $$earthRadius_km$$ and horizon angle $$horizon_angle_rad$$.";
         attribute verificationExpression : String[0..1] = "altitude_km > 0 and earthRadius_km > 0 and orbit_period_s > 0 and sunlight_s > 0 and eclipse_s > 0 and horizon_angle_rad == arccos(earthRadius_km / (earthRadius_km + altitude_km)) and sunlight_s == (0.5 + horizon_angle_rad / pi) * orbit_period_s and eclipse_s == (0.5 - horizon_angle_rad / pi) * orbit_period_s and abs(sunlight_s + eclipse_s - orbit_period_s) <= 1e-9 * orbit_period_s";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period, eq:eclipse-geometry";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period, eq:eclipse-geometry";
         attribute :>> 'altitude_km' = statement_generic_hORB_hOrbitPeriod.'altitude_km';
         attribute :>> 'earthRadius_km' = statement_generic_hORB_hOrbitPeriod.'earthRadius_km';
         attribute :>> 'orbit_period_s' = statement_generic_hORB_hOrbitPeriod.'orbit_period_s';
@@ -3031,6 +3084,7 @@ package MissionRequirements {
         attribute statementText : String = "The preliminary circular orbit shall have period $$orbit_period_s$$ at altitude $$altitude_km$$, using Earth radius $$earthRadius_km$$ and gravitational parameter $$gravitationalParameter_km3_s2$$.";
         attribute verificationExpression : String[0..1] = "altitude_km > 0 and earthRadius_km > 0 and gravitationalParameter_km3_s2 > 0 and orbit_period_s > 0 and orbit_period_s == 2 * pi * sqrt((earthRadius_km + altitude_km) ^ 3 / gravitationalParameter_km3_s2)";
         attribute sourceReference : String = "final_report/design-proposal.tex#eq:orbit-period (handpicked-0003, Eqs. 1-4)";
+        attribute rationale : String = "final_report/design-proposal.tex#eq:orbit-period (handpicked-0003, Eqs. 1-4)";
         attribute :>> 'altitude_km' = 600;
         attribute :>> 'earthRadius_km' = 6378;
         attribute :>> 'gravitationalParameter_km3_s2' = 398601;

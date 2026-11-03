@@ -10,6 +10,14 @@
   <script type="module" src="/app.js"></script>
 </head>
 <body>
+  <header class="session-toolbar" aria-label="Sessions">
+    <strong>Requirements</strong>
+    <label for="session-select">Session</label>
+    <select id="session-select" disabled><option value="current">Current mission</option></select>
+    <button type="button" id="session-new" aria-controls="session-editor" disabled>New session</button>
+    <button type="button" id="session-copy" aria-controls="session-editor" disabled>Save as…</button>
+    <span>Autosaved separately</span>
+  </header>
   <main id="workspace" class="workspace" role="tabpanel" aria-label="Requirements workspace" inert>
     <section class="sheet stakeholders" aria-labelledby="stakeholders-title" data-table="stakeholders">
       <div class="table-top">
@@ -101,13 +109,25 @@
         <p id="requirement-parameters-empty">Add <code>$$variable_name$$</code> to the text to add a parameter.</p>
         <div class="requirement-parameter-frame"><table aria-label="Requirement parameters"></table></div>
         <label for="requirement-condition">Verification condition</label>
-        <input id="requirement-condition" maxlength="5000" spellcheck="false" autocomplete="off" placeholder="energy_J >= REQ001.energy_J">
-        <p id="requirement-check"></p>
-        <p id="requirement-origin"></p>
+        <input id="requirement-condition" maxlength="5000" spellcheck="false" autocomplete="off" aria-describedby="requirement-check" placeholder="energy_J >= REQ001.energy_J">
+        <p id="requirement-check" role="status" aria-live="polite" aria-atomic="true" hidden></p>
+        <label for="requirement-rationale">Rationale</label>
+        <textarea id="requirement-rationale" rows="3" maxlength="10000" placeholder="Explain the requirement and cite its source."></textarea>
       </div>
       <footer class="requirement-editor-actions"><p id="requirement-error" class="error-text" aria-live="polite"></p><button type="button" data-requirement-cancel>Cancel</button><button id="requirement-save" class="primary" type="submit">Save requirement</button></footer>
     </form>
   </aside>
+  <div id="session-editor" class="popover" role="dialog" aria-labelledby="session-editor-title" hidden>
+    <form id="session-form">
+      <div class="popover-heading"><strong id="session-editor-title">New session</strong><button type="button" data-close aria-label="Close session form">×</button></div>
+      <label id="session-template-label" for="session-template">Start from<select id="session-template"><option value="blank">Blank</option><option value="generic-eps">Generic EPS</option></select></label>
+      <p id="session-description"></p>
+      <label for="session-name">Session name</label>
+      <input id="session-name" maxlength="80" autocomplete="off" required>
+      <p id="session-error" class="error-text" role="alert"></p>
+      <button id="session-create" class="primary" type="submit">Create session</button>
+    </form>
+  </div>
   <div id="source-editor" class="popover" role="dialog" aria-label="Link source rows" hidden>
     <div class="popover-heading"><strong>Link source rows</strong><button type="button" data-close aria-label="Close sources">×</button></div>
     <input id="source-search" type="search" placeholder="Find a row by ID or text" aria-label="Find source rows" autocomplete="off">

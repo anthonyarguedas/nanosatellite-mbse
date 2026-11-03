@@ -13,6 +13,7 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
   const text = panel.querySelector('#requirement-text');
   const kind = panel.querySelector('#requirement-kind');
   const condition = panel.querySelector('#requirement-condition');
+  const rationale = panel.querySelector('#requirement-rationale');
   const frame = panel.querySelector('.requirement-parameter-frame');
   const table = frame.querySelector('table');
   const errorLabel = panel.querySelector('#requirement-error');
@@ -61,8 +62,9 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
     const check = condition.value.trim() ? result ?? { state: 'pending', message: 'Recalculating…' }
       : { state: 'unset', message: 'No verification condition.' };
     const label = panel.querySelector('#requirement-check');
-    label.textContent = `${{ pass: 'True', fail: 'False', pending: 'Pending', error: 'Error', unset: 'Not verified' }[check.state]}: ${check.message}`;
-    label.classList.toggle('error-text', check.state === 'error');
+    label.dataset.state = check.state;
+    label.hidden = check.state === 'unset';
+    label.textContent = check.state === 'error' ? check.message : { pass: 'TRUE', fail: 'FALSE', pending: 'PENDING', unset: '' }[check.state];
   }
   function evaluate() {
     const token = ++generation;
@@ -95,6 +97,7 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
   function synchronize() {
     const statement = row();
     statement.text = text.value; statement.kind = kind.value; statement.condition = condition.value;
+    statement.rationale = rationale.value;
     try {
       // Drop only empty, unused names created during this edit. Existing data,
       // populated cells and equation inputs remain available after marker edits.
@@ -122,13 +125,18 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
     const target = anchor?.isConnected ? anchor : document.querySelector(`[${selector}="${key}"]`);
     target?.focus({ preventScroll: true });
   }
+  function snapshot() {
+    if (!draft) return validate(getWorkspace());
+    if (!synchronize()) throw new Error('Correct the requirement editor errors before saving a session.');
+    return validate(mergeRequirementDraft(getWorkspace(), draft.original, draft.workspace, draft.key));
+  }
   function save() {
-    if (!draft || !synchronize()) return;
+    if (!draft) return false;
     try {
-      const candidate = validate(mergeRequirementDraft(getWorkspace(), draft.original, draft.workspace, draft.key));
-      onCommit(candidate);
+      onCommit(snapshot());
       close();
-    } catch (error) { setError(error.message); }
+      return true;
+    } catch (error) { setError(error.message); return false; }
   }
   function open(key, anchor) {
     if (draft?.key === key) { draft.anchor = anchor; (anchor?.classList.contains('verification-edit') ? condition : text).focus(); return; }
@@ -143,7 +151,7 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
     panel.querySelector('#requirement-editor-title').textContent = `Edit ${statement.id}`;
     panel.querySelector('#requirement-kind-label').hidden = statement.context !== 'external';
     text.value = statement.text; kind.value = statement.kind; condition.value = statement.condition;
-    panel.querySelector('#requirement-origin').textContent = statement.origin ?? '';
+    rationale.value = statement.rationale ?? statement.origin ?? '';
     synchronize();
     draft.initial = JSON.stringify(draft.workspace);
     panel.hidden = false; panel.querySelector('.requirement-editor-content').scrollTop = 0;
@@ -154,6 +162,7 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
   text.addEventListener('input', synchronize);
   kind.addEventListener('change', synchronize);
   condition.addEventListener('input', synchronize);
+  rationale.addEventListener('input', () => { if (draft) row().rationale = rationale.value; });
   function setUnit(name, value) {
     const variable = draft.workspace.variables.find(variable => variable.name === name);
     const unit = parameterUnit(value, variable);
@@ -198,5 +207,5 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
   panel.addEventListener('keydown', event => {
     if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); save(); }
   });
-  return { open, close, save, isOpen: () => Boolean(draft), isDirty };
+  return { open, close, save, snapshot, isOpen: () => Boolean(draft), isDirty };
 }

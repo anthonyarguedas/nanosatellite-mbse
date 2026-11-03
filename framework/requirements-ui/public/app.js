@@ -9,6 +9,12 @@ import { requirementHTML } from '/requirement-preview.js';
 const main = document.querySelector('main');
 const status = document.querySelector('#status'), retry = document.querySelector('#retry');
 const sourceEditor = document.querySelector('#source-editor');
+const sessionSelect = document.querySelector('#session-select'), sessionEditor = document.querySelector('#session-editor');
+const sessionNameInput = document.querySelector('#session-name'), sessionTemplate = document.querySelector('#session-template');
+let sessions = [], sessionId = 'current', sessionName = 'Current mission', sessionBusy = false, sessionMode = 'new', suggestedSessionName = '';
+let saveTask = null;
+const workspaceURL = (id = sessionId) => id === 'current' ? '/api/workspace' : `/api/workspace?session=${encodeURIComponent(id)}`;
+const requestedSession = () => new URLSearchParams(location.search).get('session') || 'current';
 let catalog = domainTypes, products = [], active = 'external', workspace = emptyWorkspace(catalog);
 let revision, lastSaved, saveTimer, modelName = 'mission.sysml';
 let loaded = false, saving = false, conflict = false, exporting = false;
@@ -53,9 +59,9 @@ const isEps = () => catalog.find(type => type.model === rowByKey(active)?.defini
 const componentChecks = () => new Map(workspace.statements.map(row => [row.key,
   row.condition.trim() ? results.get(row.key) ?? { state: 'pending' } : { state: 'unset' }]));
 function updateExport() {
-  document.querySelector('.export-sysml').disabled = exporting || !loaded;
+  document.querySelector('.export-sysml').disabled = exporting || !loaded || sessionBusy;
   document.querySelectorAll('.export-kicad, .export-fprime').forEach(button => {
-    button.disabled = exporting || !viewRows('components').some(row => row.product);
+    button.disabled = exporting || sessionBusy || !viewRows('components').some(row => row.product);
   });
 }
 
@@ -106,20 +112,24 @@ document.querySelector('#tabs').addEventListener('keydown', event => {
   if (event.key === 'End') next = tabs.at(-1);
   if (next) { event.preventDefault(); navigate(next.key); document.querySelector(`[data-tab="${next.key}"]`).focus(); }
 });
-window.addEventListener('popstate', () => { if (loaded) navigate(requestedTab(), false); });
+window.addEventListener('popstate', () => {
+  if (!loaded) return;
+  if (requestedSession() !== sessionId) switchSession(requestedSession(), false);
+  else if (!sessionBusy) navigate(requestedTab(), false);
+});
 
 function draft(table) {
   const common = { key: crypto.randomUUID(), id: '' };
   if (table === 'components') return { ...common, owner: active, product: '', requirements: [] };
   if (table === 'stakeholders') return active === 'external'
     ? { ...common, name: '', type: '' } : { ...common, name: '', definition: '', owner: active };
-  return { ...common, context: active, sources: [], affected: [], kind: 'Requirement', text: '', condition: '',
+  return { ...common, context: active, sources: [], affected: [], kind: 'Requirement', text: '', condition: '', rationale: '',
     parameters: Object.fromEntries(variableNames().map(name => [name, null])) };
 }
 function used(row, table) {
   return table === 'components' ? Boolean(row.id || row.product || row.requirements.length)
     : table === 'stakeholders' ? Boolean(row.id || row.name || row.type || row.definition)
-    : Boolean(row.id || row.sources.length || row.affected.length || row.text || row.condition || row.kind !== 'Requirement'
+    : Boolean(row.id || row.sources.length || row.affected.length || row.text || row.condition || row.rationale || row.kind !== 'Requirement'
       || Object.values(row.parameters).some(value => value !== null && value !== ''));
 }
 function snapshot(state = workspace) {
@@ -135,6 +145,7 @@ function snapshot(state = workspace) {
       condition: row.condition,
       ...(row.definition ? { definition: row.definition } : {}),
       ...(row.origin ? { origin: row.origin } : {}),
+      ...(row.rationale !== undefined ? { rationale: row.rationale } : {}),
       parameters: Object.fromEntries(state.variables.map(variable => [variable.name, parameterExpression(row.parameters[variable.name], variable, row.id)])),
     })),
   };
@@ -218,7 +229,7 @@ function updatePreview(row) {
   const tr = rowElement(row.key), summary = tr?.querySelector('.statement-summary');
   if (!summary) return;
   summary.querySelector('.statement-preview').innerHTML = requirementHTML(row.text, results.get(row.key)?.values, workspace.variables);
-  summary.title = [row.text, row.origin].filter(Boolean).join('\n') || 'Use the edit button to write a requirement.';
+  summary.title = row.text || 'Use the edit button to write a requirement.';
   const errors = Object.values(results.get(row.key)?.parameters ?? {}).filter(result => result.state === 'error');
   for (const button of tr.querySelectorAll('.requirement-edit')) {
     button.setAttribute('aria-label', `Edit ${button.classList.contains('verification-edit') ? 'verification for' : 'requirement'} ${row.id || 'new row'}`);
@@ -279,41 +290,154 @@ function showStatus(message = '', error = false, action = null) {
   retry.hidden = !action; retry.textContent = conflict ? 'Reload' : 'Retry'; retry.onclick = action;
 }
 function dirty() { if (!loaded) return false; try { return JSON.stringify(snapshot()) !== lastSaved; } catch { return true; } }
-function scheduleSave() { clearTimeout(saveTimer); if (!conflict) { showStatus('Unsaved changes'); saveTimer = setTimeout(save, 450); } }
-async function save() {
+function scheduleSave() { clearTimeout(saveTimer); if (!conflict && !sessionBusy) { showStatus('Unsaved changes'); saveTimer = setTimeout(save, 450); } }
+function save() {
   clearTimeout(saveTimer);
-  if (!loaded || saving || conflict) return;
+  if (saveTask) return saveTask.then(success => success && dirty() ? save() : success);
+  saveTask = persist().finally(() => { saveTask = null; });
+  return saveTask;
+}
+async function persist() {
+  clearTimeout(saveTimer);
+  if (!loaded || saving || conflict) return false;
   let data, serialized;
   try { data = validateWorkspace(snapshot(), catalog, products); serialized = JSON.stringify(data); }
-  catch (error) { showStatus(error.message, true); return; }
-  if (serialized === lastSaved) { showStatus(); return; }
-  saving = true; showStatus(`Saving to ${modelName}…`);
+  catch (error) { showStatus(error.message, true); return false; }
+  if (serialized === lastSaved) { showStatus(); return true; }
+  const id = sessionId;
+  saving = true; showStatus(`Saving ${sessionName}…`);
   let succeeded = false;
   try {
-    const response = await fetch('/api/workspace', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workspace: data, revision }) });
+    const response = await fetch(workspaceURL(id), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workspace: data, revision }) });
     const result = await response.json();
     if (!response.ok) { conflict = response.status === 409; throw new Error(result.error); }
     revision = result.revision; lastSaved = serialized; succeeded = true; showStatus();
   } catch (error) { showStatus(error.message || 'Could not save. Your edits are still in this tab.', true, conflict ? () => location.reload() : save); }
   finally { saving = false; if (succeeded && dirty()) scheduleSave(); }
+  return succeeded;
+}
+function renderSessions() {
+  sessionSelect.innerHTML = sessions.map(session => `<option value="${escape(session.id)}" ${session.id === sessionId ? 'selected' : ''}>${escape(session.name)}</option>`).join('');
+}
+function setSessionBusy(busy) {
+  sessionBusy = busy;
+  main.inert = !loaded || busy;
+  document.querySelector('#tabs').inert = busy;
+  document.querySelector('#requirement-editor').inert = busy;
+  sessionEditor.inert = busy;
+  sessionSelect.disabled = busy || !loaded;
+  document.querySelectorAll('#session-new, #session-copy').forEach(button => { button.disabled = busy || !loaded; });
+  updateExport();
+}
+function sessionLocation(history = 'replace') {
+  const url = new URL(location.href);
+  if (sessionId === 'current') url.searchParams.delete('session');
+  else url.searchParams.set('session', sessionId);
+  url.hash = encodeURIComponent(active);
+  window.history[history === 'push' ? 'pushState' : 'replaceState'](null, '', url);
+}
+function installWorkspace(data, id, tab, history = 'replace') {
+  const nextCatalog = data.catalog ?? domainTypes, nextProducts = data.products ?? [];
+  const candidate = validateWorkspace(data.workspace, nextCatalog, nextProducts);
+  requirementEditor.close(); closeEditor(); closeMenus();
+  clearTimeout(saveTimer); clearTimeout(evaluationTimer); clearTimeout(workerTimer);
+  generation++; worker?.terminate(); worker = null; results = new Map();
+  for (const state of [selected, sorts]) for (const key of Object.keys(state)) delete state[key];
+  catalog = nextCatalog; products = nextProducts; workspace = candidate;
+  sessionId = id; sessionName = data.session?.name ?? data.modelName ?? 'Current mission';
+  sessions = data.sessions ?? sessions;
+  revision = data.revision; modelName = data.modelName ?? modelName;
+  statementIds.clear(); syncStatementIds();
+  lastSaved = JSON.stringify(snapshot()); conflict = false; loaded = true;
+  active = tab === 'eps' ? workspace.elements.find(row => catalog.find(type => type.model === row.definition)?.role === 'eps')?.key ?? 'mission'
+    : tab ?? requestedTab();
+  if (!tabsFor(workspace, catalog).some(item => item.key === active)) active = 'external';
+  sessionLocation(history); renderSessions(); renderWorkbook();
+  document.title = `${sessionName} · Requirements`;
+  showStatus(); scheduleEvaluation();
 }
 async function load() {
+  setSessionBusy(true);
   try {
-    const response = await fetch('/api/workspace'), data = await response.json();
+    const id = requestedSession();
+    const [response, listResponse] = await Promise.all([fetch(workspaceURL(id)), fetch('/api/sessions')]);
+    const data = await response.json(), list = await listResponse.json();
     if (!response.ok) throw new Error(data.error);
-    catalog = data.catalog ?? domainTypes; products = data.products ?? [];
-    workspace = validateWorkspace(data.workspace, catalog, products);
-    statementIds.clear(); syncStatementIds();
-    revision = data.revision; modelName = data.modelName ?? modelName; lastSaved = JSON.stringify(snapshot());
-    active = requestedTab(); renderWorkbook(); loaded = true; main.inert = false; updateExport(); showStatus(); scheduleEvaluation();
+    if (!listResponse.ok) throw new Error('Could not load sessions. Restart the server and reload this page.');
+    installWorkspace({ ...data, sessions: list.sessions }, id);
   } catch (error) { showStatus(error.message || 'Could not open the mission model.', true, load); }
+  finally { setSessionBusy(false); }
 }
+async function switchSession(id, history = true) {
+  if (sessionBusy || !loaded || id === sessionId) { renderSessions(); if (loaded) sessionLocation(); return; }
+  if (requirementEditor.isDirty() && !window.confirm('Discard the unsaved requirement edits and switch sessions?')) {
+    renderSessions(); sessionLocation(); return;
+  }
+  setSessionBusy(true); clearTimeout(saveTimer);
+  try {
+    if (!await save()) return;
+    const response = await fetch(workspaceURL(id)), data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    installWorkspace(data, id, undefined, history ? 'push' : 'replace');
+  } catch (error) { showStatus(error.message || 'Could not open the session.', true); }
+  finally { setSessionBusy(false); renderSessions(); if (requestedSession() !== sessionId) sessionLocation(); }
+}
+function suggestSessionName(base) {
+  base = base.slice(0, 70);
+  let name = base, suffix = 2;
+  while (sessions.some(session => session.name.toLowerCase() === name.toLowerCase())) name = `${base} (${suffix++})`;
+  return name;
+}
+function describeSession() {
+  document.querySelector('#session-description').textContent = sessionMode === 'copy'
+    ? 'Save an independent copy, including edits in the open requirement pane. The original session stays available.'
+    : sessionTemplate.value === 'blank' ? 'Empty tables with no preloaded elements or requirements.'
+      : 'The generic orbit and EPS requirements, units and equations, with mission inputs unset.';
+  const name = suggestSessionName(sessionMode === 'copy' ? `${sessionName} copy` : sessionTemplate.value === 'blank' ? 'Blank session' : 'Generic EPS session');
+  if (!sessionNameInput.value.trim() || sessionNameInput.value === suggestedSessionName) sessionNameInput.value = name;
+  suggestedSessionName = name;
+}
+function openSessionEditor(mode, anchor) {
+  if (!loaded || sessionBusy) return;
+  sessionMode = mode; sessionNameInput.value = ''; suggestedSessionName = '';
+  document.querySelector('#session-editor-title').textContent = mode === 'copy' ? 'Save session as' : 'New session';
+  document.querySelector('#session-template-label').hidden = mode === 'copy';
+  document.querySelector('#session-create').textContent = mode === 'copy' ? 'Save copy' : 'Create session';
+  document.querySelector('#session-error').textContent = '';
+  describeSession(); openEditor(sessionEditor, anchor, { type: 'session' });
+  sessionNameInput.focus(); sessionNameInput.select();
+}
+async function createSession(event) {
+  event.preventDefault();
+  if (!loaded || sessionBusy) return;
+  const copy = sessionMode === 'copy', tab = active;
+  if (!copy && requirementEditor.isDirty() && !window.confirm('Discard the unsaved requirement edits and create a new session?')) return;
+  setSessionBusy(true); clearTimeout(saveTimer);
+  try {
+    if (copy) { if (saveTask) await saveTask; }
+    else if (!await save()) return;
+    const data = { name: sessionNameInput.value, template: copy ? 'copy' : sessionTemplate.value,
+      ...(copy ? { workspace: requirementEditor.snapshot() } : {}) };
+    const response = await fetch('/api/sessions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error);
+    installWorkspace(result, result.session.id, copy ? tab : data.template === 'generic-eps' ? 'eps' : 'external', 'push');
+  } catch (error) {
+    document.querySelector('#session-error').textContent = error.message;
+    showStatus(error.message || 'Could not create the session.', true);
+  } finally { setSessionBusy(false); if (dirty() && !conflict) scheduleSave(); }
+}
+sessionSelect.addEventListener('change', () => switchSession(sessionSelect.value));
+document.querySelector('#session-new').addEventListener('click', event => openSessionEditor('new', event.currentTarget));
+document.querySelector('#session-copy').addEventListener('click', event => openSessionEditor('copy', event.currentTarget));
+sessionTemplate.addEventListener('change', describeSession);
+document.querySelector('#session-form').addEventListener('submit', createSession);
 async function exportArtifact(kind) {
   const button = document.querySelector(`.export-${kind}`);
   try {
     const data = validateWorkspace(snapshot(), catalog, products), context = active;
     exporting = true; updateExport(); button.setAttribute('aria-busy', 'true');
-    const response = await fetch(`/api/${kind}`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    const response = await fetch(`/api/${kind}?session=${encodeURIComponent(sessionId)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ workspace: data, context }) });
     if (!response.ok) throw new Error((await response.json()).error);
     const blob = await response.blob(), url = URL.createObjectURL(blob), link = document.createElement('a');
@@ -426,7 +550,7 @@ function closeMenus() {
 }
 function closeEditor(restore = false) {
   document.querySelectorAll('.popover').forEach(popover => { popover.hidden = true; });
-  if (restore && popoverAnchor?.isConnected) popoverAnchor.querySelector('input,button,textarea')?.focus();
+  if (restore && popoverAnchor?.isConnected) (popoverAnchor.matches('input,button,textarea,select') ? popoverAnchor : popoverAnchor.querySelector('input,button,textarea,select'))?.focus();
   editor = null; popoverAnchor = null;
 }
 function openEditor(element, anchor, data) {
@@ -545,7 +669,10 @@ document.addEventListener('keydown', event => {
     if (!transient) requirementEditor.close();
   }
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
-    event.preventDefault(); if (requirementEditor.isOpen()) requirementEditor.save(); else save();
+    event.preventDefault();
+    if (editor?.type === 'session') document.querySelector('#session-form').requestSubmit();
+    else if (requirementEditor.isOpen()) requirementEditor.save();
+    else save();
   }
 });
 main.addEventListener('paste', event => {

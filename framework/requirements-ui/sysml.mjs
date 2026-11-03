@@ -108,6 +108,7 @@ export function renderManaged(workspace, { packageName = 'MissionRequirements', 
       `        attribute statementText : String = ${literal(row.text)};`,
       `        attribute verificationExpression : String[0..1]${conditional ? ` = ${literal(row.condition)}` : ''};`);
     if (row.origin) lines.push(`        attribute sourceReference : String = ${literal(row.origin)};`);
+    if (row.rationale) lines.push(`        attribute rationale : String = ${literal(row.rationale)};`);
     for (const variable of workspace.variables) {
       const source = row.parameters[variable.name];
       const populated = source !== null && Boolean(source.trim());
@@ -173,7 +174,7 @@ export function updateSource(source, workspace, options) {
   return source.slice(0, range[0]) + block + source.slice(range[1]);
 }
 
-export function createStore(modelPath, { catalog = domainTypes, products = null } = {}) {
+export function createStore(modelPath, { catalog = domainTypes, products = null, initialWorkspace = null } = {}) {
   let queue = Promise.resolve();
   const modelName = basename(modelPath);
   const stem = basename(modelPath, '.sysml').replace(/[^A-Za-z0-9_]/g, '_');
@@ -183,7 +184,7 @@ export function createStore(modelPath, { catalog = domainTypes, products = null 
     catch (error) {
       if (error.code !== 'ENOENT') throw error;
       await mkdir(dirname(modelPath), { recursive: true });
-      await writeFile(modelPath, renderManaged(emptyWorkspace(catalog), { packageName, catalog, products }) + '\n', { flag: 'wx' }).catch(error => {
+      await writeFile(modelPath, renderManaged(initialWorkspace ?? emptyWorkspace(catalog), { packageName, catalog, products }) + '\n', { flag: 'wx' }).catch(error => {
         if (error.code !== 'EEXIST') throw error;
       });
       return readFile(modelPath, 'utf8');

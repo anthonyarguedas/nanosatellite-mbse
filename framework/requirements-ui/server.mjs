@@ -2,7 +2,8 @@ import { createServer as httpServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { basename, resolve } from 'node:path';
-import { createStore, renderExport } from './sysml.mjs';
+import { renderExport } from './sysml.mjs';
+import { createSessions } from './sessions.mjs';
 import { loadCatalog } from './catalog.mjs';
 import { loadProducts } from './cots.mjs';
 import { renderSchematic } from './kicad.mjs';
@@ -35,14 +36,14 @@ async function bodyJSON(request) {
 }
 
 export function createServer({ modelPath = process.env.MISSION_FILE
-  ? resolve(process.env.MISSION_FILE) : fileURLToPath(new URL('../missions/mission.sysml', import.meta.url)) } = {}) {
+  ? resolve(process.env.MISSION_FILE) : fileURLToPath(new URL('../missions/mission.sysml', import.meta.url)), sessionDirectory } = {}) {
   const genericModels = ['external', 'mission', 'eps', 'catalog', 'cad', 'requirements'].map(name =>
     fileURLToPath(new URL(`../${name}.sysml`, import.meta.url)));
   if (genericModels.includes(resolve(modelPath))) throw new Error('Choose a mission instance file. Generic framework models are read only.');
   const catalogReady = loadCatalog();
   const productsReady = loadProducts();
-  const storeReady = Promise.all([catalogReady, productsReady]).then(([catalog, products]) => createStore(modelPath, { catalog, products }));
-  storeReady.catch(() => {});
+  const sessionsReady = Promise.all([catalogReady, productsReady]).then(([catalog, products]) => createSessions(modelPath, { catalog, products, directory: sessionDirectory }));
+  sessionsReady.catch(() => {});
   return httpServer(async (request, response) => {
     response.setHeader('Cache-Control', 'no-store');
     response.setHeader('X-Content-Type-Options', 'nosniff');
@@ -58,14 +59,25 @@ export function createServer({ modelPath = process.env.MISSION_FILE
           || (request.headers.origin && request.headers.origin !== `http://${request.headers.host}`)) {
         return json(403, { error: 'Only requests from this local app are allowed.' });
       }
+      if (url.pathname === '/api/sessions') {
+        const sessions = await sessionsReady;
+        if (request.method === 'GET') return json(200, { sessions: await sessions.list() });
+        if (request.method === 'POST') {
+          const data = await sessions.create(await bodyJSON(request));
+          const catalog = await catalogReady, products = (await productsReady).map(({ pins, ...product }) => product);
+          return json(201, { ...data, sessions: await sessions.list(), catalog, products });
+        }
+        response.setHeader('Allow', 'GET, POST');
+        return json(405, { error: 'Method not allowed.' });
+      }
       if (url.pathname === '/api/workspace') {
-        const store = await storeReady;
+        const { store, session } = await (await sessionsReady).get(url.searchParams.get('session') ?? 'current');
         const catalog = await catalogReady;
         const products = (await productsReady).map(({ pins, ...product }) => product);
-        if (request.method === 'GET') return json(200, { ...await store.read(), catalog, products });
+        if (request.method === 'GET') return json(200, { ...await store.read(), session, catalog, products });
         if (request.method === 'PUT') {
           const { workspace, revision } = await bodyJSON(request);
-          return json(200, { ...await store.save(workspace, revision), catalog, products });
+          return json(200, { ...await store.save(workspace, revision), session, catalog, products });
         }
         response.setHeader('Allow', 'GET, PUT');
         return json(405, { error: 'Method not allowed.' });
@@ -77,7 +89,9 @@ export function createServer({ modelPath = process.env.MISSION_FILE
         }
         const { workspace } = await bodyJSON(request);
         const catalog = await catalogReady, products = await productsReady;
-        const stem = basename(modelPath, '.sysml').replace(/[^A-Za-z0-9_]/g, '_');
+        const id = url.searchParams.get('session') ?? 'current';
+        const name = id === 'current' ? basename(modelPath, '.sysml') : (await (await sessionsReady).get(id)).session.name;
+        const stem = name.replace(/[^A-Za-z0-9_]/g, '_');
         const packageName = `Mission_${stem}_Export`;
         const artifact = renderExport(workspace, { catalog, products, packageName });
         response.writeHead(200, { 'Content-Type': 'application/octet-stream',

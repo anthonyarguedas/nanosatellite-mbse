@@ -21,6 +21,23 @@ MISSION_FILE=../missions/cubics.sysml npm start
 
 A missing mission file is created automatically. Each file gets its own SysML package. The app imports generic definitions from `External`, `SpaceSegment`, `GroundSegment` and `Orbit`. Runtime edits leave the generic files unchanged.
 
+## Sessions
+
+Use the session toolbar above the workbook:
+
+- **New session → Blank** starts with empty tables and no preloaded elements or requirements.
+- **New session → Generic EPS** starts with the generic mission hierarchy, 27 orbit and EPS requirements, units, rationale and sizing equations. Mission inputs are unset. The sourced Earth constants remain populated.
+- **Save as…** saves an independent named copy of the current workspace. It includes unsaved edits in the requirement pane without applying those pane edits to the original session.
+- The **Session** picker reopens saved workspaces. The existing mission remains listed as **Current mission**.
+
+Each saved session autosaves independently. Names contain 1 to 80 characters and are unique without regard to letter case. Creating another Generic EPS session always starts from the framework templates. It leaves previous sessions unchanged.
+
+Switching sessions waits for pending autosaves and asks before discarding an unsaved requirement draft. Save or correct invalid table edits before switching. A save conflict keeps the current session open. Save as can preserve a valid local workspace in a separate session when the original has a conflict.
+
+The page URL contains the session ID and selected tab, so it can be bookmarked or reloaded. Session selection is local to each browser tab. Opening another session in one browser tab leaves other tabs on their own sessions.
+
+Saved sessions live in `framework/missions/sessions/<id>/<id>.sysml`. A neighboring `session.json` stores the display name and template. With a custom `MISSION_FILE`, sessions live in a `sessions` directory beside that file. The existing mission file stays in place. Session files use the same revision checks and SysML format as the current mission.
+
 ## Tabs and allocation
 
 - **External** has stakeholders on the left and their statements on the right. Existing data remains in this tab.
@@ -49,7 +66,9 @@ The battery shall provide at least $$energy_J$$.
 
 The `energy_J` row appears as soon as the closing `$$` is entered. Repeated names create one row. Names use letters, digits and underscores, begin with a letter or underscore, and follow the app's SysML identifier restrictions. Invalid or incomplete markers show an error and block saving.
 
-The parameter matrix has four columns: **Name**, **Expression**, **Units** and **Evaluated value**. Enter a number or SysML expression in its row, such as `2 * 3600` or `REQ001.energy_J * 1.2`. Enter units separately, such as `J` or `m^2/s^2`. Units are shared by variable name across the workspace. They are display labels and leave numeric evaluation unchanged. The pane includes the verification condition and evaluated parameter values. Numeric types follow the model. Existing integer constraints remain enforced. Each requirement retains its own expression.
+**Rationale** is an editable field visible only in the pane. It starts with the requirement's provenance, such as `final_report/design-proposal.tex#eq:orbit-period (handpicked-0003, Eqs. 1-4)`. It supports source references and explanatory text up to 10,000 characters. Saving retains the rationale. Cancel discards its edits. Clearing it saves an empty rationale. The original provenance remains preserved in the model.
+
+The parameter matrix has four columns: **Name**, **Expression**, **Units** and **Evaluated value**. Enter a number or SysML expression in its row, such as `2 * 3600` or `REQ001.energy_J * 1.2`. Enter units separately, such as `J` or `m^2/s^2`. Units are shared by variable name across the workspace. They are display labels and leave numeric evaluation unchanged. The pane includes the verification condition and evaluated parameter values. Verification feedback shows green **TRUE** or red **FALSE** without repeating the expression. Errors appear below the input in yellow with their message. **PENDING** indicates an unresolved result. An empty condition has no feedback label. Numeric types follow the model. Existing integer constraints remain enforced. Each requirement retains its own expression.
 
 The requirement list shows an unset variable's bare name in monospace, without its units. Numeric values with magnitude above 999 show no decimal places. Other values show four significant figures. Numeric values and their units use monospace in the requirement list and parameter results. Powers written with `^` or `**`, such as `m^2` or `s**(-2)`, appear as superscripts. Leave literal units out of requirement prose when using the Units column.
 
@@ -59,7 +78,7 @@ The requirement list shows an unset variable's bare name in monospace, without i
 
 `framework/requirements.sysml` owns the generic requirement definitions and native constraints. Its annotations supply the table text, parameters, units, equations, sources and assignments. Preloaded unit labels live in the Units column. Requirement prose uses variable markers without literal unit labels. Mission files contain typed usages and mission inputs. Editing a mission leaves these generic definitions unchanged.
 
-The workbook starts with 27 generic requirements. Mission has ORB001 through ORB003. EPS has SIZ001 through SIZ008, SIZ011, SIZ013, SIZ014, SIZ016, EPS002, EPS008, EPS009, EPS011, EPS019, EPS021, EPS047, EPS052, EPS053, EPS078, EPS088 and EPS089. Each requirement contains one sentence and at least one declared numeric parameter referenced in its text. Requirements without numeric parameters are excluded. IDs are preserved, so gaps are intentional. Separate obligations have their own rows, with **Source** links to the requirement they derive from. Generic `derivesFrom` annotations supply these links. IDs can differ when an existing mission already uses them. Each new Power subsystem gets independent EPS inputs and local equation links.
+The Generic EPS starter has 27 generic requirements. Mission has ORB001 through ORB003. EPS has SIZ001 through SIZ008, SIZ011, SIZ013, SIZ014, SIZ016, EPS002, EPS008, EPS009, EPS011, EPS019, EPS021, EPS047, EPS052, EPS053, EPS078, EPS088 and EPS089. Each requirement contains one sentence and at least one declared numeric parameter referenced in its text. Requirements without numeric parameters are excluded. IDs are preserved, so gaps are intentional. Separate obligations have their own rows, with **Source** links to the requirement they derive from. Generic `derivesFrom` annotations supply these links. IDs can differ when an existing mission already uses them. Each new Power subsystem gets independent EPS inputs and local equation links.
 
 Requirement text references named `$$variables$$`. Their definitions and equations appear in the parameter matrix. For example, SIZ007 references `$$battery_min_J$$`, whose expression is `eclipse_energy_J / dod_max * (1 + degradation_margin)`. Entering mission inputs evaluates the text and its dependent parameters without changing the generic definitions.
 
@@ -135,7 +154,7 @@ Expression references use visible row IDs. Renaming an ID through the UI updates
 
 Edits save automatically to the selected mission file without a success toast. Saving and errors use a plain footer status. The app owns only the block between `// <requirements-ui>` and `// </requirements-ui>`. Content outside that block is preserved.
 
-The block contains JSON for lossless UI round trips and a generated mission package that imports the generic models. Stakeholder and domain parts use their generic definitions. Subsystems are nested parts of their domain instance. EPS components are nested inside their Power subsystem instance. Requirements are native requirement usages. Other External statement kinds are attribute usages with an explicit kind. Variable columns become optional `Integer` or `Real` attributes. Source links become SysML dependencies. Allocations become native `ref part affectedElements` references to domain or subsystem instances.
+The block contains JSON for lossless UI round trips and a generated mission package that imports the generic models. Stakeholder and domain parts use their generic definitions. Subsystems are nested parts of their domain instance. EPS components are nested inside their Power subsystem instance. Requirements are native requirement usages. Other External statement kinds are attribute usages with an explicit kind. Variable columns become optional `Integer` or `Real` attributes. Rationale text is preserved in the UI data and exported as a native string attribute. Source links become SysML dependencies. Allocations become native `ref part affectedElements` references to domain or subsystem instances.
 
 Valid parameter expressions generate native attribute bindings. Their equations are exported instead of their calculated values. Integer bindings retain an integrality constraint when conversion is needed. Verification expressions generate native SysML constraints. Cross row references are bound to the corresponding mission elements. Invalid draft parameter expressions remain in the UI data without an executable binding. Invalid draft conditions produce no executable constraint. The browser's checkbox calculation is a lightweight evaluation of this subset. SysML tools remain responsible for full model validation.
 
@@ -150,7 +169,7 @@ npm test
 syside check ..
 ```
 
-Tests use temporary files and leave project models unchanged. An optional browser test exercises the pane, workbook navigation, cancellation, generated columns, evaluation, persistence and download:
+Tests use temporary files and leave project models unchanged. Optional browser tests exercise the pane, sessions, saved copies, autosave isolation, workbook navigation, cancellation, generated columns, evaluation, persistence and download:
 
 ```sh
 PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs npm test

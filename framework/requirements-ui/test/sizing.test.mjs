@@ -144,6 +144,7 @@ test('a new mission starts with generic, assigned requirements and unset mission
   assert.equal(workspace.stakeholders.length, 0);
   assert.equal(workspace.statements.filter(row => row.context === 'mission').length, 3);
   assert.ok(workspace.statements.every(row => row.affected.length && row.origin && row.definition));
+  assert.ok(workspace.statements.every(row => row.rationale === row.origin));
   assert.equal(find(workspace, 'OrbitPeriod').parameters.altitude_km, null);
   assert.equal(find(workspace, 'OrbitPeriod').parameters.earthRadius_km, '6378');
   assert.equal(find(workspace, 'OrbitPeriod').parameters.gravitationalParameter_km3_s2, '398601');

@@ -87,7 +87,7 @@ test('dynamic variable columns validate names, types and values', () => {
   workspace.statements[0].parameters.cell_count = '3.2';
   assert.doesNotThrow(() => validateWorkspace(workspace));
   assert.throws(() => createEvaluator(workspace).parameter(workspace.statements[0], 'cell_count'), /safe integer/);
-  for (const name of ['and', 'not', 'REQ001', 'id', 'text', '__proto__', 'bad-name', '2mass']) assert.equal(validVariableName(name), false);
+  for (const name of ['and', 'not', 'REQ001', 'id', 'text', 'rationale', '__proto__', 'bad-name', '2mass']) assert.equal(validVariableName(name), false);
   for (const name of ['mass', 'cell_count', '_margin']) assert.equal(validVariableName(name), true);
   workspace.variables.push({ name: 'x', type: 'float' });
   assert.throws(() => validateWorkspace(workspace), /already exists/);
@@ -104,6 +104,23 @@ test('optional units persist without changing expressions or numeric evaluation'
   for (const unit of [null, 1, {}, 'm\ns', 'm\rs', 'm'.repeat(101)]) {
     variable.unit = unit;
     assert.throws(() => validateWorkspace(workspace), /units must be a single line/);
+  }
+});
+
+test('rationale supports multiline text, empty values and lossless SysML storage', () => {
+  const workspace = example(), row = workspace.statements[0];
+  row.origin = 'final_report/design-proposal.tex#eq:orbit-period';
+  row.rationale = `${row.origin}\nUse the sourced constants with \"documented margins\" and */.`;
+  assert.doesNotThrow(() => validateWorkspace(workspace));
+  const generated = renderManaged(workspace);
+  assert.deepEqual(readWorkspace(generated), workspace);
+  assert.match(generated, /attribute rationale : String =/);
+  assert.match(generated, /attribute sourceReference : String =/);
+  row.rationale = '';
+  assert.deepEqual(readWorkspace(renderManaged(workspace)).statements[0].rationale, '');
+  for (const rationale of [null, 42, {}, 'a'.repeat(10001)]) {
+    row.rationale = rationale;
+    assert.throws(() => validateWorkspace(workspace), /rationale must be text/);
   }
 });
 

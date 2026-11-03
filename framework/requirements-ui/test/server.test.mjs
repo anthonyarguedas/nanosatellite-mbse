@@ -102,6 +102,25 @@ test('marker-created parameter columns save and export through the API', async t
   assert.deepEqual(readWorkspace(source, catalog), workspace);
 });
 
+test('rationale saves, exports and clears without changing the original provenance', async t => {
+  const { base, get, put } = await start(t);
+  const { workspace, revision } = await get();
+  const row = workspace.statements.find(row => row.definition === 'FrameworkRequirements::OrbitPeriod');
+  assert.equal(row.rationale, row.origin);
+  row.rationale = `${row.origin}\nUse the sourced Earth constants.`;
+  assert.equal((await put(workspace, revision)).status, 200);
+  const saved = await get();
+  assert.deepEqual(saved.workspace, workspace);
+  const exported = await fetch(base + '/api/sysml', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workspace }) });
+  assert.equal(exported.status, 200);
+  assert.match(await exported.text(), /attribute rationale : String =/);
+  row.rationale = '';
+  assert.equal((await put(workspace, saved.revision)).status, 200);
+  const cleared = (await get()).workspace.statements.find(statement => statement.key === row.key);
+  assert.equal(cleared.rationale, '');
+  assert.equal(cleared.origin, row.origin);
+});
+
 test('the API stores editable expressions in every parameter cell and retains invalid drafts safely', async t => {
   const { base, modelPath, get, put } = await start(t);
   const { workspace, revision, catalog } = await get();

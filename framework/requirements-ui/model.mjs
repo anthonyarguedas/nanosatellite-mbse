@@ -16,7 +16,7 @@ export const domainTypes = [
 export const statementKinds = ['Requirement', 'Need', 'Objective', 'Concern', 'Constraint'];
 export const defaultVariables = () => ['x', 'y', 'z', 'a'].map(name => ({ name, type: 'float' }));
 const prefixes = { Requirement: 'REQ', Need: 'NED', Objective: 'OBJ', Concern: 'CON', Constraint: 'CST', Component: 'CMP' };
-const reserved = new Set('pi sqrt arccos floor abs min max true false and or xor implies not if then else null constructor prototype __proto__ id key name type text kind verified sources source condition parameters formulas origin sourceReference acceptance externalId displayName statementKind statementText manualVerification verificationExpression verificationCondition tableName subject stakeholder context owner definition affected affectedElements product requirements components'.split(' '));
+const reserved = new Set('pi sqrt arccos floor abs min max true false and or xor implies not if then else null constructor prototype __proto__ id key name type text kind verified sources source condition parameters formulas origin rationale sourceReference acceptance externalId displayName statementKind statementText manualVerification verificationExpression verificationCondition tableName subject stakeholder context owner definition affected affectedElements product requirements components'.split(' '));
 export const allRows = workspace => [...workspace.stakeholders, ...(workspace.elements ?? []), ...workspace.statements, ...(workspace.components ?? [])];
 
 export function nextId(workspace, kind = 'Stakeholder', hint = '') {
@@ -86,7 +86,7 @@ export function seedRequirements(workspace, catalog, owners = workspace.elements
       }
       const row = { key: elementKey(workspace, `generic-${owner.id}-${template.name}`),
         id: allRows(workspace).some(row => row.id === template.id) ? nextId(workspace, 'Requirement', template.id.slice(0, 3)) : template.id,
-        context, kind: 'Requirement', definition: template.model, origin: template.origin,
+        context, kind: 'Requirement', definition: template.model, origin: template.origin, rationale: template.origin ?? '',
         text: template.text, condition: template.condition, sources: [],
         affected: context === 'mission' ? [owner.key] : workspace.elements.filter(element => element.owner === owner.key
           && template.affected.includes(element.definition.split('::').at(-1))).map(element => element.key),
@@ -122,8 +122,11 @@ export function seedRequirements(workspace, catalog, owners = workspace.elements
   return workspace;
 }
 
+export function blankWorkspace() {
+  return { version: WORKSPACE_VERSION, variables: defaultVariables(), stakeholders: [], elements: [], statements: [], components: [] };
+}
 export function emptyWorkspace(catalog = domainTypes) {
-  return seedRequirements(seedElements({ version: WORKSPACE_VERSION, variables: defaultVariables(), stakeholders: [], elements: [], statements: [], components: [] }, catalog), catalog);
+  return seedRequirements(seedElements(blankWorkspace(), catalog), catalog);
 }
 export function validVariableName(name) {
   return typeof name === 'string' && /^[A-Za-z_][A-Za-z0-9_]{0,39}$/.test(name)
@@ -191,7 +194,7 @@ export function mergeRequirementDraft(workspace, original, edited, key) {
     if (current !== previous && current !== updated) fail();
     apply(updated);
   };
-  for (const field of ['id', 'kind', 'text', 'condition']) merge(before[field], after[field], target[field], value => { target[field] = value; });
+  for (const field of ['id', 'kind', 'text', 'condition', 'rationale']) merge(before[field], after[field], target[field], value => { target[field] = value; });
   for (const variable of edited.variables) {
     const previous = original.variables.find(item => item.name === variable.name);
     let current = candidate.variables.find(item => item.name === variable.name);
@@ -400,6 +403,7 @@ export function validateWorkspace(workspace, catalog = domainTypes, products = n
       if (template.context === 'mission' ? row.context !== 'mission' : catalog.find(type => type.model === owner?.definition)?.role !== 'eps') fail(`${row.id}: the generic requirement belongs to a different table.`);
     }
     if (row.origin !== undefined && (typeof row.origin !== 'string' || row.origin.length > 2000)) fail(`${row.id}: invalid requirement provenance.`);
+    if (row.rationale !== undefined && (typeof row.rationale !== 'string' || row.rationale.length > 10000)) fail(`${row.id}: rationale must be text up to 10,000 characters.`);
     if (Object.hasOwn(row, 'formulas')) fail(`${row.id}: store every parameter expression in its cell. Separate formula maps are no longer supported.`);
     if (Object.hasOwn(row, 'verified')) fail(`${row.id}: verification is computed from a SysML condition. Manual flags are not supported.`);
     if (typeof row.condition !== 'string' || row.condition.length > 5000 || /[\r\n]/.test(row.condition)) fail(`${row.id}: verification must be a single line of SysML (up to 5,000 characters).`);
