@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { domainTypes, requirementMarkers, validVariableName } from './model.mjs';
+import { domainTypes, parameterUnit, requirementMarkers, validVariableName } from './model.mjs';
 
 // Index package and part definition scopes. This is a structural index for the
 // generic model, not a replacement for SysML parsing or validation.
@@ -49,6 +49,11 @@ export function requirementsFromSource(source) {
         || typeof template.text !== 'string' || typeof template.condition !== 'string'
         || requirements.some(row => row.id === template.id)) throw new Error(`Invalid generic requirement ${match[1]}.`);
     if (!Object.keys(template.parameters).length) throw new Error(`${match[1]}: declare at least one numeric parameter.`);
+    if (template.units !== undefined && (!template.units || typeof template.units !== 'object' || Array.isArray(template.units))) throw new Error(`${match[1]}: units must map parameter names to labels.`);
+    for (const [name, unit] of Object.entries(template.units ?? {})) {
+      if (!Object.hasOwn(template.parameters, name) || !parameterUnit(unit, { name })) throw new Error(`${match[1]}: units must name a declared parameter and contain a label.`);
+      if (requirements.some(other => other.units?.[name] !== undefined && other.units[name] !== unit)) throw new Error(`${name}: generic requirements must use the same units.`);
+    }
     const markers = requirementMarkers(template.text);
     if (!markers.names.length || markers.errors.length || markers.names.some(name => !Object.hasOwn(template.parameters, name))) {
       throw new Error(`${match[1]}: each $$variable$$ must name a declared table parameter.`);

@@ -82,7 +82,7 @@ export function seedRequirements(workspace, catalog, owners = workspace.elements
         const type = template.integers?.includes(name) ? 'integer' : 'float';
         const existing = workspace.variables.find(variable => variable.name === name);
         if (existing && existing.type !== type) throw new Error(`Generic parameter ${name} requires a ${type} column. Rename the existing column before upgrading.`);
-        if (!existing) workspace.variables.push({ name, type });
+        if (!existing) workspace.variables.push({ name, type, ...(template.units?.[name] ? { unit: template.units[name] } : {}) });
       }
       const row = { key: elementKey(workspace, `generic-${owner.id}-${template.name}`),
         id: allRows(workspace).some(row => row.id === template.id) ? nextId(workspace, 'Requirement', template.id.slice(0, 3)) : template.id,
@@ -178,10 +178,51 @@ export function requirementParameterNames(workspace, row, catalog = domainTypes)
   return [...marked, ...workspace.variables.map(variable => variable.name).filter(name => retained.has(name) && !marked.includes(name))];
 }
 
-export function interpolateRequirement(text, values = {}) {
+// Apply only the editor's changes so browsing and editing other tables stays safe.
+export function mergeRequirementDraft(workspace, original, edited, key) {
+  const candidate = structuredClone(workspace);
+  const before = original.statements.find(row => row.key === key);
+  const after = edited.statements.find(row => row.key === key);
+  const target = candidate.statements.find(row => row.key === key);
+  const fail = () => { throw new Error('This requirement or its parameters changed while you were editing. Reopen it before saving.'); };
+  if (!before || !after || !target) fail();
+  const merge = (previous, updated, current, apply) => {
+    if (previous === updated) return;
+    if (current !== previous && current !== updated) fail();
+    apply(updated);
+  };
+  for (const field of ['id', 'kind', 'text', 'condition']) merge(before[field], after[field], target[field], value => { target[field] = value; });
+  for (const variable of edited.variables) {
+    const previous = original.variables.find(item => item.name === variable.name);
+    let current = candidate.variables.find(item => item.name === variable.name);
+    if (!current) {
+      if (previous) fail();
+      current = structuredClone(variable);
+      candidate.variables.push(current);
+      for (const row of candidate.statements) row.parameters[variable.name] = null;
+    }
+    if (current.type !== variable.type) fail();
+    merge(previous?.unit, variable.unit, current.unit, unit => {
+      if (unit === undefined) delete current.unit;
+      else current.unit = unit;
+    });
+    merge(before.parameters[variable.name] ?? null, after.parameters[variable.name] ?? null, target.parameters[variable.name] ?? null,
+      value => { target.parameters[variable.name] = value; });
+  }
+  return candidate;
+}
+
+export function formatParameterValue(value) {
+  return Math.abs(value) > 999
+    ? value.toLocaleString('en-US', { useGrouping: false, maximumFractionDigits: 0 })
+    : value.toPrecision(4);
+}
+
+export function interpolateRequirement(text, values = {}, renderParameter = (name, value) => value === null ? name : formatParameterValue(value)) {
   return text.replace(/\$\$([\s\S]*?)\$\$|\{([A-Za-z_][A-Za-z0-9_]*)\}/g, (token, marked, legacy) => {
     const name = marked === undefined ? legacy : marked.trim();
-    return validVariableName(name) && typeof values[name] === 'number' && Number.isFinite(values[name]) ? String(values[name]) : token;
+    if (!validVariableName(name)) return token;
+    return renderParameter(name, typeof values[name] === 'number' && Number.isFinite(values[name]) ? values[name] : null);
   });
 }
 
@@ -307,6 +348,10 @@ export function parameterExpression(value, variable, id = 'This row') {
   if (typeof value !== 'string' || value.length > 5000 || /[\r\n]/.test(value)) throw new Error(`${id}: ${variable.name} must be a single line of SysML expression text (up to 5,000 characters) or empty.`);
   return value.trim() ? value : null;
 }
+export function parameterUnit(value, variable) {
+  if (typeof value !== 'string' || value.length > 100 || /[\r\n]/.test(value)) throw new Error(`${variable.name}: units must be a single line of text (up to 100 characters).`);
+  return value.trim();
+}
 export function validateWorkspace(workspace, catalog = domainTypes, products = null) {
   const fail = message => { throw new Error(message); };
   if (workspace && workspace.version !== WORKSPACE_VERSION) fail(`Workspace format ${workspace.version} differs from app format ${WORKSPACE_VERSION}. Restart the requirements UI server and reload this page.`);
@@ -318,6 +363,7 @@ export function validateWorkspace(workspace, catalog = domainTypes, products = n
     if (!variable || !validVariableName(variable.name)) fail('Variable names must start with a letter or underscore and contain letters, digits or underscores. Reserved names and row IDs are excluded.');
     if (variableNames.has(variable.name)) fail(`The variable ${variable.name} already exists.`);
     if (!['integer', 'float'].includes(variable.type)) fail(`${variable.name}: choose Integer or Float.`);
+    if (variable.unit !== undefined) parameterUnit(variable.unit, variable);
     variableNames.add(variable.name);
   }
   const rows = allRows(workspace), keys = new Set(), ids = new Set();

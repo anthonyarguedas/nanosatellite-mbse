@@ -33,29 +33,31 @@ A missing mission file is created automatically. Each file gets its own SysML pa
 
 The detailed tabs have an **Affected subsystems**, **Affected elements** or **Affected components** column. Assignments use rows in the current left table. **Source** records provenance and can link to rows on any tab. These are separate relationships. For example, a bus requirement can derive from a mission requirement and be assigned to the Power subsystem.
 
-The catalog is read from `framework/mission.sysml` and `framework/requirements.sysml` when the server starts. New mission files create domain and subsystem rows, plus the reusable orbit and EPS requirements. External stakeholder statements remain engineer supplied. The default workspace in `framework/missions/mission.sysml` has been reset to these generic rows. It contains no selected COTS components or entered mission inputs. Starting the app preserves subsequent mission edits.
+The catalog is read from `framework/mission.sysml` and `framework/requirements.sysml` when the server starts. New mission files create domain and subsystem rows, plus the reusable orbit and EPS requirements. External stakeholder statements remain engineer supplied. The default mission file is `framework/missions/mission.sysml`. Starting the app preserves its saved requirements, mission inputs and COTS selections.
 
 Tab identity uses stable element keys. Renaming a domain updates its tab label and preserves its requirements, children and links. A new Bus, Payload, Ground Station or Power subsystem instance gets its own tab using the same catalog and table UI. Each new bus includes its own EPS tab and component instances. An element with child rows must be emptied before its type can change or it can be deleted. Browser reload restores the selected tab through the URL fragment.
 
 ## Editing a requirement
 
-The default requirement table shows ID, source, read-only text, verification and assignments. Verified contains a calculated checkbox and a pencil. Both pencils open the same requirement modal. The verification pencil focuses its condition. Text and conditions are edited only in that modal.
+The default requirement table shows ID, source, read-only text, verification and assignments. Verified contains a calculated checkbox and a pencil. Both pencils open the same right pane. The verification pencil focuses its condition. Text and conditions are edited only in that pane. The workbook stays readable and interactive. Switching tabs keeps the draft open. On narrow screens the editor sits below the workbook.
 
 Enter one verifiable statement. Enclose each variable name in `$$` to add its parameter row:
 
 ```text
-The battery shall provide at least $$energy_J$$ J.
+The battery shall provide at least $$energy_J$$.
 ```
 
 The `energy_J` row appears as soon as the closing `$$` is entered. Repeated names create one row. Names use letters, digits and underscores, begin with a letter or underscore, and follow the app's SysML identifier restrictions. Invalid or incomplete markers show an error and block saving.
 
-The parameter matrix has three columns: **Name**, **Expression** and **Evaluated value**. Enter a number or SysML expression in its row, such as `2 * 3600` or `REQ001.energy_J * 1.2`. The modal includes the verification condition and a live text preview. Numeric types follow the model. Existing integer constraints remain enforced. Each requirement retains its own expression.
+The parameter matrix has four columns: **Name**, **Expression**, **Units** and **Evaluated value**. Enter a number or SysML expression in its row, such as `2 * 3600` or `REQ001.energy_J * 1.2`. Enter units separately, such as `J` or `m^2/s^2`. Units are shared by variable name across the workspace. They are display labels and leave numeric evaluation unchanged. The pane includes the verification condition and evaluated parameter values. Numeric types follow the model. Existing integer constraints remain enforced. Each requirement retains its own expression.
 
-**Save requirement** applies the edit and triggers autosave. **Cancel** or Escape discards the modal's changes, including new parameters. Ctrl+Enter or Cmd+Enter saves. Existing parameter values and equation inputs stay accessible even when their names are absent from the text. Removing a marker preserves populated cells. Empty, unused names created during the current edit are discarded. Existing `{name}` placeholders remain supported for older data.
+The requirement list shows an unset variable's bare name in monospace, without its units. Numeric values with magnitude above 999 show no decimal places. Other values show four significant figures. Numeric values and their units use monospace in the requirement list and parameter results. Powers written with `^` or `**`, such as `m^2` or `s**(-2)`, appear as superscripts. Leave literal units out of requirement prose when using the Units column.
+
+**Save requirement** applies the edit and triggers autosave. **Cancel** or Escape discards the pane's changes, including new parameters. Opening a different requirement asks before discarding a changed draft. Saving preserves edits made in other tables while the pane was open. Ctrl+Enter or Cmd+Enter saves. Existing parameter values and equation inputs stay accessible even when their names are absent from the text. Removing a marker preserves populated cells. Empty, unused names created during the current edit are discarded. Existing `{name}` placeholders remain supported for older data.
 
 ## Reusable sizing requirements
 
-`framework/requirements.sysml` owns the generic requirement definitions and native constraints. Its annotations supply the table text, parameters, equations, sources and assignments. Mission files contain typed usages and mission inputs. Editing a mission leaves these generic definitions unchanged.
+`framework/requirements.sysml` owns the generic requirement definitions and native constraints. Its annotations supply the table text, parameters, units, equations, sources and assignments. Preloaded unit labels live in the Units column. Requirement prose uses variable markers without literal unit labels. Mission files contain typed usages and mission inputs. Editing a mission leaves these generic definitions unchanged.
 
 The workbook starts with 27 generic requirements. Mission has ORB001 through ORB003. EPS has SIZ001 through SIZ008, SIZ011, SIZ013, SIZ014, SIZ016, EPS002, EPS008, EPS009, EPS011, EPS019, EPS021, EPS047, EPS052, EPS053, EPS078, EPS088 and EPS089. Each requirement contains one sentence and at least one declared numeric parameter referenced in its text. Requirements without numeric parameters are excluded. IDs are preserved, so gaps are intentional. Separate obligations have their own rows, with **Source** links to the requirement they derive from. Generic `derivesFrom` annotations supply these links. IDs can differ when an existing mission already uses them. Each new Power subsystem gets independent EPS inputs and local equation links.
 
@@ -71,7 +73,7 @@ Populate these inputs in order:
 6. **SIZ006:** sourced `cycle_a`, `cycle_b`, `fit_dod_min`, `fit_dod_max` and selected `dod_max`. The decreasing power-law fit requires `a > 0` and `b < 0`. The selected DoD must be inside its sourced fit domain and support the required cycles. No chemistry or fit coefficients are assumed.
 7. **SIZ007:** `degradation_margin`. Minimum battery energy is `E_e / DoD * (1 + M)` in joules. **SIZ008:** `pack_bol_J` and applicable `retained_energy_factor`. Convert Wh to J by multiplying by 3600. Margin enters preliminary sizing once. Retained capacity is derived separately.
 
-Every expression cell in the modal stores an editable SysML expression. A literal such as `500` and an equation such as `2 * pi * sqrt(x)` use the same representation. The expression stays visible beside its evaluated value. You can edit or replace any prefilled equation. Editing a cell recalculates dependent values across tabs. Empty cells stay unset. Expressions that depend on empty cells show Pending. Syntax, reference, type and arithmetic errors appear in the affected cell with details in its tooltip. Insufficient cell counts, cycle life or capacity remain visible through the requirement conditions. Conditions also check that edited derived expressions still satisfy the generic sizing equations. Mission altitude, lifetime, duty cycles, efficiencies, selected products and margins have no default values. Existing free-text orbit statements are preserved. They do not silently supply sizing inputs.
+Every expression cell in the pane stores an editable SysML expression. A literal such as `500` and an equation such as `2 * pi * sqrt(x)` use the same representation. The expression stays visible beside its evaluated value. You can edit or replace any prefilled equation. Editing a cell recalculates dependent values across tabs. Empty cells stay unset. Expressions that depend on empty cells show Pending. Syntax, reference, type and arithmetic errors appear in the affected cell with details in its tooltip. Insufficient cell counts, cycle life or capacity remain visible through the requirement conditions. Conditions also check that edited derived expressions still satisfy the generic sizing equations. Mission altitude, lifetime, duty cycles, efficiencies, selected products and margins have no default values. Existing free-text orbit statements are preserved. They do not silently supply sizing inputs.
 
 These equations implement the preliminary circular orbit case in `final_report/design-proposal.tex`. They establish no seasonal illumination, peak-current, thermal or survival compliance. The retained EPS requirements cover generation, battery capacity and cycling, energy closure, mass, volume, memory and processor utilization. Each row retains its report source. Report criteria without defined numeric parameters remain in the report and are excluded from the workbook and generic requirement library. Complete scenario assessments remain unverified until applicable evidence and verification conditions are supplied. Native generic definitions retain their numerical and assessment predicates for a full SysML tool to bind and assess. Missing Boolean evidence inputs stay unbound in exports.
 
@@ -84,12 +86,13 @@ Click **Export mission SysML v2** in the requirements table header to download t
 - External accepts requirements, needs, objectives, concerns and constraints. Its statement type dropdown is in the requirement editor. Other tabs list derived requirements.
 - Dropdown cells use plain text and a small arrow at the right edge. Linked IDs are plain links with no pill background.
 - **Source** links to individual rows anywhere in the workbook. Open the picker and check the rows to link. Click a linked ID to open its tab and focus that row. Source and assignment links survive ID changes. Source cycles are blocked across all tabs.
-- Write `$$mass$$` in the modal's requirement text to add a parameter row. The list and modal preview substitute evaluated values. Unset values retain their markers.
+- Write `$$mass$$` in the pane's requirement text to add a parameter row. The list substitutes formatted values with units. Unset values show the variable name in monospace.
 - Numeric expressions retain the model's declared types. Integer results must be safe JavaScript integers. Real results must be finite. Clearing an expression leaves the parameter unset.
-- **Verified** shows a read-only checkbox and a pencil. Click the pencil or press F2 to open the requirement modal at its condition. The checkbox cannot be toggled manually. A missing condition leaves the row unverified. Enter `true` or `false` only when you intend an explicit constant SysML condition.
+- **Verified** shows a read-only checkbox and a pencil. Click the pencil or press F2 to open the requirement pane at its condition. The checkbox cannot be toggled manually. A missing condition leaves the row unverified. Enter `true` or `false` only when you intend an explicit constant SysML condition.
+- Each table starts with one empty placeholder row. Filling the last row adds a new placeholder. Empty placeholders are excluded from saved data.
 - The **+** beside a table title inserts a row. Hover over a row to reveal its trash button in the left gutter. This deletes that row directly, regardless of selection. Remove its source and assignment links before deleting it. Rows with children remain protected.
-- Tab moves between cells and their edit buttons. Enter moves down in ordinary fields. Enter, Space or F2 on requirement text opens its editor. Shift reverses navigation. Shift+Tab from an ID cell focuses that row's trash button. Enter activates it. Requirement text supports line breaks inside the modal.
-- Headers use text labels. Click a column header to sort. Paste tab separated cells from Google Sheets in data column order, starting with ID. The delete gutter is separate from the data. Pasted sources and assignments accept comma separated row IDs or unique element names. Text and verification cells accept edits only through the modal. Grid pastes that would overwrite them are rejected as a whole. Paste a single column of expressions down the modal's parameter rows. Invalid expressions remain drafts and show cell errors.
+- Tab moves between cells and their edit buttons. Enter moves down in ordinary fields. Enter, Space or F2 on requirement text opens its editor. Shift reverses navigation. Shift+Tab from an ID cell focuses that row's trash button. Enter activates it. Requirement text supports line breaks inside the pane.
+- Headers use text labels. Click a column header to sort. Paste tab separated cells from Google Sheets in data column order, starting with ID. The delete gutter is separate from the data. Pasted sources and assignments accept comma separated row IDs or unique element names. Text and verification cells accept edits only through the pane. Grid pastes that would overwrite them are rejected as a whole. Paste a single column of expressions or units down the corresponding pane column. Invalid expressions remain drafts and show cell errors.
 
 ## Parameter and verification expressions
 
@@ -147,7 +150,7 @@ npm test
 syside check ..
 ```
 
-Tests use temporary files and leave project models unchanged. An optional browser test exercises the modal, cancellation, generated columns, evaluation, persistence and download:
+Tests use temporary files and leave project models unchanged. An optional browser test exercises the pane, workbook navigation, cancellation, generated columns, evaluation, persistence and download:
 
 ```sh
 PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs npm test

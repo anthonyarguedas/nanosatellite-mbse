@@ -12,6 +12,7 @@ const publicFiles = new Map([
   ['/', ['public/index.html', 'text/html; charset=utf-8']],
   ['/app.js', ['public/app.js', 'text/javascript; charset=utf-8']],
   ['/requirement-editor.js', ['public/requirement-editor.js', 'text/javascript; charset=utf-8']],
+  ['/requirement-preview.js', ['public/requirement-preview.js', 'text/javascript; charset=utf-8']],
   ['/style.css', ['public/style.css', 'text/css; charset=utf-8']],
   ['/model.mjs', ['model.mjs', 'text/javascript; charset=utf-8']],
   ['/verification.mjs', ['verification.mjs', 'text/javascript; charset=utf-8']],

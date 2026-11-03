@@ -50,7 +50,7 @@ test('serves the UI with a CSP and rejects unknown files and methods', async t =
   assert.match(await response.text(), /Stakeholder Requirements/);
   assert.match(response.headers.get('content-security-policy'), /frame-ancestors 'none'/);
   assert.doesNotMatch(response.headers.get('content-security-policy'), /unsafe-eval/);
-  for (const path of ['/app.js', '/requirement-editor.js', '/style.css', '/model.mjs', '/verification.mjs', '/verification-worker.js']) assert.equal((await fetch(base + path)).status, 200);
+  for (const path of ['/app.js', '/requirement-editor.js', '/requirement-preview.js', '/style.css', '/model.mjs', '/verification.mjs', '/verification-worker.js']) assert.equal((await fetch(base + path)).status, 200);
   assert.equal((await fetch(base + '/server.mjs')).status, 404);
   assert.equal((await fetch(base + '/api/workspace', { method: 'DELETE' })).status, 405);
 });
@@ -94,6 +94,7 @@ test('marker-created parameter columns save and export through the API', async t
   row.text = 'The orbit shall have altitude $$altitude_km$$ km with uncertainty $$altitude_uncertainty_km$$ km.';
   declareRequirementVariables(workspace, row);
   row.parameters.altitude_km = '500'; row.parameters.altitude_uncertainty_km = '0.5 * 2';
+  workspace.variables.find(variable => variable.name === 'altitude_uncertainty_km').unit = 'km';
   assert.equal((await put(workspace, revision)).status, 200);
   assert.deepEqual((await get()).workspace, workspace);
   const source = await readFile(modelPath, 'utf8');

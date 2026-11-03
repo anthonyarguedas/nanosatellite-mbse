@@ -1,9 +1,10 @@
 import {
   addElementChildren, allowedDefinitions, allRows as workbookRows, assignableElements, availableSources,
-  componentCheck, componentRequirements, contextForRow, domainTypes, emptyWorkspace, interpolateRequirement,
+  componentCheck, componentRequirements, contextForRow, domainTypes, emptyWorkspace,
   nextId, parameterExpression, parseTSV, WORKSPACE_VERSION, rewriteRowReferences, stakeholderTypes, tabsFor, validateWorkspace,
 } from '/model.mjs';
 import { createRequirementEditor } from '/requirement-editor.js';
+import { requirementHTML } from '/requirement-preview.js';
 
 const main = document.querySelector('main');
 const status = document.querySelector('#status'), retry = document.querySelector('#retry');
@@ -40,7 +41,7 @@ const body = table => document.querySelector(`[data-table="${table}"] tbody`);
 const rowElement = key => document.querySelector(`tr[data-key="${key}"]`);
 const rowByKey = key => workbookRows(workspace).find(row => row.key === key);
 const requirementEditor = createRequirementEditor({
-  dialog: document.querySelector('#requirement-editor'), getWorkspace: () => workspace, getCatalog: () => catalog,
+  panel: document.querySelector('#requirement-editor'), getWorkspace: () => workspace, getCatalog: () => catalog,
   validate: candidate => validateWorkspace(snapshot(candidate), catalog, products),
   onCommit: candidate => {
     workspace = candidate; statementIds.clear(); syncStatementIds();
@@ -85,7 +86,7 @@ function renderWorkbook() {
 }
 function navigate(key, history = true) {
   if (!tabsFor(workspace, catalog).some(tab => tab.key === key)) return;
-  requirementEditor.close(); closeEditor(); closeMenus();
+  closeEditor(); closeMenus();
   const changed = active !== key;
   active = key;
   if (history && location.hash !== `#${key}`) window.history.pushState(null, '', `#${encodeURIComponent(key)}`);
@@ -175,14 +176,14 @@ function rowHTML(row, table, index) {
     }
   } else {
     cells += `<td>${sourceHTML(row, index)}</td>`;
-    cells += `<td class="statement-cell"><div class="statement-summary" ${attrs('text', 2)} tabindex="0" contenteditable="false">${active === 'external' && row.kind !== 'Requirement' ? `<span class="statement-kind">${escape(row.kind)}</span>` : ''}<span class="statement-preview">${escape(row.text)}</span></div><button type="button" class="requirement-edit" data-requirement-edit="${row.key}" aria-label="Edit requirement ${escape(row.id || 'new row')}" aria-haspopup="dialog" title="Edit requirement"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 3 5 5M3 17l4-1 10-10a2.1 2.1 0 0 0-3-3L4 13l-1 4Z"/></svg></button></td>`;
-    cells += `<td class="checkbox-cell"><input class="verification-result" type="checkbox" disabled tabindex="-1" aria-readonly="true" aria-label="Verification result, row ${index + 1}"><button type="button" class="requirement-edit verification-edit" data-verification-edit="${row.key}" data-field="verified" data-col="3" aria-label="Edit verification for ${escape(row.id || 'new row')}" aria-haspopup="dialog" title="Edit requirement verification"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 3 5 5M3 17l4-1 10-10a2.1 2.1 0 0 0-3-3L4 13l-1 4Z"/></svg></button></td>`;
+    cells += `<td class="statement-cell"><div class="statement-summary" ${attrs('text', 2)} tabindex="0" contenteditable="false">${active === 'external' && row.kind !== 'Requirement' ? `<span class="statement-kind">${escape(row.kind)}</span>` : ''}<span class="statement-preview">${escape(row.text)}</span></div><button type="button" class="requirement-edit" data-requirement-edit="${row.key}" aria-label="Edit requirement ${escape(row.id || 'new row')}" aria-controls="requirement-editor" title="Edit requirement"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 3 5 5M3 17l4-1 10-10a2.1 2.1 0 0 0-3-3L4 13l-1 4Z"/></svg></button></td>`;
+    cells += `<td class="checkbox-cell"><input class="verification-result" type="checkbox" disabled tabindex="-1" aria-readonly="true" aria-label="Verification result, row ${index + 1}"><button type="button" class="requirement-edit verification-edit" data-verification-edit="${row.key}" data-field="verified" data-col="3" aria-label="Edit verification for ${escape(row.id || 'new row')}" aria-controls="requirement-editor" title="Edit requirement verification"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 3 5 5M3 17l4-1 10-10a2.1 2.1 0 0 0-3-3L4 13l-1 4Z"/></svg></button></td>`;
     if (active !== 'external') cells += `<td>${sourceHTML(row, index, 'affected', 4)}</td>`;
   }
   return `<tr id="row-${row.key}" data-key="${row.key}">${cells}</tr>`;
 }
 function pad(table) {
-  while (viewRows(table).length < 8 || used(viewRows(table).at(-1), table)) dataRows(table).push(draft(table));
+  while (!viewRows(table).length || used(viewRows(table).at(-1), table)) dataRows(table).push(draft(table));
 }
 function render(table) {
   pad(table);
@@ -216,7 +217,7 @@ function updateSources() {
 function updatePreview(row) {
   const tr = rowElement(row.key), summary = tr?.querySelector('.statement-summary');
   if (!summary) return;
-  summary.querySelector('.statement-preview').textContent = interpolateRequirement(row.text, results.get(row.key)?.values);
+  summary.querySelector('.statement-preview').innerHTML = requirementHTML(row.text, results.get(row.key)?.values, workspace.variables);
   summary.title = [row.text, row.origin].filter(Boolean).join('\n') || 'Use the edit button to write a requirement.';
   const errors = Object.values(results.get(row.key)?.parameters ?? {}).filter(result => result.state === 'error');
   for (const button of tr.querySelectorAll('.requirement-edit')) {
@@ -465,9 +466,10 @@ sourceEditor.addEventListener('change', event => {
 function insertRow(table) {
   const rows = viewRows(table), collection = dataRows(table), index = rows.findIndex(row => row.key === selected[selectionKey(table)]);
   let insertion = index < 0 ? rows.findIndex(row => !used(row, table)) : index + 1;
+  if (index >= 0 && !used(rows[index], table)) insertion = index;
   if (insertion < 0) insertion = rows.length;
-  const added = draft(table);
-  collection.splice(rows[insertion] ? collection.indexOf(rows[insertion]) : collection.length, 0, added);
+  const added = rows[insertion] && !used(rows[insertion], table) ? rows[insertion] : draft(table);
+  if (!collection.includes(added)) collection.splice(rows[insertion] ? collection.indexOf(rows[insertion]) : collection.length, 0, added);
   render(table);
   if (table === 'statements') requirementEditor.open(added.key, rowElement(added.key).querySelector('.requirement-edit'));
   else focusCell(table, insertion, 1);
@@ -537,7 +539,11 @@ document.addEventListener('click', event => {
   if (!event.target.closest('.table-top')) closeMenus();
 });
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape') { closeMenus(); closeEditor(true); }
+  if (event.key === 'Escape') {
+    const transient = editor || document.querySelector('.table-menu:not([hidden])');
+    closeMenus(); closeEditor(true);
+    if (!transient) requirementEditor.close();
+  }
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
     event.preventDefault(); if (requirementEditor.isOpen()) requirementEditor.save(); else save();
   }
@@ -555,7 +561,7 @@ main.addEventListener('paste', event => {
       for (const [cellIndex, value] of cells.entries()) {
         const field = columns(table)[column + cellIndex], variable = workspace.variables.find(variable => variable.name === field);
         if (!field) throw new Error('The pasted cells extend past the last column.');
-        if (table === 'statements' && ['text', 'verified'].includes(field)) throw new Error('Edit requirement text and verification only in the requirement modal.');
+        if (table === 'statements' && ['text', 'verified'].includes(field)) throw new Error('Edit requirement text and verification only in the requirement pane.');
         if (['sources', 'affected', 'requirements'].includes(field)) links.push([target, field, value.trim()]);
         else if (field === 'product') {
           const matches = products.filter(product => [product.id, product.name, product.partNumber].includes(value.trim()));

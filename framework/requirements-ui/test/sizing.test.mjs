@@ -106,6 +106,28 @@ test('generic annotations require at least one numeric parameter referenced in t
   assert.equal(requirementsFromSource(source({ text: 'The pack shall weigh at most $$mass_kg$$ kg.', parameters: { mass_kg: null } })).length, 1);
 });
 
+test('preloaded units seed parameter fields and stay out of requirement prose', () => {
+  const workspace = emptyWorkspace(catalog);
+  const units = new Map(workspace.variables.map(variable => [variable.name, variable.unit]));
+  for (const template of templates) for (const [name, unit] of Object.entries(template.units ?? {})) {
+    assert.equal(units.get(name), unit, `${template.id}.${name}`);
+    assert.equal(template.text.includes(`$$${name}$$ ${unit}`), false, `${template.id}.${name}`);
+  }
+  assert.equal(units.get('gravitationalParameter_km3_s2'), 'km^3/s^2');
+  assert.equal(units.get('volume_m3'), 'm^3');
+  assert.equal(units.get('required_data_bytes'), 'bytes');
+  assert.equal(units.get('days_per_year'), 'days/year');
+  assert.equal(units.get('sunlight_efficiency'), undefined);
+  assert.deepEqual(readWorkspace(renderManaged(workspace, { catalog }), catalog), workspace);
+});
+
+test('generic units must name declared parameters and agree across requirements', async () => {
+  const source = await readFile(new URL('../../requirements.sysml', import.meta.url), 'utf8');
+  assert.throws(() => requirementsFromSource(source.replace('"units":{"altitude_km":"km"', '"units":{"undeclared":"km"')), /units must name a declared parameter/);
+  assert.throws(() => requirementsFromSource(source.replace('"units":{"altitude_km":"km"', '"units":{"altitude_km":""')), /contain a label/);
+  assert.throws(() => requirementsFromSource(source.replace('"units":{"altitude_km":"km"', '"units":{"altitude_km":"m"')), /same units/);
+});
+
 test('a new mission seeds only sourced Earth constants as literal parameter values', () => {
   const workspace = emptyWorkspace(catalog);
   assert.equal(workspace.components.length, 0);

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  availableSources, emptyWorkspace, migrateWorkspace, nextId, parameterExpression, parseTSV,
+  availableSources, emptyWorkspace, migrateWorkspace, nextId, parameterExpression, parameterUnit, parseTSV,
   stakeholderTypes, statementKinds, validVariableName, validateWorkspace, WORKSPACE_VERSION,
 } from '../model.mjs';
 import { readWorkspace, renderManaged, updateSource } from '../sysml.mjs';
@@ -91,6 +91,20 @@ test('dynamic variable columns validate names, types and values', () => {
   for (const name of ['mass', 'cell_count', '_margin']) assert.equal(validVariableName(name), true);
   workspace.variables.push({ name: 'x', type: 'float' });
   assert.throws(() => validateWorkspace(workspace), /already exists/);
+});
+
+test('optional units persist without changing expressions or numeric evaluation', () => {
+  const workspace = example(), variable = workspace.variables[0];
+  variable.unit = 'm^2/s^2';
+  assert.equal(parameterUnit('  m^2/s^2  ', variable), 'm^2/s^2');
+  assert.equal(parameterUnit('', variable), '');
+  assert.doesNotThrow(() => validateWorkspace(workspace));
+  assert.equal(createEvaluator(workspace).parameter(workspace.statements[0], 'x'), 12);
+  assert.deepEqual(readWorkspace(renderManaged(workspace)), workspace);
+  for (const unit of [null, 1, {}, 'm\ns', 'm\rs', 'm'.repeat(101)]) {
+    variable.unit = unit;
+    assert.throws(() => validateWorkspace(workspace), /units must be a single line/);
+  }
 });
 
 test('invalid kinds, manual flags and duplicate keys are rejected', () => {

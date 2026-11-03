@@ -1,40 +1,43 @@
 import {
-  declareRequirementVariables, interpolateRequirement, nextId, parameterExpression,
+  declareRequirementVariables, mergeRequirementDraft, nextId, parameterExpression, parameterUnit,
   parseTSV, requirementParameterNames, tabsFor,
 } from '/model.mjs';
+import { parameterValueHTML } from '/requirement-preview.js';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 })[char]);
 
-export function createRequirementEditor({ dialog, getWorkspace, getCatalog, validate, onCommit }) {
-  const form = dialog.querySelector('form');
-  const text = dialog.querySelector('#requirement-text');
-  const kind = dialog.querySelector('#requirement-kind');
-  const condition = dialog.querySelector('#requirement-condition');
-  const frame = dialog.querySelector('.requirement-parameter-frame');
+export function createRequirementEditor({ panel, getWorkspace, getCatalog, validate, onCommit }) {
+  const form = panel.querySelector('form');
+  const text = panel.querySelector('#requirement-text');
+  const kind = panel.querySelector('#requirement-kind');
+  const condition = panel.querySelector('#requirement-condition');
+  const frame = panel.querySelector('.requirement-parameter-frame');
   const table = frame.querySelector('table');
-  const errorLabel = dialog.querySelector('#requirement-error');
-  const saveButton = dialog.querySelector('#requirement-save');
+  const errorLabel = panel.querySelector('#requirement-error');
+  const saveButton = panel.querySelector('#requirement-save');
   let draft = null, worker = null, timer, workerTimer, generation = 0;
 
   const row = () => draft.workspace.statements.find(row => row.key === draft.key);
+  const isDirty = () => Boolean(draft && JSON.stringify(draft.workspace) !== draft.initial);
   const setError = message => { errorLabel.textContent = message; };
   const names = () => requirementParameterNames(draft.workspace, row(), getCatalog());
   function renderParameters(force = false) {
     const columns = names().map(name => draft.workspace.variables.find(variable => variable.name === name)).filter(Boolean);
-    const signature = JSON.stringify(columns);
+    const signature = JSON.stringify(columns.map(({ name, type }) => ({ name, type })));
     if (!force && signature === draft.columns) return;
     draft.columns = signature;
     const focused = document.activeElement;
-    const parameter = focused?.dataset.parameter;
+    const field = focused?.dataset.parameterUnit === undefined ? 'data-parameter' : 'data-parameter-unit';
+    const parameter = focused?.getAttribute(field);
     const selection = parameter ? [focused.selectionStart, focused.selectionEnd] : null;
     table.hidden = !columns.length;
-    dialog.querySelector('#requirement-parameters-empty').hidden = Boolean(columns.length);
-    table.innerHTML = '<colgroup><col class="parameter-name-col"><col><col class="parameter-value-col"></colgroup>'
-      + '<thead><tr><th scope="col">Name</th><th scope="col">Expression</th><th scope="col">Evaluated value</th></tr></thead><tbody>'
-      + columns.map(variable => `<tr data-parameter-row="${variable.name}"><th scope="row"><code>${escape(variable.name)}</code></th><td class="parameter"><input data-parameter="${variable.name}" aria-label="Expression for ${variable.name}" value="${escape(row().parameters[variable.name])}" maxlength="5000" autocomplete="off" spellcheck="false"></td><td class="parameter-value"><span class="parameter-result" aria-label="Evaluated ${variable.name}"></span></td></tr>`).join('') + '</tbody>';
-    const target = parameter ? table.querySelector(`[data-parameter="${parameter}"]`) : null;
+    panel.querySelector('#requirement-parameters-empty').hidden = Boolean(columns.length);
+    table.innerHTML = '<colgroup><col class="parameter-name-col"><col><col class="parameter-unit-col"><col class="parameter-value-col"></colgroup>'
+      + '<thead><tr><th scope="col">Name</th><th scope="col">Expression</th><th scope="col">Units</th><th scope="col">Evaluated value</th></tr></thead><tbody>'
+      + columns.map(variable => `<tr data-parameter-row="${variable.name}"><th scope="row"><code>${escape(variable.name)}</code></th><td class="parameter"><input data-parameter="${variable.name}" aria-label="Expression for ${variable.name}" value="${escape(row().parameters[variable.name])}" maxlength="5000" autocomplete="off" spellcheck="false"></td><td class="parameter"><input data-parameter-unit="${variable.name}" aria-label="Units for ${variable.name}" value="${escape(variable.unit)}" maxlength="100" placeholder="e.g. m^2" autocomplete="off" spellcheck="false"></td><td class="parameter-value"><span class="parameter-result" aria-label="Evaluated ${variable.name}"></span></td></tr>`).join('') + '</tbody>';
+    const target = parameter ? table.querySelector(`[${field}="${parameter}"]`) : null;
     if (target) {
       target.focus({ preventScroll: true });
       if (selection) target.setSelectionRange(...selection);
@@ -48,16 +51,16 @@ export function createRequirementEditor({ dialog, getWorkspace, getCatalog, vali
       const populated = Boolean(row().parameters[name]?.trim());
       const check = result?.parameters?.[name] ?? { state: populated ? 'pending' : 'unset', message: populated ? 'Recalculating…' : 'No SysML parameter expression.' };
       parameterRow.dataset.state = check.state;
-      output.textContent = check.state === 'value' ? String(check.value) : check.state === 'error' ? 'Error' : check.state === 'pending' ? 'Pending' : 'Unset';
+      if (check.state === 'value') output.innerHTML = parameterValueHTML(check.value, draft.workspace.variables.find(variable => variable.name === name)?.unit);
+      else output.textContent = check.state === 'error' ? 'Error' : check.state === 'pending' ? 'Pending' : 'Unset';
       output.title = check.message;
       input.setAttribute('aria-invalid', String(check.state === 'error'));
       input.setAttribute('aria-description', check.message);
       input.title = check.message;
     }
-    dialog.querySelector('#requirement-preview').textContent = interpolateRequirement(row().text, result?.values);
     const check = condition.value.trim() ? result ?? { state: 'pending', message: 'Recalculating…' }
       : { state: 'unset', message: 'No verification condition.' };
-    const label = dialog.querySelector('#requirement-check');
+    const label = panel.querySelector('#requirement-check');
     label.textContent = `${{ pass: 'True', fail: 'False', pending: 'Pending', error: 'Error', unset: 'Not verified' }[check.state]}: ${check.message}`;
     label.classList.toggle('error-text', check.state === 'error');
   }
@@ -113,7 +116,8 @@ export function createRequirementEditor({ dialog, getWorkspace, getCatalog, vali
     const { anchor, key } = draft;
     draft = null; generation++;
     clearTimeout(timer); clearTimeout(workerTimer); worker?.terminate(); worker = null;
-    dialog.close();
+    panel.hidden = true;
+    document.body.classList.remove('requirement-editor-open');
     const selector = anchor?.classList.contains('verification-edit') ? 'data-verification-edit' : 'data-requirement-edit';
     const target = anchor?.isConnected ? anchor : document.querySelector(`[${selector}="${key}"]`);
     target?.focus({ preventScroll: true });
@@ -121,58 +125,78 @@ export function createRequirementEditor({ dialog, getWorkspace, getCatalog, vali
   function save() {
     if (!draft || !synchronize()) return;
     try {
-      const candidate = validate(draft.workspace);
+      const candidate = validate(mergeRequirementDraft(getWorkspace(), draft.original, draft.workspace, draft.key));
       onCommit(candidate);
       close();
     } catch (error) { setError(error.message); }
   }
   function open(key, anchor) {
+    if (draft?.key === key) { draft.anchor = anchor; (anchor?.classList.contains('verification-edit') ? condition : text).focus(); return; }
+    if (isDirty() && !window.confirm('Discard the current requirement edits and open another requirement?')) return;
     close();
-    const workspace = structuredClone(getWorkspace());
+    const original = structuredClone(getWorkspace()), workspace = structuredClone(original);
     const statement = workspace.statements.find(row => row.key === key);
     if (!statement) return;
     const prefix = tabsFor(workspace, getCatalog()).find(tab => tab.key === statement.context)?.prefix ?? 'REQ';
     statement.id ||= nextId(workspace, statement.kind, prefix);
-    draft = { workspace, key, anchor, originalNames: new Set(workspace.variables.map(variable => variable.name)), columns: null, results: new Map() };
-    dialog.querySelector('#requirement-editor-title').textContent = `Edit ${statement.id}`;
-    dialog.querySelector('#requirement-kind-label').hidden = statement.context !== 'external';
+    draft = { workspace, original, key, anchor, originalNames: new Set(workspace.variables.map(variable => variable.name)), columns: null, results: new Map() };
+    panel.querySelector('#requirement-editor-title').textContent = `Edit ${statement.id}`;
+    panel.querySelector('#requirement-kind-label').hidden = statement.context !== 'external';
     text.value = statement.text; kind.value = statement.kind; condition.value = statement.condition;
-    dialog.querySelector('#requirement-origin').textContent = statement.origin ?? '';
+    panel.querySelector('#requirement-origin').textContent = statement.origin ?? '';
     synchronize();
     draft.initial = JSON.stringify(draft.workspace);
-    dialog.showModal(); (anchor?.classList.contains('verification-edit') ? condition : text).focus();
+    panel.hidden = false; panel.querySelector('.requirement-editor-content').scrollTop = 0;
+    document.body.classList.add('requirement-editor-open');
+    anchor?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    (anchor?.classList.contains('verification-edit') ? condition : text).focus({ preventScroll: true });
   }
   text.addEventListener('input', synchronize);
   kind.addEventListener('change', synchronize);
   condition.addEventListener('input', synchronize);
+  function setUnit(name, value) {
+    const variable = draft.workspace.variables.find(variable => variable.name === name);
+    const unit = parameterUnit(value, variable);
+    if (unit) variable.unit = unit;
+    else delete variable.unit;
+  }
   frame.addEventListener('input', event => {
-    if (!draft || !event.target.dataset.parameter) return;
+    const name = event.target.dataset.parameter ?? event.target.dataset.parameterUnit;
+    if (!draft || !name) return;
     try {
-      const name = event.target.dataset.parameter;
-      row().parameters[name] = parameterExpression(event.target.value, { name }, row().id);
-      synchronize();
+      if (event.target.dataset.parameterUnit !== undefined) {
+        setUnit(name, event.target.value); updateResults();
+      } else {
+        row().parameters[name] = parameterExpression(event.target.value, { name }, row().id);
+        synchronize();
+      }
     } catch (error) { setError(error.message); }
   });
   frame.addEventListener('paste', event => {
-    const name = event.target.dataset.parameter, source = event.clipboardData.getData('text/plain');
-    if (!name || !/[\t\r\n]/.test(source)) return;
+    const units = event.target.dataset.parameterUnit !== undefined;
+    const name = event.target.dataset.parameter ?? event.target.dataset.parameterUnit, source = event.clipboardData.getData('text/plain');
+    if (!draft || !name || !/[\t\r\n]/.test(source)) return;
     event.preventDefault();
     try {
       const rows = parseTSV(source), columns = names(), start = columns.indexOf(name);
-      if (rows.some(row => row.length !== 1) || start + rows.length > columns.length) throw new Error('Paste one column of expressions within the displayed parameter rows.');
-      const parameters = { ...row().parameters };
-      rows.forEach(([value], index) => {
-        const name = columns[start + index]; parameters[name] = parameterExpression(value, { name }, row().id);
-      });
-      row().parameters = parameters;
+      if (rows.some(row => row.length !== 1) || start + rows.length > columns.length) throw new Error(`Paste one column of ${units ? 'units' : 'expressions'} within the displayed parameter rows.`);
+      if (units) {
+        const values = rows.map(([value], index) => parameterUnit(value, { name: columns[start + index] }));
+        values.forEach((value, index) => setUnit(columns[start + index], value));
+      } else {
+        const parameters = { ...row().parameters };
+        rows.forEach(([value], index) => {
+          const name = columns[start + index]; parameters[name] = parameterExpression(value, { name }, row().id);
+        });
+        row().parameters = parameters;
+      }
       renderParameters(true); synchronize();
     } catch (error) { setError(error.message); }
   });
   form.addEventListener('submit', event => { event.preventDefault(); save(); });
-  dialog.querySelectorAll('[data-requirement-cancel]').forEach(button => button.addEventListener('click', close));
-  dialog.addEventListener('cancel', event => { event.preventDefault(); close(); });
-  dialog.addEventListener('keydown', event => {
+  panel.querySelectorAll('[data-requirement-cancel]').forEach(button => button.addEventListener('click', close));
+  panel.addEventListener('keydown', event => {
     if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); save(); }
   });
-  return { open, close, save, isOpen: () => Boolean(draft), isDirty: () => Boolean(draft && JSON.stringify(draft.workspace) !== draft.initial) };
+  return { open, close, save, isOpen: () => Boolean(draft), isDirty };
 }

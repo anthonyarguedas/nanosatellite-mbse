@@ -89,24 +89,25 @@
     </section>
   </main>
   <nav id="tabs" class="sheet-tabs" role="tablist" aria-label="Model tabs"></nav>
-  <dialog id="requirement-editor" aria-labelledby="requirement-editor-title">
+  <aside id="requirement-editor" aria-labelledby="requirement-editor-title" hidden>
     <form id="requirement-form">
       <header class="requirement-editor-heading"><h2 id="requirement-editor-title">Edit requirement</h2><button type="button" data-requirement-cancel aria-label="Close requirement editor">×</button></header>
-      <label id="requirement-kind-label">Statement type<select id="requirement-kind"><option>Requirement</option><option>Need</option><option>Objective</option><option>Concern</option><option>Constraint</option></select></label>
-      <label for="requirement-text">Requirement text</label>
-      <textarea id="requirement-text" rows="5" maxlength="50000" aria-describedby="requirement-text-help" placeholder="The battery shall provide at least $$energy_J$$ J."></textarea>
-      <p id="requirement-text-help">Write one verifiable statement. Enclose a variable name in <code>$$</code>, such as <code>$$energy_J$$</code>, to add its parameter row.</p>
-      <h3>Parameters</h3>
-      <p id="requirement-parameters-empty">Add <code>$$variable_name$$</code> to the text to add a parameter.</p>
-      <div class="requirement-parameter-frame"><table aria-label="Requirement parameters"></table></div>
-      <label for="requirement-condition">Verification condition</label>
-      <input id="requirement-condition" maxlength="5000" spellcheck="false" autocomplete="off" placeholder="energy_J >= REQ001.energy_J">
-      <p id="requirement-check"></p>
-      <h3>Preview</h3><p id="requirement-preview"></p>
-      <p id="requirement-origin"></p>
+      <div class="requirement-editor-content">
+        <label id="requirement-kind-label">Statement type<select id="requirement-kind"><option>Requirement</option><option>Need</option><option>Objective</option><option>Concern</option><option>Constraint</option></select></label>
+        <label for="requirement-text">Requirement text</label>
+        <textarea id="requirement-text" rows="5" maxlength="50000" aria-describedby="requirement-text-help" placeholder="The battery shall provide at least $$energy_J$$."></textarea>
+        <p id="requirement-text-help">Write one verifiable statement. Enclose a variable name in <code>$$</code>, such as <code>$$energy_J$$</code>, to add its parameter row. Enter units in the Units column, using <code>^</code> for powers.</p>
+        <h3>Parameters</h3>
+        <p id="requirement-parameters-empty">Add <code>$$variable_name$$</code> to the text to add a parameter.</p>
+        <div class="requirement-parameter-frame"><table aria-label="Requirement parameters"></table></div>
+        <label for="requirement-condition">Verification condition</label>
+        <input id="requirement-condition" maxlength="5000" spellcheck="false" autocomplete="off" placeholder="energy_J >= REQ001.energy_J">
+        <p id="requirement-check"></p>
+        <p id="requirement-origin"></p>
+      </div>
       <footer class="requirement-editor-actions"><p id="requirement-error" class="error-text" aria-live="polite"></p><button type="button" data-requirement-cancel>Cancel</button><button id="requirement-save" class="primary" type="submit">Save requirement</button></footer>
     </form>
-  </dialog>
+  </aside>
   <div id="source-editor" class="popover" role="dialog" aria-label="Link source rows" hidden>
     <div class="popover-heading"><strong>Link source rows</strong><button type="button" data-close aria-label="Close sources">×</button></div>
     <input id="source-search" type="search" placeholder="Find a row by ID or text" aria-label="Find source rows" autocomplete="off">
