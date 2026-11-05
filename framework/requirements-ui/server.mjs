@@ -13,6 +13,9 @@ const publicFiles = new Map([
   ['/', ['public/index.html', 'text/html; charset=utf-8']],
   ['/app.js', ['public/app.js', 'text/javascript; charset=utf-8']],
   ['/requirement-editor.js', ['public/requirement-editor.js', 'text/javascript; charset=utf-8']],
+  ['/power-editor.js', ['public/power-editor.js', 'text/javascript; charset=utf-8']],
+  ['/power.mjs', ['power.mjs', 'text/javascript; charset=utf-8']],
+  ['/parameter-states.mjs', ['parameter-states.mjs', 'text/javascript; charset=utf-8']],
   ['/requirement-preview.js', ['public/requirement-preview.js', 'text/javascript; charset=utf-8']],
   ['/style.css', ['public/style.css', 'text/css; charset=utf-8']],
   ['/model.mjs', ['model.mjs', 'text/javascript; charset=utf-8']],
@@ -37,7 +40,7 @@ async function bodyJSON(request) {
 
 export function createServer({ modelPath = process.env.MISSION_FILE
   ? resolve(process.env.MISSION_FILE) : fileURLToPath(new URL('../missions/mission.sysml', import.meta.url)), sessionDirectory } = {}) {
-  const genericModels = ['external', 'mission', 'eps', 'catalog', 'cad', 'requirements'].map(name =>
+  const genericModels = ['external', 'mission', 'eps', 'catalog', 'cad', 'requirements', 'power-budget'].map(name =>
     fileURLToPath(new URL(`../${name}.sysml`, import.meta.url)));
   if (genericModels.includes(resolve(modelPath))) throw new Error('Choose a mission instance file. Generic framework models are read only.');
   const catalogReady = loadCatalog();

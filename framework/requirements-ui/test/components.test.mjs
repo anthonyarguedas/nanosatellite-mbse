@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { test } from 'node:test';
 import { loadCatalog } from '../catalog.mjs';
 import { loadProducts } from '../cots.mjs';
-import { componentCheck, componentRequirements, emptyWorkspace, migrateWorkspace, nextId, validateWorkspace } from '../model.mjs';
+import { componentCheck, componentRequirements, emptyWorkspace, migrateWorkspace, nextId, validateWorkspace, WORKSPACE_VERSION } from '../model.mjs';
 import { evaluateChecks } from '../verification.mjs';
 import { readWorkspace, renderManaged } from '../sysml.mjs';
 import { renderSchematic } from '../kicad.mjs';
@@ -41,7 +41,7 @@ test('version 5 gains an empty COTS table without changing rows or links', () =>
   const { workspace } = fixture();
   workspace.version = 5; delete workspace.components;
   const before = structuredClone(workspace), migrated = migrateWorkspace(workspace, catalog);
-  assert.equal(migrated.version, 8);
+  assert.equal(migrated.version, WORKSPACE_VERSION);
   assert.deepEqual(migrated.components, []);
   assert.deepEqual(migrated.elements, before.elements);
   assert.deepEqual(migrated.statements, before.statements);

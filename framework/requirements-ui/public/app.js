@@ -5,6 +5,8 @@ import {
 } from '/model.mjs';
 import { createRequirementEditor } from '/requirement-editor.js';
 import { requirementHTML } from '/requirement-preview.js';
+import { createPowerEditor } from '/power-editor.js';
+import { isPowerRequirement, parentPowerLimit } from '/power.mjs';
 
 const main = document.querySelector('main');
 const status = document.querySelector('#status'), retry = document.querySelector('#retry');
@@ -54,6 +56,19 @@ const requirementEditor = createRequirementEditor({
     renderWorkbook(); updateSources(); scheduleSave(); scheduleEvaluation();
   },
 });
+const powerEditor = createPowerEditor({
+  section: document.querySelector('#power-workspace'), panel: document.querySelector('#power-editor'),
+  getWorkspace: () => workspace, getActive: () => active,
+  onError: message => showStatus(message, true),
+  onChange: candidate => {
+    validateWorkspace(snapshot(candidate), catalog, products); workspace = candidate;
+    renderWorkbook(); requirementEditor.refresh(); scheduleSave(); scheduleEvaluation();
+  },
+  beforeOpen: () => {
+    if (requirementEditor.isDirty() && !window.confirm('Discard the unsaved requirement edits and edit component power?')) return false;
+    requirementEditor.close(); return true;
+  },
+});
 const rowLabel = row => row.name ?? row.text ?? products.find(product => product.id === row.product)?.name ?? '';
 const isEps = () => catalog.find(type => type.model === rowByKey(active)?.definition)?.role === 'eps';
 const componentChecks = () => new Map(workspace.statements.map(row => [row.key,
@@ -88,7 +103,7 @@ function renderWorkbook() {
   document.querySelector('.components').hidden = !isEps();
   renderTabs(); render('stakeholders'); render('statements');
   if (isEps()) render('components');
-  updateExport();
+  powerEditor.render(); updateExport();
 }
 function navigate(key, history = true) {
   if (!tabsFor(workspace, catalog).some(tab => tab.key === key)) return;
@@ -134,7 +149,7 @@ function used(row, table) {
 }
 function snapshot(state = workspace) {
   return {
-    version: WORKSPACE_VERSION, variables: structuredClone(state.variables),
+    version: WORKSPACE_VERSION, variables: structuredClone(state.variables), power: structuredClone(state.power),
     stakeholders: state.stakeholders.filter(row => used(row, 'stakeholders')).map(row => ({ key: row.key, id: row.id.trim(), name: row.name, type: row.type })),
     elements: state.elements.filter(row => used(row, 'stakeholders')).map(row => ({ key: row.key, id: row.id.trim(), name: row.name, owner: row.owner, definition: row.definition })),
     components: state.components.filter(row => used(row, 'components')).map(row => ({
@@ -144,6 +159,7 @@ function snapshot(state = workspace) {
       key: row.key, id: row.id.trim(), context: row.context, sources: [...row.sources], affected: [...row.affected], kind: row.kind, text: row.text,
       condition: row.condition,
       ...(row.definition ? { definition: row.definition } : {}),
+      ...(isPowerRequirement(row) ? { powerScope: row.powerScope } : {}),
       ...(row.origin ? { origin: row.origin } : {}),
       ...(row.rationale !== undefined ? { rationale: row.rationale } : {}),
       parameters: Object.fromEntries(state.variables.map(variable => [variable.name, parameterExpression(row.parameters[variable.name], variable, row.id)])),
@@ -156,6 +172,7 @@ function sourceHTML(row, index, field = 'sources', col = 1) {
     return source ? `<a href="#row-${key}" data-row-link="${key}" title="${escape(rowLabel(source))}">${escape(source.id)}</a>` : '';
   }).join('');
   const label = field === 'requirements' ? 'affected requirements' : field === 'affected' ? 'affected elements' : 'sources';
+  if (field === 'affected' && isPowerRequirement(row)) return `<div class="row-sources ${links ? 'has-sources' : ''}" data-links="affected" data-field="affected" data-col="${col}" tabindex="0" aria-label="Affected elements, row ${index + 1}">${links}</div>`;
   return `<div class="row-sources ${links ? 'has-sources' : ''}" data-links="${field}">${links}<button data-field="${field}" data-col="${col}" class="source-edit" aria-label="Edit ${label}, row ${index + 1}" title="${field === 'requirements' ? 'Link EPS requirements' : field === 'affected' ? 'Assign to elements on the left' : 'Link one or more source rows'}"><span class="chevron"></span></button></div>`;
 }
 function renderHeader() {
@@ -170,6 +187,11 @@ function renderHeader() {
     + header('verified', 'Verified')
     + (active === 'external' ? '' : header('affected', tabInfo().affectedLabel)) + '</tr>';
 }
+function elementAction(row) {
+  if (active === 'external') return '';
+  if (catalog.find(type => type.model === row.definition)?.expandable) return `<button type="button" class="element-open" data-open-element="${row.key}" aria-label="Open ${escape(row.name)}" title="Open component and requirement tables">↗</button>`;
+  return /^SpaceSegment::CubeSat::[^:]+::[^:]+$/.test(row.definition) ? `<button type="button" class="element-open" data-open-power="${row.key}" aria-label="Edit power for ${escape(row.name)}" title="Edit component power"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 3 5 5M3 17l4-1 10-10a2.1 2.1 0 0 0-3-3L4 13l-1 4Z"/></svg></button>` : '';
+}
 function rowHTML(row, table, index) {
   const attrs = (field, col) => `data-field="${field}" data-col="${col}" aria-label="${table === 'components' ? 'COTS component' : table === 'stakeholders' ? active === 'external' ? 'Stakeholder' : 'Element' : 'Statement'} ${field}, row ${index + 1}"`;
   let cells = `<td class="row-actions"><button type="button" class="row-delete" data-delete-row="${row.key}" aria-label="Delete row ${escape(row.id || index + 1)}" title="Delete this row" ${used(row, table) ? '' : 'disabled'}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12M8 3h4M6 5l1 12h6l1-12M9 8v6M11 8v6"/></svg></button></td>`;
@@ -179,7 +201,8 @@ function rowHTML(row, table, index) {
     cells += `<td>${sourceHTML(row, index, 'requirements', 2)}</td>`;
     cells += `<td class="checkbox-cell component-summary" tabindex="0" ${attrs('verified', 3)}><input class="verification-result" type="checkbox" disabled tabindex="-1" aria-readonly="true" aria-label="All affected requirements verified, row ${index + 1}"></td>`;
   } else if (table === 'stakeholders') {
-    cells += `<td><input ${attrs('name', 1)} value="${escape(row.name)}" title="${escape(row.name)}" autocomplete="off"></td>`;
+    const action = elementAction(row);
+    cells += `<td class="${action ? 'element-name-cell' : ''}"><input ${attrs('name', 1)} value="${escape(row.name)}" title="${escape(row.name)}" autocomplete="off">${action}</td>`;
     if (active === 'external') cells += `<td><select ${attrs('type', 2)}><option value=""> </option>${stakeholderTypes.map(type => `<option ${row.type === type.name ? 'selected' : ''}>${type.name}</option>`).join('')}</select></td>`;
     else {
       const options = allowedDefinitions(workspace, active, catalog), type = catalog.find(type => type.model === row.definition);
@@ -281,7 +304,7 @@ function scheduleEvaluation() {
       }
       worker.onerror = () => fail('Could not evaluate the expression.');
       workerTimer = setTimeout(() => fail('Expression evaluation timed out.'), 1500);
-      worker.postMessage({ token, workspace: { variables: workspace.variables, statements } });
+      worker.postMessage({ token, workspace: { variables: workspace.variables, statements, elements: workspace.elements, power: workspace.power } });
     } catch { fail('Expression evaluation is unavailable in this browser.'); }
   }, 100);
 }
@@ -324,6 +347,7 @@ function setSessionBusy(busy) {
   main.inert = !loaded || busy;
   document.querySelector('#tabs').inert = busy;
   document.querySelector('#requirement-editor').inert = busy;
+  document.querySelector('#power-editor').inert = busy;
   sessionEditor.inert = busy;
   sessionSelect.disabled = busy || !loaded;
   document.querySelectorAll('#session-new, #session-copy').forEach(button => { button.disabled = busy || !loaded; });
@@ -339,7 +363,7 @@ function sessionLocation(history = 'replace') {
 function installWorkspace(data, id, tab, history = 'replace') {
   const nextCatalog = data.catalog ?? domainTypes, nextProducts = data.products ?? [];
   const candidate = validateWorkspace(data.workspace, nextCatalog, nextProducts);
-  requirementEditor.close(); closeEditor(); closeMenus();
+  requirementEditor.close(); powerEditor.reset(); closeEditor(); closeMenus();
   clearTimeout(saveTimer); clearTimeout(evaluationTimer); clearTimeout(workerTimer);
   generation++; worker?.terminate(); worker = null; results = new Map();
   for (const state of [selected, sorts]) for (const key of Object.keys(state)) delete state[key];
@@ -370,7 +394,7 @@ async function load() {
 }
 async function switchSession(id, history = true) {
   if (sessionBusy || !loaded || id === sessionId) { renderSessions(); if (loaded) sessionLocation(); return; }
-  if (requirementEditor.isDirty() && !window.confirm('Discard the unsaved requirement edits and switch sessions?')) {
+  if ((requirementEditor.isDirty() || powerEditor.isDirty()) && !window.confirm('Discard the unsaved editor changes and switch sessions?')) {
     renderSessions(); sessionLocation(); return;
   }
   setSessionBusy(true); clearTimeout(saveTimer);
@@ -411,13 +435,13 @@ async function createSession(event) {
   event.preventDefault();
   if (!loaded || sessionBusy) return;
   const copy = sessionMode === 'copy', tab = active;
-  if (!copy && requirementEditor.isDirty() && !window.confirm('Discard the unsaved requirement edits and create a new session?')) return;
+  if (!copy && (requirementEditor.isDirty() || powerEditor.isDirty()) && !window.confirm('Discard the unsaved editor changes and create a new session?')) return;
   setSessionBusy(true); clearTimeout(saveTimer);
   try {
     if (copy) { if (saveTask) await saveTask; }
     else if (!await save()) return;
     const data = { name: sessionNameInput.value, template: copy ? 'copy' : sessionTemplate.value,
-      ...(copy ? { workspace: requirementEditor.snapshot() } : {}) };
+      ...(copy ? { workspace: snapshot(powerEditor.snapshot(requirementEditor.snapshot())) } : {}) };
     const response = await fetch('/api/sessions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error);
@@ -481,11 +505,14 @@ function changed(row, table, field) {
       const select = tr.querySelector('[data-field="definition"]');
       select.value = row.definition; select.title = row.definition; select.dataset.category = catalog.find(type => type.model === row.definition)?.category ?? '';
       if (field !== 'name') tr.querySelector('[data-field="name"]').value = row.name;
-      renderTabs();
+      const cell = tr.querySelector('[data-field="name"]').closest('td'), action = elementAction(row);
+      cell.querySelector('.element-open')?.remove(); cell.classList.toggle('element-name-cell', Boolean(action));
+      cell.insertAdjacentHTML('beforeend', action);
+      renderTabs(); render('statements');
     }
   } else if (table === 'statements') updatePreview(row);
   else tr.querySelector('[data-field="product"]').title = rowLabel(row);
-  addTrailingRows(table); updateExport(); scheduleSave(); scheduleEvaluation();
+  addTrailingRows(table); powerEditor.render(); requirementEditor.refresh(); updateExport(); scheduleSave(); scheduleEvaluation();
 }
 main.addEventListener('focusin', event => { const ctx = context(event.target); if (ctx) selected[selectionKey(ctx.table)] = ctx.row.key; });
 main.addEventListener('input', event => {
@@ -501,7 +528,8 @@ main.addEventListener('input', event => {
     else {
       if (field === 'definition' && row.definition !== event.target.value && (workspace.elements.some(child => child.owner === row.key && used(child, 'stakeholders'))
           || workspace.statements.some(statement => statement.context === row.key && used(statement, 'statements'))
-          || workspace.components.some(component => component.owner === row.key && used(component, 'components')))) {
+          || workspace.components.some(component => component.owner === row.key && used(component, 'components'))
+          || workspace.power.loads.some(load => load.element === row.key))) {
         event.target.value = row.definition; throw new Error('This element has child rows. Remove those rows before changing its type.');
       }
       row[field] = field === 'id' ? event.target.value.toUpperCase() : event.target.value;
@@ -525,6 +553,7 @@ main.addEventListener('keydown', event => {
   const field = event.target.dataset.field;
   if (table === 'statements' && ((field === 'verified' && event.key === 'F2') || (field === 'text' && ['F2', 'Enter', ' '].includes(event.key)))) {
     event.preventDefault(); closeEditor(); closeMenus();
+    if (!powerEditor.closeWithConfirmation()) return;
     requirementEditor.open(row.key, tr.querySelector(field === 'verified' ? '.verification-edit' : '.statement-cell .requirement-edit')); return;
   }
   if (event.target.dataset.col === undefined) return;
@@ -570,10 +599,12 @@ function renderSourceChoices() {
   const labels = new Map(tabsFor(workspace, catalog).map(tab => [tab.key, tab.label]));
   const candidates = editor.field === 'requirements' ? componentRequirements(state, row)
     : editor.field === 'affected' ? assignableElements(state, row) : availableSources(state, row.key);
+  const requiredSource = editor.field === 'sources' && isPowerRequirement(row) ? parentPowerLimit(state, row)?.key : null;
   const choices = candidates.filter(item => `${item.id} ${rowLabel(item)} ${labels.get(contextForRow(item))}`.toLowerCase().includes(query));
-  document.querySelector('#source-choices').innerHTML = choices.length ? choices.map(item => `<label class="source-choice"><input type="checkbox" data-source-key="${item.key}" ${row[editor.field].includes(item.key) ? 'checked' : ''}><span><strong>${escape(item.id)}</strong><span>${escape(labels.get(contextForRow(item)))} · ${escape(rowLabel(item)) || '(empty row)'}</span></span></label>`).join('') : '<p>No matching rows.</p>';
+  document.querySelector('#source-choices').innerHTML = choices.length ? choices.map(item => `<label class="source-choice"><input type="checkbox" data-source-key="${item.key}" ${row[editor.field].includes(item.key) ? 'checked' : ''} ${item.key === requiredSource ? 'disabled' : ''}><span><strong>${escape(item.id)}</strong><span>${escape(labels.get(contextForRow(item)))} · ${escape(rowLabel(item)) || '(empty row)'}</span></span></label>`).join('') : '<p>No matching rows.</p>';
 }
 function openSources(row, anchor, field = 'sources') {
+  if (field === 'affected' && isPowerRequirement(row)) return;
   document.querySelector('#source-search').value = '';
   const label = field === 'requirements' ? 'Link affected EPS requirements' : field === 'affected' ? 'Assign to elements on the left' : 'Link source rows';
   sourceEditor.querySelector('strong').textContent = label; sourceEditor.setAttribute('aria-label', label);
@@ -602,17 +633,24 @@ function deleteRow(table, key) {
   if (!viewRows(table).some(row => row.key === key)) return;
   if (workspace.statements.some(row => row.sources.includes(key) || row.affected.includes(key)) || workspace.components.some(row => row.requirements.includes(key))) { showStatus('This row is linked. Remove its source and assignment links before deleting it.', true); return; }
   if (workspace.elements.some(row => row.owner === key && used(row, 'stakeholders')) || workspace.statements.some(row => row.context === key && used(row, 'statements')) || workspace.components.some(row => row.owner === key && used(row, 'components'))) { showStatus('This element has child rows. Delete those rows before deleting the element.', true); return; }
+  if (workspace.power.links.some(link => link.eps === key || link.roots.includes(key)) || workspace.power.loads.some(load => load.host === key)) { showStatus('Disconnect the power budget or execution host reference before deleting this row.', true); return; }
+  if (workspace.power.links.some(link => workspace.statements.some(row => row.key === key && row.context === link.eps && row.definition === 'FrameworkRequirements::LoadEnergy'))) { showStatus('Disconnect the EPS budget before deleting its LoadEnergy requirement.', true); return; }
   const rows = viewRows(table), collection = dataRows(table), index = rows.findIndex(row => row.key === key);
   if (index < 0) return;
+  workspace.power.loads = workspace.power.loads.filter(load => load.element !== key);
   collection.splice(collection.indexOf(rows[index]), 1); selected[selectionKey(table)] = null;
-  renderTabs(); render(table); updateSources(); focusCell(table, Math.min(index, viewRows(table).length - 1), 0); scheduleSave(); scheduleEvaluation();
+  renderTabs(); render(table); powerEditor.render(); requirementEditor.refresh(); updateSources(); focusCell(table, Math.min(index, viewRows(table).length - 1), 0); scheduleSave(); scheduleEvaluation();
 }
 main.addEventListener('click', event => {
   const exportButton = event.target.closest('.export-sysml, .export-kicad, .export-fprime');
   if (exportButton) { closeMenus(); closeEditor(); exportArtifact(exportButton.matches('.export-sysml') ? 'sysml' : exportButton.matches('.export-kicad') ? 'kicad' : 'fprime'); return; }
+  const openElement = event.target.closest('[data-open-element]');
+  if (openElement) { navigate(openElement.dataset.openElement); return; }
+  const openPower = event.target.closest('[data-open-power]');
+  if (openPower) { powerEditor.open(openPower.dataset.openPower); return; }
   const ctx = context(event.target), link = event.target.closest('[data-row-link]');
   const requirement = event.target.closest('.requirement-edit');
-  if (requirement) { event.preventDefault(); closeMenus(); closeEditor(); requirementEditor.open(ctx.row.key, requirement); return; }
+  if (requirement) { event.preventDefault(); if (!powerEditor.closeWithConfirmation()) return; closeMenus(); closeEditor(); requirementEditor.open(ctx.row.key, requirement); return; }
   const remove = event.target.closest('[data-delete-row]');
   if (remove) {
     event.preventDefault();
@@ -666,11 +704,12 @@ document.addEventListener('keydown', event => {
   if (event.key === 'Escape') {
     const transient = editor || document.querySelector('.table-menu:not([hidden])');
     closeMenus(); closeEditor(true);
-    if (!transient) requirementEditor.close();
+    if (!transient) { requirementEditor.close(); powerEditor.close(); }
   }
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
     event.preventDefault();
     if (editor?.type === 'session') document.querySelector('#session-form').requestSubmit();
+    else if (powerEditor.isOpen()) powerEditor.save();
     else if (requirementEditor.isOpen()) requirementEditor.save();
     else save();
   }
@@ -698,7 +737,7 @@ main.addEventListener('paste', event => {
         else if (field === 'definition') {
           const matches = allowedDefinitions(candidate, active, catalog).filter(type => [type.model, type.name, type.category].includes(value.trim()));
           if (matches.length !== 1) throw new Error('The element type must match one definition in the generic mission model.');
-          if (target.definition && target.definition !== matches[0].model && (candidate.elements.some(child => child.owner === target.key && used(child, 'stakeholders')) || candidate.components.some(component => component.owner === target.key && used(component, 'components')) || candidate.statements.some(statement => statement.context === target.key && used(statement, 'statements')))) throw new Error('Remove child rows before changing their parent type.');
+          if (target.definition && target.definition !== matches[0].model && (candidate.elements.some(child => child.owner === target.key && used(child, 'stakeholders')) || candidate.components.some(component => component.owner === target.key && used(component, 'components')) || candidate.statements.some(statement => statement.context === target.key && used(statement, 'statements')) || candidate.power.loads.some(load => load.element === target.key))) throw new Error('Remove child rows or power data before changing their parent type.');
           target.definition = matches[0].model;
         } else if (variable) target.parameters[field] = parameterExpression(value, variable, target.id);
         else target[field] = field === 'id' ? value.trim().toUpperCase() : value;
@@ -722,6 +761,6 @@ main.addEventListener('paste', event => {
     renderWorkbook(); focusCell(table, start, column); scheduleSave(); scheduleEvaluation();
   } catch (error) { showStatus(error.message, true); }
 });
-window.addEventListener('beforeunload', event => { if (dirty() || requirementEditor.isDirty()) { event.preventDefault(); event.returnValue = ''; } });
+window.addEventListener('beforeunload', event => { if (dirty() || requirementEditor.isDirty() || powerEditor.isDirty()) { event.preventDefault(); event.returnValue = ''; } });
 document.addEventListener('visibilitychange', () => { if (document.hidden && dirty()) save(); });
 load();

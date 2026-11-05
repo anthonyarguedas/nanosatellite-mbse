@@ -1,6 +1,7 @@
-import { parseExpression } from './verification.mjs';
+import { expressionNodes, modeReferences, parseExpression, rewriteModeReferences } from './verification.mjs';
+import { emptyPower, isPowerRequirement, powerRequirementTemplates, seedPowerLimits, validatePower } from './power.mjs';
 
-export const WORKSPACE_VERSION = 8;
+export const WORKSPACE_VERSION = 11;
 export const stakeholderTypes = [
   { name: 'Regulatory Agency', model: 'External::RegulatoryAgencyStakeholders::RegulatoryAgencyStakeholder' },
   { name: 'Mission Stakeholder', model: 'External::MissionStakeholders::MissionStakeholder' },
@@ -16,7 +17,7 @@ export const domainTypes = [
 export const statementKinds = ['Requirement', 'Need', 'Objective', 'Concern', 'Constraint'];
 export const defaultVariables = () => ['x', 'y', 'z', 'a'].map(name => ({ name, type: 'float' }));
 const prefixes = { Requirement: 'REQ', Need: 'NED', Objective: 'OBJ', Concern: 'CON', Constraint: 'CST', Component: 'CMP' };
-const reserved = new Set('pi sqrt arccos floor abs min max true false and or xor implies not if then else null constructor prototype __proto__ id key name type text kind verified sources source condition parameters formulas origin rationale sourceReference acceptance externalId displayName statementKind statementText manualVerification verificationExpression verificationCondition tableName subject stakeholder context owner definition affected affectedElements product requirements components'.split(' '));
+const reserved = new Set('mode pi sqrt arccos floor abs min max true false and or xor implies not if then else null constructor prototype __proto__ id key name type text kind verified sources source condition parameters formulas origin rationale sourceReference acceptance externalId displayName statementKind statementText manualVerification verificationExpression verificationCondition tableName subject stakeholder context owner definition affected affectedElements product requirements components'.split(' '));
 export const allRows = workspace => [...workspace.stakeholders, ...(workspace.elements ?? []), ...workspace.statements, ...(workspace.components ?? [])];
 
 export function nextId(workspace, kind = 'Stakeholder', hint = '') {
@@ -60,7 +61,11 @@ export function addElementChildren(workspace, parent, catalog = domainTypes, see
     const descendants = new Set([parent.key]);
     for (const row of workspace.elements) if (descendants.has(row.owner)) descendants.add(row.key);
     seedRequirements(workspace, catalog, workspace.elements.filter(row => descendants.has(row.key)));
+    addPowerLimits(workspace, { scopes: [...descendants] });
   }
+}
+export function addPowerLimits(workspace, options = {}) {
+  return seedPowerLimits(workspace, options, (hint, prefix) => ({ key: elementKey(workspace, hint), id: nextId(workspace, 'Requirement', prefix) }));
 }
 function seedElements(workspace, catalog) {
   for (const type of catalog.filter(type => !type.parent)) {
@@ -123,7 +128,7 @@ export function seedRequirements(workspace, catalog, owners = workspace.elements
 }
 
 export function blankWorkspace() {
-  return { version: WORKSPACE_VERSION, variables: defaultVariables(), stakeholders: [], elements: [], statements: [], components: [] };
+  return { version: WORKSPACE_VERSION, variables: defaultVariables(), stakeholders: [], elements: [], statements: [], components: [], power: emptyPower() };
 }
 export function emptyWorkspace(catalog = domainTypes) {
   return seedRequirements(seedElements(blankWorkspace(), catalog), catalog);
@@ -160,7 +165,7 @@ export function declareRequirementVariables(workspace, row) {
 export function requirementParameterNames(workspace, row, catalog = domainTypes) {
   const marked = requirementMarkers(row.text).names;
   const retained = new Set(Object.entries(row.parameters).filter(([, value]) => typeof value === 'string' && value.trim()).map(([name]) => name));
-  const template = catalog.flatMap(type => type.requirements ?? []).find(template => template.model === row.definition);
+  const template = [...catalog.flatMap(type => type.requirements ?? []), ...powerRequirementTemplates].find(template => template.model === row.definition);
   Object.keys(template?.parameters ?? {}).forEach(name => retained.add(name));
   // Keep old placeholders and existing equation inputs accessible without
   // exposing every shared variable in the workbook.
@@ -168,14 +173,7 @@ export function requirementParameterNames(workspace, row, catalog = domainTypes)
   for (const expression of [row.condition, ...Object.values(row.parameters)]) {
     if (typeof expression !== 'string' || !expression.trim()) continue;
     try {
-      const stack = [parseExpression(expression)];
-      while (stack.length) {
-        const node = stack.pop();
-        if (node.kind === 'variable') retained.add(node.name);
-        else if (node.kind === 'binary') stack.push(node.left, node.right);
-        else if (node.kind === 'unary') stack.push(node.operand);
-        else if (node.kind === 'call') stack.push(...node.args);
-      }
+      for (const node of expressionNodes(parseExpression(expression))) if (node.kind === 'variable') retained.add(node.name);
     } catch { /* Invalid drafts keep their populated cells visible. */ }
   }
   return [...marked, ...workspace.variables.map(variable => variable.name).filter(name => retained.has(name) && !marked.includes(name))];
@@ -212,6 +210,12 @@ export function mergeRequirementDraft(workspace, original, edited, key) {
     merge(before.parameters[variable.name] ?? null, after.parameters[variable.name] ?? null, target.parameters[variable.name] ?? null,
       value => { target.parameters[variable.name] = value; });
   }
+  const connection = state => state.power?.links.find(link => link.eps === after.context);
+  const previous = connection(original), updated = connection(edited), current = connection(candidate);
+  merge(JSON.stringify(previous), JSON.stringify(updated), JSON.stringify(current), () => {
+    candidate.power.links = candidate.power.links.filter(link => link.eps !== after.context);
+    if (updated) candidate.power.links.push(structuredClone(updated));
+  });
   return candidate;
 }
 
@@ -243,9 +247,9 @@ export function tabsFor(workspace, catalog = domainTypes) {
     const type = catalog.find(type => type.model === element.definition), label = labelFor(element);
     const duplicate = elements.some(row => row.key !== element.key && labelFor(row) === label);
     tabs.push({ key: element.key, label: duplicate ? `${label} (${element.id})` : label,
-      leftTitle: `${label} ${type.role === 'eps' ? 'Components' : type.role === 'payload' ? 'Elements' : 'Subsystems'}`,
+      leftTitle: `${label} ${['eps', 'subsystem'].includes(type.role) ? 'Components' : type.role === 'payload' ? 'Elements' : 'Subsystems'}`,
       requirementsTitle: `${label} ${type.role === 'eps' ? 'Parametric Requirements' : 'Requirements'}`,
-      affectedLabel: type.role === 'eps' ? 'Affected components' : type.role === 'payload' ? 'Affected elements' : 'Affected subsystems', prefix: type.prefix });
+      affectedLabel: ['eps', 'subsystem'].includes(type.role) ? 'Affected components' : type.role === 'payload' ? 'Affected elements' : 'Affected subsystems', prefix: type.prefix });
   }
   return tabs;
 }
@@ -258,15 +262,80 @@ export function allowedDefinitions(workspace, owner, catalog = domainTypes) {
 export const contextForRow = row => row.context ?? row.owner ?? 'external';
 
 export function rewriteRowReferences(workspace, renames) {
-  const rewrite = expression => expression.replace(/\b[A-Z]{3}\d{3}(?=\s*\.)/g, id => renames.get(id) ?? id);
+  const rewrite = expression => expression.replace(/"(?:[^"\\]|\\.)*"|\b[A-Z]{3}\d{3}(?=\s*\.)/g, id => renames.get(id) ?? id);
   for (const row of workspace.statements) {
     row.condition = rewrite(row.condition);
     row.parameters = Object.fromEntries(Object.entries(row.parameters).map(([name, expression]) => [name,
       typeof expression === 'string' ? rewrite(expression) : expression]));
   }
+  for (const link of workspace.power?.links ?? []) {
+    for (const [name, expression] of Object.entries(link.previous)) if (typeof expression === 'string') link.previous[name] = rewrite(expression);
+  }
 }
 
-// Upgrade existing files without changing stable row keys, values or links.
+function mapWorkspaceExpressions(workspace, transform) {
+  for (const row of workspace.statements) {
+    row.condition = transform(row.condition);
+    for (const [name, value] of Object.entries(row.parameters)) if (typeof value === 'string') row.parameters[name] = transform(value);
+  }
+  for (const link of workspace.power.links) {
+    for (const [name, value] of Object.entries(link.previous)) if (typeof value === 'string') link.previous[name] = transform(value);
+  }
+}
+export function renamePowerMode(workspace, key, name) {
+  const mode = workspace.power.modes.find(mode => mode.key === key);
+  if (!mode) throw new Error('Choose an existing spacecraft mode.');
+  mapWorkspaceExpressions(workspace, expression => rewriteModeReferences(expression, mode.name, name));
+  mode.name = name;
+}
+export function removePowerMode(workspace, key) {
+  const mode = workspace.power.modes.find(mode => mode.key === key);
+  if (!mode) return;
+  mapWorkspaceExpressions(workspace, expression => {
+    let references = [];
+    try { references = modeReferences(expression); } catch { /* Invalid drafts remain editable. */ }
+    if (references.some(reference => reference.value === mode.name)) throw new Error('Remove expression references to this mode before deleting it.');
+    return expression;
+  });
+  workspace.power.modes = workspace.power.modes.filter(mode => mode.key !== key);
+  for (const load of workspace.power.loads) delete load.assignments[key];
+}
+
+function mergeModePowerLimits(workspace) {
+  const groups = new Map(), keys = new Map(), ids = new Map();
+  for (const row of workspace.statements.filter(isPowerRequirement)) {
+    const group = groups.get(row.powerScope) ?? [];
+    groups.set(row.powerScope, [...group, row]);
+  }
+  for (const group of groups.values()) {
+    const first = group[0];
+    for (const row of group) { keys.set(row.key, first.key); ids.set(row.id, first.id); }
+    const combine = getter => {
+      const values = workspace.power.modes.map(mode => ({ mode, value: getter(group.find(row => row.powerMode === mode.key)) || null }));
+      if (!values.length) return getter(first) || null;
+      if (values.every(item => item.value === values[0].value)) return values[0].value;
+      return values.filter(item => item.value !== null).reduceRight((rest, { mode, value }) =>
+        `if mode == ${JSON.stringify(mode.name)} ? (${value}) else ${rest}`, 'null');
+    };
+    const parameters = Object.fromEntries(workspace.variables.map(variable => [variable.name, combine(row => row?.parameters[variable.name])]));
+    parameters.draw_power_W = 'PowerAllocation.draw_power_W';
+    if (first.definition === 'PowerBudgetModel::PowerLimit') parameters.allocated_power_W = 'PowerAllocation.allocated_power_W';
+    const condition = combine(row => row?.condition) ?? '';
+    const notes = group.filter(row => row !== first && (row.text !== first.text || row.rationale !== first.rationale || row.origin !== first.origin))
+      .map(row => `${workspace.power.modes.find(mode => mode.key === row.powerMode)?.name ?? row.powerMode} (${row.id}):\n${[row.text, row.rationale, row.origin].filter(Boolean).join('\n')}`);
+    first.sources = [...new Set(group.flatMap(row => row.sources))];
+    first.parameters = parameters; first.condition = condition;
+    if (notes.length) first.rationale = [first.rationale ?? '', ...notes].filter(Boolean).join('\n\n');
+    delete first.powerMode;
+  }
+  workspace.statements = workspace.statements.filter(row => !keys.has(row.key) || keys.get(row.key) === row.key);
+  for (const row of workspace.statements) row.sources = [...new Set(row.sources.map(key => keys.get(key) ?? key))].filter(key => key !== row.key);
+  for (const row of workspace.components) row.requirements = [...new Set(row.requirements.map(key => keys.get(key) ?? key))];
+  rewriteRowReferences(workspace, ids);
+  return workspace;
+}
+
+// Upgrade existing files. Version 11 merges mode copies into one scoped requirement.
 export function migrateWorkspace(data, catalog = domainTypes) {
   if (data?.version === 1) {
     const upgraded = { version: 2, variables: defaultVariables(), stakeholders: [], statements: [] };
@@ -303,7 +372,7 @@ export function migrateWorkspace(data, catalog = domainTypes) {
   if (data?.version === 5) data = { ...data, version: 6, components: [] };
   if (data?.version === 6) data = seedRequirements(structuredClone({ ...data, version: 7 }), catalog);
   if (data?.version === 7) {
-    const upgraded = structuredClone({ ...data, version: WORKSPACE_VERSION });
+    const upgraded = structuredClone({ ...data, version: 8 });
     upgraded.statements = upgraded.statements.map(({ formulas, ...row }) => {
       const parameters = { ...row.parameters, ...formulas };
       for (const [name, value] of Object.entries(parameters)) {
@@ -314,7 +383,19 @@ export function migrateWorkspace(data, catalog = domainTypes) {
       }
       return { ...row, parameters };
     });
-    return upgraded;
+    data = upgraded;
+  }
+  if (data?.version === 8) {
+    const upgraded = structuredClone({ ...data, version: 9, power: emptyPower() });
+    for (const parent of [...upgraded.elements].filter(row => catalog.find(type => type.model === row.definition)?.role === 'subsystem')) {
+      addElementChildren(upgraded, parent, catalog, false);
+    }
+    data = upgraded;
+  }
+  if (data?.version === 9) data = addPowerLimits(structuredClone({ ...data, version: 10 }));
+  if (data?.version === 10) {
+    const upgraded = structuredClone({ ...data, version: WORKSPACE_VERSION });
+    data = upgraded.statements.some(row => isPowerRequirement(row) && row.powerMode !== undefined) ? mergeModePowerLimits(upgraded) : upgraded;
   }
   return data;
 }
@@ -390,18 +471,19 @@ export function validateWorkspace(workspace, catalog = domainTypes, products = n
     if (!allowedDefinitions(workspace, row.owner, catalog).some(type => type.model === row.definition)) fail(`${row.id}: choose a type from the generic mission model for this table.`);
   }
   const contexts = new Set(tabsFor(workspace, catalog).map(tab => tab.key));
-  const templates = new Map(catalog.flatMap(type => type.requirements ?? []).map(template => [template.model, template]));
+  const templates = new Map([...catalog.flatMap(type => type.requirements ?? []), ...powerRequirementTemplates].map(template => [template.model, template]));
   for (const row of workspace.statements) {
     if (!/^[A-Z]{3}\d{3}$/.test(row.id)) fail('Statement IDs must be three uppercase letters and three digits, such as REQ001.');
     if (!contexts.has(row.context)) fail(`${row.id}: the tab does not exist.`);
     if (!statementKinds.includes(row.kind)) fail(`${row.id}: choose a statement type.`);
     if (typeof row.text !== 'string' || row.text.length > 50000) fail(`${row.id}: invalid statement.`);
     if (row.definition && (!templates.has(row.definition) || row.kind !== 'Requirement')) fail(`${row.id}: choose a generic requirement definition.`);
-    if (row.definition) {
+    if (row.definition && !isPowerRequirement(row)) {
       const template = templates.get(row.definition);
       const owner = workspace.elements.find(element => element.key === row.context);
       if (template.context === 'mission' ? row.context !== 'mission' : catalog.find(type => type.model === owner?.definition)?.role !== 'eps') fail(`${row.id}: the generic requirement belongs to a different table.`);
     }
+    if (!isPowerRequirement(row) && (row.powerMode !== undefined || row.powerScope !== undefined)) fail(`${row.id}: mode and scope references belong to power limit requirements.`);
     if (row.origin !== undefined && (typeof row.origin !== 'string' || row.origin.length > 2000)) fail(`${row.id}: invalid requirement provenance.`);
     if (row.rationale !== undefined && (typeof row.rationale !== 'string' || row.rationale.length > 10000)) fail(`${row.id}: rationale must be text up to 10,000 characters.`);
     if (Object.hasOwn(row, 'formulas')) fail(`${row.id}: store every parameter expression in its cell. Separate formula maps are no longer supported.`);
@@ -445,6 +527,7 @@ export function validateWorkspace(workspace, catalog = domainTypes, products = n
       for (const source of statements.get(key).sources) stack.push([source, false]);
     }
   }
+  validatePower(workspace);
   return workspace;
 }
 

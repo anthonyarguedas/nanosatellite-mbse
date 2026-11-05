@@ -19,7 +19,16 @@ package EPSModel {
      * operating_temperature_basis retains ambient, case or junction scope.
      * Efficiency losses and already complete supply currents are counted once.
      */
-    part def HardwareComponent {
+    part def PowerConsumer {
+        attribute power_consumption_W : Real[0..1];
+        attribute power_consumption : ISQ::PowerValue[0..1] = power_consumption_W * 1[SI::W];
+        doc /* Active mode consumption for the installed usage. Per-unit demand
+         * remains in the load profiles. Mission usages bind this projection to
+         * their draw parameter, which includes installed quantity and accounting.
+         * An unbound projection retains unknown consumption.
+         */
+    }
+    part def HardwareComponent :> PowerConsumer {
         attribute interface_smbus : CatalogModel::BooleanFeature[0..*] :> feature_observations { :>> feature_name = "interface_smbus"; }
         attribute diameter : CatalogModel::ParameterRecord[0..*] :> parameter_observations { :>> parameter_name = "diameter"; :>> unit = CatalogModel::UnitCode::metre; }
         attribute solar_absorptance : CatalogModel::ParameterRecord[0..*] :> parameter_observations { :>> parameter_name = "solar_absorptance"; :>> unit = CatalogModel::UnitCode::dimensionless; }
@@ -1042,7 +1051,7 @@ package EPSModel {
         attribute bus_regulation : CatalogModel::FeatureRecord[0..*] :> feature_observations { :>> feature_name = "bus_regulation"; }
         attribute controller_programmable : CatalogModel::BooleanFeature[0..*] :> feature_observations { :>> feature_name = "controller_programmable"; }
     }
-    part def Subsystem {
+    part def Subsystem :> PowerConsumer {
         attribute subsystem_id : String[0..1];
         attribute aggregate_profiles : AggregateLoadProfile[0..*];
         attribute accounting_plan : AccountingPlan[0..1];
@@ -1052,7 +1061,7 @@ package EPSModel {
         attribute deployment_limits : DeploymentLimits[0..1];
         ref part deployment_check : DeploymentActuationCheck[0..1];
     }
-    part def Software {
+    part def Software :> PowerConsumer {
         attribute activity_profiles : SoftwareActivity[0..*];
         doc /* Software allocates execution to an existing physical processor.
          * Activity is counted through that processor's selected load profile.

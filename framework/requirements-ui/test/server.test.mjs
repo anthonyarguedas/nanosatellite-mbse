@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { createServer } from '../server.mjs';
-import { declareRequirementVariables, emptyWorkspace } from '../model.mjs';
+import { declareRequirementVariables, emptyWorkspace, WORKSPACE_VERSION } from '../model.mjs';
 import { createStore, readWorkspace } from '../sysml.mjs';
 
 async function start(t) {
@@ -156,7 +156,7 @@ test('opening an existing version 4 mission adds EPS components without writing 
   const original = `// <requirements-ui>\n/* requirements-ui:data\n${JSON.stringify(workspace)}\nrequirements-ui:end-data */\n// </requirements-ui>\n`;
   await writeFile(modelPath, original);
   const loaded = await get();
-  assert.equal(loaded.workspace.version, 8);
+  assert.equal(loaded.workspace.version, WORKSPACE_VERSION);
   assert.equal(loaded.workspace.elements.filter(row => row.owner === power.key).length, 6);
   assert.equal(await readFile(modelPath, 'utf8'), original);
   assert.equal((await put(loaded.workspace, loaded.revision)).status, 200);

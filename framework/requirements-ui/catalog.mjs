@@ -92,8 +92,19 @@ export function catalogFromSource(source, requirements = []) {
       model: definition.model, parent: domain.model, name: labels(definition.name),
       category: components ? 'Component' : domain.role === 'payload' ? 'Element' : 'Subsystem', expandable: false,
       id: abbreviations[definition.name] ?? definition.name.slice(0, 3).toUpperCase(),
-      ...(definition.model === 'SpaceSegment::CubeSat::PowerSubsystem'
-        ? { expandable: true, role: 'eps', prefix: 'EPS', tabLabel: 'EPS' } : {}),
+      ...(domain.role === 'bus' ? { expandable: true, role: definition.name === 'PowerSubsystem' ? 'eps' : 'subsystem',
+        prefix: abbreviations[definition.name] ?? 'SUB', tabLabel: ({
+          CommandAndDataHandlingSubsystem: 'CDH', CommunicationSubsystem: 'Communications',
+          AttitudeDeterminationAndControlSubsystem: 'ADCS', GuidanceNavigationAndControlSubsystem: 'GNC',
+          StructuresAndMechanismsSubsystem: 'Structures', ThermalSubsystem: 'Thermal', PropulsionSubsystem: 'Propulsion', PowerSubsystem: 'EPS',
+        })[definition.name] ?? labels(definition.name) } : {}),
+    });
+  }
+  // Every spacecraft subsystem uses its CSRM component definitions, just as EPS does.
+  for (const parent of catalog.filter(type => type.role === 'subsystem')) {
+    for (const definition of definitions.filter(definition => definition.parent === parent.model)) catalog.push({
+      model: definition.model, parent: parent.model, name: labels(definition.name), category: 'Component',
+      expandable: false, id: abbreviations[definition.name] ?? definition.name.slice(0, 3).toUpperCase(),
     });
   }
   for (const type of catalog) {

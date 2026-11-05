@@ -95,7 +95,9 @@
         </table>
       </div>
     </section>
+    <section id="power-workspace" class="sheet power-workspace" aria-label="Mission modes" hidden></section>
   </main>
+  <aside id="power-editor" aria-label="Component power editor" hidden></aside>
   <nav id="tabs" class="sheet-tabs" role="tablist" aria-label="Model tabs"></nav>
   <aside id="requirement-editor" aria-labelledby="requirement-editor-title" hidden>
     <form id="requirement-form">
@@ -106,11 +108,22 @@
         <textarea id="requirement-text" rows="5" maxlength="50000" aria-describedby="requirement-text-help" placeholder="The battery shall provide at least $$energy_J$$."></textarea>
         <p id="requirement-text-help">Write one verifiable statement. Enclose a variable name in <code>$$</code>, such as <code>$$energy_J$$</code>, to add its parameter row. Enter units in the Units column, using <code>^</code> for powers.</p>
         <h3>Parameters</h3>
+        <p>Choose a State to define an expression for each spacecraft mode from Mission. Choose All states in any split row to use the last edited expression for every state.</p>
+        <div id="requirement-mode-preview" hidden>
+          <label for="requirement-preview-mode">Preview mode</label>
+          <select id="requirement-preview-mode"><option value="">All modes</option></select>
+        </div>
+        <div id="requirement-load-source" hidden>
+          <label for="requirement-power-source">Load input source</label>
+          <select id="requirement-power-source"><option value="manual">Manual expressions</option><option value="components">Component modes</option></select>
+          <fieldset id="requirement-power-domains" hidden><legend>Load domains</legend><div id="requirement-power-roots"></div></fieldset>
+        </div>
         <p id="requirement-parameters-empty">Add <code>$$variable_name$$</code> to the text to add a parameter.</p>
         <div class="requirement-parameter-frame"><table aria-label="Requirement parameters"></table></div>
         <label for="requirement-condition">Verification condition</label>
         <input id="requirement-condition" maxlength="5000" spellcheck="false" autocomplete="off" aria-describedby="requirement-check" placeholder="energy_J >= REQ001.energy_J">
         <p id="requirement-check" role="status" aria-live="polite" aria-atomic="true" hidden></p>
+        <p id="requirement-mode-results" hidden></p>
         <label for="requirement-rationale">Rationale</label>
         <textarea id="requirement-rationale" rows="3" maxlength="10000" placeholder="Explain the requirement and cite its source."></textarea>
       </div>

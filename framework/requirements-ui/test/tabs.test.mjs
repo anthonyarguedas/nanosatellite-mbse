@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { catalogFromSource, indexDefinitions, loadCatalog } from '../catalog.mjs';
-import { addElementChildren, allowedDefinitions, assignableElements, availableSources, contextForRow, emptyWorkspace, migrateWorkspace, nextId, tabsFor, validateWorkspace } from '../model.mjs';
+import { addElementChildren, allowedDefinitions, assignableElements, availableSources, contextForRow, emptyWorkspace, migrateWorkspace, nextId, tabsFor, validateWorkspace, WORKSPACE_VERSION } from '../model.mjs';
 import { evaluateChecks } from '../verification.mjs';
 import { readWorkspace, renderManaged } from '../sysml.mjs';
 
@@ -65,13 +65,13 @@ test('new generic EPS component definitions are discovered without UI changes', 
   assert.doesNotThrow(() => validateWorkspace(workspace, extended));
 });
 
-test('default workbook has six tabs, four mission domains and no Orbit tab', () => {
+test('default workbook exposes all CSRM spacecraft subsystem tabs and no Orbit tab', () => {
   const workspace = emptyWorkspace(catalog);
-  assert.deepEqual(tabsFor(workspace, catalog).map(tab => tab.label), ['External', 'Mission', 'CubeSat Bus', 'EPS', 'Payload', 'Ground Station']);
+  assert.deepEqual(tabsFor(workspace, catalog).map(tab => tab.label), ['External', 'Mission', 'CubeSat Bus', 'CDH', 'Communications', 'ADCS', 'GNC', 'Structures', 'Thermal', 'Propulsion', 'EPS', 'Payload', 'Ground Station']);
   assert.deepEqual(workspace.elements.filter(row => row.owner === 'mission').map(row => row.name), ['Orbit', 'CubeSat Bus', 'Payload', 'Ground Station']);
-  assert.equal(workspace.elements.length, 28);
+  assert.equal(workspace.elements.length, 52);
   assert.equal(tabsFor(workspace, catalog).some(tab => tab.key === 'domain-orbit'), false);
-  assert.equal(new Set(workspace.elements.map(row => row.id)).size, 28);
+  assert.equal(new Set(workspace.elements.map(row => row.id)).size, 52);
   assert.doesNotThrow(() => validateWorkspace(workspace, catalog));
 });
 
@@ -164,7 +164,7 @@ test('another domain instance reuses the same table and subsystem catalog', () =
   assert.equal(workspace.elements.filter(row => row.owner === duplicate.key).length, 8);
   const power = workspace.elements.find(row => row.owner === duplicate.key && row.definition === powerModel);
   assert.equal(workspace.elements.filter(row => row.owner === power.key).length, 6);
-  assert.equal(tabsFor(workspace, catalog).length, 8);
+  assert.equal(tabsFor(workspace, catalog).length, 22);
   assert.doesNotThrow(() => validateWorkspace(workspace, catalog));
 });
 
@@ -192,7 +192,7 @@ test('version 4 adds EPS components once while preserving existing rows, values 
   old.statements[2].condition = 'x <= 20';
   old.stakeholders.push({ key: 'battery-partner', id: 'BAT', name: 'Battery partner', type: 'Partner' });
   const original = structuredClone(old), upgraded = migrateWorkspace(old, catalog);
-  assert.equal(upgraded.version, 8);
+  assert.equal(upgraded.version, WORKSPACE_VERSION);
   assert.equal(upgraded.elements.filter(row => row.owner === power.key).length, 6);
   assert.deepEqual(upgraded.elements.filter(row => original.elements.some(element => element.key === row.key)), original.elements);
   assert.deepEqual(upgraded.statements, original.statements);

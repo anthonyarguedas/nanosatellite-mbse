@@ -189,10 +189,11 @@ test('requirement pane browser workflow', { skip: !process.env.PLAYWRIGHT_MODULE
   assert.equal(await dialog.locator('[data-parameter-unit="gravitationalParameter_km3_s2"]').inputValue(), 'km^3/s^2');
   assert.equal(await dialog.locator('[data-parameter-unit="altitude_km"]').inputValue(), 'km');
   assert.equal(await dialog.locator('[data-parameter]').count(), 4);
-  assert.deepEqual(await dialog.locator('thead th').allTextContents(), ['Name', 'Expression', 'Units', 'Evaluated value']);
+  assert.deepEqual(await dialog.locator('thead th').allTextContents(), ['Name', 'State', 'Expression', 'Units', 'Evaluated value']);
   assert.equal(await dialog.locator('[data-parameter-unit]').count(), 4);
   assert.equal(await dialog.locator('tbody tr').count(), 4);
-  assert.equal(await dialog.locator('.requirement-parameter-frame select').count(), 0);
+  assert.equal(await dialog.locator('.requirement-parameter-frame select').count(), 4);
+  assert.equal(await dialog.locator('.requirement-parameter-frame select:enabled').count(), 0);
   await dialog.locator('#requirement-text').fill('The orbit shall have altitude $$altitude_km$$ km and $$new_quantity$$.');
   await dialog.locator('[data-parameter-unit="new_quantity"]').pressSequentially('m^2/s^2');
   assert.equal(await dialog.locator('[data-parameter-unit="new_quantity"]').inputValue(), 'm^2/s^2');
@@ -332,7 +333,7 @@ test('requirement pane browser workflow', { skip: !process.env.PLAYWRIGHT_MODULE
   assert.equal(await dialog.locator('#requirement-rationale').inputValue(), rationale);
   assert.equal(await dialog.locator('[data-parameter-unit="energy_J"]').inputValue(), 'J');
   assert.equal(await dialog.locator('[data-parameter-unit="margin"]').inputValue(), '%');
-  assert.equal(await dialog.locator('.requirement-parameter-frame select').count(), 0);
+  assert.equal(await dialog.locator('.requirement-parameter-frame select:enabled').count(), 0);
   await dialog.locator('#requirement-condition').fill('false');
   await dialog.getByRole('button', { name: 'Save requirement', exact: true }).click();
   await dialog.waitFor({ state: 'hidden' });

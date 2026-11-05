@@ -3,6 +3,8 @@ import { mkdir, readFile, rename, stat, unlink, writeFile } from 'node:fs/promis
 import { basename, dirname } from 'node:path';
 import { domainTypes, emptyWorkspace, migrateWorkspace, stakeholderTypes, tabsFor, validateWorkspace } from './model.mjs';
 import { createEvaluator, expressionType, parseExpression, printExpression, validateReferences } from './verification.mjs';
+import { isPowerRequirement, powerLimitFor, powerRequirementTemplates, spacecraftComponents } from './power.mjs';
+import { powerBudgetName, renderPowerBudgets, renderPowerDraws, renderPowerLimit } from './power-sysml.mjs';
 
 const begin = '// <requirements-ui>';
 const end = '// </requirements-ui>';
@@ -62,8 +64,8 @@ export function renderManaged(workspace, { packageName = 'MissionRequirements', 
     return name;
   };
   workspace.elements.forEach(elementPath);
-  const templates = new Map(catalog.flatMap(type => type.requirements ?? []).map(template => [template.model, template]));
-  const evaluator = createEvaluator(workspace);
+  const templates = new Map([...catalog.flatMap(type => type.requirements ?? []), ...powerRequirementTemplates].map(template => [template.model, template]));
+  const evaluators = (workspace.power.modes.length ? workspace.power.modes : [{ key: null }]).map(mode => createEvaluator(workspace, { mode: mode.key }));
   const checkResolved = evaluate => {
     try { evaluate(); }
     catch (error) { if (!error.pending) throw error; }
@@ -78,6 +80,7 @@ export function renderManaged(workspace, { packageName = 'MissionRequirements', 
       `        attribute externalId : String = ${literal(row.id)};`,
       `        attribute displayName : String = ${literal(row.name)};`, '    }');
   }
+  const powerElements = new Set(spacecraftComponents(workspace).map(row => row.key));
   const emitElement = (row, indent) => {
     lines.push(`${indent}part ${elementNames.get(row.key)} : ${row.definition} {`,
       `${indent}    attribute externalId : String = ${literal(row.id)};`,
@@ -88,6 +91,9 @@ export function renderManaged(workspace, { packageName = 'MissionRequirements', 
         lines.push(`${indent}    attribute :>> ${name} = ${names.get(period.key)}.'${name}';`);
       }
     }
+    const consumption = powerLimitFor(workspace, row.key);
+    if (consumption) lines.push(`${indent}    attribute :>> power_consumption_W = ${names.get(consumption.key)}.'draw_power_W';`);
+    if (powerElements.has(row.key)) lines.push(...renderPowerDraws(workspace, row, partExpression, indent + '    '));
     for (const child of workspace.elements.filter(child => child.owner === row.key)) emitElement(child, indent + '    ');
     for (const component of workspace.components.filter(component => component.owner === row.key)) {
       lines.push(`${indent}    part ${identifier('components', component.key)} : ${productsById.get(component.product)?.model ?? 'EPSModel::HardwareComponent'} {`,
@@ -98,7 +104,18 @@ export function renderManaged(workspace, { packageName = 'MissionRequirements', 
     lines.push(`${indent}}`);
   };
   for (const row of workspace.elements.filter(row => row.owner === 'mission')) emitElement(row, '    ');
+  lines.push(...renderPowerBudgets(workspace, partExpression));
   for (const row of workspace.statements) {
+    const allocation = isPowerRequirement(row) ? renderPowerLimit(workspace, row, partExpression, key => names.get(key), `${packageName}::`) : null;
+    const reference = (id, name) => {
+      if (id === 'PowerAllocation') {
+        if (!allocation) throw new Error('PowerAllocation belongs to a power limit requirement.');
+        return allocation[name];
+      }
+      if (id !== 'LoadBudget') return `${namesById.get(id)}.'${name}'`;
+      if (!workspace.power.links.some(link => link.eps === row.context)) throw new Error('Connect this EPS to a load budget before using LoadBudget inputs.');
+      return `${powerBudgetName(row.context)}.'${name}'`;
+    };
     const keyword = row.kind === 'Requirement' ? 'requirement' : 'attribute';
     const conditional = Boolean(row.condition.trim());
     lines.push(`    ${keyword} ${names.get(row.key)}${row.definition ? ` : ${row.definition}` : ''} {`,
@@ -107,6 +124,7 @@ export function renderManaged(workspace, { packageName = 'MissionRequirements', 
       `        attribute statementKind : String = ${literal(row.kind)};`,
       `        attribute statementText : String = ${literal(row.text)};`,
       `        attribute verificationExpression : String[0..1]${conditional ? ` = ${literal(row.condition)}` : ''};`);
+    if (allocation) lines.push(...allocation.lines);
     if (row.origin) lines.push(`        attribute sourceReference : String = ${literal(row.origin)};`);
     if (row.rationale) lines.push(`        attribute rationale : String = ${literal(row.rationale)};`);
     for (const variable of workspace.variables) {
@@ -118,9 +136,9 @@ export function renderManaged(workspace, { packageName = 'MissionRequirements', 
       if (populated) {
         try {
           const ast = validateReferences(parseExpression(source), workspace);
-          if (expressionType(ast) !== 'number') throw new Error('A parameter expression must produce a number.');
-          checkResolved(() => evaluator.parameter(row, variable.name));
-          const expression = printExpression(ast, (id, name) => `${namesById.get(id)}.'${name}'`);
+          if (!['number', 'null'].includes(expressionType(ast))) throw new Error('A parameter expression must produce a number.');
+          for (const evaluator of evaluators) checkResolved(() => evaluator.parameter(row, variable.name));
+          const expression = printExpression(ast, reference, `${packageName}::spacecraft_mode.display_name`);
           if (variable.type === 'integer' && ast.kind !== 'literal') {
             // Integer cells accept equations involving Real values. The native
             // binding retains an integrality predicate, so conversion cannot
@@ -142,8 +160,8 @@ export function renderManaged(workspace, { packageName = 'MissionRequirements', 
       try {
         const ast = validateReferences(parseExpression(row.condition), workspace);
         if (expressionType(ast) !== 'boolean') throw new Error('The condition must produce a Boolean.');
-        if (strict) checkResolved(() => evaluator.expression(ast, row));
-        const expression = printExpression(ast, (id, name) => `${namesById.get(id)}.'${name}'`);
+        if (strict) for (const evaluator of evaluators) checkResolved(() => evaluator.expression(ast, row));
+        const expression = printExpression(ast, reference, `${packageName}::spacecraft_mode.display_name`);
         lines.push(`        ${row.kind === 'Requirement' ? 'require' : 'assert'} constraint verificationCondition { ${expression} }`);
       } catch (error) {
         if (strict) throw new Error(`${row.id}: ${error.message}`);
@@ -154,6 +172,10 @@ export function renderManaged(workspace, { packageName = 'MissionRequirements', 
   }
   for (const row of workspace.statements) {
     for (const source of row.sources) lines.push(`    dependency from ${names.get(row.key)} to ${names.get(source)};`);
+  }
+  for (const link of workspace.power.links) {
+    const row = workspace.statements.find(row => row.context === link.eps && row.definition === 'FrameworkRequirements::LoadEnergy');
+    lines.push(`    dependency from ${names.get(row.key)} to ${powerBudgetName(link.eps)};`);
   }
   for (const row of workspace.components) {
     for (const requirement of row.requirements) lines.push(`    dependency from ${names.get(row.key)} to ${names.get(requirement)};`);
