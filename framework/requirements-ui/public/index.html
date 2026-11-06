@@ -106,31 +106,31 @@
         <label id="requirement-kind-label">Statement type<select id="requirement-kind"><option>Requirement</option><option>Need</option><option>Objective</option><option>Concern</option><option>Constraint</option></select></label>
         <label for="requirement-text">Requirement text</label>
         <textarea id="requirement-text" rows="5" maxlength="50000" aria-describedby="requirement-text-help" placeholder="The battery shall provide at least $$energy_J$$."></textarea>
-        <p id="requirement-text-help">Write one verifiable statement. Enclose a variable name in <code>$$</code>, such as <code>$$energy_J$$</code>, to add its parameter row. Enter units in the Units column, using <code>^</code> for powers.</p>
-        <h3>Parameters</h3>
-        <p>Expressions use Python, such as <code>18 if mode == "Downlink" else 3</code>. Choose a State to define one expression per mode. All states merges the rows using the last edited expression.</p>
-        <div id="requirement-mode-preview" hidden>
-          <label for="requirement-preview-mode">Preview mode</label>
-          <select id="requirement-preview-mode"><option value="">All modes</option></select>
-        </div>
+        <p id="requirement-text-help">Enclose a variable name in <code>$$</code>, such as <code>$$var$$</code>, to add its parameter row. Enter units in the Units column, using <code>**</code> for powers.</p>
+        <p>Expressions use Python. Choose a State to define one expression per mode. All states merges the rows using the last edited expression.</p>
         <div id="requirement-load-source" hidden>
           <label for="requirement-power-source">Load input source</label>
           <select id="requirement-power-source"><option value="manual">Manual expressions</option><option value="components">Component modes</option></select>
           <fieldset id="requirement-power-domains" hidden><legend>Load domains</legend><div id="requirement-power-roots"></div></fieldset>
         </div>
-        <p id="requirement-parameters-empty">Add <code>$$variable_name$$</code> to the text to add a parameter.</p>
-        <div class="requirement-parameter-frame"><table aria-label="Requirement parameters"></table></div>
+        <section class="sheet editor-sheet" aria-labelledby="requirement-parameters-title">
+          <div class="table-top"><h3 id="requirement-parameters-title">Parameters</h3></div>
+          <div class="table-frame requirement-parameter-frame"><table aria-label="Requirement parameters"></table></div>
+          <p id="requirement-parameters-empty">Add <code>$$var$$</code> to the text to add a parameter.</p>
+        </section>
         <section id="requirement-verification" aria-label="Requirement verification">
-          <div class="verification-heading"><h3>Verification methods</h3><button type="button" data-add-method aria-label="Add verification method" title="Add verification method">+</button></div>
-          <p>Every configured method must pass in every spacecraft mode. Write Python conditions using requirement values or a script output such as <code>SCR001.upper</code>.</p>
-          <div class="verification-frame"><table data-method-table aria-label="Verification methods"></table></div>
+          <section class="sheet editor-sheet" aria-labelledby="requirement-methods-title">
+            <div class="table-top"><h3 id="requirement-methods-title">Verification methods</h3><button type="button" class="add-row" data-add-method aria-label="Add verification method" title="Add row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+            <div class="table-frame verification-frame"><table data-method-table aria-label="Verification methods"></table></div>
+          </section>
           <p id="requirement-check" role="status" aria-live="polite" aria-atomic="true" hidden></p>
           <p id="requirement-mode-results" hidden></p>
-          <details data-script-library class="script-library"><summary>Python scripts</summary>
-            <p>Reusable script instances have their own inputs and named outputs. Bind inputs with expressions such as <code>REQ001.mass</code>. Run only trusted scripts. Python runs locally with your user permissions. This execution is not a sandbox.</p>
-            <div class="script-add"><select data-script-add-definition aria-label="Python script definition"><option value="">Choose a registered script…</option></select><button type="button" data-script-add>Add script</button></div>
-            <p data-script-message role="status"></p><div data-script-list></div>
-          </details>
+          <section data-script-library class="sheet editor-sheet" aria-labelledby="requirement-scripts-title">
+            <div class="table-top"><h3 id="requirement-scripts-title">Python scripts</h3><button type="button" class="add-row" data-script-add aria-label="Add script" title="Add row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+            <div class="table-frame script-frame"><table data-script-list aria-label="Python scripts"></table></div>
+            <p data-script-message class="error-text" role="status" hidden></p>
+            <div data-script-parameter-list></div>
+          </section>
         </section>
         <label for="requirement-rationale">Rationale</label>
         <textarea id="requirement-rationale" rows="3" maxlength="10000" placeholder="Explain the requirement and cite its source."></textarea>

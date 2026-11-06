@@ -356,7 +356,6 @@ test('browser shows complete PWS001 expressions and supports editing and pasting
   });
   await waitValue('3.000 W');
   assert.equal(await draw.inputValue(), 'PowerAllocation.draw_power_W + 1');
-  await pane.getByLabel('Preview mode', { exact: true }).selectOption('downlink');
   await pane.getByLabel('State for allocated_power_W', { exact: true }).selectOption('downlink');
   const nominalAllocation = pane.getByLabel('Expression for allocated_power_W in Nominal', { exact: true });
   const downlinkAllocation = pane.getByLabel('Expression for allocated_power_W in Downlink', { exact: true });

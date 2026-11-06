@@ -151,7 +151,7 @@ test('browser splits, evaluates, pastes, persists and merges state rows using th
   await page.waitForFunction(() => document.querySelector('[data-parameter-row="x"][data-mode="downlink"] .parameter-result').textContent === '9.000 W');
   assert.equal(await result('nominal').textContent(), '8.000 W');
   assert.equal(await result('science').textContent(), '10.00 W');
-  await editor.getByLabel('Preview mode', { exact: true }).selectOption('nominal');
+  assert.equal(await editor.getByLabel('Preview mode', { exact: true }).count(), 0);
   assert.equal(await result('downlink').textContent(), '9.000 W');
   await editor.locator('[data-parameter-unit="x"][data-mode="science"]').fill('mW');
   assert.deepEqual(await editor.locator('[data-parameter-unit="x"]').evaluateAll(inputs => inputs.map(input => input.value)), ['mW', 'mW', 'mW']);

@@ -92,7 +92,7 @@ test('Python evaluates conditional child allocations, installed quantities and c
   assert.equal(result.values.allocated_power_W, children.length * 3 * 1.25); assert.equal(result.values.draw_power_W, children.length * 2 + 1);
 });
 
-test('browser edits one conditional requirement, previews modes, and retains expressions after save and reload', { skip: !process.env.PLAYWRIGHT_MODULE }, async t => {
+test('browser edits one conditional requirement, shows all mode results, and retains expressions after save and reload', { skip: !process.env.PLAYWRIGHT_MODULE }, async t => {
   const { chromium } = await import(process.env.PLAYWRIGHT_MODULE);
   const directory = await mkdtemp(join(tmpdir(), 'conditional-requirement-browser-')), modelPath = join(directory, 'mission.json');
   await writeFile(modelPath, serializeWorkspace(fixture()));
@@ -103,15 +103,16 @@ test('browser edits one conditional requirement, previews modes, and retains exp
   const errors = []; page.on('pageerror', error => errors.push(error.message));
   const base = `http://127.0.0.1:${server.address().port}`;
   await page.goto(base); await page.locator('[data-requirement-edit="r1"]').click();
-  const editor = page.locator('#requirement-editor'), preview = editor.getByLabel('Preview mode', { exact: true });
+  const editor = page.locator('#requirement-editor');
+  assert.equal(await editor.getByLabel('Preview mode', { exact: true }).count(), 0);
   const output = editor.locator('[data-parameter-row="x"][data-mode="downlink"] .parameter-result');
   await page.waitForFunction(() => document.querySelector('[data-parameter-row="x"][data-mode="downlink"] .parameter-result')?.textContent === '18.00');
   assert.match(await editor.locator('#requirement-mode-results').textContent(), /Nominal: TRUE.*Downlink: TRUE/);
-  await preview.selectOption('nominal'); assert.equal(await output.textContent(), '18.00');
-  await preview.selectOption('downlink'); assert.equal(await output.textContent(), '18.00');
-  await editor.getByLabel('Expression for x in Nominal', { exact: true }).fill('1'); await preview.selectOption('');
+  assert.equal(await output.textContent(), '18.00');
+  await editor.getByLabel('Expression for x in Nominal', { exact: true }).fill('1');
   await page.waitForFunction(() => document.querySelector('#requirement-check').textContent === 'FALSE');
-  await preview.selectOption('downlink'); assert.equal(await editor.locator('#requirement-check').textContent(), 'TRUE');
+  assert.match(await editor.locator('#requirement-mode-results').textContent(), /Nominal: FALSE.*Downlink: TRUE/);
+  assert.equal(await output.textContent(), '18.00');
   await editor.getByRole('button', { name: 'Save requirement', exact: true }).click();
   await page.waitForFunction(() => document.querySelector('#status').textContent === '');
   await page.reload(); await page.locator('[data-requirement-edit="r1"]').click();

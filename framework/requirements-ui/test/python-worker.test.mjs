@@ -225,9 +225,8 @@ test('browser authors Python expressions, state branches and script inputs throu
   await pane.getByLabel('State for x', { exact: true }).selectOption('science');
   await pane.getByLabel('Expression for x in Science', { exact: true }).fill('18');
   await check('pass');
-  const library = pane.locator('[data-script-library]'); await library.locator('summary').first().click();
-  await pane.getByLabel('Python script definition', { exact: true }).selectOption('normal_interval');
   await pane.getByRole('button', { name: 'Add script', exact: true }).click();
+  await pane.getByLabel('Python script definition', { exact: true }).selectOption('normal_interval');
   await pane.getByLabel('SCR001 mean expression', { exact: true }).fill('statistics.mean([REQ001.x, REQ002.x])');
   await pane.getByLabel('SCR001 standard_deviation expression', { exact: true }).fill('2');
   await pane.getByLabel('SCR001 confidence expression', { exact: true }).fill('0.95');

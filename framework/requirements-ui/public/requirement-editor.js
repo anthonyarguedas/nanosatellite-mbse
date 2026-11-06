@@ -25,7 +25,6 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
   const powerSource = panel.querySelector('#requirement-power-source');
   const powerDomains = panel.querySelector('#requirement-power-domains');
   const powerRoots = panel.querySelector('#requirement-power-roots');
-  const previewMode = panel.querySelector('#requirement-preview-mode');
   let draft = null, worker = null, timer, workerTimer, generation = 0;
 
   const row = () => draft.workspace.statements.find(row => row.key === draft.key);
@@ -102,14 +101,13 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
       : focused?.dataset.parameterUnit !== undefined ? 'data-parameter-unit' : 'data-parameter';
     const parameter = focused?.getAttribute(field), focusedMode = focused?.dataset.mode ?? '';
     const selection = parameter && typeof focused.selectionStart === 'number' ? [focused.selectionStart, focused.selectionEnd] : null;
-    table.hidden = !rows.length;
     panel.querySelector('#requirement-parameters-empty').hidden = Boolean(rows.length);
     table.innerHTML = '<colgroup><col class="parameter-name-col"><col class="parameter-state-col"><col><col class="parameter-unit-col"><col class="parameter-value-col"></colgroup>'
       + '<thead><tr><th scope="col">Name</th><th scope="col">State</th><th scope="col">Expression</th><th scope="col">Units</th><th scope="col">Evaluated value</th></tr></thead><tbody>'
       + rows.map(({ variable, mode, expression }) => {
         const suffix = mode ? ` in ${modes.find(state => state.key === mode).name}` : '';
         const managed = managedPowerInput(draft.workspace, row(), variable.name);
-        return `<tr data-parameter-row="${variable.name}" data-mode="${mode}"><th scope="row"><code>${escape(variable.name)}</code></th><td><select data-parameter-state="${variable.name}" data-mode="${mode}" aria-label="State for ${variable.name}${escape(suffix)}" ${!modes.length || managed ? 'disabled' : ''}><option value="">All states</option>${modes.map(state => `<option value="${state.key}" ${state.key === mode ? 'selected' : ''} ${mode && state.key !== mode ? 'disabled' : ''}>${escape(state.name)}</option>`).join('')}</select></td><td class="parameter parameter-expression"><textarea data-parameter="${variable.name}" data-mode="${mode}" aria-label="Expression for ${variable.name}${escape(suffix)}" rows="1" wrap="soft" maxlength="5000" autocomplete="off" spellcheck="false">${escape(expression)}</textarea></td><td class="parameter"><input data-parameter-unit="${variable.name}" data-mode="${mode}" aria-label="Units for ${variable.name}${escape(suffix)}" value="${escape(variable.unit)}" maxlength="100" placeholder="e.g. m^2" autocomplete="off" spellcheck="false"></td><td class="parameter-value"><span class="parameter-result" aria-label="Evaluated ${variable.name}${escape(suffix)}"></span></td></tr>`;
+        return `<tr data-parameter-row="${variable.name}" data-mode="${mode}"><th scope="row"><code>${escape(variable.name)}</code></th><td><select data-parameter-state="${variable.name}" data-mode="${mode}" aria-label="State for ${variable.name}${escape(suffix)}" ${!modes.length || managed ? 'disabled' : ''}><option value="">All states</option>${modes.map(state => `<option value="${state.key}" ${state.key === mode ? 'selected' : ''} ${mode && state.key !== mode ? 'disabled' : ''}>${escape(state.name)}</option>`).join('')}</select></td><td class="parameter parameter-expression"><textarea data-parameter="${variable.name}" data-mode="${mode}" aria-label="Expression for ${variable.name}${escape(suffix)}" rows="1" wrap="soft" maxlength="5000" autocomplete="off" spellcheck="false">${escape(expression)}</textarea></td><td class="parameter"><input data-parameter-unit="${variable.name}" data-mode="${mode}" aria-label="Units for ${variable.name}${escape(suffix)}" value="${escape(variable.unit)}" maxlength="100" placeholder="e.g. m**2" autocomplete="off" spellcheck="false"></td><td class="parameter-value"><span class="parameter-result" aria-label="Evaluated ${variable.name}${escape(suffix)}"></span></td></tr>`;
       }).join('') + '</tbody>';
     fitExpressions();
     const target = parameter ? table.querySelector(`[${field}="${parameter}"][data-mode="${focusedMode}"]`)
@@ -121,16 +119,14 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
   }
   function updateResults() {
     if (!draft) return;
-    const aggregate = draft.results.get(draft.key);
-    renderModes();
-    const result = draft.previewMode ? aggregate?.modes?.find(result => result.mode === draft.previewMode) ?? aggregate : aggregate;
+    const result = draft.results.get(draft.key);
     panel.querySelector('#requirement-editor-title').textContent = `Edit ${row().id}`;
     for (const input of table.querySelectorAll('[data-parameter]')) {
       const name = input.dataset.parameter, parameterRow = input.closest('tr'), output = parameterRow.querySelector('.parameter-result');
       const managed = managedPowerInput(draft.workspace, row(), name);
       input.readOnly = managed;
       const populated = Boolean(input.value.trim());
-      const stateResult = input.dataset.mode ? aggregate?.modes?.find(result => result.mode === input.dataset.mode) ?? aggregate : result;
+      const stateResult = input.dataset.mode ? result?.modes?.find(result => result.mode === input.dataset.mode) ?? result : result;
       const check = stateResult?.parameters?.[name] ?? { state: populated ? 'pending' : 'unset', message: populated ? 'Recalculating…' : 'No Python parameter expression.' };
       parameterRow.dataset.state = check.state;
       if (check.state === 'value') output.innerHTML = parameterValueHTML(check.value, draft.workspace.variables.find(variable => variable.name === name)?.unit);
@@ -141,7 +137,7 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
       input.setAttribute('aria-description', message);
       input.title = [input.value, message].filter(Boolean).join('\n');
     }
-    verificationEditor.update(result, draft.previewMode);
+    verificationEditor.update(result);
     const hasMethods = verificationMethods(row()).length > 0;
     const check = hasMethods ? result ?? { state: 'pending', message: 'Recalculating…' }
       : { state: 'unset', message: 'No verification condition.' };
@@ -152,21 +148,9 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
     label.textContent = check.state === 'error' ? check.message : check.state === 'unset' ? '' : stateLabel(check.state);
     label.title = check.message;
     const modeResults = panel.querySelector('#requirement-mode-results');
-    modeResults.hidden = Boolean(draft.previewMode) || !hasMethods || !aggregate?.modes;
-    modeResults.textContent = aggregate?.modes?.map(result => `${getWorkspace().power.modes.find(mode => mode.key === result.mode)?.name}: ${stateLabel(result.state)}`).join(' · ') ?? '';
+    modeResults.hidden = !hasMethods || !result?.modes;
+    modeResults.textContent = result?.modes?.map(result => `${getWorkspace().power.modes.find(mode => mode.key === result.mode)?.name}: ${stateLabel(result.state)}`).join(' · ') ?? '';
   }
-  function renderModes() {
-    const modes = getWorkspace().power.modes;
-    panel.querySelector('#requirement-mode-preview').hidden = !modes.length;
-    if (draft.previewMode && !modes.some(mode => mode.key === draft.previewMode)) draft.previewMode = '';
-    const signature = JSON.stringify(modes.map(({ key, name }) => ({ key, name })));
-    if (draft.modes !== signature) {
-      draft.modes = signature;
-      previewMode.innerHTML = '<option value="">All modes</option>' + modes.map(mode => `<option value="${mode.key}">${escape(mode.name)}</option>`).join('');
-    }
-    previewMode.value = draft.previewMode;
-  }
-  previewMode.addEventListener('change', () => { if (draft) { draft.previewMode = previewMode.value; updateResults(); } });
   frame.addEventListener('change', event => {
     const name = event.target.dataset.parameterState;
     if (!draft || !name || managedPowerInput(draft.workspace, row(), name)) return;
@@ -300,7 +284,7 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
     const prefix = tabsFor(workspace, getCatalog()).find(tab => tab.key === statement.context)?.prefix ?? 'REQ';
     statement.id ||= nextId(workspace, statement.kind, prefix);
     draft = { workspace, original, key, anchor, originalNames: new Set(workspace.variables.map(variable => variable.name)), columns: null,
-      parameterViews: new Map(), previewMode: '', results: new Map(), scriptInputs: new Map() };
+      parameterViews: new Map(), results: new Map(), scriptInputs: new Map() };
     panel.querySelector('#requirement-editor-title').textContent = `Edit ${statement.id}`;
     panel.querySelector('#requirement-kind-label').hidden = statement.context !== 'external';
     text.value = statement.text; kind.value = statement.kind;
