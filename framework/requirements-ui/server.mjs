@@ -1,13 +1,16 @@
 import { createServer as httpServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { basename, resolve } from 'node:path';
-import { renderExport } from './sysml.mjs';
+import { basename, extname, resolve } from 'node:path';
 import { createSessions } from './sessions.mjs';
 import { loadCatalog } from './catalog.mjs';
 import { loadProducts } from './cots.mjs';
 import { renderSchematic } from './kicad.mjs';
 import { renderFprimeArchive } from './fprime.mjs';
+import { defaultScriptDirectory, loadScriptCatalog, runScripts } from './python.mjs';
+import { validateWorkspace } from './model.mjs';
+import { createEvaluationWorker } from './evaluation-worker.mjs';
+import { canonicalWorkspace, workspacePaths } from './storage.mjs';
 
 const publicFiles = new Map([
   ['/', ['public/index.html', 'text/html; charset=utf-8']],
@@ -16,10 +19,12 @@ const publicFiles = new Map([
   ['/power-editor.js', ['public/power-editor.js', 'text/javascript; charset=utf-8']],
   ['/power.mjs', ['power.mjs', 'text/javascript; charset=utf-8']],
   ['/parameter-states.mjs', ['parameter-states.mjs', 'text/javascript; charset=utf-8']],
+  ['/verification-methods.mjs', ['verification-methods.mjs', 'text/javascript; charset=utf-8']],
+  ['/expression-metadata.mjs', ['expression-metadata.mjs', 'text/javascript; charset=utf-8']],
+  ['/verification-editor.js', ['public/verification-editor.js', 'text/javascript; charset=utf-8']],
   ['/requirement-preview.js', ['public/requirement-preview.js', 'text/javascript; charset=utf-8']],
   ['/style.css', ['public/style.css', 'text/css; charset=utf-8']],
   ['/model.mjs', ['model.mjs', 'text/javascript; charset=utf-8']],
-  ['/verification.mjs', ['verification.mjs', 'text/javascript; charset=utf-8']],
   ['/verification-worker.js', ['public/verification-worker.js', 'text/javascript; charset=utf-8']],
 ]);
 
@@ -39,15 +44,17 @@ async function bodyJSON(request) {
 }
 
 export function createServer({ modelPath = process.env.MISSION_FILE
-  ? resolve(process.env.MISSION_FILE) : fileURLToPath(new URL('../missions/mission.sysml', import.meta.url)), sessionDirectory } = {}) {
-  const genericModels = ['external', 'mission', 'eps', 'catalog', 'cad', 'requirements', 'power-budget'].map(name =>
-    fileURLToPath(new URL(`../${name}.sysml`, import.meta.url)));
-  if (genericModels.includes(resolve(modelPath))) throw new Error('Choose a mission instance file. Generic framework models are read only.');
-  const catalogReady = loadCatalog();
+  ? resolve(process.env.MISSION_FILE) : fileURLToPath(new URL('../missions/mission.json', import.meta.url)), sessionDirectory,
+  scriptDirectory = process.env.VERIFICATION_SCRIPTS_DIR ? resolve(process.env.VERIFICATION_SCRIPTS_DIR) : defaultScriptDirectory,
+  python = process.env.VERIFICATION_PYTHON || 'python3' } = {}) {
+  workspacePaths(modelPath);
+  const evaluator = createEvaluationWorker({ python });
+  const catalogReady = loadCatalog({ evaluator });
   const productsReady = loadProducts();
   const sessionsReady = Promise.all([catalogReady, productsReady]).then(([catalog, products]) => createSessions(modelPath, { catalog, products, directory: sessionDirectory }));
   sessionsReady.catch(() => {});
-  return httpServer(async (request, response) => {
+  const runningScripts = new Set();
+  const server = httpServer(async (request, response) => {
     response.setHeader('Cache-Control', 'no-store');
     response.setHeader('X-Content-Type-Options', 'nosniff');
     response.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; worker-src 'self'; style-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'");
@@ -61,6 +68,29 @@ export function createServer({ modelPath = process.env.MISSION_FILE
       if (!['localhost', '127.0.0.1', '[::1]'].includes(host)
           || (request.headers.origin && request.headers.origin !== `http://${request.headers.host}`)) {
         return json(403, { error: 'Only requests from this local app are allowed.' });
+      }
+      if (url.pathname === '/api/evaluate') {
+        if (request.method !== 'POST') { response.setHeader('Allow', 'POST'); return json(405, { error: 'Method not allowed.' }); }
+        const { workspace, scriptResults, mode } = await bodyJSON(request);
+        const controller = new AbortController(), cancel = () => controller.abort();
+        response.once('close', cancel);
+        try { return json(200, await evaluator.evaluate(workspace, { scriptResults, ...(mode !== undefined ? { mode } : {}) }, { signal: controller.signal })); }
+        finally { response.removeListener('close', cancel); }
+      }
+      if (url.pathname === '/api/scripts') {
+        if (request.method !== 'GET') { response.setHeader('Allow', 'GET'); return json(405, { error: 'Method not allowed.' }); }
+        return json(200, { scripts: await loadScriptCatalog(scriptDirectory) });
+      }
+      if (url.pathname === '/api/scripts/run') {
+        if (request.method !== 'POST') { response.setHeader('Allow', 'POST'); return json(405, { error: 'Method not allowed.' }); }
+        if (runningScripts.size >= 2) return json(429, { error: 'Two Python runs are already active. Wait for one to finish.' });
+        const { workspace, script } = await bodyJSON(request);
+        validateWorkspace(workspace, await catalogReady, await productsReady);
+        if (runningScripts.size >= 2) return json(429, { error: 'Two Python runs are already active. Wait for one to finish.' });
+        const controller = new AbortController(), cancel = () => controller.abort();
+        runningScripts.add(controller); response.once('close', cancel);
+        try { return json(200, await runScripts(workspace, script, { directory: scriptDirectory, python, evaluator, signal: controller.signal })); }
+        finally { runningScripts.delete(controller); response.removeListener('close', cancel); }
       }
       if (url.pathname === '/api/sessions') {
         const sessions = await sessionsReady;
@@ -85,21 +115,16 @@ export function createServer({ modelPath = process.env.MISSION_FILE
         response.setHeader('Allow', 'GET, PUT');
         return json(405, { error: 'Method not allowed.' });
       }
-      if (url.pathname === '/api/sysml') {
-        if (request.method !== 'POST') {
-          response.setHeader('Allow', 'POST');
-          return json(405, { error: 'Method not allowed.' });
-        }
+      if (url.pathname === '/api/json') {
+        if (request.method !== 'POST') { response.setHeader('Allow', 'POST'); return json(405, { error: 'Method not allowed.' }); }
         const { workspace } = await bodyJSON(request);
-        const catalog = await catalogReady, products = await productsReady;
+        const canonical = await canonicalWorkspace(workspace, { catalog: await catalogReady, products: await productsReady });
         const id = url.searchParams.get('session') ?? 'current';
-        const name = id === 'current' ? basename(modelPath, '.sysml') : (await (await sessionsReady).get(id)).session.name;
+        const name = id === 'current' ? basename(modelPath, extname(modelPath)) : (await (await sessionsReady).get(id)).session.name;
         const stem = name.replace(/[^A-Za-z0-9_]/g, '_');
-        const packageName = `Mission_${stem}_Export`;
-        const artifact = renderExport(workspace, { catalog, products, packageName });
-        response.writeHead(200, { 'Content-Type': 'application/octet-stream',
-          'Content-Disposition': `attachment; filename="${stem}-export.sysml"` });
-        return response.end(artifact);
+        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8',
+          'Content-Disposition': `attachment; filename="${stem}-export.json"` });
+        return response.end(JSON.stringify(canonical.workspace, null, 2) + '\n');
       }
       if (['/api/kicad', '/api/fprime'].includes(url.pathname)) {
         if (request.method !== 'POST') {
@@ -111,7 +136,8 @@ export function createServer({ modelPath = process.env.MISSION_FILE
         const projectName = `eps-${workspace?.elements?.find(row => row.key === context)?.id?.toLowerCase() ?? 'components'}`;
         const fprime = url.pathname === '/api/fprime';
         const artifact = fprime ? renderFprimeArchive(workspace, context, { catalog, products })
-          : renderSchematic(workspace, context, { catalog, products, projectName });
+          : renderSchematic(workspace, context, { catalog, products, projectName,
+            checks: (await evaluator.evaluate(workspace)).results });
         response.writeHead(200, { 'Content-Type': fprime ? 'application/zip' : 'application/octet-stream',
           'Content-Disposition': `attachment; filename="${projectName}${fprime ? '-fprime.zip' : '.kicad_sch'}"` });
         return response.end(artifact);
@@ -131,6 +157,8 @@ export function createServer({ modelPath = process.env.MISSION_FILE
       json(status, { error: status === 500 ? 'Could not read or save the mission model. Check the terminal.' : error.message });
     }
   });
+  server.on('close', () => evaluator.close());
+  return server;
 }
 
 if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
@@ -143,6 +171,6 @@ if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) 
   });
   server.listen(port, '127.0.0.1', () => {
     console.log(`Requirements UI: http://127.0.0.1:${server.address().port}`);
-    console.log(`Edits are saved to ${process.env.MISSION_FILE ?? 'framework/missions/mission.sysml'}.`);
+    console.log(`Edits are saved as JSON (${process.env.MISSION_FILE ? workspacePaths(resolve(process.env.MISSION_FILE)).path : 'framework/missions/mission.json'}).`);
   });
 }

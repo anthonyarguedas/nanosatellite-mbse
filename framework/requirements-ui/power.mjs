@@ -1,8 +1,6 @@
-// Shared browser/server projection of the native PowerBudgetModel definitions.
+// Shared editing and structural validation for the Python power model.
 export const emptyPower = () => ({ modes: [], loads: [], links: [] });
 export const powerInputNames = ['sunlight_power_W', 'eclipse_power_W', 'sunlight_duty', 'eclipse_duty'];
-export const powerReference = (id, name) => id === 'LoadBudget' && ['sunlight_power_W', 'eclipse_power_W'].includes(name);
-export const allocationReference = (id, name) => id === 'PowerAllocation' && ['allocated_power_W', 'draw_power_W'].includes(name);
 export const powerRequirementTemplates = [
   { model: 'PowerBudgetModel::PowerLimit', attributes: { power_limit_W: 'Real', allocated_power_W: 'Real', draw_power_W: 'Real' },
     parameters: { power_limit_W: null, allocated_power_W: 'PowerAllocation.allocated_power_W', draw_power_W: 'PowerAllocation.draw_power_W' } },
@@ -15,15 +13,6 @@ export const powerKind = element => element.definition.endsWith('::Software') ? 
 export const spacecraftComponents = workspace => workspace.elements.filter(row => row.id && /^SpaceSegment::CubeSat::[^:]+::[^:]+$/.test(row.definition));
 export const powerFor = (workspace, element) => workspace.power?.loads.find(load => load.element === element.key)
   ?? { element: element.key, quantity: 1, accounting: powerKind(element), host: '', rationale: '', states: [], assignments: {} };
-export function inRoots(workspace, element, roots) {
-  const elements = new Map(workspace.elements.map(row => [row.key, row]));
-  const seen = new Set();
-  for (let row = element; row && !seen.has(row.key); row = elements.get(row.owner)) {
-    if (roots.includes(row.key)) return true;
-    seen.add(row.key);
-  }
-  return false;
-}
 export function powerScopes(workspace) {
   const roots = workspace.elements.filter(row => row.id && row.owner === 'mission'
     && ['SpaceSegment::CubeSat', 'SpaceSegment::CubeSat::PayloadSubsystem'].includes(row.definition));
@@ -39,47 +28,6 @@ export const parentPowerLimit = (workspace, row) => {
   const scope = powerScopes(workspace).find(scope => scope.key === row.powerScope);
   return scope?.parent ? powerLimitFor(workspace, scope.parent) : null;
 };
-export function allocationChildren(workspace, scope) {
-  return powerScopes(workspace).filter(child => child.parent === scope && (child.kind !== 'component'
-    || powerFor(workspace, workspace.elements.find(element => element.key === child.key)).accounting === 'counted'
-    || powerLimitFor(workspace, child.key)));
-}
-export function allocationComponents(workspace, scope) {
-  const components = spacecraftComponents(workspace);
-  if (scope === 'mission') return components;
-  const element = workspace.elements.find(element => element.key === scope);
-  return components.filter(row => element?.key === row.key || inRoots(workspace, row, [scope]));
-}
-export function allocationParameter(workspace, row, name, resolve, mode) {
-  const pending = message => { const error = new Error(message); error.pending = true; throw error; };
-  if (!isPowerRequirement(row)) throw new Error('PowerAllocation belongs to a power limit requirement.');
-  const children = allocationChildren(workspace, row.powerScope);
-  if (name === 'allocated_power_W' || children.length) {
-    let total = 0;
-    for (const child of children) {
-      const requirement = powerLimitFor(workspace, child.key);
-      if (!requirement) pending(`Define a power limit for ${workspace.elements.find(element => element.key === child.key)?.id ?? child.key}.`);
-      const value = resolve(requirement, name === 'allocated_power_W' ? 'power_limit_W' : 'draw_power_W');
-      if (value < 0) throw new Error(`${requirement.id} power must be nonnegative.`);
-      total += value;
-    }
-    if (!Number.isFinite(total)) throw new Error('Allocated power must be finite.');
-    return total;
-  }
-  const components = allocationComponents(workspace, row.powerScope);
-  if (!components.length) pending('Define the components for this power limit.');
-  let total = 0;
-  for (const element of components) {
-    const load = powerFor(workspace, element);
-    if (load.accounting !== 'counted') continue;
-    if (!mode) pending('Select a spacecraft mode to calculate power draw.');
-    const state = load.states.find(state => state.key === load.assignments[mode]);
-    if (!state || state.watts === null) pending(`Select a state and power draw for ${element.id}.`);
-    total += load.quantity * state.watts;
-  }
-  if (!Number.isFinite(total)) throw new Error('Power draw must be finite.');
-  return total;
-}
 export function seedPowerLimits(workspace, { scopes = null } = {}, identity) {
   const subjects = powerScopes(workspace);
   const selected = subjects.filter(scope => (!scopes || scopes.includes(scope.key)) && (scope.kind !== 'component'
@@ -137,53 +85,6 @@ export function disconnectPower(workspace, eps) {
   const row = workspace.statements.find(row => row.context === eps && row.definition === 'FrameworkRequirements::LoadEnergy');
   if (link && row) Object.assign(row.parameters, link.previous);
   workspace.power.links = workspace.power.links.filter(link => link.eps !== eps);
-}
-export function calculatePower(workspace, roots) {
-  const modes = workspace.power?.modes ?? [];
-  const components = spacecraftComponents(workspace).filter(row => inRoots(workspace, row, roots));
-  const issues = [];
-  const totals = modes.map(mode => {
-    let watts = 0;
-    const missing = [];
-    for (const element of components) {
-      const load = powerFor(workspace, element);
-      if (load.accounting !== 'counted') continue;
-      const state = load.states.find(state => state.key === load.assignments[mode.key]);
-      if (!state || state.watts === null) missing.push(element.id);
-      else watts += load.quantity * state.watts;
-    }
-    return { mode: mode.key, watts: missing.length ? null : watts, missing };
-  });
-  if (!modes.length) issues.push('Add a spacecraft mode.');
-  if (!components.length) issues.push('The selected scope has no spacecraft components.');
-  const averages = {};
-  for (const period of ['sunlight', 'eclipse']) {
-    const weights = modes.map(mode => mode[period]);
-    const sum = weights.reduce((sum, value) => sum + (value ?? 0), 0);
-    const errors = [];
-    if (!modes.length || weights.some(value => value === null) || Math.abs(sum - 100) > 1e-6) errors.push(`${period === 'sunlight' ? 'Sunlight' : 'Eclipse'} mode fractions must total 100%.`);
-    let watts = 0;
-    for (const [index, total] of totals.entries()) {
-      if (weights[index] === 0) continue;
-      if (total.missing.length) errors.push(`${modes[index].name}: define a state and power for ${total.missing.join(', ')}.`);
-      else watts += total.watts * weights[index] / 100;
-    }
-    if (!Number.isFinite(watts)) errors.push('The demand exceeds the supported finite numeric range.');
-    issues.push(...errors);
-    averages[`${period}_power_W`] = errors.length || !components.length ? null : watts;
-  }
-  return { ...averages, totals, issues: [...new Set(issues)], components };
-}
-export function budgetParameter(workspace, row, name) {
-  const link = workspace.power?.links.find(link => link.eps === row.context);
-  if (!link) throw new Error('Connect this EPS to a load budget before using LoadBudget inputs.');
-  const result = calculatePower(workspace, link.roots);
-  if (result[name] === null) {
-    const error = new Error(result.issues[0] ?? 'The load budget is incomplete.');
-    error.pending = true;
-    throw error;
-  }
-  return result[name];
 }
 export function validatePower(workspace) {
   const power = workspace.power;

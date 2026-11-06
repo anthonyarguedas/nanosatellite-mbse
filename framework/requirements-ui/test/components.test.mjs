@@ -6,9 +6,9 @@ import { spawnSync } from 'node:child_process';
 import { test } from 'node:test';
 import { loadCatalog } from '../catalog.mjs';
 import { loadProducts } from '../cots.mjs';
-import { componentCheck, componentRequirements, emptyWorkspace, migrateWorkspace, nextId, validateWorkspace, WORKSPACE_VERSION } from '../model.mjs';
-import { evaluateChecks } from '../verification.mjs';
-import { readWorkspace, renderManaged } from '../sysml.mjs';
+import { componentCheck, componentRequirements, emptyWorkspace, nextId, validateWorkspace, WORKSPACE_VERSION } from '../model.mjs';
+import { evaluateChecks } from './helpers.mjs';
+import { readWorkspace, serializeWorkspace as renderManaged } from './helpers.mjs';
 import { renderSchematic } from '../kicad.mjs';
 import { renderFprimeArchive, renderFprimeFiles } from '../fprime.mjs';
 
@@ -19,7 +19,7 @@ function fixture() {
   const power = workspace.elements.find(row => row.definition.endsWith('::PowerSubsystem'));
   const requirement = (id, context, condition) => ({ key: id.toLowerCase(), id, context, kind: 'Requirement', text: '',
     sources: [], affected: [], condition, parameters: { x: '12', y: null, z: null, a: null } });
-  workspace.statements = [requirement('EPS001', power.key, 'x >= 10'), requirement('EPS002', power.key, 'true'), requirement('BUS001', power.owner, 'true')];
+  workspace.statements = [requirement('EPS001', power.key, 'x >= 10'), requirement('EPS002', power.key, 'True'), requirement('BUS001', power.owner, 'True')];
   workspace.components = [
     { key: 'rtc', id: 'CMP001', owner: power.key, product: 'abracon_ab1805_t3', requirements: ['eps001', 'eps002'] },
     { key: 'battery', id: 'CMP002', owner: power.key, product: 'molicel_inr_18650_p28a', requirements: [] },
@@ -37,16 +37,9 @@ test('COTS dropdown catalog comes from product records and uses only catalog sel
   assert.equal(products.find(product => product.id === 'isispace_iceps2_type_a').pins.length, 0);
 });
 
-test('version 5 gains an empty COTS table without changing rows or links', () => {
-  const { workspace } = fixture();
-  workspace.version = 5; delete workspace.components;
-  const before = structuredClone(workspace), migrated = migrateWorkspace(workspace, catalog);
-  assert.equal(migrated.version, WORKSPACE_VERSION);
-  assert.deepEqual(migrated.components, []);
-  assert.deepEqual(migrated.elements, before.elements);
-  assert.deepEqual(migrated.statements, before.statements);
-  assert.deepEqual(workspace, before);
-  assert.equal(migrateWorkspace(migrated, catalog), migrated);
+test('COTS data is required by the current schema', () => {
+  const { workspace } = fixture(); delete workspace.components;
+  assert.throws(() => validateWorkspace(workspace, catalog, products), /Invalid workspace/);
 });
 
 test('COTS rows validate and share the global ID and key namespaces', () => {
@@ -95,15 +88,14 @@ test('component verification requires at least one link and every requirement to
   assert.equal(componentCheck(row, new Map()).state, 'pending');
 });
 
-test('COTS parts, stable requirement links and source links round trip in typed SysML', () => {
+test('COTS selections, stable requirement links and source links round trip as data', () => {
   const { workspace } = fixture();
   workspace.statements[2].sources = ['rtc'];
   const source = renderManaged(workspace, { catalog, products });
-  assert.match(source, /part component_rtc : EPSModel::RealTimeClock/);
-  assert.match(source, /attribute :>> catalog_product_id = "abracon_ab1805_t3"/);
-  assert.match(source, /attribute :>> physical_resource_id = "rtc"/);
-  assert.match(source, /dependency from element_domain_hbus::element_domain_hbus_hPowerSubsystem::component_rtc to statement_eps001/);
-  assert.match(source, /dependency from statement_bus001 to element_domain_hbus::element_domain_hbus_hPowerSubsystem::component_rtc/);
+  assert.equal(workspace.components[0].product, 'abracon_ab1805_t3');
+  assert.equal(workspace.components[0].key, 'rtc');
+  assert.deepEqual(workspace.statements[2].sources, ['rtc']);
+  assert.deepEqual(workspace.components[0].requirements, ['eps001', 'eps002']);
   assert.deepEqual(readWorkspace(source, catalog, products), workspace);
   workspace.statements[0].id = 'PWR001';
   assert.deepEqual(workspace.components[0].requirements, ['eps001', 'eps002']);
@@ -113,6 +105,8 @@ test('COTS parts, stable requirement links and source links round trip in typed 
 test('KiCad embeds symbols, preserves repeated physical instances and does not invent wiring or footprints', () => {
   const { workspace, context, options } = fixture();
   workspace.components.push({ ...workspace.components[0], key: 'second-rtc', id: 'CMP003' });
+  assert.doesNotMatch(renderSchematic(workspace, context, options), /\(property "Verified" "true"/);
+  options.checks = evaluateChecks(workspace);
   const source = renderSchematic(workspace, context, options);
   assert.equal((source.match(/\(lib_id /g) ?? []).length, 3);
   assert.equal((source.match(/\(symbol "RequirementsUI:abracon_ab1805_t3"/g) ?? []).length, 1);

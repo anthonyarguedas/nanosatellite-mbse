@@ -18,12 +18,12 @@ test('unset, pending and invalid values display bare variable names in monospace
     assert.equal(requirementHTML('At least $$ mass $$.', { mass: value }, variables),
       'At least <code class="parameter-name">mass</code>.');
   }
-  assert.equal(requirementHTML('Legacy {mass} and $$unknown$$.', {}, variables),
-    'Legacy <code class="parameter-name">mass</code> and <code class="parameter-name">unknown</code>.');
+  assert.equal(requirementHTML('Literal {mass} and $$unknown$$.', {}, variables),
+    'Literal {mass} and <code class="parameter-name">unknown</code>.');
 });
 
 test('numeric values and units use monospace with superscript unit powers', () => {
-  assert.equal(requirementHTML('At least $$mass$$ and {mass}.', { mass: 12.3456 }, [{ name: 'mass', unit: 'kg' }]),
+  assert.equal(requirementHTML('At least $$mass$$ and $$mass$$.', { mass: 12.3456 }, [{ name: 'mass', unit: 'kg' }]),
     'At least <code class="parameter-number">12.35</code> <code class="parameter-unit">kg</code> and <code class="parameter-number">12.35</code> <code class="parameter-unit">kg</code>.');
   assert.equal(parameterValueHTML(398601, 'km^3/s^2'), '<code class="parameter-number">398601</code> <code class="parameter-unit">km<sup>3</sup>/s<sup>2</sup></code>');
   assert.equal(parameterValueHTML(0.125, 'm**2 s^(-2)'), '<code class="parameter-number">0.1250</code> <code class="parameter-unit">m<sup>2</sup> s<sup>-2</sup></code>');

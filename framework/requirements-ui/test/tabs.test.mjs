@@ -1,10 +1,9 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
-import { catalogFromSource, indexDefinitions, loadCatalog } from '../catalog.mjs';
-import { addElementChildren, allowedDefinitions, assignableElements, availableSources, contextForRow, emptyWorkspace, migrateWorkspace, nextId, tabsFor, validateWorkspace, WORKSPACE_VERSION } from '../model.mjs';
-import { evaluateChecks } from '../verification.mjs';
-import { readWorkspace, renderManaged } from '../sysml.mjs';
+import { loadCatalog } from '../catalog.mjs';
+import { addElementChildren, allowedDefinitions, assignableElements, availableSources, contextForRow, emptyWorkspace, nextId, tabsFor, validateWorkspace, WORKSPACE_VERSION } from '../model.mjs';
+import { evaluateChecks } from './helpers.mjs';
+import { readWorkspace, serializeWorkspace as renderManaged, roundTrip } from './helpers.mjs';
 
 // Hierarchy fixtures are intentionally unseeded. sizing.test.mjs covers templates.
 const catalog = (await loadCatalog()).map(({ requirements, ...type }) => type);
@@ -29,10 +28,9 @@ function mission() {
   return workspace;
 }
 
-test('structural index ignores comments and strings and preserves definition scopes', () => {
-  const definitions = indexDefinitions('package P { doc /* part def Fake; */ attribute label : String = "part def Wrong;"; part def Outer { assert constraint c { true } part def Inner; } part def Sibling; }');
-  assert.deepEqual(definitions.map(row => row.model), ['P::Outer', 'P::Outer::Inner', 'P::Sibling']);
-  assert.deepEqual(indexDefinitions('package P { part /* note */ def A; }').map(row => row.model), ['P::A']);
+test('catalog projections use unique opaque identifiers and explicit parent relationships', () => {
+  assert.equal(new Set(catalog.map(type => type.model)).size, catalog.length);
+  for (const type of catalog) if (type.parent) assert.ok(catalog.some(parent => parent.model === type.parent));
 });
 
 test('catalog uses exactly the subsystem definitions in the generic mission model', () => {
@@ -49,16 +47,14 @@ test('catalog uses exactly the subsystem definitions in the generic mission mode
 });
 
 test('new generic subsystem definitions are discovered without UI changes', async () => {
-  const source = await readFile(new URL('../../mission.sysml', import.meta.url), 'utf8');
-  const extended = catalogFromSource(source.replace('        part def PowerSubsystem :>', '        part def ExperimentalSubsystem;\n        part def PowerSubsystem :>'));
+  const extended = [...catalog, { model: 'SpaceSegment::CubeSat::ExperimentalSubsystem', name: 'Experimental', category: 'Subsystem', id: 'EXP', parent: 'SpaceSegment::CubeSat', role: 'subsystem', prefix: 'EXP', expandable: true }];
   const workspace = emptyWorkspace(extended);
   assert.ok(workspace.elements.some(row => row.definition === 'SpaceSegment::CubeSat::ExperimentalSubsystem'));
   assert.doesNotThrow(() => validateWorkspace(workspace, extended));
 });
 
 test('new generic EPS component definitions are discovered without UI changes', async () => {
-  const source = await readFile(new URL('../../mission.sysml', import.meta.url), 'utf8');
-  const extended = catalogFromSource(source.replace('            part def Batteries :>', '            part def Fuse;\n            part def Batteries :>'));
+  const extended = [...catalog, { model: `${powerModel}::Fuse`, name: 'Fuse', category: 'Component', id: 'FUS', parent: powerModel, expandable: false }];
   const workspace = emptyWorkspace(extended), power = powerFor(workspace);
   assert.ok(workspace.elements.some(row => row.definition === `${powerModel}::Fuse` && row.owner === power.key));
   assert.equal(allowedDefinitions(workspace, power.key, extended).length, 7);
@@ -168,42 +164,18 @@ test('another domain instance reuses the same table and subsystem catalog', () =
   assert.doesNotThrow(() => validateWorkspace(workspace, catalog));
 });
 
-test('version 2 upgrades into External while preserving values and avoiding ID collisions', () => {
-  const old = { version: 2, variables: [{ name: 'mass', type: 'float' }],
-    stakeholders: [{ key: 'stakeholder', id: 'BUS', name: 'Existing stakeholder', type: 'Partner' }],
-    statements: [{ key: 'original', id: 'REQ001', kind: 'Requirement', text: 'Original', sources: ['stakeholder'], verified: true, condition: 'mass > 0', parameters: { mass: 2 } }] };
-  const upgraded = migrateWorkspace(old, catalog);
-  assert.doesNotThrow(() => validateWorkspace(upgraded, catalog));
-  assert.equal(upgraded.statements[0].context, 'external');
-  assert.equal(upgraded.statements[0].parameters.mass, '2');
-  assert.equal(Object.hasOwn(upgraded.statements[0], 'verified'), false);
-  assert.equal(upgraded.statements[0].condition, 'mass > 0');
-  assert.deepEqual(upgraded.statements[0].sources, ['stakeholder']);
-  assert.deepEqual(upgraded.statements[0].affected, []);
-  assert.notEqual(upgraded.elements.find(row => row.key === 'domain-bus').id, 'BUS');
+test('new elements avoid ID collisions with existing stakeholders', () => {
+  const workspace = mission(); workspace.stakeholders.push({ key: 'stakeholder', id: 'BAK', name: 'Existing stakeholder', type: 'Partner' });
+  assert.notEqual(nextId(workspace, 'Element', 'Backup bus'), 'BAK');
+  validateWorkspace(workspace, catalog);
 });
 
-test('version 4 adds EPS components once while preserving existing rows, values and links', () => {
-  const old = mission(), power = powerFor(old);
-  old.version = 4;
-  old.elements = old.elements.filter(row => row.owner !== power.key);
-  old.statements = old.statements.filter(row => row.context !== power.key);
-  old.statements[2].parameters.x = '12';
-  old.statements[2].condition = 'x <= 20';
-  old.stakeholders.push({ key: 'battery-partner', id: 'BAT', name: 'Battery partner', type: 'Partner' });
-  const original = structuredClone(old), upgraded = migrateWorkspace(old, catalog);
-  assert.equal(upgraded.version, WORKSPACE_VERSION);
-  assert.equal(upgraded.elements.filter(row => row.owner === power.key).length, 6);
-  assert.deepEqual(upgraded.elements.filter(row => original.elements.some(element => element.key === row.key)), original.elements);
-  assert.deepEqual(upgraded.statements, original.statements);
-  assert.deepEqual(upgraded.stakeholders, original.stakeholders);
-  assert.deepEqual(old, original);
-  assert.doesNotThrow(() => validateWorkspace(upgraded, catalog));
-  const source = `// <requirements-ui>\n/* requirements-ui:data\n${JSON.stringify(old)}\nrequirements-ui:end-data */\n// </requirements-ui>`;
-  assert.deepEqual(readWorkspace(source, catalog), upgraded);
-  upgraded.elements = upgraded.elements.filter(row => row.owner !== power.key);
-  assert.deepEqual(readWorkspace(renderManaged(upgraded, { catalog }), catalog), upgraded);
-  assert.equal(migrateWorkspace(upgraded, catalog), upgraded);
+test('current JSON reopens the hierarchy without reseeding components or requirements', () => {
+  const workspace = mission(), power = powerFor(workspace);
+  workspace.elements = workspace.elements.filter(row => row.owner !== power.key);
+  workspace.statements = workspace.statements.filter(row => row.context !== power.key);
+  assert.deepEqual(readWorkspace(renderManaged(workspace), catalog), workspace);
+  assert.equal(readWorkspace(renderManaged(workspace), catalog).elements.filter(row => row.owner === power.key).length, 0);
 });
 
 test('expressions read variable values across all tab contexts', () => {
@@ -220,31 +192,19 @@ test('expressions read variable values across all tab contexts', () => {
   assert.equal(evaluateChecks(workspace).find(row => row.key === 'eps001').state, 'fail');
 });
 
-test('mission SysML contains typed nested parts, native assignments and all requirements', () => {
-  const workspace = mission();
-  const source = renderManaged(workspace, { catalog });
-  assert.match(source, /private import SpaceSegment::\*/);
-  assert.match(source, /private import GroundSegment::\*/);
-  assert.match(source, /: Orbit \{/);
-  assert.match(source, /: SpaceSegment::CubeSat \{/);
-  assert.match(source, /: SpaceSegment::CubeSat::PowerSubsystem \{/);
-  assert.match(source, /: GroundSegment::NetworkSubsystem \{/);
-  assert.match(source, /ref part affectedElements\[0\.\.\*\] = \(element_domain_horbit, element_domain_hbus\)/);
-  assert.match(source, /element_domain_hbus\.element_domain_hbus_hPowerSubsystem/);
-  assert.match(source, /attribute tableName : String = "Mission"/);
-  assert.match(source, /attribute tableName : String = "CubeSat Bus"/);
-  assert.match(source, /attribute tableName : String = "EPS"/);
-  assert.match(source, /: SpaceSegment::CubeSat::PowerSubsystem::Batteries \{/);
-  assert.match(source, /ref part affectedElements\[0\.\.\*\] = \(element_domain_hbus\.element_domain_hbus_hPowerSubsystem\.element_domain_hbus_hPowerSubsystem_hBatteries\)/);
-  assert.match(source, /dependency from statement_eps001 to statement_bus001/);
-  assert.deepEqual(readWorkspace(source, catalog), workspace);
+test('JSON snapshots preserve the complete hierarchy, assignments and traceability', () => {
+  const workspace = mission(), snapshot = roundTrip(workspace), power = powerFor(snapshot);
+  assert.equal(snapshot.elements.find(row => row.owner === power.key).definition, `${powerModel}::Batteries`);
+  assert.deepEqual(snapshot.statements[1].affected, ['domain-orbit', 'domain-bus']);
+  assert.deepEqual(snapshot.statements[5].sources, ['bus001']);
+  assert.equal(snapshot.statements[5].context, power.key);
+  assert.deepEqual(snapshot, workspace);
 });
 
-test('nested SysML source paths include all ancestors regardless of row order', () => {
+test('stable element references work regardless of element ordering', () => {
   const workspace = mission();
-  workspace.statements[5].sources.push(workspace.statements[5].affected[0]);
-  workspace.elements.reverse();
-  const source = renderManaged(workspace, { catalog });
-  assert.match(source, /dependency from statement_eps001 to element_domain_hbus::element_domain_hbus_hPowerSubsystem::element_domain_hbus_hPowerSubsystem_hBatteries;/);
-  assert.deepEqual(readWorkspace(source, catalog), workspace);
+  workspace.statements[5].sources.push(workspace.statements[5].affected[0]); workspace.elements.reverse();
+  const restored = roundTrip(workspace);
+  assert.doesNotThrow(() => validateWorkspace(restored, catalog));
+  assert.deepEqual(restored.statements[5].sources, workspace.statements[5].sources);
 });

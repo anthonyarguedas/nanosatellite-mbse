@@ -8,8 +8,8 @@ import {
   declareRequirementVariables, emptyWorkspace, interpolateRequirement, mergeRequirementDraft, requirementMarkers,
   requirementParameterNames, validateWorkspace,
 } from '../model.mjs';
-import { evaluateChecks } from '../verification.mjs';
-import { readWorkspace, renderExport, renderManaged } from '../sysml.mjs';
+import { evaluateChecks } from './helpers.mjs';
+import { readWorkspace, validateCalculations as renderExport, serializeWorkspace as renderManaged } from './helpers.mjs';
 import { createServer } from '../server.mjs';
 
 function fixture() {
@@ -58,8 +58,8 @@ test('a requirement editor shows its markers and retained inputs, not all workbo
   assert.deepEqual(requirementParameterNames(workspace, row), ['energy_J', 'x']);
   row.condition = 'energy_J >= a';
   assert.deepEqual(requirementParameterNames(workspace, row), ['energy_J', 'x', 'a']);
-  row.text = 'Legacy {z}.'; row.parameters.x = '12';
-  assert.deepEqual(requirementParameterNames(workspace, row), ['x', 'z', 'a', 'energy_J']);
+  row.text = 'Bound $$z$$.'; row.parameters.x = '12';
+  assert.deepEqual(requirementParameterNames(workspace, row), ['z', 'x', 'a', 'energy_J']);
 });
 
 test('existing generic requirements retain all their relevant inputs when opened', async () => {
@@ -85,11 +85,11 @@ test('unknown, invalid and incomplete markers cannot silently become saved requi
 
 test('marker previews format evaluated values, preserve zero and show unknown variable names', () => {
   assert.equal(interpolateRequirement('At least $$energy_J$$ J, margin $$margin$$.', { energy_J: 7200, margin: 0 }), 'At least 7200 J, margin 0.000.');
-  assert.equal(interpolateRequirement('Unknown $$energy_J$$ and legacy {x}.', { x: 3 }), 'Unknown energy_J and legacy 3.000.');
+  assert.equal(interpolateRequirement('Unknown $$energy_J$$ and known $$x$$.', { x: 3 }), 'Unknown energy_J and known 3.000.');
   assert.equal(interpolateRequirement('$$bad-name$$ $$x$$', { x: Infinity }), '$$bad-name$$ x');
 });
 
-test('marker-driven expressions round trip and export as native attributes and equations', () => {
+test('marker-driven expressions round trip as editable JSON equations', () => {
   const workspace = fixture(), row = workspace.statements[0];
   row.text = 'The battery shall provide at least $$energy_J$$ J.';
   declareRequirementVariables(workspace, row);
@@ -99,8 +99,8 @@ test('marker-driven expressions round trip and export as native attributes and e
   assert.equal(interpolateRequirement(row.text, evaluateChecks(workspace)[0].values), 'The battery shall provide at least 7200 J.');
   assert.deepEqual(readWorkspace(renderManaged(workspace)), workspace);
   const exported = renderExport(workspace);
-  assert.match(exported, /attribute 'energy_J' : Real\[0\.\.1\] = \(2 \* 3600\)/);
-  assert.match(exported, /require constraint verificationCondition/);
+  assert.equal(JSON.parse(exported).statements[0].parameters.energy_J, '2 * 3600');
+  assert.equal(JSON.parse(exported).statements[0].condition, 'energy_J >= 7200');
 });
 
 test('requirement drafts merge with other table edits without overwriting them', () => {
@@ -141,7 +141,7 @@ test('conflicting edits and deleted requirements keep drafts from overwriting cu
 test('requirement pane browser workflow', { skip: !process.env.PLAYWRIGHT_MODULE }, async t => {
   const { chromium } = await import(process.env.PLAYWRIGHT_MODULE);
   const dir = await mkdtemp(join(tmpdir(), 'requirement-pane-browser-'));
-  const modelPath = join(dir, 'mission.sysml'), server = createServer({ modelPath });
+  const modelPath = join(dir, 'mission.json'), server = createServer({ modelPath });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   let browser;
   t.after(async () => {
@@ -154,10 +154,10 @@ test('requirement pane browser workflow', { skip: !process.env.PLAYWRIGHT_MODULE
   const errors = []; page.on('pageerror', error => errors.push(error.message));
   const base = `http://127.0.0.1:${server.address().port}`;
   const get = async () => (await page.request.get(base + '/api/workspace')).json();
-  const legacy = await get();
-  legacy.workspace.statements.forEach(row => { delete row.rationale; });
-  const legacySave = await page.request.put(base + '/api/workspace', { data: { workspace: legacy.workspace, revision: legacy.revision } });
-  assert.equal(legacySave.ok(), true);
+  const existing = await get();
+  existing.workspace.statements.forEach(row => { delete row.rationale; });
+  const savedExisting = await page.request.put(base + '/api/workspace', { data: { workspace: existing.workspace, revision: existing.revision } });
+  assert.equal(savedExisting.ok(), true);
   await page.goto(base + '/#mission');
   await page.locator('main:not([inert])').waitFor();
   assert.equal(await page.locator('.statements td.parameter, .statements .add-variable').count(), 0);
@@ -189,9 +189,9 @@ test('requirement pane browser workflow', { skip: !process.env.PLAYWRIGHT_MODULE
   assert.equal(await dialog.locator('[data-parameter-unit="gravitationalParameter_km3_s2"]').inputValue(), 'km^3/s^2');
   assert.equal(await dialog.locator('[data-parameter-unit="altitude_km"]').inputValue(), 'km');
   assert.equal(await dialog.locator('[data-parameter]').count(), 4);
-  assert.deepEqual(await dialog.locator('thead th').allTextContents(), ['Name', 'State', 'Expression', 'Units', 'Evaluated value']);
+  assert.deepEqual(await dialog.locator('.requirement-parameter-frame thead th').allTextContents(), ['Name', 'State', 'Expression', 'Units', 'Evaluated value']);
   assert.equal(await dialog.locator('[data-parameter-unit]').count(), 4);
-  assert.equal(await dialog.locator('tbody tr').count(), 4);
+  assert.equal(await dialog.locator('.requirement-parameter-frame tbody tr').count(), 4);
   assert.equal(await dialog.locator('.requirement-parameter-frame select').count(), 4);
   assert.equal(await dialog.locator('.requirement-parameter-frame select:enabled').count(), 0);
   await dialog.locator('#requirement-text').fill('The orbit shall have altitude $$altitude_km$$ km and $$new_quantity$$.');
@@ -231,7 +231,7 @@ test('requirement pane browser workflow', { skip: !process.env.PLAYWRIGHT_MODULE
   assert.equal(await dialog.locator('#requirement-condition').evaluate(element => element === document.activeElement), true);
   assert.equal(await dialog.locator('#requirement-text').inputValue(), initial.workspace.statements.find(row => row.definition === 'FrameworkRequirements::OrbitPeriod').text);
   assert.equal(await dialog.locator('#requirement-rationale').inputValue(), orbitData.origin);
-  await dialog.locator('#requirement-condition').fill('false');
+  await dialog.locator('#requirement-condition').fill('False');
   await page.waitForFunction(() => document.querySelector('#requirement-check').textContent === 'FALSE');
   assert.equal(await dialog.locator('#requirement-check').evaluate(element => getComputedStyle(element).color), 'rgb(180, 63, 49)');
   await dialog.locator('#requirement-condition').fill('1 +');
@@ -334,7 +334,7 @@ test('requirement pane browser workflow', { skip: !process.env.PLAYWRIGHT_MODULE
   assert.equal(await dialog.locator('[data-parameter-unit="energy_J"]').inputValue(), 'J');
   assert.equal(await dialog.locator('[data-parameter-unit="margin"]').inputValue(), '%');
   assert.equal(await dialog.locator('.requirement-parameter-frame select:enabled').count(), 0);
-  await dialog.locator('#requirement-condition').fill('false');
+  await dialog.locator('#requirement-condition').fill('False');
   await dialog.getByRole('button', { name: 'Save requirement', exact: true }).click();
   await dialog.waitFor({ state: 'hidden' });
   await page.waitForFunction(() => document.querySelector('#status').textContent === '');
@@ -342,7 +342,7 @@ test('requirement pane browser workflow', { skip: !process.env.PLAYWRIGHT_MODULE
   assert.equal(await page.evaluate(() => document.activeElement.dataset.verificationEdit), added.key);
   assert.equal((await get()).workspace.statements.find(row => row.key === added.key).text, changed.workspace.statements.find(row => row.key === added.key).text);
   await page.locator(`[data-verification-edit="${added.key}"]`).click();
-  assert.equal(await dialog.locator('#requirement-condition').inputValue(), 'false');
+  assert.equal(await dialog.locator('#requirement-condition').inputValue(), 'False');
   await dialog.locator('#requirement-rationale').fill('Discard this changed rationale.');
   await dialog.locator('[data-parameter-unit="energy_J"]').fill('kg');
   await dialog.locator('[data-parameter="energy_J"]').fill('1 +');
@@ -353,10 +353,11 @@ test('requirement pane browser workflow', { skip: !process.env.PLAYWRIGHT_MODULE
   const cancelled = await get();
   assert.equal(cancelled.workspace.variables.find(variable => variable.name === 'energy_J').unit, 'J');
   assert.equal(cancelled.workspace.statements.find(row => row.key === added.key).rationale, rationale);
-  const [download] = await Promise.all([page.waitForEvent('download'), page.locator('.export-sysml').click()]);
-  const exported = join(dir, 'download.sysml'); await download.saveAs(exported);
-  assert.match(await readFile(exported, 'utf8'), /attribute 'energy_J' : Real\[0\.\.1\] = \(3 \* 3600\)/);
-  assert.match(await readFile(exported, 'utf8'), /attribute rationale : String =/);
+  const [download] = await Promise.all([page.waitForEvent('download'), page.locator('.export-json').click()]);
+  const exported = join(dir, 'download.json'); await download.saveAs(exported);
+  const downloaded = JSON.parse(await readFile(exported, 'utf8')).statements.find(row => row.key === added.key);
+  assert.equal(downloaded.parameters.energy_J, '3 * 3600');
+  assert.equal(downloaded.rationale, rationale);
   await addedRow.locator('.row-delete').click();
   await page.waitForFunction(() => document.querySelector('#status').textContent === '');
   assert.equal(await page.locator('.statements tbody tr').count(), 1);

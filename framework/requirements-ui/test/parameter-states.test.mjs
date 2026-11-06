@@ -1,15 +1,13 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
-import { spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import { emptyWorkspace, parameterExpression, removePowerMode, renamePowerMode, validateWorkspace } from '../model.mjs';
 import { mergedStateExpression, parameterStates, splitParameterStates, stateExpression } from '../parameter-states.mjs';
 import { createServer } from '../server.mjs';
-import { readWorkspace, renderExport, renderManaged } from '../sysml.mjs';
-import { evaluateChecks } from '../verification.mjs';
+import { readWorkspace, validateCalculations as renderExport, serializeWorkspace as renderManaged } from './helpers.mjs';
+import { evaluateChecks } from './helpers.mjs';
 
 const modes = [
   { key: 'nominal', name: 'Nominal', sunlight: 70, eclipse: 100 },
@@ -36,13 +34,13 @@ test('splitting copies a shared expression to every global state and retains one
   assert.deepEqual(states.values, { nominal: '2 * 3', downlink: '2 * 3', science: '2 * 3' });
   const source = stateExpression(states, modes);
   assert.deepEqual(parameterStates(source, modes), states);
-  assert.match(source, /^if mode == "Downlink"/);
+  assert.match(source, /if mode == "Downlink" else/);
   row.parameters.x = source;
   assert.doesNotThrow(() => validateWorkspace(workspace));
   assert.deepEqual(evaluateChecks(workspace)[0].modes.map(mode => mode.values.x), [6, 6, 6]);
   const exported = renderExport(workspace);
-  assert.equal((exported.match(/attribute 'x' : Real\[0\.\.1\]/g) ?? []).length, 2);
-  assert.match(exported, /if \(MissionRequirements::spacecraft_mode.display_name == "Downlink"\) \?/);
+  assert.equal(JSON.parse(exported).statements.length, 2);
+  assert.equal(JSON.parse(exported).statements[0].parameters.x, source);
   assert.deepEqual(readWorkspace(renderManaged(workspace)), workspace);
   assert.throws(() => splitParameterStates('1', modes, 'missing'), /existing spacecraft state/);
 });
@@ -57,21 +55,22 @@ test('last edited expressions survive encoding and merge from any row, including
   assert.equal(mergedStateExpression(empty, 'nominal'), null);
   assert.equal(parameterStates('12', modes), null);
   assert.equal(parameterStates(null, modes), null);
-  assert.equal(parameterStates('if true ? 1 else 2', modes), null);
+  assert.equal(parameterStates('1 if True else 2', modes), null);
   assert.deepEqual(splitParameterStates(null, modes, 'nominal').values, { nominal: null, downlink: null, science: null });
 });
 
 test('existing conditional expressions expose their branch text without evaluating or simplifying arithmetic', () => {
   for (const [source, expected] of [
-    ['if mode == "Downlink" ? REQ002.x * 2 else 2 * 3', { nominal: '2 * 3', downlink: 'REQ002.x * 2', science: '2 * 3' }],
-    ['(if "Nominal" != mode ? (x) + (2) else (if y > 0 ? 4 else 5))',
-      { nominal: 'if y > 0 ? 4 else 5', downlink: '(x) + (2)', science: '(x) + (2)' }],
-    ['if mode == "Nominal" ? null else if mode == "Downlink" ? min(4, y) else -2 ** 3',
+    ['REQ002.x * 2 if mode == "Downlink" else 2 * 3', { nominal: '2 * 3', downlink: 'REQ002.x * 2', science: '2 * 3' }],
+    ['(x) + (2) if "Nominal" != mode else (4 if y > 0 else 5)',
+      { nominal: '4 if y > 0 else 5', downlink: '(x) + (2)', science: '(x) + (2)' }],
+    ['None if mode == "Nominal" else min(4, y) if mode == "Downlink" else -2 ** 3',
       { nominal: null, downlink: 'min(4, y)', science: '-2 ** 3' }],
   ]) {
-    assert.deepEqual(parameterStates(source, modes).values, expected, source);
+    const workspace = fixture(); workspace.statements[0].parameters.x = source;
+    assert.deepEqual(evaluateChecks(workspace)[0].parameters.x.branches.values, expected, source);
   }
-  const source = '2 * (if mode == "Downlink" ? 3 else 4)';
+  const source = '2 * (3 if mode == "Downlink" else 4)';
   assert.equal(parameterStates(source, modes), null);
   assert.deepEqual(Object.values(splitParameterStates(source, modes, 'nominal').values), [source, source, source]);
 });
@@ -93,9 +92,9 @@ test('state expressions retain reference rewrites, mode guards, pending branches
   assert.equal(parameterStates(row.parameters.x, added).values.safe, null);
 });
 
-test('invalid state drafts round trip without becoming executable SysML and combined length stays bounded', () => {
+test('invalid state drafts round trip as data and combined length stays bounded', () => {
   const workspace = fixture(), row = workspace.statements[0];
-  const states = { values: { nominal: '1 +', downlink: '4', science: 'if true ? 2 else null' }, lastEdited: 'nominal' };
+  const states = { values: { nominal: '1 +', downlink: '4', science: '2 if True else None' }, lastEdited: 'nominal' };
   row.parameters.x = stateExpression(states, modes);
   assert.deepEqual(parameterStates(row.parameters.x, modes), states);
   assert.equal(evaluateChecks(workspace)[0].parameters.x.state, 'error');
@@ -105,24 +104,20 @@ test('invalid state drafts round trip without becoming executable SysML and comb
   assert.throws(() => parameterExpression(stateExpression(states, modes), { name: 'x' }), /5,000/);
 });
 
-test('generated state branches validate as native SysML, including quoted modes and pending Integer values', async t => {
-  if (spawnSync('syside', ['--version']).error) return t.skip('syside is not installed');
+test('generated state branches evaluate in Python, including quoted modes and pending Integer values', () => {
   const workspace = fixture(), row = workspace.statements[0];
   row.parameters.x = stateExpression({ values: { nominal: '2 * 3', downlink: 'REQ002.x * 2', science: '9' }, lastEdited: 'science' }, modes);
   row.parameters.y = stateExpression({ values: { nominal: '2', downlink: null, science: '3' }, lastEdited: 'downlink' }, modes);
-  const directory = await mkdtemp(join(tmpdir(), 'parameter-states-native-'));
-  t.after(() => rm(directory, { recursive: true, force: true }));
-  const file = join(directory, 'mission.sysml');
-  await writeFile(file, renderExport(workspace));
-  const framework = fileURLToPath(new URL('../../', import.meta.url));
-  const libraries = (await readdir(framework)).filter(name => name.endsWith('.sysml')).map(name => join(framework, name));
-  const result = spawnSync('syside', ['check', ...libraries, file], { encoding: 'utf8', timeout: 120000 });
-  assert.equal(result.status, 0, result.stdout + result.stderr);
+  const snapshot = JSON.parse(renderExport(workspace));
+  const result = evaluateChecks(snapshot)[0];
+  assert.deepEqual(result.modes.map(mode => mode.values.x), [6, 8, 9]);
+  assert.deepEqual(result.modes.map(mode => mode.values.y), [2, null, 3]);
+  assert.equal(result.parameters.y.state, 'pending');
 });
 
 test('browser splits, evaluates, pastes, persists and merges state rows using the last edited expression', { skip: !process.env.PLAYWRIGHT_MODULE }, async t => {
   const { chromium } = await import(process.env.PLAYWRIGHT_MODULE);
-  const directory = await mkdtemp(join(tmpdir(), 'parameter-states-browser-')), modelPath = join(directory, 'mission.sysml');
+  const directory = await mkdtemp(join(tmpdir(), 'parameter-states-browser-')), modelPath = join(directory, 'mission.json');
   await writeFile(modelPath, renderManaged(fixture()));
   const server = createServer({ modelPath });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -164,10 +159,11 @@ test('browser splits, evaluates, pastes, persists and merges state rows using th
   const persisted = await read(), source = persisted.statements[0].parameters.x;
   assert.equal(persisted.statements.length, 2);
   assert.equal(parameterStates(source, persisted.power.modes).lastEdited, 'downlink');
-  assert.match(await readFile(modelPath, 'utf8'), /if \(MissionRequirements::spacecraft_mode.display_name == "Downlink"\) \?/);
-  const exportResponse = await page.request.post(base + '/api/sysml', { data: { workspace: persisted } });
+  assert.equal(JSON.parse(await readFile(join(directory, 'mission.json'), 'utf8')).statements[0].parameters.x, source);
+  assert.match(source, /if mode == "Downlink" else/);
+  const exportResponse = await page.request.post(base + '/api/json', { data: { workspace: persisted } });
   assert.equal(exportResponse.ok(), true);
-  assert.match(await exportResponse.text(), /if \(Mission_mission_Export::spacecraft_mode.display_name == "Downlink"\) \?/);
+  assert.deepEqual(await exportResponse.json(), persisted);
   await page.reload(); await open();
   assert.equal(await expression('downlink').inputValue(), '3 * 3');
   await state('science').selectOption('');

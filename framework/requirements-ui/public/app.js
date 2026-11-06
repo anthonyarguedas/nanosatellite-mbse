@@ -7,6 +7,7 @@ import { createRequirementEditor } from '/requirement-editor.js';
 import { requirementHTML } from '/requirement-preview.js';
 import { createPowerEditor } from '/power-editor.js';
 import { isPowerRequirement, parentPowerLimit } from '/power.mjs';
+import { verificationMethods } from '/verification-methods.mjs';
 
 const main = document.querySelector('main');
 const status = document.querySelector('#status'), retry = document.querySelector('#retry');
@@ -18,11 +19,11 @@ let saveTask = null;
 const workspaceURL = (id = sessionId) => id === 'current' ? '/api/workspace' : `/api/workspace?session=${encodeURIComponent(id)}`;
 const requestedSession = () => new URLSearchParams(location.search).get('session') || 'current';
 let catalog = domainTypes, products = [], active = 'external', workspace = emptyWorkspace(catalog);
-let revision, lastSaved, saveTimer, modelName = 'mission.sysml';
+let revision, lastSaved, saveTimer, modelName = 'mission.json';
 let loaded = false, saving = false, conflict = false, exporting = false;
 let editor = null, popoverAnchor = null, worker = null, evaluationTimer, workerTimer, generation = 0;
 const selected = {}, sorts = {}, statementIds = new Map();
-let results = new Map();
+let results = new Map(), scriptResults = null;
 const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 })[char]);
@@ -51,6 +52,8 @@ const rowByKey = key => workbookRows(workspace).find(row => row.key === key);
 const requirementEditor = createRequirementEditor({
   panel: document.querySelector('#requirement-editor'), getWorkspace: () => workspace, getCatalog: () => catalog,
   validate: candidate => validateWorkspace(snapshot(candidate), catalog, products),
+  getScriptResults: () => scriptResults,
+  onScriptResults: evidence => { scriptResults = evidence; scheduleEvaluation(); },
   onCommit: candidate => {
     workspace = candidate; statementIds.clear(); syncStatementIds();
     renderWorkbook(); updateSources(); scheduleSave(); scheduleEvaluation();
@@ -72,9 +75,9 @@ const powerEditor = createPowerEditor({
 const rowLabel = row => row.name ?? row.text ?? products.find(product => product.id === row.product)?.name ?? '';
 const isEps = () => catalog.find(type => type.model === rowByKey(active)?.definition)?.role === 'eps';
 const componentChecks = () => new Map(workspace.statements.map(row => [row.key,
-  row.condition.trim() ? results.get(row.key) ?? { state: 'pending' } : { state: 'unset' }]));
+  verificationMethods(row).length ? results.get(row.key) ?? { state: 'pending' } : { state: 'unset' }]));
 function updateExport() {
-  document.querySelector('.export-sysml').disabled = exporting || !loaded || sessionBusy;
+  document.querySelectorAll('.export-json').forEach(button => { button.disabled = exporting || !loaded || sessionBusy; });
   document.querySelectorAll('.export-kicad, .export-fprime').forEach(button => {
     button.disabled = exporting || sessionBusy || !viewRows('components').some(row => row.product);
   });
@@ -144,12 +147,12 @@ function draft(table) {
 function used(row, table) {
   return table === 'components' ? Boolean(row.id || row.product || row.requirements.length)
     : table === 'stakeholders' ? Boolean(row.id || row.name || row.type || row.definition)
-    : Boolean(row.id || row.sources.length || row.affected.length || row.text || row.condition || row.rationale || row.kind !== 'Requirement'
+    : Boolean(row.id || row.sources.length || row.affected.length || row.text || row.condition || row.verifications?.length || row.rationale || row.kind !== 'Requirement'
       || Object.values(row.parameters).some(value => value !== null && value !== ''));
 }
 function snapshot(state = workspace) {
   return {
-    version: WORKSPACE_VERSION, variables: structuredClone(state.variables), power: structuredClone(state.power),
+    version: WORKSPACE_VERSION, ...(state.expressionLanguage ? { expressionLanguage: state.expressionLanguage } : {}), variables: structuredClone(state.variables), power: structuredClone(state.power), scripts: structuredClone(state.scripts),
     stakeholders: state.stakeholders.filter(row => used(row, 'stakeholders')).map(row => ({ key: row.key, id: row.id.trim(), name: row.name, type: row.type })),
     elements: state.elements.filter(row => used(row, 'stakeholders')).map(row => ({ key: row.key, id: row.id.trim(), name: row.name, owner: row.owner, definition: row.definition })),
     components: state.components.filter(row => used(row, 'components')).map(row => ({
@@ -158,6 +161,7 @@ function snapshot(state = workspace) {
     statements: state.statements.filter(row => used(row, 'statements')).map(row => ({
       key: row.key, id: row.id.trim(), context: row.context, sources: [...row.sources], affected: [...row.affected], kind: row.kind, text: row.text,
       condition: row.condition,
+      ...(row.verifications ? { verifications: structuredClone(row.verifications) } : {}),
       ...(row.definition ? { definition: row.definition } : {}),
       ...(isPowerRequirement(row) ? { powerScope: row.powerScope } : {}),
       ...(row.origin ? { origin: row.origin } : {}),
@@ -265,8 +269,8 @@ function updateChecks() {
     const tr = rowElement(row.key), cell = tr?.querySelector('.checkbox-cell');
     if (!cell) continue;
     updatePreview(row);
-    const result = row.condition.trim() ? results.get(row.key) ?? { state: 'pending', message: 'Recalculating…' }
-      : { state: 'unset', message: 'No SysML condition. Enter a Boolean expression to verify this row.' };
+    const result = verificationMethods(row).length ? results.get(row.key) ?? { state: 'pending', message: 'Recalculating…' }
+      : { state: 'unset', message: 'No verification condition. Enter a Python Boolean expression to verify this row.' };
     const checkbox = cell.querySelector('.verification-result'), edit = cell.querySelector('.verification-edit');
     checkbox.checked = result.state === 'pass'; checkbox.indeterminate = ['error', 'pending'].includes(result.state);
     checkbox.title = result.message;
@@ -290,7 +294,7 @@ function scheduleEvaluation() {
     const statements = workspace.statements.filter(row => used(row, 'statements'));
     if (!statements.length) return;
     const fail = message => {
-      results = new Map(statements.map(row => [row.key, { state: row.condition.trim() ? 'error' : 'unset', message,
+      results = new Map(statements.map(row => [row.key, { state: verificationMethods(row).length ? 'error' : 'unset', message,
         parameters: Object.fromEntries(workspace.variables.map(variable => [variable.name, { state: row.parameters[variable.name]?.trim() ? 'error' : 'unset', value: null, message }])) }]));
       updateChecks(); worker?.terminate(); worker = null;
     };
@@ -299,12 +303,15 @@ function scheduleEvaluation() {
         worker = new Worker('/verification-worker.js', { type: 'module' });
         worker.onmessage = event => {
           if (event.data.token !== generation) return;
-          clearTimeout(workerTimer); results = new Map(event.data.results.map(result => [result.key, result])); updateChecks();
+          clearTimeout(workerTimer);
+          if (event.data.error) { fail(event.data.error); return; }
+          results = new Map(event.data.results.map(result => [result.key, result])); updateChecks();
         };
       }
       worker.onerror = () => fail('Could not evaluate the expression.');
-      workerTimer = setTimeout(() => fail('Expression evaluation timed out.'), 1500);
-      worker.postMessage({ token, workspace: { variables: workspace.variables, statements, elements: workspace.elements, power: workspace.power } });
+      workerTimer = setTimeout(() => fail('Python expression evaluation timed out.'), 7000);
+      worker.postMessage({ token, scriptResults, workspace: { variables: workspace.variables, statements,
+        elements: workspace.elements, power: workspace.power, scripts: workspace.scripts, expressionLanguage: workspace.expressionLanguage } });
     } catch { fail('Expression evaluation is unavailable in this browser.'); }
   }, 100);
 }
@@ -334,7 +341,9 @@ async function persist() {
     const response = await fetch(workspaceURL(id), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workspace: data, revision }) });
     const result = await response.json();
     if (!response.ok) { conflict = response.status === 409; throw new Error(result.error); }
-    revision = result.revision; lastSaved = serialized; succeeded = true; showStatus();
+    revision = result.revision; lastSaved = serialized; succeeded = true;
+    document.querySelector('#session-storage').title = `Autosaved separately to ${modelName}.`;
+    showStatus();
   } catch (error) { showStatus(error.message || 'Could not save. Your edits are still in this tab.', true, conflict ? () => location.reload() : save); }
   finally { saving = false; if (succeeded && dirty()) scheduleSave(); }
   return succeeded;
@@ -365,12 +374,14 @@ function installWorkspace(data, id, tab, history = 'replace') {
   const candidate = validateWorkspace(data.workspace, nextCatalog, nextProducts);
   requirementEditor.close(); powerEditor.reset(); closeEditor(); closeMenus();
   clearTimeout(saveTimer); clearTimeout(evaluationTimer); clearTimeout(workerTimer);
-  generation++; worker?.terminate(); worker = null; results = new Map();
+  generation++; worker?.terminate(); worker = null; results = new Map(); scriptResults = null;
   for (const state of [selected, sorts]) for (const key of Object.keys(state)) delete state[key];
   catalog = nextCatalog; products = nextProducts; workspace = candidate;
   sessionId = id; sessionName = data.session?.name ?? data.modelName ?? 'Current mission';
   sessions = data.sessions ?? sessions;
   revision = data.revision; modelName = data.modelName ?? modelName;
+  const storage = document.querySelector('#session-storage');
+  storage.title = `Autosaved separately to ${modelName}.`;
   statementIds.clear(); syncStatementIds();
   lastSaved = JSON.stringify(snapshot()); conflict = false; loaded = true;
   active = tab === 'eps' ? workspace.elements.find(row => catalog.find(type => type.model === row.definition)?.role === 'eps')?.key ?? 'mission'
@@ -459,13 +470,13 @@ document.querySelector('#session-form').addEventListener('submit', createSession
 async function exportArtifact(kind) {
   const button = document.querySelector(`.export-${kind}`);
   try {
-    const data = validateWorkspace(snapshot(), catalog, products), context = active;
+    const data = validateWorkspace(snapshot(powerEditor.snapshot(requirementEditor.snapshot())), catalog, products), context = active;
     exporting = true; updateExport(); button.setAttribute('aria-busy', 'true');
     const response = await fetch(`/api/${kind}?session=${encodeURIComponent(sessionId)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ workspace: data, context }) });
     if (!response.ok) throw new Error((await response.json()).error);
     const blob = await response.blob(), url = URL.createObjectURL(blob), link = document.createElement('a');
-    link.href = url; link.download = response.headers.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1] ?? (kind === 'sysml' ? 'mission-export.sysml' : kind === 'kicad' ? 'eps.kicad_sch' : 'eps-fprime.zip');
+    link.href = url; link.download = response.headers.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1] ?? (kind === 'json' ? 'workspace-export.json' : kind === 'kicad' ? 'eps.kicad_sch' : 'eps-fprime.zip');
     document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
   } catch (error) { showStatus(error.message || 'Could not export the components.', true); }
   finally { exporting = false; updateExport(); button.removeAttribute('aria-busy'); }
@@ -642,8 +653,8 @@ function deleteRow(table, key) {
   renderTabs(); render(table); powerEditor.render(); requirementEditor.refresh(); updateSources(); focusCell(table, Math.min(index, viewRows(table).length - 1), 0); scheduleSave(); scheduleEvaluation();
 }
 main.addEventListener('click', event => {
-  const exportButton = event.target.closest('.export-sysml, .export-kicad, .export-fprime');
-  if (exportButton) { closeMenus(); closeEditor(); exportArtifact(exportButton.matches('.export-sysml') ? 'sysml' : exportButton.matches('.export-kicad') ? 'kicad' : 'fprime'); return; }
+  const exportButton = event.target.closest('.export-kicad, .export-fprime, .export-json');
+  if (exportButton) { closeMenus(); closeEditor(); exportArtifact(exportButton.matches('.export-json') ? 'json' : exportButton.matches('.export-kicad') ? 'kicad' : 'fprime'); return; }
   const openElement = event.target.closest('[data-open-element]');
   if (openElement) { navigate(openElement.dataset.openElement); return; }
   const openPower = event.target.closest('[data-open-power]');

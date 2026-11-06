@@ -1,13 +1,8 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, readdir, rm, writeFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { spawnSync } from 'node:child_process';
 import { test } from 'node:test';
-import { emptyWorkspace, migrateWorkspace, parameterExpression, parseTSV, rewriteRowReferences, validateWorkspace, WORKSPACE_VERSION } from '../model.mjs';
-import { createEvaluator, evaluateChecks } from '../verification.mjs';
-import { readWorkspace, renderExport, renderManaged } from '../sysml.mjs';
+import { emptyWorkspace, parameterExpression, parseTSV, rewriteRowReferences, validateWorkspace, WORKSPACE_VERSION } from '../model.mjs';
+import { createEvaluator, evaluateChecks } from './helpers.mjs';
+import { readWorkspace, validateCalculations as renderExport, serializeWorkspace as renderManaged } from './helpers.mjs';
 
 function fixture() {
   return {
@@ -17,7 +12,7 @@ function fixture() {
       { key: 'r1', id: 'REQ001', context: 'external', kind: 'Requirement', text: 'A quantity of {x}.', sources: [], affected: [], condition: '',
         parameters: { x: '1.2e3', y: 'x / 1000 + 1.3', count: '2 ** 3', z: null } },
       { key: 'r2', id: 'REQ002', context: 'external', kind: 'Requirement', text: '', sources: ['r1'], affected: [], condition: 'x == 600 and y == 602.5 and count == 2',
-        parameters: { x: 'REQ001.x / 2', y: 'x + REQ001.y', count: 'RealFunctions::floor(REQ001.y)', z: '3 * count' } },
+        parameters: { x: 'REQ001.x / 2', y: 'x + REQ001.y', count: 'math.floor(REQ001.y)', z: '3 * count' } },
     ],
   };
 }
@@ -76,13 +71,13 @@ test('cycles in local or cross-row parameter expressions give errors without a s
   }
 });
 
-test('Integer is an evaluated result type and preserves integrality in native SysML', () => {
+test('Integer evaluation preserves integrality across JSON round trips', () => {
   const workspace = fixture(), row = workspace.statements[0];
   row.parameters.count = 'x / 200';
   assert.equal(createEvaluator(workspace).parameter(row, 'count'), 6);
   const source = renderExport(workspace);
-  assert.match(source, /attribute 'count' : Integer\[0\.\.1\] = RealFunctions::ToInteger\(\('x' \/ 200\)\)/);
-  assert.match(source, /assert constraint \{ \('x' \/ 200\) == RealFunctions::ToInteger/);
+  assert.equal(JSON.parse(source).statements[0].parameters.count, 'x / 200');
+  assert.equal(JSON.parse(source).variables.find(variable => variable.name === 'count').type, 'integer');
   row.parameters.count = 'x / 201';
   assert.equal(evaluateChecks(workspace)[0].parameters.count.state, 'error');
   assert.throws(() => renderExport(workspace), /safe integer/);
@@ -93,40 +88,18 @@ test('Integer is an evaluated result type and preserves integrality in native Sy
   assert.doesNotThrow(() => renderExport(workspace));
 });
 
-test('qualified SysML math functions and constants evaluate in parameter cells', () => {
+test('Python math calls and constants evaluate directly', () => {
   const workspace = fixture(), row = workspace.statements[0];
-  row.parameters.x = 'RealFunctions::sqrt(9) + RealFunctions::max(2, 4)';
-  row.parameters.y = 'TrigFunctions::arccos(-1) / TrigFunctions::pi';
-  row.parameters.count = '2 ^ 3 ** 2';
+  row.parameters.x = 'math.sqrt(9) + max(2, 4)'; row.parameters.y = 'math.acos(-1) / math.pi'; row.parameters.count = '2 ** 3 ** 2';
   const result = evaluateChecks(workspace)[0];
-  assert.equal(result.values.x, 7);
-  assert.equal(result.values.y, 1);
-  assert.equal(result.values.count, 512);
-  assert.match(renderExport(workspace), /TrigFunctions::arccos/);
+  assert.equal(result.values.x, 7); assert.equal(result.values.y, 1); assert.equal(result.values.count, 512);
 });
 
-test('version 7 literals and hidden formulas migrate losslessly to editable cell expressions', () => {
-  const old = fixture(); old.version = 7;
-  old.statements[0].parameters = { x: 600, y: null, count: 4, z: 0 };
-  old.statements[0].formulas = { y: '  x * 2  ' };
-  old.statements[1].parameters = { x: null, y: -1.5, count: null, z: null };
-  old.statements[1].formulas = { x: 'REQ001.y / 2', count: 'REQ001.count + 1' };
-  const original = structuredClone(old), upgraded = migrateWorkspace(old);
-  assert.deepEqual(old, original);
-  assert.equal(upgraded.version, WORKSPACE_VERSION);
-  assert.deepEqual(upgraded.statements[0].parameters, { x: '600', y: '  x * 2  ', count: '4', z: '0' });
-  assert.deepEqual(upgraded.statements[1].parameters, { x: 'REQ001.y / 2', y: '-1.5', count: 'REQ001.count + 1', z: null });
-  assert.ok(upgraded.statements.every(row => !Object.hasOwn(row, 'formulas')));
-  assert.deepEqual(upgraded.statements.map(row => row.sources), old.statements.map(row => row.sources));
-  assert.deepEqual(upgraded.statements.map(row => row.condition), old.statements.map(row => row.condition));
-  assert.doesNotThrow(() => validateWorkspace(upgraded));
-  assert.equal(evaluateChecks(upgraded)[0].values.y, 1200);
-  const source = `// <requirements-ui>\n/* requirements-ui:data\n${JSON.stringify(old)}\nrequirements-ui:end-data */\n// </requirements-ui>`;
-  assert.deepEqual(readWorkspace(source), upgraded);
-  assert.deepEqual(readWorkspace(renderManaged(upgraded)), upgraded);
-  assert.equal(migrateWorkspace(upgraded), upgraded);
-  upgraded.statements[0].formulas = { x: '5' };
-  assert.throws(() => validateWorkspace(upgraded), /Separate formula maps/);
+test('current cells require expression text and reject separate formula maps', () => {
+  const workspace = fixture(); workspace.statements[0].formulas = { y: 'x * 2' };
+  assert.throws(() => validateWorkspace(workspace), /Separate formula maps/);
+  delete workspace.statements[0].formulas; workspace.statements[0].parameters.x = 600;
+  assert.throws(() => validateWorkspace(workspace), /expression text/);
 });
 
 test('storage retains expression spelling and exports equations rather than evaluated values', () => {
@@ -134,9 +107,10 @@ test('storage retains expression spelling and exports equations rather than eval
   const source = renderManaged(workspace);
   assert.deepEqual(readWorkspace(source), workspace);
   const exported = renderExport(workspace);
-  assert.match(exported, /attribute 'x' : Real\[0\.\.1\] = \(1200 \+ 4\)/);
-  assert.doesNotMatch(exported, /attribute 'x' : Real\[0\.\.1\] = 1204/);
-  assert.match(exported, /statement_r1\.'x' \/ 2/);
+  const stored = JSON.parse(exported);
+  assert.equal(stored.statements[0].parameters.x, '  1.2e3 + 4  ');
+  assert.equal(stored.statements[1].parameters.x, 'REQ001.x / 2');
+  assert.equal(stored.statements[0].values, undefined);
   assert.equal(evaluateChecks(workspace)[0].values.x, 1204);
 });
 
@@ -164,17 +138,11 @@ test('repeated references share evaluated results and deep recursion remains bou
   assert.equal(evaluateChecks(workspace).at(-1).parameters.x.state, 'error');
 });
 
-test('native SysML accepts parameter equations with pending and resolved Integer results', async t => {
-  if (spawnSync('syside', ['--version']).error) return t.skip('syside is not installed');
-  const dir = await mkdtemp(join(tmpdir(), 'parameter-expression-sysml-'));
-  t.after(() => rm(dir, { recursive: true, force: true }));
-  const framework = fileURLToPath(new URL('../../', import.meta.url));
-  const libraries = (await readdir(framework)).filter(name => name.endsWith('.sysml')).map(name => join(framework, name));
+test('JSON snapshots retain pending and resolved Integer equations for Python evaluation', () => {
   const workspace = fixture(); workspace.statements[0].parameters.count = 'x / 200';
-  const filled = join(dir, 'filled.sysml'), pending = join(dir, 'pending.sysml');
-  await writeFile(filled, renderExport(workspace, { packageName: 'ExpressionMission' }));
+  const filled = JSON.parse(renderExport(workspace));
+  assert.equal(evaluateChecks(filled)[0].values.count, 6);
   workspace.statements[0].parameters.x = null;
-  await writeFile(pending, renderExport(workspace, { packageName: 'PendingExpressionMission' }));
-  const result = spawnSync('syside', ['check', ...libraries, filled, pending], { encoding: 'utf8', timeout: 120000 });
-  assert.equal(result.status, 0, result.stdout + result.stderr);
+  const pending = JSON.parse(renderExport(workspace));
+  assert.equal(evaluateChecks(pending)[0].parameters.count.state, 'pending');
 });

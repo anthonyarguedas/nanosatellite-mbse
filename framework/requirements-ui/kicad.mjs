@@ -1,6 +1,5 @@
 import { createHash } from 'node:crypto';
 import { componentCheck, tabsFor, validateWorkspace } from './model.mjs';
-import { evaluateChecks } from './verification.mjs';
 
 const quote = value => JSON.stringify(String(value));
 const number = value => Number(value.toFixed(4));
@@ -39,7 +38,7 @@ function symbolFor(product) {
 
 // Self-contained architecture symbols. Catalog pins remain unwired. Missing
 // pin data produces a black box, with no invented pins or PCB footprint.
-export function renderSchematic(workspace, context, { catalog, products, projectName = 'eps' }) {
+export function renderSchematic(workspace, context, { catalog, products, projectName = 'eps', checks: evaluatedChecks }) {
   validateWorkspace(workspace, catalog, products);
   const owner = workspace.elements.find(row => row.key === context);
   if (!owner || catalog.find(type => type.model === owner.definition)?.role !== 'eps') throw new Error('Choose an EPS tab to export.');
@@ -48,7 +47,7 @@ export function renderSchematic(workspace, context, { catalog, products, project
   const byId = new Map(products.map(product => [product.id, product]));
   const symbols = new Map(components.map(row => [row.product, symbolFor(byId.get(row.product))]));
   const root = uuid(`requirements-ui:${context}`);
-  const checks = new Map(evaluateChecks(workspace).map(check => [check.key, check]));
+  const checks = new Map((evaluatedChecks ?? []).map(check => [check.key, check]));
   const statements = new Map(workspace.statements.map(row => [row.key, row.id]));
   const label = tabsFor(workspace, catalog).find(tab => tab.key === context).label;
   const cellWidth = Math.max(95, ...[...symbols.values()].map(symbol => symbol.halfWidth * 2 + 25));

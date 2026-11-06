@@ -4,10 +4,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import { loadCatalog } from '../catalog.mjs';
-import { addPowerLimits, emptyWorkspace, mergeRequirementDraft, migrateWorkspace, validateWorkspace, WORKSPACE_VERSION } from '../model.mjs';
-import { calculatePower, connectPower, defaultPowerRoots, disconnectPower, isPowerRequirement, powerFor, powerLimitFor, spacecraftComponents } from '../power.mjs';
-import { evaluateChecks } from '../verification.mjs';
-import { readWorkspace, renderExport, renderManaged } from '../sysml.mjs';
+import { addPowerLimits, emptyWorkspace, mergeRequirementDraft, validateWorkspace, WORKSPACE_VERSION } from '../model.mjs';
+import { connectPower, disconnectPower, isPowerRequirement, powerFor, powerLimitFor, spacecraftComponents } from '../power.mjs';
+import { evaluateChecks } from './helpers.mjs';
+import { readWorkspace, validateCalculations as renderExport, serializeWorkspace as renderManaged } from './helpers.mjs';
 import { createServer } from '../server.mjs';
 import { parameterStates } from '../parameter-states.mjs';
 
@@ -30,22 +30,12 @@ function fixture() {
   return { workspace, eps, radio };
 }
 
-test('version 8 gains the CSRM component tables once and retains existing mission and EPS data', () => {
-  const original = emptyWorkspace(catalog); original.version = 8; delete original.power;
-  const subsystems = original.elements.filter(row => catalog.find(type => type.model === row.definition)?.role === 'subsystem');
-  const owners = new Set(subsystems.map(row => row.key));
-  original.elements = original.elements.filter(row => !owners.has(row.owner));
-  const before = structuredClone(original), upgraded = migrateWorkspace(original, catalog);
-  assert.deepEqual(original, before);
-  assert.equal(upgraded.version, WORKSPACE_VERSION);
-  assert.deepEqual(upgraded.statements, before.statements);
-  assert.equal(upgraded.elements.length, 52);
-  assert.deepEqual(upgraded.power, { modes: [], loads: [], links: [] });
-  assert.doesNotThrow(() => validateWorkspace(upgraded, catalog));
-  const sensor = upgraded.elements.find(row => row.definition.endsWith('ControlSubsystem::Sensor'));
-  upgraded.elements = upgraded.elements.filter(row => row.key !== sensor.key);
-  assert.equal(migrateWorkspace(upgraded, catalog), upgraded);
-  assert.deepEqual(readWorkspace(renderManaged(upgraded, { catalog }), catalog), upgraded);
+test('the current catalog seeds component tables and JSON preserves later deletions', () => {
+  const workspace = emptyWorkspace(catalog);
+  assert.equal(workspace.elements.length, 52);
+  const sensor = workspace.elements.find(row => row.definition.endsWith('ControlSubsystem::Sensor'));
+  workspace.elements = workspace.elements.filter(row => row.key !== sensor.key);
+  assert.deepEqual(readWorkspace(renderManaged(workspace), catalog), workspace);
 });
 
 test('system and subsystem limits remain separate from component allocations and verify their scoped sums and draws', () => {
@@ -71,11 +61,10 @@ test('system and subsystem limits remain separate from component allocations and
   limit.parameters.power_limit_W = null; assert.equal(check(subsystem).state, 'pending');
   assert.doesNotThrow(() => validateWorkspace(workspace, catalog));
   const source = renderExport(workspace, { catalog, packageName: 'PowerLimits' });
-  assert.match(source, /requirement .* : PowerBudgetModel::PowerLimit/);
-  assert.match(source, /requirement .* : PowerBudgetModel::ComponentPowerLimit/);
-  assert.match(source, /ref part :>> power_scope/);
-  assert.match(source, /attribute :>> 'allocated_power_W' = \(statement_.*\.'power_limit_W'/);
-  assert.doesNotMatch(source, /PowerAllocation\./);
+  const snapshot = JSON.parse(source);
+  assert.equal(snapshot.statements.find(row => row.key === system.key).powerScope, 'mission');
+  assert.equal(snapshot.statements.find(row => row.key === subsystem.key).parameters.allocated_power_W, 'PowerAllocation.allocated_power_W');
+  assert.ok(snapshot.statements.find(row => row.key === limit.key).sources.includes(subsystem.key));
 });
 
 test('power allocation and draw expressions can be edited, saved and exported', () => {
@@ -86,7 +75,7 @@ test('power allocation and draw expressions can be edited, saved and exported', 
   subsystem.parameters.power_limit_W = '20';
   powerLimitFor(workspace, component.key).parameters.power_limit_W = '3';
   subsystem.parameters.allocated_power_W = 'PowerAllocation.allocated_power_W * 1.2';
-  subsystem.parameters.draw_power_W = 'if mode == "Nominal" ? PowerAllocation.draw_power_W + 0.5 else PowerAllocation.draw_power_W';
+  subsystem.parameters.draw_power_W = 'PowerAllocation.draw_power_W + 0.5 if mode == "Nominal" else PowerAllocation.draw_power_W';
   assert.doesNotThrow(() => validateWorkspace(workspace, catalog));
   const check = evaluateChecks(workspace, { mode: 'nominal' }).find(result => result.key === subsystem.key);
   assert.ok(Math.abs(check.values.allocated_power_W - 3.6) < 1e-10);
@@ -94,8 +83,7 @@ test('power allocation and draw expressions can be edited, saved and exported', 
   assert.equal(check.state, 'pass');
   assert.deepEqual(readWorkspace(renderManaged(workspace, { catalog }), catalog), workspace);
   const source = renderExport(workspace, { catalog });
-  assert.match(source, /attribute :>> 'allocated_power_W' = \(\(.*\.'power_limit_W'.*\) \* 1\.2\)/);
-  assert.doesNotMatch(source, /PowerAllocation\./);
+  assert.equal(JSON.parse(source).statements.find(row => row.key === subsystem.key).parameters.allocated_power_W, 'PowerAllocation.allocated_power_W * 1.2');
   subsystem.parameters.allocated_power_W = 'allocated_power_W + 1';
   assert.match(evaluateChecks(workspace).find(result => result.key === subsystem.key).parameters.allocated_power_W.message, /Cyclic parameter expression/);
   assert.throws(() => renderExport(workspace, { catalog }), /Cyclic parameter expression/);
@@ -109,39 +97,32 @@ test('subsystem and component consumption properties bind to live draw parameter
   const component = workspace.elements.find(row => row.key === radio.element);
   const subsystem = powerLimitFor(workspace, component.owner), limit = powerLimitFor(workspace, component.key);
   limit.parameters.draw_power_W = 'PowerAllocation.draw_power_W + 0.5';
-  subsystem.parameters.draw_power_W = 'if mode == "Downlink" ? PowerAllocation.draw_power_W * 1.1 else PowerAllocation.draw_power_W';
+  subsystem.parameters.draw_power_W = 'PowerAllocation.draw_power_W * 1.1 if mode == "Downlink" else PowerAllocation.draw_power_W';
   const source = renderExport(workspace, { catalog });
-  const bindings = source.match(/attribute :>> power_consumption_W = statement_.*\.'draw_power_W';/g) ?? [];
-  assert.equal(bindings.length, workspace.statements.filter(isPowerRequirement).length - 1);
-  assert.match(source, /attribute :>> 'draw_power_W' = \(if \(MissionRequirements::spacecraft_mode.display_name == "Downlink"\)/);
-  assert.doesNotMatch(source, /power_consumption_W = [0-9]/);
-  const generic = await readFile(new URL('../../eps.sysml', import.meta.url), 'utf8');
-  assert.match(generic, /part def PowerConsumer \{/);
-  assert.match(generic, /attribute power_consumption_W : Real\[0\.\.1\]/);
-  assert.match(generic, /attribute power_consumption : ISQ::PowerValue\[0\.\.1\] = power_consumption_W \* 1\[SI::W\]/);
-  for (const type of ['Subsystem', 'HardwareComponent', 'Software']) assert.match(generic, new RegExp(`part def ${type} :> PowerConsumer`));
+  const snapshot = JSON.parse(source);
+  for (const definition of [component.definition, workspace.elements.find(row => row.key === component.owner).definition]) {
+    const properties = catalog.find(type => type.model === definition).properties;
+    assert.ok(properties.some(property => property.name === 'power_consumption_W' && property.unit === 'W' && property.value === null));
+  }
+  assert.equal(snapshot.statements.find(row => row.key === limit.key).parameters.draw_power_W, 'PowerAllocation.draw_power_W + 0.5');
+  assert.equal(evaluateChecks(snapshot, { mode: 'nominal' }).find(row => row.key === subsystem.key).values.draw_power_W, 2.5);
   workspace.statements = workspace.statements.filter(row => row.key !== limit.key);
-  const withoutLimit = renderExport(workspace, { catalog });
-  assert.equal((withoutLimit.match(/attribute :>> power_consumption_W/g) ?? []).length, bindings.length - 1);
+  assert.equal(evaluateChecks(workspace, { mode: 'nominal' }).find(row => row.key === subsystem.key).parameters.draw_power_W.state, 'pending');
 });
 
-test('version 9 adds unset power limits once while preserving mode draws, sizing inputs and existing requirement IDs', () => {
+test('power limit seeding is idempotent and preserves assigned data', () => {
   const { workspace, eps } = fixture(); connectPower(workspace, eps);
   workspace.statements = workspace.statements.filter(row => !isPowerRequirement(row));
   const parameters = new Set(['power_limit_W', 'allocated_power_W', 'draw_power_W']);
   workspace.variables = workspace.variables.filter(variable => !parameters.has(variable.name));
   for (const row of workspace.statements) for (const name of parameters) delete row.parameters[name];
-  workspace.version = 9;
-  const original = structuredClone(workspace), upgraded = migrateWorkspace(workspace, catalog);
-  assert.deepEqual(workspace, original);
-  assert.deepEqual(upgraded.power, original.power);
-  assert.deepEqual(upgraded.statements.filter(row => !isPowerRequirement(row)).map(row => row.id), original.statements.map(row => row.id));
-  assert.ok(upgraded.statements.filter(isPowerRequirement).every(row => row.parameters.power_limit_W === null));
-  assert.equal(upgraded.variables.length, 62);
-  assert.doesNotThrow(() => validateWorkspace(upgraded, catalog));
-  const before = upgraded.statements.length; addPowerLimits(upgraded); assert.equal(upgraded.statements.length, before);
-  assert.equal(migrateWorkspace(upgraded, catalog), upgraded);
-  assert.deepEqual(readWorkspace(renderManaged(upgraded, { catalog }), catalog), upgraded);
+  const original = structuredClone(workspace); addPowerLimits(workspace);
+  assert.deepEqual(workspace.power, original.power);
+  assert.deepEqual(workspace.statements.filter(row => !isPowerRequirement(row)).map(row => row.id), original.statements.map(row => row.id));
+  assert.ok(workspace.statements.filter(isPowerRequirement).every(row => row.parameters.power_limit_W === null));
+  assert.equal(workspace.variables.length, 62); validateWorkspace(workspace, catalog);
+  const before = workspace.statements.length; addPowerLimits(workspace); assert.equal(workspace.statements.length, before);
+  assert.deepEqual(readWorkspace(renderManaged(workspace), catalog), workspace);
 });
 
 test('weighted component states drive EPS equations, propagate missing inputs, and restore manual inputs on disconnect', () => {
@@ -151,7 +132,7 @@ test('weighted component states drive EPS equations, propagate missing inputs, a
   workspace.statements.find(row => row.definition === 'FrameworkRequirements::OrbitPeriod').parameters.altitude_km = '500';
   connectPower(workspace, eps);
   validateWorkspace(workspace, catalog);
-  const result = calculatePower(workspace, defaultPowerRoots(workspace, eps));
+  const result = evaluateChecks(workspace).find(row => row.key === energy.key).values;
   assert.equal(result.sunlight_power_W, 3.5); assert.equal(result.eclipse_power_W, 2);
   let check = evaluateChecks(workspace).find(row => row.key === energy.key);
   assert.equal(check.state, 'pass'); assert.equal(check.values.sunlight_power_W, 3.5);
@@ -161,9 +142,9 @@ test('weighted component states drive EPS equations, propagate missing inputs, a
   assert.equal(check.state, 'pending'); assert.equal(check.values.eclipse_power_W, 2);
   assert.equal(check.values.sunlight_power_W, null);
   workspace.power.modes[0].sunlight = 100; workspace.power.modes[1].sunlight = 0;
-  assert.equal(calculatePower(workspace, defaultPowerRoots(workspace, eps)).sunlight_power_W, 2);
+  assert.equal(evaluateChecks(workspace).find(row => row.key === energy.key).values.sunlight_power_W, 2);
   workspace.power.modes[0].eclipse = 50;
-  assert.equal(calculatePower(workspace, defaultPowerRoots(workspace, eps)).eclipse_power_W, null);
+  assert.equal(evaluateChecks(workspace).find(row => row.key === energy.key).values.eclipse_power_W, null);
   radio.states[0].watts = -1;
   assert.throws(() => validateWorkspace(workspace, catalog), /nonnegative/);
   radio.states[0].watts = 1;
@@ -190,33 +171,30 @@ test('requirement drafts merge load source changes while preserving component de
   assert.equal(disconnected.statements.find(row => row.key === energy.key).parameters.sunlight_power_W, null);
 });
 
-test('native exports retain typed load profiles, quantity, mode fractions and live references without cached totals', () => {
+test('JSON snapshots retain load profiles, quantity, mode fractions and live references without cached totals', () => {
   const { workspace, eps } = fixture(); connectPower(workspace, eps);
   const source = renderExport(workspace, { catalog, packageName: 'PowerBudgetTest' });
-  assert.match(source, /PowerBudgetModel::ModeDraw :> load_profiles/);
-  assert.match(source, /:>> power|:>> watts = 4/);
-  assert.match(source, /PowerBudgetModel::ModeContribution/);
-  assert.match(source, /attribute :>> quantity = 2/);
-  assert.match(source, /:>> sunlight_fraction = 75 \/ 100/);
-  assert.match(source, /attribute :>> sunlight_power_W = if .* \? contribution_\d+\.sunlight_power_W/);
-  assert.match(source, /power_budget_.*\.'sunlight_power_W'/);
-  assert.doesNotMatch(source, /sunlight_power_W = 3\.5|requirements-ui:data/);
+  const snapshot = JSON.parse(source);
+  assert.ok(snapshot.power.loads.some(load => load.quantity === 2 && load.states.some(state => state.watts === 4)));
+  assert.equal(snapshot.power.modes[0].sunlight, 75);
+  assert.equal(snapshot.statements.find(row => row.definition === 'FrameworkRequirements::LoadEnergy').parameters.sunlight_power_W, 'LoadBudget.sunlight_power_W');
+  assert.ok(snapshot.statements.every(row => row.values === undefined));
   assert.deepEqual(readWorkspace(renderManaged(workspace, { catalog }), catalog), workspace);
 });
 
 test('browser keeps system limits in Mission and component allocations in their subsystem tabs', { skip: !process.env.PLAYWRIGHT_MODULE }, async t => {
   const { chromium } = await import(process.env.PLAYWRIGHT_MODULE);
   const directory = await mkdtemp(join(tmpdir(), 'power-ui-browser-'));
-  const modelPath = join(directory, 'mission.sysml');
+  const modelPath = join(directory, 'mission.json');
   const { workspace, eps, radio } = fixture();
   const energy = workspace.statements.find(row => row.definition === 'FrameworkRequirements::LoadEnergy');
   energy.parameters.sunlight_power_W = '17';
   const transmitter = workspace.elements.find(row => row.key === radio.element);
   for (const row of workspace.statements.filter(isPowerRequirement)) row.parameters.power_limit_W = '0';
-  const total = 'if mode == "Nominal" ? 4 else 20';
+  const total = '4 if mode == "Nominal" else 20';
   powerLimitFor(workspace, 'mission').parameters.power_limit_W = total;
   powerLimitFor(workspace, transmitter.owner).parameters.power_limit_W = total;
-  powerLimitFor(workspace, transmitter.key).parameters.power_limit_W = 'if mode == "Nominal" ? 3 else 18';
+  powerLimitFor(workspace, transmitter.key).parameters.power_limit_W = '3 if mode == "Nominal" else 18';
   const systemLimit = powerLimitFor(workspace, 'mission');
   const subsystemLimit = powerLimitFor(workspace, transmitter.owner);
   await writeFile(modelPath, renderManaged(workspace, { catalog }));
@@ -257,7 +235,7 @@ test('browser keeps system limits in Mission and component allocations in their 
   assert.equal(await page.getByRole('table', { name: 'Component state allocation', exact: true }).count(), 0);
   assert.equal(await page.locator(`[data-requirement-edit="${subsystemLimit.key}"]`).count(), 0);
   assert.equal(await page.locator('.statements .statement-kind').count(), 0);
-  await setLimit(systemLimit, 'if mode == "Nominal" ? 3 else 20'); await waitCheck(systemLimit, 'fail');
+  await setLimit(systemLimit, '3 if mode == "Nominal" else 20'); await waitCheck(systemLimit, 'fail');
   assert.equal((await read()).workspace.statements.find(row => row.key === subsystemLimit.key).parameters.power_limit_W, total);
   await setLimit(systemLimit, total); await waitCheck(systemLimit, 'pass');
   await page.getByRole('tab', { name: 'Communications', exact: true }).click();
@@ -321,12 +299,14 @@ test('browser keeps system limits in Mission and component allocations in their 
   await openEnergy(); await waitPower('2.500 W');
   assert.doesNotMatch(await page.locator('body').textContent(), /EPS sizing inputs|Preliminary steady energy budget|Steady load inputs are complete/);
   assert.deepEqual(errors, []);
-  assert.match(await readFile(modelPath, 'utf8'), /PowerBudgetModel::ModeDraw/);
+  const stored = JSON.parse(await readFile(join(directory, 'mission.json'), 'utf8'));
+  assert.equal(stored.power.modes.length, 3);
+  assert.ok(stored.power.loads.some(load => load.states.length));
 });
 
 test('browser shows complete PWS001 expressions and supports editing and pasting allocation and draw formulas', { skip: !process.env.PLAYWRIGHT_MODULE }, async t => {
   const { chromium } = await import(process.env.PLAYWRIGHT_MODULE);
-  const directory = await mkdtemp(join(tmpdir(), 'power-expression-browser-')), modelPath = join(directory, 'mission.sysml');
+  const directory = await mkdtemp(join(tmpdir(), 'power-expression-browser-')), modelPath = join(directory, 'mission.json');
   const { workspace } = fixture();
   for (const row of workspace.statements.filter(isPowerRequirement)) row.parameters.power_limit_W = '0';
   const requirement = workspace.statements.find(row => row.id === 'PWS001');

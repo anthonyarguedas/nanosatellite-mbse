@@ -3,16 +3,14 @@ import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
-import { spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
 import { createServer } from '../server.mjs';
 import { createSessions } from '../sessions.mjs';
 import { loadCatalog } from '../catalog.mjs';
-import { tabsFor, validateWorkspace } from '../model.mjs';
+import { emptyWorkspace, tabsFor, validateWorkspace } from '../model.mjs';
 
 async function start(t) {
   const directory = await mkdtemp(join(tmpdir(), 'requirements-sessions-'));
-  const modelPath = join(directory, 'mission.sysml'), original = 'package Existing { part def Satellite; }\n';
+  const modelPath = join(directory, 'mission.json'), original = JSON.stringify(emptyWorkspace(await loadCatalog()), null, 2) + '\n';
   await writeFile(modelPath, original);
   const server = createServer({ modelPath });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -37,7 +35,7 @@ test('the existing mission remains available without creating or changing sessio
   assert.equal(sessions.length, 1);
   assert.equal(sessions[0].id, 'current');
   assert.equal((await get()).workspace.statements.length, 27);
-  assert.deepEqual(await readdir(directory), ['mission.sysml']);
+  assert.deepEqual(await readdir(directory), ['mission.json']);
   assert.equal(await readFile(modelPath, 'utf8'), original);
 });
 
@@ -122,10 +120,10 @@ test('session IDs cannot traverse paths and missing files are never regenerated'
   assert.equal((await fetch(base + '/api/workspace?session=00000000-0000-0000-0000-000000000000')).status, 404);
   const created = await (await create({ name: '../Display name only', template: 'blank' })).json();
   assert.match(created.session.id, /^[a-f0-9-]{36}$/);
-  const file = join(directory, 'sessions', created.session.id, `${created.session.id}.sysml`);
+  const file = join(directory, 'sessions', created.session.id, `${created.session.id}.json`);
   await rm(file);
   assert.equal((await fetch(`${base}/api/workspace?session=${created.session.id}`)).status, 404);
-  assert.ok(!(await readdir(join(directory, 'sessions', created.session.id))).includes(`${created.session.id}.sysml`));
+  assert.ok(!(await readdir(join(directory, 'sessions', created.session.id))).includes(`${created.session.id}.json`));
   assert.equal((await get()).session.id, 'current');
   assert.equal((await fetch(base + '/sessions.mjs')).status, 404);
   assert.equal((await fetch(base + '/api/sessions', { method: 'DELETE' })).status, 405);
@@ -138,16 +136,21 @@ test('session creation rejects cross-origin and non-JSON writes', async t => {
   assert.equal((await fetch(base + '/api/sessions', { method: 'POST', body })).status, 415);
 });
 
-test('saved blank and generic session files validate together as native SysML', async t => {
-  if (spawnSync('syside', ['--version']).error) return t.skip('syside is not installed');
-  const { create, directory } = await start(t);
+test('saved sessions are JSON and reopen with the same Python calculation inputs', async t => {
+  const { create, directory, base } = await start(t);
   const blank = await (await create({ name: 'Blank', template: 'blank' })).json();
   const generic = await (await create({ name: 'Generic EPS', template: 'generic-eps' })).json();
-  const framework = fileURLToPath(new URL('../../', import.meta.url));
-  const libraries = (await readdir(framework)).filter(name => name.endsWith('.sysml')).map(name => join(framework, name));
-  const files = [blank, generic].map(data => join(directory, 'sessions', data.session.id, `${data.session.id}.sysml`));
-  const result = spawnSync('syside', ['check', ...libraries, ...files], { encoding: 'utf8', timeout: 120000 });
-  assert.equal(result.status, 0, result.stdout + result.stderr);
+  for (const data of [blank, generic]) {
+    const file = join(directory, 'sessions', data.session.id, `${data.session.id}.json`);
+    assert.deepEqual(JSON.parse(await readFile(file, 'utf8')), data.workspace);
+    assert.equal(data.workspace.expressionLanguage, 'python');
+    assert.equal((await readdir(join(directory, 'sessions', data.session.id))).some(name => name.endsWith('.sysml')), false);
+  }
+  const response = await fetch(`${base}/api/evaluate`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workspace: generic.workspace }) });
+  assert.equal(response.status, 200);
+  const calculations = await response.json();
+  assert.equal(calculations.results.find(row => row.key.endsWith('OrbitPeriod')).state, 'pending');
+  assert.equal(calculations.results.find(row => row.key.endsWith('OrbitPeriod')).values.earthRadius_km, 6378);
 });
 
 test('session browser workflow keeps templates, saved copies and in-flight autosaves separate', { skip: !process.env.PLAYWRIGHT_MODULE }, async t => {
@@ -261,9 +264,11 @@ test('session browser workflow keeps templates, saved copies and in-flight autos
   assert.equal(await otherPage.locator('#session-select').inputValue(), genericId);
   assert.equal(await select.inputValue(), copyId);
   await otherPage.close();
-  const [download] = await Promise.all([page.waitForEvent('download'), page.locator('.export-sysml').click()]);
-  assert.equal(download.suggestedFilename(), 'Mission_copy-export.sysml');
-  await download.saveAs(join(directory, 'copy-export.sysml'));
+  const [download] = await Promise.all([page.waitForEvent('download'), page.locator('.export-json').click()]);
+  assert.equal(download.suggestedFilename(), 'Mission_copy-export.json');
+  const exported = join(directory, 'copy-export.json');
+  await download.saveAs(exported);
+  assert.deepEqual(JSON.parse(await readFile(exported, 'utf8')), (await get(copyId)).workspace);
   await page.setViewportSize({ width: 390, height: 844 });
   assert.equal(await page.getByRole('button', { name: 'New session', exact: true }).isVisible(), true);
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);

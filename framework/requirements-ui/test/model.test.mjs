@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  availableSources, emptyWorkspace, migrateWorkspace, nextId, parameterExpression, parameterUnit, parseTSV,
+  availableSources, emptyWorkspace, nextId, parameterExpression, parameterUnit, parseTSV,
   stakeholderTypes, statementKinds, validVariableName, validateWorkspace, WORKSPACE_VERSION,
 } from '../model.mjs';
-import { readWorkspace, renderManaged, updateSource } from '../sysml.mjs';
-import { createEvaluator } from '../verification.mjs';
+import { readWorkspace, serializeWorkspace as renderManaged, roundTrip } from './helpers.mjs';
+import { createEvaluator } from './helpers.mjs';
 
 function example() {
   return {
@@ -14,7 +14,7 @@ function example() {
     stakeholders: [{ key: 's1', id: 'OPS', name: 'Mission team', type: 'Mission Stakeholder' }],
     statements: [
       { key: 'n1', id: 'NED001', context: 'external', affected: [], sources: ['s1'], kind: 'Need', text: 'Observe for {x} months.', condition: '', parameters: { x: '12', y: null, z: null, a: null } },
-      { key: 'r1', id: 'REQ001', context: 'external', affected: [], sources: ['n1', 's1'], kind: 'Requirement', text: 'The mission shall last {x} months.', condition: 'true', parameters: { x: '12', y: '-1.5', z: '0', a: null } },
+      { key: 'r1', id: 'REQ001', context: 'external', affected: [], sources: ['n1', 's1'], kind: 'Requirement', text: 'The mission shall last {x} months.', condition: 'True', parameters: { x: '12', y: '-1.5', z: '0', a: null } },
     ],
   };
 }
@@ -74,7 +74,7 @@ test('every parameter stores expression text, including literals, equations and 
   assert.equal(parameterExpression('  ', variable), null);
   for (const value of [12, NaN, Infinity, undefined, {}, '1\n+2', ' '.repeat(5001)]) {
     const workspace = example(); workspace.statements[0].parameters.x = value;
-    assert.throws(() => validateWorkspace(workspace), /SysML expression text/);
+    assert.throws(() => validateWorkspace(workspace), /expression text/);
   }
 });
 
@@ -107,15 +107,15 @@ test('optional units persist without changing expressions or numeric evaluation'
   }
 });
 
-test('rationale supports multiline text, empty values and lossless SysML storage', () => {
+test('rationale supports multiline text, empty values and lossless JSON storage', () => {
   const workspace = example(), row = workspace.statements[0];
   row.origin = 'final_report/design-proposal.tex#eq:orbit-period';
   row.rationale = `${row.origin}\nUse the sourced constants with \"documented margins\" and */.`;
   assert.doesNotThrow(() => validateWorkspace(workspace));
   const generated = renderManaged(workspace);
   assert.deepEqual(readWorkspace(generated), workspace);
-  assert.match(generated, /attribute rationale : String =/);
-  assert.match(generated, /attribute sourceReference : String =/);
+  assert.equal(roundTrip(workspace).statements[0].rationale, row.rationale);
+  assert.equal(roundTrip(workspace).statements[0].origin, row.origin);
   row.rationale = '';
   assert.deepEqual(readWorkspace(renderManaged(workspace)).statements[0].rationale, '');
   for (const rationale of [null, 42, {}, 'a'.repeat(10001)]) {
@@ -138,74 +138,40 @@ test('TSV accepts quoted multiline cells, escaped quotes, CRLF and trailing cell
   assert.deepEqual(parseTSV('one\ttwo\t'), [['one', 'two', '']]);
 });
 
-test('old data preserves checked status as a SysML literal while retaining values and links', () => {
-  const old = { version: 1, stakeholders: [{ key: 's1', id: 'STK-001', name: 'Team', type: 'Mission Stakeholder' }],
-    statements: [{ key: 'r1', id: 'REQ-001', kind: 'Requirement', text: 'Original text', source: 's1', verified: true, parameters: { x: 2, y: null, z: 0, a: null } }] };
-  const upgraded = validateWorkspace(migrateWorkspace(old));
-  assert.equal(upgraded.stakeholders[0].id, 'STK');
-  assert.equal(upgraded.statements[0].id, 'REQ001');
-  assert.deepEqual(upgraded.statements[0].sources, ['s1']);
-  assert.equal(Object.hasOwn(upgraded.statements[0], 'verified'), false);
-  assert.equal(upgraded.statements[0].parameters.x, '2');
-  assert.equal(upgraded.statements[0].condition, 'true');
-  assert.deepEqual(readWorkspace(`// <requirements-ui>\n/* requirements-ui:data\n${JSON.stringify(old)}\nrequirements-ui:end-data */\n// </requirements-ui>`), upgraded);
-});
-
-test('version 3 manual checks migrate to condition-only verification without losing formulas', () => {
-  const old = example();
-  old.version = 3;
-  old.statements[0] = { ...old.statements[0], verified: true, condition: '' };
-  old.statements[1] = { ...old.statements[1], verified: false, condition: '' };
-  old.statements.push({ ...old.statements[1], key: 'r2', id: 'REQ002', verified: true, condition: 'x < 0' });
-  const migrated = validateWorkspace(migrateWorkspace(old));
-  assert.equal(migrated.version, WORKSPACE_VERSION);
-  assert.deepEqual(migrated.statements.map(row => row.condition), ['true', '', 'x < 0']);
-  assert.ok(migrated.statements.every(row => !Object.hasOwn(row, 'verified')));
-  assert.deepEqual(migrated.statements.map(row => row.parameters), old.statements.map(row => row.parameters));
-  assert.doesNotMatch(renderManaged(migrated), /manualVerification/);
+test('unsupported workspace versions are rejected without implicit migration', () => {
+  for (const version of [1, 7, 13, 999]) {
+    const workspace = example(); workspace.version = version;
+    assert.throws(() => validateWorkspace(workspace), /differs from app format/);
+  }
 });
 
 test('manual flags cannot be written to the current schema', () => {
   for (const value of [true, false, 'true']) {
     const workspace = example(); workspace.statements[0].verified = value;
-    assert.throws(() => validateWorkspace(workspace), /computed from a SysML condition/);
+    assert.throws(() => validateWorkspace(workspace), /computed from verification methods/);
   }
 });
 
-test('SysML round trips data and preserves content outside its managed section', () => {
+test('JSON round trips Unicode, quotes, line breaks and comment terminators as data', () => {
   const workspace = example(); workspace.statements[0].text = 'A quote: "Olá". A terminator: */.\nA new line.';
-  const original = 'package Existing { part def Satellite; }\n';
-  const source = updateSource(original, workspace) + '\npackage After {}\n';
-  assert.deepEqual(readWorkspace(source), workspace);
-  const updated = updateSource(source, emptyWorkspace());
-  assert.ok(updated.startsWith(original)); assert.ok(updated.endsWith('\npackage After {}\n'));
-  assert.deepEqual(readWorkspace(updated), emptyWorkspace());
-  assert.equal((updated.match(/package MissionRequirements/g) ?? []).length, 1);
+  assert.deepEqual(roundTrip(workspace), workspace);
+  assert.deepEqual(readWorkspace(renderManaged(workspace)), workspace);
 });
 
-test('mission SysML imports generic types and emits all source dependencies', () => {
-  const generated = renderManaged(example());
-  assert.match(generated, /private import External::\*/);
-  assert.match(generated, /External::MissionStakeholders::MissionStakeholder/);
-  assert.match(generated, /requirement statement_r1/);
-  assert.match(generated, /attribute statement_n1/);
-  assert.match(generated, /dependency from statement_r1 to statement_n1/);
-  assert.match(generated, /dependency from statement_r1 to stakeholder_s1/);
-  assert.match(generated, /attribute 'z' : Real\[0\.\.1\] = 0;/);
-  assert.match(generated, /attribute 'a' : Real\[0\.\.1\];/);
+test('JSON preserves source dependencies and optional parameter cells without generating code', () => {
+  const workspace = example(), restored = roundTrip(workspace);
+  assert.deepEqual(restored.statements[1].sources, workspace.statements[1].sources);
+  assert.equal(restored.statements[1].parameters.z, '0');
+  assert.equal(restored.statements[1].parameters.a, null);
+  assert.equal(restored.stakeholders[0].type, workspace.stakeholders[0].type);
 });
 
-test('valid conditions generate native SysML constraints with resolved row references', () => {
+test('verification source remains editable data, including invalid drafts', () => {
   const workspace = example(); workspace.statements[1].condition = 'x <= NED001.x and y < 0';
-  const generated = renderManaged(workspace);
-  assert.match(generated, /require constraint verification/);
-  assert.match(generated, /statement_n1\.'x'/);
-  assert.doesNotMatch(generated, /manualVerification/);
+  assert.equal(roundTrip(workspace).statements[1].condition, workspace.statements[1].condition);
   workspace.statements[1].condition = 'alert(1)';
-  const invalid = renderManaged(workspace);
-  assert.doesNotMatch(invalid, /require constraint verification/);
-  assert.match(invalid, /invalid or unresolved/);
-  assert.deepEqual(readWorkspace(invalid), workspace);
+  assert.deepEqual(roundTrip(workspace), workspace);
+  assert.deepEqual(readWorkspace(renderManaged(workspace)), workspace);
 });
 
 test('all types and statement kinds serialize', () => {
@@ -213,28 +179,22 @@ test('all types and statement kinds serialize', () => {
   workspace.stakeholders = stakeholderTypes.map((type, index) => ({ key: `s${index}`, id: `AA${String.fromCharCode(65 + index)}`, name: type.name, type: type.name }));
   workspace.statements = statementKinds.map((kind, index) => ({ ...example().statements[0], key: `r${index}`, id: `REQ00${index}`, sources: ['s0'], kind }));
   const generated = renderManaged(workspace);
-  for (const type of stakeholderTypes) assert.ok(generated.includes(type.model));
+  for (const type of stakeholderTypes) assert.ok(generated.includes(type.name));
   assert.deepEqual(readWorkspace(generated), workspace);
 });
 
-test('Windows line endings survive reading and updating', () => {
-  const original = 'package Existing {}\r\n';
-  const source = updateSource(original, example());
+test('JSON with Windows line endings reads without losing data', () => {
+  const source = renderManaged(example()).replaceAll('\n', '\r\n');
   assert.deepEqual(readWorkspace(source), example());
-  const updated = updateSource(source, emptyWorkspace());
-  assert.deepEqual(readWorkspace(updated), emptyWorkspace());
-  assert.ok(updated.startsWith(original)); assert.equal(updated.replaceAll('\r\n', '').includes('\n'), false);
 });
 
-test('different keys generate different SysML identifiers', () => {
+test('JSON preserves distinct keys and stable references without identifier mangling', () => {
   const workspace = example(); workspace.statements[0].key = 'a-b'; workspace.statements[1].key = 'a_b'; workspace.statements[1].sources = ['a-b'];
-  assert.match(renderManaged(workspace), /dependency from statement_a_ub to statement_a_hb/);
+  const restored = roundTrip(workspace);
+  assert.deepEqual(restored.statements.map(row => row.key), ['a-b', 'a_b']);
+  assert.deepEqual(restored.statements[1].sources, ['a-b']);
 });
 
-test('malformed managed sections fail instead of discarding data', () => {
-  assert.deepEqual(readWorkspace('package Existing {}'), emptyWorkspace());
-  assert.throws(() => readWorkspace('// <requirements-ui>\n'), /incomplete/);
-  assert.throws(() => readWorkspace('// <requirements-ui>\n// </requirements-ui>'), /missing/);
-  const block = renderManaged(example());
-  assert.throws(() => updateSource(`${block}\n${block}`, example()), /duplicated/);
+test('malformed JSON fails instead of being replaced with an empty workspace', () => {
+  for (const source of ['not JSON', '{', JSON.stringify(example()) + JSON.stringify(example())]) assert.throws(() => readWorkspace(source));
 });

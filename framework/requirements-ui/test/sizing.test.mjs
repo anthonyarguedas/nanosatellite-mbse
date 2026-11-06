@@ -1,14 +1,10 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { spawnSync } from 'node:child_process';
+import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
-import { loadCatalog, requirementsFromSource } from '../catalog.mjs';
-import { addElementChildren, emptyWorkspace, migrateWorkspace, requirementMarkers, rewriteRowReferences, validateWorkspace, WORKSPACE_VERSION } from '../model.mjs';
-import { evaluateChecks, evaluateExpression, parseExpression } from '../verification.mjs';
-import { readWorkspace, renderExport, renderManaged } from '../sysml.mjs';
+import { loadCatalog } from '../catalog.mjs';
+import { addElementChildren, emptyWorkspace, requirementMarkers, rewriteRowReferences, validateWorkspace, WORKSPACE_VERSION } from '../model.mjs';
+import { evaluateChecks, evaluateExpression } from './helpers.mjs';
+import { readWorkspace, validateCalculations as renderExport, serializeWorkspace as renderManaged } from './helpers.mjs';
 
 const catalog = await loadCatalog();
 const templates = catalog.flatMap(type => type.requirements ?? []);
@@ -64,7 +60,6 @@ test('generic definitions retain only parameterized report requirements and sizi
     assert.ok(markers.names.length, template.id);
     assert.doesNotMatch(template.text, /\{[A-Za-z_][A-Za-z0-9_]*\}/);
   }
-  assert.throws(() => requirementsFromSource('package Missing {}'), /no requirements/);
 });
 
 test('generic requirements contain one requirement sentence without advisory notes', () => {
@@ -90,20 +85,20 @@ test('decomposed requirements retain their local derivation sources and paramete
   assert.equal(values(workspace).get('EnergyPathEfficiencyBounds').state, 'pass');
 });
 
-test('generic table markers and numeric types must match their native parameters', async () => {
-  const source = await readFile(new URL('../../requirements.sysml', import.meta.url), 'utf8');
-  assert.throws(() => requirementsFromSource(source.replace('$$orbit_period_s$$', () => '$$undeclared$$')), /declared table parameter/);
-  assert.throws(() => requirementsFromSource(source.replace('$$orbit_period_s$$', () => '$$invalid-name$$')), /declared table parameter/);
-  assert.throws(() => requirementsFromSource(source.replace('attribute minimum_cells : Integer', 'attribute minimum_cells : Real')), /types must match/);
-  assert.throws(() => requirementsFromSource(source.replace('"derivesFrom":["IlluminationPeriods"]', '"derivesFrom":["Missing"]')), /derivation sources/);
+test('generic table markers and numeric declarations match the Python catalog', () => {
+  for (const template of templates) {
+    assert.ok(requirementMarkers(template.text).names.every(name => Object.hasOwn(template.parameters, name)));
+    for (const name of Object.keys(template.parameters)) assert.equal(template.attributes[name], template.integers?.includes(name) ? 'Integer' : 'Real');
+  }
 });
 
-test('generic annotations require at least one numeric parameter referenced in their text', () => {
-  const source = template => `requirement def Example { doc /* @requirements-ui\n${JSON.stringify({ id: 'EPS001', context: 'eps', affected: ['Batteries'], condition: '', ...template })}\n*/ attribute mass_kg : Real[0..1]; attribute assessed : Boolean[0..1]; }`;
-  assert.throws(() => requirementsFromSource(source({ text: 'The pack shall be assessed.', parameters: {} })), /at least one numeric parameter/);
-  assert.throws(() => requirementsFromSource(source({ text: 'The pack shall be assessed.', parameters: { mass_kg: null } })), /declared table parameter/);
-  assert.throws(() => requirementsFromSource(source({ text: 'The pack shall satisfy $$assessed$$.', parameters: { assessed: null } })), /types must match/);
-  assert.equal(requirementsFromSource(source({ text: 'The pack shall weigh at most $$mass_kg$$ kg.', parameters: { mass_kg: null } })).length, 1);
+test('every reusable requirement declares at least one meaningful numeric parameter in its text', () => {
+  for (const template of templates) {
+    assert.ok(Object.keys(template.parameters).length > 0);
+    const marked = requirementMarkers(template.text);
+    assert.ok(marked.names.length > 0);
+    assert.ok(marked.names.every(name => ['Real', 'Integer'].includes(template.attributes[name])));
+  }
 });
 
 test('preloaded units seed parameter fields and stay out of requirement prose', () => {
@@ -121,11 +116,13 @@ test('preloaded units seed parameter fields and stay out of requirement prose', 
   assert.deepEqual(readWorkspace(renderManaged(workspace, { catalog }), catalog), workspace);
 });
 
-test('generic units must name declared parameters and agree across requirements', async () => {
-  const source = await readFile(new URL('../../requirements.sysml', import.meta.url), 'utf8');
-  assert.throws(() => requirementsFromSource(source.replace('"units":{"altitude_km":"km"', '"units":{"undeclared":"km"')), /units must name a declared parameter/);
-  assert.throws(() => requirementsFromSource(source.replace('"units":{"altitude_km":"km"', '"units":{"altitude_km":""')), /contain a label/);
-  assert.throws(() => requirementsFromSource(source.replace('"units":{"altitude_km":"km"', '"units":{"altitude_km":"m"')), /same units/);
+test('generic units name declared parameters and agree across requirements', () => {
+  const units = new Map();
+  for (const template of templates) for (const [name, unit] of Object.entries(template.units ?? {})) {
+    assert.ok(Object.hasOwn(template.parameters, name)); assert.ok(unit.trim());
+    if (units.has(name)) assert.equal(units.get(name), unit);
+    units.set(name, unit);
+  }
 });
 
 test('a new mission seeds only sourced Earth constants as literal parameter values', () => {
@@ -133,7 +130,7 @@ test('a new mission seeds only sourced Earth constants as literal parameter valu
   assert.equal(workspace.components.length, 0);
   const literals = [];
   for (const row of workspace.statements) for (const [name, expression] of Object.entries(row.parameters)) {
-    if (expression !== null && parseExpression(expression).kind === 'literal') literals.push([row.id, name, expression]);
+    if (expression !== null && /^\s*[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?\s*$/i.test(expression)) literals.push([row.id, name, expression]);
   }
   assert.deepEqual(literals, [['ORB001', 'earthRadius_km', '6378'], ['ORB001', 'gravitationalParameter_km3_s2', '398601']]);
 });
@@ -175,7 +172,7 @@ test('orbit parameters drive panel and battery sizing with consistent seconds, w
   close(checks.get('BatteryCapacityScreen').values.pack_eol_J, 80000);
   close(checks.get('EPS08').values.battery_min_J, checks.get('MinimumBatteryEnergy').values.battery_min_J);
   for (const [name, result] of checks) assert.equal(result.state, templates.find(template => template.name === name).condition ? 'pass' : 'unset', name);
-  assert.equal(find(workspace, 'MinimumBatteryEnergy').parameters.battery_min_J, 'eclipse_energy_J / dod_max * (1 + degradation_margin)');
+  assert.equal(find(workspace, 'MinimumBatteryEnergy').parameters.battery_min_J, templates.find(template => template.name === 'MinimumBatteryEnergy').parameters.battery_min_J);
   set(workspace, 'OrbitPeriod', { altitude_km: 1000 });
   assert.notEqual(values(workspace).get('MinimumBatteryEnergy').values.battery_min_J, checks.get('MinimumBatteryEnergy').values.battery_min_J);
 });
@@ -243,34 +240,19 @@ test('derived formulas are safe, numeric, bounded and detect cycles', () => {
   assert.equal(values(workspace).get('OrbitPeriod').state, 'error');
   row.parameters.orbit_period_s = 'globalThis.fetch("/api/workspace")';
   assert.throws(() => renderExport(workspace, { catalog }), /ORB001.orbit_period_s/);
-  assert.match(renderManaged(workspace, { catalog }), /Invalid parameter expression/);
-  assert.equal(evaluateExpression(parseExpression('min(2, max(3, 4)) + abs(-2) + 2 ^ 3 ^ 2'), workspace, row), 516);
-  assert.throws(() => parseExpression('sqrt(1, 2)'), /requires 1/);
-  assert.throws(() => parseExpression('unknown(1)'), /Unsupported function/);
+  assert.equal(readWorkspace(renderManaged(workspace), catalog).statements.find(statement => statement.key === row.key).parameters.orbit_period_s, 'globalThis.fetch("/api/workspace")');
+  assert.equal(evaluateExpression('min(2, max(3, 4)) + abs(-2) + 2 ** 3 ** 2', workspace, row), 516);
+  assert.throws(() => evaluateExpression('math.sqrt(1, 2)', workspace, row), /requires 1/);
+  assert.throws(() => evaluateExpression('unknown(1)', workspace, row), /Unsupported Python function/);
 });
 
-test('version 6 upgrades once and preserves mission data, IDs, components and source links', () => {
-  const old = emptyWorkspace(catalog.map(({ requirements, ...type }) => type));
-  old.version = 6;
-  old.statements.push({ key: 'existing', id: 'ORB001', context: 'external', kind: 'Requirement', text: 'Existing orbit constraint',
-    condition: 'x >= 300', parameters: { x: 500, y: null, z: null, a: null }, sources: ['domain-orbit'], affected: [] });
-  old.components.push({ key: 'rtc', id: 'CMP001', owner: old.elements.find(row => row.definition.endsWith('::PowerSubsystem')).key,
-    product: 'abracon_ab1805_t3', requirements: [] });
-  const original = structuredClone(old), upgraded = migrateWorkspace(old, catalog);
-  assert.deepEqual(old, original);
-  assert.equal(upgraded.version, WORKSPACE_VERSION);
-  assert.equal(upgraded.statements.length, 28);
-  assert.deepEqual(upgraded.components, old.components);
-  assert.deepEqual(upgraded.elements, old.elements);
-  assert.deepEqual(upgraded.statements[0].sources, ['domain-orbit']);
-  assert.equal(upgraded.statements[0].parameters.x, '500');
-  assert.notEqual(find(upgraded, 'OrbitPeriod').id, 'ORB001');
-  assert.match(find(upgraded, 'IlluminationPeriods').parameters.orbit_period_s, new RegExp(`^${find(upgraded, 'OrbitPeriod').id}\\.`));
-  assert.doesNotThrow(() => validateWorkspace(upgraded, catalog));
-  assert.equal(migrateWorkspace(upgraded, catalog), upgraded);
-  upgraded.statements = upgraded.statements.filter(row => row.definition !== 'FrameworkRequirements::EPS89');
-  assert.deepEqual(readWorkspace(renderManaged(upgraded, { catalog }), catalog), upgraded);
-  assert.equal(upgraded.statements.length, 27);
+test('JSON retains mission edits, COTS selections and requirement deletions', () => {
+  const workspace = populated();
+  workspace.components.push({ key: 'rtc', id: 'CMP001', owner: workspace.elements.find(row => row.definition.endsWith('::PowerSubsystem')).key, product: 'abracon_ab1805_t3', requirements: [] });
+  workspace.statements = workspace.statements.filter(row => row.definition !== 'FrameworkRequirements::EPS89');
+  const restored = readWorkspace(renderManaged(workspace), catalog);
+  assert.deepEqual(restored, workspace);
+  assert.equal(restored.statements.length, 26);
 });
 
 test('ID changes preserve equation references, including simultaneous swaps', () => {
@@ -322,39 +304,26 @@ test('another Orbit gets its own geometry and an ambiguous new EPS leaves orbit 
   assert.doesNotThrow(() => renderExport(workspace, { catalog }));
 });
 
-test('mission export binds native generic requirements, orbit attributes, formulas and traceability', () => {
-  const workspace = populated(), source = renderExport(workspace, { catalog, packageName: 'ExampleMission' });
+test('JSON retains requirement definitions, formulas, provenance and traceability without cached values', () => {
+  const workspace = populated(), source = renderExport(workspace, { catalog }), snapshot = JSON.parse(source);
   assert.doesNotMatch(source, /requirements-ui:data|<requirements-ui>|@OrbitPeriod/);
-  assert.match(source, /package ExampleMission/);
-  assert.match(source, /requirement .* : FrameworkRequirements::OrbitPeriod/);
-  assert.match(source, /requirement .* : FrameworkRequirements::EPS02/);
-  assert.match(source, /requirement .* : FrameworkRequirements::EPS21/);
-  assert.match(source, /requirement .* : FrameworkRequirements::EPS89/);
-  assert.doesNotMatch(source, /: FrameworkRequirements::(?:EPS01|EPS20|EPS22|EPS92)\s*\{/);
-  assert.match(source, /attribute :>> 'required_data_bytes' = 256/);
-  assert.match(source, /attribute :>> 'energy_end_J' = 50000/);
-  assert.match(source, /attribute :>> 'mass_allocation_kg' = 1/);
-  assert.match(source, /attribute :>> altitude_km = statement_generic_hORB_hOrbitPeriod\.'altitude_km'/);
-  assert.match(source, /attribute :>> 'altitude_km' = 500/);
-  assert.match(source, /attribute :>> 'orbit_period_s' = .*RealFunctions::sqrt/);
-  assert.match(source, /TrigFunctions::arccos/);
-  assert.match(source, /RealFunctions::floor/);
-  assert.match(source, /attribute sourceReference/);
-  assert.match(source, /dependency from statement_generic_hEPS_hMinimumPanelPower to statement_generic_hEPS_hLoadEnergy/);
-  assert.deepEqual(readWorkspace(renderManaged(workspace, { catalog }), catalog), workspace);
+  assert.equal(snapshot.statements.length, 27);
+  assert.equal(find(snapshot, 'EPS21').parameters.required_data_bytes, '256');
+  assert.equal(find(snapshot, 'EPS11').parameters.energy_end_J, '50000');
+  assert.equal(find(snapshot, 'EPS19').parameters.mass_allocation_kg, '1');
+  assert.equal(find(snapshot, 'OrbitPeriod').parameters.altitude_km, '500');
+  assert.match(find(snapshot, 'OrbitPeriod').parameters.orbit_period_s, /math.sqrt/);
+  assert.ok(snapshot.statements.every(row => row.origin && row.values === undefined));
+  assert.ok(find(snapshot, 'MinimumPanelPower').sources.includes(find(snapshot, 'LoadEnergy').key));
+  assert.deepEqual(readWorkspace(renderManaged(workspace), catalog), workspace);
   find(workspace, 'OrbitPeriod').condition = 'alert(1)';
   assert.throws(() => renderExport(workspace, { catalog }), /ORB001/);
 });
 
-test('draft and populated mission exports validate with the native SysML checker when available', async t => {
-  if (spawnSync('syside', ['--version']).error) return t.skip('syside is not installed');
-  const dir = await mkdtemp(join(tmpdir(), 'eps-sizing-sysml-'));
-  t.after(() => rm(dir, { recursive: true, force: true }));
-  const framework = fileURLToPath(new URL('../../', import.meta.url));
-  const libraries = (await readdir(framework)).filter(name => name.endsWith('.sysml')).map(name => join(framework, name));
-  const draft = join(dir, 'draft.sysml'), filled = join(dir, 'filled.sysml');
-  await writeFile(draft, renderExport(emptyWorkspace(catalog), { catalog, packageName: 'DraftMission' }));
-  await writeFile(filled, renderExport(populated(), { catalog, packageName: 'FilledMission' }));
-  const result = spawnSync('syside', ['check', ...libraries, draft, filled], { encoding: 'utf8', timeout: 120000 });
-  assert.equal(result.status, 0, result.stdout + result.stderr);
+test('draft and populated JSON snapshots retain their Python evaluation states', () => {
+  const draft = JSON.parse(renderExport(emptyWorkspace(catalog), { catalog }));
+  const filled = JSON.parse(renderExport(populated(), { catalog }));
+  assert.equal(values(draft).get('OrbitPeriod').state, 'pending');
+  assert.equal(values(filled).get('OrbitPeriod').state, 'pass');
+  assert.equal(values(filled).get('MinimumBatteryEnergy').state, 'pass');
 });

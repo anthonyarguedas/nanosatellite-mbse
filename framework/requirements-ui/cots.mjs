@@ -10,10 +10,10 @@ export async function loadProducts(directory = new URL('../cots/', import.meta.u
   const [products, pins] = await Promise.all(['products.tsv', 'pins.tsv'].map(async name => records(await readFile(new URL(name, directory), 'utf8'))));
   const ids = new Set();
   return products.map(row => {
-    if (!/^[a-z0-9_]+$/.test(row.product_id) || ids.has(row.product_id) || !/^EPSModel::[A-Za-z][A-Za-z0-9]*$/.test(row.sysml_type)) throw new Error('Invalid or duplicate COTS product definition.');
+    if (!/^[a-z0-9_]+$/.test(row.product_id) || ids.has(row.product_id) || !/^EPSModel::[A-Za-z][A-Za-z0-9]*$/.test(row.model_type)) throw new Error('Invalid or duplicate COTS product definition.');
     ids.add(row.product_id);
     return { id: row.product_id, name: `${row.part_number} · ${row.manufacturer}`, manufacturer: row.manufacturer,
-      partNumber: row.part_number, model: row.sysml_type, datasheetUrl: row.datasheet_url,
+      partNumber: row.part_number, model: row.model_type, datasheetUrl: row.datasheet_url,
       pins: pins.filter(pin => pin.product_id === row.product_id && pin.element_id === 'self')
         .map(pin => ({ number: pin.pin_number, name: pin.pin_name, kind: pin.pin_kind, direction: pin.direction })) };
   });

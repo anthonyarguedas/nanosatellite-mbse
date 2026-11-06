@@ -1,12 +1,5 @@
-// Clean mission workspace seeded from the generic framework requirements.
-// Enter mission inputs through requirements-ui, then export mission SysML v2.
-
-// <requirements-ui>
-// Mission data managed by requirements-ui. Generic definitions are imported.
-// The JSON preserves UI data. The SysML elements below are generated from it.
-/* requirements-ui:data
 {
-  "version": 8,
+  "version": 14,
   "variables": [
     {
       "name": "x",
@@ -481,6 +474,174 @@
       "name": "Telemetry Processing",
       "owner": "domain-ground",
       "definition": "GroundSegment::TelemetryProcessingSubsystem"
+    },
+    {
+      "key": "domain-bus-CommandAndDataHandlingSubsystem-CommandTelemetryAndDataBus",
+      "id": "AAB",
+      "name": "Command Telemetry and Data Bus",
+      "owner": "domain-bus-CommandAndDataHandlingSubsystem",
+      "definition": "SpaceSegment::CubeSat::CommandAndDataHandlingSubsystem::CommandTelemetryAndDataBus"
+    },
+    {
+      "key": "domain-bus-CommandAndDataHandlingSubsystem-ProcessorAndMemory",
+      "id": "AAC",
+      "name": "Processor and Memory",
+      "owner": "domain-bus-CommandAndDataHandlingSubsystem",
+      "definition": "SpaceSegment::CubeSat::CommandAndDataHandlingSubsystem::ProcessorAndMemory"
+    },
+    {
+      "key": "domain-bus-CommunicationSubsystem-ProcessorAndMemory",
+      "id": "AAD",
+      "name": "Processor and Memory",
+      "owner": "domain-bus-CommunicationSubsystem",
+      "definition": "SpaceSegment::CubeSat::CommunicationSubsystem::ProcessorAndMemory"
+    },
+    {
+      "key": "domain-bus-CommunicationSubsystem-ReceiveAntennaAndEquipment",
+      "id": "REC",
+      "name": "Receive Antenna and Equipment",
+      "owner": "domain-bus-CommunicationSubsystem",
+      "definition": "SpaceSegment::CubeSat::CommunicationSubsystem::ReceiveAntennaAndEquipment"
+    },
+    {
+      "key": "domain-bus-CommunicationSubsystem-TransmitAntennaAndEquipment",
+      "id": "TRA",
+      "name": "Transmit Antenna and Equipment",
+      "owner": "domain-bus-CommunicationSubsystem",
+      "definition": "SpaceSegment::CubeSat::CommunicationSubsystem::TransmitAntennaAndEquipment"
+    },
+    {
+      "key": "domain-bus-AttitudeDeterminationAndControlSubsystem-Software",
+      "id": "AAE",
+      "name": "Software",
+      "owner": "domain-bus-AttitudeDeterminationAndControlSubsystem",
+      "definition": "SpaceSegment::CubeSat::AttitudeDeterminationAndControlSubsystem::Software"
+    },
+    {
+      "key": "domain-bus-AttitudeDeterminationAndControlSubsystem-Actuator",
+      "id": "ACT",
+      "name": "Actuator",
+      "owner": "domain-bus-AttitudeDeterminationAndControlSubsystem",
+      "definition": "SpaceSegment::CubeSat::AttitudeDeterminationAndControlSubsystem::Actuator"
+    },
+    {
+      "key": "domain-bus-AttitudeDeterminationAndControlSubsystem-Sensor",
+      "id": "SEN",
+      "name": "Sensor",
+      "owner": "domain-bus-AttitudeDeterminationAndControlSubsystem",
+      "definition": "SpaceSegment::CubeSat::AttitudeDeterminationAndControlSubsystem::Sensor"
+    },
+    {
+      "key": "domain-bus-GuidanceNavigationAndControlSubsystem-Accelerometer",
+      "id": "ACC",
+      "name": "Accelerometer",
+      "owner": "domain-bus-GuidanceNavigationAndControlSubsystem",
+      "definition": "SpaceSegment::CubeSat::GuidanceNavigationAndControlSubsystem::Accelerometer"
+    },
+    {
+      "key": "domain-bus-GuidanceNavigationAndControlSubsystem-GNSSReceiver",
+      "id": "GNS",
+      "name": "GNSS Receiver",
+      "owner": "domain-bus-GuidanceNavigationAndControlSubsystem",
+      "definition": "SpaceSegment::CubeSat::GuidanceNavigationAndControlSubsystem::GNSSReceiver"
+    },
+    {
+      "key": "domain-bus-GuidanceNavigationAndControlSubsystem-Software",
+      "id": "AAF",
+      "name": "Software",
+      "owner": "domain-bus-GuidanceNavigationAndControlSubsystem",
+      "definition": "SpaceSegment::CubeSat::GuidanceNavigationAndControlSubsystem::Software"
+    },
+    {
+      "key": "domain-bus-StructuresAndMechanismsSubsystem-ActuatedMount",
+      "id": "AAG",
+      "name": "Actuated Mount",
+      "owner": "domain-bus-StructuresAndMechanismsSubsystem",
+      "definition": "SpaceSegment::CubeSat::StructuresAndMechanismsSubsystem::ActuatedMount"
+    },
+    {
+      "key": "domain-bus-StructuresAndMechanismsSubsystem-DeployableMount",
+      "id": "DEP",
+      "name": "Deployable Mount",
+      "owner": "domain-bus-StructuresAndMechanismsSubsystem",
+      "definition": "SpaceSegment::CubeSat::StructuresAndMechanismsSubsystem::DeployableMount"
+    },
+    {
+      "key": "domain-bus-StructuresAndMechanismsSubsystem-StaticMount",
+      "id": "STA",
+      "name": "Static Mount",
+      "owner": "domain-bus-StructuresAndMechanismsSubsystem",
+      "definition": "SpaceSegment::CubeSat::StructuresAndMechanismsSubsystem::StaticMount"
+    },
+    {
+      "key": "domain-bus-ThermalSubsystem-ThermalSensor",
+      "id": "AAH",
+      "name": "Thermal Sensor",
+      "owner": "domain-bus-ThermalSubsystem",
+      "definition": "SpaceSegment::CubeSat::ThermalSubsystem::ThermalSensor"
+    },
+    {
+      "key": "domain-bus-ThermalSubsystem-ThermalSource",
+      "id": "AAI",
+      "name": "Thermal Source",
+      "owner": "domain-bus-ThermalSubsystem",
+      "definition": "SpaceSegment::CubeSat::ThermalSubsystem::ThermalSource"
+    },
+    {
+      "key": "domain-bus-ThermalSubsystem-ThermalSink",
+      "id": "AAJ",
+      "name": "Thermal Sink",
+      "owner": "domain-bus-ThermalSubsystem",
+      "definition": "SpaceSegment::CubeSat::ThermalSubsystem::ThermalSink"
+    },
+    {
+      "key": "domain-bus-ThermalSubsystem-ProcessorAndMemory",
+      "id": "AAK",
+      "name": "Processor and Memory",
+      "owner": "domain-bus-ThermalSubsystem",
+      "definition": "SpaceSegment::CubeSat::ThermalSubsystem::ProcessorAndMemory"
+    },
+    {
+      "key": "domain-bus-ThermalSubsystem-Software",
+      "id": "AAL",
+      "name": "Software",
+      "owner": "domain-bus-ThermalSubsystem",
+      "definition": "SpaceSegment::CubeSat::ThermalSubsystem::Software"
+    },
+    {
+      "key": "domain-bus-PropulsionSubsystem-PropellantStorage",
+      "id": "AAM",
+      "name": "Propellant Storage",
+      "owner": "domain-bus-PropulsionSubsystem",
+      "definition": "SpaceSegment::CubeSat::PropulsionSubsystem::PropellantStorage"
+    },
+    {
+      "key": "domain-bus-PropulsionSubsystem-PropellantControl",
+      "id": "AAN",
+      "name": "Propellant Control",
+      "owner": "domain-bus-PropulsionSubsystem",
+      "definition": "SpaceSegment::CubeSat::PropulsionSubsystem::PropellantControl"
+    },
+    {
+      "key": "domain-bus-PropulsionSubsystem-Thrusters",
+      "id": "THR",
+      "name": "Thrusters",
+      "owner": "domain-bus-PropulsionSubsystem",
+      "definition": "SpaceSegment::CubeSat::PropulsionSubsystem::Thrusters"
+    },
+    {
+      "key": "domain-bus-PropulsionSubsystem-Software",
+      "id": "AAO",
+      "name": "Software",
+      "owner": "domain-bus-PropulsionSubsystem",
+      "definition": "SpaceSegment::CubeSat::PropulsionSubsystem::Software"
+    },
+    {
+      "key": "domain-bus-PropulsionSubsystem-ProcessorAndMemory",
+      "id": "AAP",
+      "name": "Processor and Memory",
+      "owner": "domain-bus-PropulsionSubsystem",
+      "definition": "SpaceSegment::CubeSat::PropulsionSubsystem::ProcessorAndMemory"
     }
   ],
   "components": [],
@@ -889,7 +1050,7 @@
       ],
       "kind": "Requirement",
       "text": "The selected maximum depth of discharge $$dod_max$$ shall support $$supported_cycles$$, at least the required $$required_cycles$$.",
-      "condition": "required_cycles > 0 and cycle_a > 0 and cycle_b < 0 and fit_dod_min > 0 and fit_dod_min <= fit_dod_max and fit_dod_max <= 1 and dod_max >= fit_dod_min and dod_max <= fit_dod_max and dod_cycle_limit == (required_cycles / cycle_a) ^ (1 / cycle_b) and supported_cycles == cycle_a * dod_max ^ cycle_b and supported_cycles >= required_cycles",
+      "condition": "(((((((((((required_cycles > 0) and (cycle_a > 0)) and (cycle_b < 0)) and (fit_dod_min > 0)) and (fit_dod_min <= fit_dod_max)) and (fit_dod_max <= 1)) and (dod_max >= fit_dod_min)) and (dod_max <= fit_dod_max)) and (dod_cycle_limit == ((required_cycles / cycle_a) ** (1 / cycle_b)))) and (supported_cycles == (cycle_a * (dod_max ** cycle_b)))) and (supported_cycles >= required_cycles))",
       "definition": "FrameworkRequirements::CycleLife",
       "origin": "final_report/design-proposal.tex#eq:battery-cycle-life; EPS-09",
       "parameters": {
@@ -928,8 +1089,8 @@
         "dod_max": null,
         "fit_dod_min": null,
         "fit_dod_max": null,
-        "dod_cycle_limit": "(required_cycles / cycle_a) ^ (1 / cycle_b)",
-        "supported_cycles": "cycle_a * dod_max ^ cycle_b",
+        "dod_cycle_limit": "((required_cycles / cycle_a) ** (1 / cycle_b))",
+        "supported_cycles": "(cycle_a * (dod_max ** cycle_b))",
         "degradation_margin": null,
         "battery_min_J": null,
         "pack_bol_J": null,
@@ -969,7 +1130,7 @@
       ],
       "kind": "Requirement",
       "text": "The battery shall provide at least $$battery_min_J$$ of BOL energy for eclipse demand $$eclipse_energy_J$$ at maximum DoD $$dod_max$$ and degradation margin $$degradation_margin$$.",
-      "condition": "eclipse_energy_J >= 0 and dod_max > 0 and dod_max <= 1 and degradation_margin >= 0 and battery_min_J == eclipse_energy_J / dod_max * (1 + degradation_margin) and required_cycles > 0 and cycle_a > 0 and cycle_b < 0 and fit_dod_min > 0 and fit_dod_min <= fit_dod_max and fit_dod_max <= 1 and dod_max >= fit_dod_min and dod_max <= fit_dod_max and supported_cycles == cycle_a * dod_max ^ cycle_b and supported_cycles >= required_cycles",
+      "condition": "(((((((((((((((eclipse_energy_J >= 0) and (dod_max > 0)) and (dod_max <= 1)) and (degradation_margin >= 0)) and (battery_min_J == ((eclipse_energy_J / dod_max) * (1 + degradation_margin)))) and (required_cycles > 0)) and (cycle_a > 0)) and (cycle_b < 0)) and (fit_dod_min > 0)) and (fit_dod_min <= fit_dod_max)) and (fit_dod_max <= 1)) and (dod_max >= fit_dod_min)) and (dod_max <= fit_dod_max)) and (supported_cycles == (cycle_a * (dod_max ** cycle_b)))) and (supported_cycles >= required_cycles))",
       "definition": "FrameworkRequirements::MinimumBatteryEnergy",
       "origin": "final_report/design-proposal.tex#eq:battery-energy; EPS-08",
       "parameters": {
@@ -2539,7 +2700,7 @@
       ],
       "kind": "Requirement",
       "text": "The preliminary circular orbit shall have period $$orbit_period_s$$ at altitude $$altitude_km$$, using Earth radius $$earthRadius_km$$ and gravitational parameter $$gravitationalParameter_km3_s2$$.",
-      "condition": "altitude_km > 0 and earthRadius_km > 0 and gravitationalParameter_km3_s2 > 0 and orbit_period_s > 0 and orbit_period_s == 2 * pi * sqrt((earthRadius_km + altitude_km) ^ 3 / gravitationalParameter_km3_s2)",
+      "condition": "(((((altitude_km > 0) and (earthRadius_km > 0)) and (gravitationalParameter_km3_s2 > 0)) and (orbit_period_s > 0)) and (orbit_period_s == ((2 * math.pi) * math.sqrt((((earthRadius_km + altitude_km) ** 3) / gravitationalParameter_km3_s2)))))",
       "definition": "FrameworkRequirements::OrbitPeriod",
       "origin": "final_report/design-proposal.tex#eq:orbit-period (handpicked-0003, Eqs. 1-4)",
       "parameters": {
@@ -2550,7 +2711,7 @@
         "altitude_km": "600",
         "earthRadius_km": "6378",
         "gravitationalParameter_km3_s2": "398601",
-        "orbit_period_s": "2 * pi * sqrt((earthRadius_km + altitude_km) ^ 3 / gravitationalParameter_km3_s2)",
+        "orbit_period_s": "((2 * math.pi) * math.sqrt((((earthRadius_km + altitude_km) ** 3) / gravitationalParameter_km3_s2)))",
         "horizon_angle_rad": null,
         "sunlight_s": null,
         "eclipse_s": null,
@@ -2605,521 +2766,12 @@
       },
       "rationale": "final_report/design-proposal.tex#eq:orbit-period (handpicked-0003, Eqs. 1-4)"
     }
-  ]
+  ],
+  "power": {
+    "modes": [],
+    "loads": [],
+    "links": []
+  },
+  "scripts": [],
+  "expressionLanguage": "python"
 }
-requirements-ui:end-data */
-package MissionRequirements {
-    private import External::*;
-    private import Orbit;
-    private import SpaceSegment::*;
-    private import GroundSegment::*;
-    private import ScalarValues::*;
-    part element_domain_horbit : Orbit {
-        attribute externalId : String = "ORB";
-        attribute displayName : String = "Orbit";
-        attribute :>> altitude_km = statement_generic_hORB_hOrbitPeriod.'altitude_km';
-        attribute :>> earthRadius_km = statement_generic_hORB_hOrbitPeriod.'earthRadius_km';
-        attribute :>> gravitationalParameter_km3_s2 = statement_generic_hORB_hOrbitPeriod.'gravitationalParameter_km3_s2';
-    }
-    part element_domain_hbus : SpaceSegment::CubeSat {
-        attribute externalId : String = "BUS";
-        attribute displayName : String = "CubeSat Bus";
-        part element_domain_hbus_hCommandAndDataHandlingSubsystem : SpaceSegment::CubeSat::CommandAndDataHandlingSubsystem {
-            attribute externalId : String = "CDH";
-            attribute displayName : String = "Command and Data Handling";
-        }
-        part element_domain_hbus_hCommunicationSubsystem : SpaceSegment::CubeSat::CommunicationSubsystem {
-            attribute externalId : String = "COM";
-            attribute displayName : String = "Communication";
-        }
-        part element_domain_hbus_hAttitudeDeterminationAndControlSubsystem : SpaceSegment::CubeSat::AttitudeDeterminationAndControlSubsystem {
-            attribute externalId : String = "ADC";
-            attribute displayName : String = "Attitude Determination and Control";
-        }
-        part element_domain_hbus_hGuidanceNavigationAndControlSubsystem : SpaceSegment::CubeSat::GuidanceNavigationAndControlSubsystem {
-            attribute externalId : String = "GNC";
-            attribute displayName : String = "Guidance Navigation and Control";
-        }
-        part element_domain_hbus_hStructuresAndMechanismsSubsystem : SpaceSegment::CubeSat::StructuresAndMechanismsSubsystem {
-            attribute externalId : String = "STR";
-            attribute displayName : String = "Structures and Mechanisms";
-        }
-        part element_domain_hbus_hThermalSubsystem : SpaceSegment::CubeSat::ThermalSubsystem {
-            attribute externalId : String = "THE";
-            attribute displayName : String = "Thermal";
-        }
-        part element_domain_hbus_hPropulsionSubsystem : SpaceSegment::CubeSat::PropulsionSubsystem {
-            attribute externalId : String = "PRO";
-            attribute displayName : String = "Propulsion";
-        }
-        part element_domain_hbus_hPowerSubsystem : SpaceSegment::CubeSat::PowerSubsystem {
-            attribute externalId : String = "EPS";
-            attribute displayName : String = "Power";
-            part element_domain_hbus_hPowerSubsystem_hBatteries : SpaceSegment::CubeSat::PowerSubsystem::Batteries {
-                attribute externalId : String = "BAT";
-                attribute displayName : String = "Batteries";
-            }
-            part element_domain_hbus_hPowerSubsystem_hSolarArrays : SpaceSegment::CubeSat::PowerSubsystem::SolarArrays {
-                attribute externalId : String = "SOL";
-                attribute displayName : String = "Solar Arrays";
-            }
-            part element_domain_hbus_hPowerSubsystem_hProcessorAndMemory : SpaceSegment::CubeSat::PowerSubsystem::ProcessorAndMemory {
-                attribute externalId : String = "PCM";
-                attribute displayName : String = "Processor and Memory";
-            }
-            part element_domain_hbus_hPowerSubsystem_hRegulatorsAndConverters : SpaceSegment::CubeSat::PowerSubsystem::RegulatorsAndConverters {
-                attribute externalId : String = "REG";
-                attribute displayName : String = "Regulators and Converters";
-            }
-            part element_domain_hbus_hPowerSubsystem_hPowerCircuitsAndSwitches : SpaceSegment::CubeSat::PowerSubsystem::PowerCircuitsAndSwitches {
-                attribute externalId : String = "PCS";
-                attribute displayName : String = "Power Circuits and Switches";
-            }
-            part element_domain_hbus_hPowerSubsystem_hSoftware : SpaceSegment::CubeSat::PowerSubsystem::Software {
-                attribute externalId : String = "SFW";
-                attribute displayName : String = "Software";
-            }
-        }
-    }
-    part element_domain_hpayload : SpaceSegment::CubeSat::PayloadSubsystem {
-        attribute externalId : String = "PAY";
-        attribute displayName : String = "Payload";
-        part element_domain_hpayload_hInstrument : SpaceSegment::CubeSat::PayloadSubsystem::Instrument {
-            attribute externalId : String = "INS";
-            attribute displayName : String = "Instrument";
-        }
-        part element_domain_hpayload_hProcessorAndMemory : SpaceSegment::CubeSat::PayloadSubsystem::ProcessorAndMemory {
-            attribute externalId : String = "AAA";
-            attribute displayName : String = "Processor and Memory";
-        }
-    }
-    part element_domain_hground : GroundSegment::GroundStation {
-        attribute externalId : String = "GND";
-        attribute displayName : String = "Ground Station";
-        part element_domain_hground_hPlanAndScheduleSubsystem : GroundSegment::PlanAndScheduleSubsystem {
-            attribute externalId : String = "PLS";
-            attribute displayName : String = "Plan and Schedule";
-        }
-        part element_domain_hground_hSpacecraftCommandSubsystem : GroundSegment::SpacecraftCommandSubsystem {
-            attribute externalId : String = "SCC";
-            attribute displayName : String = "Spacecraft Command";
-        }
-        part element_domain_hground_hGroundEquipmentControlSubsystem : GroundSegment::GroundEquipmentControlSubsystem {
-            attribute externalId : String = "GEC";
-            attribute displayName : String = "Ground Equipment Control";
-        }
-        part element_domain_hground_hSpaceGroundCommunicationSubsystem : GroundSegment::SpaceGroundCommunicationSubsystem {
-            attribute externalId : String = "SGC";
-            attribute displayName : String = "Space Ground Communication";
-        }
-        part element_domain_hground_hMissionDataProcessingSubsystem : GroundSegment::MissionDataProcessingSubsystem {
-            attribute externalId : String = "MDP";
-            attribute displayName : String = "Mission Data Processing";
-        }
-        part element_domain_hground_hMissionDataDisseminationSubsystem : GroundSegment::MissionDataDisseminationSubsystem {
-            attribute externalId : String = "MDD";
-            attribute displayName : String = "Mission Data Dissemination";
-        }
-        part element_domain_hground_hNetworkSubsystem : GroundSegment::NetworkSubsystem {
-            attribute externalId : String = "NET";
-            attribute displayName : String = "Network";
-        }
-        part element_domain_hground_hTelemetryProcessingSubsystem : GroundSegment::TelemetryProcessingSubsystem {
-            attribute externalId : String = "TLM";
-            attribute displayName : String = "Telemetry Processing";
-        }
-    }
-    requirement statement_generic_hEPS_hLoadEnergy : FrameworkRequirements::LoadEnergy {
-        attribute externalId : String = "SIZ001";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "The preliminary load budget shall allocate $$sunlight_energy_J$$ during $$sunlight_s$$ of sunlight and $$eclipse_energy_J$$ during $$eclipse_s$$ of eclipse.";
-        attribute verificationExpression : String[0..1] = "sunlight_power_W >= 0 and eclipse_power_W >= 0 and sunlight_duty >= 0 and sunlight_duty <= 1 and eclipse_duty >= 0 and eclipse_duty <= 1 and sunlight_s > 0 and eclipse_s > 0 and sunlight_energy_J == sunlight_power_W * sunlight_duty * sunlight_s and eclipse_energy_J == eclipse_power_W * eclipse_duty * eclipse_s";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:minimum-panel-power; EPSModel::ModeLoadProfile and AccountingPlan";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:minimum-panel-power; EPSModel::ModeLoadProfile and AccountingPlan";
-        attribute :>> 'sunlight_s' = statement_generic_hORB_hIlluminationPeriods.'sunlight_s';
-        attribute :>> 'eclipse_s' = statement_generic_hORB_hIlluminationPeriods.'eclipse_s';
-        attribute :>> 'sunlight_energy_J' = (('sunlight_power_W' * 'sunlight_duty') * 'sunlight_s');
-        attribute :>> 'eclipse_energy_J' = (('eclipse_power_W' * 'eclipse_duty') * 'eclipse_s');
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays);
-        require constraint verificationCondition { (((((((((('sunlight_power_W' >= 0) and ('eclipse_power_W' >= 0)) and ('sunlight_duty' >= 0)) and ('sunlight_duty' <= 1)) and ('eclipse_duty' >= 0)) and ('eclipse_duty' <= 1)) and ('sunlight_s' > 0)) and ('eclipse_s' > 0)) and ('sunlight_energy_J' == (('sunlight_power_W' * 'sunlight_duty') * 'sunlight_s'))) and ('eclipse_energy_J' == (('eclipse_power_W' * 'eclipse_duty') * 'eclipse_s'))) }
-    }
-    requirement statement_generic_hEPS_hMinimumPanelPower : FrameworkRequirements::MinimumPanelPower {
-        attribute externalId : String = "SIZ002";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "The solar panels shall provide at least $$panel_min_W$$ at the declared source boundary.";
-        attribute verificationExpression : String[0..1] = "sunlight_energy_J >= 0 and eclipse_energy_J >= 0 and sunlight_s > 0 and sunlight_efficiency > 0 and sunlight_efficiency <= 1 and eclipse_efficiency > 0 and eclipse_efficiency <= 1 and panel_min_W == (sunlight_energy_J / sunlight_efficiency + eclipse_energy_J / eclipse_efficiency) / sunlight_s";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:minimum-panel-power (handpicked-0003)";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:minimum-panel-power (handpicked-0003)";
-        attribute :>> 'sunlight_s' = statement_generic_hORB_hIlluminationPeriods.'sunlight_s';
-        attribute :>> 'sunlight_energy_J' = statement_generic_hEPS_hLoadEnergy.'sunlight_energy_J';
-        attribute :>> 'eclipse_energy_J' = statement_generic_hEPS_hLoadEnergy.'eclipse_energy_J';
-        attribute :>> 'panel_min_W' = ((('sunlight_energy_J' / 'sunlight_efficiency') + ('eclipse_energy_J' / 'eclipse_efficiency')) / 'sunlight_s');
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hRegulatorsAndConverters);
-        require constraint verificationCondition { (((((((('sunlight_energy_J' >= 0) and ('eclipse_energy_J' >= 0)) and ('sunlight_s' > 0)) and ('sunlight_efficiency' > 0)) and ('sunlight_efficiency' <= 1)) and ('eclipse_efficiency' > 0)) and ('eclipse_efficiency' <= 1)) and ('panel_min_W' == ((('sunlight_energy_J' / 'sunlight_efficiency') + ('eclipse_energy_J' / 'eclipse_efficiency')) / 'sunlight_s'))) }
-    }
-    requirement statement_generic_hEPS_hSolarCellPower : FrameworkRequirements::SolarCellPower {
-        attribute externalId : String = "SIZ003";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "The selected solar cell shall provide EOL maximum power $$cell_eol_W$$ from maximum power point voltage $$cell_eol_V$$ and current $$cell_eol_A$$.";
-        attribute verificationExpression : String[0..1] = "cell_eol_V > 0 and cell_eol_A > 0 and cell_eol_W == cell_eol_V * cell_eol_A";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:solar-cell-eol-power";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:solar-cell-eol-power";
-        attribute :>> 'cell_eol_W' = ('cell_eol_V' * 'cell_eol_A');
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays);
-        require constraint verificationCondition { ((('cell_eol_V' > 0) and ('cell_eol_A' > 0)) and ('cell_eol_W' == ('cell_eol_V' * 'cell_eol_A'))) }
-    }
-    requirement statement_generic_hEPS_hSolarCellCount : FrameworkRequirements::SolarCellCount {
-        attribute externalId : String = "SIZ004";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "The array shall install $$installed_cells$$, at least the minimum $$minimum_cells$$ obtained by rounding calculated count $$required_cells$$ upward.";
-        attribute verificationExpression : String[0..1] = "panel_min_W >= 0 and cell_eol_W > 0 and required_cells == panel_min_W / cell_eol_W and minimum_cells == -floor(-required_cells) and installed_cells > 0 and installed_cells >= minimum_cells";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:solar-cell-count, eq:pv-integer-configuration";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:solar-cell-count, eq:pv-integer-configuration";
-        attribute :>> 'panel_min_W' = statement_generic_hEPS_hMinimumPanelPower.'panel_min_W';
-        attribute :>> 'cell_eol_W' = statement_generic_hEPS_hSolarCellPower.'cell_eol_W';
-        attribute :>> 'required_cells' = ('panel_min_W' / 'cell_eol_W');
-        assert constraint { (- RealFunctions::floor((- 'required_cells'))) == RealFunctions::ToInteger((- RealFunctions::floor((- 'required_cells')))) }
-        attribute :>> 'minimum_cells' = RealFunctions::ToInteger((- RealFunctions::floor((- 'required_cells'))));
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays);
-        require constraint verificationCondition { (((((('panel_min_W' >= 0) and ('cell_eol_W' > 0)) and ('required_cells' == ('panel_min_W' / 'cell_eol_W'))) and ('minimum_cells' == (- RealFunctions::floor((- 'required_cells'))))) and ('installed_cells' > 0)) and ('installed_cells' >= 'minimum_cells')) }
-    }
-    requirement statement_generic_hEPS_hMissionCycles : FrameworkRequirements::MissionCycles {
-        attribute externalId : String = "SIZ005";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "For one nominal cycle per orbit, the battery shall support at least $$required_cycles$$ over $$lifetime_years$$, using $$days_per_year$$ and $$orbits_per_day$$ derived from period $$orbit_period_s$$.";
-        attribute verificationExpression : String[0..1] = "orbit_period_s > 0 and lifetime_years > 0 and days_per_year > 0 and orbits_per_day == 86400 / orbit_period_s and required_cycles == lifetime_years * days_per_year * orbits_per_day";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-mission-cycles";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-mission-cycles";
-        attribute :>> 'orbit_period_s' = statement_generic_hORB_hOrbitPeriod.'orbit_period_s';
-        attribute :>> 'orbits_per_day' = (86400 / 'orbit_period_s');
-        attribute :>> 'required_cycles' = (('lifetime_years' * 'days_per_year') * 'orbits_per_day');
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
-        require constraint verificationCondition { ((((('orbit_period_s' > 0) and ('lifetime_years' > 0)) and ('days_per_year' > 0)) and ('orbits_per_day' == (86400 / 'orbit_period_s'))) and ('required_cycles' == (('lifetime_years' * 'days_per_year') * 'orbits_per_day'))) }
-    }
-    requirement statement_generic_hEPS_hCycleLife : FrameworkRequirements::CycleLife {
-        attribute externalId : String = "SIZ006";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "The selected maximum depth of discharge $$dod_max$$ shall support $$supported_cycles$$, at least the required $$required_cycles$$.";
-        attribute verificationExpression : String[0..1] = "required_cycles > 0 and cycle_a > 0 and cycle_b < 0 and fit_dod_min > 0 and fit_dod_min <= fit_dod_max and fit_dod_max <= 1 and dod_max >= fit_dod_min and dod_max <= fit_dod_max and dod_cycle_limit == (required_cycles / cycle_a) ^ (1 / cycle_b) and supported_cycles == cycle_a * dod_max ^ cycle_b and supported_cycles >= required_cycles";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-cycle-life; EPS-09";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-cycle-life; EPS-09";
-        attribute :>> 'required_cycles' = statement_generic_hEPS_hMissionCycles.'required_cycles';
-        attribute :>> 'dod_cycle_limit' = (('required_cycles' / 'cycle_a') ^ (1 / 'cycle_b'));
-        attribute :>> 'supported_cycles' = ('cycle_a' * ('dod_max' ^ 'cycle_b'));
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
-        require constraint verificationCondition { ((((((((((('required_cycles' > 0) and ('cycle_a' > 0)) and ('cycle_b' < 0)) and ('fit_dod_min' > 0)) and ('fit_dod_min' <= 'fit_dod_max')) and ('fit_dod_max' <= 1)) and ('dod_max' >= 'fit_dod_min')) and ('dod_max' <= 'fit_dod_max')) and ('dod_cycle_limit' == (('required_cycles' / 'cycle_a') ^ (1 / 'cycle_b')))) and ('supported_cycles' == ('cycle_a' * ('dod_max' ^ 'cycle_b')))) and ('supported_cycles' >= 'required_cycles')) }
-    }
-    requirement statement_generic_hEPS_hMinimumBatteryEnergy : FrameworkRequirements::MinimumBatteryEnergy {
-        attribute externalId : String = "SIZ007";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "The battery shall provide at least $$battery_min_J$$ of BOL energy for eclipse demand $$eclipse_energy_J$$ at maximum DoD $$dod_max$$ and degradation margin $$degradation_margin$$.";
-        attribute verificationExpression : String[0..1] = "eclipse_energy_J >= 0 and dod_max > 0 and dod_max <= 1 and degradation_margin >= 0 and battery_min_J == eclipse_energy_J / dod_max * (1 + degradation_margin) and required_cycles > 0 and cycle_a > 0 and cycle_b < 0 and fit_dod_min > 0 and fit_dod_min <= fit_dod_max and fit_dod_max <= 1 and dod_max >= fit_dod_min and dod_max <= fit_dod_max and supported_cycles == cycle_a * dod_max ^ cycle_b and supported_cycles >= required_cycles";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-energy; EPS-08";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-energy; EPS-08";
-        attribute :>> 'eclipse_energy_J' = statement_generic_hEPS_hLoadEnergy.'eclipse_energy_J';
-        attribute :>> 'required_cycles' = statement_generic_hEPS_hMissionCycles.'required_cycles';
-        attribute :>> 'cycle_a' = statement_generic_hEPS_hCycleLife.'cycle_a';
-        attribute :>> 'cycle_b' = statement_generic_hEPS_hCycleLife.'cycle_b';
-        attribute :>> 'dod_max' = statement_generic_hEPS_hCycleLife.'dod_max';
-        attribute :>> 'fit_dod_min' = statement_generic_hEPS_hCycleLife.'fit_dod_min';
-        attribute :>> 'fit_dod_max' = statement_generic_hEPS_hCycleLife.'fit_dod_max';
-        attribute :>> 'supported_cycles' = statement_generic_hEPS_hCycleLife.'supported_cycles';
-        attribute :>> 'battery_min_J' = (('eclipse_energy_J' / 'dod_max') * (1 + 'degradation_margin'));
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
-        require constraint verificationCondition { ((((((((((((((('eclipse_energy_J' >= 0) and ('dod_max' > 0)) and ('dod_max' <= 1)) and ('degradation_margin' >= 0)) and ('battery_min_J' == (('eclipse_energy_J' / 'dod_max') * (1 + 'degradation_margin')))) and ('required_cycles' > 0)) and ('cycle_a' > 0)) and ('cycle_b' < 0)) and ('fit_dod_min' > 0)) and ('fit_dod_min' <= 'fit_dod_max')) and ('fit_dod_max' <= 1)) and ('dod_max' >= 'fit_dod_min')) and ('dod_max' <= 'fit_dod_max')) and ('supported_cycles' == ('cycle_a' * ('dod_max' ^ 'cycle_b')))) and ('supported_cycles' >= 'required_cycles')) }
-    }
-    requirement statement_generic_hEPS_hBatteryCapacityScreen : FrameworkRequirements::BatteryCapacityScreen {
-        attribute externalId : String = "SIZ008";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "The selected battery shall have BOL energy $$pack_bol_J$$, at least the preliminary minimum $$battery_min_J$$.";
-        attribute verificationExpression : String[0..1] = "battery_min_J >= 0 and pack_bol_J > 0 and pack_bol_J >= battery_min_J and retained_energy_factor > 0 and retained_energy_factor <= 1 and pack_eol_J == retained_energy_factor * pack_bol_J";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-assembly-capacity; EPS-08";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-assembly-capacity; EPS-08";
-        attribute :>> 'battery_min_J' = statement_generic_hEPS_hMinimumBatteryEnergy.'battery_min_J';
-        attribute :>> 'pack_eol_J' = ('retained_energy_factor' * 'pack_bol_J');
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
-        require constraint verificationCondition { (((((('battery_min_J' >= 0) and ('pack_bol_J' > 0)) and ('pack_bol_J' >= 'battery_min_J')) and ('retained_energy_factor' > 0)) and ('retained_energy_factor' <= 1)) and ('pack_eol_J' == ('retained_energy_factor' * 'pack_bol_J'))) }
-    }
-    requirement statement_generic_hEPS_hEPS02 : FrameworkRequirements::EPS02 {
-        attribute externalId : String = "EPS002";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "EPS-02. The solar arrays shall provide at least $$panel_min_W$$ of average source power from $$sunlight_generation_J$$ over $$sunlight_s$$ of sunlight at each section's attainable DET or MPPT operating point under applicable illumination and EOL conditions.";
-        attribute verificationExpression : String[0..1];
-        attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-02; eq:array-generation-screen, eq:pv-integer-configuration";
-        attribute rationale : String = "final_report/eps-requirements.tex#EPS-02; eq:array-generation-screen, eq:pv-integer-configuration";
-        attribute :>> 'sunlight_s' = statement_generic_hORB_hIlluminationPeriods.'sunlight_s';
-        attribute :>> 'panel_min_W' = statement_generic_hEPS_hMinimumPanelPower.'panel_min_W';
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays);
-    }
-    requirement statement_generic_hEPS_hEPS08 : FrameworkRequirements::EPS08 {
-        attribute externalId : String = "EPS008";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "EPS-08. The battery pack BOL energy $$pack_bol_J$$ shall meet minimum energy $$battery_min_J$$ from preliminary battery sizing.";
-        attribute verificationExpression : String[0..1];
-        attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-08; eq:battery-energy, eq:battery-assembly-capacity, eq:battery-assembly-ratings";
-        attribute rationale : String = "final_report/eps-requirements.tex#EPS-08; eq:battery-energy, eq:battery-assembly-capacity, eq:battery-assembly-ratings";
-        attribute :>> 'battery_min_J' = statement_generic_hEPS_hMinimumBatteryEnergy.'battery_min_J';
-        attribute :>> 'pack_bol_J' = statement_generic_hEPS_hBatteryCapacityScreen.'pack_bol_J';
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
-    }
-    requirement statement_generic_hEPS_hEPS09 : FrameworkRequirements::EPS09 {
-        attribute externalId : String = "EPS009";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "EPS-09. For nominal operation, the battery pack shall support $$supported_cycles$$, at least the required $$required_cycles$$ at the selected DoD and applicable conditions.";
-        attribute verificationExpression : String[0..1];
-        attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-09; eq:battery-mission-cycles, eq:battery-cycle-life";
-        attribute rationale : String = "final_report/eps-requirements.tex#EPS-09; eq:battery-mission-cycles, eq:battery-cycle-life";
-        attribute :>> 'required_cycles' = statement_generic_hEPS_hMissionCycles.'required_cycles';
-        attribute :>> 'dod_max' = statement_generic_hEPS_hCycleLife.'dod_max';
-        attribute :>> 'supported_cycles' = statement_generic_hEPS_hCycleLife.'supported_cycles';
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
-    }
-    requirement statement_generic_hEPS_hEPS11 : FrameworkRequirements::EPS11 {
-        attribute externalId : String = "EPS011";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "EPS-11. The EPS shall replenish the battery from starting energy $$energy_start_J$$ and charge based SOC $$soc_start$$ over every specified nominal repeating interval.";
-        attribute verificationExpression : String[0..1];
-        attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-11; eq:nominal-energy-feasibility";
-        attribute rationale : String = "final_report/eps-requirements.tex#EPS-11; eq:nominal-energy-feasibility";
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays);
-    }
-    requirement statement_generic_hEPS_hEPS19 : FrameworkRequirements::EPS19 {
-        attribute externalId : String = "EPS019";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "EPS-19. Total EPS mass $$mass_kg$$ shall remain within allocation $$mass_allocation_kg$$.";
-        attribute verificationExpression : String[0..1];
-        attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-19; eq:eps-product-budgets";
-        attribute rationale : String = "final_report/eps-requirements.tex#EPS-19; eq:eps-product-budgets";
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hProcessorAndMemory, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hRegulatorsAndConverters, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hPowerCircuitsAndSwitches);
-    }
-    requirement statement_generic_hEPS_hEPS21 : FrameworkRequirements::EPS21 {
-        attribute externalId : String = "EPS021";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "EPS-21. Each software execution host shall provide $$required_data_bytes$$ of data memory within an allocation of $$available_data_bytes$$.";
-        attribute verificationExpression : String[0..1];
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:software-resource-screen; Software-host checks";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:software-resource-screen; Software-host checks";
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hProcessorAndMemory, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSoftware);
-    }
-    requirement statement_generic_hEPS_hEnergyPathEfficiencyBounds : FrameworkRequirements::EnergyPathEfficiencyBounds {
-        attribute externalId : String = "SIZ011";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "Sunlight path efficiency $$sunlight_efficiency$$ and eclipse path efficiency $$eclipse_efficiency$$ shall lie in (0,1].";
-        attribute verificationExpression : String[0..1] = "sunlight_efficiency > 0 and sunlight_efficiency <= 1 and eclipse_efficiency > 0 and eclipse_efficiency <= 1";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:minimum-panel-power";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:minimum-panel-power";
-        attribute :>> 'sunlight_efficiency' = statement_generic_hEPS_hMinimumPanelPower.'sunlight_efficiency';
-        attribute :>> 'eclipse_efficiency' = statement_generic_hEPS_hMinimumPanelPower.'eclipse_efficiency';
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hRegulatorsAndConverters);
-        require constraint verificationCondition { (((('sunlight_efficiency' > 0) and ('sunlight_efficiency' <= 1)) and ('eclipse_efficiency' > 0)) and ('eclipse_efficiency' <= 1)) }
-    }
-    requirement statement_generic_hEPS_hCycleFitDomain : FrameworkRequirements::CycleFitDomain {
-        attribute externalId : String = "SIZ013";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "Maximum DoD $$dod_max$$ shall lie in (0,1] and the sourced fit interval [$$fit_dod_min$$,$$fit_dod_max$$] for power law coefficients $$cycle_a$$ and $$cycle_b$$.";
-        attribute verificationExpression : String[0..1] = "cycle_a > 0 and cycle_b < 0 and fit_dod_min > 0 and fit_dod_min <= fit_dod_max and fit_dod_max <= 1 and dod_max >= fit_dod_min and dod_max <= fit_dod_max";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-cycle-life";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-cycle-life";
-        attribute :>> 'cycle_a' = statement_generic_hEPS_hCycleLife.'cycle_a';
-        attribute :>> 'cycle_b' = statement_generic_hEPS_hCycleLife.'cycle_b';
-        attribute :>> 'dod_max' = statement_generic_hEPS_hCycleLife.'dod_max';
-        attribute :>> 'fit_dod_min' = statement_generic_hEPS_hCycleLife.'fit_dod_min';
-        attribute :>> 'fit_dod_max' = statement_generic_hEPS_hCycleLife.'fit_dod_max';
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
-        require constraint verificationCondition { ((((((('cycle_a' > 0) and ('cycle_b' < 0)) and ('fit_dod_min' > 0)) and ('fit_dod_min' <= 'fit_dod_max')) and ('fit_dod_max' <= 1)) and ('dod_max' >= 'fit_dod_min')) and ('dod_max' <= 'fit_dod_max')) }
-    }
-    requirement statement_generic_hEPS_hCycleLimitedDoD : FrameworkRequirements::CycleLimitedDoD {
-        attribute externalId : String = "SIZ014";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "Maximum DoD $$dod_max$$ shall not exceed fitted cycle limit $$dod_cycle_limit$$.";
-        attribute verificationExpression : String[0..1] = "dod_max > 0 and dod_max <= 1 and dod_cycle_limit > 0 and dod_max <= dod_cycle_limit";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-cycle-life";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-cycle-life";
-        attribute :>> 'dod_max' = statement_generic_hEPS_hCycleLife.'dod_max';
-        attribute :>> 'dod_cycle_limit' = statement_generic_hEPS_hCycleLife.'dod_cycle_limit';
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
-        require constraint verificationCondition { (((('dod_max' > 0) and ('dod_max' <= 1)) and ('dod_cycle_limit' > 0)) and ('dod_max' <= 'dod_cycle_limit')) }
-    }
-    requirement statement_generic_hEPS_hBatteryRetainedEnergy : FrameworkRequirements::BatteryRetainedEnergy {
-        attribute externalId : String = "SIZ016";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "Battery EOL energy $$pack_eol_J$$ shall equal BOL energy $$pack_bol_J$$ multiplied by retained energy factor $$retained_energy_factor$$ in (0,1].";
-        attribute verificationExpression : String[0..1] = "pack_bol_J > 0 and retained_energy_factor > 0 and retained_energy_factor <= 1 and pack_eol_J == retained_energy_factor * pack_bol_J";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:battery-assembly-capacity";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:battery-assembly-capacity";
-        attribute :>> 'pack_bol_J' = statement_generic_hEPS_hBatteryCapacityScreen.'pack_bol_J';
-        attribute :>> 'retained_energy_factor' = statement_generic_hEPS_hBatteryCapacityScreen.'retained_energy_factor';
-        attribute :>> 'pack_eol_J' = statement_generic_hEPS_hBatteryCapacityScreen.'pack_eol_J';
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
-        require constraint verificationCondition { (((('pack_bol_J' > 0) and ('retained_energy_factor' > 0)) and ('retained_energy_factor' <= 1)) and ('pack_eol_J' == ('retained_energy_factor' * 'pack_bol_J'))) }
-    }
-    requirement statement_generic_hEPS_hEPS47 : FrameworkRequirements::EPS47 {
-        attribute externalId : String = "EPS047";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "EPS-47. Nominal cycle DoD $$nominal_dod$$ shall not exceed maximum DoD $$dod_max$$.";
-        attribute verificationExpression : String[0..1];
-        attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-09";
-        attribute rationale : String = "final_report/eps-requirements.tex#EPS-09";
-        attribute :>> 'dod_max' = statement_generic_hEPS_hEPS09.'dod_max';
-        attribute :>> 'nominal_dod' = statement_generic_hEPS_hEPS09.'nominal_dod';
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries);
-    }
-    requirement statement_generic_hEPS_hEPS52 : FrameworkRequirements::EPS52 {
-        attribute externalId : String = "EPS052";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "EPS-52. Ending energy $$energy_end_J$$ shall be at least starting energy $$energy_start_J$$ minus nonnegative numerical closure tolerance $$closure_tolerance_J$$ over each nominal repeating interval.";
-        attribute verificationExpression : String[0..1];
-        attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-11; eq:nominal-energy-feasibility";
-        attribute rationale : String = "final_report/eps-requirements.tex#EPS-11; eq:nominal-energy-feasibility";
-        attribute :>> 'energy_start_J' = statement_generic_hEPS_hEPS11.'energy_start_J';
-        attribute :>> 'energy_end_J' = statement_generic_hEPS_hEPS11.'energy_end_J';
-        attribute :>> 'closure_tolerance_J' = statement_generic_hEPS_hEPS11.'closure_tolerance_J';
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays);
-    }
-    requirement statement_generic_hEPS_hEPS53 : FrameworkRequirements::EPS53 {
-        attribute externalId : String = "EPS053";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "EPS-53. Ending charge based SOC $$soc_end$$ shall be at least starting SOC $$soc_start$$ over each nominal repeating interval.";
-        attribute verificationExpression : String[0..1];
-        attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-11";
-        attribute rationale : String = "final_report/eps-requirements.tex#EPS-11";
-        attribute :>> 'soc_start' = statement_generic_hEPS_hEPS11.'soc_start';
-        attribute :>> 'soc_end' = statement_generic_hEPS_hEPS11.'soc_end';
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays);
-    }
-    requirement statement_generic_hEPS_hEPS78 : FrameworkRequirements::EPS78 {
-        attribute externalId : String = "EPS078";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "EPS-78. Occupied EPS volume $$volume_m3$$ shall remain within allocation $$volume_allocation_m3$$.";
-        attribute verificationExpression : String[0..1];
-        attribute sourceReference : String = "final_report/eps-requirements.tex#EPS-19; eq:eps-product-budgets";
-        attribute rationale : String = "final_report/eps-requirements.tex#EPS-19; eq:eps-product-budgets";
-        attribute :>> 'volume_m3' = statement_generic_hEPS_hEPS19.'volume_m3';
-        attribute :>> 'volume_allocation_m3' = statement_generic_hEPS_hEPS19.'volume_allocation_m3';
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hBatteries, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSolarArrays, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hProcessorAndMemory, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hRegulatorsAndConverters, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hPowerCircuitsAndSwitches);
-    }
-    requirement statement_generic_hEPS_hEPS88 : FrameworkRequirements::EPS88 {
-        attribute externalId : String = "EPS088";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "EPS-88. Each software execution host shall provide $$required_program_bytes$$ of program storage within an allocation of $$available_program_bytes$$.";
-        attribute verificationExpression : String[0..1];
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:software-resource-screen";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:software-resource-screen";
-        assert constraint { statement_generic_hEPS_hEPS21.'required_program_bytes' == RealFunctions::ToInteger(statement_generic_hEPS_hEPS21.'required_program_bytes') }
-        attribute :>> 'required_program_bytes' = RealFunctions::ToInteger(statement_generic_hEPS_hEPS21.'required_program_bytes');
-        assert constraint { statement_generic_hEPS_hEPS21.'available_program_bytes' == RealFunctions::ToInteger(statement_generic_hEPS_hEPS21.'available_program_bytes') }
-        attribute :>> 'available_program_bytes' = RealFunctions::ToInteger(statement_generic_hEPS_hEPS21.'available_program_bytes');
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hProcessorAndMemory, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSoftware);
-    }
-    requirement statement_generic_hEPS_hEPS89 : FrameworkRequirements::EPS89 {
-        attribute externalId : String = "EPS089";
-        attribute tableName : String = "EPS";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "EPS-89. The sum of each allocated task's execution time divided by its period shall give required utilization $$required_utilization$$, at most allocation $$allocated_utilization$$.";
-        attribute verificationExpression : String[0..1];
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:software-resource-screen";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:software-resource-screen";
-        attribute :>> 'required_utilization' = statement_generic_hEPS_hEPS21.'required_utilization';
-        attribute :>> 'allocated_utilization' = statement_generic_hEPS_hEPS21.'allocated_utilization';
-        ref part affectedElements[0..*] = (element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hProcessorAndMemory, element_domain_hbus.element_domain_hbus_hPowerSubsystem.element_domain_hbus_hPowerSubsystem_hSoftware);
-    }
-    requirement statement_generic_hORB_hOrbitPeriodClosure : FrameworkRequirements::OrbitPeriodClosure {
-        attribute externalId : String = "ORB003";
-        attribute tableName : String = "Mission";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "The positive sunlight and eclipse periods shall sum to $$orbit_period_s$$ within numerical tolerance.";
-        attribute verificationExpression : String[0..1] = "orbit_period_s > 0 and sunlight_s > 0 and eclipse_s > 0 and abs(sunlight_s + eclipse_s - orbit_period_s) <= 1e-9 * orbit_period_s";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period";
-        attribute :>> 'orbit_period_s' = statement_generic_hORB_hIlluminationPeriods.'orbit_period_s';
-        attribute :>> 'sunlight_s' = statement_generic_hORB_hIlluminationPeriods.'sunlight_s';
-        attribute :>> 'eclipse_s' = statement_generic_hORB_hIlluminationPeriods.'eclipse_s';
-        ref part affectedElements[0..*] = (element_domain_horbit);
-        require constraint verificationCondition { (((('orbit_period_s' > 0) and ('sunlight_s' > 0)) and ('eclipse_s' > 0)) and (RealFunctions::abs((('sunlight_s' + 'eclipse_s') - 'orbit_period_s')) <= (1e-9 * 'orbit_period_s'))) }
-    }
-    requirement statement_generic_hORB_hIlluminationPeriods : FrameworkRequirements::IlluminationPeriods {
-        attribute externalId : String = "ORB002";
-        attribute tableName : String = "Mission";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "The preliminary circular orbit at altitude $$altitude_km$$ shall provide $$sunlight_s$$ of sunlight and $$eclipse_s$$ of eclipse per $$orbit_period_s$$ orbit, using Earth radius $$earthRadius_km$$ and horizon angle $$horizon_angle_rad$$.";
-        attribute verificationExpression : String[0..1] = "altitude_km > 0 and earthRadius_km > 0 and orbit_period_s > 0 and sunlight_s > 0 and eclipse_s > 0 and horizon_angle_rad == arccos(earthRadius_km / (earthRadius_km + altitude_km)) and sunlight_s == (0.5 + horizon_angle_rad / pi) * orbit_period_s and eclipse_s == (0.5 - horizon_angle_rad / pi) * orbit_period_s and abs(sunlight_s + eclipse_s - orbit_period_s) <= 1e-9 * orbit_period_s";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period, eq:eclipse-geometry";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period, eq:eclipse-geometry";
-        attribute :>> 'altitude_km' = statement_generic_hORB_hOrbitPeriod.'altitude_km';
-        attribute :>> 'earthRadius_km' = statement_generic_hORB_hOrbitPeriod.'earthRadius_km';
-        attribute :>> 'orbit_period_s' = statement_generic_hORB_hOrbitPeriod.'orbit_period_s';
-        attribute :>> 'horizon_angle_rad' = TrigFunctions::arccos((('earthRadius_km' / ('earthRadius_km' + 'altitude_km')) as TrigFunctions::UnitBoundedReal));
-        attribute :>> 'sunlight_s' = ((0.5 + ('horizon_angle_rad' / TrigFunctions::pi)) * 'orbit_period_s');
-        attribute :>> 'eclipse_s' = ((0.5 - ('horizon_angle_rad' / TrigFunctions::pi)) * 'orbit_period_s');
-        ref part affectedElements[0..*] = (element_domain_horbit);
-        require constraint verificationCondition { ((((((((('altitude_km' > 0) and ('earthRadius_km' > 0)) and ('orbit_period_s' > 0)) and ('sunlight_s' > 0)) and ('eclipse_s' > 0)) and ('horizon_angle_rad' == TrigFunctions::arccos((('earthRadius_km' / ('earthRadius_km' + 'altitude_km')) as TrigFunctions::UnitBoundedReal)))) and ('sunlight_s' == ((0.5 + ('horizon_angle_rad' / TrigFunctions::pi)) * 'orbit_period_s'))) and ('eclipse_s' == ((0.5 - ('horizon_angle_rad' / TrigFunctions::pi)) * 'orbit_period_s'))) and (RealFunctions::abs((('sunlight_s' + 'eclipse_s') - 'orbit_period_s')) <= (1e-9 * 'orbit_period_s'))) }
-    }
-    requirement statement_generic_hORB_hOrbitPeriod : FrameworkRequirements::OrbitPeriod {
-        attribute externalId : String = "ORB001";
-        attribute tableName : String = "Mission";
-        attribute statementKind : String = "Requirement";
-        attribute statementText : String = "The preliminary circular orbit shall have period $$orbit_period_s$$ at altitude $$altitude_km$$, using Earth radius $$earthRadius_km$$ and gravitational parameter $$gravitationalParameter_km3_s2$$.";
-        attribute verificationExpression : String[0..1] = "altitude_km > 0 and earthRadius_km > 0 and gravitationalParameter_km3_s2 > 0 and orbit_period_s > 0 and orbit_period_s == 2 * pi * sqrt((earthRadius_km + altitude_km) ^ 3 / gravitationalParameter_km3_s2)";
-        attribute sourceReference : String = "final_report/design-proposal.tex#eq:orbit-period (handpicked-0003, Eqs. 1-4)";
-        attribute rationale : String = "final_report/design-proposal.tex#eq:orbit-period (handpicked-0003, Eqs. 1-4)";
-        attribute :>> 'altitude_km' = 600;
-        attribute :>> 'earthRadius_km' = 6378;
-        attribute :>> 'gravitationalParameter_km3_s2' = 398601;
-        attribute :>> 'orbit_period_s' = ((2 * TrigFunctions::pi) * RealFunctions::sqrt(((('earthRadius_km' + 'altitude_km') ^ 3) / 'gravitationalParameter_km3_s2')));
-        ref part affectedElements[0..*] = (element_domain_horbit);
-        require constraint verificationCondition { ((((('altitude_km' > 0) and ('earthRadius_km' > 0)) and ('gravitationalParameter_km3_s2' > 0)) and ('orbit_period_s' > 0)) and ('orbit_period_s' == ((2 * TrigFunctions::pi) * RealFunctions::sqrt(((('earthRadius_km' + 'altitude_km') ^ 3) / 'gravitationalParameter_km3_s2'))))) }
-    }
-    dependency from statement_generic_hEPS_hLoadEnergy to statement_generic_hORB_hIlluminationPeriods;
-    dependency from statement_generic_hEPS_hMinimumPanelPower to statement_generic_hEPS_hLoadEnergy;
-    dependency from statement_generic_hEPS_hMinimumPanelPower to statement_generic_hORB_hIlluminationPeriods;
-    dependency from statement_generic_hEPS_hSolarCellCount to statement_generic_hEPS_hMinimumPanelPower;
-    dependency from statement_generic_hEPS_hSolarCellCount to statement_generic_hEPS_hSolarCellPower;
-    dependency from statement_generic_hEPS_hMissionCycles to statement_generic_hORB_hOrbitPeriod;
-    dependency from statement_generic_hEPS_hCycleLife to statement_generic_hEPS_hMissionCycles;
-    dependency from statement_generic_hEPS_hMinimumBatteryEnergy to statement_generic_hEPS_hLoadEnergy;
-    dependency from statement_generic_hEPS_hMinimumBatteryEnergy to statement_generic_hEPS_hCycleLife;
-    dependency from statement_generic_hEPS_hMinimumBatteryEnergy to statement_generic_hEPS_hMissionCycles;
-    dependency from statement_generic_hEPS_hBatteryCapacityScreen to statement_generic_hEPS_hMinimumBatteryEnergy;
-    dependency from statement_generic_hEPS_hEPS02 to statement_generic_hORB_hIlluminationPeriods;
-    dependency from statement_generic_hEPS_hEPS02 to statement_generic_hEPS_hMinimumPanelPower;
-    dependency from statement_generic_hEPS_hEPS08 to statement_generic_hEPS_hBatteryCapacityScreen;
-    dependency from statement_generic_hEPS_hEPS08 to statement_generic_hEPS_hMinimumBatteryEnergy;
-    dependency from statement_generic_hEPS_hEPS09 to statement_generic_hEPS_hMissionCycles;
-    dependency from statement_generic_hEPS_hEPS09 to statement_generic_hEPS_hCycleLife;
-    dependency from statement_generic_hEPS_hEnergyPathEfficiencyBounds to statement_generic_hEPS_hMinimumPanelPower;
-    dependency from statement_generic_hEPS_hCycleFitDomain to statement_generic_hEPS_hCycleLife;
-    dependency from statement_generic_hEPS_hCycleLimitedDoD to statement_generic_hEPS_hCycleLife;
-    dependency from statement_generic_hEPS_hBatteryRetainedEnergy to statement_generic_hEPS_hBatteryCapacityScreen;
-    dependency from statement_generic_hEPS_hEPS47 to statement_generic_hEPS_hEPS09;
-    dependency from statement_generic_hEPS_hEPS52 to statement_generic_hEPS_hEPS11;
-    dependency from statement_generic_hEPS_hEPS53 to statement_generic_hEPS_hEPS11;
-    dependency from statement_generic_hEPS_hEPS78 to statement_generic_hEPS_hEPS19;
-    dependency from statement_generic_hEPS_hEPS88 to statement_generic_hEPS_hEPS21;
-    dependency from statement_generic_hEPS_hEPS89 to statement_generic_hEPS_hEPS21;
-    dependency from statement_generic_hORB_hOrbitPeriodClosure to statement_generic_hORB_hIlluminationPeriods;
-    dependency from statement_generic_hORB_hIlluminationPeriods to statement_generic_hORB_hOrbitPeriod;
-}
-// </requirements-ui>

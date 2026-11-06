@@ -6,13 +6,14 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { createServer } from '../server.mjs';
+import { loadCatalog } from '../catalog.mjs';
 import { declareRequirementVariables, emptyWorkspace, WORKSPACE_VERSION } from '../model.mjs';
-import { createStore, readWorkspace } from '../sysml.mjs';
+import { createStore } from '../storage.mjs';
 
 async function start(t) {
   const dir = await mkdtemp(join(tmpdir(), 'requirements-ui-test-'));
-  const modelPath = join(dir, 'mission.sysml');
-  const original = 'package Existing { part def Satellite; }\n';
+  const modelPath = join(dir, 'mission.json');
+  const original = JSON.stringify(emptyWorkspace(await loadCatalog()), null, 2) + '\n';
   await writeFile(modelPath, original);
   const server = createServer({ modelPath });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -26,20 +27,20 @@ async function start(t) {
     method: 'PUT', headers: { 'Content-Type': 'application/json', ...headers },
     body: JSON.stringify({ workspace, revision }),
   });
-  return { base, modelPath, original, get, put };
+  return { base, modelPath, storagePath: join(dir, 'mission.json'), original, get, put };
 }
 
 function populated() {
-  const workspace = emptyWorkspace();
+  const workspace = { ...emptyWorkspace(), expressionLanguage: 'python' };
   workspace.stakeholders.push({ key: 's1', id: 'REG', name: 'Agência espacial', type: 'Regulatory Agency' });
   workspace.statements.push({ key: 'r1', id: 'REQ001', context: 'external', affected: [], kind: 'Requirement', text: 'Operate for {x} months.', sources: ['s1'], condition: 'x >= 12', parameters: { x: '12', y: null, z: '0', a: null } });
   return workspace;
 }
 
-test('the server refuses to use a generic framework file as mission storage', () => {
-  for (const name of ['external', 'mission', 'eps', 'catalog', 'cad', 'requirements']) {
-    const modelPath = fileURLToPath(new URL(`../../${name}.sysml`, import.meta.url));
-    assert.throws(() => createServer({ modelPath }), /Generic framework models are read only/);
+test('the server refuses to use application code as workspace storage', () => {
+  for (const name of ['server.mjs', 'worker/catalog_data.py']) {
+    const modelPath = fileURLToPath(new URL(`../${name}`, import.meta.url));
+    assert.throws(() => createServer({ modelPath }), /Choose a .json workspace/);
   }
 });
 
@@ -50,13 +51,13 @@ test('serves the UI with a CSP and rejects unknown files and methods', async t =
   assert.match(await response.text(), /Stakeholder Requirements/);
   assert.match(response.headers.get('content-security-policy'), /frame-ancestors 'none'/);
   assert.doesNotMatch(response.headers.get('content-security-policy'), /unsafe-eval/);
-  for (const path of ['/app.js', '/requirement-editor.js', '/requirement-preview.js', '/style.css', '/model.mjs', '/verification.mjs', '/verification-worker.js']) assert.equal((await fetch(base + path)).status, 200);
+  for (const path of ['/app.js', '/requirement-editor.js', '/requirement-preview.js', '/style.css', '/model.mjs', '/parameter-states.mjs', '/verification-worker.js']) assert.equal((await fetch(base + path)).status, 200);
   assert.equal((await fetch(base + '/server.mjs')).status, 404);
   assert.equal((await fetch(base + '/api/workspace', { method: 'DELETE' })).status, 405);
 });
 
-test('saves and reloads typed SysML without changing the existing model', async t => {
-  const { modelPath, original, get, put } = await start(t);
+test('saves and reloads plain JSON as the sole source of truth', async t => {
+  const { modelPath, storagePath, original, get, put } = await start(t);
   const before = await get();
   const workspace = populated();
   const response = await put(workspace, before.revision);
@@ -64,13 +65,12 @@ test('saves and reloads typed SysML without changing the existing model', async 
   const after = await get();
   assert.deepEqual(after.workspace, workspace);
   assert.notEqual(before.revision, after.revision);
-  const source = await readFile(modelPath, 'utf8');
-  assert.ok(source.startsWith(original));
-  assert.deepEqual(readWorkspace(source), workspace);
+  const source = await readFile(storagePath, 'utf8');
+  assert.deepEqual(JSON.parse(source), workspace);
 });
 
 test('EPS components and parametric requirements save and reload through the API', async t => {
-  const { modelPath, get, put } = await start(t);
+  const { storagePath, get, put } = await start(t);
   const { workspace, revision, catalog } = await get();
   const power = workspace.elements.find(row => row.definition === 'SpaceSegment::CubeSat::PowerSubsystem');
   const battery = workspace.elements.find(row => row.owner === power.key && row.name === 'Batteries');
@@ -80,15 +80,15 @@ test('EPS components and parametric requirements save and reload through the API
     condition: 'x >= 12', parameters: { ...Object.fromEntries(workspace.variables.map(variable => [variable.name, null])), x: '15' } });
   assert.equal((await put(workspace, revision)).status, 200);
   assert.deepEqual((await get()).workspace, workspace);
-  const source = await readFile(modelPath, 'utf8');
-  assert.match(source, /attribute tableName : String = "EPS"/);
-  assert.match(source, /: SpaceSegment::CubeSat::PowerSubsystem::Batteries \{/);
-  assert.match(source, /require constraint verificationCondition \{ \('x' >= 12\) \}/);
-  assert.deepEqual(readWorkspace(source, catalog), workspace);
+  const stored = JSON.parse(await readFile(storagePath, 'utf8'));
+  assert.equal(stored.statements.at(-1).context, power.key);
+  assert.deepEqual(stored.statements.at(-1).affected, [battery.key]);
+  assert.equal(stored.statements.at(-1).condition, 'x >= 12');
+  assert.deepEqual(stored, workspace);
 });
 
 test('marker-created parameter columns save and export through the API', async t => {
-  const { get, put, modelPath } = await start(t);
+  const { get, put, storagePath } = await start(t);
   const { workspace, revision, catalog } = await get();
   const row = workspace.statements.find(row => row.definition === 'FrameworkRequirements::OrbitPeriod');
   row.text = 'The orbit shall have altitude $$altitude_km$$ km with uncertainty $$altitude_uncertainty_km$$ km.';
@@ -97,9 +97,9 @@ test('marker-created parameter columns save and export through the API', async t
   workspace.variables.find(variable => variable.name === 'altitude_uncertainty_km').unit = 'km';
   assert.equal((await put(workspace, revision)).status, 200);
   assert.deepEqual((await get()).workspace, workspace);
-  const source = await readFile(modelPath, 'utf8');
-  assert.match(source, /attribute 'altitude_uncertainty_km' : Real\[0\.\.1\] = \(0.5 \* 2\)/);
-  assert.deepEqual(readWorkspace(source, catalog), workspace);
+  const stored = JSON.parse(await readFile(storagePath, 'utf8'));
+  assert.equal(stored.statements.find(statement => statement.key === row.key).parameters.altitude_uncertainty_km, '0.5 * 2');
+  assert.deepEqual(stored, workspace);
 });
 
 test('rationale saves, exports and clears without changing the original provenance', async t => {
@@ -111,9 +111,9 @@ test('rationale saves, exports and clears without changing the original provenan
   assert.equal((await put(workspace, revision)).status, 200);
   const saved = await get();
   assert.deepEqual(saved.workspace, workspace);
-  const exported = await fetch(base + '/api/sysml', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workspace }) });
+  const exported = await fetch(base + '/api/json', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workspace }) });
   assert.equal(exported.status, 200);
-  assert.match(await exported.text(), /attribute rationale : String =/);
+  assert.equal((await exported.json()).statements.find(statement => statement.key === row.key).rationale, row.rationale);
   row.rationale = '';
   assert.equal((await put(workspace, saved.revision)).status, 200);
   const cleared = (await get()).workspace.statements.find(statement => statement.key === row.key);
@@ -122,7 +122,7 @@ test('rationale saves, exports and clears without changing the original provenan
 });
 
 test('the API stores editable expressions in every parameter cell and retains invalid drafts safely', async t => {
-  const { base, modelPath, get, put } = await start(t);
+  const { base, storagePath, get, put } = await start(t);
   const { workspace, revision, catalog } = await get();
   const orbit = workspace.statements.find(row => row.definition === 'FrameworkRequirements::OrbitPeriod');
   orbit.parameters.altitude_km = '300 + 350';
@@ -131,63 +131,51 @@ test('the API stores editable expressions in every parameter cell and retains in
   assert.equal((await put(workspace, revision)).status, 200);
   let loaded = await get();
   assert.equal(loaded.workspace.statements.find(row => row.key === orbit.key).parameters.orbit_period_s, period);
-  assert.deepEqual(readWorkspace(await readFile(modelPath, 'utf8'), catalog), workspace);
+  assert.deepEqual(JSON.parse(await readFile(storagePath, 'utf8')), workspace);
   assert.ok(workspace.statements.every(row => !Object.hasOwn(row, 'formulas')));
   orbit.parameters.altitude_km = '1; package Injected {}';
   assert.equal((await put(workspace, loaded.revision)).status, 200);
   loaded = await get();
   assert.deepEqual(loaded.workspace, workspace);
-  const source = await readFile(modelPath, 'utf8');
-  assert.match(source, /Invalid parameter expression for altitude_km/);
-  const download = await fetch(`${base}/api/sysml`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workspace }) });
-  assert.equal(download.status, 400);
+  const source = JSON.parse(await readFile(storagePath, 'utf8'));
+  assert.equal(source.statements.find(row => row.key === orbit.key).parameters.altitude_km, '1; package Injected {}');
+  const download = await fetch(`${base}/api/json`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workspace }) });
+  assert.equal(download.status, 200);
+  assert.equal((await download.json()).statements.find(row => row.key === orbit.key).parameters.altitude_km, '1; package Injected {}');
   orbit.parameters.altitude_km = 650;
   const rejected = await put(workspace, loaded.revision);
   assert.equal(rejected.status, 400);
-  assert.match((await rejected.json()).error, /SysML expression text/);
+  assert.match((await rejected.json()).error, /expression text/);
 });
 
-test('opening an existing version 4 mission adds EPS components without writing until save', async t => {
-  const { modelPath, get, put } = await start(t);
-  const { workspace } = await get();
-  const power = workspace.elements.find(row => row.definition === 'SpaceSegment::CubeSat::PowerSubsystem');
-  workspace.version = 4;
-  workspace.elements = workspace.elements.filter(row => row.owner !== power.key);
-  const original = `// <requirements-ui>\n/* requirements-ui:data\n${JSON.stringify(workspace)}\nrequirements-ui:end-data */\n// </requirements-ui>\n`;
-  await writeFile(modelPath, original);
-  const loaded = await get();
-  assert.equal(loaded.workspace.version, WORKSPACE_VERSION);
-  assert.equal(loaded.workspace.elements.filter(row => row.owner === power.key).length, 6);
-  assert.equal(await readFile(modelPath, 'utf8'), original);
-  assert.equal((await put(loaded.workspace, loaded.revision)).status, 200);
-  assert.deepEqual((await get()).workspace, loaded.workspace);
+test('unsupported stored schemas fail without migration or replacement', async t => {
+  const { base, modelPath, get } = await start(t);
+  const { workspace } = await get(); workspace.version = 4;
+  const source = JSON.stringify(workspace); await writeFile(modelPath, source);
+  const response = await fetch(base + '/api/workspace');
+  assert.equal(response.status, 400); assert.match((await response.json()).error, /differs from app format/);
+  assert.equal(await readFile(modelPath, 'utf8'), source);
 });
 
-test('a new mission file is created with generic imports and leaves generic files untouched', async t => {
+test('new stores write only JSON and leave neighboring files untouched', async t => {
   const dir = await mkdtemp(join(tmpdir(), 'new-mission-'));
   t.after(() => rm(dir, { recursive: true, force: true }));
-  const generic = join(dir, 'external.sysml');
-  await writeFile(generic, 'package External {}\n');
-  const path = join(dir, 'missions', 'demo.sysml');
-  const store = createStore(path);
-  const initial = await store.read();
-  assert.equal(initial.modelName, 'demo.sysml');
+  const neighbor = join(dir, 'notes.txt'); await writeFile(neighbor, 'Retain these notes.\n');
+  const path = join(dir, 'missions', 'demo.json'), store = createStore(path);
+  const initial = await store.read(); assert.equal(initial.modelName, 'demo.json');
   await store.save(populated(), initial.revision);
-  const source = await readFile(path, 'utf8');
-  assert.match(source, /package DemoRequirements/);
-  assert.match(source, /private import External::\*/);
-  assert.match(source, /require constraint verification/);
-  assert.equal(await readFile(generic, 'utf8'), 'package External {}\n');
+  assert.deepEqual(JSON.parse(await readFile(path, 'utf8')), populated());
+  assert.equal(await readFile(neighbor, 'utf8'), 'Retain these notes.\n');
 });
 
 test('stored conditions are parsed rather than executed by the server', async t => {
-  const { get, put, modelPath } = await start(t);
+  const { get, put, storagePath } = await start(t);
   const before = await get();
   const workspace = populated();
   workspace.statements[0].condition = 'globalThis.requirementsInjected = true';
   assert.equal((await put(workspace, before.revision)).status, 200);
   assert.equal(globalThis.requirementsInjected, undefined);
-  assert.doesNotMatch(await readFile(modelPath, 'utf8'), /require constraint verification/);
+  assert.equal(JSON.parse(await readFile(storagePath, 'utf8')).statements[0].condition, 'globalThis.requirementsInjected = true');
 });
 
 test('API writes cannot set a manual verification flag', async t => {
@@ -197,59 +185,48 @@ test('API writes cannot set a manual verification flag', async t => {
   workspace.statements[0].verified = true;
   const response = await put(workspace, revision);
   assert.equal(response.status, 400);
-  assert.match((await response.json()).error, /computed from a SysML condition/);
+  assert.match((await response.json()).error, /computed from verification methods/);
   assert.equal(await readFile(modelPath, 'utf8'), original);
 });
 
 test('COTS catalog selections and affected requirements save and reload', async t => {
-  const { get, put, modelPath } = await start(t);
+  const { get, put, storagePath } = await start(t);
   const { workspace, revision, catalog, products } = await get();
   assert.equal(products.length, 99);
   assert.equal(products[0].pins, undefined);
   const power = workspace.elements.find(row => row.definition.endsWith('::PowerSubsystem'));
   workspace.statements.push({ key: 'eps1', id: 'EPS101', context: power.key, kind: 'Requirement', text: '', sources: [], affected: [],
-    condition: 'true', parameters: Object.fromEntries(workspace.variables.map(variable => [variable.name, null])) });
+    condition: 'True', parameters: Object.fromEntries(workspace.variables.map(variable => [variable.name, null])) });
   workspace.components.push({ key: 'rtc1', id: 'CMP001', owner: power.key, product: 'abracon_ab1805_t3', requirements: ['eps1'] });
   assert.equal((await put(workspace, revision)).status, 200);
   assert.deepEqual((await get()).workspace, workspace);
-  assert.deepEqual(readWorkspace(await readFile(modelPath, 'utf8'), catalog, products), workspace);
+  assert.deepEqual(JSON.parse(await readFile(storagePath, 'utf8')), workspace);
   workspace.components[0].verified = true;
   const response = await put(workspace, (await get()).revision);
   assert.equal(response.status, 400);
   assert.match((await response.json()).error, /computed/);
 });
 
-test('SysML downloads contain generic sizing usages and unsaved parameters without changing mission storage', async t => {
+test('JSON downloads retain generic definitions, provenance and unsaved inputs without changing storage', async t => {
   const { base, get, modelPath, original } = await start(t);
   const { workspace } = await get();
   const orbit = workspace.statements.find(row => row.definition === 'FrameworkRequirements::OrbitPeriod');
-  assert.equal(workspace.statements.length, 27);
   orbit.parameters.altitude_km = '650';
-  const genericPath = fileURLToPath(new URL('../../requirements.sysml', import.meta.url));
-  const generic = await readFile(genericPath, 'utf8');
-  const post = (state = workspace, headers = {}) => fetch(`${base}/api/sysml`, {
+  const post = (state = workspace, headers = {}) => fetch(`${base}/api/json`, {
     method: 'POST', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify({ workspace: state }),
   });
-  const response = await post();
-  assert.equal(response.status, 200);
-  assert.match(response.headers.get('content-disposition'), /mission-export\.sysml/);
-  const source = await response.text();
-  assert.match(source, /: FrameworkRequirements::OrbitPeriod/);
-  assert.match(source, /: FrameworkRequirements::EPS02/);
-  assert.match(source, /: FrameworkRequirements::EPS21/);
-  assert.match(source, /: FrameworkRequirements::OrbitPeriodClosure/);
-  assert.match(source, /: FrameworkRequirements::EPS89/);
-  assert.doesNotMatch(source, /: FrameworkRequirements::(?:EPS01|EPS20|EPS22|EPS92)\s*\{/);
-  assert.match(source, /attribute :>> 'altitude_km' = 650/);
-  assert.match(source, /attribute :>> altitude_km = statement_/);
-  assert.match(source, /RealFunctions::sqrt/);
-  assert.doesNotMatch(source, /requirements-ui:data|NaN|undefined/);
+  const response = await post(); assert.equal(response.status, 200);
+  assert.match(response.headers.get('content-disposition'), /mission-export\.json/);
+  const exported = await response.json(); assert.deepEqual(exported, workspace);
+  assert.equal(exported.statements.length, 27);
+  assert.ok(exported.statements.every(row => row.origin && row.affected.length));
+  assert.equal(exported.statements.find(row => row.key === orbit.key).parameters.altitude_km, '650');
   assert.equal(await readFile(modelPath, 'utf8'), original);
-  assert.equal(await readFile(genericPath, 'utf8'), generic);
-  assert.equal((await fetch(`${base}/api/sysml`)).status, 405);
+  assert.equal((await fetch(`${base}/api/sysml`)).status, 404);
+  assert.equal((await fetch(`${base}/api/json`)).status, 405);
   assert.equal((await post(workspace, { Origin: 'https://example.com' })).status, 403);
-  const invalid = structuredClone(workspace); invalid.statements[0].condition = 'unknown(1)';
-  assert.equal((await post(invalid)).status, 400);
+  const draft = structuredClone(workspace); draft.statements[0].condition = 'unknown(1)';
+  assert.equal((await post(draft)).status, 200);
   assert.equal(await readFile(modelPath, 'utf8'), original);
 });
 
