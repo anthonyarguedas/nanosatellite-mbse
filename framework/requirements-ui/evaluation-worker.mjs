@@ -7,7 +7,7 @@ const failure = (message, status = 503) => Object.assign(new Error(message), { s
 
 export function evaluationRequest(workspace, { scriptResults, mode, ...options } = {}) {
   const runs = scriptResults?.signature === scriptContext(workspace) ? scriptResults.runs : {};
-  return { operation: 'evaluate', workspace, runs,
+  return { operation: 'evaluate', workspace, runs, cotsSignature: scriptResults?.cotsSignature ?? null,
     ...(mode !== undefined ? { mode } : {}), ...options };
 }
 

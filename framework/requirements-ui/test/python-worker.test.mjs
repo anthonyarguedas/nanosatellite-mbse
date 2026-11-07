@@ -131,7 +131,7 @@ test('Python retains sizing, component draws, allocations and weighted power bud
 });
 
 test('script input expressions and script output references use the same Python interpreter and discard stale evidence', { skip: !pythonAvailable }, async t => {
-  const worker = workerFor(t), workspace = fixture(), definition = (await loadScriptCatalog())[0];
+  const worker = workerFor(t), workspace = fixture(), definition = (await loadScriptCatalog()).find(definition => definition.id === 'normal_interval');
   const script = scriptInstance(definition, { key: 'analysis', id: 'SCR001' });
   Object.assign(script.parameters, { mean: 'statistics.mean([REQ001.x, REQ002.x])', standard_deviation: '1', confidence: '0.95' });
   workspace.scripts.push(script);

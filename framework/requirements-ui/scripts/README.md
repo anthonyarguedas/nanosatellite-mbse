@@ -7,7 +7,13 @@ VERIFICATION_PYTHON=/path/to/venv/bin/python3 \
 VERIFICATION_SCRIPTS_DIR=/path/to/reviewed/scripts npm start
 ```
 
-The default directory is this one. `normal_interval.py` and `normal_interval.json` provide a standard library example. It calculates a two-sided normal distribution interval with a known standard deviation. Inputs start unset. The calculation supplies no measurement data or confidence assumption.
+The default directory is this one. Each registered analysis uses the Python standard library:
+
+- `normal_interval` calculates a two-sided normal distribution interval with a known standard deviation.
+- `scenario_illumination` estimates circular orbit illumination, conical eclipse and direct irradiance on one panel section.
+- `mppt_po` simulates an ideal perturb and observe tracker over one environmental step.
+
+New instances added from the script picker start with unset inputs. The combined test bench supplies synthetic values for both engineering analyses. See [analyses/README.md](../analyses/README.md) for engineering assumptions, required inputs, proposed requirements, result bindings and the optional named-session creator. These scripts provide preliminary model evidence within their declared scope.
 
 ## Interface
 

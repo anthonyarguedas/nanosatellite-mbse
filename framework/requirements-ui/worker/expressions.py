@@ -81,6 +81,7 @@ class Evaluator:
         self.budget = budget if budget is not None else [2000000]
         self.rows = {row.id: row for row in workspace.requirements}
         self.scripts = {row.id: row for row in workspace.scripts}
+        self.cots = {row.id: row for row in workspace.cots}
         self.variables = {variable.name: variable for variable in workspace.variables}
 
     def tree(self, source):
@@ -107,6 +108,11 @@ class Evaluator:
                 return "number"
             if identifier == "LoadBudget" and field in ("sunlight_power_W", "eclipse_power_W"):
                 return "number"
+            if identifier in self.cots:
+                binding = next((item for item in self.cots[identifier].facts if item['name'] == field), None)
+                if binding is None:
+                    raise ValueError(f'Unknown COTS reference “{name}”. Select it in the COTS pane.')
+                return 'boolean' if binding['type'] == 'boolean' else 'string' if binding['type'] == 'string' else 'number'
             if identifier in self.scripts:
                 parameter = next((item for item in self.scripts[identifier].outputs if item.name == field), None)
                 if parameter is None:
@@ -182,7 +188,7 @@ class Evaluator:
             generator = node.generators[0]
             if generator.is_async or not isinstance(generator.target, ast.Name) or generator.target.id.startswith("__"):
                 raise ValueError("Use a single named comprehension variable.")
-            if generator.target.id in {*self.rows, *self.scripts, *CONSTANTS, *ARITY, 'mode', 'math', 'statistics'}:
+            if generator.target.id in {*self.rows, *self.scripts, *self.cots, *CONSTANTS, *ARITY, 'mode', 'math', 'statistics'}:
                 raise ValueError('Comprehension variables must have their own local names.')
             element_type = kind(generator.iter)
             if not element_type.startswith("list:"):
@@ -238,6 +244,22 @@ class Evaluator:
                 raise Pending(result.get("message", "The script is pending."))
             raise ValueError(result.get("message", "The script has no execution result."))
         return result
+
+    def component(self, key):
+        component = next((row for row in self.workspace.cots if row.key == key), None)
+        if component is None:
+            raise ValueError('Choose an existing COTS component.')
+        if not component.facts:
+            raise Pending(f'Select fact references for {component.id} in its COTS pane.')
+        for fact in component.facts:
+            self.cots_fact(component, fact['name'])
+        return component
+
+    def cots_fact(self, component, name):
+        fact = self.workspace.cots_values.get(component.key, {}).get(name)
+        if not fact or fact['state'] != 'value':
+            raise Pending(f'{component.id}.{name}: ' + (fact['message'] if fact else 'Select a current catalogue record in the COTS pane.'))
+        return fact['value']
 
     def parameter(self, row, name):
         key = f"{row.id}.{name}"
@@ -316,6 +338,8 @@ class Evaluator:
                 return self.workspace.allocation(row, field, self.parameter, self.mode)
             if identifier == "LoadBudget":
                 return self.workspace.budget(row, field)
+            if identifier in self.cots:
+                return self.cots_fact(self.cots[identifier], field)
             if identifier in self.scripts:
                 script = self.scripts[identifier]
                 value = self.script(script.key).get("values", {}).get(field)

@@ -11,6 +11,7 @@ export const roundTrip = workspace => JSON.parse(JSON.stringify(workspace));
 function execute(workspace, options = {}) {
   const request = { id: 1, operation: 'evaluate', workspace,
     runs: options.scriptResults?.signature === scriptContext(workspace) ? options.scriptResults.runs : {},
+    cotsSignature: options.scriptResults?.cotsSignature ?? null,
     ...(Object.hasOwn(options, 'mode') ? { mode: options.mode } : {}) };
   const worker = fileURLToPath(new URL('../worker/main.py', import.meta.url));
   const result = spawnSync(process.env.VERIFICATION_PYTHON || 'python3', ['-I', '-B', '-u', worker], {

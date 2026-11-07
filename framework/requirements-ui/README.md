@@ -25,7 +25,7 @@ A missing workspace is created as plain JSON. Only `.json` workspace paths and t
 
 Automatic parameter calculations, verification methods, power projections and registered script inputs run in a persistent Python worker. The browser UI and Node HTTP server remain in place. The browser worker transports JSON to `POST /api/evaluate` and contains no calculation engine. `worker/models.py` defines the request-local parameter, requirement, script and workspace models. `worker/expressions.py` owns Python parsing and evaluation.
 
-Set `VERIFICATION_PYTHON` to select a Python executable or virtual environment. The interpreter starts lazily and stays available across requests. Each request receives a fresh model, dependency cache and execution context. Only bounded, source-only syntax trees are cached between requests. Different tabs and sessions share no calculation values or Python variables. A missing interpreter produces an actionable error and no JavaScript fallback.
+Set `VERIFICATION_PYTHON` to select a Python executable or virtual environment. The interpreter starts lazily and stays available across requests. Each request receives a fresh model, dependency cache and execution context. Only bounded syntax trees and content-keyed catalogue source data are cached between requests. Different tabs and sessions share no calculation values or Python variables. A missing interpreter produces an actionable error and no JavaScript fallback.
 
 Requests use JSON lines over stdin and stdout. The Node supervisor serializes requests, permits up to 16 waiting requests, and enforces a 4-second execution timeout. A timeout, active cancellation, crash, malformed response or oversized response replaces the process. Requests are limited to 8 MiB and responses to 16 MiB. Browser requests carry generation IDs and discard superseded responses.
 
@@ -41,12 +41,12 @@ Use the session toolbar above the workbook:
 
 - **New session → Blank** starts with empty tables and no preloaded elements or requirements.
 - **New session → Generic EPS** starts with the generic mission hierarchy, 27 orbit and EPS requirements, mass and volume budgets, units, rationale and sizing equations. Mission inputs are unset. The sourced Earth constants remain populated.
-- **Save as…** saves an independent named copy of the current workspace. It includes unsaved edits in the requirement pane without applying those pane edits to the original session.
+- **Save as…** saves an independent named copy of the current workspace. It includes valid unsaved requirement, component power and COTS reference drafts without applying those drafts to the original session.
 - The **Session** picker reopens saved workspaces. The existing mission remains listed as **Current mission**.
 
 Each saved session autosaves independently. Names contain 1 to 80 characters and are unique without regard to letter case. Creating another Generic EPS session always starts from the framework templates. It leaves previous sessions unchanged.
 
-Switching sessions waits for pending autosaves and asks before discarding an unsaved requirement draft. Save or correct invalid table edits before switching. A save conflict keeps the current session open. Save as can preserve a valid local workspace in a separate session when the original has a conflict.
+Switching sessions waits for pending autosaves and asks before discarding unsaved editor drafts. Save or correct invalid table edits before switching. A save conflict keeps the current session open. Save as can preserve a valid local workspace in a separate session when the original has a conflict.
 
 The page URL contains the session ID and selected tab, so it can be bookmarked or reloaded. Session selection is local to each browser tab. Opening another session in one browser tab leaves other tabs on their own sessions.
 
@@ -134,11 +134,47 @@ The requirement list shows an unset variable's bare name in monospace, without i
 
 **Save requirement** applies the edit and triggers autosave. **Cancel** or Escape discards the pane's changes, including new parameters. Opening a different requirement asks before discarding a changed draft. Saving preserves edits made in other tables while the pane was open. Ctrl+Enter or Cmd+Enter saves. Existing parameter values and equation inputs stay accessible even when their names are absent from the text. Removing a marker preserves populated cells. Empty, unused names created during the current edit are discarded. Use `$$name$$` markers consistently in requirement text.
 
+## COTS facts and compatibility
+
+COTS selections remain in the EPS table. Use the pencil beside a selected product, or press F2 in its product cell, to open its **COTS pane**. It occupies the same sidebar area as the requirement editor. The requirement pane contains no COTS facts table.
+
+The COTS pane shows searchable catalogue facts with their internal element, typed value, units, minimum/typical/maximum meaning, conditions and datasheet source. Numeric properties come from `framework/cots/parameters.tsv`. Boolean and String features come from `features.tsv`. `definitions.tsv` supplies their types. Conditions, additional condition parameters, internal elements and source revisions remain attached to each fact. Catalogue values are read-only.
+
+1. Choose **Use fact** to create a named reference, such as `CMP001.input_voltage_max`. Each COTS instance owns up to 64 references, separate from the workbook's 64 shared parameter names.
+2. Rename references to distinguish records with different meanings or conditions. Select the exact record in its dropdown. Multiple requirements can reuse the same reference.
+3. Choose **Save COTS** to apply the selections. This saves no open requirement draft.
+4. In a requirement's **Verification methods**, choose the COTS component under **Values from** and enter a Python condition, for example:
+
+```python
+CMP001.input_voltage_min <= operating_voltage_V <= CMP001.input_voltage_max
+CMP001.autonomous_overcurrent_protection
+```
+
+The second example uses an existing Boolean feature. An explicitly false feature returns false. An unknown reference name gives an expression error. A missing, changed or substituted catalogue record stays pending. A COTS-backed method requires at least one selected reference, and all references owned by that component must be current.
+
+Keep requirement allocations and limits independently entered. Hardware characteristics can instead use catalogue references in their existing parameter expressions. **Insert reference** saves the COTS selections and inserts a reference into the last active parameter, verification condition or script input expression. The requirement edit remains unsaved until **Save requirement**. Scripts can continue to bind exclusively to requirement parameters.
+
+Click a qualified COTS reference or **Inspect CMP001** to open its pane. **Used by** links show requirements using each reference, with script input uses listed alongside them. **Back to** navigation preserves both drafts. **Save as** and JSON exports include both valid drafts. Renaming a reference updates expressions across requirements, scripts and a suspended requirement draft. Referenced facts and components remain protected from deletion.
+
+Selecting a product and linking requirements records an allocation. It adds no compatibility condition automatically. The component checkbox still aggregates its affected requirements. Add COTS-backed methods to those requirements to establish the product compatibility checks.
+
+### Conditions, units and revisions
+
+Select the applicable internal element, value meaning and conditions explicitly. The app displays conditions and performs no automatic interpolation or worst-case envelope selection. A typical value establishes no guaranteed limit. Operating limits and absolute maxima retain their separate meanings.
+
+References use catalogue units. The existing Units column is a display label, so conversions remain explicit in Python expressions. A Kelvin catalogue value can be converted with `CMP001.temperature_K - 273.15` when a Celsius value is needed.
+
+Each reference pins a record identity, source revision, conditions, type and units. Product substitutions retain the reference names and leave unresolved records pending. Reopen the COTS pane or use **Refresh catalogue** to review current facts. **Update fact** accepts a changed revision of the same record. Select another record when its identity changed. Dependent calculations discard stale Python execution evidence. Rerun the scripts after reviewing the selections.
+
+The supervised Python worker reads trusted local catalogue files for each COTS calculation. Its cache is keyed by file contents. Browser requests and saved workspaces supply selections, never authoritative fact values. Inspection uses read-only `GET /api/cots?product=<product-id>` and executes no registered Python analysis source.
+
+Version 14 workspaces retain optional `components[].facts` selections and `verifications[].component` source keys. Existing workspaces need no migration or reseeding. JSON stores reference names, record identities, revisions, types and units. It stores no copied catalogue values or execution evidence.
+
 ## Verification methods and Python analyses
 
 The requirement pane has a **Verification methods** table with **Values from**, **Python condition** and **Result** columns. It uses the workbook's green header, plus button and delete gutter. Its plus button focuses the trailing empty row. Entering a condition adds another empty row. Empty placeholders are excluded from saved data. Each requirement supports up to 32 configured methods. Every method must pass in every configured spacecraft mode for the workbook checkbox to pass. Missing inputs or execution results keep the affected method pending. Errors appear beside that method's condition.
 
-**Requirement values** uses the current requirement's parameters and references such as `REQ002.mass`. Selecting a script instance keeps the condition in Python and supplies external outputs such as `SCR001.upper`. The selected script must have a successful execution for the current inputs, including when the condition is a constant. Script output references also work in ordinary parameter expressions and in other script instances' inputs.
+**Requirement values** uses the current requirement's parameters and references such as `REQ002.mass`. Selecting a COTS component supplies its named fact references. Selecting a script instance keeps the condition in Python and supplies external outputs such as `SCR001.upper`. The selected script must have a successful execution for the current inputs, including when the condition is a constant. Script output references also work in ordinary parameter expressions and in other script instances' inputs.
 
 ### Use a Python script
 
@@ -152,11 +188,17 @@ Definitions are reusable across instances and requirements in the workspace. ID 
 
 Execution results stay in the current browser session. They are never stored as parameter expressions or verification flags. Changing calculation inputs, modes, types, units, script bindings or pinned revisions invalidates prior results. Prose and verification conditions can change without rerunning an unchanged calculation. Saving retains current evidence in that browser. Reloading or switching sessions requires another run. Late results from an earlier input configuration are discarded.
 
-The default script directory is `framework/requirements-ui/scripts`. It includes **Normal distribution interval**, a Python standard library example with no supplied measurement data or confidence assumption. Python 3.8 or later is also required by the automatic calculation worker. Set `VERIFICATION_PYTHON` to select an interpreter or virtual environment. Set `VERIFICATION_SCRIPTS_DIR` to use another trusted directory. See [scripts/README.md](scripts/README.md) for registration, the JSON protocol and execution limits.
+The default script directory is `framework/requirements-ui/scripts`. It includes **Normal distribution interval**, **Orbit illumination scenario** and **MPPT perturb and observe**. All three use the Python standard library. New instances added from the script picker start with unset inputs. Set `VERIFICATION_PYTHON` to select an interpreter or virtual environment. Set `VERIFICATION_SCRIPTS_DIR` to use another trusted directory. See [scripts/README.md](scripts/README.md) for registration, the JSON protocol and execution limits.
 
 **Run only trusted local scripts. Python runs with your user permissions. This is not a sandbox.** Opening, editing, saving and exporting never execute registered script source. Automatic Python expressions use the restricted calculation worker. The browser can run registered script source only through an explicit local POST. It cannot submit source, file paths, shell commands or interpreter arguments.
 
 JSON downloads contain each analysis's typed interface, input expressions and pinned definition revision. They contain no execution success flags or cached output bindings. Reopening a download requires fresh execution evidence before script-backed verification methods can pass.
+
+### Illumination and MPPT studies
+
+The Session picker includes **Illumination + MPPT test bench**. It contains both scripts, 15 linked requirements and populated synthetic inputs and acceptance limits. Open MPT008 in EPS and click **Run Python** for SCR001 (MPPT). Its irradiance bindings run the illumination script first. All 15 checks pass with the supplied test values. Results remain transient.
+
+Create another populated test bench with `node tools/create-analysis-session.mjs demo --name "My test bench"`. The `mppt` and `scenario` commands still create separate configurations with unset inputs. The illumination script can also be selected directly in any session's existing script table. No generic catalog, UI or schema changes are needed. See [analyses/README.md](analyses/README.md) for the input audit, proposed requirements, result destinations, model limits and session options.
 
 ## Reusable sizing requirements
 

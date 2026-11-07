@@ -69,6 +69,8 @@ def compute(workspace, mode, budget):
             try:
                 if method.get("script"):
                     evaluator.script(method["script"])
+                if method.get('component'):
+                    evaluator.component(method['component'])
                 if not method["condition"].strip():
                     methods.append({"key": method["key"], "state": "pending", "message": "Enter a Python condition for this verification method."})
                     continue
@@ -106,7 +108,7 @@ def aggregate(results, modes, methods=False):
 
 
 def evaluate(request):
-    workspace = Workspace.read(request.get("workspace"), request.get("runs"))
+    workspace = Workspace.read(request.get("workspace"), request.get("runs"), request.get('cotsSignature'))
     budget = [2000000]
     modes = workspace.modes
     if "mode" in request:
@@ -128,11 +130,13 @@ def evaluate(request):
                 if projection:
                     result["parameters"][name]["branches"] = projection
                     result["parameters"][name]["expressionSource"] = source
-    return {"results": results, "scripts": scripts, "engine": "python"}
+    return {"results": results, "scripts": scripts, "engine": "python", 'cotsSignature': workspace.cots_signature}
 
 
 def script_inputs(request):
-    workspace = Workspace.read(request.get("workspace"), request.get("runs"))
+    workspace = Workspace.read(request.get("workspace"), request.get("runs"), request.get('cotsSignature'))
+    if request.get('expectedCotsSignature') != workspace.cots_signature:
+        raise Pending('The COTS catalogue changed during execution. Review the references and run again.')
     script = next((script for script in workspace.scripts if script.key == request.get("script")), None)
     if script is None:
         raise ValueError("Choose an existing Python script instance.")

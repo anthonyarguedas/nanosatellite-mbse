@@ -6,6 +6,8 @@ import {
 import { createRequirementEditor } from '/requirement-editor.js';
 import { requirementHTML } from '/requirement-preview.js';
 import { createPowerEditor } from '/power-editor.js';
+import { createCotsEditor } from '/cots-editor.js';
+import { cotsUses } from '/cots-bindings.mjs';
 import { isPowerRequirement, parentPowerLimit } from '/power.mjs';
 import { isResourceRequirement, parentResourceLimit } from '/resource-budgets.mjs';
 import { verificationMethods } from '/verification-methods.mjs';
@@ -32,8 +34,9 @@ const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({
 const variableNames = () => workspace.variables.map(variable => variable.name);
 function syncStatementIds(state = workspace, known = statementIds) {
   const renames = new Map();
-  for (const row of state.statements) {
-    if (!/^[A-Z]{3}\d{3}$/.test(row.id) || state.statements.some(other => other.key !== row.key && other.id === row.id)) continue;
+  const rows = [...state.statements, ...state.components];
+  for (const row of rows) {
+    if (!/^[A-Z]{3}\d{3}$/.test(row.id) || [...rows, ...state.scripts].some(other => other.key !== row.key && other.id === row.id)) continue;
     const previous = known.get(row.key);
     if (previous && previous !== row.id) renames.set(previous, row.id);
     known.set(row.key, row.id);
@@ -54,11 +57,32 @@ const rowByKey = key => workbookRows(workspace).find(row => row.key === key);
 const requirementEditor = createRequirementEditor({
   panel: document.querySelector('#requirement-editor'), getWorkspace: () => workspace, getCatalog: () => catalog,
   validate: candidate => validateWorkspace(snapshot(candidate), catalog, products),
-  getScriptResults: () => scriptResults,
+  getScriptResults: () => scriptResults, getProducts: () => products,
+  onInspectCots: (key, name, anchor) => cotsEditor.open(key, anchor, name),
+  onBackCots: () => cotsEditor.open(cotsEditor.key()),
+  getBackCotsLabel: () => workspace.components.find(component => component.key === cotsEditor.key())?.id ?? '',
   onScriptResults: evidence => { scriptResults = evidence; scheduleEvaluation(); },
   onCommit: candidate => {
     workspace = candidate; statementIds.clear(); syncStatementIds();
     renderWorkbook(); updateSources(); scheduleSave(); scheduleEvaluation();
+  },
+});
+const cotsEditor = createCotsEditor({
+  panel: document.querySelector('#cots-editor'), getWorkspace: () => workspace, getProducts: () => products,
+  getReferenceWorkspace: () => { try { return requirementEditor.preview(); } catch { return workspace; } },
+  validate: candidate => validateWorkspace(snapshot(candidate), catalog, products),
+  beforeOpen: () => { if (!powerEditor.closeWithConfirmation()) return false; requirementEditor.suspend(); return true; },
+  onReturn: () => requirementEditor.resume(), returnLabel: () => requirementEditor.id(),
+  onCatalogueRefresh: () => { scheduleEvaluation(); requirementEditor.refresh(); },
+  canInsert: () => requirementEditor.canInsertCots(), onInsert: reference => requirementEditor.insertCotsReference(reference),
+  onOpenRequirement: key => {
+    const row = rowByKey(key);
+    if (row) { navigate(row.context); requirementEditor.open(key, rowElement(key)?.querySelector('.requirement-edit')); }
+    if (!requirementEditor.isVisible()) cotsEditor.resume();
+  },
+  onCommit: (candidate, before, after, renames) => {
+    workspace = candidate; requirementEditor.rebaseCots(before, candidate.components.find(component => component.key === after.key), renames);
+    statementIds.clear(); syncStatementIds(); renderWorkbook(); updateSources(); scheduleSave(); scheduleEvaluation();
   },
 });
 const powerEditor = createPowerEditor({
@@ -71,7 +95,7 @@ const powerEditor = createPowerEditor({
   },
   beforeOpen: () => {
     if (requirementEditor.isDirty() && !window.confirm('Discard the unsaved requirement edits and edit component power?')) return false;
-    requirementEditor.close(); return true;
+    requirementEditor.close(); cotsEditor.suspend(); return true;
   },
 });
 const rowLabel = row => row.name ?? row.text ?? products.find(product => product.id === row.product)?.name ?? '';
@@ -160,6 +184,7 @@ function snapshot(state = workspace) {
     elements: state.elements.filter(row => used(row, 'stakeholders')).map(row => ({ key: row.key, id: row.id.trim(), name: row.name, owner: row.owner, definition: row.definition })),
     components: state.components.filter(row => used(row, 'components')).map(row => ({
       key: row.key, id: row.id.trim(), owner: row.owner, product: row.product, requirements: [...row.requirements],
+      ...(row.facts !== undefined ? { facts: structuredClone(row.facts) } : {}),
     })),
     statements: state.statements.filter(row => used(row, 'statements')).map(row => ({
       key: row.key, id: row.id.trim(), context: row.context, sources: [...row.sources], affected: [...row.affected], kind: row.kind, text: row.text,
@@ -205,7 +230,7 @@ function rowHTML(row, table, index) {
   let cells = `<td class="row-actions"><button type="button" class="row-delete" data-delete-row="${row.key}" aria-label="Delete row ${escape(row.id || index + 1)}" title="Delete this row" ${used(row, table) ? '' : 'disabled'}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12M8 3h4M6 5l1 12h6l1-12M9 8v6M11 8v6"/></svg></button></td>`;
   cells += `<td class="id-cell"><input ${attrs('id', 0)} value="${escape(row.id)}" maxlength="${table === 'stakeholders' ? 3 : 6}" title="${table === 'stakeholders' ? 'Three uppercase letters' : 'Three uppercase letters and three digits'}" autocomplete="off" spellcheck="false"></td>`;
   if (table === 'components') {
-    cells += `<td><select ${attrs('product', 1)} title="${escape(rowLabel(row))}"><option value=""> </option>${products.map(product => `<option value="${escape(product.id)}" ${row.product === product.id ? 'selected' : ''}>${escape(product.name)}</option>`).join('')}</select></td>`;
+    cells += `<td class="cots-product-cell"><select ${attrs('product', 1)} title="${escape(rowLabel(row))}"><option value=""> </option>${products.map(product => `<option value="${escape(product.id)}" ${row.product === product.id ? 'selected' : ''}>${escape(product.name)}</option>`).join('')}</select><button type="button" class="requirement-edit" data-cots-edit="${row.key}" aria-label="Edit COTS ${escape(row.id || 'new row')}" aria-controls="cots-editor" title="Inspect COTS facts and named references" ${row.product ? '' : 'disabled'}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 3 5 5M3 17l4-1 10-10a2.1 2.1 0 0 0-3-3L4 13l-1 4Z"/></svg></button></td>`;
     cells += `<td>${sourceHTML(row, index, 'requirements', 2)}</td>`;
     cells += `<td class="checkbox-cell component-summary" tabindex="0" ${attrs('verified', 3)}><input class="verification-result" type="checkbox" disabled tabindex="-1" aria-readonly="true" aria-label="All affected requirements verified, row ${index + 1}"></td>`;
   } else if (table === 'stakeholders') {
@@ -309,13 +334,14 @@ function scheduleEvaluation() {
           if (event.data.token !== generation) return;
           clearTimeout(workerTimer);
           if (event.data.error) { fail(event.data.error); return; }
+          if (scriptResults && (scriptResults.cotsSignature ?? null) !== (event.data.cotsSignature ?? null)) scriptResults = null;
           results = new Map(event.data.results.map(result => [result.key, result])); updateChecks();
         };
       }
       worker.onerror = () => fail('Could not evaluate the expression.');
       workerTimer = setTimeout(() => fail('Python expression evaluation timed out.'), 7000);
       worker.postMessage({ token, scriptResults, workspace: { variables: workspace.variables, statements,
-        elements: workspace.elements, power: workspace.power, scripts: workspace.scripts, expressionLanguage: workspace.expressionLanguage } });
+        elements: workspace.elements, components: workspace.components, power: workspace.power, scripts: workspace.scripts, expressionLanguage: workspace.expressionLanguage } });
     } catch { fail('Expression evaluation is unavailable in this browser.'); }
   }, 100);
 }
@@ -361,6 +387,7 @@ function setSessionBusy(busy) {
   document.querySelector('#tabs').inert = busy;
   document.querySelector('#requirement-editor').inert = busy;
   document.querySelector('#power-editor').inert = busy;
+  document.querySelector('#cots-editor').inert = busy;
   sessionEditor.inert = busy;
   sessionSelect.disabled = busy || !loaded;
   document.querySelectorAll('#session-new, #session-copy').forEach(button => { button.disabled = busy || !loaded; });
@@ -376,7 +403,7 @@ function sessionLocation(history = 'replace') {
 function installWorkspace(data, id, tab, history = 'replace') {
   const nextCatalog = data.catalog ?? domainTypes, nextProducts = data.products ?? [];
   const candidate = validateWorkspace(data.workspace, nextCatalog, nextProducts);
-  requirementEditor.close(); powerEditor.reset(); closeEditor(); closeMenus();
+  cotsEditor.close(false); requirementEditor.close(); powerEditor.reset(); closeEditor(); closeMenus();
   clearTimeout(saveTimer); clearTimeout(evaluationTimer); clearTimeout(workerTimer);
   generation++; worker?.terminate(); worker = null; results = new Map(); scriptResults = null;
   for (const state of [selected, sorts]) for (const key of Object.keys(state)) delete state[key];
@@ -409,7 +436,7 @@ async function load() {
 }
 async function switchSession(id, history = true) {
   if (sessionBusy || !loaded || id === sessionId) { renderSessions(); if (loaded) sessionLocation(); return; }
-  if ((requirementEditor.isDirty() || powerEditor.isDirty()) && !window.confirm('Discard the unsaved editor changes and switch sessions?')) {
+  if ((requirementEditor.isDirty() || powerEditor.isDirty() || cotsEditor.isDirty()) && !window.confirm('Discard the unsaved editor changes and switch sessions?')) {
     renderSessions(); sessionLocation(); return;
   }
   setSessionBusy(true); clearTimeout(saveTimer);
@@ -450,13 +477,13 @@ async function createSession(event) {
   event.preventDefault();
   if (!loaded || sessionBusy) return;
   const copy = sessionMode === 'copy', tab = active;
-  if (!copy && (requirementEditor.isDirty() || powerEditor.isDirty()) && !window.confirm('Discard the unsaved editor changes and create a new session?')) return;
+  if (!copy && (requirementEditor.isDirty() || powerEditor.isDirty() || cotsEditor.isDirty()) && !window.confirm('Discard the unsaved editor changes and create a new session?')) return;
   setSessionBusy(true); clearTimeout(saveTimer);
   try {
     if (copy) { if (saveTask) await saveTask; }
     else if (!await save()) return;
     const data = { name: sessionNameInput.value, template: copy ? 'copy' : sessionTemplate.value,
-      ...(copy ? { workspace: snapshot(powerEditor.snapshot(requirementEditor.snapshot())) } : {}) };
+      ...(copy ? { workspace: snapshot(powerEditor.snapshot(cotsEditor.snapshot(requirementEditor.snapshot()))) } : {}) };
     const response = await fetch('/api/sessions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error);
@@ -474,7 +501,7 @@ document.querySelector('#session-form').addEventListener('submit', createSession
 async function exportArtifact(kind) {
   const button = document.querySelector(`.export-${kind}`);
   try {
-    const data = validateWorkspace(snapshot(powerEditor.snapshot(requirementEditor.snapshot())), catalog, products), context = active;
+    const data = validateWorkspace(snapshot(powerEditor.snapshot(cotsEditor.snapshot(requirementEditor.snapshot()))), catalog, products), context = active;
     exporting = true; updateExport(); button.setAttribute('aria-busy', 'true');
     const response = await fetch(`/api/${kind}?session=${encodeURIComponent(sessionId)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ workspace: data, context }) });
@@ -526,8 +553,11 @@ function changed(row, table, field) {
       renderTabs(); render('statements');
     }
   } else if (table === 'statements') updatePreview(row);
-  else tr.querySelector('[data-field="product"]').title = rowLabel(row);
-  addTrailingRows(table); powerEditor.render(); requirementEditor.refresh(); updateExport(); scheduleSave(); scheduleEvaluation();
+  else {
+    tr.querySelector('[data-field="product"]').title = rowLabel(row);
+    const button = tr.querySelector('[data-cots-edit]'); button.disabled = !row.product; button.setAttribute('aria-label', `Edit COTS ${row.id || 'new row'}`);
+  }
+  addTrailingRows(table); powerEditor.render(); cotsEditor.refresh(); requirementEditor.refresh(); updateExport(); scheduleSave(); scheduleEvaluation();
 }
 main.addEventListener('focusin', event => { const ctx = context(event.target); if (ctx) selected[selectionKey(ctx.table)] = ctx.row.key; });
 main.addEventListener('input', event => {
@@ -566,10 +596,13 @@ main.addEventListener('keydown', event => {
   if (!ctx) return;
   const { table, row, tr } = ctx, index = viewRows(table).indexOf(row);
   const field = event.target.dataset.field;
+  if (table === 'components' && field === 'product' && event.key === 'F2') {
+    event.preventDefault(); closeEditor(); closeMenus(); cotsEditor.open(row.key, tr.querySelector('[data-cots-edit]')); return;
+  }
   if (table === 'statements' && ((field === 'verified' && event.key === 'F2') || (field === 'text' && ['F2', 'Enter', ' '].includes(event.key)))) {
     event.preventDefault(); closeEditor(); closeMenus();
     if (!powerEditor.closeWithConfirmation()) return;
-    requirementEditor.open(row.key, tr.querySelector(field === 'verified' ? '.verification-edit' : '.statement-cell .requirement-edit')); return;
+    cotsEditor.suspend(); requirementEditor.open(row.key, tr.querySelector(field === 'verified' ? '.verification-edit' : '.statement-cell .requirement-edit')); return;
   }
   if (event.target.dataset.col === undefined) return;
   const col = Number(event.target.dataset.col ?? 2);
@@ -642,11 +675,17 @@ function insertRow(table) {
   const added = rows[insertion] && !used(rows[insertion], table) ? rows[insertion] : draft(table);
   if (!collection.includes(added)) collection.splice(rows[insertion] ? collection.indexOf(rows[insertion]) : collection.length, 0, added);
   render(table);
-  if (table === 'statements') requirementEditor.open(added.key, rowElement(added.key).querySelector('.requirement-edit'));
+  if (table === 'statements') { cotsEditor.suspend(); requirementEditor.open(added.key, rowElement(added.key).querySelector('.requirement-edit')); }
   else focusCell(table, insertion, 1);
 }
 function deleteRow(table, key) {
   if (!viewRows(table).some(row => row.key === key)) return;
+  if (table === 'components') {
+    let referenceState;
+    try { referenceState = requirementEditor.preview(); } catch (error) { showStatus(error.message, true); return; }
+    if (cotsUses(referenceState, rowByKey(key)).length) { showStatus('Remove expression and verification references before deleting this COTS component.', true); return; }
+    if (cotsEditor.key() === key && cotsEditor.isDirty()) { showStatus('Save or cancel this component’s COTS reference edits before deleting it.', true); return; }
+  }
   if (workspace.statements.some(row => row.sources.includes(key) || row.affected.includes(key)) || workspace.components.some(row => row.requirements.includes(key))) { showStatus('This row is linked. Remove its source and assignment links before deleting it.', true); return; }
   if (workspace.elements.some(row => row.owner === key && used(row, 'stakeholders')) || workspace.statements.some(row => row.context === key && used(row, 'statements')) || workspace.components.some(row => row.owner === key && used(row, 'components'))) { showStatus('This element has child rows. Delete those rows before deleting the element.', true); return; }
   if (workspace.power.links.some(link => link.eps === key || link.roots.includes(key)) || workspace.power.loads.some(load => load.host === key)) { showStatus('Disconnect the power budget or execution host reference before deleting this row.', true); return; }
@@ -664,9 +703,11 @@ main.addEventListener('click', event => {
   if (openElement) { navigate(openElement.dataset.openElement); return; }
   const openPower = event.target.closest('[data-open-power]');
   if (openPower) { powerEditor.open(openPower.dataset.openPower); return; }
+  const cots = event.target.closest('[data-cots-edit]');
+  if (cots) { event.preventDefault(); closeMenus(); closeEditor(); cotsEditor.open(cots.dataset.cotsEdit, cots); return; }
   const ctx = context(event.target), link = event.target.closest('[data-row-link]');
   const requirement = event.target.closest('.requirement-edit');
-  if (requirement) { event.preventDefault(); if (!powerEditor.closeWithConfirmation()) return; closeMenus(); closeEditor(); requirementEditor.open(ctx.row.key, requirement); return; }
+  if (requirement) { event.preventDefault(); if (!powerEditor.closeWithConfirmation()) return; closeMenus(); closeEditor(); cotsEditor.suspend(); requirementEditor.open(ctx.row.key, requirement); return; }
   const remove = event.target.closest('[data-delete-row]');
   if (remove) {
     event.preventDefault();
@@ -720,11 +761,12 @@ document.addEventListener('keydown', event => {
   if (event.key === 'Escape') {
     const transient = editor || document.querySelector('.table-menu:not([hidden])');
     closeMenus(); closeEditor(true);
-    if (!transient) { requirementEditor.close(); powerEditor.close(); }
+    if (!transient) { if (cotsEditor.isVisible()) cotsEditor.close(); else { requirementEditor.close(); powerEditor.close(); } }
   }
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
     event.preventDefault();
     if (editor?.type === 'session') document.querySelector('#session-form').requestSubmit();
+    else if (cotsEditor.isVisible()) cotsEditor.save();
     else if (powerEditor.isOpen()) powerEditor.save();
     else if (requirementEditor.isOpen()) requirementEditor.save();
     else save();
@@ -773,10 +815,10 @@ main.addEventListener('paste', event => {
     }
     syncStatementIds(candidate, new Map(statementIds));
     validateWorkspace(snapshot(candidate), catalog, products); workspace = candidate;
-    statementIds.clear(); workspace.statements.forEach(row => statementIds.set(row.key, row.id));
+    statementIds.clear(); syncStatementIds();
     renderWorkbook(); focusCell(table, start, column); scheduleSave(); scheduleEvaluation();
   } catch (error) { showStatus(error.message, true); }
 });
-window.addEventListener('beforeunload', event => { if (dirty() || requirementEditor.isDirty() || powerEditor.isDirty()) { event.preventDefault(); event.returnValue = ''; } });
+window.addEventListener('beforeunload', event => { if (dirty() || requirementEditor.isDirty() || powerEditor.isDirty() || cotsEditor.isDirty()) { event.preventDefault(); event.returnValue = ''; } });
 document.addEventListener('visibilitychange', () => { if (document.hidden && dirty()) save(); });
 load();

@@ -1,5 +1,13 @@
 import { readFile } from 'node:fs/promises';
 import { parseTSV } from './model.mjs';
+import { createEvaluationWorker } from './evaluation-worker.mjs';
+
+export async function loadCotsFacts(product, { evaluator } = {}) {
+  if (typeof product !== 'string' || !/^[a-z0-9_]+$/.test(product)) throw new Error('Choose a COTS product ID.');
+  const worker = evaluator ?? createEvaluationWorker();
+  try { return await worker.request({ operation: 'cots_facts', product }); }
+  finally { if (!evaluator) worker.close(); }
+}
 
 function records(source) {
   const [header, ...rows] = parseTSV(source);

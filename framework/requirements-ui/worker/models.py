@@ -102,6 +102,34 @@ class Script:
 
 
 @dataclass
+class CotsComponent:
+    key: str
+    id: str
+    product: str
+    facts: List[dict]
+
+    @classmethod
+    def read(cls, data):
+        if not isinstance(data, dict) or not isinstance(data.get('key'), str) or not isinstance(data.get('id'), str) or not isinstance(data.get('product'), str):
+            raise ValueError('Every COTS component needs a key, ID and product.')
+        facts = collection(data.get('facts', []), 64, 'COTS fact references')
+        names, keys = set(), set()
+        for fact in facts:
+            if not isinstance(fact, dict) or set(fact) != {'key', 'name', 'fact', 'revision', 'type', 'unit'}:
+                raise ValueError('COTS references contain record selections, never editable fact values.')
+            if not isinstance(fact['name'], str) or not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]{0,39}', fact['name']) or fact['name'].startswith('__') or fact['name'] in names:
+                raise ValueError('COTS reference names must be unique identifiers.')
+            if not isinstance(fact['key'], str) or not re.fullmatch(r'[A-Za-z0-9_-]{1,80}', fact['key']) or fact['key'] in keys:
+                raise ValueError('COTS references need unique keys.')
+            if any(not isinstance(fact[field], str) or not re.fullmatch(r'[a-f0-9]{64}', fact[field]) for field in ('fact', 'revision')):
+                raise ValueError('Pin a COTS record and revision.')
+            if fact['type'] not in ('float', 'integer', 'boolean', 'string') or not isinstance(fact['unit'], str) or len(fact['unit']) > 100 or '\n' in fact['unit'] or '\r' in fact['unit']:
+                raise ValueError('COTS references need a valid type and units.')
+            names.add(fact['name']); keys.add(fact['key'])
+        return cls(data['key'], data['id'], data['product'], facts)
+
+
+@dataclass
 class Workspace:
     variables: List[Parameter]
     requirements: List[Requirement]
@@ -110,9 +138,13 @@ class Workspace:
     power: dict
     runs: dict = field(default_factory=dict)
     language: str = 'python'
+    cots: List[CotsComponent] = field(default_factory=list)
+    cots_values: dict = field(default_factory=dict)
+    cots_signature: Optional[str] = None
+    evidence_current: bool = True
 
     @classmethod
-    def read(cls, data, runs=None):
+    def read(cls, data, runs=None, cots_signature=None):
         if not isinstance(data, dict):
             raise ValueError("A calculation request needs a workspace object.")
         variables = [Parameter.read(item) for item in collection(data.get("variables"), 64, "Variables")]
@@ -125,15 +157,20 @@ class Workspace:
         collection(power.get("modes", []), 24, "Spacecraft modes")
         collection(power.get("loads", []), 1000, "Power loads")
         collection(power.get("links", []), 1000, "Power connections")
-        ids = [row.id for row in requirements + scripts]
-        keys = [row.key for row in requirements + scripts]
+        components = [CotsComponent.read(item) for item in collection(data.get('components', []), 10000, 'COTS components') if item.get('id')]
+        ids = [row.id for row in requirements + scripts + components]
+        keys = [row.key for row in requirements + scripts + components]
         if len(set(ids)) != len(ids) or len(set(keys)) != len(keys):
             raise ValueError("Calculation row keys and IDs must be unique.")
         if len({variable.name for variable in variables}) != len(variables):
             raise ValueError("Calculation parameter names must be unique.")
         if data.get('expressionLanguage', 'python') != 'python':
             raise ValueError('Only Python expressions are supported.')
-        return cls(variables, requirements, scripts, elements, power, runs or {})
+        from cots_data import resolve_components
+        values, signature = resolve_components([{'key': row.key, 'product': row.product, 'facts': row.facts} for row in components])
+        current = signature == cots_signature
+        return cls(variables, requirements, scripts, elements, power, (runs or {}) if current else {},
+                   cots=components, cots_values=values, cots_signature=signature, evidence_current=current)
 
     @property
     def modes(self):

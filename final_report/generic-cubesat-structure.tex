@@ -14,36 +14,33 @@ The CSRM EPS model will be tailored to each mission by selecting a topology alte
 % the current translation. The diagrams establish no SysML v2 conformance or
 % runtime validation. The orbit reference is a chosen translation feature.
 
-\begin{landscape}
+\begingroup
 \captionsetup{font=small,skip=4pt}
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=\dimexpr\textheight-95pt\relax,keepaspectratio]{fig/csrm-mission-structure.pdf}
+\includegraphics[width=0.95\linewidth]{fig/csrm-mission-structure.pdf}
 \caption[CSRM mission and segment structure.]{CSRM mission and segment structure. Nested rectangles denote composition. Brackets give part multiplicities. Light gray identifies external context and services. Orbits are modeled elements of the Space Segment. Each CubeSat has an orbit reference, with no individual spacecraft-to-orbit pairing specified in this view. Adapted from the CSRM reference model, copyright 2022 INCOSE Space Systems Working Group and OMG Space Domain Task Force, \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0} \citep{incose2025csrmmodel}.}
 \label{fig:csrm-mission-structure}
 \end{figure}
-\clearpage
 
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=\dimexpr\textheight-80pt\relax,keepaspectratio]{fig/csrm-cubesat-subsystems.pdf}
+\includegraphics[width=0.95\linewidth]{fig/csrm-cubesat-subsystems.pdf}
 \caption[CSRM CubeSat subsystems.]{CSRM CubeSat subsystems. The reference architecture contains one part for each of nine subsystem categories. Power Subsystem is the EPS. Mission-specific models can omit, combine or refine categories to meet mission needs \citep{kaslow2020csrm}. The view shows logical composition. It specifies no subsystem interfaces or allocation to circuit boards. Adapted from the CSRM reference model \citep{incose2025csrmmodel}.}
 \label{fig:csrm-cubesat-subsystems}
 \end{figure}
-\clearpage
 
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=\dimexpr\textheight-80pt\relax,keepaspectratio]{fig/csrm-eps-components.pdf}
+\includegraphics[width=0.95\linewidth]{fig/csrm-eps-components.pdf}
 \caption[CSRM EPS component groups.]{CSRM EPS component groups. The Power Subsystem contains six reference component categories, including processing and software. Batteries and Solar Arrays each denote an aggregate category. Multiplicity [1] identifies one reference part per category. Detailed design will define the numbers of cells, panels, converters and switches, together with their electrical connections. Adapted from the CSRM reference model \citep{incose2025csrmmodel}.}
 \label{fig:csrm-eps-components}
 \end{figure}
-\clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=\dimexpr\textheight-95pt\relax,keepaspectratio]{fig/csrm-eps-topology.pdf}
+\includegraphics[width=0.95\linewidth]{fig/csrm-eps-topology.pdf}
 \caption[CSRM EPS components and topology variation points.]{CSRM EPS components and topology variation points. Arrows express design associations proposed for this framework. Route labels identify the affected design roles. Repeated component names denote the same CSRM groups \citep{incose2025csrmmodel}. The alternatives follow El Hachimi et al. \citep[Fig.~1, Sec.~4]{handpicked-0003}. The view focuses on hardware topology. Processing and software remain in the reference structure shown in Figure~\ref{fig:csrm-eps-components}. No topology alternative is selected in this view.}
 \label{fig:csrm-eps-topology}
 \end{figure}
 \clearpage
-\end{landscape}
+\endgroup

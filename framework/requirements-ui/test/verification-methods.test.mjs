@@ -25,7 +25,7 @@ function fixture() {
         condition: 'limit > 0', parameters: { x: null, limit: '12' } },
     ] };
   workspace.power.modes = [{ key: 'nominal', name: 'Nominal', sunlight: 100, eclipse: 100 }, { key: 'downlink', name: 'Downlink', sunlight: 0, eclipse: 0 }];
-  const script = scriptInstance(definitions[0], { key: 'analysis', id: 'SCR001' });
+  const script = scriptInstance(definitions.find(definition => definition.id === 'normal_interval'), { key: 'analysis', id: 'SCR001' });
   Object.assign(script.parameters, { mean: 'REQ001.x', standard_deviation: '2', confidence: '0.95' });
   workspace.scripts.push(script);
   setVerificationMethods(workspace.statements[0], [

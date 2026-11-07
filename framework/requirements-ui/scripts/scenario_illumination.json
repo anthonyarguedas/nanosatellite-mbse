@@ -1,0 +1,38 @@
+{
+  "id": "scenario_illumination",
+  "name": "Orbit illumination scenario",
+  "description": "Preliminary circular Earth orbit with epoch-dependent solar direction and distance, secular J2 node drift, conical eclipse and one fixed local-orbital or Sun-tracking panel. Outputs summarize the declared interval. No thermal, battery or flight compliance claim. See analyses/README.md.",
+  "inputs": [
+    { "name": "altitude_km", "type": "float", "unit": "km" },
+    { "name": "earth_radius_km", "type": "float", "unit": "km" },
+    { "name": "mu_km3_s2", "type": "float", "unit": "km**3/s**2" },
+    { "name": "inclination_deg", "type": "float", "unit": "deg" },
+    { "name": "raan_deg", "type": "float", "unit": "deg" },
+    { "name": "argument_latitude_deg", "type": "float", "unit": "deg" },
+    { "name": "epoch_jd", "type": "float", "unit": "JD" },
+    { "name": "duration_s", "type": "float", "unit": "s" },
+    { "name": "step_s", "type": "float", "unit": "s" },
+    { "name": "earth_j2", "type": "float" },
+    { "name": "solar_constant_W_m2", "type": "float", "unit": "W/m**2" },
+    { "name": "panel_normal_radial", "type": "float" },
+    { "name": "panel_normal_along", "type": "float" },
+    { "name": "panel_normal_cross", "type": "float" },
+    { "name": "sun_tracking", "type": "boolean" }
+  ],
+  "outputs": [
+    { "name": "orbit_period_s", "type": "float", "unit": "s" },
+    { "name": "sunlight_s", "type": "float", "unit": "s" },
+    { "name": "eclipse_s", "type": "float", "unit": "s" },
+    { "name": "penumbra_s", "type": "float", "unit": "s" },
+    { "name": "longest_eclipse_s", "type": "float", "unit": "s" },
+    { "name": "sunlit_fraction", "type": "float" },
+    { "name": "min_beta_deg", "type": "float", "unit": "deg" },
+    { "name": "max_beta_deg", "type": "float", "unit": "deg" },
+    { "name": "min_irradiance_W_m2", "type": "float", "unit": "W/m**2" },
+    { "name": "max_irradiance_W_m2", "type": "float", "unit": "W/m**2" },
+    { "name": "mean_irradiance_W_m2", "type": "float", "unit": "W/m**2" },
+    { "name": "incident_energy_J_m2", "type": "float", "unit": "J/m**2" },
+    { "name": "sample_count", "type": "integer" }
+  ],
+  "timeoutMs": 10000
+}

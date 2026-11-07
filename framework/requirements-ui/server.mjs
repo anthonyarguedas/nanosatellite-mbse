@@ -4,7 +4,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { basename, extname, resolve } from 'node:path';
 import { createSessions } from './sessions.mjs';
 import { loadCatalog } from './catalog.mjs';
-import { loadProducts } from './cots.mjs';
+import { loadCotsFacts, loadProducts } from './cots.mjs';
 import { renderSchematic } from './kicad.mjs';
 import { renderFprimeArchive } from './fprime.mjs';
 import { defaultScriptDirectory, loadScriptCatalog, runScripts } from './python.mjs';
@@ -17,6 +17,8 @@ const publicFiles = new Map([
   ['/app.js', ['public/app.js', 'text/javascript; charset=utf-8']],
   ['/requirement-editor.js', ['public/requirement-editor.js', 'text/javascript; charset=utf-8']],
   ['/power-editor.js', ['public/power-editor.js', 'text/javascript; charset=utf-8']],
+  ['/cots-editor.js', ['public/cots-editor.js', 'text/javascript; charset=utf-8']],
+  ['/cots-bindings.mjs', ['cots-bindings.mjs', 'text/javascript; charset=utf-8']],
   ['/power.mjs', ['power.mjs', 'text/javascript; charset=utf-8']],
   ['/resource-budgets.mjs', ['resource-budgets.mjs', 'text/javascript; charset=utf-8']],
   ['/parameter-states.mjs', ['parameter-states.mjs', 'text/javascript; charset=utf-8']],
@@ -77,6 +79,10 @@ export function createServer({ modelPath = process.env.MISSION_FILE
         response.once('close', cancel);
         try { return json(200, await evaluator.evaluate(workspace, { scriptResults, ...(mode !== undefined ? { mode } : {}) }, { signal: controller.signal })); }
         finally { response.removeListener('close', cancel); }
+      }
+      if (url.pathname === '/api/cots') {
+        if (request.method !== 'GET') { response.setHeader('Allow', 'GET'); return json(405, { error: 'Method not allowed.' }); }
+        return json(200, await loadCotsFacts(url.searchParams.get('product'), { evaluator }));
       }
       if (url.pathname === '/api/scripts') {
         if (request.method !== 'GET') { response.setHeader('Allow', 'GET'); return json(405, { error: 'Method not allowed.' }); }

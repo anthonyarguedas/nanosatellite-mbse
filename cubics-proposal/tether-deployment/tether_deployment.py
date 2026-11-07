@@ -4,6 +4,33 @@
 # dependencies = ["numpy>=1.26", "scipy>=1.13", "matplotlib>=3.8"]
 # ///
 
+# %% [markdown]
+# # Tether deployment notebook as a Python script
+#
+# Run this file as a script or use its `# %%` code cells and `# %% [markdown]`
+# explanation cells in VS Code's Python Interactive window.
+#
+# From the repository root:
+#
+# ```sh
+# uv run cubics-proposal/tether-deployment/tether_deployment.py
+# ```
+#
+# `uv` installs NumPy, SciPy, and Matplotlib in an isolated environment. The default
+# run compares nylon and Dyneema at 2 m and 200 m, prints four summaries, and opens
+# two separate 2x3 plot grids. It writes no output files by default.
+#
+# For notebook cells, use an environment with those packages and `ipykernel`:
+#
+# ```sh
+# uv venv cubics-proposal/tether-deployment/.venv
+# uv pip install --python cubics-proposal/tether-deployment/.venv/bin/python numpy scipy matplotlib ipykernel
+# ```
+#
+# Open this script with the Python and Jupyter extensions in VS Code. Select that
+# environment and use **Run Cell** or **Run All**. Edit `params = Parameters(...)`
+# and the material assumptions, then rerun the comparison and display cells.
+
 # %% Imports
 from __future__ import annotations
 
@@ -15,9 +42,35 @@ import numpy as np
 from scipy.integrate import solve_ivp
 from scipy.optimize import approx_fprime
 
-# %% Material assumptions and parameters
-# Illustrative effective moduli for sensitivity studies, not product specifications.
-# Replace these with measurements for the selected grade, braid, and terminations.
+# %% [markdown]
+# ## Material and length comparison
+#
+# Edit `MATERIAL_YOUNGS_MODULUS_PA` and `TETHER_LENGTHS_M` to choose the cases.
+# The comparison overrides `tether_youngs_modulus_Pa` and `total_tether_length_m`
+# for each run. All other inputs stay fixed, including diameter, initial free
+# length, damping, payout resistance, and spring energy.
+#
+# The example effective moduli are assumptions for sensitivity studies. Product
+# specifications require data for the selected grade and finished cord. Braiding,
+# knots, terminations, temperature, and load level affect the effective modulus.
+# Replace these examples with measurements or data for the selected tether.
+#
+# For the default 0.4 mm diameter:
+#
+# | Material | Effective modulus [GPa] | Stiffness at 2 m [N/m] | At 200 m [N/m] |
+# | --- | ---: | ---: | ---: |
+# | Nylon | 2 | 126 | 1.26 |
+# | Dyneema | 100 | 6,280 | 62.8 |
+#
+# Area is `A = pi * diameter**2 / 4`, axial rigidity is `EA`, and axial stiffness
+# is `k(t) = EA / L(t)`. Here `L(t)` is the unstretched length outside the reel.
+# Stiffness decreases during payout and stays fixed once the reel locks. Elastic
+# stored energy is `0.5 * k(t) * extension**2`.
+#
+# Sanity checks: doubling Young's modulus doubles stiffness. Doubling diameter
+# quadruples stiffness. Increasing free length from 2 m to 200 m divides it by 100.
+
+# %% Material assumptions
 MATERIAL_YOUNGS_MODULUS_PA = {
     "Nylon": 2.0e9,
     "Dyneema": 100.0e9,
@@ -25,37 +78,52 @@ MATERIAL_YOUNGS_MODULUS_PA = {
 TETHER_LENGTHS_M = (2.0, 200.0)
 
 
+# %% [markdown]
+# ## Inputs to replace
+#
+# The defaults are illustrative. Calibration to STARS-C or a specific separation
+# mechanism remains outstanding. Field names give SI units.
+#
+# RTN means radial outward, along track, and orbit normal. `(1, 0, 0)` starts
+# deployment radially outward. `(0, 1, 0)` starts it along track. The direction is
+# normalized automatically. Pair rotation is orbital motion of the two point
+# masses about their centre. Individual CubeSat spin requires an attitude model.
+#
+# Total tether length limits the available unstretched length. Centre separation
+# can exceed that length through elastic stretch.
+
+# %% Parameters
 @dataclass(frozen=True)
 class Parameters:
-    mass_1_kg: float = 1.25
-    mass_2_kg: float = 1.25
-    altitude_m: float = 600_000.0
-    earth_radius_m: float = 6_378_137.0
-    earth_mu_m3_s2: float = 3.986004418e14
-    gravity_enabled: bool = True
+    mass_1_kg: float = 1.25  # Satellite 1 mass.
+    mass_2_kg: float = 1.25  # Satellite 2 mass.
+    altitude_m: float = 600_000.0  # Initial circular orbit altitude.
+    earth_radius_m: float = 6_378_137.0  # Reference Earth radius.
+    earth_mu_m3_s2: float = 3.986004418e14  # Earth's gravitational parameter.
+    gravity_enabled: bool = True  # Disable for checks without orbital gravity.
 
-    initial_separation_m: float = 0.101
+    initial_separation_m: float = 0.101  # Initial distance between centres of mass.
     initial_direction_rtn: tuple[float, float, float] = (1.0, 0.0, 0.0)
-    initial_separation_speed_m_s: float = 0.0
+    initial_separation_speed_m_s: float = 0.0  # Relative speed along that direction.
     initial_pair_spin_rad_s: float = 0.0  # Extra rotation about orbit normal, in RTN.
-    collision_distance_m: float = 0.10  # Approximate centre separation at contact.
+    collision_distance_m: float = 0.10  # Contact separation where integration stops.
 
-    spring_stiffness_N_m: float = 500.0
+    spring_stiffness_N_m: float = 500.0  # Equivalent separating spring stiffness.
     spring_stroke_m: float = 0.02  # Initial compression and available push distance.
 
     initial_free_length_m: float = 0.15  # Unstretched length already outside reel.
     total_tether_length_m: float = 2.0  # Includes initial_free_length_m.
-    tether_youngs_modulus_Pa: float = 2.0e9
+    tether_youngs_modulus_Pa: float = 2.0e9  # Effective modulus for a single run.
     tether_diameter_m: float = 0.0004  # Equivalent circular diameter (0.4 mm).
-    tether_damping_N_s_m: float = 2.0
-    payout_friction_N: float = 0.0005
-    payout_viscosity_N_s_m: float = 0.0005
+    tether_damping_N_s_m: float = 2.0  # Effective axial damping.
+    payout_friction_N: float = 0.0005  # Constant payout resistance.
+    payout_viscosity_N_s_m: float = 0.0005  # Payout resistance per unit speed.
 
-    duration_s: float = 3000.0
-    sample_interval_s: float = 0.05
-    max_step_s: float = 0.25
-    rtol: float = 1e-8
-    atol: float = 1e-10
+    duration_s: float = 3000.0  # Maximum run duration.
+    sample_interval_s: float = 0.05  # Regular output interval.
+    max_step_s: float = 0.25  # Solver step limit, also capped for contact detection.
+    rtol: float = 1e-8  # Relative solver tolerance.
+    atol: float = 1e-10  # Absolute solver tolerance.
 
     def __post_init__(self):
         for name in ("tether_youngs_modulus_Pa", "tether_diameter_m",
@@ -87,19 +155,33 @@ class Parameters:
 
     @property
     def spring_energy_J(self):
+        # Initial spring energy: 0.5 * k_s * stroke**2.
         return 0.5 * self.spring_stiffness_N_m * self.spring_stroke_m**2
 
 
 params = Parameters()
 
 
+# %% [markdown]
+# ## Physics and state coordinates
+#
+# Each satellite experiences central Earth gravity at its own position. Spring
+# and tether forces are equal and opposite, preserving internal momentum balance.
+# The spring pushes along the line of centres. The tether pulls when stretched
+# and becomes force free when slack.
+#
+# Integrating centre and relative coordinates in an inertial frame resolves small
+# relative displacements directly, avoiding subtraction of large orbit positions.
+# Gravity gradient and pair rotation emerge from these equations. Centrifugal
+# forces are excluded as separate loads because the frame is inertial.
+
 # %% State and internal forces
-R = slice(0, 3)
-V = slice(3, 6)
-REL = slice(6, 9)
-VEL = slice(9, 12)
-LENGTH = 12
-LOSS = 13
+R = slice(0, 3)  # Inertial centre of mass position [m].
+V = slice(3, 6)  # Inertial centre of mass velocity [m/s].
+REL = slice(6, 9)  # Inertial relative position r2 - r1 [m].
+VEL = slice(9, 12)  # Inertial relative velocity v2 - v1 [m/s].
+LENGTH = 12  # Unstretched tether length outside the reel [m].
+LOSS = 13  # Accumulated dissipated energy [J].
 
 
 def initial_state(p: Parameters):
@@ -111,6 +193,7 @@ def initial_state(p: Parameters):
     direction = np.asarray(p.initial_direction_rtn, dtype=float)
     direction = direction / np.linalg.norm(direction)
     y[REL] = p.initial_separation_m * direction
+    # The initial inertial axes align with RTN. Add orbital rotation to RTN spin.
     angular_velocity = np.array([0.0, 0.0, orbit_rate + p.initial_pair_spin_rad_s])
     y[VEL] = (p.initial_separation_speed_m_s * direction
               + np.cross(angular_velocity, y[REL]))
@@ -134,6 +217,7 @@ def internal_forces(y, p: Parameters, spring_attached: bool, payout_available: b
     spring = p.spring_stiffness_N_m * compression if spring_attached else 0.0
     extension = distance - y[LENGTH]
     if extension <= 0.0:
+        # A slack tether carries no force and drives no payout or tether losses.
         return spring, 0.0, 0.0, 0.0
 
     stiffness = p.tether_stiffness_N_m(y[LENGTH])
@@ -141,15 +225,20 @@ def internal_forces(y, p: Parameters, spring_attached: bool, payout_available: b
     trial = elastic + p.tether_damping_N_s_m * speed
     payout_speed = 0.0
     if payout_available:
+        # A reel with negligible inertia pays out when tension exceeds resistance.
+        # Solve T = friction + viscosity * L_dot with axial damping based on the
+        # extension rate. Clamping L_dot to zero prevents rewind.
         payout_speed = max(
             0.0,
             (trial - p.payout_friction_N)
             / (p.tether_damping_N_s_m + p.payout_viscosity_N_s_m),
         )
     extension_rate = speed - payout_speed
+    # Unilateral force clipping prevents the tether from pushing during rebound.
     tension = max(0.0, elastic + p.tether_damping_N_s_m * extension_rate)
-    # Account for force clipping and the change in U = 0.5 * (EA/L) * extension**2.
-    # This ideal payout model treats released stiffness energy as an extra loss.
+    # Losses include payout resistance, axial damping, and unilateral force clipping.
+    # Decreasing stiffness releases energy at 0.5 * k * extension**2 * L_dot / L.
+    # This simplified reel law counts that release as additional dissipation.
     stiffness_release = 0.5 * stiffness / y[LENGTH] * extension**2 * payout_speed
     loss_rate = (tension - elastic) * extension_rate + tension * payout_speed + stiffness_release
     return spring, tension, payout_speed, max(0.0, loss_rate)
@@ -190,6 +279,18 @@ def rhs_jacobian(t, y, p: Parameters, spring_attached: bool, payout_available: b
     return jacobian
 
 
+# %% [markdown]
+# ## Integration and deployment events
+#
+# The spring permanently disengages at full extension. Paid out length increases
+# until the available tether is exhausted, then the reel locks. These irreversible
+# changes restart the integrator. Residual kinetic energy can stretch the locked
+# tether and cause rebound.
+#
+# A run ends at the contact distance or at `duration_s`, whichever comes first.
+# Contact and impact dynamics are outside this model. A 200 m tether may remain
+# partly deployed if spring energy is insufficient to overcome payout resistance.
+
 # %% Integrate, restarting at spring release and the reel end stop
 @dataclass
 class Simulation:
@@ -211,7 +312,8 @@ def simulate(p: Parameters = params):
         contact_speed_scale += (3 * orbit_rate_squared * p.duration_s
                                 * max(p.initial_separation_m, p.total_tether_length_m))
     # Limit travel per step so a rapid approach does not skip the contact event.
-    # The energy bound is exact without gravity. The tidal addition is an estimate.
+    # The energy speed bound is exact without gravity. The tidal allowance is an
+    # estimate for short tether motion near the initial orbit.
     max_step = min(p.max_step_s, 0.5 * p.collision_distance_m / max(contact_speed_scale, 1e-12))
     spring_attached = p.spring_stiffness_N_m > 0 and p.spring_stroke_m > 0
     payout_available = p.initial_free_length_m < p.total_tether_length_m
@@ -284,6 +386,26 @@ def simulate(p: Parameters = params):
     return Simulation(p, times, states, event_times)
 
 
+# %% [markdown]
+# ## Diagnostics and load interpretation
+#
+# `diagnostics(run)` provides separation, separation speed, elastic extension,
+# payout speed, axial stiffness, spring force, tether tension, gravity gradient
+# force magnitude, and energy histories. Paid out length is `run.state[LENGTH]`.
+# Energy and stiffness remain available here without separate plots.
+#
+# The force comparison uses `F_gg = reduced_mass * ||g(r2) - g(r1)||`, the equivalent
+# differential gravity force in the relative motion equation. This is inertial
+# differential gravity. It excludes rotating frame centrifugal terms. Gravity is
+# already included in the integration, so this diagnostic adds no extra force.
+#
+# The energy residual is
+# `mechanical_energy(t) - mechanical_energy(0) + dissipated_energy(t)`.
+# Losses follow the simplified reel and damping law in `internal_forces`.
+# Global orbital energy is large, so floating point subtraction imposes a small
+# residual floor. Peak forces are sampled. Check sensitivity to `rtol`, `atol`,
+# `max_step_s`, and output spacing before using loads for design.
+
 # %% Diagnostics: forces, motion, and an energy balance
 
 def diagnostics(run: Simulation):
@@ -342,6 +464,9 @@ def diagnostics(run: Simulation):
 def summary(run: Simulation, data=None):
     p = run.params
     data = diagnostics(run) if data is None else data
+    # Spring-only release speed from zero initial relative velocity. Both bodies
+    # recoil. This is a diagnostic, since the spring push is integrated directly.
+    # Adding this speed as an initial kick would count the spring energy twice.
     ideal_speed = np.sqrt(2 * p.spring_energy_J / p.reduced_mass_kg)
     print(f"Young's modulus: {p.tether_youngs_modulus_Pa / 1e9:g} GPa")
     print(f"Tether diameter: {p.tether_diameter_m * 1000:g} mm")
@@ -382,6 +507,25 @@ def compare_materials(p: Parameters = params):
         for length in TETHER_LENGTHS_M
     }
 
+
+# %% [markdown]
+# ## Comparison figures
+#
+# `plot_comparisons_by_length(comparisons)` creates separate grids for 2 m and
+# 200 m. `plot_comparison(...)` accepts runs for a single length. Each default
+# grid has two material rows (nylon and Dyneema) and three columns:
+#
+# 1. Force magnitudes: blue solid tether tension, green dashed gravity gradient
+#    magnitude, and orange dotted spring force.
+# 2. Along track versus radial separation, with a cross at each run's end. Set
+#    `SEPARATION_VIEW = "time"` for centre separation versus time instead.
+# 3. Separation speed versus time. Negative values indicate rebound.
+#
+# Each panel contains one material and one length. Axis limits are shared within
+# each column to compare materials directly. Figures for different lengths have
+# independent time and distance scales. Time and separation axes are linear.
+# Force axes use a symmetric logarithmic scale to show weak and strong loads.
+# Each figure's time window extends to the latest run end for that length.
 
 # %% Separate comparison grids for each tether length
 
@@ -463,8 +607,20 @@ def plot_comparisons_by_length(runs, separation_view="rtn"):
     }
 
 
+# %% [markdown]
+# ## Display and optional export
+#
+# Each run's summary prints stiffness at full payout, spring energy, ideal release
+# speed, deployment events, peak loads, final free length, and energy residual.
+# The display cell stores the figures in `figures[2.0]` and `figures[200.0]`.
+# To save them from the interactive window:
+#
+# ```python
+# figures[2.0].savefig("tether-deployment-2m.png", dpi=180)
+# figures[200.0].savefig("tether-deployment-200m.png", dpi=180)
+# ```
+
 # %% Display separate 2x3 grids for 2 m and 200 m, with one material per row
-# Use "time" for centre separation versus time, or "rtn" for the existing trajectory.
 SEPARATION_VIEW = "rtn"
 if __name__ == "__main__":
     comparisons = compare_materials(params)
@@ -473,3 +629,31 @@ if __name__ == "__main__":
         summary(run)
     figures = plot_comparisons_by_length(comparisons, separation_view=SEPARATION_VIEW)
     plt.show()
+
+
+# %% [markdown]
+# ## Limits and next steps
+#
+# This model uses point masses and a massless tether with constant effective
+# Young's modulus and length dependent stiffness. Omitted effects include:
+#
+# - Individual attitude, offset attachment torques, tether wrapping, and coiling
+#   memory.
+# - Distributed tether dynamics, reel inertia, rewind, and stop compliance.
+# - Atmospheric drag, Earth oblateness, and solar pressure.
+#
+# Measure spring energy, tether stiffness, damping, and payout resistance before
+# calibration. A measured resistance curve can replace the constant friction law.
+# Hardware peak load estimates need a detailed end stop model. Studying STARS-C
+# winding scenarios requires body attitude and cable contact.
+#
+# ## Sources
+#
+# - [Liu et al. (2015), §4](../corpus/tethers-and-propulsion/0.1155_2015_740253.pdf):
+#   tension and slack modeling. DOI: 10.1155/2015/740253.
+# - [Yamagiwa et al. (2020), §6 and Appendix D](../corpus/tethers-and-propulsion/10.1016_j.actaastro.2019.12.035.pdf):
+#   resistance and rotation during STARS-C deployment.
+#   DOI: 10.1016/j.actaastro.2019.12.035.
+#
+# The implemented payout law is a simplified constitutive model. This notebook is
+# an initial engineering study. Validation against flight data remains outstanding.

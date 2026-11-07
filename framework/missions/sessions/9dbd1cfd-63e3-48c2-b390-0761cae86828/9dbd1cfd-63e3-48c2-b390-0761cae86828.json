@@ -1,0 +1,1534 @@
+{
+  "version": 14,
+  "expressionLanguage": "python",
+  "variables": [
+    {
+      "name": "voc_ref_V",
+      "type": "float",
+      "unit": "V"
+    },
+    {
+      "name": "isc_ref_A",
+      "type": "float",
+      "unit": "A"
+    },
+    {
+      "name": "vmp_ref_V",
+      "type": "float",
+      "unit": "V"
+    },
+    {
+      "name": "imp_ref_A",
+      "type": "float",
+      "unit": "A"
+    },
+    {
+      "name": "reference_irradiance_W_m2",
+      "type": "float",
+      "unit": "W/m**2"
+    },
+    {
+      "name": "reference_temperature_C",
+      "type": "float",
+      "unit": "degC"
+    },
+    {
+      "name": "voltage_temp_coeff_V_C",
+      "type": "float",
+      "unit": "V/degC"
+    },
+    {
+      "name": "current_temp_coeff_per_C",
+      "type": "float",
+      "unit": "1/degC"
+    },
+    {
+      "name": "voltage_log_coefficient_V",
+      "type": "float",
+      "unit": "V"
+    },
+    {
+      "name": "duration_s",
+      "type": "float",
+      "unit": "s"
+    },
+    {
+      "name": "change_time_s",
+      "type": "float",
+      "unit": "s"
+    },
+    {
+      "name": "irradiance_start_W_m2",
+      "type": "float",
+      "unit": "W/m**2"
+    },
+    {
+      "name": "temperature_start_C",
+      "type": "float",
+      "unit": "degC"
+    },
+    {
+      "name": "irradiance_end_W_m2",
+      "type": "float",
+      "unit": "W/m**2"
+    },
+    {
+      "name": "temperature_end_C",
+      "type": "float",
+      "unit": "degC"
+    },
+    {
+      "name": "voltage_step_V",
+      "type": "float",
+      "unit": "V"
+    },
+    {
+      "name": "sample_period_s",
+      "type": "float",
+      "unit": "s"
+    },
+    {
+      "name": "initial_voltage_V",
+      "type": "float",
+      "unit": "V"
+    },
+    {
+      "name": "tracking_min_V",
+      "type": "float",
+      "unit": "V"
+    },
+    {
+      "name": "tracking_max_V",
+      "type": "float",
+      "unit": "V"
+    },
+    {
+      "name": "input_absolute_max_V",
+      "type": "float",
+      "unit": "V"
+    },
+    {
+      "name": "source_current_limit_A",
+      "type": "float",
+      "unit": "A"
+    },
+    {
+      "name": "tracking_efficiency_min",
+      "type": "float"
+    },
+    {
+      "name": "settling_limit_s",
+      "type": "float",
+      "unit": "s"
+    },
+    {
+      "name": "settling_relative_band",
+      "type": "float"
+    },
+    {
+      "name": "settling_hold_s",
+      "type": "float",
+      "unit": "s"
+    },
+    {
+      "name": "delivered_energy_min_J",
+      "type": "float",
+      "unit": "J"
+    },
+    {
+      "name": "conversion_efficiency",
+      "type": "float"
+    },
+    {
+      "name": "altitude_km",
+      "type": "float",
+      "unit": "km"
+    },
+    {
+      "name": "earthRadius_km",
+      "type": "float",
+      "unit": "km"
+    },
+    {
+      "name": "gravitationalParameter_km3_s2",
+      "type": "float",
+      "unit": "km^3/s^2"
+    },
+    {
+      "name": "orbit_period_s",
+      "type": "float",
+      "unit": "s"
+    },
+    {
+      "name": "horizon_angle_rad",
+      "type": "float",
+      "unit": "rad"
+    },
+    {
+      "name": "sunlight_s",
+      "type": "float",
+      "unit": "s"
+    },
+    {
+      "name": "eclipse_s",
+      "type": "float",
+      "unit": "s"
+    },
+    {
+      "name": "eclipse_limit_s",
+      "type": "float",
+      "unit": "s"
+    },
+    {
+      "name": "irradiance_min_W_m2",
+      "type": "float",
+      "unit": "W/m**2"
+    }
+  ],
+  "stakeholders": [],
+  "elements": [
+    {
+      "key": "mppt-bus",
+      "id": "BUS",
+      "name": "CubeSat Bus",
+      "owner": "mission",
+      "definition": "SpaceSegment::CubeSat"
+    },
+    {
+      "key": "mppt-eps",
+      "id": "EPS",
+      "name": "Power",
+      "owner": "mppt-bus",
+      "definition": "SpaceSegment::CubeSat::PowerSubsystem"
+    },
+    {
+      "key": "mppt-array",
+      "id": "SOL",
+      "name": "Modeled array section",
+      "owner": "mppt-eps",
+      "definition": "SpaceSegment::CubeSat::PowerSubsystem::SolarArrays"
+    },
+    {
+      "key": "mppt-converter",
+      "id": "REG",
+      "name": "Modeled MPPT receiver",
+      "owner": "mppt-eps",
+      "definition": "SpaceSegment::CubeSat::PowerSubsystem::RegulatorsAndConverters"
+    },
+    {
+      "key": "test-orbit",
+      "id": "ORB",
+      "name": "Test orbit",
+      "owner": "mission",
+      "definition": "Orbit"
+    }
+  ],
+  "statements": [
+    {
+      "key": "423f87be-1b5b-44ff-acc3-7f30a8e9efb8",
+      "id": "MPT001",
+      "context": "mppt-eps",
+      "kind": "Requirement",
+      "text": "The array model shall use reference points $$voc_ref_V$$, $$isc_ref_A$$, $$vmp_ref_V$$ and $$imp_ref_A$$ at irradiance $$reference_irradiance_W_m2$$ and temperature $$reference_temperature_C$$.",
+      "condition": "0 < vmp_ref_V < voc_ref_V and 0 < imp_ref_A < isc_ref_A and reference_irradiance_W_m2 > 0 and reference_temperature_C > -273.15",
+      "affected": [
+        "mppt-array",
+        "mppt-converter"
+      ],
+      "sources": [],
+      "origin": "framework/requirements-ui/analyses/README.md",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: framework/requirements-ui/analyses/README.md.",
+      "parameters": {
+        "voc_ref_V": "8",
+        "isc_ref_A": "1.1",
+        "vmp_ref_V": "6.4",
+        "imp_ref_A": "1",
+        "reference_irradiance_W_m2": "1361",
+        "reference_temperature_C": "28",
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": null,
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": null,
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "altitude_km": null,
+        "earthRadius_km": null,
+        "gravitationalParameter_km3_s2": null,
+        "orbit_period_s": null,
+        "horizon_angle_rad": null,
+        "sunlight_s": null,
+        "eclipse_s": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": null
+      }
+    },
+    {
+      "key": "ce362073-afd5-4336-bad3-6c22ca72d783",
+      "id": "MPT002",
+      "context": "mppt-eps",
+      "kind": "Requirement",
+      "text": "The array model shall apply voltage temperature coefficient $$voltage_temp_coeff_V_C$$, relative current temperature coefficient $$current_temp_coeff_per_C$$ and logarithmic irradiance coefficient $$voltage_log_coefficient_V$$.",
+      "condition": "math.isfinite(voltage_temp_coeff_V_C) and math.isfinite(current_temp_coeff_per_C) and voltage_log_coefficient_V >= 0",
+      "affected": [
+        "mppt-array",
+        "mppt-converter"
+      ],
+      "sources": [],
+      "origin": "framework/requirements-ui/analyses/README.md",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: framework/requirements-ui/analyses/README.md.",
+      "parameters": {
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": "-0.02",
+        "current_temp_coeff_per_C": "0.0005",
+        "voltage_log_coefficient_V": "0.25",
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": null,
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": null,
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "altitude_km": null,
+        "earthRadius_km": null,
+        "gravitationalParameter_km3_s2": null,
+        "orbit_period_s": null,
+        "horizon_angle_rad": null,
+        "sunlight_s": null,
+        "eclipse_s": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": null
+      }
+    },
+    {
+      "key": "8332aad6-2d5b-4c66-8224-6f819434a9b4",
+      "id": "MPT003",
+      "context": "mppt-eps",
+      "kind": "Requirement",
+      "text": "The tracker shall be assessed for $$duration_s$$ with a change at $$change_time_s$$ from irradiance $$irradiance_start_W_m2$$ and temperature $$temperature_start_C$$ to irradiance $$irradiance_end_W_m2$$ and temperature $$temperature_end_C$$.",
+      "condition": "duration_s > 0 and 0 <= change_time_s <= duration_s and irradiance_start_W_m2 >= 0 and irradiance_end_W_m2 >= 0 and temperature_start_C > -273.15 and temperature_end_C > -273.15",
+      "affected": [
+        "mppt-array",
+        "mppt-converter"
+      ],
+      "sources": [
+        "8141e5da-0157-45ed-bbf9-1d98972d997a"
+      ],
+      "origin": "framework/requirements-ui/analyses/README.md",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: framework/requirements-ui/analyses/README.md. Initial irradiance uses the illumination maximum and final irradiance uses its interval mean. These are two constant test levels. They do not replay the orbital time history.",
+      "parameters": {
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": "120",
+        "change_time_s": "60",
+        "irradiance_start_W_m2": "SCR002.max_irradiance_W_m2",
+        "temperature_start_C": "28",
+        "irradiance_end_W_m2": "SCR002.mean_irradiance_W_m2",
+        "temperature_end_C": "50",
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": null,
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": null,
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "altitude_km": null,
+        "earthRadius_km": null,
+        "gravitationalParameter_km3_s2": null,
+        "orbit_period_s": null,
+        "horizon_angle_rad": null,
+        "sunlight_s": null,
+        "eclipse_s": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": null
+      }
+    },
+    {
+      "key": "c3647501-7e58-4bbc-910c-ca6738d73979",
+      "id": "MPT004",
+      "context": "mppt-eps",
+      "kind": "Requirement",
+      "text": "The tracker shall perturb voltage by $$voltage_step_V$$ every $$sample_period_s$$ from initial voltage $$initial_voltage_V$$.",
+      "condition": "voltage_step_V > 0 and sample_period_s > 0 and initial_voltage_V > 0",
+      "affected": [
+        "mppt-array",
+        "mppt-converter"
+      ],
+      "sources": [],
+      "origin": "framework/requirements-ui/analyses/README.md",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: framework/requirements-ui/analyses/README.md.",
+      "parameters": {
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": "0.05",
+        "sample_period_s": "0.1",
+        "initial_voltage_V": "3",
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": null,
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": null,
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "altitude_km": null,
+        "earthRadius_km": null,
+        "gravitationalParameter_km3_s2": null,
+        "orbit_period_s": null,
+        "horizon_angle_rad": null,
+        "sunlight_s": null,
+        "eclipse_s": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": null
+      }
+    },
+    {
+      "key": "d531f2cd-989d-4a4c-82f1-9337611a19e9",
+      "id": "MPT005",
+      "context": "mppt-eps",
+      "kind": "Requirement",
+      "text": "The source maximum power voltage shall remain within the tracking interval from $$tracking_min_V$$ to $$tracking_max_V$$ during illuminated phases.",
+      "condition": "",
+      "affected": [
+        "mppt-array",
+        "mppt-converter"
+      ],
+      "sources": [
+        "423f87be-1b5b-44ff-acc3-7f30a8e9efb8",
+        "ce362073-afd5-4336-bad3-6c22ca72d783",
+        "8332aad6-2d5b-4c66-8224-6f819434a9b4",
+        "c3647501-7e58-4bbc-910c-ca6738d73979"
+      ],
+      "origin": "framework/requirements-ui/analyses/README.md",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: framework/requirements-ui/analyses/README.md.",
+      "parameters": {
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": "2",
+        "tracking_max_V": "8",
+        "input_absolute_max_V": null,
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": null,
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "altitude_km": null,
+        "earthRadius_km": null,
+        "gravitationalParameter_km3_s2": null,
+        "orbit_period_s": null,
+        "horizon_angle_rad": null,
+        "sunlight_s": null,
+        "eclipse_s": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": null
+      },
+      "verifications": [
+        {
+          "key": "analysis",
+          "condition": "0 < tracking_min_V < tracking_max_V and SCR001.min_mpp_voltage_V >= tracking_min_V and SCR001.max_mpp_voltage_V <= tracking_max_V",
+          "script": "5312dbbe-96b7-4afb-869c-30e94c6ca4ac"
+        }
+      ]
+    },
+    {
+      "key": "d642f55c-852a-4808-ae7d-27d9dcc526e3",
+      "id": "MPT006",
+      "context": "mppt-eps",
+      "kind": "Requirement",
+      "text": "The source open circuit voltage shall remain at most $$input_absolute_max_V$$.",
+      "condition": "",
+      "affected": [
+        "mppt-array",
+        "mppt-converter"
+      ],
+      "sources": [
+        "423f87be-1b5b-44ff-acc3-7f30a8e9efb8",
+        "ce362073-afd5-4336-bad3-6c22ca72d783",
+        "8332aad6-2d5b-4c66-8224-6f819434a9b4",
+        "c3647501-7e58-4bbc-910c-ca6738d73979"
+      ],
+      "origin": "framework/requirements-ui/analyses/README.md",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: framework/requirements-ui/analyses/README.md.",
+      "parameters": {
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": "9",
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": null,
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "altitude_km": null,
+        "earthRadius_km": null,
+        "gravitationalParameter_km3_s2": null,
+        "orbit_period_s": null,
+        "horizon_angle_rad": null,
+        "sunlight_s": null,
+        "eclipse_s": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": null
+      },
+      "verifications": [
+        {
+          "key": "analysis",
+          "condition": "input_absolute_max_V > 0 and SCR001.max_open_circuit_voltage_V <= input_absolute_max_V",
+          "script": "5312dbbe-96b7-4afb-869c-30e94c6ca4ac"
+        }
+      ]
+    },
+    {
+      "key": "a5f9e459-875f-4a8a-a52e-e0a608ac9189",
+      "id": "MPT007",
+      "context": "mppt-eps",
+      "kind": "Requirement",
+      "text": "The source short circuit current shall remain at most $$source_current_limit_A$$.",
+      "condition": "",
+      "affected": [
+        "mppt-array",
+        "mppt-converter"
+      ],
+      "sources": [
+        "423f87be-1b5b-44ff-acc3-7f30a8e9efb8",
+        "ce362073-afd5-4336-bad3-6c22ca72d783",
+        "8332aad6-2d5b-4c66-8224-6f819434a9b4",
+        "c3647501-7e58-4bbc-910c-ca6738d73979"
+      ],
+      "origin": "framework/requirements-ui/analyses/README.md",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: framework/requirements-ui/analyses/README.md.",
+      "parameters": {
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": null,
+        "source_current_limit_A": "1.2",
+        "tracking_efficiency_min": null,
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "altitude_km": null,
+        "earthRadius_km": null,
+        "gravitationalParameter_km3_s2": null,
+        "orbit_period_s": null,
+        "horizon_angle_rad": null,
+        "sunlight_s": null,
+        "eclipse_s": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": null
+      },
+      "verifications": [
+        {
+          "key": "analysis",
+          "condition": "source_current_limit_A > 0 and SCR001.max_short_circuit_current_A <= source_current_limit_A",
+          "script": "5312dbbe-96b7-4afb-869c-30e94c6ca4ac"
+        }
+      ]
+    },
+    {
+      "key": "e01c020a-0813-4a11-a628-4d6433cb78e4",
+      "id": "MPT008",
+      "context": "mppt-eps",
+      "kind": "Requirement",
+      "text": "The tracker shall capture at least fraction $$tracking_efficiency_min$$ of the energy attainable within its tracking interval.",
+      "condition": "",
+      "affected": [
+        "mppt-array",
+        "mppt-converter"
+      ],
+      "sources": [
+        "423f87be-1b5b-44ff-acc3-7f30a8e9efb8",
+        "ce362073-afd5-4336-bad3-6c22ca72d783",
+        "8332aad6-2d5b-4c66-8224-6f819434a9b4",
+        "c3647501-7e58-4bbc-910c-ca6738d73979"
+      ],
+      "origin": "framework/requirements-ui/analyses/README.md",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: framework/requirements-ui/analyses/README.md.",
+      "parameters": {
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": null,
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": "0.95",
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "altitude_km": null,
+        "earthRadius_km": null,
+        "gravitationalParameter_km3_s2": null,
+        "orbit_period_s": null,
+        "horizon_angle_rad": null,
+        "sunlight_s": null,
+        "eclipse_s": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": null
+      },
+      "verifications": [
+        {
+          "key": "analysis",
+          "condition": "0 < tracking_efficiency_min <= 1 and SCR001.tracking_efficiency >= tracking_efficiency_min",
+          "script": "5312dbbe-96b7-4afb-869c-30e94c6ca4ac"
+        }
+      ]
+    },
+    {
+      "key": "aa895b2f-5399-4a07-8bf1-585c9fb80be8",
+      "id": "MPT009",
+      "context": "mppt-eps",
+      "kind": "Requirement",
+      "text": "The tracker shall settle within $$settling_limit_s$$ to relative power error at most $$settling_relative_band$$ for at least $$settling_hold_s$$ through the end of each illuminated phase.",
+      "condition": "",
+      "affected": [
+        "mppt-array",
+        "mppt-converter"
+      ],
+      "sources": [
+        "423f87be-1b5b-44ff-acc3-7f30a8e9efb8",
+        "ce362073-afd5-4336-bad3-6c22ca72d783",
+        "8332aad6-2d5b-4c66-8224-6f819434a9b4",
+        "c3647501-7e58-4bbc-910c-ca6738d73979"
+      ],
+      "origin": "framework/requirements-ui/analyses/README.md",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: framework/requirements-ui/analyses/README.md.",
+      "parameters": {
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": null,
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": null,
+        "settling_limit_s": "15",
+        "settling_relative_band": "0.02",
+        "settling_hold_s": "5",
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "altitude_km": null,
+        "earthRadius_km": null,
+        "gravitationalParameter_km3_s2": null,
+        "orbit_period_s": null,
+        "horizon_angle_rad": null,
+        "sunlight_s": null,
+        "eclipse_s": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": null
+      },
+      "verifications": [
+        {
+          "key": "analysis",
+          "condition": "settling_limit_s >= 0 and 0 < settling_relative_band < 1 and settling_hold_s > 0 and SCR001.settled and SCR001.settling_time_s <= settling_limit_s",
+          "script": "5312dbbe-96b7-4afb-869c-30e94c6ca4ac"
+        }
+      ]
+    },
+    {
+      "key": "726cb322-5865-469a-b859-7bd6f6a325c3",
+      "id": "MPT010",
+      "context": "mppt-eps",
+      "kind": "Requirement",
+      "text": "The conditioning model shall deliver at least $$delivered_energy_min_J$$ over the assessed interval at conversion efficiency $$conversion_efficiency$$.",
+      "condition": "",
+      "affected": [
+        "mppt-array",
+        "mppt-converter"
+      ],
+      "sources": [
+        "423f87be-1b5b-44ff-acc3-7f30a8e9efb8",
+        "ce362073-afd5-4336-bad3-6c22ca72d783",
+        "8332aad6-2d5b-4c66-8224-6f819434a9b4",
+        "c3647501-7e58-4bbc-910c-ca6738d73979"
+      ],
+      "origin": "framework/requirements-ui/analyses/README.md",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: framework/requirements-ui/analyses/README.md.",
+      "parameters": {
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": null,
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": null,
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": "400",
+        "conversion_efficiency": "0.9",
+        "altitude_km": null,
+        "earthRadius_km": null,
+        "gravitationalParameter_km3_s2": null,
+        "orbit_period_s": null,
+        "horizon_angle_rad": null,
+        "sunlight_s": null,
+        "eclipse_s": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": null
+      },
+      "verifications": [
+        {
+          "key": "analysis",
+          "condition": "delivered_energy_min_J >= 0 and 0 < conversion_efficiency <= 1 and SCR001.delivered_energy_J >= delivered_energy_min_J",
+          "script": "5312dbbe-96b7-4afb-869c-30e94c6ca4ac"
+        }
+      ]
+    },
+    {
+      "key": "generic-ORB-OrbitPeriod",
+      "id": "ORB001",
+      "context": "mission",
+      "kind": "Requirement",
+      "definition": "FrameworkRequirements::OrbitPeriod",
+      "origin": "final_report/design-proposal.tex#eq:orbit-period (handpicked-0003, Eqs. 1-4)",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: final_report/design-proposal.tex#eq:orbit-period (handpicked-0003, Eqs. 1-4).",
+      "text": "The preliminary circular orbit shall have period $$orbit_period_s$$ at altitude $$altitude_km$$, using Earth radius $$earthRadius_km$$ and gravitational parameter $$gravitationalParameter_km3_s2$$.",
+      "condition": "(((((altitude_km > 0) and (earthRadius_km > 0)) and (gravitationalParameter_km3_s2 > 0)) and (orbit_period_s > 0)) and (orbit_period_s == ((2 * math.pi) * math.sqrt((((earthRadius_km + altitude_km) ** 3) / gravitationalParameter_km3_s2)))))",
+      "sources": [],
+      "affected": [
+        "test-orbit"
+      ],
+      "parameters": {
+        "altitude_km": "500",
+        "earthRadius_km": "6378",
+        "gravitationalParameter_km3_s2": "398601",
+        "orbit_period_s": "((2 * math.pi) * math.sqrt((((earthRadius_km + altitude_km) ** 3) / gravitationalParameter_km3_s2)))",
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": null,
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": null,
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "horizon_angle_rad": null,
+        "sunlight_s": null,
+        "eclipse_s": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": null
+      }
+    },
+    {
+      "key": "generic-ORB-IlluminationPeriods",
+      "id": "ORB002",
+      "context": "mission",
+      "kind": "Requirement",
+      "definition": "FrameworkRequirements::IlluminationPeriods",
+      "origin": "final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period, eq:eclipse-geometry",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period, eq:eclipse-geometry.",
+      "text": "The preliminary circular orbit at altitude $$altitude_km$$ shall provide $$sunlight_s$$ of sunlight and $$eclipse_s$$ of eclipse per $$orbit_period_s$$ orbit, using Earth radius $$earthRadius_km$$ and horizon angle $$horizon_angle_rad$$.",
+      "condition": "(((((((((altitude_km > 0) and (earthRadius_km > 0)) and (orbit_period_s > 0)) and (sunlight_s > 0)) and (eclipse_s > 0)) and (horizon_angle_rad == math.acos((earthRadius_km / (earthRadius_km + altitude_km))))) and (sunlight_s == ((0.5 + (horizon_angle_rad / math.pi)) * orbit_period_s))) and (eclipse_s == ((0.5 - (horizon_angle_rad / math.pi)) * orbit_period_s))) and (abs(((sunlight_s + eclipse_s) - orbit_period_s)) <= (1e-9 * orbit_period_s)))",
+      "sources": [
+        "generic-ORB-OrbitPeriod"
+      ],
+      "affected": [
+        "test-orbit"
+      ],
+      "parameters": {
+        "altitude_km": "ORB001.altitude_km",
+        "earthRadius_km": "ORB001.earthRadius_km",
+        "orbit_period_s": "ORB001.orbit_period_s",
+        "horizon_angle_rad": "math.acos((earthRadius_km / (earthRadius_km + altitude_km)))",
+        "sunlight_s": "((0.5 + (horizon_angle_rad / math.pi)) * orbit_period_s)",
+        "eclipse_s": "((0.5 - (horizon_angle_rad / math.pi)) * orbit_period_s)",
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": null,
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": null,
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "gravitationalParameter_km3_s2": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": null
+      }
+    },
+    {
+      "key": "generic-ORB-OrbitPeriodClosure",
+      "id": "ORB003",
+      "context": "mission",
+      "kind": "Requirement",
+      "definition": "FrameworkRequirements::OrbitPeriodClosure",
+      "origin": "final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period.",
+      "text": "The positive sunlight and eclipse periods shall sum to $$orbit_period_s$$ within numerical tolerance.",
+      "condition": "((((orbit_period_s > 0) and (sunlight_s > 0)) and (eclipse_s > 0)) and (abs(((sunlight_s + eclipse_s) - orbit_period_s)) <= (1e-9 * orbit_period_s)))",
+      "sources": [
+        "generic-ORB-IlluminationPeriods"
+      ],
+      "affected": [
+        "test-orbit"
+      ],
+      "parameters": {
+        "orbit_period_s": "ORB002.orbit_period_s",
+        "sunlight_s": "ORB002.sunlight_s",
+        "eclipse_s": "ORB002.eclipse_s",
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": null,
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": null,
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "altitude_km": null,
+        "earthRadius_km": null,
+        "gravitationalParameter_km3_s2": null,
+        "horizon_angle_rad": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": null
+      }
+    },
+    {
+      "key": "ec6d7d7b-5b45-408d-9b94-4405f59747f8",
+      "id": "SCN001",
+      "context": "mission",
+      "kind": "Requirement",
+      "text": "The longest total eclipse within the assessed interval shall be at most $$eclipse_limit_s$$.",
+      "condition": "",
+      "affected": [
+        "test-orbit"
+      ],
+      "sources": [
+        "generic-ORB-OrbitPeriod"
+      ],
+      "origin": "framework/requirements-ui/analyses/README.md",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: framework/requirements-ui/analyses/README.md.",
+      "parameters": {
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": null,
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": null,
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "altitude_km": null,
+        "earthRadius_km": null,
+        "gravitationalParameter_km3_s2": null,
+        "orbit_period_s": null,
+        "horizon_angle_rad": null,
+        "sunlight_s": null,
+        "eclipse_s": null,
+        "eclipse_limit_s": "2400",
+        "irradiance_min_W_m2": null
+      },
+      "verifications": [
+        {
+          "key": "analysis",
+          "condition": "eclipse_limit_s >= 0 and SCR002.longest_eclipse_s <= eclipse_limit_s",
+          "script": "4408f958-beec-4f4d-88d8-6a20c0f4d2ed"
+        }
+      ]
+    },
+    {
+      "key": "8141e5da-0157-45ed-bbf9-1d98972d997a",
+      "id": "SCN002",
+      "context": "mission",
+      "kind": "Requirement",
+      "text": "The assessed panel section shall receive interval mean direct irradiance of at least $$irradiance_min_W_m2$$.",
+      "condition": "",
+      "affected": [
+        "test-orbit"
+      ],
+      "sources": [
+        "generic-ORB-OrbitPeriod"
+      ],
+      "origin": "framework/requirements-ui/analyses/README.md",
+      "rationale": "Synthetic test bench. Values and acceptance limits are illustrative test data. See analyses/README.md for the model and test setup. Equation or criterion basis: framework/requirements-ui/analyses/README.md.",
+      "parameters": {
+        "voc_ref_V": null,
+        "isc_ref_A": null,
+        "vmp_ref_V": null,
+        "imp_ref_A": null,
+        "reference_irradiance_W_m2": null,
+        "reference_temperature_C": null,
+        "voltage_temp_coeff_V_C": null,
+        "current_temp_coeff_per_C": null,
+        "voltage_log_coefficient_V": null,
+        "duration_s": null,
+        "change_time_s": null,
+        "irradiance_start_W_m2": null,
+        "temperature_start_C": null,
+        "irradiance_end_W_m2": null,
+        "temperature_end_C": null,
+        "voltage_step_V": null,
+        "sample_period_s": null,
+        "initial_voltage_V": null,
+        "tracking_min_V": null,
+        "tracking_max_V": null,
+        "input_absolute_max_V": null,
+        "source_current_limit_A": null,
+        "tracking_efficiency_min": null,
+        "settling_limit_s": null,
+        "settling_relative_band": null,
+        "settling_hold_s": null,
+        "delivered_energy_min_J": null,
+        "conversion_efficiency": null,
+        "altitude_km": null,
+        "earthRadius_km": null,
+        "gravitationalParameter_km3_s2": null,
+        "orbit_period_s": null,
+        "horizon_angle_rad": null,
+        "sunlight_s": null,
+        "eclipse_s": null,
+        "eclipse_limit_s": null,
+        "irradiance_min_W_m2": "800"
+      },
+      "verifications": [
+        {
+          "key": "analysis",
+          "condition": "irradiance_min_W_m2 >= 0 and SCR002.mean_irradiance_W_m2 >= irradiance_min_W_m2",
+          "script": "4408f958-beec-4f4d-88d8-6a20c0f4d2ed"
+        }
+      ]
+    }
+  ],
+  "components": [],
+  "scripts": [
+    {
+      "key": "5312dbbe-96b7-4afb-869c-30e94c6ca4ac",
+      "id": "SCR001",
+      "name": "MPPT perturb and observe",
+      "definition": "mppt_po",
+      "revision": "011103331f21e13ce3ef5b4b5512168ac36a43fbea3dd6c68f2990812203911a",
+      "inputs": [
+        {
+          "name": "voc_ref_V",
+          "type": "float",
+          "unit": "V"
+        },
+        {
+          "name": "isc_ref_A",
+          "type": "float",
+          "unit": "A"
+        },
+        {
+          "name": "vmp_ref_V",
+          "type": "float",
+          "unit": "V"
+        },
+        {
+          "name": "imp_ref_A",
+          "type": "float",
+          "unit": "A"
+        },
+        {
+          "name": "reference_irradiance_W_m2",
+          "type": "float",
+          "unit": "W/m**2"
+        },
+        {
+          "name": "reference_temperature_C",
+          "type": "float",
+          "unit": "degC"
+        },
+        {
+          "name": "voltage_temp_coeff_V_C",
+          "type": "float",
+          "unit": "V/degC"
+        },
+        {
+          "name": "current_temp_coeff_per_C",
+          "type": "float",
+          "unit": "1/degC"
+        },
+        {
+          "name": "voltage_log_coefficient_V",
+          "type": "float",
+          "unit": "V"
+        },
+        {
+          "name": "irradiance_start_W_m2",
+          "type": "float",
+          "unit": "W/m**2"
+        },
+        {
+          "name": "irradiance_end_W_m2",
+          "type": "float",
+          "unit": "W/m**2"
+        },
+        {
+          "name": "temperature_start_C",
+          "type": "float",
+          "unit": "degC"
+        },
+        {
+          "name": "temperature_end_C",
+          "type": "float",
+          "unit": "degC"
+        },
+        {
+          "name": "change_time_s",
+          "type": "float",
+          "unit": "s"
+        },
+        {
+          "name": "duration_s",
+          "type": "float",
+          "unit": "s"
+        },
+        {
+          "name": "sample_period_s",
+          "type": "float",
+          "unit": "s"
+        },
+        {
+          "name": "voltage_step_V",
+          "type": "float",
+          "unit": "V"
+        },
+        {
+          "name": "initial_voltage_V",
+          "type": "float",
+          "unit": "V"
+        },
+        {
+          "name": "tracking_min_V",
+          "type": "float",
+          "unit": "V"
+        },
+        {
+          "name": "tracking_max_V",
+          "type": "float",
+          "unit": "V"
+        },
+        {
+          "name": "conversion_efficiency",
+          "type": "float"
+        },
+        {
+          "name": "settling_relative_band",
+          "type": "float"
+        },
+        {
+          "name": "settling_hold_s",
+          "type": "float",
+          "unit": "s"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "available_energy_J",
+          "type": "float",
+          "unit": "J"
+        },
+        {
+          "name": "attainable_energy_J",
+          "type": "float",
+          "unit": "J"
+        },
+        {
+          "name": "tracked_energy_J",
+          "type": "float",
+          "unit": "J"
+        },
+        {
+          "name": "delivered_energy_J",
+          "type": "float",
+          "unit": "J"
+        },
+        {
+          "name": "tracking_efficiency",
+          "type": "float"
+        },
+        {
+          "name": "capture_efficiency",
+          "type": "float"
+        },
+        {
+          "name": "min_mpp_voltage_V",
+          "type": "float",
+          "unit": "V"
+        },
+        {
+          "name": "max_mpp_voltage_V",
+          "type": "float",
+          "unit": "V"
+        },
+        {
+          "name": "max_open_circuit_voltage_V",
+          "type": "float",
+          "unit": "V"
+        },
+        {
+          "name": "max_short_circuit_current_A",
+          "type": "float",
+          "unit": "A"
+        },
+        {
+          "name": "min_operating_voltage_V",
+          "type": "float",
+          "unit": "V"
+        },
+        {
+          "name": "max_operating_voltage_V",
+          "type": "float",
+          "unit": "V"
+        },
+        {
+          "name": "max_input_current_A",
+          "type": "float",
+          "unit": "A"
+        },
+        {
+          "name": "settled",
+          "type": "boolean"
+        },
+        {
+          "name": "settling_time_s",
+          "type": "float",
+          "unit": "s"
+        },
+        {
+          "name": "max_power_error_fraction",
+          "type": "float"
+        },
+        {
+          "name": "sample_count",
+          "type": "integer"
+        },
+        {
+          "name": "voltage_reversals",
+          "type": "integer"
+        }
+      ],
+      "parameters": {
+        "voc_ref_V": "MPT001.voc_ref_V",
+        "isc_ref_A": "MPT001.isc_ref_A",
+        "vmp_ref_V": "MPT001.vmp_ref_V",
+        "imp_ref_A": "MPT001.imp_ref_A",
+        "reference_irradiance_W_m2": "MPT001.reference_irradiance_W_m2",
+        "reference_temperature_C": "MPT001.reference_temperature_C",
+        "voltage_temp_coeff_V_C": "MPT002.voltage_temp_coeff_V_C",
+        "current_temp_coeff_per_C": "MPT002.current_temp_coeff_per_C",
+        "voltage_log_coefficient_V": "MPT002.voltage_log_coefficient_V",
+        "irradiance_start_W_m2": "MPT003.irradiance_start_W_m2",
+        "irradiance_end_W_m2": "MPT003.irradiance_end_W_m2",
+        "temperature_start_C": "MPT003.temperature_start_C",
+        "temperature_end_C": "MPT003.temperature_end_C",
+        "change_time_s": "MPT003.change_time_s",
+        "duration_s": "MPT003.duration_s",
+        "sample_period_s": "MPT004.sample_period_s",
+        "voltage_step_V": "MPT004.voltage_step_V",
+        "initial_voltage_V": "MPT004.initial_voltage_V",
+        "tracking_min_V": "MPT005.tracking_min_V",
+        "tracking_max_V": "MPT005.tracking_max_V",
+        "conversion_efficiency": "MPT010.conversion_efficiency",
+        "settling_relative_band": "MPT009.settling_relative_band",
+        "settling_hold_s": "MPT009.settling_hold_s"
+      }
+    },
+    {
+      "key": "4408f958-beec-4f4d-88d8-6a20c0f4d2ed",
+      "id": "SCR002",
+      "name": "Orbit illumination scenario",
+      "definition": "scenario_illumination",
+      "revision": "389d79b166e6b2cb7b4f781e5443474e7597f484bf7ea98dc20ea28aea5630ee",
+      "inputs": [
+        {
+          "name": "altitude_km",
+          "type": "float",
+          "unit": "km"
+        },
+        {
+          "name": "earth_radius_km",
+          "type": "float",
+          "unit": "km"
+        },
+        {
+          "name": "mu_km3_s2",
+          "type": "float",
+          "unit": "km**3/s**2"
+        },
+        {
+          "name": "inclination_deg",
+          "type": "float",
+          "unit": "deg"
+        },
+        {
+          "name": "raan_deg",
+          "type": "float",
+          "unit": "deg"
+        },
+        {
+          "name": "argument_latitude_deg",
+          "type": "float",
+          "unit": "deg"
+        },
+        {
+          "name": "epoch_jd",
+          "type": "float",
+          "unit": "JD"
+        },
+        {
+          "name": "duration_s",
+          "type": "float",
+          "unit": "s"
+        },
+        {
+          "name": "step_s",
+          "type": "float",
+          "unit": "s"
+        },
+        {
+          "name": "earth_j2",
+          "type": "float"
+        },
+        {
+          "name": "solar_constant_W_m2",
+          "type": "float",
+          "unit": "W/m**2"
+        },
+        {
+          "name": "panel_normal_radial",
+          "type": "float"
+        },
+        {
+          "name": "panel_normal_along",
+          "type": "float"
+        },
+        {
+          "name": "panel_normal_cross",
+          "type": "float"
+        },
+        {
+          "name": "sun_tracking",
+          "type": "boolean"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "orbit_period_s",
+          "type": "float",
+          "unit": "s"
+        },
+        {
+          "name": "sunlight_s",
+          "type": "float",
+          "unit": "s"
+        },
+        {
+          "name": "eclipse_s",
+          "type": "float",
+          "unit": "s"
+        },
+        {
+          "name": "penumbra_s",
+          "type": "float",
+          "unit": "s"
+        },
+        {
+          "name": "longest_eclipse_s",
+          "type": "float",
+          "unit": "s"
+        },
+        {
+          "name": "sunlit_fraction",
+          "type": "float"
+        },
+        {
+          "name": "min_beta_deg",
+          "type": "float",
+          "unit": "deg"
+        },
+        {
+          "name": "max_beta_deg",
+          "type": "float",
+          "unit": "deg"
+        },
+        {
+          "name": "min_irradiance_W_m2",
+          "type": "float",
+          "unit": "W/m**2"
+        },
+        {
+          "name": "max_irradiance_W_m2",
+          "type": "float",
+          "unit": "W/m**2"
+        },
+        {
+          "name": "mean_irradiance_W_m2",
+          "type": "float",
+          "unit": "W/m**2"
+        },
+        {
+          "name": "incident_energy_J_m2",
+          "type": "float",
+          "unit": "J/m**2"
+        },
+        {
+          "name": "sample_count",
+          "type": "integer"
+        }
+      ],
+      "parameters": {
+        "altitude_km": "ORB001.altitude_km",
+        "earth_radius_km": "ORB001.earthRadius_km",
+        "mu_km3_s2": "ORB001.gravitationalParameter_km3_s2",
+        "inclination_deg": "0",
+        "raan_deg": "0",
+        "argument_latitude_deg": "0",
+        "epoch_jd": "2460754.5",
+        "duration_s": "2 * ORB001.orbit_period_s",
+        "step_s": "2",
+        "earth_j2": "0.00108263",
+        "solar_constant_W_m2": "1361",
+        "panel_normal_radial": "1",
+        "panel_normal_along": "0",
+        "panel_normal_cross": "0",
+        "sun_tracking": "True"
+      }
+    }
+  ],
+  "power": {
+    "modes": [],
+    "loads": [],
+    "links": []
+  }
+}

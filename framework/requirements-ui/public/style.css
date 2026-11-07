@@ -205,7 +205,7 @@ select[data-category="Ground Segment"] { color: #3d6b44; }
 .verification-frame table { min-width: 580px; }
 .verification-source-col { width: 165px; }
 .verification-result-col { width: 85px; }
-#requirement-verification [data-method-field="condition"], #requirement-condition { display: block; width: 100%; min-height: var(--row-height); padding: 10px; border: 0; border-radius: 0; background: transparent; font: 12px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; }
+#requirement-verification [data-method-field="condition"], #requirement-condition { display: block; width: 100%; height: auto; min-height: var(--row-height); padding: 10px; border: 0; border-radius: 0; background: transparent; font: 12px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; }
 .verification-method-result { display: block; padding: 10px; font-size: 11px; color: #997a42; }
 [data-method-key][data-state="pass"] .verification-method-result { color: #2e6b3c; }
 [data-method-key][data-state="fail"] .verification-method-result { color: #b43f31; }
@@ -285,5 +285,45 @@ td.element-name-cell > input { padding-right: 38px; }
 @media (max-width: 900px) {
   .power-editor-open .workspace { margin-right: 0; height: calc((100dvh - var(--session-toolbar-height) - 46px) * 0.44); min-height: 0; overflow: auto; padding: 16px; }
   #power-editor { inset: calc(var(--session-toolbar-height) + (100dvh - var(--session-toolbar-height) - 46px) * 0.44) 0 46px; width: auto; border-left: 0; border-top: 1px solid #b5c5bb; }
+}
+#cots-editor { position: fixed; z-index: 32; inset: var(--session-toolbar-height) 0 46px auto; width: var(--requirement-pane-width); border-left: 1px solid #b5c5bb; background: #fff; box-shadow: -4px 0 18px #26342b10; }
+#cots-editor > form { display: flex; flex-direction: column; height: 100%; }
+#cots-editor h3 { margin: 20px 0 8px; font-size: 14px; }
+#cots-editor .table-top h3 { margin: 0; padding: 0 16px; white-space: nowrap; }
+#cots-editor p { margin: 10px 0; font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
+#cots-editor a, .reference-link { color: #386254; }
+#cots-editor .muted { color: #637568; font-size: 11px; }
+.cots-fact-frame tbody th { padding: 10px 12px; }
+.cots-fact-frame tbody th .muted { display: block; margin-top: 6px; }
+.cots-fact-frame table { min-width: 990px; }
+.cots-reference-frame table { min-width: 820px; }
+.cots-name-col { width: 180px; }
+.cots-record-col { width: 260px; }
+.cots-value-col { width: 120px; }
+.cots-uses-col { width: 110px; }
+.cots-actions-col { width: 150px; }
+.cots-property-col { width: 210px; }
+.cots-meaning-col { width: 100px; }
+.cots-condition-col { width: 230px; }
+.cots-source-col { width: 220px; }
+.cots-reference-frame td input { height: auto; }
+.cots-qualified, .cots-reference-status { display: block; padding: 0 12px 10px; font-size: 11px; overflow-wrap: anywhere; }
+.cots-reference-status { color: #997a42; }
+.cots-reference-status:empty { display: none; }
+.cots-search { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.cots-search input { flex: 1; min-width: 0; padding: 9px 10px; border: 1px solid #b5c5bb; border-radius: 4px; }
+.cots-search button { flex-shrink: 0; margin: 0; }
+[data-cots-error] { flex: 1; color: #a03e2e; }
+.reference-link { border: 0; padding: 3px 5px; background: none; font-size: 11px; cursor: pointer; overflow-wrap: anywhere; }
+.reference-link:hover { text-decoration: underline; }
+.cots-back { margin-top: 12px; }
+.cots-expression-links { display: flex; flex-wrap: wrap; padding: 0 6px 5px; gap: 4px; }
+.cots-expression-links:empty { display: none; }
+.cots-product-cell > select { padding-right: 62px; background-position: right 40px center; }
+.cots-editor-open .workspace { margin-right: var(--requirement-pane-width); grid-template-columns: minmax(0, 1fr); padding: 24px 24px 80px; gap: 24px; }
+.cots-editor-open .stakeholders { width: min(100%, 520px); }
+@media (max-width: 900px) {
+  .cots-editor-open .workspace { margin-right: 0; height: calc((100dvh - var(--session-toolbar-height) - 46px) * 0.44); min-height: 0; overflow: auto; padding: 16px; }
+  #cots-editor { inset: calc(var(--session-toolbar-height) + (100dvh - var(--session-toolbar-height) - 46px) * 0.44) 0 46px; width: auto; border-left: 0; border-top: 1px solid #b5c5bb; }
 }
 @media (prefers-reduced-motion: no-preference) { button { transition: background-color 120ms ease; } }

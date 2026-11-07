@@ -8,8 +8,9 @@ import sys
 # added, never a workspace or user-supplied module search path.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from evaluation import evaluate, script_inputs
-from models import Pending
+from models import Pending, Workspace
 from catalog import catalog, assess_requirement
+from cots_data import product_facts
 
 MAX_REQUEST = 8 * 1024 * 1024
 
@@ -39,6 +40,10 @@ def main():
                 result = evaluate(request)
             elif operation == "script_inputs":
                 result = script_inputs(request)
+            elif operation == 'cots_facts':
+                result = product_facts(request.get('product'))
+            elif operation == 'cots_context':
+                result = {'signature': Workspace.read(request.get('workspace')).cots_signature}
             elif operation == "catalog":
                 result = catalog()
             elif operation == "catalog_assessment":

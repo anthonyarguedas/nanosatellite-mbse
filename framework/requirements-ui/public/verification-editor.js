@@ -5,11 +5,12 @@ import { parameterValueHTML } from '/requirement-preview.js';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const blank = () => ({ key: crypto.randomUUID(), condition: '' });
+const hasMethod = method => Boolean(method.condition.trim() || method.script || method.component);
 const label = state => ({ pass: 'TRUE', fail: 'FALSE', pending: 'PENDING', error: 'ERROR', unset: '' })[state] ?? '';
 const trash = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12M8 3h4M6 5l1 12h6l1-12M9 8v6M11 8v6"/></svg>';
 
 export function createVerificationEditor({ container, getWorkspace, getRow, snapshot, onChange, onError,
-  getScriptResults, onScriptResults, getScriptInputs }) {
+  getScriptResults, onScriptResults, getScriptInputs, getProducts = () => [] }) {
   const table = container.querySelector('[data-method-table]');
   const library = container.querySelector('[data-script-library]');
   const scriptList = container.querySelector('[data-script-list]');
@@ -27,18 +28,24 @@ export function createVerificationEditor({ container, getWorkspace, getRow, snap
   };
   function renderMethods(force = false) {
     if (!active) return;
-    const populated = methods.filter(method => method.condition.trim() || method.script);
-    const empty = methods.find(method => !method.condition.trim() && !method.script) ?? blank();
+    const populated = methods.filter(hasMethod);
+    const empty = methods.find(method => !hasMethod(method)) ?? blank();
     methods = [...populated, ...(populated.length < 32 ? [empty] : [])];
     const scripts = workspace().scripts;
-    const signature = JSON.stringify([methods.map(({ key, script }) => ({ key, script })), scripts.map(({ key, id, name }) => ({ key, id, name }))]);
+    const components = workspace().components.filter(component => component.id && component.product);
+    const signature = JSON.stringify([methods.map(({ key, script, component }) => ({ key, script, component })), scripts.map(({ key, id, name }) => ({ key, id, name })), components.map(({ key, id, product }) => ({ key, id, product }))]);
     if (!force && columns === signature) return;
     columns = signature;
     const focused = document.activeElement, key = focused?.closest('[data-method-key]')?.dataset.methodKey;
     const field = focused?.dataset.methodField;
     const selection = typeof focused?.selectionStart === 'number' ? [focused.selectionStart, focused.selectionEnd] : null;
     table.innerHTML = '<colgroup><col class="row-actions-col"><col class="verification-source-col"><col><col class="verification-result-col"></colgroup><thead><tr><th class="row-actions-heading" aria-label="Row actions"></th><th scope="col">Values from</th><th scope="col">Python condition</th><th scope="col">Result</th></tr></thead><tbody>'
-      + methods.map((method, index) => `<tr data-method-key="${method.key}"><td class="row-actions"><button type="button" class="row-delete" data-remove-method="${method.key}" aria-label="Delete verification method ${index + 1}" title="Delete row" ${method.condition.trim() || method.script ? '' : 'disabled'}>${trash}</button></td><td><select data-method-field="script" aria-label="Values for verification method ${index + 1}"><option value="">Requirement values</option>${scripts.map(script => `<option value="${script.key}" ${method.script === script.key ? 'selected' : ''}>${escape(script.id)} · ${escape(script.name)}</option>`).join('')}</select>${method.script ? `<button type="button" class="verification-run cell-button" data-run-script="${method.script}" aria-label="Run ${escape(scripts.find(script => script.key === method.script)?.id)}">Run Python</button>` : ''}</td><td><input ${index === 0 ? 'id="requirement-condition"' : ''} data-method-field="condition" aria-label="${index === 0 ? 'Verification condition' : `Verification condition ${index + 1}`}" maxlength="5000" spellcheck="false" autocomplete="off" value="${escape(method.condition)}" placeholder="${method.script ? `${escape(scripts.find(script => script.key === method.script)?.id)}.output <= limit` : 'energy_J >= REQ001.energy_J'}"><span class="verification-message" hidden></span></td><td><span class="verification-method-result" role="status"></span></td></tr>`).join('') + '</tbody>';
+      + methods.map((method, index) => {
+        const component = components.find(component => component.key === method.component);
+        const options = scripts.map(script => `<option value="${script.key}" ${method.script === script.key ? 'selected' : ''}>${escape(script.id)} · ${escape(script.name)}</option>`).join('')
+          + components.map(part => `<option value="cots:${part.key}" ${method.component === part.key ? 'selected' : ''}>${escape(part.id)} · ${escape(getProducts().find(product => product.id === part.product)?.name ?? part.product)}</option>`).join('');
+        return `<tr data-method-key="${method.key}"><td class="row-actions"><button type="button" class="row-delete" data-remove-method="${method.key}" aria-label="Delete verification method ${index + 1}" title="Delete row" ${hasMethod(method) ? '' : 'disabled'}>${trash}</button></td><td><select data-method-field="script" aria-label="Values for verification method ${index + 1}"><option value="">Requirement values</option>${options}</select>${method.script ? `<button type="button" class="verification-run cell-button" data-run-script="${method.script}" aria-label="Run ${escape(scripts.find(script => script.key === method.script)?.id)}">Run Python</button>` : ''}${component ? `<button type="button" class="reference-link" data-inspect-cots="${component.key}">Inspect ${escape(component.id)}</button>` : ''}</td><td><input ${index === 0 ? 'id="requirement-condition"' : ''} data-method-field="condition" aria-label="${index === 0 ? 'Verification condition' : `Verification condition ${index + 1}`}" maxlength="5000" spellcheck="false" autocomplete="off" value="${escape(method.condition)}" placeholder="${component ? `${escape(component.id)}.fact >= limit` : method.script ? `${escape(scripts.find(script => script.key === method.script)?.id)}.output <= limit` : 'energy_J >= REQ001.energy_J'}"><div data-cots-links class="cots-expression-links"></div><span class="verification-message" hidden></span></td><td><span class="verification-method-result" role="status"></span></td></tr>`;
+      }).join('') + '</tbody>';
     const target = key && field ? table.querySelector(`[data-method-key="${key}"] [data-method-field="${field}"]`) : null;
     if (target) { target.focus({ preventScroll: true }); if (selection) target.setSelectionRange(...selection); }
     container.querySelector('[data-add-method]').disabled = populated.length >= 32;
@@ -48,7 +55,7 @@ export function createVerificationEditor({ container, getWorkspace, getRow, snap
       ...script.outputs.map(output => ({ ...output, direction: 'Output' }))];
     return `<section class="sheet editor-sheet script-parameters" data-script-parameters="${script.key}" aria-label="${escape(script.id)} parameters"><div class="table-top"><h4>${escape(script.id)} parameters</h4></div><div class="table-frame"><table aria-label="${escape(script.id)} parameters"><colgroup><col class="parameter-name-col"><col class="script-direction-col"><col class="script-type-col"><col><col class="parameter-unit-col"><col class="parameter-value-col"></colgroup><thead><tr><th scope="col">Parameter</th><th scope="col">Direction</th><th scope="col">Type</th><th scope="col">Expression</th><th scope="col">Units</th><th scope="col">Evaluated value</th></tr></thead><tbody>${parameters.map(parameter => {
       const input = parameter.direction === 'Input';
-      return `<tr><th scope="row"><code>${input ? '' : `${escape(script.id)}.`}${escape(parameter.name)}</code></th><td class="cell-text">${parameter.direction}</td><td class="cell-text">${escape(parameter.type)}</td><td class="parameter">${input ? `<textarea data-script-input="${parameter.name}" aria-label="${escape(script.id)} ${parameter.name} expression" rows="1" maxlength="5000" spellcheck="false">${escape(script.parameters[parameter.name])}</textarea>` : ''}</td><td class="cell-text"><code>${escape(parameter.unit)}</code></td><td><span ${input ? 'data-script-input-result' : 'data-script-output'}="${parameter.name}" class="parameter-result"></span></td></tr>`;
+      return `<tr><th scope="row"><code>${input ? '' : `${escape(script.id)}.`}${escape(parameter.name)}</code></th><td class="cell-text">${parameter.direction}</td><td class="cell-text">${escape(parameter.type)}</td><td class="parameter">${input ? `<textarea data-script-input="${parameter.name}" aria-label="${escape(script.id)} ${parameter.name} expression" rows="1" maxlength="5000" spellcheck="false">${escape(script.parameters[parameter.name])}</textarea><div data-cots-script-links="${parameter.name}" class="cots-expression-links"></div>` : ''}</td><td class="cell-text"><code>${escape(parameter.unit)}</code></td><td><span ${input ? 'data-script-input-result' : 'data-script-output'}="${parameter.name}" class="parameter-result"></span></td></tr>`;
     }).join('')}</tbody></table></div></section>`;
   }
   function renderScripts() {
@@ -89,8 +96,9 @@ export function createVerificationEditor({ container, getWorkspace, getRow, snap
   table.addEventListener('change', event => {
     if (!active || event.target.dataset.methodField !== 'script') return;
     const method = methods.find(method => method.key === event.target.closest('[data-method-key]').dataset.methodKey);
-    if (event.target.value) method.script = event.target.value;
-    else delete method.script;
+    delete method.script; delete method.component;
+    if (event.target.value.startsWith('cots:')) method.component = event.target.value.slice(5);
+    else if (event.target.value) method.script = event.target.value;
     changed();
   });
   container.addEventListener('click', event => {
@@ -184,13 +192,20 @@ export function createVerificationEditor({ container, getWorkspace, getRow, snap
       if (active && token === lifecycle && error.name !== 'AbortError') { showMessage(error.message); onError(error.message); }
     } finally { if (token === lifecycle) { running = ''; runController = null; update(null); } }
   });
+  function cotsLinks(source) {
+    return [...new Map(expressionReferences(source).map(reference => [`${reference.id}.${reference.name}`, reference])).values()].flatMap(reference => {
+      const component = workspace().components.find(component => component.id === reference.id);
+      return component ? [`<button type="button" class="reference-link" data-inspect-cots="${component.key}" data-cots-name="${escape(reference.name)}">${escape(component.id)}.${escape(reference.name)}</button>`] : [];
+    }).join('');
+  }
   function update(result) {
     if (!active) return;
     currentResult = result;
     for (const tr of table.querySelectorAll('[data-method-key]')) {
       const method = methods.find(method => method.key === tr.dataset.methodKey);
-      const index = methods.filter(method => method.condition.trim() || method.script).findIndex(item => item.key === method.key);
-      const check = result?.methods?.[index] ?? (method.condition.trim() || method.script ? { state: 'pending', message: 'Recalculating…' } : { state: 'unset', message: '' });
+      const index = methods.filter(hasMethod).findIndex(item => item.key === method.key);
+      tr.querySelector('[data-cots-links]').innerHTML = cotsLinks(method.condition);
+      const check = result?.methods?.[index] ?? (hasMethod(method) ? { state: 'pending', message: 'Recalculating…' } : { state: 'unset', message: '' });
       const output = tr.querySelector('.verification-method-result'), error = tr.querySelector('.verification-message');
       tr.dataset.state = check.state; output.textContent = label(check.state); output.title = check.message;
       error.hidden = check.state !== 'error'; error.textContent = check.state === 'error' ? check.message : '';
@@ -212,8 +227,11 @@ export function createVerificationEditor({ container, getWorkspace, getRow, snap
       const element = parameterList.querySelector(`[data-script-parameters="${script.key}"]`);
       const runs = modes.map(mode => fresh ? evidence.runs[runKey(script.key, mode.key)] : null);
       const aggregate = inputResults.get(script.key);
-      for (const input of script.inputs) display(element.querySelector(`[data-script-input-result="${input.name}"]`), modes.map(mode =>
-        (aggregate?.modes?.find(result => result.mode === mode.key) ?? aggregate)?.parameters?.[input.name] ?? { state: 'pending', message: 'Recalculating…' }), input.unit);
+      for (const input of script.inputs) {
+        display(element.querySelector(`[data-script-input-result="${input.name}"]`), modes.map(mode =>
+          (aggregate?.modes?.find(result => result.mode === mode.key) ?? aggregate)?.parameters?.[input.name] ?? { state: 'pending', message: 'Recalculating…' }), input.unit);
+        element.querySelector(`[data-cots-script-links="${input.name}"]`).innerHTML = cotsLinks(script.parameters[input.name]);
+      }
       for (const output of script.outputs) display(element.querySelector(`[data-script-output="${output.name}"]`), runs.map(run => run?.state === 'value'
         ? { state: run.values[output.name] === null ? 'pending' : 'value', value: run.values[output.name] } : { state: run?.state ?? 'pending', message: run?.message }), output.unit);
       const status = scriptList.querySelector(`[data-script-key="${script.key}"] [data-script-status]`);

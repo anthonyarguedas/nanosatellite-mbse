@@ -300,7 +300,7 @@ export function rewriteRowReferences(workspace, renames) {
   }
 }
 
-function mapWorkspaceExpressions(workspace, transform) {
+export function mapWorkspaceExpressions(workspace, transform) {
   for (const row of workspace.statements) {
     row.condition = transform(row.condition);
     for (const method of row.verifications ?? []) method.condition = transform(method.condition);
@@ -454,7 +454,9 @@ export function validateWorkspace(workspace, catalog = domainTypes, products = n
         methodKeys.add(method.key);
         if (typeof method.condition !== 'string' || method.condition.length > 5000 || /[\r\n]/.test(method.condition)) fail(`${row.id}: each verification condition must be one line of expression text, up to 5,000 characters.`);
         if (method.script !== undefined && !workspace.scripts.some(script => script.key === method.script)) fail(`${row.id}: choose an existing script instance for each verification method.`);
-        if (Object.keys(method).some(key => !['key', 'condition', 'script'].includes(key))) fail(`${row.id}: verification results are calculated, never manually assigned.`);
+        if (method.component !== undefined && !workspace.components.some(component => component.key === method.component)) fail(`${row.id}: choose an existing COTS component for each verification method.`);
+        if (method.script !== undefined && method.component !== undefined) fail(`${row.id}: select one value source per verification method.`);
+        if (Object.keys(method).some(key => !['key', 'condition', 'script', 'component'].includes(key))) fail(`${row.id}: verification results are calculated, never manually assigned.`);
       }
     }
     if (!Array.isArray(row.sources) || new Set(row.sources).size !== row.sources.length || row.sources.some(source => !keys.has(source))) fail(`${row.id}: choose existing source rows without duplicates.`);
@@ -478,6 +480,20 @@ export function validateWorkspace(workspace, catalog = domainTypes, products = n
     if (!owner || catalog.find(type => type.model === owner.definition)?.role !== 'eps') fail(`${row.id}: COTS components must belong to an EPS tab.`);
     if (typeof row.product !== 'string' || !/^[a-z0-9_]+$/.test(row.product) || (products && !products.some(product => product.id === row.product))) fail(`${row.id}: choose a component from the COTS catalog.`);
     if (Object.hasOwn(row, 'verified')) fail(`${row.id}: component verification is computed from its affected requirements.`);
+    if (Object.keys(row).some(key => !['key', 'id', 'owner', 'product', 'requirements', 'facts'].includes(key))) fail(`${row.id}: COTS rows store selections, never editable catalogue values or execution results.`);
+    if (row.facts !== undefined) {
+      if (!Array.isArray(row.facts) || row.facts.length > 64) fail(`${row.id}: select up to 64 named COTS fact references.`);
+      const names = new Set(), factKeys = new Set();
+      for (const fact of row.facts) {
+        if (!fact || Object.keys(fact).length !== 6 || Object.keys(fact).some(key => !['key', 'name', 'fact', 'revision', 'type', 'unit'].includes(key))) fail(`${row.id}: fact references store pinned records, never editable values.`);
+        if (typeof fact.key !== 'string' || !/^[a-zA-Z0-9_-]{1,80}$/.test(fact.key) || factKeys.has(fact.key)) fail(`${row.id}: fact references need unique keys.`);
+        if (!validVariableName(fact.name) || fact.name.startsWith('__') || names.has(fact.name)) fail(`${row.id}: fact references need unique, valid parameter names.`);
+        if (![fact.fact, fact.revision].every(value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value))) fail(`${row.id}: select a catalogue fact and pin its revision.`);
+        if (!['float', 'integer', 'boolean', 'string'].includes(fact.type)) fail(`${row.id}: select a typed catalogue fact.`);
+        parameterUnit(fact.unit, fact);
+        names.add(fact.name); factKeys.add(fact.key);
+      }
+    }
     const requirements = new Set(componentRequirements(workspace, row).map(statement => statement.key));
     if (!Array.isArray(row.requirements) || new Set(row.requirements).size !== row.requirements.length || row.requirements.some(key => !requirements.has(key))) fail(`${row.id}: choose requirements from this EPS tab without duplicates.`);
   }

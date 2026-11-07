@@ -124,7 +124,7 @@ export async function runScripts(workspace, key, { directory = defaultScriptDire
       for (let attempt = 0; attempt <= workspace.scripts.length; attempt++) {
         try {
           ({ inputs, requirements } = await worker.request(evaluationRequest(workspace, {
-            operation: 'script_inputs', script: script.key, mode: mode.key, scriptResults: evidence,
+            operation: 'script_inputs', script: script.key, mode: mode.key, scriptResults: evidence, expectedCotsSignature: evidence.cotsSignature ?? null,
           }), { signal, timeout: Math.max(1, deadline - Date.now()) }));
           break;
         } catch (error) {
@@ -149,6 +149,9 @@ export async function runScripts(workspace, key, { directory = defaultScriptDire
     } finally { running.delete(identity); evidence.runs[identity] = result; }
   };
   try {
+    if (workspace.components?.some(component => component.facts?.length)) {
+      evidence.cotsSignature = (await worker.request({ operation: 'cots_context', workspace }, { signal })).signature;
+    }
     for (const mode of modes) await ensure(workspace.scripts.find(script => script.key === key), mode);
     return evidence;
   } finally { if (!evaluator) worker.close(); }

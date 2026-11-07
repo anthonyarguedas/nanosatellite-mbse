@@ -18,58 +18,50 @@ from diagram_style import (Figure, LIGHT, LINE_PATTERNS, render_figure,
 FIG = Path(__file__).resolve().parent
 ROOT = FIG.parent.parent
 BASE = FIG / 'framework-context'
-W, H = 690, 606
-FRAME = (300, 49, 105, 550)
-ACTOR_H = 86
+W, H = 690, 470
+FRAME = (300, 49, 105, 414)
+ACTOR_H = 130
 
 # Exchange groups stay at the system requirements level. Logical ownership
 # remains in the separate architecture figure.
 INTERFACES = [
-    {'id': 'IF-01', 'port': 'p01', 'side': 'left', 'y': 84,
+    {'id': 'IF-01', 'port': 'p01', 'side': 'left', 'y': 100,
      'name': ['Engineering use'], 'actor': 'engineers',
      'actor_labels': ['Engineers and', 'stakeholders'],
-     'in_y': 108, 'out_y': 158,
-     'in_labels': ['Engineering submissions', 'Authorized decisions'],
-     'in_label_y': 79,
-     'out_labels': ['Guidance and products'], 'out_label_y': 149},
-    {'id': 'IF-03', 'port': 'p03', 'side': 'right', 'y': 188,
-     'name': ['Spacecraft simulation', 'coupling'], 'actor': 'tools',
-     'actor_labels': ['NVIDIA', 'Omniverse', 'spacecraft and', 'subsystem', 'simulations'],
-     'in_y': 270, 'out_y': 212,
-     'out_labels': ['Spacecraft models and', 'simulation requests', 'EPS states and', 'feasibility findings'],
-     'out_label_y': 150,
-     'in_labels': ['Spacecraft conditions', 'Feasibility findings', 'Histories and status'],
-     'in_label_y': 228},
-    {'id': 'IF-02', 'port': 'p02', 'side': 'left', 'y': 292,
+     'in_y': 120, 'out_y': 220,
+     'in_labels': ['Expectations and mission', 'Requirement drafts', 'Parameters and changes'],
+     'in_label_y': 77,
+     'out_labels': ['Requirement checks', 'Computed parameters', 'Updated requirements'],
+     'out_label_y': 178},
+    {'id': 'IF-02', 'port': 'p02', 'side': 'right', 'y': 100,
      'name': ['Knowledge and', 'supplied data'], 'actor': 'sources',
      'actor_labels': ['Knowledge and', 'data sources'],
-     'in_y': 316, 'out_y': 366,
-     'in_labels': ['Sources and methods', 'Component properties', 'Reference data'],
-     'in_label_y': 270,
-     'out_labels': ['Source queries'], 'out_label_y': 356},
-    {'id': 'IF-04', 'port': 'p04', 'side': 'right', 'y': 396,
-     'name': ['Host software', 'execution'], 'actor': 'software',
-     'actor_labels': ['F Prime', 'host toolchain'],
-     'in_y': 474, 'out_y': 420,
-     'out_labels': ['Authorized design', 'and interfaces', 'Coding/build/SIL', 'requests'],
-     'out_label_y': 358,
-     'in_labels': ['Host products and logs', 'Raw SIL responses'], 'in_label_y': 442},
-    {'id': 'IF-06', 'port': 'p06', 'side': 'left', 'y': 500,
+     'in_y': 120, 'out_y': 220,
+     'in_labels': ['Component descriptions', 'Parameters and models', 'Reference data'],
+     'in_label_y': 77,
+     'out_labels': ['Source queries'], 'out_label_y': 210},
+    {'id': 'IF-03', 'port': 'p03', 'side': 'left', 'y': 320,
+     'name': ['Simulation coupling'], 'actor': 'tools',
+     'actor_labels': ['Simulation', 'tools'],
+     'out_y': 340, 'in_y': 440,
+     'out_labels': ['Spacecraft models', 'Parameters and states'], 'out_label_y': 314,
+     'in_labels': ['Numerical analysis', 'results'], 'in_label_y': 414},
+    {'id': 'IF-06', 'port': 'p06', 'side': 'right', 'y': 320,
      'name': ['Technical review'], 'actor': 'reviewers',
-     'actor_labels': ['Reviewers and', 'review', 'authority'],
-     'in_y': 524, 'out_y': 578,
-     'in_labels': ['Findings and authorized', 'review decisions'], 'in_label_y': 495,
-     'out_labels': ['Review packages'], 'out_label_y': 566},
+     'actor_labels': ['Reviewers'],
+     'out_y': 340, 'in_y': 440,
+     'out_labels': ['Baseline review package'], 'out_label_y': 330,
+     'in_labels': ['Review findings'], 'in_label_y': 430},
 ]
 
 
 def create_figure():
     figure = Figure('Framework boundary and external exchanges', W, H)
     figure.el('desc').text = (
-        'The EPS engineering framework is an opaque black box. Five labeled '
+        'The EPS engineering framework is an opaque black box. Four labeled '
         'port rectangles straddle its boundary. Engineers, knowledge sources, '
-        'reviewers, NVIDIA Omniverse spacecraft and subsystem simulations, and the F Prime host toolchain '
-        'remain outside. Each directed exchange has one head at its destination. '
+        'simulation tools and reviewers remain outside. '
+        'Each directed exchange has one head at its destination. '
         + ' '.join(f'{entry["id"]}: {" ".join(entry["name"])}.' for entry in INTERFACES))
     figure.text('Framework boundary and external exchanges', 8, 20, size=18, weight='bold')
     frame = figure.el('g', data_system='Framework')
@@ -100,7 +92,7 @@ def create_figure():
                     label_size=14)
         port_x, port_w = float(port.attrib['x']), float(port.attrib['width'])
         inner_x = port_x+port_w if left else port_x
-        label_x, label_w = (132, 146) if left else (430, 136)
+        label_x, label_w = (126, 153) if left else (426, 143)
         for direction in ('in', 'out'):
             line_y = entry[direction+'_y']
             source, target = (outer_x, inner_x) if direction == 'in' else (inner_x, outer_x)
@@ -127,7 +119,7 @@ def context_check(figure, inventory):
             'Black-box context must not show internal interface blocks or components')
     fx, fy, fw, fh = FRAME
     actors = figure.root.findall('./{*}g[@data-actor]')
-    require(len(actors) == 5 and not frame.findall('.//{*}g[@data-actor]'),
+    require(len(actors) == 4 and not frame.findall('.//{*}g[@data-actor]'),
             'External participant inside framework')
     actor_bounds = {}
     for actor in actors:
@@ -136,9 +128,9 @@ def context_check(figure, inventory):
         require(x+w < fx or x > fx+fw, 'External participant overlaps framework')
         actor_bounds[actor.attrib['data-actor']] = (x, y, w, h)
     ports = frame.findall('./{*}rect[@data-port]')
-    require(len(ports) == len(inventory['interfaces']) == 5 and
+    require(len(ports) == len(inventory['interfaces']) == 4 and
             len(frame.findall('.//{*}rect')) == len(ports)+1,
-            'Black-box context must contain only its boundary and five shared ports')
+            'Black-box context must contain only its boundary and four shared ports')
     validate_port_labels(figure.root)
     all_flows = {flow['id']: (interface['id'], flow['direction'])
                  for interface in inventory['interfaces'] for flow in interface['flows']}
@@ -181,8 +173,8 @@ def context_check(figure, inventory):
         require(set(port.attrib['data-features'].split(',')) ==
                 {flow['feature'] for flow in native['flows']}, 'Shared context port omits a flow feature')
     require(covered == set(all_flows), 'Missing context exchange coverage')
-    return {'black_box_has_no_internal_interface_blocks': True, 'five_external_participants_outside': True,
-            'all_17_flows_grouped_once_by_interface_and_direction': True,
+    return {'black_box_has_no_internal_interface_blocks': True, 'four_external_participants_outside': True,
+            'all_8_flows_grouped_once_by_interface_and_direction': True,
             'shared_ports_and_directed_actor_boundary_endpoints_checked': True,
             'one_rectangular_port_per_interface': True,
             'distinct_neighboring_exchange_patterns': True,

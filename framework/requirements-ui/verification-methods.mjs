@@ -4,8 +4,8 @@ export function verificationMethods(row) {
 
 // Retain the original single-condition format when it represents the whole table.
 export function setVerificationMethods(row, methods) {
-  const populated = methods.filter(method => method.condition.trim() || method.script);
-  if (populated.length === 1 && !populated[0].script) {
+  const populated = methods.filter(method => method.condition.trim() || method.script || method.component);
+  if (populated.length === 1 && !populated[0].script && !populated[0].component) {
     row.condition = populated[0].condition;
     delete row.verifications;
   } else {
@@ -28,6 +28,7 @@ export function scriptContext(workspace) {
       ({ key, id, parameters, definition, context, powerScope })),
     elements: sorted(workspace.elements?.filter(row => row.id)), power: workspace.power,
     scripts: sorted(workspace.scripts),
+    components: sorted(workspace.components?.filter(row => row.id)).map(({ key, id, owner, product, facts }) => ({ key, id, owner, product, facts })),
   }, (_, value) => value && typeof value === 'object' && !Array.isArray(value)
     ? Object.fromEntries(Object.keys(value).sort().map(key => [key, value[key]])) : value);
 }
