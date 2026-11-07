@@ -1,9 +1,11 @@
 // Shared editing and structural validation for the Python power model.
+import { expressionReferences } from './expression-metadata.mjs';
+
 export const emptyPower = () => ({ modes: [], loads: [], links: [] });
 export const powerInputNames = ['sunlight_power_W', 'eclipse_power_W', 'sunlight_duty', 'eclipse_duty'];
 export const powerRequirementTemplates = [
   { model: 'PowerBudgetModel::PowerLimit', attributes: { power_limit_W: 'Real', allocated_power_W: 'Real', draw_power_W: 'Real' },
-    parameters: { power_limit_W: null, allocated_power_W: 'PowerAllocation.allocated_power_W', draw_power_W: 'PowerAllocation.draw_power_W' } },
+    parameters: { power_limit_W: null, allocated_power_W: null, draw_power_W: 'PowerAllocation.draw_power_W' } },
   { model: 'PowerBudgetModel::ComponentPowerLimit', attributes: { power_limit_W: 'Real', draw_power_W: 'Real' },
     parameters: { power_limit_W: null, draw_power_W: 'PowerAllocation.draw_power_W' } },
 ];
@@ -28,11 +30,46 @@ export const parentPowerLimit = (workspace, row) => {
   const scope = powerScopes(workspace).find(scope => scope.key === row.powerScope);
   return scope?.parent ? powerLimitFor(workspace, scope.parent) : null;
 };
+export function powerAllocationExpression(workspace, row, { skipMissing = false } = {}) {
+  const children = powerScopes(workspace).filter(scope => scope.parent === row.powerScope && (scope.kind !== 'component'
+    || powerFor(workspace, workspace.elements.find(element => element.key === scope.key)).accounting === 'counted'
+    || powerLimitFor(workspace, scope.key)));
+  const requirements = children.sort((a, b) => a.key.localeCompare(b.key)).map(scope => powerLimitFor(workspace, scope.key));
+  if (!skipMissing && requirements.some(requirement => !requirement)) return 'None';
+  const references = requirements.filter(Boolean).map(requirement => `${requirement.id}.power_limit_W`);
+  return references.length ? `sum([${references.join(', ')}])` : '0';
+}
+
+// Expand saved allocation aliases into ordinary, editable Python references.
+export function expandPowerAllocations(workspace) {
+  for (const row of workspace.statements.filter(isPowerRequirement)) {
+    let sum;
+    const expand = source => {
+      const references = expressionReferences(source).filter(reference => reference.id === 'PowerAllocation' && reference.name === 'allocated_power_W');
+      if (references.length) sum ??= powerAllocationExpression(workspace, row);
+      for (const reference of references.reverse()) {
+        const standalone = source.trim() === source.slice(reference.start, reference.fieldEnd);
+        // An unset sum keeps its numeric type inside custom arithmetic.
+        const replacement = sum === 'None' && !standalone ? 'None if True else 0' : sum;
+        source = source.slice(0, reference.start) + (standalone ? replacement : `(${replacement})`) + source.slice(reference.fieldEnd);
+      }
+      return source;
+    };
+    row.condition = expand(row.condition);
+    for (const method of row.verifications ?? []) method.condition = expand(method.condition);
+    for (const [name, source] of Object.entries(row.parameters)) row.parameters[name] = expand(source);
+  }
+  return workspace;
+}
+
 export function seedPowerLimits(workspace, { scopes = null } = {}, identity) {
   const subjects = powerScopes(workspace);
   const selected = subjects.filter(scope => (!scopes || scopes.includes(scope.key)) && (scope.kind !== 'component'
     || powerFor(workspace, workspace.elements.find(row => row.key === scope.key)).accounting === 'counted'));
   if (!selected.length || !workspace.power.modes.length) return workspace;
+  const defaults = new Set(workspace.statements.filter(row => row.definition === 'PowerBudgetModel::PowerLimit'
+    && [powerAllocationExpression(workspace, row), powerAllocationExpression(workspace, row, { skipMissing: true })]
+      .includes(row.parameters.allocated_power_W)).map(row => row.key));
   for (const name of ['power_limit_W', 'allocated_power_W', 'draw_power_W']) {
     const existing = workspace.variables.find(variable => variable.name === name);
     if (existing && (existing.type !== 'float' || (existing.unit && existing.unit !== 'W'))) throw new Error(`${name} requires a Float parameter in W.`);
@@ -53,7 +90,7 @@ export function seedPowerLimits(workspace, { scopes = null } = {}, identity) {
         : 'power_limit_W >= 0 and allocated_power_W >= 0 and allocated_power_W <= power_limit_W and draw_power_W >= 0 and draw_power_W <= power_limit_W',
       parameters: Object.fromEntries(workspace.variables.map(variable => [variable.name, null])) };
     row.parameters.draw_power_W = 'PowerAllocation.draw_power_W';
-    if (!component) row.parameters.allocated_power_W = 'PowerAllocation.allocated_power_W';
+    if (!component) defaults.add(row.key);
     const local = workspace.statements.filter(other => other.context === row.context && isPowerRequirement(other));
     const position = local.length ? workspace.statements.indexOf(local.at(-1)) + 1 : workspace.statements.findIndex(other => other.context === row.context);
     workspace.statements.splice(position < 0 ? workspace.statements.length : position, 0, row);
@@ -62,8 +99,9 @@ export function seedPowerLimits(workspace, { scopes = null } = {}, identity) {
     const parent = parentPowerLimit(workspace, row);
     if (parent && !row.sources.includes(parent.key)) row.sources.push(parent.key);
     if (row.powerScope === 'mission') row.affected = subjects[0].affected;
+    if (defaults.has(row.key)) row.parameters.allocated_power_W = powerAllocationExpression(workspace, row);
   }
-  return workspace;
+  return expandPowerAllocations(workspace);
 }
 export function defaultPowerRoots(workspace, eps) {
   const owner = workspace.elements.find(row => row.key === eps)?.owner;

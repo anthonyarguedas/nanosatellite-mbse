@@ -2,6 +2,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { link, lstat, mkdir, open, readFile, rename, unlink } from 'node:fs/promises';
 import { basename, dirname, extname, resolve } from 'node:path';
 import { domainTypes, emptyWorkspace, validateWorkspace } from './model.mjs';
+import { expandPowerAllocations } from './power.mjs';
 
 const queues = new Map();
 const conflict = message => Object.assign(new Error(message), { status: 409 });
@@ -12,7 +13,8 @@ export function workspacePaths(path) {
   return { path };
 }
 export async function canonicalWorkspace(workspace, { catalog = domainTypes, products = null } = {}) {
-  return { workspace: validateWorkspace(structuredClone(workspace), catalog, products) };
+  const validated = validateWorkspace(structuredClone(workspace), catalog, products);
+  return { workspace: validateWorkspace(expandPowerAllocations(validated), catalog, products) };
 }
 
 export function createStore(modelPath, { catalog = domainTypes, products = null, initialWorkspace = null, createIfMissing = true } = {}) {

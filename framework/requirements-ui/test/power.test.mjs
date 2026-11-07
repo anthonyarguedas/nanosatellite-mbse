@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { loadCatalog } from '../catalog.mjs';
 import { addPowerLimits, emptyWorkspace, mergeRequirementDraft, validateWorkspace, WORKSPACE_VERSION } from '../model.mjs';
-import { connectPower, disconnectPower, isPowerRequirement, powerFor, powerLimitFor, spacecraftComponents } from '../power.mjs';
+import { connectPower, disconnectPower, isPowerRequirement, powerAllocationExpression, powerFor, powerLimitFor, spacecraftComponents } from '../power.mjs';
 import { evaluateChecks } from './helpers.mjs';
 import { readWorkspace, validateCalculations as renderExport, serializeWorkspace as renderManaged } from './helpers.mjs';
 import { createServer } from '../server.mjs';
@@ -63,7 +63,7 @@ test('system and subsystem limits remain separate from component allocations and
   const source = renderExport(workspace, { catalog, packageName: 'PowerLimits' });
   const snapshot = JSON.parse(source);
   assert.equal(snapshot.statements.find(row => row.key === system.key).powerScope, 'mission');
-  assert.equal(snapshot.statements.find(row => row.key === subsystem.key).parameters.allocated_power_W, 'PowerAllocation.allocated_power_W');
+  assert.equal(snapshot.statements.find(row => row.key === subsystem.key).parameters.allocated_power_W, powerAllocationExpression(workspace, subsystem));
   assert.ok(snapshot.statements.find(row => row.key === limit.key).sources.includes(subsystem.key));
 });
 
@@ -310,6 +310,7 @@ test('browser shows complete PWS001 expressions and supports editing and pasting
   const { workspace } = fixture();
   for (const row of workspace.statements.filter(isPowerRequirement)) row.parameters.power_limit_W = '0';
   const requirement = workspace.statements.find(row => row.id === 'PWS001');
+  const defaultAllocation = powerAllocationExpression(workspace, requirement);
   requirement.parameters.power_limit_W = '10';
   workspace.statements.find(row => row.context === requirement.context && row.definition === 'PowerBudgetModel::ComponentPowerLimit').parameters.power_limit_W = '2';
   await writeFile(modelPath, renderManaged(workspace, { catalog }));
@@ -337,9 +338,9 @@ test('browser shows complete PWS001 expressions and supports editing and pasting
   assert.equal(await allocation.evaluate(input => input.tagName), 'TEXTAREA');
   assert.equal(await allocation.isEditable(), true);
   assert.equal(await draw.isEditable(), true);
-  assert.equal(await allocation.inputValue(), 'PowerAllocation.allocated_power_W');
+  assert.equal(await allocation.inputValue(), defaultAllocation);
   await assertFits();
-  const expression = 'PowerAllocation.allocated_power_W * (1 + 0.25)' + ' + 0'.repeat(30);
+  const expression = `(${defaultAllocation}) * (1 + 0.25)` + ' + 0'.repeat(30);
   await allocation.fill(expression); await waitValue('2.500 W'); await assertFits();
   assert.equal(await allocation.evaluate(input => input.clientHeight > 2 * parseFloat(getComputedStyle(input).lineHeight)), true);
   await allocation.press('Enter');
@@ -349,19 +350,19 @@ test('browser shows complete PWS001 expressions and supports editing and pasting
   assert.equal((await read()).statements.find(row => row.key === requirement.key).parameters.allocated_power_W, expression);
   await page.reload(); await open(); await assertFits();
   assert.equal(await allocation.inputValue(), expression);
-  await allocation.evaluate(input => {
+  await allocation.evaluate((input, sum) => {
     const clipboardData = new DataTransfer();
-    clipboardData.setData('text/plain', 'PowerAllocation.allocated_power_W * 1.5\nPowerAllocation.draw_power_W + 1');
+    clipboardData.setData('text/plain', `(${sum}) * 1.5\nPowerAllocation.draw_power_W + 1`);
     input.dispatchEvent(new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData }));
-  });
+  }, defaultAllocation);
   await waitValue('3.000 W');
   assert.equal(await draw.inputValue(), 'PowerAllocation.draw_power_W + 1');
   await pane.getByLabel('State for allocated_power_W', { exact: true }).selectOption('downlink');
   const nominalAllocation = pane.getByLabel('Expression for allocated_power_W in Nominal', { exact: true });
   const downlinkAllocation = pane.getByLabel('Expression for allocated_power_W in Downlink', { exact: true });
-  assert.equal(await downlinkAllocation.inputValue(), 'PowerAllocation.allocated_power_W * 1.5');
-  await nominalAllocation.fill('PowerAllocation.allocated_power_W'); await assertFits();
-  const expected = { nominal: 'PowerAllocation.allocated_power_W', downlink: 'PowerAllocation.allocated_power_W * 1.5' };
+  assert.equal(await downlinkAllocation.inputValue(), `(${defaultAllocation}) * 1.5`);
+  await nominalAllocation.fill(defaultAllocation); await assertFits();
+  const expected = { nominal: defaultAllocation, downlink: `(${defaultAllocation}) * 1.5` };
   await pane.getByRole('button', { name: 'Save requirement', exact: true }).click(); await waitSaved();
   await page.reload(); await open();
   assert.equal(await nominalAllocation.inputValue(), expected.nominal);

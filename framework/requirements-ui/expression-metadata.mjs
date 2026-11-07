@@ -48,7 +48,7 @@ export function expressionReferences(source) {
   const list = tokens(source), references = [];
   for (let index = 0; index < list.length - 2; index++) {
     const [id, dot, name] = list.slice(index, index + 3);
-    if (id.kind === 'name' && dot.value === '.' && name.kind === 'name' && list[index - 1]?.value !== '.') references.push({ id: id.value, name: name.value, start: id.start, end: id.end });
+    if (id.kind === 'name' && dot.value === '.' && name.kind === 'name' && list[index - 1]?.value !== '.') references.push({ id: id.value, name: name.value, start: id.start, end: id.end, fieldEnd: name.end });
   }
   return references;
 }
