@@ -40,7 +40,7 @@ The download is **Export workspace JSON** in the requirements table header. It i
 Use the session toolbar above the workbook:
 
 - **New session → Blank** starts with empty tables and no preloaded elements or requirements.
-- **New session → Generic EPS** starts with the generic mission hierarchy, 27 orbit and EPS requirements, units, rationale and sizing equations. Mission inputs are unset. The sourced Earth constants remain populated.
+- **New session → Generic EPS** starts with the generic mission hierarchy, 27 orbit and EPS requirements, mass and volume budgets, units, rationale and sizing equations. Mission inputs are unset. The sourced Earth constants remain populated.
 - **Save as…** saves an independent named copy of the current workspace. It includes unsaved edits in the requirement pane without applying those pane edits to the original session.
 - The **Session** picker reopens saved workspaces. The existing mission remains listed as **Current mission**.
 
@@ -55,7 +55,7 @@ Saved sessions live in `framework/missions/sessions/<id>/<id>.json`. A neighbori
 ## Tabs and allocation
 
 - **External** has stakeholders on the left and their statements on the right. Existing data remains in this tab.
-- **Mission** has Orbit, CubeSat Bus, Payload and Ground Station on the left. It defines spacecraft modes and system power limits. Its requirements have an **Affected domain elements** column for assignment to one or more of these rows.
+- **Mission** has Orbit, CubeSat Bus, Payload and Ground Station on the left. It defines spacecraft modes and system power, mass and volume limits. Its requirements have an **Affected domain elements** column for assignment to one or more of these rows.
 - **CubeSat Bus** has the eight bus subsystems declared in the Python catalog. Each subsystem has its own tab and CSRM generic component table, using the same add, rename and type selection UX as EPS. Use the arrow beside a subsystem name to open it. Payload and the optional shared processor resource are separate from this list.
 - **EPS** belongs to the bus's Power subsystem. Its left table lists Batteries, Solar Arrays, Processor and Memory, Regulators and Converters, Power Circuits and Switches, and Software from the generic model. Subdivide the EPS by adding component instances here. The right table holds parametric requirements with shared variable columns, Python verification conditions, sources and an **Affected components** column.
 - **Payload** has the Instrument and Processor and Memory definitions inside `PayloadSubsystem`.
@@ -93,6 +93,22 @@ Component edits have **Save component** and **Cancel**. Cmd+Enter or Ctrl+Enter 
 The Python catalog declares optional `power_consumption_W` and `power_consumption` properties in W on spacecraft subsystems and components. The Python worker calculates allocations, component draws and weighted illumination budgets. Software demand remains assigned to its execution host.
 
 This first view assesses preliminary steady load energy. Mode shares establish no chronological ordering or simultaneous peak demand. Startup pulses, rail limits, converter path losses, battery time histories and energy closure require their separate report assessments. A typical or estimated consumption value establishes no guaranteed hardware limit.
+
+## Mass and volume budgets
+
+Every mission receives mass and volume requirements when opened, including saved sessions and copies. Blank sessions retain empty tables until spacecraft elements are added. These budgets use the existing requirement pane and need no spacecraft modes.
+
+- **Mission** owns the spacecraft limits, with IDs starting at MAS001 and VOL001.
+- Each spacecraft subsystem, including Payload and EPS, owns a mass limit (MSS) and volume limit (VLS).
+- Each hardware component owns a mass allocation (MSC) and volume allocation (VLC) in its subsystem tab. Batteries, solar arrays and passive hardware are included. Software occupies its execution host's hardware allocation.
+
+Enter independent limits in `mass_allocation_kg` and `volume_allocation_m3`. Enter total installed component values in `mass_kg` and `volume_m3`, including quantity and auxiliaries. Power accounting exclusions and power quantities leave these physical inputs unchanged. Component limits and physical values start unset.
+
+Parent `mass_kg` and `volume_m3` expressions sum their children's physical values. `allocated_mass_kg` and `allocated_volume_m3` sum their children's assigned limits. These are ordinary editable Python sums. New hardware extends unchanged default sums. Custom expressions and cleared cells retain their values. Source links connect spacecraft, subsystem and component requirements. Changing a parent limit leaves child allocations unchanged. Verification checks nonnegative physical values and child allocation totals against the assigned limit. Missing inputs stay pending.
+
+Use the existing COTS pane to select mass or dimension facts, then reference them in physical value expressions. For example, `2 * CMP001.mass` accounts for two units. `2 * CMP001.length * CMP001.width * CMP001.height` calculates their combined rectangular envelope volume when the selected dimensions are in metres. Keep allocations independently entered. Catalogue revisions, substitutions, reference renames, Save as and JSON export use the existing COTS behavior. A summed volume establishes a preliminary budget, with mechanical fit assessed separately.
+
+The existing EPS-19 and EPS-78 report requirements retain their inputs and evidence conditions. They can reference the new EPS budget parameters through ordinary requirement references. Existing workspace files remain unchanged during reads. Saving retains the new requirements and an optional `resourceBudgets: true` initialization marker in version 14 JSON. Later requirement deletions remain deleted.
 
 ## Editing a requirement
 

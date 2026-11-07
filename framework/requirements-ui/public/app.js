@@ -7,8 +7,10 @@ import { createRequirementEditor } from '/requirement-editor.js';
 import { requirementHTML } from '/requirement-preview.js';
 import { createPowerEditor } from '/power-editor.js';
 import { isPowerRequirement, parentPowerLimit } from '/power.mjs';
+import { isResourceRequirement, parentResourceLimit } from '/resource-budgets.mjs';
 import { verificationMethods } from '/verification-methods.mjs';
 
+const hasFixedBudgetScope = row => isPowerRequirement(row) || isResourceRequirement(row);
 const main = document.querySelector('main');
 const status = document.querySelector('#status'), retry = document.querySelector('#retry');
 const sourceEditor = document.querySelector('#source-editor');
@@ -153,6 +155,7 @@ function used(row, table) {
 function snapshot(state = workspace) {
   return {
     version: WORKSPACE_VERSION, ...(state.expressionLanguage ? { expressionLanguage: state.expressionLanguage } : {}), variables: structuredClone(state.variables), power: structuredClone(state.power), scripts: structuredClone(state.scripts),
+    ...(state.resourceBudgets ? { resourceBudgets: true } : {}),
     stakeholders: state.stakeholders.filter(row => used(row, 'stakeholders')).map(row => ({ key: row.key, id: row.id.trim(), name: row.name, type: row.type })),
     elements: state.elements.filter(row => used(row, 'stakeholders')).map(row => ({ key: row.key, id: row.id.trim(), name: row.name, owner: row.owner, definition: row.definition })),
     components: state.components.filter(row => used(row, 'components')).map(row => ({
@@ -164,6 +167,7 @@ function snapshot(state = workspace) {
       ...(row.verifications ? { verifications: structuredClone(row.verifications) } : {}),
       ...(row.definition ? { definition: row.definition } : {}),
       ...(isPowerRequirement(row) ? { powerScope: row.powerScope } : {}),
+      ...(isResourceRequirement(row) ? { budgetScope: row.budgetScope } : {}),
       ...(row.origin ? { origin: row.origin } : {}),
       ...(row.rationale !== undefined ? { rationale: row.rationale } : {}),
       parameters: Object.fromEntries(state.variables.map(variable => [variable.name, parameterExpression(row.parameters[variable.name], variable, row.id)])),
@@ -176,7 +180,7 @@ function sourceHTML(row, index, field = 'sources', col = 1) {
     return source ? `<a href="#row-${key}" data-row-link="${key}" title="${escape(rowLabel(source))}">${escape(source.id)}</a>` : '';
   }).join('');
   const label = field === 'requirements' ? 'affected requirements' : field === 'affected' ? 'affected elements' : 'sources';
-  if (field === 'affected' && isPowerRequirement(row)) return `<div class="row-sources ${links ? 'has-sources' : ''}" data-links="affected" data-field="affected" data-col="${col}" tabindex="0" aria-label="Affected elements, row ${index + 1}">${links}</div>`;
+  if (field === 'affected' && hasFixedBudgetScope(row)) return `<div class="row-sources ${links ? 'has-sources' : ''}" data-links="affected" data-field="affected" data-col="${col}" tabindex="0" aria-label="Affected elements, row ${index + 1}">${links}</div>`;
   return `<div class="row-sources ${links ? 'has-sources' : ''}" data-links="${field}">${links}<button data-field="${field}" data-col="${col}" class="source-edit" aria-label="Edit ${label}, row ${index + 1}" title="${field === 'requirements' ? 'Link EPS requirements' : field === 'affected' ? 'Assign to elements on the left' : 'Link one or more source rows'}"><span class="chevron"></span></button></div>`;
 }
 function renderHeader() {
@@ -610,12 +614,13 @@ function renderSourceChoices() {
   const labels = new Map(tabsFor(workspace, catalog).map(tab => [tab.key, tab.label]));
   const candidates = editor.field === 'requirements' ? componentRequirements(state, row)
     : editor.field === 'affected' ? assignableElements(state, row) : availableSources(state, row.key);
-  const requiredSource = editor.field === 'sources' && isPowerRequirement(row) ? parentPowerLimit(state, row)?.key : null;
+  const requiredSource = editor.field === 'sources' ? (isPowerRequirement(row) ? parentPowerLimit(state, row)?.key
+    : isResourceRequirement(row) ? parentResourceLimit(state, row)?.key : null) : null;
   const choices = candidates.filter(item => `${item.id} ${rowLabel(item)} ${labels.get(contextForRow(item))}`.toLowerCase().includes(query));
   document.querySelector('#source-choices').innerHTML = choices.length ? choices.map(item => `<label class="source-choice"><input type="checkbox" data-source-key="${item.key}" ${row[editor.field].includes(item.key) ? 'checked' : ''} ${item.key === requiredSource ? 'disabled' : ''}><span><strong>${escape(item.id)}</strong><span>${escape(labels.get(contextForRow(item)))} · ${escape(rowLabel(item)) || '(empty row)'}</span></span></label>`).join('') : '<p>No matching rows.</p>';
 }
 function openSources(row, anchor, field = 'sources') {
-  if (field === 'affected' && isPowerRequirement(row)) return;
+  if (field === 'affected' && hasFixedBudgetScope(row)) return;
   document.querySelector('#source-search').value = '';
   const label = field === 'requirements' ? 'Link affected EPS requirements' : field === 'affected' ? 'Assign to elements on the left' : 'Link source rows';
   sourceEditor.querySelector('strong').textContent = label; sourceEditor.setAttribute('aria-label', label);

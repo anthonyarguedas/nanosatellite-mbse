@@ -7,7 +7,8 @@ import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { createServer } from '../server.mjs';
 import { loadCatalog } from '../catalog.mjs';
-import { declareRequirementVariables, emptyWorkspace, WORKSPACE_VERSION } from '../model.mjs';
+import { addResourceBudgets, declareRequirementVariables, emptyWorkspace, WORKSPACE_VERSION } from '../model.mjs';
+import { isResourceRequirement } from '../resource-budgets.mjs';
 import { createStore } from '../storage.mjs';
 
 async function start(t) {
@@ -34,7 +35,7 @@ function populated() {
   const workspace = { ...emptyWorkspace(), expressionLanguage: 'python' };
   workspace.stakeholders.push({ key: 's1', id: 'REG', name: 'Agência espacial', type: 'Regulatory Agency' });
   workspace.statements.push({ key: 'r1', id: 'REQ001', context: 'external', affected: [], kind: 'Requirement', text: 'Operate for {x} months.', sources: ['s1'], condition: 'x >= 12', parameters: { x: '12', y: null, z: '0', a: null } });
-  return workspace;
+  return { ...addResourceBudgets(workspace), resourceBudgets: true };
 }
 
 test('the server refuses to use application code as workspace storage', () => {
@@ -51,7 +52,7 @@ test('serves the UI with a CSP and rejects unknown files and methods', async t =
   assert.match(await response.text(), /Stakeholder Requirements/);
   assert.match(response.headers.get('content-security-policy'), /frame-ancestors 'none'/);
   assert.doesNotMatch(response.headers.get('content-security-policy'), /unsafe-eval/);
-  for (const path of ['/app.js', '/requirement-editor.js', '/requirement-preview.js', '/style.css', '/model.mjs', '/parameter-states.mjs', '/verification-worker.js']) assert.equal((await fetch(base + path)).status, 200);
+  for (const path of ['/app.js', '/requirement-editor.js', '/requirement-preview.js', '/style.css', '/model.mjs', '/resource-budgets.mjs', '/parameter-states.mjs', '/verification-worker.js']) assert.equal((await fetch(base + path)).status, 200);
   assert.equal((await fetch(base + '/server.mjs')).status, 404);
   assert.equal((await fetch(base + '/api/workspace', { method: 'DELETE' })).status, 405);
 });
@@ -218,8 +219,10 @@ test('JSON downloads retain generic definitions, provenance and unsaved inputs w
   const response = await post(); assert.equal(response.status, 200);
   assert.match(response.headers.get('content-disposition'), /mission-export\.json/);
   const exported = await response.json(); assert.deepEqual(exported, workspace);
-  assert.equal(exported.statements.length, 27);
-  assert.ok(exported.statements.every(row => row.origin && row.affected.length));
+  const generic = exported.statements.filter(row => row.definition.startsWith('FrameworkRequirements::'));
+  assert.equal(generic.length, 27);
+  assert.ok(generic.every(row => row.origin && row.affected.length));
+  assert.ok(exported.statements.some(isResourceRequirement));
   assert.equal(exported.statements.find(row => row.key === orbit.key).parameters.altitude_km, '650');
   assert.equal(await readFile(modelPath, 'utf8'), original);
   assert.equal((await fetch(`${base}/api/sysml`)).status, 404);

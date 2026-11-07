@@ -119,6 +119,7 @@ test('browser edits one conditional requirement, shows all mode results, and ret
   assert.equal(await editor.getByLabel('Expression for x in Nominal', { exact: true }).inputValue(), '1');
   await editor.getByLabel('Expression for x in Downlink', { exact: true }).fill('99'); await editor.getByRole('button', { name: 'Cancel', exact: true }).click();
   const saved = (await (await page.request.get(base + '/api/workspace')).json()).workspace;
-  assert.equal(saved.statements.length, 2); assert.deepEqual(parameterStates(saved.statements[0].parameters.x, saved.power.modes).values, { nominal: '1', downlink: '18' });
+  assert.equal(saved.statements.filter(row => row.context === 'external').length, 2);
+  assert.deepEqual(parameterStates(saved.statements[0].parameters.x, saved.power.modes).values, { nominal: '1', downlink: '18' });
   assert.deepEqual(errors, []);
 });

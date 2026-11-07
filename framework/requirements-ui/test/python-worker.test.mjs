@@ -265,11 +265,11 @@ test('evaluation and JSON download APIs preserve Python source and leave storage
   assert.equal((await post('/api/evaluate', { workspace }, { Origin: 'https://example.com' })).status, 403);
   assert.equal((await fetch(base + '/api/evaluate', { method: 'POST', body: '{}' })).status, 415);
   assert.equal((await post('/api/evaluate', { workspace: {} })).status, 400);
-  const exported = await post('/api/json', { workspace }); assert.equal(exported.status, 200); assert.deepEqual(await exported.json(), { ...workspace, expressionLanguage: 'python' });
+  const exported = await post('/api/json', { workspace }); assert.equal(exported.status, 200); assert.deepEqual(await exported.json(), { ...workspace, expressionLanguage: 'python', resourceBudgets: true });
   assert.equal((await post('/api/sysml', { workspace })).status, 404);
   const state = await (await fetch(base + '/api/workspace')).json();
   assert.equal((await post('/api/workspace', { workspace, revision: state.revision })).status, 405);
   const saved = await fetch(base + '/api/workspace', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workspace, revision: state.revision }) });
-  assert.equal(saved.status, 200); assert.equal(JSON.parse(await readFile(join(directory, 'mission.json'), 'utf8')).statements[0].parameters.x, 'statistics.mean([2, 4, 6])');
-  assert.equal(await readFile(modelPath, 'utf8'), source);
+  assert.equal(saved.status, 200);
+  assert.deepEqual(JSON.parse(await readFile(modelPath, 'utf8')), { ...workspace, resourceBudgets: true });
 });

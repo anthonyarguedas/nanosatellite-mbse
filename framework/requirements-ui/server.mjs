@@ -18,6 +18,7 @@ const publicFiles = new Map([
   ['/requirement-editor.js', ['public/requirement-editor.js', 'text/javascript; charset=utf-8']],
   ['/power-editor.js', ['public/power-editor.js', 'text/javascript; charset=utf-8']],
   ['/power.mjs', ['power.mjs', 'text/javascript; charset=utf-8']],
+  ['/resource-budgets.mjs', ['resource-budgets.mjs', 'text/javascript; charset=utf-8']],
   ['/parameter-states.mjs', ['parameter-states.mjs', 'text/javascript; charset=utf-8']],
   ['/verification-methods.mjs', ['verification-methods.mjs', 'text/javascript; charset=utf-8']],
   ['/expression-metadata.mjs', ['expression-metadata.mjs', 'text/javascript; charset=utf-8']],

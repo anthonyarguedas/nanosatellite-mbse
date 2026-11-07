@@ -115,7 +115,8 @@ test('the app starts, edits, evaluates and saves Generic EPS without any framewo
   t.after(() => new Promise(resolve => { server.close(resolve); server.closeAllConnections(); }));
   const base = `http://127.0.0.1:${server.address().port}`;
   const initial = await (await fetch(base + '/api/workspace')).json();
-  assert.equal(initial.workspace.expressionLanguage, 'python'); assert.equal(initial.workspace.statements.length, 27);
+  assert.equal(initial.workspace.expressionLanguage, 'python');
+  assert.equal(initial.workspace.statements.filter(row => row.definition.startsWith('FrameworkRequirements::')).length, 27);
   assert.equal(initial.catalog.length, 52); assert.equal(initial.modelName, 'mission.json');
   assert.ok(initial.products.length); assert.equal(initial.error, undefined);
   const orbit = initial.workspace.statements.find(row => row.definition === 'FrameworkRequirements::OrbitPeriod');
@@ -131,5 +132,5 @@ test('the app starts, edits, evaluates and saves Generic EPS without any framewo
   const data = await created.json(); assert.equal(created.status, 201);
   const folder = join(root, 'missions', 'sessions', data.session.id);
   assert.deepEqual((await readdir(folder)).sort(), [`${data.session.id}.json`, 'session.json'].sort());
-  assert.equal(data.workspace.statements.length, 27);
+  assert.equal(data.workspace.statements.filter(row => row.definition.startsWith('FrameworkRequirements::')).length, 27);
 });

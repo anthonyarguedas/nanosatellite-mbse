@@ -157,7 +157,7 @@ test('browser splits, evaluates, pastes, persists and merges state rows using th
   assert.deepEqual(await editor.locator('[data-parameter-unit="x"]').evaluateAll(inputs => inputs.map(input => input.value)), ['mW', 'mW', 'mW']);
   await editor.getByRole('button', { name: 'Save requirement', exact: true }).click(); await saved();
   const persisted = await read(), source = persisted.statements[0].parameters.x;
-  assert.equal(persisted.statements.length, 2);
+  assert.equal(persisted.statements.filter(row => row.context === 'external').length, 2);
   assert.equal(parameterStates(source, persisted.power.modes).lastEdited, 'downlink');
   assert.equal(JSON.parse(await readFile(join(directory, 'mission.json'), 'utf8')).statements[0].parameters.x, source);
   assert.match(source, /if mode == "Downlink" else/);

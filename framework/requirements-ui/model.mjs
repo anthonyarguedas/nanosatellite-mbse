@@ -1,6 +1,7 @@
 import { expressionIdentifiers, modeReferences, rewriteModeReferences, rewriteReferences } from './expression-metadata.mjs';
 import { emptyPower, isPowerRequirement, powerRequirementTemplates, seedPowerLimits, validatePower } from './power.mjs';
 import { verificationMethods } from './verification-methods.mjs';
+import { isResourceRequirement, resourceRequirementTemplates, seedResourceBudgets, validateResourceBudgets } from './resource-budgets.mjs';
 
 export const WORKSPACE_VERSION = 14;
 export const stakeholderTypes = [
@@ -63,10 +64,19 @@ export function addElementChildren(workspace, parent, catalog = domainTypes, see
     for (const row of workspace.elements) if (descendants.has(row.owner)) descendants.add(row.key);
     seedRequirements(workspace, catalog, workspace.elements.filter(row => descendants.has(row.key)));
     addPowerLimits(workspace, { scopes: [...descendants] });
+    if (workspace.resourceBudgets) {
+      const roots = workspace.elements.filter(row => row.id && row.owner === 'mission'
+        && ['SpaceSegment::CubeSat', 'SpaceSegment::CubeSat::PayloadSubsystem'].includes(row.definition));
+      const firstSpacecraft = roots.length && roots.every(row => descendants.has(row.key));
+      addResourceBudgets(workspace, { scopes: [...descendants, ...(firstSpacecraft ? ['mission'] : [])] });
+    }
   }
 }
 export function addPowerLimits(workspace, options = {}) {
   return seedPowerLimits(workspace, options, (hint, prefix) => ({ key: elementKey(workspace, hint), id: nextId(workspace, 'Requirement', prefix) }));
+}
+export function addResourceBudgets(workspace, options = {}) {
+  return seedResourceBudgets(workspace, options, (hint, prefix) => ({ key: elementKey(workspace, hint), id: nextId(workspace, 'Requirement', prefix) }));
 }
 function seedElements(workspace, catalog) {
   for (const type of catalog.filter(type => !type.parent)) {
@@ -170,7 +180,7 @@ export function declareRequirementVariables(workspace, row) {
 export function requirementParameterNames(workspace, row, catalog = domainTypes) {
   const marked = requirementMarkers(row.text).names;
   const retained = new Set(Object.entries(row.parameters).filter(([, value]) => typeof value === 'string' && value.trim()).map(([name]) => name));
-  const template = [...catalog.flatMap(type => type.requirements ?? []), ...powerRequirementTemplates].find(template => template.model === row.definition);
+  const template = [...catalog.flatMap(type => type.requirements ?? []), ...powerRequirementTemplates, ...resourceRequirementTemplates].find(template => template.model === row.definition);
   Object.keys(template?.parameters ?? {}).forEach(name => retained.add(name));
   // Retain equation inputs without exposing every shared workbook variable.
   for (const expression of [...verificationMethods(row).map(method => method.condition), ...Object.values(row.parameters)]) {
@@ -418,14 +428,14 @@ export function validateWorkspace(workspace, catalog = domainTypes, products = n
     for (const input of script.inputs) parameterExpression(script.parameters[input.name], input, script.id);
   }
   const contexts = new Set(tabsFor(workspace, catalog).map(tab => tab.key));
-  const templates = new Map([...catalog.flatMap(type => type.requirements ?? []), ...powerRequirementTemplates].map(template => [template.model, template]));
+  const templates = new Map([...catalog.flatMap(type => type.requirements ?? []), ...powerRequirementTemplates, ...resourceRequirementTemplates].map(template => [template.model, template]));
   for (const row of workspace.statements) {
     if (!/^[A-Z]{3}\d{3}$/.test(row.id)) fail('Statement IDs must be three uppercase letters and three digits, such as REQ001.');
     if (!contexts.has(row.context)) fail(`${row.id}: the tab does not exist.`);
     if (!statementKinds.includes(row.kind)) fail(`${row.id}: choose a statement type.`);
     if (typeof row.text !== 'string' || row.text.length > 50000) fail(`${row.id}: invalid statement.`);
     if (row.definition && (!templates.has(row.definition) || row.kind !== 'Requirement')) fail(`${row.id}: choose a generic requirement definition.`);
-    if (row.definition && !isPowerRequirement(row)) {
+    if (row.definition && !isPowerRequirement(row) && !isResourceRequirement(row)) {
       const template = templates.get(row.definition);
       const owner = workspace.elements.find(element => element.key === row.context);
       if (template.context === 'mission' ? row.context !== 'mission' : catalog.find(type => type.model === owner?.definition)?.role !== 'eps') fail(`${row.id}: the generic requirement belongs to a different table.`);
@@ -486,6 +496,7 @@ export function validateWorkspace(workspace, catalog = domainTypes, products = n
     }
   }
   validatePower(workspace);
+  validateResourceBudgets(workspace);
   return workspace;
 }
 
