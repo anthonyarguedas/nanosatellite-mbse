@@ -1,7 +1,6 @@
 // HTTP and static-file transport. nanosat_mbse owns session and domain behavior.
 import { createServer as httpServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { createPythonService } from './python-client.mjs';
 import { renderSchematic } from './exporters/kicad.mjs';
@@ -42,7 +41,7 @@ async function bodyJSON(request) {
 }
 
 export function createServer({ modelPath = process.env.MISSION_FILE
-  ? resolve(process.env.MISSION_FILE) : fileURLToPath(new URL('../../missions/mission.py', import.meta.url)),
+  ? resolve(process.env.MISSION_FILE) : undefined,
   sessionDirectory, cotsDirectory, scriptDirectory = process.env.VERIFICATION_SCRIPTS_DIR,
   python = process.env.VERIFICATION_PYTHON || 'python3', installed = false } = {}) {
   const service = createPythonService({ modelPath, sessionDirectory, cotsDirectory, scriptDirectory, python, installed });

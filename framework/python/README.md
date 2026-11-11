@@ -84,7 +84,7 @@ Adding the domain objects calls their ordinary initialization methods to create 
 Adding another Battery creates its applicable component requirements in its EPS.
 Each populated requirement owns independent parameter records.
 
-The supplied **Generic EPS Example** is an ordinary saved session in `framework/missions/sessions/`.
+The supplied **Generic EPS Example** is an ordinary saved session in `framework/sessions/`.
 Open it through the Session picker and use **Save as** to make an independent copy.
 It has no special initialization or regeneration behavior.
 Deleting it leaves new sessions blank.
@@ -384,6 +384,9 @@ nanosat-mbse report energy --mission /path/to/mission.py --name "My energy asses
 From a source checkout, use `python3 -I framework/python/cli.py` before the same arguments.
 The old Node tool commands are thin launchers for this CLI.
 Named-session creation shares the application's repository, locks and unique-name rules.
+The UI and CLI default to `framework/sessions/current.py` in a source checkout and store named sessions directly under `framework/sessions/`.
+Outside a checkout, the default is `sessions/current.py` under the working directory.
+`MISSION_FILE` or `--mission` selects a different workspace.
 `--from` and `--orbit` select an existing session and orbit for independent scenario copies.
 Original source files remain intact, and creating a study runs no analysis.
 

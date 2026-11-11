@@ -21,7 +21,7 @@ Set `PORT` to select another port and `VERIFICATION_PYTHON` to select an interpr
 There are no npm dependencies or browser build steps.
 The source launcher locates the Python package in `framework/python/src`.
 
-The default workspace is `framework/missions/mission.py`.
+The default workspace is `framework/sessions/current.py`.
 If it has never existed and no legacy source is present, opening it creates a blank session.
 Choose another file relative to the directory where the server starts:
 
@@ -43,7 +43,7 @@ Use copies when exploring the supplied [demo](demo/README.md).
 - `server/exporters/`: KiCad and Fprime output formatting over Python-validated data.
 - `../python/src/nanosat_mbse/`: generic classes, engineering domains, catalogs, verifications, persistence and application service.
 - `../cots/`: live shared product facts and sources.
-- `../missions/sessions/`: individual named Python sessions.
+- `../sessions/`: the current workspace and individual named Python sessions.
 
 The retired JavaScript model and request-local Python worker have been removed.
 There is one active engineering implementation.
@@ -62,15 +62,20 @@ Valid table edits autosave to that session.
 Requirement, component and COTS panes retain drafts until their Save action.
 Save as includes valid open drafts in an independent copy.
 
-Named sessions use:
+The default storage layout is:
 
 ```text
-framework/missions/sessions/<id>/
-├── session.py
-└── metadata.json
+framework/sessions/
+├── current.py
+├── current.metadata.json
+└── <id>/
+    ├── session.py
+    └── metadata.json
 ```
 
-With a custom `MISSION_FILE`, named sessions live beside it in `sessions/`.
+The UI and native CLI share these default locations.
+With a custom `MISSION_FILE`, named sessions use a neighboring `sessions/` directory.
+If the selected workspace is already inside a directory named `sessions`, named sessions share that directory.
 Legacy JSON and its old metadata remain intact during conversion.
 
 Install the same library for a REPL:

@@ -25,6 +25,7 @@ from ..core.verification import VerificationScript
 from ..core.session import Session
 from ..domains.registry import element_class
 from ..persistence.callables import CallableRegistry
+from ..persistence.locations import default_workspace, named_sessions_directory
 from ..persistence.migrate import SessionMetadata, convert_json
 from ..persistence.repository import (
     SessionConflict,
@@ -71,13 +72,17 @@ class Application:
 
     def __init__(
         self,
-        model_path,
+        model_path=None,
         *,
         session_directory=None,
         cots_directory=None,
         script_directory=None,
     ):
-        self.model_path = Path(model_path).expanduser().absolute()
+        self.model_path = (
+            default_workspace()
+            if model_path is None
+            else Path(model_path).expanduser().absolute()
+        )
         if self.model_path.suffix.lower() not in (".json", ".py"):
             raise SessionFileError(
                 "Choose a .py session or a retained legacy .json source."
@@ -92,7 +97,7 @@ class Application:
         self.directory = (
             Path(session_directory).expanduser().absolute()
             if session_directory
-            else self.model_path.parent / "sessions"
+            else named_sessions_directory(self.model_path)
         )
         self.catalog = default_catalog()
         self.database = TabularDatabase(cots_directory)
@@ -130,7 +135,7 @@ class Application:
         if session_id == "current":
             return {
                 "id": "current",
-                "name": f"Current mission ({self.current_path.name})",
+                "name": f"Current session ({self.current_path.name})",
                 "template": "existing",
                 "storage": "python",
             }

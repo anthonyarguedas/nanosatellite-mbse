@@ -16,7 +16,7 @@ const status = document.querySelector('#status'), retry = document.querySelector
 const sourceEditor = document.querySelector('#source-editor');
 const sessionSelect = document.querySelector('#session-select'), sessionEditor = document.querySelector('#session-editor');
 const sessionNameInput = document.querySelector('#session-name');
-let sessions = [], sessionId = 'current', sessionName = 'Current mission', sessionBusy = false, sessionMode = 'new', suggestedSessionName = '';
+let sessions = [], sessionId = 'current', sessionName = 'Current session', sessionBusy = false, sessionMode = 'new', suggestedSessionName = '';
 let saveTask = null;
 const workspaceURL = (id = sessionId) => id === 'current' ? '/api/workspace' : `/api/workspace?session=${encodeURIComponent(id)}`;
 const requestedSession = () => new URLSearchParams(location.search).get('session') || 'current';
@@ -413,7 +413,7 @@ function installWorkspace(data, id, tab, history = 'replace') {
   generation++; worker?.terminate(); worker = null; results = new Map(); componentResults = new Map(); scriptResults = null;
   for (const state of [selected, sorts]) for (const key of Object.keys(state)) delete state[key];
   catalog = nextCatalog; products = nextProducts; workspace = candidate;
-  sessionId = id; sessionName = data.session?.name ?? data.modelName ?? 'Current mission';
+  sessionId = id; sessionName = data.session?.name ?? data.modelName ?? 'Current session';
   sessions = data.sessions ?? sessions;
   revision = data.revision; modelName = data.modelName ?? modelName;
   const storage = document.querySelector('#session-storage');

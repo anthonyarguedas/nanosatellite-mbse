@@ -26,7 +26,11 @@ MAX_RESPONSE = 16 * 1024 * 1024
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model", type=Path, default=Path.cwd() / "mission.py")
+    parser.add_argument(
+        "--model",
+        type=Path,
+        help="Current session file (defaults to sessions/current.py).",
+    )
     parser.add_argument("--sessions", type=Path)
     parser.add_argument("--cots-directory", type=Path)
     parser.add_argument("--scripts-directory", type=Path)

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 from pathlib import Path
 
@@ -15,16 +14,6 @@ from .benches import (
     report_profiles,
 )
 from .service.application import Application
-
-
-def default_mission():
-    configured = os.environ.get("MISSION_FILE")
-    if configured:
-        return Path(configured).expanduser().absolute()
-    for parent in Path(__file__).resolve().parents:
-        if (parent / "missions").is_dir() and (parent / "requirements-ui").is_dir():
-            return parent / "missions" / "mission.py"
-    return Path.cwd() / "mission.py"
 
 
 def parser():
@@ -62,7 +51,7 @@ def create_analysis(args, application):
             for path in (application.current_path, application.legacy_path)
         ):
             raise FileNotFoundError(
-                "Choose an existing current mission or a saved session with --from."
+                "Choose an existing current session or a saved session with --from."
             )
         source = application.load_session(identity)
         graph = add_scenario_analysis(source, orbit=args.orbit)
@@ -88,7 +77,7 @@ def main(argv=None):
             for profile in report_profiles():
                 print(f"{profile.id}\t{profile.name}")
             return 0
-        application = Application(args.mission or default_mission())
+        application = Application(args.mission)
         if args.command == "analysis":
             graph, name, tab = create_analysis(args, application)
         else:

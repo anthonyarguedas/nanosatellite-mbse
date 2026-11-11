@@ -21,6 +21,9 @@ python3 -I -B -u -m nanosat_mbse.service \
   --cots-directory /path/to/cots
 ```
 
+Without `--model` or `MISSION_FILE`, the service uses `framework/sessions/current.py` in a source checkout.
+Outside a checkout it uses `sessions/current.py` under the working directory.
+The UI and native CLI use this same location policy.
 Optional trusted launcher arguments are `--sessions` and `--scripts-directory`.
 Paths, providers and interpreter arguments are unavailable as browser operations.
 The source bootstrap adds only its own `src` directory.
@@ -49,13 +52,18 @@ Creation requests accept `template: "blank"` or `template: "copy"`.
 The removed `generic-eps` creation value is rejected.
 Historical `generic-eps` metadata remains readable as provenance only.
 
-Named sessions use:
+Default session storage uses:
 
 ```text
-sessions/<uuid>/session.py
-sessions/<uuid>/metadata.json
+framework/sessions/current.py
+framework/sessions/current.metadata.json
+framework/sessions/<uuid>/session.py
+framework/sessions/<uuid>/metadata.json
 ```
 
+For a custom workspace, named sessions use its neighboring `sessions/` directory.
+A workspace already inside a directory named `sessions` shares that directory with named sessions.
+An explicit `--sessions` directory overrides this convention.
 A legacy named session is converted on first open.
 Its old `session.json` and `<uuid>.json` remain unchanged.
 The native metadata retains its ID, name, template and creation time.
@@ -78,7 +86,7 @@ Opening a session returns:
   "revision": "path-bound-file-revision",
   "storage": "python",
   "writable": true,
-  "session": {"id": "current", "name": "Current mission"},
+  "session": {"id": "current", "name": "Current session"},
   "metadata": {},
   "catalog": [],
   "products": [],

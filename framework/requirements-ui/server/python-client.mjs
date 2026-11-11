@@ -4,13 +4,12 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const sourceBootstrap = fileURLToPath(new URL('../../python/service.py', import.meta.url));
-const defaultModel = fileURLToPath(new URL('../../missions/mission.py', import.meta.url));
 const defaultCots = fileURLToPath(new URL('../../cots/', import.meta.url));
 const failure = (message, status = 503) => Object.assign(new Error(message), { status });
 const pathValue = value => value instanceof URL ? fileURLToPath(value) : value;
 
 export function createPythonService({ python = process.env.VERIFICATION_PYTHON || 'python3',
-  modelPath = defaultModel, sessionDirectory, cotsDirectory = process.env.NANOSAT_MBSE_COTS_DIR || defaultCots,
+  modelPath = process.env.MISSION_FILE, sessionDirectory, cotsDirectory = process.env.NANOSAT_MBSE_COTS_DIR || defaultCots,
   scriptDirectory = process.env.VERIFICATION_SCRIPTS_DIR, installed = false, path,
   timeoutMs = 7000, maxQueue = 16, maxResponseBytes = 16 * 1024 * 1024 } = {}) {
   let child = null, active = null, sequence = 0, closed = false, buffer = '', stderr = '';
@@ -37,7 +36,8 @@ export function createPythonService({ python = process.env.VERIFICATION_PYTHON |
     if (!closed) queueMicrotask(pump);
   };
   const start = () => {
-    const args = ['-I', '-B', '-u', ...(installed ? ['-m', 'nanosat_mbse.service'] : [pathValue(path || sourceBootstrap)]), '--model', pathValue(modelPath)];
+    const args = ['-I', '-B', '-u', ...(installed ? ['-m', 'nanosat_mbse.service'] : [pathValue(path || sourceBootstrap)])];
+    if (modelPath) args.push('--model', pathValue(modelPath));
     if (sessionDirectory) args.push('--sessions', pathValue(sessionDirectory));
     if (cotsDirectory) args.push('--cots-directory', pathValue(cotsDirectory));
     if (scriptDirectory) args.push('--scripts-directory', pathValue(scriptDirectory));

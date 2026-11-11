@@ -13,12 +13,22 @@ Add domain objects through `Session.add()` to run their normal initialization me
 Reuse a saved session by opening it and choosing Save as in the UI, or saving the loaded graph to a new native path.
 The supplied Generic EPS Example is a normal saved file with no special creation or regeneration behavior.
 
+## Storage locations
+
+The UI and CLI use `framework/sessions/current.py` as their default workspace in a source checkout.
+Named sessions live directly under `framework/sessions/<id>/`, alongside the current workspace.
+The supplied Generic EPS Example is one of these ordinary saved sessions.
+Outside a checkout, the default workspace is `sessions/current.py` under the working directory.
+A custom workspace uses a neighboring `sessions/` directory for named sessions.
+When the workspace is already inside a directory named `sessions`, that directory is reused.
+The service's `--sessions` argument selects an explicit named-session directory.
+
 ## Native API
 
 ```python
 from nanosat_mbse import Session
 
-session = Session.open("mission/session.py")
+session = Session.open("framework/sessions/current.py")
 period = session.value("ORB001", "orbit_period_s")
 session.get("ORB001").set_value("altitude_km", 500)
 session.run("SCR001")
