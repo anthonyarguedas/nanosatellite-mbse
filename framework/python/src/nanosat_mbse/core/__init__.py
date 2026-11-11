@@ -11,6 +11,7 @@ from .drafts import DraftRequirement, DraftStatement
 from .elements import Component, Element, Stakeholder, Subsystem
 from .configuration import (
     ComponentState,
+    StateAllocation,
     LoadConnection,
     LoadProfile,
     Mode,
@@ -60,6 +61,7 @@ __all__ = [
     "calculation_signature",
     "Component",
     "ComponentState",
+    "StateAllocation",
     "DraftExpression",
     "DraftRequirement",
     "DraftStatement",

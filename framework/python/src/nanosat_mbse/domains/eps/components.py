@@ -30,6 +30,19 @@ class PowerCircuit(Component):
     id_prefix = "PCS"
 
 
+class PowerLoss(Component):
+    """Explicit dissipative demand at the declared budget boundary, in W.
+
+    This is an accounting contribution, with no additional physical hardware.
+    Supply losses only when they are absent from the other counted loads.
+    """
+
+    model = "SpaceSegment::CubeSat::PowerSubsystem::PowerLoss"
+    default_name = "Power Loss"
+    id_prefix = "LOS"
+    resource_accounting = False
+
+
 class BatteryCharger(RegulatorAndConverter):
     default_name = "Battery Charger"
 

@@ -194,9 +194,6 @@ def describe(session, *, callables=None):
                     "key": state.key,
                     "name": state.name,
                     "watts": state.watts,
-                    "basis": state.basis,
-                    "source": state.source,
-                    "conditions": state.conditions,
                 }
                 for state in load.states
             ],
@@ -204,6 +201,10 @@ def describe(session, *, callables=None):
                 mode.key: state.key for mode, state in load.assignments.items()
             },
             "duties": {mode.key: duty for mode, duty in load.duties.items()},
+            "allocations": {
+                mode.key: [{"state": item.state.key, "duty": item.duty} for item in entries]
+                for mode, entries in load.allocations.items()
+            },
         }
     return {
         "tabs": contexts,
@@ -217,6 +218,13 @@ def describe(session, *, callables=None):
         "objects": descriptions,
         "powerDefaults": power,
         "powerComponents": list(power),
+        "powerLossDefinitions": {
+            context["key"]: next(
+                (item["model"] for item in allowed_definitions(session, context["key"])
+                 if item["category"] == "Power Loss"), None
+            )
+            for context in contexts if context["key"] != "external"
+        },
         "powerScopes": [
             {"key": scope.key, "kind": scope.kind} for scope in power_scopes(session)
         ],

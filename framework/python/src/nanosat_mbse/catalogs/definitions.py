@@ -212,6 +212,11 @@ class ElementDefinition:
     tab_label: Optional[str] = None
     expandable: bool = False
     properties: Tuple[DefinitionParameter, ...] = field(default_factory=tuple)
+    auto_create: bool = True
+
+    def __post_init__(self):
+        if type(self.auto_create) is not bool:
+            raise TypeError("Element default creation is a Boolean choice.")
 
     def projection(self):
         result = {
@@ -229,6 +234,8 @@ class ElementDefinition:
         ):
             if value is not None:
                 result[key] = value
+        if not self.auto_create:
+            result["autoCreate"] = False
         if self.properties:
             result["properties"] = [
                 {

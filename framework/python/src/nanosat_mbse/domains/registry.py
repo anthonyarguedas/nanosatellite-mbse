@@ -29,6 +29,7 @@ _TYPES = (
     eps_components.SolarArray,
     eps_components.RegulatorAndConverter,
     eps_components.PowerCircuit,
+    eps_components.PowerLoss,
     components.ProcessorAndMemory,
     components.Software,
     components.Instrument,

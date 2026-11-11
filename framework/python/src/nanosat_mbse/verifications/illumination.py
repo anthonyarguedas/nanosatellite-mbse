@@ -86,6 +86,26 @@ def solar_visibility(position, sun, earth_radius):
     return clamp(1.0 - overlap / (math.pi * a * a), 0.0, 1.0), direction, distance
 
 
+def initial_orientation(vector, roll_deg, pitch_deg, yaw_deg):
+    """Active body-to-local Rz(yaw) Ry(pitch) Rx(roll), in degrees."""
+    roll, pitch, yaw = (math.radians(value % 360) for value in (roll_deg, pitch_deg, yaw_deg))
+    x, y, z = vector
+    y, z = math.cos(roll) * y - math.sin(roll) * z, math.sin(roll) * y + math.cos(roll) * z
+    x, z = math.cos(pitch) * x + math.sin(pitch) * z, -math.sin(pitch) * x + math.cos(pitch) * z
+    return (math.cos(yaw) * x - math.sin(yaw) * y, math.sin(yaw) * x + math.cos(yaw) * y, z)
+
+
+def rotate(vector, axis, angle_deg):
+    """Rodrigues rotation about a unit axis fixed in the local orbital frame."""
+    angle = math.radians(angle_deg % 360)
+    c, s = math.cos(angle), math.sin(angle)
+    x, y, z = axis
+    a, b, d = vector
+    cross = (y * d - z * b, z * a - x * d, x * b - y * a)
+    projection = dot(axis, vector)
+    return tuple(c * v + s * w + (1 - c) * projection * k for v, w, k in zip(vector, cross, axis))
+
+
 def simulate(p):
     for name, value in p.items():
         if name == "sun_tracking":
@@ -122,9 +142,25 @@ def simulate(p):
         )
     panel = (p["panel_normal_radial"], p["panel_normal_along"], p["panel_normal_cross"])
     length = norm(panel)
+    if not math.isfinite(length):
+        raise ValueError("Panel normal magnitude must be finite.")
     if not p["sun_tracking"] and length == 0:
         raise ValueError("A fixed panel needs a nonzero local orbital normal vector.")
     panel = tuple(value / length for value in panel) if length else (0.0, 0.0, 0.0)
+    panel = initial_orientation(panel, p["initial_roll_deg"], p["initial_pitch_deg"], p["initial_yaw_deg"])
+    axis = (p["rotation_axis_radial"], p["rotation_axis_along"], p["rotation_axis_cross"])
+    axis_length = norm(axis)
+    if not math.isfinite(axis_length):
+        raise ValueError("Rotation axis magnitude must be finite.")
+    if not p["sun_tracking"] and p["rotation_rate_deg_s"] != 0:
+        if axis_length == 0:
+            raise ValueError("A rotating panel needs a nonzero rotation axis.")
+        if p["step_s"] > 2 / abs(p["rotation_rate_deg_s"]):
+            raise ValueError("Use an integration step covering at most two degrees of rotation.")
+    axis = tuple(value / axis_length for value in axis) if axis_length else (0.0, 0.0, 1.0)
+    if p["panel_area_m2"] < 0 or not 0 < p["panel_efficiency"] <= 1 or not 0 <= p["panel_retained_factor"] <= 1:
+        raise ValueError("Use nonnegative active area, efficiency in (0,1] and retention in [0,1].")
+    electrical_area = p["panel_area_m2"] * p["panel_efficiency"] * p["panel_retained_factor"]
     inclination = math.radians(p["inclination_deg"])
     node_rate = (
         -1.5
@@ -167,8 +203,9 @@ def simulate(p):
             current_eclipse = 0.0
             if visible < 1:
                 penumbra += dt
+        local = rotate(panel, axis, p["rotation_rate_deg_s"] * time) if not p["sun_tracking"] else panel
         normal = tuple(
-            panel[0] * r + panel[1] * a + panel[2] * c
+            local[0] * r + local[1] * a + local[2] * c
             for r, a, c in zip(radial, along, cross)
         )
         incidence = 1.0 if p["sun_tracking"] else max(0.0, dot(normal, direction))
@@ -178,7 +215,9 @@ def simulate(p):
     print(
         f"Circular orbit, {steps} midpoint samples, J2 node drift only. "
         "Eclipse lengths are clipped at interval boundaries. Repeat with a smaller step to check convergence. "
-        "No thermal, battery, albedo or hardware compliance assessment.",
+        "Prescribed constant rotation relative to the local orbital frame. "
+        "Electrical generation uses constant declared area, efficiency and retention. "
+        "No attitude dynamics, operating-point inference, path losses, thermal or battery assessment.",
         file=sys.stderr,
     )
     return {
@@ -194,6 +233,12 @@ def simulate(p):
         "max_irradiance_W_m2": max_flux,
         "mean_irradiance_W_m2": incident / p["duration_s"],
         "incident_energy_J_m2": incident,
+        "generated_energy_J": incident * electrical_area,
+        "generated_energy_Wh": incident * electrical_area / 3600,
+        "mean_generation_W": incident * electrical_area / p["duration_s"],
+        "mean_sunlight_generation_W": incident * electrical_area / sunlight if sunlight else 0.0,
+        "min_generation_W": min_flux * electrical_area,
+        "max_generation_W": max_flux * electrical_area,
         "sample_count": steps,
     }
 
@@ -202,7 +247,7 @@ class Illumination(VerificationScript):
     definition_spec = ScriptDefinition(
         id="scenario_illumination",
         name="Orbit illumination scenario",
-        description="Preliminary circular Earth orbit with epoch-dependent solar direction and distance, secular J2 node drift, conical eclipse and one fixed local-orbital or Sun-tracking panel. Outputs summarize the declared interval. No thermal, battery or flight compliance claim. See analyses/README.md.",
+        description="Circular Earth orbit, epoch-dependent solar direction, J2 node drift and conical eclipse for one array section. Initial Rz Ry Rx orientation and constant spin about a declared local-orbital axis, or ideal Sun tracking. Electrical power uses constant active area, efficiency and retention. Only scalar interval summaries are returned. No attitude dynamics, operating-point inference or path-loss model. See analyses/README.md.",
         inputs=(
             ScriptPort("altitude_km", float, "km"),
             ScriptPort("earth_radius_km", float, "km"),
@@ -219,6 +264,16 @@ class Illumination(VerificationScript):
             ScriptPort("panel_normal_along", float, None),
             ScriptPort("panel_normal_cross", float, None),
             ScriptPort("sun_tracking", bool, None),
+            ScriptPort("rotation_rate_deg_s", float, "deg/s"),
+            ScriptPort("rotation_axis_radial", float, None),
+            ScriptPort("rotation_axis_along", float, None),
+            ScriptPort("rotation_axis_cross", float, None),
+            ScriptPort("initial_roll_deg", float, "deg"),
+            ScriptPort("initial_pitch_deg", float, "deg"),
+            ScriptPort("initial_yaw_deg", float, "deg"),
+            ScriptPort("panel_area_m2", float, "m**2"),
+            ScriptPort("panel_efficiency", float, None),
+            ScriptPort("panel_retained_factor", float, None),
         ),
         outputs=(
             ScriptPort("orbit_period_s", float, "s"),
@@ -233,6 +288,12 @@ class Illumination(VerificationScript):
             ScriptPort("max_irradiance_W_m2", float, "W/m**2"),
             ScriptPort("mean_irradiance_W_m2", float, "W/m**2"),
             ScriptPort("incident_energy_J_m2", float, "J/m**2"),
+            ScriptPort("generated_energy_J", float, "J"),
+            ScriptPort("generated_energy_Wh", float, "Wh"),
+            ScriptPort("mean_generation_W", float, "W"),
+            ScriptPort("mean_sunlight_generation_W", float, "W"),
+            ScriptPort("min_generation_W", float, "W"),
+            ScriptPort("max_generation_W", float, "W"),
             ScriptPort("sample_count", int, None),
         ),
         timeout_ms=10000,

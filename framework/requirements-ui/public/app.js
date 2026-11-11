@@ -7,7 +7,7 @@ import {
 import * as native from '/native-client.js';
 import { createRequirementEditor } from '/editors/requirement.js';
 import { requirementHTML } from '/requirement-preview.js';
-import { createPowerEditor } from '/editors/power.js';
+import { createPowerTable } from '/editors/power.js';
 import { createCotsEditor } from '/editors/cots.js';
 
 const hasFixedBudgetScope = row => fixedScope(workspace, row);
@@ -41,8 +41,10 @@ function captureFocus() {
   const input = document.activeElement, row = input?.closest('tr[data-key]');
   const selector = row && input.dataset.field ? `tr[data-key="${row.dataset.key}"] [data-field="${input.dataset.field}"]`
     : input?.dataset.modeKey ? `[data-mode-key="${input.dataset.modeKey}"][data-mode-field="${input.dataset.modeField}"]`
-      : input?.dataset.powerAssignment ? `[data-power-assignment="${input.dataset.powerAssignment}"][data-mode="${input.dataset.mode}"]`
-        : input?.dataset.powerDuty ? `[data-power-duty="${input.dataset.powerDuty}"][data-mode="${input.dataset.mode}"]` : null;
+      : input?.dataset.powerName ? `[data-power-name="${input.dataset.powerName}"][data-state="${input.dataset.state}"]`
+        : input?.dataset.powerWatts ? `[data-power-watts="${input.dataset.powerWatts}"][data-state="${input.dataset.state}"]`
+          : input?.dataset.powerLoad ? `[data-power-load="${input.dataset.powerLoad}"][data-load-field="${input.dataset.loadField}"]`
+            : input?.dataset.powerDuty ? `[data-power-duty="${input.dataset.powerDuty}"][data-mode="${input.dataset.mode}"][data-state="${input.dataset.state}"]` : null;
   return selector ? { selector, start: input.selectionStart, end: input.selectionEnd } : null;
 }
 function restoreFocus(focus) {
@@ -97,7 +99,7 @@ const cotsEditor = createCotsEditor({
   panel: document.querySelector('#cots-editor'), getWorkspace: () => workspace, getProducts: () => products,
   getReferenceWorkspace: () => { try { return requirementEditor.preview(); } catch { return workspace; } },
   validate: candidate => candidate,
-  beforeOpen: () => { if (!powerEditor.closeWithConfirmation()) return false; requirementEditor.suspend(); return true; },
+  beforeOpen: () => { requirementEditor.suspend(); return true; },
   onReturn: () => requirementEditor.resume(), returnLabel: () => requirementEditor.id(),
   onCatalogueRefresh: () => { scheduleEvaluation(); requirementEditor.refresh(); },
   canInsert: () => requirementEditor.canInsertCots(), onInsert: reference => requirementEditor.insertCotsReference(reference),
@@ -111,8 +113,8 @@ const cotsEditor = createCotsEditor({
     await requirementEditor.rebaseCots(before, workspace.components.find(component => component.key === after.key));
   },
 });
-const powerEditor = createPowerEditor({
-  section: document.querySelector('#power-workspace'), panel: document.querySelector('#power-editor'),
+const powerTable = createPowerTable({
+  section: document.querySelector('#power-workspace'),
   getWorkspace: () => workspace, getActive: () => active,
   onError: message => showStatus(message, true),
   onChange: commitCandidate,
@@ -120,10 +122,6 @@ const powerEditor = createPowerEditor({
     const before = structuredClone(workspace), view = await native.command(workspace, operation);
     adoptCanonical(view, before); requirementEditor.refresh(); scheduleSave(); scheduleEvaluation();
   }),
-  beforeOpen: () => {
-    if (requirementEditor.isDirty() && !window.confirm('Discard the unsaved requirement edits and edit component power?')) return false;
-    requirementEditor.close(); cotsEditor.suspend(); return true;
-  },
 });
 const rowLabel = row => row.name ?? row.text ?? products.find(product => product.id === row.product)?.name ?? '';
 const isEps = () => catalog.find(type => type.model === rowByKey(active)?.definition)?.role === 'eps';
@@ -158,7 +156,7 @@ function renderWorkbook() {
   document.querySelector('.components').hidden = !isEps();
   renderTabs(); render('stakeholders'); render('statements');
   if (isEps()) render('components');
-  powerEditor.render(); updateExport();
+  powerTable.render(); updateExport();
 }
 function navigate(key, history = true) {
   if (!tabsFor(workspace, catalog).some(tab => tab.key === key)) return;
@@ -227,7 +225,7 @@ function renderHeader() {
 function elementAction(row) {
   if (active === 'external') return '';
   if (objectMetadata(workspace, row.key).expandable) return `<button type="button" class="element-open" data-open-element="${row.key}" aria-label="Open ${escape(row.name)}" title="Open component and requirement tables">↗</button>`;
-  return (metadata(workspace).powerComponents ?? []).includes(row.key) ? `<button type="button" class="element-open" data-open-power="${row.key}" aria-label="Edit power for ${escape(row.name)}" title="Edit component power"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 3 5 5M3 17l4-1 10-10a2.1 2.1 0 0 0-3-3L4 13l-1 4Z"/></svg></button>` : '';
+  return '';
 }
 function rowHTML(row, table, index) {
   const attrs = (field, col) => `data-field="${field}" data-col="${col}" aria-label="${table === 'components' ? 'COTS component' : table === 'stakeholders' ? active === 'external' ? 'Stakeholder' : 'Element' : 'Statement'} ${field}, row ${index + 1}"`;
@@ -392,7 +390,6 @@ function setSessionBusy(busy) {
   main.inert = !loaded || busy;
   document.querySelector('#tabs').inert = busy;
   document.querySelector('#requirement-editor').inert = busy;
-  document.querySelector('#power-editor').inert = busy;
   document.querySelector('#cots-editor').inert = busy;
   sessionEditor.inert = busy;
   sessionSelect.disabled = busy || !loaded;
@@ -409,7 +406,7 @@ function sessionLocation(history = 'replace') {
 function installWorkspace(data, id, tab, history = 'replace') {
   const nextCatalog = data.catalog ?? [], nextProducts = data.products ?? [];
   const candidate = native.attachView(data);
-  cotsEditor.close(false); requirementEditor.close(); powerEditor.reset(); closeEditor(); closeMenus();
+  cotsEditor.close(false); requirementEditor.close(); powerTable.reset(); closeEditor(); closeMenus();
   clearTimeout(saveTimer); clearTimeout(evaluationTimer); clearTimeout(workerTimer);
   generation++; worker?.terminate(); worker = null; results = new Map(); componentResults = new Map(); scriptResults = null;
   for (const state of [selected, sorts]) for (const key of Object.keys(state)) delete state[key];
@@ -441,7 +438,7 @@ async function load() {
 }
 async function switchSession(id, history = true) {
   if (sessionBusy || !loaded || id === sessionId) { renderSessions(); if (loaded) sessionLocation(); return; }
-  if ((requirementEditor.isDirty() || powerEditor.isDirty() || cotsEditor.isDirty()) && !window.confirm('Discard the unsaved editor changes and switch sessions?')) {
+  if ((requirementEditor.isDirty() || cotsEditor.isDirty()) && !window.confirm('Discard the unsaved editor changes and switch sessions?')) {
     renderSessions(); sessionLocation(); return;
   }
   setSessionBusy(true); clearTimeout(saveTimer);
@@ -480,12 +477,12 @@ async function createSession(event) {
   event.preventDefault();
   if (!loaded || sessionBusy) return;
   const copy = sessionMode === 'copy', tab = active;
-  if (!copy && (requirementEditor.isDirty() || powerEditor.isDirty() || cotsEditor.isDirty()) && !window.confirm('Discard the unsaved editor changes and create a new session?')) return;
+  if (!copy && (requirementEditor.isDirty() || cotsEditor.isDirty()) && !window.confirm('Discard the unsaved editor changes and create a new session?')) return;
   setSessionBusy(true); clearTimeout(saveTimer);
   try {
     if (copy) { if (saveTask) await saveTask; }
     else if (!await save()) return;
-    const copied = copy ? powerEditor.snapshot(cotsEditor.snapshot(requirementEditor.snapshot())) : null;
+    const copied = copy ? cotsEditor.snapshot(requirementEditor.snapshot()) : null;
     const data = { name: sessionNameInput.value, template: copy ? 'copy' : 'blank',
       ...(copy ? native.payload(copied, scriptResults) : {}) };
     const response = await fetch('/api/sessions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
@@ -504,7 +501,7 @@ document.querySelector('#session-form').addEventListener('submit', createSession
 async function exportArtifact(kind) {
   const button = document.querySelector(`.export-${kind}`);
   try {
-    const data = powerEditor.snapshot(cotsEditor.snapshot(requirementEditor.snapshot())), context = active;
+    const data = cotsEditor.snapshot(requirementEditor.snapshot()), context = active;
     exporting = true; updateExport(); button.setAttribute('aria-busy', 'true');
     const response = await fetch(`/api/${kind}?session=${encodeURIComponent(sessionId)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...native.payload(data, scriptResults), context }) });
@@ -541,7 +538,7 @@ function changed(row, table, field) {
     tr.querySelector('[data-field="product"]').title = rowLabel(row);
     const button = tr.querySelector('[data-cots-edit]'); button.disabled = !row.product; button.setAttribute('aria-label', `Edit COTS ${row.id || 'new row'}`);
   }
-  addTrailingRows(table); powerEditor.render(); cotsEditor.refresh(); requirementEditor.refresh(); updateExport(); scheduleSave(); scheduleEvaluation();
+  addTrailingRows(table); powerTable.render(); cotsEditor.refresh(); requirementEditor.refresh(); updateExport(); scheduleSave(); scheduleEvaluation();
 }
 main.addEventListener('focusin', event => { const ctx = context(event.target); if (ctx) selected[selectionKey(ctx.table)] = ctx.row.key; });
 main.addEventListener('input', event => {
@@ -579,7 +576,6 @@ main.addEventListener('keydown', event => {
   }
   if (table === 'statements' && ((field === 'verified' && event.key === 'F2') || (field === 'text' && ['F2', 'Enter', ' '].includes(event.key)))) {
     event.preventDefault(); closeEditor(); closeMenus();
-    if (!powerEditor.closeWithConfirmation()) return;
     cotsEditor.suspend(); requirementEditor.open(row.key, tr.querySelector(field === 'verified' ? '.verification-edit' : '.statement-cell .requirement-edit')); return;
   }
   if (event.target.dataset.col === undefined) return;
@@ -655,7 +651,7 @@ function insertRow(table) {
 async function deleteRow(table, key) {
   const row = viewRows(table).find(row => row.key === key);
   if (!row) return;
-  if (requirementEditor.isDirty() || cotsEditor.isDirty() || powerEditor.isDirty()) { showStatus('Save or cancel the open editor draft before deleting rows.', true); return; }
+  if (requirementEditor.isDirty() || cotsEditor.isDirty()) { showStatus('Save or cancel the open editor draft before deleting rows.', true); return; }
   const before = structuredClone(workspace);
   try {
     if (!used(row, table)) dataRows(table).splice(dataRows(table).indexOf(row), 1);
@@ -672,13 +668,11 @@ main.addEventListener('click', event => {
   if (exportButton) { closeMenus(); closeEditor(); exportArtifact(exportButton.matches('.export-python') ? 'python' : exportButton.matches('.export-kicad') ? 'kicad' : 'fprime'); return; }
   const openElement = event.target.closest('[data-open-element]');
   if (openElement) { navigate(openElement.dataset.openElement); return; }
-  const openPower = event.target.closest('[data-open-power]');
-  if (openPower) { powerEditor.open(openPower.dataset.openPower); return; }
   const cots = event.target.closest('[data-cots-edit]');
   if (cots) { event.preventDefault(); closeMenus(); closeEditor(); cotsEditor.open(cots.dataset.cotsEdit, cots); return; }
   const ctx = context(event.target), link = event.target.closest('[data-row-link]');
   const requirement = event.target.closest('.requirement-edit');
-  if (requirement) { event.preventDefault(); if (!powerEditor.closeWithConfirmation()) return; closeMenus(); closeEditor(); cotsEditor.suspend(); requirementEditor.open(ctx.row.key, requirement); return; }
+  if (requirement) { event.preventDefault(); closeMenus(); closeEditor(); cotsEditor.suspend(); requirementEditor.open(ctx.row.key, requirement); return; }
   const remove = event.target.closest('[data-delete-row]');
   if (remove) {
     event.preventDefault();
@@ -732,13 +726,12 @@ document.addEventListener('keydown', event => {
   if (event.key === 'Escape') {
     const transient = editor || document.querySelector('.table-menu:not([hidden])');
     closeMenus(); closeEditor(true);
-    if (!transient) { if (cotsEditor.isVisible()) cotsEditor.close(); else { requirementEditor.close(); powerEditor.close(); } }
+    if (!transient) { if (cotsEditor.isVisible()) cotsEditor.close(); else requirementEditor.close(); }
   }
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
     event.preventDefault();
     if (editor?.type === 'session') document.querySelector('#session-form').requestSubmit();
     else if (cotsEditor.isVisible()) cotsEditor.save();
-    else if (powerEditor.isOpen()) powerEditor.save();
     else if (requirementEditor.isOpen()) requirementEditor.save();
     else save();
   }
@@ -786,6 +779,6 @@ main.addEventListener('paste', async event => {
     focusCell(table, start, column);
   } catch (error) { showStatus(error.message, true); }
 });
-window.addEventListener('beforeunload', event => { if (dirty() || requirementEditor.isDirty() || powerEditor.isDirty() || cotsEditor.isDirty()) { event.preventDefault(); event.returnValue = ''; } });
+window.addEventListener('beforeunload', event => { if (dirty() || requirementEditor.isDirty() || cotsEditor.isDirty()) { event.preventDefault(); event.returnValue = ''; } });
 document.addEventListener('visibilitychange', () => { if (document.hidden && dirty()) save(); });
 load();

@@ -191,8 +191,32 @@ def add_scenario_analysis(original, *, orbit=None):
             ("mu_km3_s2", "gravitationalParameter_km3_s2"),
         ):
             script.set_expression(name, f"{orbit.id}.{target}")
+    # Numeric model inputs live in ordinary generic EPS requirements. Keep
+    # multiple-EPS studies manual rather than selecting an ambiguous owner.
+    epses = [element for element in session.elements if element.role == "eps"]
+    if len(epses) == 1:
+        eps = epses[0]
+        names = ("ArrayAttitude", "ArrayPanelModel", "ArrayIllumination", "EPS02")
+        session._seed_templates(eps, tuple(
+            session.catalog.by_requirement[f"FrameworkRequirements::{name}"]
+            for name in names
+            if not any(row.definition == f"FrameworkRequirements::{name}" and row.subject is None for row in eps.requirements)
+        ))
+        for name in names[:3]:
+            row = next(row for row in eps.requirements if row.definition == f"FrameworkRequirements::{name}" and row.subject is None)
+            for parameter in row.parameters:
+                if parameter in script.parameters:
+                    script.set_expression(parameter, f"{row.id}.{parameter}")
+        arrays = [element for element in eps.components if isinstance(element, SolarArray)]
+        generation = next(row for row in eps.requirements if row.definition == "FrameworkRequirements::EPS02" and row.subject is None)
+        parameter = generation.parameters["sunlight_generation_J"]
+        if len(arrays) == 1 and parameter.expression is None and parameter.value is None and orbit is not None:
+            # Normalize this interval estimate to one orbit. Differently
+            # illuminated sections require separately reviewed sums.
+            generation.set_expression("sunlight_generation_J", f"{script.id}.mean_generation_W * {orbit.id}.orbit_period_s")
+
     rationale = (
-        "Proposed interval-specific illumination criterion. Set and source the scenario inputs in the Python script input table. "
+        "Proposed interval-specific illumination criterion. Set and source numeric model inputs in the generic EPS requirements when linked, or in the script input table. "
         "Supply an approved acceptance limit here. Eclipse lengths use midpoint samples and are clipped at interval boundaries. "
         "Repeat at a smaller step and cover the required epochs and orbital phases. This criterion establishes no thermal, "
         "energy closure or complete mission compliance."
@@ -222,6 +246,23 @@ def add_scenario_analysis(original, *, orbit=None):
             origin=DOCUMENT,
             rationale=rationale,
         )
+    add_requirement(
+        session,
+        text="The declared array section shall generate at least $$generation_min_J$$ over the assessed interval, with calculated energy $$generated_energy_J$$ and mean power $$mean_generation_W$$.",
+        fields=(
+            Field("generation_min_J", "J"),
+            Field("generated_energy_J", "J", expression=f"{script.id}.generated_energy_J"),
+            Field("mean_generation_W", "W", expression=f"{script.id}.mean_generation_W"),
+        ),
+        owner=session.mission,
+        affected=() if orbit is None else orbit.affected,
+        sources=() if orbit is None else (orbit,),
+        condition="generation_min_J >= 0 and generated_energy_J >= generation_min_J",
+        script=script,
+        prefix="SCN",
+        origin=DOCUMENT,
+        rationale=rationale + " Electrical generation uses a constant declared section efficiency and retention. No attainable operating point is inferred.",
+    )
     validate_session(session)
     return session
 
@@ -255,8 +296,16 @@ def create_analysis_demo(**providers):
         "panel_normal_along": "0",
         "panel_normal_cross": "0",
         "sun_tracking": "True",
+        "panel_area_m2": "0.006036",
+        "panel_efficiency": "0.293",
+        "panel_retained_factor": "1",
     }.items():
-        illumination.set_expression(name, expression)
+        binding = illumination.parameters[name].expression
+        if binding is not None:
+            owner_id, parameter = binding.split(".")
+            session.get(owner_id).set_expression(parameter, expression)
+        else:
+            illumination.set_expression(name, expression)
     mppt = next(script for script in session.scripts if script.definition == "mppt_po")
     for name, expression in {
         "voc_ref_V": "8",
@@ -293,6 +342,7 @@ def create_analysis_demo(**providers):
         "delivered_energy_min_J": "400",
         "eclipse_limit_s": "2400",
         "irradiance_min_W_m2": "800",
+        "generation_min_J": "8000",
     }.items():
         row = next(row for row in session.requirements if f"$${name}$$" in row.text)
         row.set_expression(name, expression)

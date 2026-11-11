@@ -163,6 +163,17 @@ def normalize_projection(data, base=None):
             raise ValueError(f"{table} entries must be objects.")
     power = result["power"]
     if isinstance(power, dict):
+        # Former state annotations are read only for transport compatibility.
+        # They are absent from the native model and all new projections.
+        loads = power.get("loads", [])
+        for load in loads if isinstance(loads, list) else ():
+            if not isinstance(load, dict):
+                continue
+            states = load.get("states", [])
+            for state in states if isinstance(states, list) else ():
+                if isinstance(state, dict):
+                    for retired in ("basis", "source", "conditions"):
+                        state.pop(retired, None)
         power["modes"] = [
             row
             for row in power.get("modes", [])
@@ -365,6 +376,7 @@ def validate_projection(data, *, allow_new_ids=False):
                 "states",
                 "assignments",
                 "duties",
+                "allocations",
             },
         )
         key(load.get("element"), "Load component")
@@ -372,18 +384,24 @@ def validate_projection(data, *, allow_new_ids=False):
         text(load.get("host", ""), "Execution host", 80)
         mapping(load.get("assignments"), "State assignments")
         mapping(load.get("duties", {}), "Component duty percentages")
+        allocations = mapping(load.get("allocations", {}), "State allocations")
+        for mode, entries in allocations.items():
+            key(mode, "Allocation mode")
+            for item in collection(entries, "Allocated states", 32):
+                mapping(item, "State allocation", {"state", "duty"})
+                key(item.get("state"), "Allocated state")
+                if type(item.get("duty")) not in (int, float):
+                    raise ValueError("Enter a numeric state duty percentage.")
         for state in collection(load.get("states"), "Component states", 32):
             mapping(
                 state,
                 "Component state",
-                {"key", "name", "watts", "basis", "source", "conditions"},
+                {"key", "name", "watts"},
             )
             key(state.get("key"), "State key")
             text(state.get("name"), "State name", 80, required=True)
             if isinstance(state.get("watts"), str):
                 expression(state["watts"], "State power")
-            text(state.get("source", ""), "State source", 2000)
-            text(state.get("conditions", ""), "State conditions", 2000)
     for link in power["links"]:
         mapping(link, "Load connection", {"eps", "roots", "previous"})
         key(link.get("eps"), "EPS key")

@@ -629,6 +629,22 @@ ELEMENTS = (
     ),
 )
 
+# Loss entries are added explicitly. They share the component power editor,
+# while their native class excludes them from physical resource accounting.
+ELEMENTS += tuple(
+    E(
+        model=f"{parent.model}::PowerLoss",
+        name="Power Loss",
+        category="Power Loss",
+        id="LOS",
+        parent=parent.model,
+        auto_create=False,
+    )
+    for parent in ELEMENTS
+    if parent.model.startswith("SpaceSegment::")
+    and (parent.role in ("eps", "subsystem") or parent.model.endswith("::PayloadSubsystem"))
+)
+
 REQUIREMENTS = (
     R(
         name="OrbitPeriod",
@@ -1381,6 +1397,90 @@ REQUIREMENTS = (
         condition="",
         acceptance="((((required_utilization >= 0) and (required_utilization <= allocated_utilization)) and (allocated_utilization <= 1)) and all_hosts_and_tasks_assessed)",
         derives_from=("EPS21",),
+    ),
+)
+
+REQUIREMENTS += (
+    R(
+        name="BatteryRecoveryOrbits",
+        id="SIZ017",
+        context="eps",
+        text="The battery shall recover from depth of discharge $$recovery_dod$$ within $$max_recovery_orbits$$ orbits, with calculated recovery count $$recovery_orbits$$.",
+        origin="Constant repeating-orbit energy estimate. Fractional orbit count uses retained capacity and net energy at one declared boundary. This estimate excludes charge taper and does not establish chronological service or reserve compliance.",
+        affected=("Batteries", "SolarArrays"),
+        parameters=(
+            P("recovery_dod", expression="@CycleLife.dod_max"),
+            P("pack_eol_J", unit="J", expression="@BatteryCapacityScreen.pack_eol_J"),
+            P("generated_energy_J", unit="J", expression="@EPS02.sunlight_generation_J"),
+            P("load_energy_J", unit="J", expression="@LoadEnergy.sunlight_energy_J + @LoadEnergy.eclipse_energy_J"),
+            P("net_orbit_energy_J", unit="J", expression="generated_energy_J - load_energy_J"),
+            P("recovery_energy_J", unit="J", expression="pack_eol_J * recovery_dod"),
+            P("recovery_orbits", unit="orbits", expression="0 if recovery_dod == 0 else recovery_energy_J / net_orbit_energy_J if net_orbit_energy_J > 0 else None"),
+            P("max_recovery_orbits", unit="orbits"),
+        ),
+        condition="0 <= recovery_dod <= 1 and pack_eol_J > 0 and generated_energy_J >= 0 and load_energy_J >= 0 and (recovery_dod == 0 or net_orbit_energy_J > 0) and max_recovery_orbits >= 0 and recovery_orbits <= max_recovery_orbits",
+        acceptance="0 <= recovery_dod <= 1 and pack_eol_J > 0 and generated_energy_J >= 0 and load_energy_J >= 0 and (recovery_dod == 0 or net_orbit_energy_J > 0) and max_recovery_orbits >= 0 and recovery_orbits <= max_recovery_orbits",
+        auto_populate=True,
+    ),
+    R(
+        name="ArrayAttitude",
+        id="SIZ018",
+        context="eps",
+        text="The array section shall be assessed at constant rotation rate $$rotation_rate_deg_s$$ about its declared local orbital axis from initial roll $$initial_roll_deg$$, pitch $$initial_pitch_deg$$ and yaw $$initial_yaw_deg$$.",
+        origin="Prescribed constant rotation relative to the radial, along-track and orbit-normal frame. Initial active body-to-local rotation is Rz(yaw) Ry(pitch) Rx(roll). The normalized spin axis is fixed in the local orbital frame. Sun tracking overrides this prescribed orientation. No attitude dynamics or supplied histories.",
+        affected=("SolarArrays",),
+        parameters=(
+            P("rotation_rate_deg_s", unit="deg/s", expression="0"),
+            P("rotation_axis_radial", expression="0"),
+            P("rotation_axis_along", expression="0"),
+            P("rotation_axis_cross", expression="1"),
+            P("initial_roll_deg", unit="deg", expression="0"),
+            P("initial_pitch_deg", unit="deg", expression="0"),
+            P("initial_yaw_deg", unit="deg", expression="0"),
+        ),
+        condition="math.isfinite(rotation_rate_deg_s) and rotation_axis_radial ** 2 + rotation_axis_along ** 2 + rotation_axis_cross ** 2 > 0 and math.isfinite(initial_roll_deg) and math.isfinite(initial_pitch_deg) and math.isfinite(initial_yaw_deg)",
+        acceptance="math.isfinite(rotation_rate_deg_s) and rotation_axis_radial ** 2 + rotation_axis_along ** 2 + rotation_axis_cross ** 2 > 0 and math.isfinite(initial_roll_deg) and math.isfinite(initial_pitch_deg) and math.isfinite(initial_yaw_deg)",
+        auto_populate=True,
+    ),
+    R(
+        name="ArrayPanelModel",
+        id="SIZ019",
+        context="eps",
+        text="The declared array section shall use active cell area $$panel_area_m2$$, electrical efficiency $$panel_efficiency$$ and retained generation factor $$panel_retained_factor$$.",
+        origin="One uniformly illuminated section with constant declared electrical efficiency and lifetime retention. Area includes all active cells in the section. Zero area represents an unavailable section. Normal components are in the body frame before the initial attitude rotation. Evaluate differently oriented sections separately. This bounded power model does not infer an attainable operating point or MPPT behavior.",
+        affected=("SolarArrays",),
+        parameters=(
+            P("panel_area_m2", unit="m^2"),
+            P("panel_efficiency"),
+            P("panel_retained_factor"),
+            P("panel_normal_radial", expression="1"),
+            P("panel_normal_along", expression="0"),
+            P("panel_normal_cross", expression="0"),
+        ),
+        condition="panel_area_m2 >= 0 and 0 < panel_efficiency <= 1 and 0 <= panel_retained_factor <= 1 and panel_normal_radial ** 2 + panel_normal_along ** 2 + panel_normal_cross ** 2 > 0",
+        acceptance="panel_area_m2 >= 0 and 0 < panel_efficiency <= 1 and 0 <= panel_retained_factor <= 1 and panel_normal_radial ** 2 + panel_normal_along ** 2 + panel_normal_cross ** 2 > 0",
+        auto_populate=True,
+    ),
+    R(
+        name="ArrayIllumination",
+        id="SIZ020",
+        context="eps",
+        text="The array section shall be assessed over $$duration_s$$ from epoch $$epoch_jd$$ with integration step $$step_s$$ and reference irradiance $$solar_constant_W_m2$$.",
+        origin="Preliminary circular orbit with epoch-dependent solar direction and J2 node drift. Initial orbit angles are supplied at epoch. Step is at most orbit period / 180 and two degrees of prescribed rotation. Repeat at smaller steps to assess convergence. Booleans such as Sun tracking remain explicit script inputs.",
+        affected=("SolarArrays",),
+        parameters=(
+            P("inclination_deg", unit="deg"),
+            P("raan_deg", unit="deg"),
+            P("argument_latitude_deg", unit="deg"),
+            P("epoch_jd", unit="JD"),
+            P("duration_s", unit="s", expression="@OrbitPeriod.orbit_period_s"),
+            P("step_s", unit="s", expression="min(2, duration_s / 720, 2 / abs(@ArrayAttitude.rotation_rate_deg_s)) if @ArrayAttitude.rotation_rate_deg_s != 0 else min(2, duration_s / 720)"),
+            P("earth_j2"),
+            P("solar_constant_W_m2", unit="W/m^2"),
+        ),
+        condition="0 <= inclination_deg <= 180 and math.isfinite(raan_deg) and math.isfinite(argument_latitude_deg) and 2415020.5 <= epoch_jd and epoch_jd + duration_s / 86400 <= 2488069.5 and duration_s > 0 and step_s > 0 and 0 <= earth_j2 < 0.01 and solar_constant_W_m2 > 0",
+        acceptance="0 <= inclination_deg <= 180 and math.isfinite(raan_deg) and math.isfinite(argument_latitude_deg) and 2415020.5 <= epoch_jd and epoch_jd + duration_s / 86400 <= 2488069.5 and duration_s > 0 and step_s > 0 and 0 <= earth_j2 < 0.01 and solar_constant_W_m2 > 0",
+        auto_populate=True,
     ),
 )
 

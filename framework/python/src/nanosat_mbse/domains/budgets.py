@@ -5,7 +5,7 @@ from __future__ import annotations
 import ast
 from dataclasses import dataclass, replace
 
-from ..core.configuration import ComponentState, LoadConnection, LoadProfile
+from ..core.configuration import ComponentState, LoadConnection, LoadProfile, StateAllocation
 from ..core.elements import Subsystem
 from ..core.expressions import finite_number
 from ..core.requirements import Parameter, Requirement
@@ -199,6 +199,7 @@ def resource_scopes(session):
             bool(scope.affected)
             if scope.kind == "system"
             else getattr(scope.target, "default_accounting", "counted") != "host"
+            and getattr(scope.target, "resource_accounting", True)
         )
     )
 
@@ -659,25 +660,31 @@ def in_roots(element, roots):
 def component_draw(load, mode, *, context=None, average=False):
     if mode is None:
         raise PendingValue("Select a spacecraft mode to calculate power draw.")
-    duty = finite_number(load.duties.get(mode, 100)) if average else 100
-    if not 0 <= duty <= 100:
-        raise ValueError("Component duty must be between 0 and 100 percent.")
-    # No energy is consumed by this contribution at zero duty. Active power
-    # remains independently assessed by the unchanged power limit checks.
-    if duty == 0:
-        return 0.0
-    state = load.assignments.get(mode)
-    if state is None or state.watts is None:
+    allocations = load.for_mode(mode)
+    if not allocations:
         raise PendingValue(f"Select a state and power draw for {load.element.id}.")
-    if context is not None:
-        watts = context.component_state_power(load.element, state)
-    elif isinstance(state.watts, str):
-        raise PendingValue("Use a session evaluation context for power expressions.")
-    else:
-        watts = finite_number(state.watts)
-    if watts < 0:
-        raise ValueError("Component power draw must be nonnegative.")
-    return finite_number(finite_number(load.quantity) * watts * duty / 100)
+    powers = []
+    for allocation in allocations:
+        # Zero duty skips missing power for energy only. Active power remains
+        # independently checked, including rarely selected states.
+        if average and allocation.duty == 0:
+            powers.append(0.0)
+            continue
+        state = allocation.state
+        if state.watts is None:
+            raise PendingValue(f"Define {state.name} power for {load.element.id}.")
+        if context is not None:
+            watts = context.component_state_power(load.element, state)
+        elif isinstance(state.watts, str):
+            raise PendingValue("Use a session evaluation context for power expressions.")
+        else:
+            watts = finite_number(state.watts)
+        if watts < 0:
+            raise ValueError("Component power draw must be nonnegative.")
+        powers.append(watts * allocation.duty / 100 if average else watts)
+    # States of one component are mutually exclusive. Across components the
+    # active draw remains a conservative sum of independent maxima.
+    return finite_number(load.quantity * (sum(powers) if average else max(powers)))
 
 
 def load_budget(context, row, name):
@@ -846,35 +853,52 @@ def configure_load(session, element, **changes):
         changes["states"] = tuple(changes["states"])
     previous = load_for(session, element)
     load = replace(previous, **changes)
-    if "states" in changes and "assignments" not in changes:
-        states = {state.key: state for state in load.states}
-        load.assignments = {
-            mode: states[state.key]
-            for mode, state in previous.assignments.items()
-            if state.key in states
-        }
-    if "assignments" in changes:
-        states = {state.key: state for state in load.states}
-        states.update({state.name: state for state in load.states})
-        assignments = {}
-        for mode, state in changes["assignments"].items():
-            selected_mode = session.resolve_mode(mode)
-            if isinstance(state, str) and state not in states:
-                if "states" in changes and any(
-                    old.key == state for old in previous.states
-                ):
-                    continue
-                raise ValueError("Select an existing component state for each mode.")
-            selected_state = states[state] if isinstance(state, str) else state
-            assignments[selected_mode] = selected_state
-        load.assignments = assignments
-    if "duties" in changes:
-        load.duties = {
-            session.resolve_mode(mode): duty for mode, duty in changes["duties"].items()
-        }
-    else:
-        load.duties = dict(previous.duties)
+    states = {state.key: state for state in load.states}
+    states.update({state.name: state for state in load.states})
+    removed = {state.key for state in previous.states} - {state.key for state in load.states}
+
+    def selected(state):
+        identity = state.key if isinstance(state, ComponentState) else state
+        if identity in states:
+            return states[identity]
+        if "states" in changes and identity in removed:
+            return None
+        raise ValueError("Select an existing component state for each mode.")
+
+    assignments = changes.get("assignments", previous.assignments)
+    load.assignments = {}
+    for mode, state in assignments.items():
+        state = selected(state)
+        if state is not None:
+            load.assignments[session.resolve_mode(mode)] = state
+    load.duties = {
+        session.resolve_mode(mode): duty
+        for mode, duty in changes.get("duties", previous.duties).items()
+    }
     for mode in previous.assignments.keys() - load.assignments.keys():
+        load.duties.pop(mode, None)
+
+    allocations = changes.get(
+        "allocations", {} if "assignments" in changes else previous.allocations
+    )
+    load.allocations = {}
+    for mode, entries in allocations.items():
+        mode = session.resolve_mode(mode)
+        if not isinstance(entries, (list, tuple)) or len(entries) > 32:
+            raise ValueError("Allocate up to 32 states per component and mode.")
+        converted = []
+        for entry in entries:
+            if isinstance(entry, StateAllocation):
+                state, duty = entry.state, entry.duty
+            elif isinstance(entry, dict) and set(entry) == {"state", "duty"}:
+                state, duty = entry["state"], entry["duty"]
+            else:
+                raise ValueError("Each state allocation needs a state and duty percentage.")
+            state = selected(state)
+            if state is not None:
+                converted.append(StateAllocation(state, duty))
+        load.allocations[mode] = tuple(converted)
+        load.assignments.pop(mode, None)
         load.duties.pop(mode, None)
     validate_load(session, load)
     existing = session.power.load_for(element)
@@ -930,6 +954,18 @@ def validate_load(session, load):
             raise ValueError(
                 "Mode mappings must reference existing modes and component states."
             )
+    for mode, entries in load.allocations.items():
+        if mode not in session.power.modes or mode in load.assignments or mode in load.duties:
+            raise ValueError("Define each mode using either allocations or a legacy assignment.")
+        if not isinstance(entries, tuple) or len(entries) > 32:
+            raise ValueError("Allocate up to 32 states per component and mode.")
+        for entry in entries:
+            if not isinstance(entry, StateAllocation) or entry.state not in load.states:
+                raise ValueError("Allocations must reference existing component states.")
+            entry.__post_init__()
+        _unique([entry.state.key for entry in entries], "Allocated states")
+        if sum(entry.duty for entry in entries) > 100 + 1e-6:
+            raise ValueError("State duties within a spacecraft mode must total at most 100 percent.")
 
 
 def validate_budgets(session):

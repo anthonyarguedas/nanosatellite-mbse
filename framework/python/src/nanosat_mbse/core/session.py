@@ -622,6 +622,8 @@ class Session:
     def initialize_children(self, parent):
         created = []
         for definition in self.catalog.children(parent.definition):
+            if not definition.auto_create:
+                continue
             rule = SeedRule(parent.key, parent.key, f"child:{definition.model}")
             if rule in self.seed_history:
                 continue
@@ -1061,6 +1063,7 @@ class Session:
         for load in self.power.loads:
             load.assignments.pop(selected, None)
             load.duties.pop(selected, None)
+            load.allocations.pop(selected, None)
         return selected
 
     def configure_parameter_states(self, target, parameter, **changes):

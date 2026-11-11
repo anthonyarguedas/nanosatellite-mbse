@@ -209,9 +209,6 @@ def calculation_signature(session, *, cots_signature=ALL_MODES):
                             "key": state.key,
                             "name": state.name,
                             "watts": state.watts,
-                            "basis": state.basis,
-                            "source": state.source,
-                            "conditions": state.conditions,
                         }
                         for state in load.states
                     ],
@@ -222,6 +219,10 @@ def calculation_signature(session, *, cots_signature=ALL_MODES):
                     "duties": sorted(
                         (mode.key, duty) for mode, duty in load.duties.items()
                     ),
+                    **({"allocations": sorted(
+                        (mode.key, [(item.state.key, item.duty) for item in entries])
+                        for mode, entries in load.allocations.items()
+                    )} if load.allocations else {}),
                 }
                 for load in sorted(
                     session.power.loads, key=lambda load: load.element.key

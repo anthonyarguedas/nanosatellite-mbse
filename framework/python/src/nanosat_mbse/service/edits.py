@@ -397,14 +397,7 @@ def _load_changes(session, data, base):
         states = tuple(
             native_states[state["key"]]
             if state == old_states.get(state["key"]) and state["key"] in native_states
-            else ComponentState(
-                state["name"],
-                state["watts"],
-                state["basis"],
-                state["source"],
-                state["conditions"],
-                state["key"],
-            )
+            else ComponentState(**state)
             for state in row["states"]
         )
         session.configure_load(
@@ -416,6 +409,7 @@ def _load_changes(session, data, base):
             states=states,
             assignments=row["assignments"],
             duties=row.get("duties", previous.get(element, {}).get("duties", {})),
+            allocations=row.get("allocations", previous.get(element, {}).get("allocations", {})),
         )
     session.power.loads = [
         load

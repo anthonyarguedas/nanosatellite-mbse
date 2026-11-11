@@ -399,5 +399,127 @@ class IlluminationTests(unittest.TestCase):
             self.assertTrue(reopened.get(row.id).verify().verified)
 
 
+class RotatingArrayTests(unittest.TestCase):
+    def inputs(self):
+        return {
+            "altitude_km": 500, "earth_radius_km": 6378, "mu_km3_s2": 398601,
+            "inclination_deg": 0, "raan_deg": 0, "argument_latitude_deg": 0,
+            "epoch_jd": 2460754.5, "duration_s": 360, "step_s": 1,
+            "earth_j2": 0, "solar_constant_W_m2": 1000,
+            "panel_normal_radial": 0, "panel_normal_along": 0, "panel_normal_cross": 1,
+            "sun_tracking": False,
+            "rotation_rate_deg_s": 0, "rotation_axis_radial": 1,
+            "rotation_axis_along": 0, "rotation_axis_cross": 0,
+            "initial_roll_deg": 0, "initial_pitch_deg": 0, "initial_yaw_deg": 0,
+            "panel_area_m2": .01, "panel_efficiency": .3, "panel_retained_factor": .8,
+        }
+
+    def run_fixed_sun(self, **changes):
+        from unittest.mock import patch
+        from nanosat_mbse.verifications.illumination import AU_KM, simulate
+        p = {**self.inputs(), **changes}
+        with patch("nanosat_mbse.verifications.illumination.sun_position", return_value=(0, 0, AU_KM)), patch(
+            "nanosat_mbse.verifications.illumination.solar_visibility", return_value=(1, (0, 0, 1), AU_KM)
+        ):
+            return simulate(p)
+
+    def test_zero_rotation_and_tracking_have_expected_generation(self):
+        for tracking in (False, True):
+            result = self.run_fixed_sun(sun_tracking=tracking)
+            self.assertAlmostEqual(result["mean_irradiance_W_m2"], 1000)
+            self.assertAlmostEqual(result["mean_generation_W"], 2.4)
+            self.assertAlmostEqual(result["generated_energy_J"], 864)
+            self.assertAlmostEqual(result["generated_energy_Wh"], .24)
+            self.assertAlmostEqual(result["mean_sunlight_generation_W"], 2.4)
+            self.assertTrue(all(type(value) in (float, int) for value in result.values()))
+
+    def test_full_rotation_matches_cosine_integral_and_step_converges(self):
+        coarse = self.run_fixed_sun(rotation_rate_deg_s=1)
+        fine = self.run_fixed_sun(rotation_rate_deg_s=1, step_s=.5)
+        expected = 2.4 * 360 / math.pi
+        self.assertAlmostEqual(coarse["generated_energy_J"], expected, delta=.004)
+        self.assertLess(abs(fine["generated_energy_J"] - expected), abs(coarse["generated_energy_J"] - expected))
+        self.assertAlmostEqual(coarse["min_generation_W"], 0)
+        self.assertGreater(coarse["max_generation_W"], 2.39)
+        normalized = self.run_fixed_sun(rotation_rate_deg_s=1, rotation_axis_radial=10)
+        self.assertAlmostEqual(normalized["generated_energy_J"], coarse["generated_energy_J"])
+
+    def test_initial_angles_and_rotation_direction(self):
+        from nanosat_mbse.verifications.illumination import initial_orientation, rotate
+        for actual, expected in (
+            (initial_orientation((1, 0, 0), 0, 0, 90), (0, 1, 0)),
+            (initial_orientation((0, 1, 0), 90, 0, 0), (0, 0, 1)),
+            (initial_orientation((1, 0, 0), 0, 90, 0), (0, 0, -1)),
+            (rotate((1, 0, 0), (0, 0, 1), -90), (0, -1, 0)),
+        ):
+            for first, second in zip(actual, expected):
+                self.assertAlmostEqual(first, second)
+        result = self.run_fixed_sun(initial_roll_deg=180)
+        self.assertEqual(result["generated_energy_J"], 0)
+
+    def test_all_dark_interval_returns_zero_sunlight_generation(self):
+        from unittest.mock import patch
+        from nanosat_mbse.verifications.illumination import AU_KM, simulate
+        with patch("nanosat_mbse.verifications.illumination.solar_visibility", return_value=(0, (0, 0, 1), AU_KM)):
+            result = simulate(self.inputs())
+        self.assertEqual(result["sunlight_s"], 0)
+        self.assertEqual(result["generated_energy_J"], 0)
+        self.assertEqual(result["mean_sunlight_generation_W"], 0)
+
+    def test_zero_area_or_retention_has_zero_electrical_generation(self):
+        for values in ({"panel_area_m2": 0}, {"panel_retained_factor": 0}):
+            result = self.run_fixed_sun(**values)
+            self.assertEqual(result["generated_energy_J"], 0)
+            self.assertEqual(result["mean_generation_W"], 0)
+            self.assertEqual(result["max_generation_W"], 0)
+            self.assertGreater(result["incident_energy_J_m2"], 0)
+
+    def test_model_domains_reject_invalid_rotation_and_panel_parameters(self):
+        for values in (
+            {"panel_area_m2": -1}, {"panel_efficiency": 0}, {"panel_efficiency": 1.1},
+            {"panel_retained_factor": 1.1}, {"rotation_rate_deg_s": True},
+            {"rotation_rate_deg_s": 3},
+            {"rotation_rate_deg_s": 1, "rotation_axis_radial": 0},
+            {"rotation_axis_radial": 1e308}, {"panel_normal_cross": 1e308},
+        ):
+            with self.subTest(values=values), self.assertRaises(ValueError):
+                self.run_fixed_sun(**values)
+
+    def test_zero_rotation_matches_the_previous_local_orbital_incidence(self):
+        from nanosat_mbse.verifications.illumination import AU_KM, solar_visibility, sun_position, simulate
+        p = self.inputs()
+        p.update(panel_normal_radial=1, panel_normal_cross=0, duration_s=120)
+        actual = simulate(p)
+        radius = p["earth_radius_km"] + p["altitude_km"]
+        rate = math.sqrt(p["mu_km3_s2"] / radius ** 3)
+        expected = 0
+        for index in range(120):
+            t = index + .5
+            radial = (math.cos(rate * t), math.sin(rate * t), 0)
+            visible, direction, distance = solar_visibility(tuple(radius * v for v in radial), sun_position(p["epoch_jd"] + t / 86400), p["earth_radius_km"])
+            expected += p["solar_constant_W_m2"] * (AU_KM / distance) ** 2 * visible * max(0, sum(a*b for a,b in zip(radial, direction)))
+        self.assertAlmostEqual(actual["incident_energy_J_m2"], expected)
+
+    def test_requirement_bindings_execute_and_invalidate_evidence(self):
+        from nanosat_mbse.benches import create_analysis_demo
+        from nanosat_mbse import Illumination
+        from nanosat_mbse.service.validation import validate_projection
+        s = create_analysis_demo()
+        validate_projection(s.to_projection())
+        script = next(script for script in s.scripts if isinstance(script, Illumination))
+        attitude = next(row for row in s.requirements if row.definition == "FrameworkRequirements::ArrayAttitude")
+        self.assertEqual(script.parameters["rotation_rate_deg_s"].expression, f"{attitude.id}.rotation_rate_deg_s")
+        evidence = s.run(script)
+        self.assertTrue(evidence.successful)
+        self.assertGreater(script.value("generated_energy_J"), 0)
+        generation = next(row for row in s.requirements if row.definition == "FrameworkRequirements::EPS02")
+        self.assertGreater(generation.value("sunlight_generation_J"), 0)
+        attitude.set_value("rotation_rate_deg_s", .1)
+        with self.assertRaises(PendingValue):
+            script.value("generated_energy_J")
+        restored = loads(dumps(s))
+        self.assertEqual(restored.get(script.id).parameters["rotation_rate_deg_s"].expression, f"{attitude.id}.rotation_rate_deg_s")
+
+
 if __name__ == "__main__":
     unittest.main()

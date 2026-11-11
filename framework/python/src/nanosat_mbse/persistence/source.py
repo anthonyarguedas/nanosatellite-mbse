@@ -14,6 +14,7 @@ from dataclasses import fields, is_dataclass
 from ..catalogs.database import DatabaseBacked, FactReference
 from ..core.configuration import (
     ComponentState,
+    StateAllocation,
     LoadConnection,
     LoadProfile,
     Mode,
@@ -157,6 +158,7 @@ _RECORDS = (
     FactReference,
     Mode,
     ComponentState,
+    StateAllocation,
     DraftExpression,
 )
 

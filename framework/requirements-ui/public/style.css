@@ -260,36 +260,43 @@ td.element-name-cell > input { padding-right: 38px; }
 .power-modes { width: min(100%, 580px); }
 .power-table th { padding: 10px 12px; height: 50px; font-size: 12px; }
 .power-share-col { width: 130px; }
-.power-reference-col { width: 100px; }
-.power-mode-col { width: 270px; }
-.power-assignment { display: grid; grid-template-columns: minmax(0, 1fr) 82px; align-items: center; gap: 8px; }
+.power-reference-col { width: 190px; }
+.power-mode-col { width: 150px; }
+.power-accounting-col { width: 140px; }
 .power-duty { display: flex; align-items: center; gap: 4px; margin: 0; font-size: 12px; }
 .power-duty input { min-width: 0; }
-.power-expression-help { margin: 10px 0; font-size: 12px; line-height: 1.5; }
-.power-allocations table { min-width: 540px; }
-.power-state-sheet { margin-top: 20px; }
-.power-state-sheet table { min-width: 760px; }
-.power-state-name-col { width: 140px; }
+.power-allocations th small { display: block; margin-top: 4px; font-weight: 400; }
+.power-allocations .table-top { width: 100%; justify-content: space-between; border-radius: 8px 8px 0 0; }
+.power-allocation-help { margin: 8px 12px 12px; font-size: 12px; line-height: 1.5; color: #526157; }
+.power-component-label { vertical-align: top; padding: 12px; }
+.power-component-label > span, .power-component-label > small { display: block; margin-top: 4px; }
+.power-component-label > small { color: #637568; }
+.power-component-label .power-quantity { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 11px; }
+.power-component-label .power-quantity input { width: 64px; min-height: 26px; height: 26px; padding: 3px 6px; border: 1px solid #d7dfd5; background: #fff; }
+.power-add-state { display: inline-flex; align-items: center; gap: 4px; margin-top: 10px; padding: 0; border: 0; background: transparent; color: #375e47; font-size: 11px; }
+.power-add-state:disabled { opacity: 0.5; cursor: default; }
+.power-add-state svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.power-state-label { padding: 0; }
+.power-state-name { display: grid; grid-template-columns: 26px minmax(0, 1fr); align-items: center; }
+.power-no-states { display: block; padding: 12px; color: #8e978c; font-size: 12px; }
+.power-accounting { vertical-align: top; }
+.power-accounting > label { display: block; padding: 6px; font-size: 11px; }
+.power-accounting label select { margin-top: 4px; min-height: 32px; padding: 6px; border: 1px solid #d7dfd5; }
+.power-show-others { display: flex; align-items: center; gap: 6px; margin-left: auto; padding: 0 12px; font-size: 11px; }
+.power-component-start td { border-top: 2px solid #b5c5bb; }
+.power-loss-row .power-component-label { background: #f0f4ef; }
+.power-allocations .table-top > .power-add-loss { display: inline-flex; gap: 6px; align-items: center; padding: 0 14px; border-left: 1px solid #2c5144; cursor: pointer; }
+.power-allocations .power-duty { padding-right: 10px; }
+.power-add-loss svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+[data-power-watts] { font-family: ui-monospace, monospace; }
+.power-allocations table { min-width: 840px; }
+.power-state-name-col { width: 160px; }
 .power-state-watts-col { width: 240px; }
-[data-state-field="watts"] { font-family: ui-monospace, monospace; }
-.power-state-basis-col { width: 120px; }
 #requirement-power-source { width: 100%; padding: 10px 12px; border: 1px solid #b5c5bb; border-radius: 5px; background: #fff; }
 #requirement-power-domains { margin: 14px 0; padding: 0; border: 0; }
 #requirement-power-domains legend { font-size: 12px; font-weight: 600; }
 #requirement-power-roots { display: flex; flex-wrap: wrap; gap: 16px; }
 #requirement-power-roots label { display: inline-flex; align-items: center; gap: 7px; font-weight: 400; }
-#power-editor { position: fixed; z-index: 31; inset: var(--session-toolbar-height) 0 46px auto; width: var(--requirement-pane-width); border-left: 1px solid #b5c5bb; background: #fff; box-shadow: -4px 0 18px #26342b10; }
-#power-component-form { display: flex; flex-direction: column; height: 100%; }
-#power-editor label { display: block; margin: 12px 0 6px; font-size: 12px; font-weight: 500; }
-#power-editor label input, #power-editor label select, #power-editor label textarea { display: block; width: 100%; min-width: 0; margin-top: 6px; padding: 9px 10px; border: 1px solid #b5c5bb; border-radius: 4px; background: #fff; }
-.power-editor-fields { display: grid; grid-template-columns: 100px 1fr; gap: 16px; }
-#power-editor-error { flex: 1; color: #a03e2e !important; }
-.power-editor-open .workspace { margin-right: var(--requirement-pane-width); grid-template-columns: minmax(0, 1fr); padding: 24px 24px 80px; gap: 24px; }
-.power-editor-open .stakeholders { width: min(100%, 520px); }
-@media (max-width: 900px) {
-  .power-editor-open .workspace { margin-right: 0; height: calc((100dvh - var(--session-toolbar-height) - 46px) * 0.44); min-height: 0; overflow: auto; padding: 16px; }
-  #power-editor { inset: calc(var(--session-toolbar-height) + (100dvh - var(--session-toolbar-height) - 46px) * 0.44) 0 46px; width: auto; border-left: 0; border-top: 1px solid #b5c5bb; }
-}
 #cots-editor { position: fixed; z-index: 32; inset: var(--session-toolbar-height) 0 46px auto; width: var(--requirement-pane-width); border-left: 1px solid #b5c5bb; background: #fff; box-shadow: -4px 0 18px #26342b10; }
 #cots-editor > form { display: flex; flex-direction: column; height: 100%; }
 #cots-editor h3 { margin: 20px 0 8px; font-size: 14px; }

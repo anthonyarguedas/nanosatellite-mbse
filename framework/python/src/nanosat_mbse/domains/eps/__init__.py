@@ -1,6 +1,6 @@
 """EPS domain classes."""
 
-from .components import Battery, SolarArray, RegulatorAndConverter, PowerCircuit
+from .components import Battery, SolarArray, RegulatorAndConverter, PowerCircuit, PowerLoss
 from .subsystem import EPS, IntegratedEPS
 
 __all__ = [
@@ -8,6 +8,7 @@ __all__ = [
     "SolarArray",
     "RegulatorAndConverter",
     "PowerCircuit",
+    "PowerLoss",
     "EPS",
     "IntegratedEPS",
 ]

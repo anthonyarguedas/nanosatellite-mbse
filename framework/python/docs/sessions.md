@@ -122,6 +122,32 @@ Arbitrary additional code in a handwritten file is outside this round-trip contr
 A trusted file without the format marker can be opened but is read-only for replacement.
 Save it to a new `.py` path to preserve its original source.
 
+## State allocations and losses
+
+A `LoadProfile` can retain legacy `assignments` and `duties`, or use `allocations` for a mode.
+The latter maps a `Mode` object to a tuple of `StateAllocation(state, duty)` records.
+Duties are numeric percentages from 0 to 100 and total at most 100 per component and mode.
+Each state is an object reference to one of that load's declared `ComponentState` instances.
+A state stores only `name`, `watts` and `key`.
+The source writer preserves these records and references directly.
+The browser projection uses mode keys and lists of `{state: state_key, duty: percentage}` objects.
+Former state annotations (`basis`, `source`, `conditions`) are accepted while reading old Python constructors or projections and discarded from the model.
+They are absent from new projections, calculation signatures and saved source.
+Reading a saved file leaves its original contents unchanged until a save.
+Legacy allocation forms remain unchanged until an allocation is edited.
+Removing a mode removes both forms of allocation. Removing a state removes its allocations.
+Changes invalidate dependent execution evidence.
+
+`PowerLoss` is an importable `Component` subclass.
+It uses ordinary power configuration, participates once in load demand and has no physical mass or volume scope.
+Catalog loss entries are available for explicit addition and excluded from automatic child creation.
+Restoring a saved loss recreates its actual class through both native source and browser transport.
+No loss is added automatically when reopening an existing session.
+
+The new generic EPS requirements are introduced by normal reconciliation.
+Deliberately deleted requirements and authored bindings retain their configuration.
+Illumination script revisions remain pinned and require explicit definition review when the interface changes.
+
 ## Storage integrity
 
 Revision tokens cover the canonical path and exact file contents.

@@ -8,7 +8,7 @@ from .mission import (
     GroundStation,
     CommandAndDataHandling,
 )
-from .eps import EPS, Battery, SolarArray, RegulatorAndConverter, PowerCircuit
+from .eps import EPS, Battery, SolarArray, RegulatorAndConverter, PowerCircuit, PowerLoss
 
 __all__ = [
     "Mission",
@@ -22,4 +22,5 @@ __all__ = [
     "SolarArray",
     "RegulatorAndConverter",
     "PowerCircuit",
+    "PowerLoss",
 ]

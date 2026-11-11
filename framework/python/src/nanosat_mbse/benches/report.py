@@ -109,6 +109,17 @@ def _energy(builder):
         "0 < dod_max <= 1 and SCR002.soc_minimum >= 1 - dod_max",
         ("EPS-09", "EPS-10"),
     )
+    template = builder.session.catalog.by_requirement["FrameworkRequirements::BatteryRecoveryOrbits"]
+    recovery = builder.session._seed_templates(builder.eps, (template,))[0]
+    recovery.set_expression("pack_eol_J", "INP002.energy_capacity_J")
+    recovery.set_expression("generated_energy_J", "SCR001.source_energy_J * INP001.source_efficiency + SCR002.source_energy_J * INP007.source_efficiency")
+    recovery.set_expression("load_energy_J", "SCR001.load_energy_J / INP001.load_efficiency + SCR002.load_energy_J / INP007.load_efficiency")
+    recovery.rationale = (
+        "Constant repeating-orbit recovery estimate at the conditioned bus boundary. "
+        "Set recovery_dod and max_recovery_orbits independently. "
+        "This estimate assumes available surplus is accepted without charge taper or storage-path losses. "
+        "Use the segment checks separately for current, temperature, charge and energy limits."
+    )
 
 
 def _survival(builder):

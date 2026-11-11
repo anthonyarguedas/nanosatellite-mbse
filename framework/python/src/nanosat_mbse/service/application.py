@@ -831,7 +831,10 @@ class Application:
         elif name == "disconnect_power":
             graph.disconnect_power(target)
         elif name == "configure_load":
-            changes = dict(command.get("changes", {}))
+            changes = dict(mapping(command.get("changes", {}), "Load changes", {
+                "quantity", "accounting", "host", "rationale", "states",
+                "assignments", "duties", "allocations",
+            }))
             if "states" in changes:
                 from ..core.configuration import ComponentState
 

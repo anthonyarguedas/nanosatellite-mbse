@@ -38,7 +38,7 @@ Use copies when exploring the supplied [demo](demo/README.md).
 ## Code organization
 
 - `public/`: browser projections, presentation helpers and editor drafts.
-- `public/editors/`: requirement, verification, component power and COTS editors.
+- `public/editors/`: requirement, verification and COTS editors, plus the inline power allocation table.
 - `server/`: HTTP routes, supervised Python transport and output adapters.
 - `server/exporters/`: KiCad and Fprime output formatting over Python-validated data.
 - `../python/src/nanosat_mbse/`: generic classes, engineering domains, catalogs, verifications, persistence and application service.
@@ -59,7 +59,8 @@ If no sessions exist, start blank and add the desired elements.
 Each browser tab keeps its own native draft handle and selected session.
 The URL retains the session ID and tab.
 Valid table edits autosave to that session.
-Requirement, component and COTS panes retain drafts until their Save action.
+Requirement and COTS panes retain drafts until their Save action.
+Power allocation cells apply directly through Python.
 Save as includes valid open drafts in an independent copy.
 
 The default storage layout is:
@@ -138,21 +139,32 @@ Their scoped identities are preserved through edits and saves.
 Their calculated results use the same evaluation context as editable expressions.
 
 Save and Cancel apply to the pane's drafts.
-Cmd+Enter or Ctrl+Enter saves the active requirement or component editor.
+Cmd+Enter or Ctrl+Enter saves the active requirement editor.
 Source and assignment pickers, stable IDs, trailing empty rows, plus buttons, delete gutters, sorting and tab navigation remain available.
 Python handles naming, reference rewriting, ownership constraints and protected deletion.
 
 ## Power, mass and volume
 
 Define spacecraft modes and sunlight/eclipse fractions in Mission.
-Define component quantities, accounting, states and power values in each component pane.
-The **Power (W)** field accepts a number or a Python expression such as `RAD001.current_A * RAD001.voltage_V`.
+Edit component quantities, accounting, state names, powers and duties directly in **Component State Allocation**.
+The **Power per unit (W)** field accepts a number or a Python expression such as `RAD001.current_A * RAD001.voltage_V`.
 State power is per installed unit while that state is active.
-Allocate states to spacecraft modes in the subsystem table and enter **Duty (%)** beside each state selector.
-Component duty defaults to 100 percent and is independent of the spacecraft's sunlight/eclipse mode shares.
-Account for inactive consumption explicitly when it is nonzero.
-Power limit requirements link spacecraft, subsystem and component allocations and retain active state power for their checks.
-Their `average_power_W` parameter includes component duty.
+Use **Add state** beside a component to start a new state row. Enter its name to create the state, then its power and duties.
+Use a state's delete button to remove it and its allocations.
+Use **Show other components** to include excluded components and software whose demand belongs to an execution host.
+Accounting and software execution host controls are inline. Component names open no panel.
+States store only their name, power and allocation identity. The unused Meaning, Source and Conditions fields have been removed.
+Duties for one component and mode total at most 100 percent and remain independent of sunlight/eclipse mode shares.
+Unallocated time contributes zero power. Allocate an explicit Off state to represent a complete zero-power mode.
+Existing single-state allocations retain their former duty, including the default of 100 percent.
+Power limit checks use the largest allocated state power per component, independently of duty.
+Their `average_power_W` parameter uses the weighted state powers.
+The sum of component maxima is a conservative assessment and establishes no simultaneous peak schedule.
+
+Use **Add loss** in the allocation table to create a native `PowerLoss` instance.
+A new loss starts with an inline state row and supports the same quantity, state powers and duties.
+Losses enter demand once and have no hardware mass or volume allocation.
+Enter losses only when they are absent from the other counted loads. No automatic loss solver is used.
 
 Open the spacecraft power limit requirement and set `assessment_duration_s` in its existing parameter table.
 Use the **State** selector to enter different durations for different spacecraft modes, such as 5400 s for standby and 600 s for a pass.
@@ -173,6 +185,15 @@ The circular orbit calculation assumes constant beta and a cylindrical Earth sha
 High absolute beta can produce zero eclipse duration and a full orbit of sunlight.
 An absent period has zero load energy and needs no power, duty, mode shares or assignments for that period.
 Opening older sessions introduces beta and updates unchanged library defaults while preserving custom bindings.
+
+The generic **BatteryRecoveryOrbits** requirement calculates the fractional orbits needed to recover from a supplied DoD.
+Its allowable maximum starts blank. Its expression references retained capacity and generated minus consumed energy per orbit.
+Use compatible energy boundaries and a repeating operating case. This estimate excludes charge taper and does not establish chronological reserve compliance.
+
+The generic **ArrayAttitude**, **ArrayPanelModel** and **ArrayIllumination** requirements supply rotation, panel properties and numeric scenario inputs.
+The illumination study factory binds these to the script and adds a scalar generation check.
+Internal time steps produce energy, mean power and sampled extrema without plots or history inputs.
+Use separate sessions for different operating assumptions or failed-panel cases.
 
 Mass and volume requirements account for physical hardware independently from power accounting.
 Parent sums reference child values and allocations.

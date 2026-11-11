@@ -14,6 +14,7 @@ from ..catalogs.database import DatabaseBacked, FactReference
 from ..catalogs.definitions import PYTHON_TYPES
 from ..core.configuration import (
     ComponentState,
+    StateAllocation,
     LoadConnection,
     LoadProfile,
     Mode,
@@ -356,14 +357,7 @@ def from_projection(data, *, session_class=None, callables=None, **kwargs):
     modes = {mode.key: mode for mode in session.power.modes}
     for row in power["loads"]:
         states = tuple(
-            ComponentState(
-                item["name"],
-                item["watts"],
-                item["basis"],
-                item["source"],
-                item["conditions"],
-                item["key"],
-            )
+            ComponentState(**item)
             for item in row["states"]
         )
         by_key = {item.key: item for item in states}
@@ -380,6 +374,13 @@ def from_projection(data, *, session_class=None, callables=None, **kwargs):
                     for mode, state in row["assignments"].items()
                 },
                 {modes[mode]: duty for mode, duty in row.get("duties", {}).items()},
+                {
+                    modes[mode]: tuple(
+                        StateAllocation(by_key[item["state"]], item["duty"])
+                        for item in entries
+                    )
+                    for mode, entries in row.get("allocations", {}).items()
+                },
             )
         )
     session.power.links = [
@@ -532,9 +533,6 @@ def to_projection(session, *, callables=None):
                             "key": state.key,
                             "name": state.name,
                             "watts": state.watts,
-                            "basis": state.basis,
-                            "source": state.source,
-                            "conditions": state.conditions,
                         }
                         for state in load.states
                     ],
@@ -549,6 +547,16 @@ def to_projection(session, *, callables=None):
                         }
                         if load.duties
                         else {}
+                    ),
+                    **(
+                        {"allocations": {
+                            mode.key: [
+                                {"state": item.state.key, "duty": item.duty}
+                                for item in entries
+                            ]
+                            for mode, entries in load.allocations.items()
+                        }}
+                        if load.allocations else {}
                     ),
                 }
                 for load in session.power.loads

@@ -199,8 +199,12 @@ Units remain labels, with conversions explicit in calculations.
 Use `configure_mode()`, `rename_mode()` and `remove_mode()` to retain expression and state links.
 Removing a mode with expression references is protected.
 
-Use `configure_load(component, quantity=..., accounting=..., states=..., assignments=..., duties=...)` for component demand.
+Use `configure_load(component, quantity=..., accounting=..., states=..., allocations=...)` for component demand.
+Legacy `assignments` and `duties` remain supported without changing saved single-state sessions.
 States are `ComponentState` objects, and assignments reference actual `Mode` and state objects.
+`ComponentState` stores only its name, per-unit power and stable key.
+The former value meaning, source and conditions annotations have been removed.
+Old Python constructors and projections can still be read, with those annotations discarded.
 A state's `watts` accepts a nonnegative number or a restricted Python expression in W per installed unit.
 Expressions can reference qualified requirement parameters, selected COTS facts, script outputs and `mode`.
 They use the common evaluation context, dependency guards, evidence gating and reference renaming.
@@ -209,6 +213,8 @@ Unset upstream inputs remain pending. Negative or nonnumeric results are errors.
 `duties` maps modes, mode keys or mode names to independent component duty percentages from 0 to 100.
 Omitted entries mean 100 percent, preserving existing sessions.
 Each table supplied to `configure_load()` replaces that table.
+The browser edits state names, powers, quantities and allocations directly in Component State Allocation.
+Adding and deleting states needs no separate component panel.
 For an existing component and a configured Downlink mode:
 
 ```python
@@ -224,13 +230,37 @@ session.configure_load(
 )
 ```
 
-Active draw is quantity times state power. Average draw additionally multiplies by component duty divided by 100.
-Duty applies to a declared load contribution with zero consumption while inactive.
-Account for quiescent draw or another nonzero state explicitly, including through a weighted state power expression.
+For multiple states within one mode, use actual state references and duty percentages:
+
+```python
+from nanosat_mbse import StateAllocation
+
+receive = ComponentState("Receive", 0.18)
+transmit = ComponentState("Transmit", 10.8)
+session.configure_load(
+    component,
+    states=(receive, transmit),
+    allocations={"Downlink": (StateAllocation(receive, 99), StateAllocation(transmit, 1))},
+)
+```
+
+State duties within a component and mode total at most 100 percent.
+Unallocated time contributes zero power. Use an explicit zero-power Off state for a complete off mode.
+Average draw is quantity times the sum of each allocated state's power times its duty divided by 100.
+Active draw is quantity times the largest allocated state power, including zero-duty states.
+Across components, active draw remains a conservative sum of independent maxima.
+An `allocations` table replaces the previous mixture table and removes legacy assignments for the same modes.
+Replacing `assignments` without `allocations` returns the component to legacy allocation semantics.
 Power limit checks retain active draw, so low duty cannot conceal an active overload.
 Software demand belongs to its execution host.
 Battery storage, generation and passive components start excluded from load demand.
 Mass and volume accounting still includes physical hardware.
+
+`PowerLoss` is an explicit dissipative contribution with the same states, quantity and allocations.
+Add it under a spacecraft subsystem, including EPS or payload, using `session.add(PowerLoss(), owner=subsystem)`.
+It is never automatically instantiated and has no mass or volume budget.
+Count a loss only when it is absent from the other loads at the declared accounting boundary.
+No converter-loss solver or automatic efficiency model is introduced.
 
 Each power limit requirement exposes `draw_power_W`, `average_power_W`, `assessment_duration_s` and `energy_Wh`.
 Set the spacecraft requirement's `assessment_duration_s` through the existing parameter editor or Python API.
@@ -260,6 +290,23 @@ Import remains hook-free and preserves the original projection.
 Seed history preserves deliberate requirement deletions through reconciliation and restoration.
 Native edits enable `modelState` metadata so parameter ownership, literal bindings and deletion history survive transport.
 
+### Recovery from depth of discharge
+
+The generic `BatteryRecoveryOrbits` requirement (normally SIZ017) calculates:
+
+```text
+net_orbit_energy_J = generated_energy_J - load_energy_J
+recovery_orbits = pack_eol_J * recovery_dod / net_orbit_energy_J
+```
+
+`max_recovery_orbits` starts unset. Supply the approved maximum to assess the requirement.
+Capacity, generation, load energy and DoD initially reference the existing generic EPS parameters.
+Both energies must cover one repeating orbit at the same accounting boundary.
+This is a fractional orbit estimate with constant positive net energy and unrestricted charge acceptance.
+It excludes charge taper and storage-path losses. Use `EnergySegment` separately for chronological service and charge limits.
+A positive DoD with nonpositive surplus fails the requirement and leaves its recovery count pending.
+Zero DoD requires zero recovery orbits.
+
 ### Circular orbit illumination
 
 The existing `IlluminationPeriods` requirement owns `beta_deg`, in degrees, with a default of zero.
@@ -284,7 +331,15 @@ Opening a saved session or calling `reconcile_defaults()` adds a missing beta in
 Authored expressions, conditions, cleared inputs and deliberately deleted requirements retain their configuration.
 Direct source and projection imports remain unchanged until explicit reconciliation.
 
-Regression checks for illumination geometry, load expressions, duty accounting, assessment durations, persistence and UI transport:
+The separate `Illumination` script also supports prescribed constant rotation about an axis fixed in the local orbital frame.
+The generic `ArrayAttitude`, `ArrayPanelModel` and `ArrayIllumination` requirements own its numeric inputs.
+Initial orientation is active `Rz(yaw) Ry(pitch) Rx(roll)`, followed by the prescribed rotation.
+Electrical generation uses incident irradiance times declared active cell area, electrical efficiency and retention.
+The script returns only scalar energy, mean power and sampled extrema. It stores no history and infers no operating point.
+The scenario factory binds these requirements when there is one EPS and adds a generation criterion.
+Existing script pins require explicit definition review before running the changed interface.
+
+Regression checks for illumination geometry, rotation, recovery, state mixtures, losses, persistence and UI transport:
 
 ```sh
 PYTHONPATH=framework/python/src python3 -m unittest discover -s framework/python/tests -v

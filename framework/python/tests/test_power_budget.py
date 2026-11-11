@@ -8,11 +8,13 @@ import copy
 import math
 import tempfile
 import unittest
-from dataclasses import replace
+from dataclasses import fields, replace
 from pathlib import Path
 
 from nanosat_mbse import (
     ComponentState,
+    StateAllocation,
+    PowerLoss,
     CotsBattery,
     CubeSat,
     NormalInterval,
@@ -22,13 +24,13 @@ from nanosat_mbse import (
 )
 from nanosat_mbse.core.execution import InlineRunner
 from nanosat_mbse.core.predicates import PendingValue
-from nanosat_mbse.domains.budgets import power_limit_for
+from nanosat_mbse.domains.budgets import power_limit_for, resource_scopes
 from nanosat_mbse.domains.eps import EPS, RegulatorAndConverter
 from nanosat_mbse.persistence import dumps, loads
 from nanosat_mbse.persistence.callables import CallableRegistry
 from nanosat_mbse.service.application import Application
 from nanosat_mbse.service.edits import apply_projection
-from nanosat_mbse.service.validation import validate_projection
+from nanosat_mbse.service.validation import normalize_projection, validate_projection
 from nanosat_mbse.service.views import describe
 
 
@@ -87,6 +89,10 @@ class PowerBudgetTests(unittest.TestCase):
                         ("eclipse_power_W", 0),
                         ("sunlight_duty", 1),
                         ("eclipse_duty", 1),
+                        ("sunlight_s", None),
+                        ("eclipse_s", None),
+                        ("sunlight_energy_J", None),
+                        ("eclipse_energy_J", None),
                     )
                 ),
             ),
@@ -424,6 +430,185 @@ class PowerBudgetTests(unittest.TestCase):
             )
             load = view["workspace"]["power"]["loads"][0]
             self.assertEqual(load["duties"][self.standby.key], 50)
+
+    def mix_states(self):
+        self.tx = ComponentState("Transmit", 7.2)
+        self.off = ComponentState("Off", 0)
+        self.session.configure_load(
+            self.component,
+            states=(self.state, self.tx, self.off),
+            allocations={
+                self.standby: (StateAllocation(self.state, 99), StateAllocation(self.tx, 1)),
+                self.passed: (StateAllocation(self.off, 100),),
+            },
+        )
+
+    def test_state_mixture_uses_weighted_average_and_exclusive_active_maximum(self):
+        self.mix_states()
+        self.assertAlmostEqual(self.value("average_power_W"), 1.5696)
+        self.assertAlmostEqual(self.value("draw_power_W"), 14.4)
+        self.assertEqual(self.value("average_power_W", mode=self.passed), 0)
+        self.root.set_value("assessment_duration_s", 600)
+        self.assertAlmostEqual(self.value("energy_Wh"), 0.2616)
+        self.row.set_value("power_limit_W", 2)
+        self.assertEqual(self.row.verify(mode=self.standby).state.value, "fail")
+        load = self.session.power.load_for(self.component)
+        self.assertEqual(load.assignments, {})
+        self.assertEqual(load.duties, {})
+
+    def test_invalid_mixtures_leave_the_existing_configuration_unchanged(self):
+        self.mix_states()
+        before = self.session.to_projection()
+        invalid = (
+            [{"state": self.state.key, "duty": 60}, {"state": self.tx.key, "duty": 41}],
+            [{"state": self.state.key, "duty": 50}, {"state": self.state.key, "duty": 50}],
+            [{"state": self.state.key, "duty": True}],
+            [{"state": self.state.key, "duty": math.inf}],
+            [{"state": "missing", "duty": 20}],
+        )
+        for entries in invalid:
+            with self.subTest(entries=entries):
+                with self.assertRaises((ValueError, TypeError)):
+                    self.session.configure_load(self.component, allocations={self.standby: entries})
+                self.assertEqual(self.session.to_projection(), before)
+
+    def test_state_removal_rebinds_retained_mixture_states(self):
+        self.mix_states()
+        replacement = ComponentState("On", 1.0, key=self.state.key)
+        self.session.configure_load(self.component, states=(replacement, self.off))
+        load = self.session.power.load_for(self.component)
+        self.assertIs(load.allocations[self.standby][0].state, replacement)
+        self.assertEqual(len(load.allocations[self.standby]), 1)
+        self.assertAlmostEqual(self.value("average_power_W"), 1.98)
+
+    def test_mixture_mode_removal_and_signature_changes(self):
+        self.mix_states()
+        before = self.session.calculation_signature()
+        self.session.configure_load(self.component, allocations={self.standby: (StateAllocation(self.state, 10),)})
+        self.assertNotEqual(before, self.session.calculation_signature())
+        self.session.remove_mode(self.standby)
+        self.assertNotIn(self.standby, self.session.power.load_for(self.component).allocations)
+
+    def test_mixed_zero_duty_skips_missing_power_for_energy_only(self):
+        self.session.configure_load(self.component, allocations={self.standby: (StateAllocation(self.state, 0),)})
+        self.inputs.set_value("current_A", None)
+        self.assertEqual(self.value("average_power_W"), 0)
+        with self.assertRaises(PendingValue):
+            self.value("draw_power_W")
+
+    def test_mixture_round_trips_and_editor_projection_edits(self):
+        self.mix_states()
+        projection = self.session.to_projection()
+        validate_projection(projection)
+        for restored in (loads(dumps(self.session)), Session.from_projection(projection)):
+            self.assertEqual(restored.to_projection(), projection)
+            self.assertAlmostEqual(restored.value(self.row.id, "average_power_W", mode="Standby"), 1.5696)
+        edited = copy.deepcopy(projection)
+        edited["power"]["loads"][0]["allocations"][self.standby.key][1]["duty"] = 0.5
+        restored = apply_projection(self.session, edited, callables=CallableRegistry())
+        self.assertAlmostEqual(restored.value(self.row.id, "average_power_W", mode="Standby"), 1.4976)
+        with tempfile.TemporaryDirectory() as directory:
+            self.session.save(Path(directory) / "session.py")
+            reopened = Session.open(Path(directory) / "session.py")
+            self.assertAlmostEqual(reopened.value(self.row.id, "average_power_W", mode="Standby"), 1.5696)
+
+    def test_connected_mixture_uses_each_modes_average(self):
+        self.mix_states()
+        load = self.connect()
+        self.assertAlmostEqual(self.session.value(load, "sunlight_power_W", mode=self.standby), 1.5696 * .6)
+        self.assertAlmostEqual(self.session.value(load, "eclipse_power_W", mode=self.passed), 1.5696 * .2)
+
+    def test_power_loss_is_optional_and_has_no_mass_or_volume_scope(self):
+        complete = Session()
+        complete.add(CubeSat())
+        self.assertFalse(any(isinstance(row, PowerLoss) for row in complete.elements))
+        loss = self.session.add(PowerLoss("LOS"), owner=self.eps)
+        state = ComponentState("Dissipating", .15)
+        self.session.configure_load(loss, quantity=2, states=(state,), allocations={
+            self.standby: (StateAllocation(state, 50),),
+            self.passed: (StateAllocation(state, 100),),
+        })
+        self.assertNotIn(loss, [scope.target for scope in resource_scopes(self.session)])
+        self.assertIsNotNone(power_limit_for(self.session, loss))
+        self.assertAlmostEqual(self.value("average_power_W", row=self.root), 1.59)
+        load = self.connect()
+        self.assertAlmostEqual(self.session.value(load, "sunlight_power_W", mode=self.standby), 1.65)
+        for restored in (loads(dumps(self.session)), Session.from_projection(self.session.to_projection())):
+            self.assertIsInstance(restored.get("LOS"), PowerLoss)
+            self.assertAlmostEqual(restored.value(self.root.id, "average_power_W", mode="Standby"), 1.59)
+
+    def test_service_creates_a_real_loss_and_accepts_state_mixtures(self):
+        with tempfile.TemporaryDirectory() as directory:
+            app = Application(Path(directory) / "current.py")
+            view = app.create_session(self.session, name="Loss test")
+            definition = f"{self.eps.definition}::PowerLoss"
+            view = app.command({"handle": view["handle"], "command": {
+                "name": "add_element", "owner": self.eps.key, "definition": definition, "key": "test-loss",
+            }})
+            self.assertEqual(view["metadata"]["objects"]["test-loss"]["className"], "PowerLoss")
+            view = app.command({"handle": view["handle"], "command": {
+                "name": "configure_load", "target": "test-loss", "changes": {
+                    "states": [{"key": "on", "name": "On", "watts": .1}],
+                    "allocations": {self.standby.key: [{"state": "on", "duty": 100}]},
+                },
+            }})
+            loss_load = next(load for load in view["workspace"]["power"]["loads"] if load["element"] == "test-loss")
+            self.assertEqual(loss_load["allocations"][self.standby.key][0]["duty"], 100)
+
+    def test_component_states_only_store_identity_name_and_power(self):
+        self.assertEqual([field.name for field in fields(ComponentState)], ["name", "watts", "key"])
+        state = self.session.to_projection()["power"]["loads"][0]["states"][0]
+        self.assertEqual(set(state), {"key", "name", "watts"})
+        described = describe(self.session)["powerDefaults"][self.component.key]["states"][0]
+        self.assertEqual(set(described), {"key", "name", "watts"})
+        for retired in ("basis", "source", "conditions"):
+            self.assertFalse(hasattr(self.state, retired))
+
+    def test_old_state_constructors_read_without_retaining_annotations(self):
+        keyword = ComponentState("On", .72, key="old-state", basis="measured", source="old source", conditions="old conditions")
+        positional = ComponentState("On", .72, "measured", "old source", "old conditions", "old-state")
+        for state in (keyword, positional):
+            self.assertEqual(state.key, "old-state")
+            self.assertEqual(state.watts, .72)
+            self.assertEqual(set(vars(state)), {"key", "name", "watts"})
+        with self.assertRaises(TypeError):
+            ComponentState("On", .72, unsupported="typo")
+
+    def test_legacy_native_source_discards_only_retired_state_metadata(self):
+        source = dumps(self.session)
+        legacy = source.replace("name='On', watts=", "name='On', basis='measured', source='legacy source', conditions='25 C', watts=")
+        self.assertNotEqual(legacy, source)
+        restored = loads(legacy)
+        self.assertAlmostEqual(restored.value(self.row.id, "draw_power_W", mode="Standby"), 1.44)
+        self.assertEqual(restored.power.loads[0].states[0].key, self.state.key)
+        self.assertNotIn("legacy source", dumps(restored))
+        self.assertEqual(restored.to_projection(), self.session.to_projection())
+
+    def test_legacy_projection_discards_retired_metadata_and_preserves_allocations(self):
+        self.mix_states()
+        projection = copy.deepcopy(self.session.to_projection())
+        for state in projection["power"]["loads"][0]["states"]:
+            state.update(basis="measured", source="legacy source", conditions="25 C")
+        normalized = normalize_projection(projection)
+        validate_projection(normalized)
+        self.assertEqual(set(normalized["power"]["loads"][0]["states"][0]), {"key", "name", "watts"})
+        for restored in (Session.from_projection(projection), apply_projection(self.session, projection, callables=CallableRegistry())):
+            self.assertAlmostEqual(restored.value(self.row.id, "average_power_W", mode="Standby"), 1.5696)
+            self.assertEqual(restored.to_projection(), self.session.to_projection())
+
+    def test_inline_state_rename_addition_and_deletion_preserve_surviving_duties(self):
+        self.mix_states()
+        projection = copy.deepcopy(self.session.to_projection())
+        load = projection["power"]["loads"][0]
+        load["states"][0]["name"] = "Receiving"
+        load["states"] = [state for state in load["states"] if state["key"] != self.tx.key]
+        load["states"].append({"key": "idle-state", "name": "Idle", "watts": "0.01"})
+        restored = apply_projection(self.session, projection, callables=CallableRegistry())
+        native = restored.power.load_for(restored.get(self.component.key))
+        self.assertEqual(native.states[0].name, "Receiving")
+        self.assertEqual(native.states[-1].name, "Idle")
+        self.assertEqual(len(native.allocations[restored.resolve_mode("Standby")]), 1)
+        self.assertAlmostEqual(restored.value(self.row.id, "average_power_W", mode="Standby"), 1.4256)
 
 
 if __name__ == "__main__":
