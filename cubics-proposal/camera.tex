@@ -26,12 +26,28 @@ Calculations use $n=4$, giving occupancy bands of 10--15, 15--20, 20--25, and 25
 
 \paragraph{Scenario A} The camera focus is fixed, but the distance between the camera and the subject can be controlled externally. The distance range must be as narrow as possible, and the maximum distance as small as possible. No camera accesories can be added apart from the fixed lens.
 \begin{itemize}
-\item Basler dart daA2448-70um, CS-mount version, global shutter, $2448\times2048$ native pixels. Use a fixed $2048\times2048$ native crop to fit the lens image circle.
+\item Basler dart daA2448-70uc, CS-mount version, global shutter, $2448\times2048$ native pixels. Use a fixed $2048\times2048$ native crop to fit the lens image circle.
 \item Raspberry Pi 6mm CS-mount wide-angle lens, with iris locked at a calibrated f/8 and focus fixed at approximately 0.60m.
 \item Nominal distance range 0.407--0.520m from the lens optical reference plane to the CubeSat centre. Distances of 520, 480, 440, and 407mm give occupancies of 15.0, 17.7, 21.3, and 25.1\%, respectively.
 \item Nominal axial height is $20+34-5=49$mm, accounting for the lens's 5mm rear protrusion into the camera. A 49.6mm budget adds 0.5mm for mounting and 0.1mm for focus travel.
 \item Camera and lens volume is approximately $41\,\mathrm{cm}^3$, or $141\,\mathrm{cm}^3$ with a $100\,\mathrm{cm}^3$ integration allowance.
 \end{itemize}
+
+\begin{table}[htbp]
+\centering
+\caption{Uncompressed image sizes for the output modes of the camera selected for Scenario A.}
+\begin{tabular}{lcc}
+\hline
+\textbf{Output format} & \textbf{Bits per pixel transmitted} & \textbf{Uncompressed $2048 \times 2048$ image} \\
+\hline
+BayerRG8 & 8 & 4 MiB \\
+BayerRG12p & 12 & 6 MiB \\
+BayerRG12 & 16 & 8 MiB \\
+RGB8 / BGR8 & 24 (8 per channel) & 12 MiB \\
+YCbCr422\_8 & 16 on average & 8 MiB \\
+\hline
+\end{tabular}
+\end{table}
 
 \paragraph{Scenario B} The camera distance is fixed at 2m from the CubeSat. Any camera accesories can be added.
 \begin{itemize}
@@ -42,13 +58,5 @@ Calculations use $n=4$, giving occupancy bands of 10--15, 15--20, 20--25, and 25
 \item Software for motion registration, focus fusion over approximately 1.9m to infinity, and centred cropping. Square crops of 3200, 2800, 2480, and 2240 pixels per side give occupancies of approximately 13.3, 17.4, 22.2, and 27.2\%, respectively.
 \end{itemize}
 The estimated volume budget is $345\,\mathrm{cm}^3$, including $145\,\mathrm{cm}^3$ for the camera, optics, and lens controller, $100\,\mathrm{cm}^3$ for a dedicated computer (i.e. Raspberry Pi), and $100\,\mathrm{cm}^3$ for power, cabling, and mounting.
-
-\section{Downlink Budget}
-Assumptions:
-\begin{itemize}
-\item 1 image, taken with the camera from Scenario A, is downlinked at a time.
-\item AX.25 packet format, GMSK modulation, 70cm amateur radio band.
-\item AX5043 transceiver, taken from OreSat0.5.
-\end{itemize}
 
 \end{document}
