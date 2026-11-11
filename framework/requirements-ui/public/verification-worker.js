@@ -6,7 +6,8 @@ self.onmessage = async ({ data }) => {
   const request = new AbortController(); controller = request;
   try {
     const response = await fetch('/api/evaluate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ workspace: data.workspace, scriptResults: data.scriptResults }), signal: request.signal });
+      body: JSON.stringify({ handle: data.handle, workspace: data.workspace, stateEdits: data.stateEdits,
+        evidenceToken: data.evidenceToken }), signal: request.signal });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || 'Python evaluation failed.');
     if (controller === request) self.postMessage({ token: data.token, ...result });

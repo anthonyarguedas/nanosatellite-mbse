@@ -1,4 +1,4 @@
-import { formatParameterValue, interpolateRequirement } from '../model.mjs';
+import { formatParameterValue, interpolateRequirement } from './workbook.js';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',

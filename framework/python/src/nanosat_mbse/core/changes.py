@@ -1,0 +1,259 @@
+"""Shared native edit operations used by interactive clients and the UI service."""
+
+from __future__ import annotations
+
+import io
+import tokenize
+from dataclasses import replace
+
+from .elements import Element
+from .requirements import Parameter, Statement
+from .predicates import DraftExpression, restored_expression
+from ..catalogs.database import DatabaseBacked, FactReference
+
+
+def retype_element(session, identity, definition):
+    """Retain object identity while changing an empty catalog element's type."""
+    from ..domains.registry import element_class
+    from ..domains.budgets import after_element_added
+
+    value = session.get(identity)
+    if not isinstance(value, Element) or value.selection:
+        raise TypeError("Choose a generic domain element to change its type.")
+    target = session.catalog.by_model.get(definition)
+    if target is None:
+        raise ValueError("Choose a definition from the generic catalog.")
+    if value.definition == definition:
+        return value
+    if (
+        value.children
+        or any(row.owner is value for row in session.statements)
+        or session.power.load_for(value) is not None
+    ):
+        raise ValueError(
+            "Remove child rows and component configuration before changing this type."
+        )
+    if target.parent is None:
+        valid_owner = value.owner is session.mission
+    else:
+        valid_owner = (
+            value.owner is not None and value.owner.definition == target.parent
+        )
+    if not valid_owner:
+        raise ValueError("The selected type belongs to a different parent table.")
+    old_class, old_definition = type(value), value.definition
+    before = set(session._objects)
+    history = set(session.seed_history)
+    initialized = set(session._initialized)
+    variables = list(session.variables)
+    remembered = dict(session.requirement_seeds)
+    flags = (
+        session.resource_budgets,
+        session._resource_budgets_present,
+        session._requirement_seeds_present,
+        session._model_state_present,
+    )
+    statements = {
+        row: (dict(row.parameters), row.sources, row.affected)
+        for row in session.statements
+    }
+    value.__class__, value.definition = element_class(definition), definition
+    try:
+        session._initialized.discard(value.key)
+        session.initialize(value)
+        value.on_added(session)
+        after_element_added(session, value)
+        session.validate_budgets()
+    except Exception:
+        for object_key in set(session._objects) - before:
+            session._objects.pop(object_key)._session = None
+        session.seed_history, session._initialized = history, initialized
+        session.variables, session.requirement_seeds = variables, remembered
+        (
+            session.resource_budgets,
+            session._resource_budgets_present,
+            session._requirement_seeds_present,
+            session._model_state_present,
+        ) = flags
+        for row, (parameters, sources, affected) in statements.items():
+            row._parameters, row._sources, row._affected = parameters, sources, affected
+        value.__class__, value.definition = old_class, old_definition
+        raise
+    session._model_state_present = True
+    return value
+
+
+def substitute_product(session, identity, product):
+    """Use the generic inheritance of the new product while retaining fact names."""
+    from ..catalogs.cots import component_for_product
+
+    value = session.get(identity)
+    if not isinstance(value, DatabaseBacked):
+        raise TypeError("Choose a database-backed component.")
+    if value.product == product:
+        return value
+    replacement = component_for_product(product, database=session.database)
+    cls = type(replacement)
+    old_class, old_definition, old_product, old_usage = (
+        type(value),
+        value.definition,
+        value.product,
+        value.usage,
+    )
+    value.__class__ = cls
+    try:
+        value.definition = replacement.definition
+        value.product = product
+        if (
+            value.usage is not None
+            and value.usage.definition.rsplit("::", 1)[-1]
+            != value.definition.rsplit("::", 1)[-1]
+        ):
+            value.usage = None
+        if value.usage is None:
+            matches = [
+                element
+                for element in session.elements
+                if element.owner is value.owner
+                and element.definition.rsplit("::", 1)[-1]
+                == value.definition.rsplit("::", 1)[-1]
+            ]
+            if len(matches) == 1:
+                value.usage = matches[0]
+    except Exception:
+        value.__class__, value.definition, value._product, value._usage = (
+            old_class,
+            old_definition,
+            old_product,
+            old_usage,
+        )
+        raise
+    session._model_state_present = True
+    return value
+
+
+def configure_parameter(session, identity, parameter):
+    """Replace an owned binding after validating its domain constraints."""
+    value = session.get(identity)
+    if not isinstance(parameter, Parameter) or not hasattr(value, "parameters"):
+        raise TypeError("Configure a typed Parameter on a requirement or analysis.")
+    if isinstance(value, Statement):
+        session.validate_parameter_binding(value, parameter)
+        if parameter.name not in value.parameters:
+            value.add_parameter(parameter)
+        else:
+            value._parameters[parameter.name] = parameter
+    else:
+        if parameter.name not in {port.name for port in value.inputs}:
+            raise ValueError("Bind a declared analysis input.")
+        value.parameters[parameter.name] = parameter
+    session.register_parameter(parameter)
+    session._model_state_present = True
+    return parameter
+
+
+def _field_source(source, identifier, old, new):
+    if not isinstance(source, str):
+        return source
+    tokens = []
+    try:
+        for token in tokenize.generate_tokens(io.StringIO(source).readline):
+            if token.type not in (
+                tokenize.NL,
+                tokenize.NEWLINE,
+                tokenize.INDENT,
+                tokenize.DEDENT,
+                tokenize.COMMENT,
+            ):
+                tokens.append(token)
+    except (tokenize.TokenError, IndentationError):
+        pass
+    offsets = [0]
+    for line in source.splitlines(keepends=True):
+        offsets.append(offsets[-1] + len(line))
+    spans = [
+        (
+            offsets[field.start[0] - 1] + field.start[1],
+            offsets[field.end[0] - 1] + field.end[1],
+        )
+        for row, dot, field in zip(tokens, tokens[1:], tokens[2:])
+        if row.type == tokenize.NAME
+        and row.string == identifier
+        and dot.string == "."
+        and field.type == tokenize.NAME
+        and field.string == old
+    ]
+    for start, end in reversed(spans):
+        source = source[:start] + new + source[end:]
+    return source
+
+
+def configure_facts(session, identity, references):
+    """Retain named selections, rewrite renames, and protect referenced deletions."""
+    value = session.get(identity)
+    if not isinstance(value, DatabaseBacked):
+        raise TypeError("Choose a database-backed component.")
+    references = tuple(references)
+    if any(not isinstance(reference, FactReference) for reference in references):
+        raise TypeError("Select FactReference instances.")
+    if len({reference.key for reference in references}) != len(references) or len(
+        {reference.name for reference in references}
+    ) != len(references):
+        raise ValueError("Fact keys and names must be unique.")
+    previous = {reference.key: reference for reference in value.facts}
+    following = {reference.key: reference for reference in references}
+    removed = [
+        reference.name for reference in value.facts if reference.key not in following
+    ]
+    for _, _, _, source in session._expressions():
+        if any(
+            _field_source(source, value.id, name, "__used__") != source
+            for name in removed
+        ):
+            raise ValueError(
+                "Remove expression references before deleting a selected COTS fact."
+            )
+    renames = [
+        (reference.name, following[key].name)
+        for key, reference in previous.items()
+        if key in following and reference.name != following[key].name
+    ]
+    # Simultaneous renames use temporary field names so swaps stay unambiguous.
+    for index, (old, _) in enumerate(renames):
+        _rename_field(session, value.id, old, f"_fact_rename_{index}")
+    for index, (_, new) in enumerate(renames):
+        _rename_field(session, value.id, f"_fact_rename_{index}", new)
+    value.facts = references
+    value._facts_present = True
+    session._model_state_present = True
+    return value
+
+
+def _rename_field(session, identifier, old, new):
+    for row, kind, name, source in tuple(session._expressions()):
+        rewritten = _field_source(source, identifier, old, new)
+        if rewritten == source:
+            continue
+        expression = restored_expression(rewritten)
+        if kind == "parameter":
+            configure_parameter(
+                session, row, replace(row.parameters[name], expression=expression)
+            )
+        else:
+            methods = list(row.verifications)
+            methods[name] = replace(methods[name], condition=expression)
+            row.verifications = methods
+    for link in session.power.links:
+        for name, parameter in tuple(link.previous.items()):
+            source = (
+                parameter.expression.source
+                if isinstance(parameter.expression, DraftExpression)
+                else parameter.expression
+            )
+            if isinstance(source, str):
+                link.previous[name] = replace(
+                    parameter,
+                    expression=restored_expression(
+                        _field_source(source, identifier, old, new)
+                    ),
+                )

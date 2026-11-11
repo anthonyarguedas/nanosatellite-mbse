@@ -16,7 +16,7 @@
     <select id="session-select" disabled><option value="current">Current mission</option></select>
     <button type="button" id="session-new" aria-controls="session-editor" disabled>New session</button>
     <button type="button" id="session-copy" aria-controls="session-editor" disabled>Save as…</button>
-    <span id="session-storage">JSON autosave</span>
+    <span id="session-storage">Python autosave</span>
   </header>
   <main id="workspace" class="workspace" role="tabpanel" aria-label="Requirements workspace" inert>
     <section class="sheet stakeholders" aria-labelledby="stakeholders-title" data-table="stakeholders">
@@ -48,7 +48,7 @@
       <div class="table-top">
         <h2 id="statements-title">Stakeholder Requirements</h2>
         <button class="menu-toggle" aria-label="Requirements table actions" aria-expanded="false"><span class="chevron"></span></button>
-        <button class="export-json" aria-label="Export workspace JSON" title="Download the complete workspace as JSON" disabled>
+        <button class="export-python" aria-label="Export Python session" title="Download an executable Python session with its instances and verification calls" disabled>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 16v5h14v-5"/></svg>
         </button>
         <button class="add-row" aria-label="Add requirement row" title="Add row">
@@ -109,7 +109,7 @@
         <label for="requirement-text">Requirement text</label>
         <textarea id="requirement-text" rows="5" maxlength="50000" aria-describedby="requirement-text-help" placeholder="The battery shall provide at least $$energy_J$$."></textarea>
         <p id="requirement-text-help">Enclose a variable name in <code>$$</code>, such as <code>$$var$$</code>, to add its parameter row. Enter units in the Units column, using <code>**</code> for powers.</p>
-        <p>Expressions use Python. Choose a State to define one expression per mode. All states merges the rows using the last edited expression.</p>
+        <p>Expressions use Python. Choose a State to define one expression per mode. All states merges the rows using the last edited expression. Native Python bindings are read-only here.</p>
         <div id="requirement-load-source" hidden>
           <label for="requirement-power-source">Load input source</label>
           <select id="requirement-power-source"><option value="manual">Manual expressions</option><option value="components">Component modes</option></select>
@@ -143,7 +143,6 @@
   <div id="session-editor" class="popover" role="dialog" aria-labelledby="session-editor-title" hidden>
     <form id="session-form">
       <div class="popover-heading"><strong id="session-editor-title">New session</strong><button type="button" data-close aria-label="Close session form">×</button></div>
-      <label id="session-template-label" for="session-template">Start from<select id="session-template"><option value="blank">Blank</option><option value="generic-eps">Generic EPS</option></select></label>
       <p id="session-description"></p>
       <label for="session-name">Session name</label>
       <input id="session-name" maxlength="80" autocomplete="off" required>

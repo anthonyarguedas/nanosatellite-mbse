@@ -2,11 +2,17 @@
 
 ## Scope and interpretation
 
+This is the historical numerical coverage audit for the report assessment additions.
+Its **Existing support** and **Added assessment scope** columns describe that implementation stage.
+The current runtime uses native Python classes and sessions, with the same numerical scope and engineering limitations.
+See the [application guide](../README.md) and [native API](../../python/README.md) for current architecture and commands.
+This runtime refactor supplies no new framework-conformity claim or re-evaluation of the report MOPs.
+
 `final_report/requirements.tex` defines 23 framework requirements (FRs). The 20 EPS product requirements are in `final_report/eps-requirements.tex`, included by `design-proposal.tex`. This audit covers both sets. Legacy workbook IDs such as EPS047, EPS052 and EPS078 are decompositions of report obligations. They are not additional report requirements.
 
 Coverage means an implemented assessment within its declared scope. A place to enter a manual verdict provides no implementation credit. A synthetic test pass establishes numerical behavior for that fixture. It establishes no product compliance, physical model validity or achieved framework MOP.
 
-The additions use generic requirements, numeric parameters, typed registered scripts and sourced COTS facts. The 49 new study requirements are part of the normal Python catalog and populate every applicable EPS session. Their independent quantities and limits start unset. Existing entered values, prose, IDs and evidence configurations remain intact. The visible tables and editor are unchanged. Internal numeric capacity is 256 names, and mode results omit redundant empty cells to support the larger generic workbook. Version 14 JSON retains optional per-EPS seed history for deliberate deletion preservation. Scripts still require explicit execution. Missing decisive evidence stays pending, invalid model inputs produce errors, and known operational violations produce failed findings.
+The additions use generic requirements, numeric parameters, typed registered scripts and sourced COTS facts. The 49 new study requirements are part of the normal Python catalog and populate every applicable EPS session. Their independent quantities and limits start unset. Existing entered values, prose, IDs and evidence configurations remain intact. The visible tables and editor are unchanged. Internal numeric capacity is 256 names, and mode results omit redundant empty cells to support the larger generic workbook. Native Python sessions retain per-owner lifecycle history for deliberate deletion preservation, with version-14 JSON retained only as migration input and browser transport. Scripts still require explicit execution. Missing decisive evidence stays pending, invalid model inputs produce errors, and known operational violations produce failed findings.
 
 ## Framework requirements
 
@@ -71,7 +77,7 @@ Existing workbook rows keep their values and verification methods. The new gener
 
 ## Generic requirements are the activity guidance
 
-Restart the server and reload any existing EPS session. The normal Generic EPS catalog now has 76 requirements: the original 27 plus 49 study requirements. All 20 report EPS criteria have generic primary rows. EPR001–027 separate additional obligations. CAL001–004 cover model fits, MIL001 covers regulator settling, and RAM001–002 cover reliability measures.
+Restart the server and reload any existing EPS session. The reusable orbit and EPS catalog has 76 requirements: the original 27 plus 49 study requirements. All 20 report EPS criteria have generic primary rows. EPR001–027 separate additional obligations. CAL001–004 cover model fits, MIL001 covers regulator settling, and RAM001–002 cover reliability measures.
 
 For example, EPS013 exposes `temp_limit_min_K`, `temp_limit_max_K`, `assessed_temp_min_K` and `assessed_temp_max_K`, all unset. Its assigned components, source and rationale identify the thermal study to perform. The engineer supplies independently assigned operating limits and assessed temperature bounds, then binds applicable study evidence through the existing verification table. A registered model can support that work. No separate session or planner is needed to make the obligation visible.
 
@@ -118,13 +124,13 @@ Exact model interfaces, equations, test fixtures and limitations are in [MODELS.
 
 The power-path topology codes are 0 (buck), 1 (boost) and 2 (buckboost magnitude). Sizing uses its separate codes 0 (direct/DET), 1 (buck), 2 (boost) and 3 (buck-boost). Keep each script's documented codebook. Sizing voltage screens are necessary conditions. Its full-interface feasibility result remains pending unless a represented violation proves false.
 
-Use `--mission /path/to/mission.json` to select the neighboring saved-session directory. `MISSION_FILE`, `VERIFICATION_SCRIPTS_DIR` and `VERIFICATION_PYTHON` are honored. The tool creates a normal named copy. It never reads inputs from, overwrites or runs analyses on the current mission. Duplicate names fail without replacing a session.
+Use `--mission /path/to/mission.py` to select the neighboring saved-session directory. A retained legacy JSON source is also accepted. `MISSION_FILE`, `VERIFICATION_SCRIPTS_DIR` and `VERIFICATION_PYTHON` are honored. The thin Node launcher uses native Python bench factories and the shared session repository. It creates a named Python copy without reading inputs from, overwriting or running analyses on the current mission. Duplicate names fail without replacing a session.
 
 Open the new session in the existing Session picker. INP rows declare numeric model inputs with shared units. Open each requirement pane to supply their parameter expressions. Boolean inputs remain in the script input table and start unset. CHK rows contain product or assessment acceptance criteria. Supply their independent limits and sources. Run the relevant script explicitly. Inspect its typed outputs, logs and verification results in the existing pane.
 
 Use source links and affected-component assignments to connect the study to approved mission requirements and products. Most profiles are scoped studies with no automatically selected COTS product. Add a product through the existing COTS table and pin applicable facts. The `cots-protection` profile selects TPS63802 and pins nine exact capability, action, threshold and operating-limit facts. Its output OVP maximum is 5.9 V. A separately assigned 5.5 V trip ceiling therefore fails. Its OVP threshold does not extend the recommended operating range or establish battery protection. Replace input literals with fact references where appropriate. Unit conversions stay explicit. Capability facts describe supported functions. The assessed circuit and selected settings determine whether the function is effective.
 
-The Generic EPS starter uses 161 shared numeric names before power/resource allocation additions. The internal capacity is 256, leaving room for additional studies in the same session. Script inputs and outputs keep independent namespaces. Any registered model can be selected directly in an existing requirement pane. Define its inputs there and attach an evidence method to the generic requirement. No new UI controls or activity workflow are introduced.
+The full orbit and EPS model uses 161 shared numeric names before power/resource allocation additions. The internal capacity is 256, leaving room for additional studies in the same session. Script inputs and outputs keep independent namespaces. Any registered model can be selected directly in an existing requirement pane. Define its inputs there and attach an evidence method to the generic requirement. No new UI controls or activity workflow are introduced.
 
 ## Chronological energy and charge
 
@@ -191,11 +197,9 @@ The existing COTS model already supports numeric, Boolean and String facts with 
 
 Controller capability requires its external circuitry, supported configuration and processor-unavailable policy to be assessed. Typical trip values establish no guaranteed worst-case limit. A Boolean capability alone establishes no threshold, interruption-time, fault-energy, SOA or system-level protection result. See `framework/cots/ENRICHMENT.md` for the sourced database additions and unresolved properties.
 
-## Verification
+## Verification history
 
-```sh
-node --test test/generic-requirements.test.mjs test/report-*.test.mjs test/cots-enrichment.test.mjs
-npm test
-```
-
-Tests use synthetic data, analytic reference calculations, known violations, invalid inputs, missing evidence, dependency chains, mode isolation and JSON round trips. Generic requirement tests cover existing-session backfill, untouched source files, retained edits and deletions, future catalog additions, independent EPS instances and all 24 supported modes. Named-session tests use temporary directories and leave project mission files unchanged. Browser rendering and editor controls are unchanged. Optional Playwright tests remain available through the existing `PLAYWRIGHT_MODULE` mechanism.
+The pre-refactor sources under `test/legacy/` preserve checks using synthetic data, analytic reference calculations, known violations, invalid inputs, missing evidence, dependency chains, mode isolation and JSON round trips.
+Their `.txt` suffix excludes them from current Node test discovery because their earlier implementation dependencies were retired.
+Active `npm test` runs the retained requirement presentation checks and makes no claim of old-suite parity.
+Current native examples, Python study factories and browser workflows are documented in the [application guide](../README.md) and [REPL demonstration](../../python/docs/repl.md).

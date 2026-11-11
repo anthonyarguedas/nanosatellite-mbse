@@ -1,47 +1,75 @@
 import {
-  addElementChildren, allowedDefinitions, allRows as workbookRows, assignableElements, availableSources,
-  componentCheck, componentRequirements, contextForRow, domainTypes, emptyWorkspace,
-  nextId, parameterExpression, parseTSV, WORKSPACE_VERSION, rewriteRowReferences, stakeholderTypes, tabsFor, validateWorkspace,
-} from '/model.mjs';
-import { createRequirementEditor } from '/requirement-editor.js';
+  allowedDefinitions, allRows as workbookRows, assignableElements, availableSources,
+  componentRequirements, contextForRow, parameterExpression, parseTSV, tabsFor,
+  verificationMethods, metadata, objectMetadata, hasFixedBudgetScope as fixedScope,
+  snapshot as projectionSnapshot, rebase, parameterInfo,
+} from '/workbook.js';
+import * as native from '/native-client.js';
+import { createRequirementEditor } from '/editors/requirement.js';
 import { requirementHTML } from '/requirement-preview.js';
-import { createPowerEditor } from '/power-editor.js';
-import { createCotsEditor } from '/cots-editor.js';
-import { cotsUses } from '/cots-bindings.mjs';
-import { isPowerRequirement, parentPowerLimit } from '/power.mjs';
-import { isResourceRequirement, parentResourceLimit } from '/resource-budgets.mjs';
-import { verificationMethods } from '/verification-methods.mjs';
+import { createPowerEditor } from '/editors/power.js';
+import { createCotsEditor } from '/editors/cots.js';
 
-const hasFixedBudgetScope = row => isPowerRequirement(row) || isResourceRequirement(row);
+const hasFixedBudgetScope = row => fixedScope(workspace, row);
 const main = document.querySelector('main');
 const status = document.querySelector('#status'), retry = document.querySelector('#retry');
 const sourceEditor = document.querySelector('#source-editor');
 const sessionSelect = document.querySelector('#session-select'), sessionEditor = document.querySelector('#session-editor');
-const sessionNameInput = document.querySelector('#session-name'), sessionTemplate = document.querySelector('#session-template');
+const sessionNameInput = document.querySelector('#session-name');
 let sessions = [], sessionId = 'current', sessionName = 'Current mission', sessionBusy = false, sessionMode = 'new', suggestedSessionName = '';
 let saveTask = null;
 const workspaceURL = (id = sessionId) => id === 'current' ? '/api/workspace' : `/api/workspace?session=${encodeURIComponent(id)}`;
 const requestedSession = () => new URLSearchParams(location.search).get('session') || 'current';
-let catalog = domainTypes, products = [], active = 'external', workspace = emptyWorkspace(catalog);
-let revision, lastSaved, saveTimer, modelName = 'mission.json';
+let catalog = [], products = [], active = 'external', workspace = { version: 14, expressionLanguage: 'python',
+  variables: [], elements: [], stakeholders: [], statements: [], components: [], scripts: [], power: { modes: [], loads: [], links: [] } };
+let revision, lastSaved, saveTimer, modelName = 'session.py';
 let loaded = false, saving = false, conflict = false, exporting = false;
 let editor = null, popoverAnchor = null, worker = null, evaluationTimer, workerTimer, generation = 0;
-const selected = {}, sorts = {}, statementIds = new Map();
-let results = new Map(), scriptResults = null;
+const selected = {}, sorts = {};
+let results = new Map(), componentResults = new Map(), scriptResults = null;
+let nativeEdits = Promise.resolve();
+function enqueue(operation) {
+  const task = nativeEdits.catch(() => {}).then(operation);
+  nativeEdits = task.catch(() => {});
+  return task;
+}
 const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 })[char]);
 const variableNames = () => workspace.variables.map(variable => variable.name);
-function syncStatementIds(state = workspace, known = statementIds) {
-  const renames = new Map();
-  const rows = [...state.statements, ...state.components];
-  for (const row of rows) {
-    if (!/^[A-Z]{3}\d{3}$/.test(row.id) || [...rows, ...state.scripts].some(other => other.key !== row.key && other.id === row.id)) continue;
-    const previous = known.get(row.key);
-    if (previous && previous !== row.id) renames.set(previous, row.id);
-    known.set(row.key, row.id);
-  }
-  rewriteRowReferences(state, renames);
+function captureFocus() {
+  const input = document.activeElement, row = input?.closest('tr[data-key]');
+  const selector = row && input.dataset.field ? `tr[data-key="${row.dataset.key}"] [data-field="${input.dataset.field}"]`
+    : input?.dataset.modeKey ? `[data-mode-key="${input.dataset.modeKey}"][data-mode-field="${input.dataset.modeField}"]`
+      : input?.dataset.powerAssignment ? `[data-power-assignment="${input.dataset.powerAssignment}"][data-mode="${input.dataset.mode}"]` : null;
+  return selector ? { selector, start: input.selectionStart, end: input.selectionEnd } : null;
+}
+function restoreFocus(focus) {
+  const input = focus && document.querySelector(focus.selector);
+  if (!input) return;
+  input.focus({ preventScroll: true });
+  if (typeof focus.start === 'number') input.setSelectionRange?.(focus.start, focus.end);
+}
+function adoptCanonical(view, before = workspace) {
+  const focus = captureFocus(), canonical = view.workspace?._native ? view.workspace : native.attachView(view, workspace);
+  workspace = rebase(workspace, before, canonical);
+  workspace._native = canonical._native;
+  if (view.catalog) catalog = view.catalog;
+  if (view.products) products = view.products;
+  if (!tabsFor(workspace).some(tab => tab.key === active)) active = 'external';
+  renderWorkbook(); updateSources(); restoreFocus(focus);
+}
+function commitCandidate(candidate) {
+  const captured = structuredClone(workspace), id = sessionId;
+  return enqueue(async () => {
+    const before = structuredClone(workspace), combined = rebase(workspace, captured, candidate);
+    combined._native = candidate._native;
+    const view = await native.normalize(combined);
+    if (id !== sessionId) throw new Error('The selected session changed while applying the draft.');
+    adoptCanonical(view, before);
+    scheduleSave(); scheduleEvaluation();
+    return workspace;
+  });
 }
 const tabInfo = () => tabsFor(workspace, catalog).find(tab => tab.key === active);
 const columns = table => table === 'components' ? ['id', 'product', 'requirements', 'verified']
@@ -56,21 +84,18 @@ const rowElement = key => document.querySelector(`tr[data-key="${key}"]`);
 const rowByKey = key => workbookRows(workspace).find(row => row.key === key);
 const requirementEditor = createRequirementEditor({
   panel: document.querySelector('#requirement-editor'), getWorkspace: () => workspace, getCatalog: () => catalog,
-  validate: candidate => validateWorkspace(snapshot(candidate), catalog, products),
+  validate: candidate => candidate,
   getScriptResults: () => scriptResults, getProducts: () => products,
   onInspectCots: (key, name, anchor) => cotsEditor.open(key, anchor, name),
   onBackCots: () => cotsEditor.open(cotsEditor.key()),
   getBackCotsLabel: () => workspace.components.find(component => component.key === cotsEditor.key())?.id ?? '',
-  onScriptResults: evidence => { scriptResults = evidence; scheduleEvaluation(); },
-  onCommit: candidate => {
-    workspace = candidate; statementIds.clear(); syncStatementIds();
-    renderWorkbook(); updateSources(); scheduleSave(); scheduleEvaluation();
-  },
+  onScriptResults: evidence => { scriptResults = evidence; workspace._native.evidenceToken = evidence?.evidenceToken ?? null; scheduleEvaluation(); },
+  onCommit: commitCandidate,
 });
 const cotsEditor = createCotsEditor({
   panel: document.querySelector('#cots-editor'), getWorkspace: () => workspace, getProducts: () => products,
   getReferenceWorkspace: () => { try { return requirementEditor.preview(); } catch { return workspace; } },
-  validate: candidate => validateWorkspace(snapshot(candidate), catalog, products),
+  validate: candidate => candidate,
   beforeOpen: () => { if (!powerEditor.closeWithConfirmation()) return false; requirementEditor.suspend(); return true; },
   onReturn: () => requirementEditor.resume(), returnLabel: () => requirementEditor.id(),
   onCatalogueRefresh: () => { scheduleEvaluation(); requirementEditor.refresh(); },
@@ -80,19 +105,20 @@ const cotsEditor = createCotsEditor({
     if (row) { navigate(row.context); requirementEditor.open(key, rowElement(key)?.querySelector('.requirement-edit')); }
     if (!requirementEditor.isVisible()) cotsEditor.resume();
   },
-  onCommit: (candidate, before, after, renames) => {
-    workspace = candidate; requirementEditor.rebaseCots(before, candidate.components.find(component => component.key === after.key), renames);
-    statementIds.clear(); syncStatementIds(); renderWorkbook(); updateSources(); scheduleSave(); scheduleEvaluation();
+  onCommit: async (candidate, before, after) => {
+    await commitCandidate(candidate);
+    await requirementEditor.rebaseCots(before, workspace.components.find(component => component.key === after.key));
   },
 });
 const powerEditor = createPowerEditor({
   section: document.querySelector('#power-workspace'), panel: document.querySelector('#power-editor'),
   getWorkspace: () => workspace, getActive: () => active,
   onError: message => showStatus(message, true),
-  onChange: candidate => {
-    validateWorkspace(snapshot(candidate), catalog, products); workspace = candidate;
-    renderWorkbook(); requirementEditor.refresh(); scheduleSave(); scheduleEvaluation();
-  },
+  onChange: commitCandidate,
+  onCommand: operation => enqueue(async () => {
+    const before = structuredClone(workspace), view = await native.command(workspace, operation);
+    adoptCanonical(view, before); requirementEditor.refresh(); scheduleSave(); scheduleEvaluation();
+  }),
   beforeOpen: () => {
     if (requirementEditor.isDirty() && !window.confirm('Discard the unsaved requirement edits and edit component power?')) return false;
     requirementEditor.close(); cotsEditor.suspend(); return true;
@@ -100,10 +126,9 @@ const powerEditor = createPowerEditor({
 });
 const rowLabel = row => row.name ?? row.text ?? products.find(product => product.id === row.product)?.name ?? '';
 const isEps = () => catalog.find(type => type.model === rowByKey(active)?.definition)?.role === 'eps';
-const componentChecks = () => new Map(workspace.statements.map(row => [row.key,
-  verificationMethods(row).length ? results.get(row.key) ?? { state: 'pending' } : { state: 'unset' }]));
+const componentCheck = row => componentResults.get(row.key) ?? { state: 'pending', message: 'Recalculating in Python…' };
 function updateExport() {
-  document.querySelectorAll('.export-json').forEach(button => { button.disabled = exporting || !loaded || sessionBusy; });
+  document.querySelectorAll('.export-python').forEach(button => { button.disabled = exporting || !loaded || sessionBusy; });
   document.querySelectorAll('.export-kicad, .export-fprime').forEach(button => {
     button.disabled = exporting || sessionBusy || !viewRows('components').some(row => row.product);
   });
@@ -176,30 +201,7 @@ function used(row, table) {
     : Boolean(row.id || row.sources.length || row.affected.length || row.text || row.condition || row.verifications?.length || row.rationale || row.kind !== 'Requirement'
       || Object.values(row.parameters).some(value => value !== null && value !== ''));
 }
-function snapshot(state = workspace) {
-  return {
-    version: WORKSPACE_VERSION, ...(state.expressionLanguage ? { expressionLanguage: state.expressionLanguage } : {}), variables: structuredClone(state.variables), power: structuredClone(state.power), scripts: structuredClone(state.scripts),
-    ...(state.resourceBudgets ? { resourceBudgets: true } : {}),
-    ...(state.requirementSeeds ? { requirementSeeds: structuredClone(state.requirementSeeds) } : {}),
-    stakeholders: state.stakeholders.filter(row => used(row, 'stakeholders')).map(row => ({ key: row.key, id: row.id.trim(), name: row.name, type: row.type })),
-    elements: state.elements.filter(row => used(row, 'stakeholders')).map(row => ({ key: row.key, id: row.id.trim(), name: row.name, owner: row.owner, definition: row.definition })),
-    components: state.components.filter(row => used(row, 'components')).map(row => ({
-      key: row.key, id: row.id.trim(), owner: row.owner, product: row.product, requirements: [...row.requirements],
-      ...(row.facts !== undefined ? { facts: structuredClone(row.facts) } : {}),
-    })),
-    statements: state.statements.filter(row => used(row, 'statements')).map(row => ({
-      key: row.key, id: row.id.trim(), context: row.context, sources: [...row.sources], affected: [...row.affected], kind: row.kind, text: row.text,
-      condition: row.condition,
-      ...(row.verifications ? { verifications: structuredClone(row.verifications) } : {}),
-      ...(row.definition ? { definition: row.definition } : {}),
-      ...(isPowerRequirement(row) ? { powerScope: row.powerScope } : {}),
-      ...(isResourceRequirement(row) ? { budgetScope: row.budgetScope } : {}),
-      ...(row.origin ? { origin: row.origin } : {}),
-      ...(row.rationale !== undefined ? { rationale: row.rationale } : {}),
-      parameters: Object.fromEntries(state.variables.map(variable => [variable.name, parameterExpression(row.parameters[variable.name], variable, row.id)])),
-    })),
-  };
-}
+function snapshot(state = workspace) { return projectionSnapshot(state); }
 function sourceHTML(row, index, field = 'sources', col = 1) {
   const links = row[field].map(key => {
     const source = rowByKey(key);
@@ -223,13 +225,13 @@ function renderHeader() {
 }
 function elementAction(row) {
   if (active === 'external') return '';
-  if (catalog.find(type => type.model === row.definition)?.expandable) return `<button type="button" class="element-open" data-open-element="${row.key}" aria-label="Open ${escape(row.name)}" title="Open component and requirement tables">↗</button>`;
-  return /^SpaceSegment::CubeSat::[^:]+::[^:]+$/.test(row.definition) ? `<button type="button" class="element-open" data-open-power="${row.key}" aria-label="Edit power for ${escape(row.name)}" title="Edit component power"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 3 5 5M3 17l4-1 10-10a2.1 2.1 0 0 0-3-3L4 13l-1 4Z"/></svg></button>` : '';
+  if (objectMetadata(workspace, row.key).expandable) return `<button type="button" class="element-open" data-open-element="${row.key}" aria-label="Open ${escape(row.name)}" title="Open component and requirement tables">↗</button>`;
+  return (metadata(workspace).powerComponents ?? []).includes(row.key) ? `<button type="button" class="element-open" data-open-power="${row.key}" aria-label="Edit power for ${escape(row.name)}" title="Edit component power"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 3 5 5M3 17l4-1 10-10a2.1 2.1 0 0 0-3-3L4 13l-1 4Z"/></svg></button>` : '';
 }
 function rowHTML(row, table, index) {
   const attrs = (field, col) => `data-field="${field}" data-col="${col}" aria-label="${table === 'components' ? 'COTS component' : table === 'stakeholders' ? active === 'external' ? 'Stakeholder' : 'Element' : 'Statement'} ${field}, row ${index + 1}"`;
   let cells = `<td class="row-actions"><button type="button" class="row-delete" data-delete-row="${row.key}" aria-label="Delete row ${escape(row.id || index + 1)}" title="Delete this row" ${used(row, table) ? '' : 'disabled'}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12M8 3h4M6 5l1 12h6l1-12M9 8v6M11 8v6"/></svg></button></td>`;
-  cells += `<td class="id-cell"><input ${attrs('id', 0)} value="${escape(row.id)}" maxlength="${table === 'stakeholders' ? 3 : 6}" title="${table === 'stakeholders' ? 'Three uppercase letters' : 'Three uppercase letters and three digits'}" autocomplete="off" spellcheck="false"></td>`;
+  cells += `<td class="id-cell"><input ${attrs('id', 0)} value="${escape(row.id)}" maxlength="200" title="Display ID, assigned and validated by Python" autocomplete="off" spellcheck="false"></td>`;
   if (table === 'components') {
     cells += `<td class="cots-product-cell"><select ${attrs('product', 1)} title="${escape(rowLabel(row))}"><option value=""> </option>${products.map(product => `<option value="${escape(product.id)}" ${row.product === product.id ? 'selected' : ''}>${escape(product.name)}</option>`).join('')}</select><button type="button" class="requirement-edit" data-cots-edit="${row.key}" aria-label="Edit COTS ${escape(row.id || 'new row')}" aria-controls="cots-editor" title="Inspect COTS facts and named references" ${row.product ? '' : 'disabled'}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 3 5 5M3 17l4-1 10-10a2.1 2.1 0 0 0-3-3L4 13l-1 4Z"/></svg></button></td>`;
     cells += `<td>${sourceHTML(row, index, 'requirements', 2)}</td>`;
@@ -237,7 +239,7 @@ function rowHTML(row, table, index) {
   } else if (table === 'stakeholders') {
     const action = elementAction(row);
     cells += `<td class="${action ? 'element-name-cell' : ''}"><input ${attrs('name', 1)} value="${escape(row.name)}" title="${escape(row.name)}" autocomplete="off">${action}</td>`;
-    if (active === 'external') cells += `<td><select ${attrs('type', 2)}><option value=""> </option>${stakeholderTypes.map(type => `<option ${row.type === type.name ? 'selected' : ''}>${type.name}</option>`).join('')}</select></td>`;
+    if (active === 'external') cells += `<td><select ${attrs('type', 2)}><option value=""> </option>${(metadata(workspace).stakeholderTypes ?? []).map(type => `<option ${row.type === type ? 'selected' : ''}>${escape(type)}</option>`).join('')}</select></td>`;
     else {
       const options = allowedDefinitions(workspace, active, catalog), type = catalog.find(type => type.model === row.definition);
       cells += `<td><select ${attrs('definition', 2)} data-category="${escape(type?.category)}" title="${escape(row.definition)}"><option value=""> </option>${options.map(option => `<option value="${option.model}" ${row.definition === option.model ? 'selected' : ''}>${escape(active === 'mission' && option.category !== option.name ? `${option.category} · ${option.name}` : option.name)}</option>`).join('')}</select></td>`;
@@ -285,9 +287,10 @@ function updateSources() {
 function updatePreview(row) {
   const tr = rowElement(row.key), summary = tr?.querySelector('.statement-summary');
   if (!summary) return;
-  summary.querySelector('.statement-preview').innerHTML = requirementHTML(row.text, results.get(row.key)?.values, workspace.variables);
-  summary.title = row.text || 'Use the edit button to write a requirement.';
-  const errors = Object.values(results.get(row.key)?.parameters ?? {}).filter(result => result.state === 'error');
+  summary.querySelector('.statement-preview').innerHTML = requirementHTML(row.text, results.get(row.key)?.values, Object.keys(row.parameters).map(name => parameterInfo(workspace, row, name)));
+  const issues = objectMetadata(workspace, row.key).draftIssues ?? [];
+  summary.title = [row.text || 'Use the edit button to write a requirement.', ...issues].join('\n');
+  const errors = [...Object.values(results.get(row.key)?.parameters ?? {}).filter(result => result.state === 'error'), ...issues.map(message => ({ message }))];
   for (const button of tr.querySelectorAll('.requirement-edit')) {
     button.setAttribute('aria-label', `Edit ${button.classList.contains('verification-edit') ? 'verification for' : 'requirement'} ${row.id || 'new row'}`);
     button.dataset.state = errors.length ? 'error' : '';
@@ -299,7 +302,7 @@ function updateChecks() {
     const tr = rowElement(row.key), cell = tr?.querySelector('.checkbox-cell');
     if (!cell) continue;
     updatePreview(row);
-    const result = verificationMethods(row).length ? results.get(row.key) ?? { state: 'pending', message: 'Recalculating…' }
+    const result = verificationMethods(row, workspace).length ? results.get(row.key) ?? { state: 'pending', message: 'Recalculating…' }
       : { state: 'unset', message: 'No verification condition. Enter a Python Boolean expression to verify this row.' };
     const checkbox = cell.querySelector('.verification-result'), edit = cell.querySelector('.verification-edit');
     checkbox.checked = result.state === 'pass'; checkbox.indeterminate = ['error', 'pending'].includes(result.state);
@@ -308,41 +311,39 @@ function updateChecks() {
     edit.setAttribute('aria-description', result.message);
     cell.dataset.state = result.state;
   }
-  const checks = componentChecks();
   for (const row of viewRows('components')) {
     const cell = rowElement(row.key)?.querySelector('.component-summary');
     if (!cell) continue;
-    const result = componentCheck(row, checks), checkbox = cell.querySelector('input');
+    const result = componentCheck(row), checkbox = cell.querySelector('input');
     checkbox.checked = result.state === 'pass'; checkbox.indeterminate = ['error', 'pending'].includes(result.state);
     cell.dataset.state = result.state; cell.title = result.message; cell.setAttribute('aria-description', result.message);
   }
 }
 function scheduleEvaluation() {
   const token = ++generation;
-  clearTimeout(evaluationTimer); clearTimeout(workerTimer); results = new Map(); updateChecks();
+  clearTimeout(evaluationTimer); clearTimeout(workerTimer); results = new Map(); componentResults = new Map(); updateChecks();
   evaluationTimer = setTimeout(() => {
     const statements = workspace.statements.filter(row => used(row, 'statements'));
-    if (!statements.length) return;
+    const evaluationBase = structuredClone(workspace);
     const fail = message => {
-      results = new Map(statements.map(row => [row.key, { state: verificationMethods(row).length ? 'error' : 'unset', message,
-        parameters: Object.fromEntries(workspace.variables.map(variable => [variable.name, { state: row.parameters[variable.name]?.trim() ? 'error' : 'unset', value: null, message }])) }]));
+      results = new Map(statements.map(row => [row.key, { state: verificationMethods(row, workspace).length ? 'error' : 'unset', message,
+        parameters: Object.fromEntries(Object.entries(row.parameters).map(([name, source]) => [name, { state: source ? 'error' : 'unset', value: null, message }])) }]));
       updateChecks(); worker?.terminate(); worker = null;
     };
     try {
-      if (!worker) {
-        worker = new Worker('/verification-worker.js', { type: 'module' });
-        worker.onmessage = event => {
+      if (!worker) worker = new Worker('/verification-worker.js', { type: 'module' });
+      worker.onmessage = event => {
           if (event.data.token !== generation) return;
           clearTimeout(workerTimer);
           if (event.data.error) { fail(event.data.error); return; }
-          if (scriptResults && (scriptResults.cotsSignature ?? null) !== (event.data.cotsSignature ?? null)) scriptResults = null;
-          results = new Map(event.data.results.map(result => [result.key, result])); updateChecks();
-        };
-      }
+          if (event.data.view) adoptCanonical(event.data.view, evaluationBase);
+          native.applyEvaluation(workspace, event.data);
+          results = new Map(event.data.results.map(result => [result.key, result]));
+          componentResults = new Map((event.data.components ?? []).map(result => [result.key, result])); updateChecks();
+      };
       worker.onerror = () => fail('Could not evaluate the expression.');
       workerTimer = setTimeout(() => fail('Python expression evaluation timed out.'), 7000);
-      worker.postMessage({ token, scriptResults, workspace: { variables: workspace.variables, statements,
-        elements: workspace.elements, components: workspace.components, power: workspace.power, scripts: workspace.scripts, expressionLanguage: workspace.expressionLanguage } });
+      worker.postMessage({ token, ...native.payload(workspace, scriptResults) });
     } catch { fail('Expression evaluation is unavailable in this browser.'); }
   }, 100);
 }
@@ -355,26 +356,29 @@ function scheduleSave() { clearTimeout(saveTimer); if (!conflict && !sessionBusy
 function save() {
   clearTimeout(saveTimer);
   if (saveTask) return saveTask.then(success => success && dirty() ? save() : success);
-  saveTask = persist().finally(() => { saveTask = null; });
+  saveTask = enqueue(persist).finally(() => { saveTask = null; });
   return saveTask;
 }
 async function persist() {
   clearTimeout(saveTimer);
   if (!loaded || saving || conflict) return false;
   let data, serialized;
-  try { data = validateWorkspace(snapshot(), catalog, products); serialized = JSON.stringify(data); }
+  const before = structuredClone(workspace);
+  try { data = snapshot(); serialized = JSON.stringify(data); }
   catch (error) { showStatus(error.message, true); return false; }
   if (serialized === lastSaved) { showStatus(); return true; }
   const id = sessionId;
   saving = true; showStatus(`Saving ${sessionName}…`);
   let succeeded = false;
   try {
-    const response = await fetch(workspaceURL(id), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workspace: data, revision }) });
+    const response = await fetch(workspaceURL(id), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...native.payload(before, scriptResults), workspace: data, revision }) });
     const result = await response.json();
     if (!response.ok) { conflict = response.status === 409; throw new Error(result.error); }
-    revision = result.revision; lastSaved = serialized; succeeded = true;
+    native.attachView(result, workspace);
+    revision = result.revision; lastSaved = JSON.stringify(snapshot(result.workspace)); succeeded = true;
+    adoptCanonical(result, before); workspace._native.revision = revision;
     document.querySelector('#session-storage').title = `Autosaved separately to ${modelName}.`;
-    showStatus();
+    showStatus(); scheduleEvaluation();
   } catch (error) { showStatus(error.message || 'Could not save. Your edits are still in this tab.', true, conflict ? () => location.reload() : save); }
   finally { saving = false; if (succeeded && dirty()) scheduleSave(); }
   return succeeded;
@@ -402,11 +406,11 @@ function sessionLocation(history = 'replace') {
   window.history[history === 'push' ? 'pushState' : 'replaceState'](null, '', url);
 }
 function installWorkspace(data, id, tab, history = 'replace') {
-  const nextCatalog = data.catalog ?? domainTypes, nextProducts = data.products ?? [];
-  const candidate = validateWorkspace(data.workspace, nextCatalog, nextProducts);
+  const nextCatalog = data.catalog ?? [], nextProducts = data.products ?? [];
+  const candidate = native.attachView(data);
   cotsEditor.close(false); requirementEditor.close(); powerEditor.reset(); closeEditor(); closeMenus();
   clearTimeout(saveTimer); clearTimeout(evaluationTimer); clearTimeout(workerTimer);
-  generation++; worker?.terminate(); worker = null; results = new Map(); scriptResults = null;
+  generation++; worker?.terminate(); worker = null; results = new Map(); componentResults = new Map(); scriptResults = null;
   for (const state of [selected, sorts]) for (const key of Object.keys(state)) delete state[key];
   catalog = nextCatalog; products = nextProducts; workspace = candidate;
   sessionId = id; sessionName = data.session?.name ?? data.modelName ?? 'Current mission';
@@ -414,7 +418,6 @@ function installWorkspace(data, id, tab, history = 'replace') {
   revision = data.revision; modelName = data.modelName ?? modelName;
   const storage = document.querySelector('#session-storage');
   storage.title = `Autosaved separately to ${modelName}.`;
-  statementIds.clear(); syncStatementIds();
   lastSaved = JSON.stringify(snapshot()); conflict = false; loaded = true;
   active = tab === 'eps' ? workspace.elements.find(row => catalog.find(type => type.model === row.definition)?.role === 'eps')?.key ?? 'mission'
     : tab ?? requestedTab();
@@ -457,10 +460,9 @@ function suggestSessionName(base) {
 }
 function describeSession() {
   document.querySelector('#session-description').textContent = sessionMode === 'copy'
-    ? 'Save an independent copy, including edits in the open requirement pane. The original session stays available.'
-    : sessionTemplate.value === 'blank' ? 'Empty tables with no preloaded elements or requirements.'
-      : 'The generic orbit and EPS requirements, units and equations, with mission inputs unset.';
-  const name = suggestSessionName(sessionMode === 'copy' ? `${sessionName} copy` : sessionTemplate.value === 'blank' ? 'Blank session' : 'Generic EPS session');
+    ? 'Save an independent copy, including valid open editor drafts. The original session stays available.'
+    : 'Empty tables with no preloaded elements or requirements. To reuse an existing session, open it and choose Save as.';
+  const name = suggestSessionName(sessionMode === 'copy' ? `${sessionName} copy` : 'Blank session');
   if (!sessionNameInput.value.trim() || sessionNameInput.value === suggestedSessionName) sessionNameInput.value = name;
   suggestedSessionName = name;
 }
@@ -468,7 +470,6 @@ function openSessionEditor(mode, anchor) {
   if (!loaded || sessionBusy) return;
   sessionMode = mode; sessionNameInput.value = ''; suggestedSessionName = '';
   document.querySelector('#session-editor-title').textContent = mode === 'copy' ? 'Save session as' : 'New session';
-  document.querySelector('#session-template-label').hidden = mode === 'copy';
   document.querySelector('#session-create').textContent = mode === 'copy' ? 'Save copy' : 'Create session';
   document.querySelector('#session-error').textContent = '';
   describeSession(); openEditor(sessionEditor, anchor, { type: 'session' });
@@ -483,12 +484,13 @@ async function createSession(event) {
   try {
     if (copy) { if (saveTask) await saveTask; }
     else if (!await save()) return;
-    const data = { name: sessionNameInput.value, template: copy ? 'copy' : sessionTemplate.value,
-      ...(copy ? { workspace: snapshot(powerEditor.snapshot(cotsEditor.snapshot(requirementEditor.snapshot()))) } : {}) };
+    const copied = copy ? powerEditor.snapshot(cotsEditor.snapshot(requirementEditor.snapshot())) : null;
+    const data = { name: sessionNameInput.value, template: copy ? 'copy' : 'blank',
+      ...(copy ? native.payload(copied, scriptResults) : {}) };
     const response = await fetch('/api/sessions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error);
-    installWorkspace(result, result.session.id, copy ? tab : data.template === 'generic-eps' ? 'eps' : 'external', 'push');
+    installWorkspace(result, result.session.id, copy ? tab : 'external', 'push');
   } catch (error) {
     document.querySelector('#session-error').textContent = error.message;
     showStatus(error.message || 'Could not create the session.', true);
@@ -497,18 +499,17 @@ async function createSession(event) {
 sessionSelect.addEventListener('change', () => switchSession(sessionSelect.value));
 document.querySelector('#session-new').addEventListener('click', event => openSessionEditor('new', event.currentTarget));
 document.querySelector('#session-copy').addEventListener('click', event => openSessionEditor('copy', event.currentTarget));
-sessionTemplate.addEventListener('change', describeSession);
 document.querySelector('#session-form').addEventListener('submit', createSession);
 async function exportArtifact(kind) {
   const button = document.querySelector(`.export-${kind}`);
   try {
-    const data = validateWorkspace(snapshot(powerEditor.snapshot(cotsEditor.snapshot(requirementEditor.snapshot()))), catalog, products), context = active;
+    const data = powerEditor.snapshot(cotsEditor.snapshot(requirementEditor.snapshot())), context = active;
     exporting = true; updateExport(); button.setAttribute('aria-busy', 'true');
     const response = await fetch(`/api/${kind}?session=${encodeURIComponent(sessionId)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ workspace: data, context }) });
+      body: JSON.stringify({ ...native.payload(data, scriptResults), context }) });
     if (!response.ok) throw new Error((await response.json()).error);
     const blob = await response.blob(), url = URL.createObjectURL(blob), link = document.createElement('a');
-    link.href = url; link.download = response.headers.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1] ?? (kind === 'json' ? 'workspace-export.json' : kind === 'kicad' ? 'eps.kicad_sch' : 'eps-fprime.zip');
+    link.href = url; link.download = response.headers.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1] ?? (kind === 'python' ? 'session.py' : kind === 'kicad' ? 'eps.kicad_sch' : 'eps-fprime.zip');
     document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
   } catch (error) { showStatus(error.message || 'Could not export the components.', true); }
   finally { exporting = false; updateExport(); button.removeAttribute('aria-busy'); }
@@ -517,26 +518,7 @@ function context(target) {
   const tr = target.closest('tr[data-key]'), table = tr?.closest('[data-table]').dataset.table;
   return tr ? { tr, table, row: rowByKey(tr.dataset.key) } : null;
 }
-function activate(row, table, field, state = workspace) {
-  if (table === 'components') {
-    if (field !== 'id' && !row.id) row.id = nextId(state, 'Component');
-  } else if (table === 'stakeholders' && active !== 'external') {
-    const wasEmpty = !row.definition;
-    row.definition ||= allowedDefinitions(state, active, catalog)[0]?.model ?? '';
-    const type = catalog.find(type => type.model === row.definition);
-    if (!row.name && field === 'definition') row.name = type?.name ?? '';
-    if (field !== 'id' && !row.id) row.id = nextId(state, 'Element', type?.id ?? row.name);
-    if (wasEmpty || field === 'definition') addElementChildren(state, row, catalog);
-  } else {
-    const prefix = tabsFor(state, catalog).find(tab => tab.key === row.context)?.prefix ?? 'REQ';
-    if (field !== 'id' && !row.id) row.id = nextId(state, table === 'stakeholders' ? 'Stakeholder' : row.kind,
-      table === 'stakeholders' ? row.name : row.kind === 'Requirement' ? prefix : '');
-    if (table === 'stakeholders' && !row.type && row.id) row.type = 'Mission Stakeholder';
-  }
-}
 function changed(row, table, field) {
-  activate(row, table, field);
-  syncStatementIds();
   const tr = rowElement(row.key), remove = tr.querySelector('.row-delete');
   remove.disabled = !used(row, table);
   remove.setAttribute('aria-label', `Delete row ${row.id || 'draft'}`);
@@ -572,13 +554,7 @@ main.addEventListener('input', event => {
       row.parameters[field] = parameterExpression(event.target.value, variable, row.id);
     } else if (field === 'verified') { updateChecks(); return; }
     else {
-      if (field === 'definition' && row.definition !== event.target.value && (workspace.elements.some(child => child.owner === row.key && used(child, 'stakeholders'))
-          || workspace.statements.some(statement => statement.context === row.key && used(statement, 'statements'))
-          || workspace.components.some(component => component.owner === row.key && used(component, 'components'))
-          || workspace.power.loads.some(load => load.element === row.key))) {
-        event.target.value = row.definition; throw new Error('This element has child rows. Remove those rows before changing its type.');
-      }
-      row[field] = field === 'id' ? event.target.value.toUpperCase() : event.target.value;
+      row[field] = event.target.value;
       if (field === 'id') event.target.value = row.id;
       if (field === 'kind') event.target.title = row.kind;
     }
@@ -641,17 +617,13 @@ function renderSourceChoices() {
   const row = rowByKey(editor?.key);
   if (!row) return;
   const query = document.querySelector('#source-search').value.toLowerCase();
-  const state = { stakeholders: workspace.stakeholders.filter(item => /^[A-Z]{3}$/.test(item.id)),
-    elements: workspace.elements.filter(item => /^[A-Z]{3}$/.test(item.id)),
-    statements: workspace.statements.filter(item => /^[A-Z]{3}\d{3}$/.test(item.id)),
-    components: workspace.components.filter(item => /^[A-Z]{3}\d{3}$/.test(item.id)) };
+  const state = workspace;
   const labels = new Map(tabsFor(workspace, catalog).map(tab => [tab.key, tab.label]));
   const candidates = editor.field === 'requirements' ? componentRequirements(state, row)
     : editor.field === 'affected' ? assignableElements(state, row) : availableSources(state, row.key);
-  const requiredSource = editor.field === 'sources' ? (isPowerRequirement(row) ? parentPowerLimit(state, row)?.key
-    : isResourceRequirement(row) ? parentResourceLimit(state, row)?.key : null) : null;
+  const requiredSources = editor.field === 'sources' ? objectMetadata(workspace, row.key).requiredSources ?? [] : [];
   const choices = candidates.filter(item => `${item.id} ${rowLabel(item)} ${labels.get(contextForRow(item))}`.toLowerCase().includes(query));
-  document.querySelector('#source-choices').innerHTML = choices.length ? choices.map(item => `<label class="source-choice"><input type="checkbox" data-source-key="${item.key}" ${row[editor.field].includes(item.key) ? 'checked' : ''} ${item.key === requiredSource ? 'disabled' : ''}><span><strong>${escape(item.id)}</strong><span>${escape(labels.get(contextForRow(item)))} · ${escape(rowLabel(item)) || '(empty row)'}</span></span></label>`).join('') : '<p>No matching rows.</p>';
+  document.querySelector('#source-choices').innerHTML = choices.length ? choices.map(item => `<label class="source-choice"><input type="checkbox" data-source-key="${item.key}" ${row[editor.field].includes(item.key) ? 'checked' : ''} ${requiredSources.includes(item.key) ? 'disabled' : ''}><span><strong>${escape(item.id)}</strong><span>${escape(labels.get(contextForRow(item)))} · ${escape(rowLabel(item)) || '(empty row)'}</span></span></label>`).join('') : '<p>No matching rows.</p>';
 }
 function openSources(row, anchor, field = 'sources') {
   if (field === 'affected' && hasFixedBudgetScope(row)) return;
@@ -679,27 +651,24 @@ function insertRow(table) {
   if (table === 'statements') { cotsEditor.suspend(); requirementEditor.open(added.key, rowElement(added.key).querySelector('.requirement-edit')); }
   else focusCell(table, insertion, 1);
 }
-function deleteRow(table, key) {
-  if (!viewRows(table).some(row => row.key === key)) return;
-  if (table === 'components') {
-    let referenceState;
-    try { referenceState = requirementEditor.preview(); } catch (error) { showStatus(error.message, true); return; }
-    if (cotsUses(referenceState, rowByKey(key)).length) { showStatus('Remove expression and verification references before deleting this COTS component.', true); return; }
-    if (cotsEditor.key() === key && cotsEditor.isDirty()) { showStatus('Save or cancel this component’s COTS reference edits before deleting it.', true); return; }
-  }
-  if (workspace.statements.some(row => row.sources.includes(key) || row.affected.includes(key)) || workspace.components.some(row => row.requirements.includes(key))) { showStatus('This row is linked. Remove its source and assignment links before deleting it.', true); return; }
-  if (workspace.elements.some(row => row.owner === key && used(row, 'stakeholders')) || workspace.statements.some(row => row.context === key && used(row, 'statements')) || workspace.components.some(row => row.owner === key && used(row, 'components'))) { showStatus('This element has child rows. Delete those rows before deleting the element.', true); return; }
-  if (workspace.power.links.some(link => link.eps === key || link.roots.includes(key)) || workspace.power.loads.some(load => load.host === key)) { showStatus('Disconnect the power budget or execution host reference before deleting this row.', true); return; }
-  if (workspace.power.links.some(link => workspace.statements.some(row => row.key === key && row.context === link.eps && row.definition === 'FrameworkRequirements::LoadEnergy'))) { showStatus('Disconnect the EPS budget before deleting its LoadEnergy requirement.', true); return; }
-  const rows = viewRows(table), collection = dataRows(table), index = rows.findIndex(row => row.key === key);
-  if (index < 0) return;
-  workspace.power.loads = workspace.power.loads.filter(load => load.element !== key);
-  collection.splice(collection.indexOf(rows[index]), 1); selected[selectionKey(table)] = null;
-  renderTabs(); render(table); powerEditor.render(); requirementEditor.refresh(); updateSources(); focusCell(table, Math.min(index, viewRows(table).length - 1), 0); scheduleSave(); scheduleEvaluation();
+async function deleteRow(table, key) {
+  const row = viewRows(table).find(row => row.key === key);
+  if (!row) return;
+  if (requirementEditor.isDirty() || cotsEditor.isDirty() || powerEditor.isDirty()) { showStatus('Save or cancel the open editor draft before deleting rows.', true); return; }
+  const before = structuredClone(workspace);
+  try {
+    if (!used(row, table)) dataRows(table).splice(dataRows(table).indexOf(row), 1);
+    else {
+      const view = await native.command(workspace, { name: 'remove', target: key });
+      adoptCanonical(view, before);
+    }
+    selected[selectionKey(table)] = null;
+    renderWorkbook(); requirementEditor.refresh(); updateSources(); scheduleSave(); scheduleEvaluation();
+  } catch (error) { showStatus(error.message, true); }
 }
 main.addEventListener('click', event => {
-  const exportButton = event.target.closest('.export-kicad, .export-fprime, .export-json');
-  if (exportButton) { closeMenus(); closeEditor(); exportArtifact(exportButton.matches('.export-json') ? 'json' : exportButton.matches('.export-kicad') ? 'kicad' : 'fprime'); return; }
+  const exportButton = event.target.closest('.export-kicad, .export-fprime, .export-python');
+  if (exportButton) { closeMenus(); closeEditor(); exportArtifact(exportButton.matches('.export-python') ? 'python' : exportButton.matches('.export-kicad') ? 'kicad' : 'fprime'); return; }
   const openElement = event.target.closest('[data-open-element]');
   if (openElement) { navigate(openElement.dataset.openElement); return; }
   const openPower = event.target.closest('[data-open-power]');
@@ -734,7 +703,7 @@ main.addEventListener('click', event => {
     sorts[key] = { field, direction };
     const value = row => variableNames().includes(field) ? results.get(row.key)?.values?.[field]
       : ['sources', 'affected', 'requirements'].includes(field) ? row[field].map(key => rowByKey(key)?.id ?? '').join(',')
-        : field === 'verified' ? (table === 'components' ? componentCheck(row, componentChecks()) : results.get(row.key))?.state === 'pass'
+        : field === 'verified' ? (table === 'components' ? componentCheck(row) : results.get(row.key))?.state === 'pass'
           : field === 'product' ? rowLabel(row) : row[field];
     const current = viewRows(table), collection = dataRows(table);
     const sorted = current.filter(row => used(row, table)).sort((a, b) => {
@@ -773,7 +742,7 @@ document.addEventListener('keydown', event => {
     else save();
   }
 });
-main.addEventListener('paste', event => {
+main.addEventListener('paste', async event => {
   const ctx = context(event.target), text = event.clipboardData.getData('text/plain');
   if (!ctx || event.target.dataset.col === undefined || (!['sources', 'affected', 'requirements', 'verified', 'text'].includes(event.target.dataset.field) && !text.includes('\t') && (!/[\r\n]/.test(text) || event.target.tagName === 'TEXTAREA'))) return;
   event.preventDefault();
@@ -796,12 +765,10 @@ main.addEventListener('paste', event => {
         else if (field === 'definition') {
           const matches = allowedDefinitions(candidate, active, catalog).filter(type => [type.model, type.name, type.category].includes(value.trim()));
           if (matches.length !== 1) throw new Error('The element type must match one definition in the generic mission model.');
-          if (target.definition && target.definition !== matches[0].model && (candidate.elements.some(child => child.owner === target.key && used(child, 'stakeholders')) || candidate.components.some(component => component.owner === target.key && used(component, 'components')) || candidate.statements.some(statement => statement.context === target.key && used(statement, 'statements')) || candidate.power.loads.some(load => load.element === target.key))) throw new Error('Remove child rows or power data before changing their parent type.');
           target.definition = matches[0].model;
         } else if (variable) target.parameters[field] = parameterExpression(value, variable, target.id);
-        else target[field] = field === 'id' ? value.trim().toUpperCase() : value;
+        else target[field] = field === 'id' ? value.trim() : value;
       }
-      activate(target, table, columns(table).includes('definition') ? 'definition' : 'paste', candidate);
     }
     for (const [target, field, label] of links) {
       target[field] = [];
@@ -814,10 +781,8 @@ main.addEventListener('paste', event => {
         if (!target[field].includes(matches[0].key)) target[field].push(matches[0].key);
       }
     }
-    syncStatementIds(candidate, new Map(statementIds));
-    validateWorkspace(snapshot(candidate), catalog, products); workspace = candidate;
-    statementIds.clear(); syncStatementIds();
-    renderWorkbook(); focusCell(table, start, column); scheduleSave(); scheduleEvaluation();
+    await commitCandidate(candidate);
+    focusCell(table, start, column);
   } catch (error) { showStatus(error.message, true); }
 });
 window.addEventListener('beforeunload', event => { if (dirty() || requirementEditor.isDirty() || powerEditor.isDirty() || cotsEditor.isDirty()) { event.preventDefault(); event.returnValue = ''; } });

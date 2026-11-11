@@ -7,11 +7,13 @@ arithmetic fixtures, not recommended hardware settings or mission conditions.**
 A pass is evidence only for the declared model, supplied bounds and case. It is
 not a claim that a complete EPS or every applicable requirement passes.
 
-Each script reads `{ "inputs": { ... }, "requirements": {}, "mode": null }` from
-stdin and emits exactly its `.json` definition's output object. Diagnostics go
-to stderr. Invalid types/domains or nonrepresentable arithmetic fail with a
-nonzero exit and no stdout. All declared inputs must be present and finite with
-the declared scalar type, including explicit Booleans. Unknown optional findings
+The current `PowerPath`, `Protection`, `BatteryStep` and `Thermal` classes live in
+`framework/python/src/nanosat_mbse/verifications/` and inherit `VerificationScript`.
+Their Python definitions declare exact typed inputs and outputs.
+The UI and REPL execute those same classes through the native runner.
+The JSON objects below illustrate their input values.
+Diagnostics remain separate from outputs, and invalid types, domains or arithmetic produce execution errors.
+All declared inputs must be present and finite with the declared scalar type, including explicit Booleans. Unknown optional findings
 are `null`, never an invented bound. Operational violations retain raw measures
 and `false`. An aggregate finding is false if any included criterion is false.
 Otherwise it is null if a decisive included criterion is unknown.
@@ -465,17 +467,17 @@ Expected: endpoint/minimum `270 + 10 exp(-1)` K (about 273.6787944 K), maximum
 
 ## Recommended verification conditions
 
-Run the independent protocol/arithmetic regression tests:
+Prepare an independent native study without executing its analysis:
 
 ```sh
 cd framework/requirements-ui
-node --test test/report-paths.test.mjs
-npm test
+node tools/create-report-session.mjs path --mission /tmp/nanosat-studies/mission.py
 ```
 
-The new test file loads the registered catalog and spawns each script with `-I`
-from an unrelated working directory, checks exact stdout keys/types, scalar limits,
-strict input types, diagnostics and independently calculated model values. It
+Use `protection`, `battery` or `thermal` for the other cases.
+The archived `test/legacy/report-paths.test.mjs.txt` records the earlier protocol and arithmetic checks.
+That implementation spawned scripts with `-I` from unrelated working directories and checked output keys, types, limits and independently calculated values.
+The archived coverage
 also exercises all three topologies, additive/replacing pulses, rating violations,
 negative unserviceable rail voltage, UV/OV/OC equality, trip/reset delays including
 substep positive delays, hysteresis, nuisance trips, command shedding, inhibited

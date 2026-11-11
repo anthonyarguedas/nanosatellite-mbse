@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { formatParameterValue } from '../model.mjs';
+import { formatParameterValue } from '../public/workbook.js';
 import { parameterValueHTML, requirementHTML } from '../public/requirement-preview.js';
 
 test('numeric previews use four significant figures up to 999 and whole numbers above it', () => {

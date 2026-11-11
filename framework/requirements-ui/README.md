@@ -1,326 +1,223 @@
 # Requirements UI
 
-A workbook inspired by Google Sheets, with a restrained n8n style. Each tab has linked tables and a focused requirement editor. No build step or npm dependencies are needed.
+A JavaScript workbook over the native `nanosat_mbse` Python library.
+Python owns the model, lifecycle, validation, calculations, analyses and session storage.
+The browser owns rendering, navigation and unsaved editor drafts.
+The UI and a Python REPL use the same domain classes and calculation engine.
 
 ## Run
 
-Install Node.js 22 or later and Python 3.8 or later, then run from the repository root:
+Install Node.js 22 or later and Python 3.8 or later.
+From the repository root:
 
 ```sh
 cd framework/requirements-ui
 npm start
 ```
 
-Open <http://127.0.0.1:3000>. Set `PORT` to use another port. The server only listens on the local machine.
+Open <http://127.0.0.1:3000>.
+The server listens only on the local machine.
+Set `PORT` to select another port and `VERIFICATION_PYTHON` to select an interpreter or virtual environment.
+There are no npm dependencies or browser build steps.
+The source launcher locates the Python package in `framework/python/src`.
 
-The default workspace is `framework/missions/mission.json`. Choose another file with `MISSION_FILE`, relative to the directory where you start the server:
+The default workspace is `framework/missions/mission.py`.
+If it has never existed and no legacy source is present, opening it creates a blank session.
+Choose another file relative to the directory where the server starts:
 
 ```sh
-MISSION_FILE=../missions/cubics.json npm start
+MISSION_FILE=/path/to/mission.py PORT=3002 npm start
 ```
 
-A missing workspace is created as plain JSON. Only `.json` workspace paths and the current schema are supported. The existing mission and saved sessions have already been converted to the current format.
+An existing version-14 `.json` workspace is a retained migration source.
+Its first open creates an adjacent Python session and leaves the JSON unchanged.
+Subsequent opens and saves use the Python file.
+Once native metadata records a session, a missing Python file remains an error and is never regenerated from stale JSON.
+Use copies when exploring the supplied [demo](demo/README.md).
 
-## Python worker
+## Code organization
 
-Automatic parameter calculations, verification methods, power projections and registered script inputs run in a persistent Python worker. The browser UI and Node HTTP server remain in place. The browser worker transports JSON to `POST /api/evaluate` and contains no calculation engine. `worker/models.py` defines the request-local parameter, requirement, script and workspace models. `worker/expressions.py` owns Python parsing and evaluation.
+- `public/`: browser projections, presentation helpers and editor drafts.
+- `public/editors/`: requirement, verification, component power and COTS editors.
+- `server/`: HTTP routes, supervised Python transport and output adapters.
+- `server/exporters/`: KiCad and Fprime output formatting over Python-validated data.
+- `../python/src/nanosat_mbse/`: generic classes, engineering domains, catalogs, verifications, persistence and application service.
+- `../cots/`: live shared product facts and sources.
+- `../missions/sessions/`: individual named Python sessions.
 
-Set `VERIFICATION_PYTHON` to select a Python executable or virtual environment. The interpreter starts lazily and stays available across requests. Each request receives a fresh model, dependency cache and execution context. Only bounded syntax trees and content-keyed catalogue source data are cached between requests. Different tabs and sessions share no calculation values or Python variables. A missing interpreter produces an actionable error and no JavaScript fallback.
+The retired JavaScript model and request-local Python worker have been removed.
+There is one active engineering implementation.
+See the [Python API](../python/README.md), [session format](../python/docs/sessions.md) and [service protocol](../python/docs/http-service.md).
 
-Requests use JSON lines over stdin and stdout. The Node supervisor serializes requests, permits up to 16 waiting requests, and enforces a 4-second execution timeout. A timeout, active cancellation, crash, malformed response or oversized response replaces the process. Requests are limited to 8 MiB and responses to 16 MiB. Browser requests carry generation IDs and discard superseded responses.
+## Sessions and shared REPL access
 
-Version 14 workspaces use plain JSON with `expressionLanguage: "python"`. Python source retains its spelling. Invalid drafts remain editable and produce cell errors. No expression converter or older format importer is present. Script source runs only through an explicit **Run Python** action in a separate process.
+**New session** always creates empty tables.
+Open any existing session and choose **Save as…** to reuse its configuration under another name.
+The supplied **Generic EPS Example** is an ordinary editable saved session in the picker.
+It is copied through Save as and has no special creation or automatic regeneration behavior.
+If no sessions exist, start blank and add the desired elements.
+Each browser tab keeps its own native draft handle and selected session.
+The URL retains the session ID and tab.
+Valid table edits autosave to that session.
+Requirement, component and COTS panes retain drafts until their Save action.
+Save as includes valid open drafts in an independent copy.
 
-The Python catalog owns the workbook's 52 element types and 76 reusable requirement definitions. `worker/catalog_data.py` contains the original sizing definitions and includes 49 generic study requirements from `worker/report_requirements.py`. `worker/catalog_models.py` defines their typed models, and `worker/catalog.py` validates and projects them. The catalog uses no external model files. Stable identifiers such as `SpaceSegment::CubeSat` and `FrameworkRequirements::OrbitPeriod` are opaque data keys that preserve workspace links.
-
-The download is **Export workspace JSON** in the requirements table header. It includes valid unsaved editor inputs and changes no session data. Framework SysML files, importers, exporters, conversion utilities and old schema migrations have been removed. Existing mission and named-session data is preserved in JSON.
-
-## Sessions
-
-Use the session toolbar above the workbook:
-
-- **New session → Blank** starts with empty tables and no preloaded elements or requirements.
-- **New session → Generic EPS** starts with the generic mission hierarchy, 76 orbit and EPS requirements, mass and volume budgets, units, rationale and sizing equations. Mission inputs and study limits are unset. The sourced Earth constants remain populated.
-- **Save as…** saves an independent named copy of the current workspace. It includes valid unsaved requirement, component power and COTS reference drafts without applying those drafts to the original session.
-- The **Session** picker reopens saved workspaces. The existing mission remains listed as **Current mission**.
-
-Every session with an EPS also receives the 49 new generic study requirements when opened. They provide activity guidance through unfilled engineering obligations, such as temperature limits and assessed thermal bounds. Existing entered values and requirement edits remain intact. Deliberate later deletions remain deleted. Blank sessions stay empty until an EPS is added.
-
-Each saved session autosaves independently. Names contain 1 to 80 characters and are unique without regard to letter case. Creating another Generic EPS session always starts from the framework templates. It leaves previous sessions unchanged.
-
-Switching sessions waits for pending autosaves and asks before discarding unsaved editor drafts. Save or correct invalid table edits before switching. A save conflict keeps the current session open. Save as can preserve a valid local workspace in a separate session when the original has a conflict.
-
-The page URL contains the session ID and selected tab, so it can be bookmarked or reloaded. Session selection is local to each browser tab. Opening another session in one browser tab leaves other tabs on their own sessions.
-
-Saved sessions live in `framework/missions/sessions/<id>/<id>.json`. A neighboring `session.json` stores the display name, template and JSON storage marker. With a custom `MISSION_FILE`, sessions live in a `sessions` directory beside the workspace. Named sessions retain their IDs and names. A missing JSON session stays missing and is never regenerated.
-
-## Tabs and allocation
-
-- **External** has stakeholders on the left and their statements on the right. Existing data remains in this tab.
-- **Mission** has Orbit, CubeSat Bus, Payload and Ground Station on the left. It defines spacecraft modes and system power, mass and volume limits. Its requirements have an **Affected domain elements** column for assignment to one or more of these rows.
-- **CubeSat Bus** has the eight bus subsystems declared in the Python catalog. Each subsystem has its own tab and CSRM generic component table, using the same add, rename and type selection UX as EPS. Use the arrow beside a subsystem name to open it. Payload and the optional shared processor resource are separate from this list.
-- **EPS** belongs to the bus's Power subsystem. Its left table lists Batteries, Solar Arrays, Processor and Memory, Regulators and Converters, Power Circuits and Switches, and Software from the generic model. Subdivide the EPS by adding component instances here. The right table holds parametric requirements with shared variable columns, Python verification conditions, sources and an **Affected components** column.
-- **Payload** has the Instrument and Processor and Memory definitions inside `PayloadSubsystem`.
-- **Ground Station** has the eight subsystems declared in `GroundSegment`.
-- **Orbit** stays in Mission. Assign mission requirements to it using **Affected domain elements**. It has no separate tab.
-
-The detailed tabs have an **Affected subsystems**, **Affected elements** or **Affected components** column. Assignments use rows in the current left table. **Source** records provenance and can link to rows on any tab. These are separate relationships. For example, a bus requirement can derive from a mission requirement and be assigned to the Power subsystem.
-
-The server loads the Python catalog through the supervised worker. New workspaces create domain and subsystem rows, plus reusable orbit and EPS requirements. External stakeholder statements remain engineer supplied. Starting the app preserves saved requirements, mission inputs, scripts and COTS selections. Editing the Python definitions and restarting the server updates the catalog without parsing a SysML model.
-
-Tab identity uses stable element keys. Renaming a domain updates its tab label and preserves its requirements, children and links. A new Bus, Payload, Ground Station or Power subsystem instance gets its own tab using the same catalog and table UI. Each new bus includes its own EPS tab and component instances. An element with child rows must be emptied before its type can change or it can be deleted. Browser reload restores the selected tab through the URL fragment.
-
-## Component states and power consumption
-
-Each definition has one editing location. Other tables reference it by its stable key and display ID or mode name. Named COTS selection remains exclusive to EPS.
-
-1. In a subsystem's generic component table, use the pencil beside the component name to open its editor. Define quantity, accounting and operating states there. The **Component States** table holds per-unit power in W, value meaning, source and operating conditions. It uses the workbook's plus button, trailing empty row and delete gutter.
-2. In **Mission**, define spacecraft modes and their sunlight and eclipse shares in **Spacecraft Modes**. Each period must total 100%. Enter the system power limit in its single **PWR** requirement.
-3. Each spacecraft subsystem tab, including Payload and EPS, owns one **PWS** subsystem limit and one **PWC** allocation per counted component. Enter `power_limit_W` as a shared expression or a conditional expression such as `18 if mode == "Downlink" else 3`. Their Source links form **PWR → PWS → PWC**. Limits stay independently assigned when a parent limit changes.
-4. In that subsystem's **Component State Allocation** table, select each included component's state for each spacecraft mode. The table references locally owned component IDs and the modes defined in Mission. Component draws, quantities and accounting remain in the component editor.
-5. In **EPS**, open the generic **LoadEnergy** requirement (normally SIZ001). Set **Load input source** to **Component modes** and select its **Load domains** by ID. Save the requirement to apply the connection. Selecting **Manual expressions** restores the four prior load inputs. Cancel discards a source or domain change along with the rest of the requirement draft.
-
-Each power requirement covers all spacecraft modes. Adding a mode preserves the requirement rows and IDs. `allocated_power_W` starts with an explicit Python sum such as `sum([PWC001.power_limit_W, PWC002.power_limit_W])`. A subsystem references its component PWC limits. The spacecraft PWR requirement references subsystem PWS limits. Each reference evaluates in the current mode. An empty scope has the expression `0`. A missing child requirement leaves the allocation pending as `None`.
-
-Adding a child extends an unchanged default allocation sum. Custom expressions and cleared cells remain editable and retain their values. Renaming a requirement updates its references. Opening an existing workspace expands prior `PowerAllocation.allocated_power_W` references into explicit sums while retaining surrounding arithmetic and mode conditions. Reads leave the stored file unchanged. Saving or exporting retains the explicit expressions.
-
-`draw_power_W` starts with `PowerAllocation.draw_power_W`, which sums child draws or calculates component quantity times its selected state draw. Both parameter expressions are editable. You can add calculations or mode conditions, replace an expression, or clear the cell. Parent requirements check the allocation sum and draw against their assigned limit. Component requirements check quantity times the selected state draw against their component allocation. Verification covers every configured mode, including modes with zero sunlight or eclipse share. Empty limits remain unset. Missing limits and missing state draws keep the affected checks pending. Complete checks return false for over allocation or an excessive draw.
-
-Software is counted through its execution host. Its component editor references an existing Processor and Memory usage by ID. Passive structural and thermal elements, battery storage, and solar generation start excluded from load demand. EPS internal demand can be defined in its own generic component usages. Accounting rationale identifies any excluded or already covered demand.
-
-A connected LoadEnergy requirement uses `LoadBudget.sunlight_power_W` and `LoadBudget.eclipse_power_W`. Its two duty factors are one because these averages already include the mode shares. Expressions, evaluated averages, energy and verification remain in the existing parametric requirement UI. There is no separate sizing summary. Missing states, missing power, or incomplete mode shares keep the affected parameters pending. A mode with zero share needs no draw to evaluate that period.
-
-Component edits have **Save component** and **Cancel**. Cmd+Enter or Ctrl+Enter saves. Save as includes an unsaved valid component draft in the independent copy. Sessions retain their own modes, mappings, sources and EPS connections. Version 9 adds the CSRM component tables. Version 10 introduced power limit requirements. Version 11 merges their mode copies into one requirement per scope. Differing inputs become conditional expressions. Each merged requirement keeps its first key and ID. Source links, COTS links and expression references are redirected to it. Differing prose and rationale are retained in its rationale. Draws, mappings and EPS connections remain unchanged. Later deletions remain deleted.
-
-The Python catalog declares optional `power_consumption_W` and `power_consumption` properties in W on spacecraft subsystems and components. The Python worker calculates allocations, component draws and weighted illumination budgets. Software demand remains assigned to its execution host.
-
-This first view assesses preliminary steady load energy. Mode shares establish no chronological ordering or simultaneous peak demand. Startup pulses, rail limits, converter path losses, battery time histories and energy closure require their separate report assessments. A typical or estimated consumption value establishes no guaranteed hardware limit.
-
-## Mass and volume budgets
-
-Every mission receives mass and volume requirements when opened, including saved sessions and copies. Blank sessions retain empty tables until spacecraft elements are added. These budgets use the existing requirement pane and need no spacecraft modes.
-
-- **Mission** owns the spacecraft limits, with IDs starting at MAS001 and VOL001.
-- Each spacecraft subsystem, including Payload and EPS, owns a mass limit (MSS) and volume limit (VLS).
-- Each hardware component owns a mass allocation (MSC) and volume allocation (VLC) in its subsystem tab. Batteries, solar arrays and passive hardware are included. Software occupies its execution host's hardware allocation.
-
-Enter independent limits in `mass_allocation_kg` and `volume_allocation_m3`. Enter total installed component values in `mass_kg` and `volume_m3`, including quantity and auxiliaries. Power accounting exclusions and power quantities leave these physical inputs unchanged. Component limits and physical values start unset.
-
-Parent `mass_kg` and `volume_m3` expressions sum their children's physical values. `allocated_mass_kg` and `allocated_volume_m3` sum their children's assigned limits. These are ordinary editable Python sums. New hardware extends unchanged default sums. Custom expressions and cleared cells retain their values. Source links connect spacecraft, subsystem and component requirements. Changing a parent limit leaves child allocations unchanged. Verification checks nonnegative physical values and child allocation totals against the assigned limit. Missing inputs stay pending.
-
-Use the existing COTS pane to select mass or dimension facts, then reference them in physical value expressions. For example, `2 * CMP001.mass` accounts for two units. `2 * CMP001.length * CMP001.width * CMP001.height` calculates their combined rectangular envelope volume when the selected dimensions are in metres. Keep allocations independently entered. Catalogue revisions, substitutions, reference renames, Save as and JSON export use the existing COTS behavior. A summed volume establishes a preliminary budget, with mechanical fit assessed separately.
-
-The existing EPS-19 and EPS-78 report requirements retain their inputs and evidence conditions. They can reference the new EPS budget parameters through ordinary requirement references. Existing workspace files remain unchanged during reads. Saving retains the new requirements and an optional `resourceBudgets: true` initialization marker in version 14 JSON. Later requirement deletions remain deleted.
-
-## Editing a requirement
-
-The default requirement table shows ID, source, read-only text, verification and assignments. Verified contains a calculated checkbox and a pencil. Both pencils open the same right pane. The verification pencil focuses the first condition in **Verification methods**. Text and conditions are edited only in that pane. The workbook stays readable and interactive. Switching tabs keeps the draft open. On narrow screens the editor sits below the workbook.
-
-Enter one verifiable statement. Enclose each variable name in `$$` to add its parameter row:
+Named sessions use:
 
 ```text
-The battery shall provide at least $$energy_J$$.
+framework/missions/sessions/<id>/
+├── session.py
+└── metadata.json
 ```
 
-The `energy_J` row appears as soon as the closing `$$` is entered. Repeated names create one row. Names use letters, digits and underscores, begin with a letter or underscore, and follow the app's Python parameter identifier restrictions. Invalid or incomplete markers show an error and block saving.
+With a custom `MISSION_FILE`, named sessions live beside it in `sessions/`.
+Legacy JSON and its old metadata remain intact during conversion.
 
-**Rationale** is an editable field visible only in the pane. It starts with the requirement's provenance, such as `final_report/design-proposal.tex#eq:orbit-period (handpicked-0003, Eqs. 1-4)`. It supports source references and explanatory text up to 10,000 characters. Saving retains the rationale. Cancel discards its edits. Clearing it saves an empty rationale. The original provenance remains preserved in the model.
+Install the same library for a REPL:
 
-The Parameters table uses the workbook's green header and cell styling. It has five columns: **Name**, **State**, **Expression**, **Units** and **Evaluated value**. Enter a number or Python expression in its row, such as `2 * 3600` or `REQ001.energy_J * 1.2`. Expression fields wrap and grow to show the full text. Enter units separately, such as `J` or `m^2/s^2`. Units are shared by variable name across the workspace. They are display labels and leave numeric evaluation unchanged. The pane includes the verification method table and evaluated parameter values. Verification feedback shows green **TRUE** or red **FALSE** without repeating the expression. Errors appear below the input in yellow with their message. **PENDING** indicates an unresolved result. An empty condition has no feedback label. Numeric types follow the model. Existing integer constraints remain enforced. Each requirement retains its own expression.
-
-**State** starts at **All states**. Its options use the spacecraft modes defined in Mission. Selecting a state splits that parameter into one expression row per mode, initially retaining the shared expression in every row. Each row evaluates in its own mode. Units remain shared across these rows. Selecting **All states** in any split row merges the parameter using the most recently edited expression, including an empty expression. This merge choice survives saving and reloading. Existing mode conditionals also open as state rows. The app stores one Python conditional expression for each split parameter. Empty branches stay pending. The dropdown is disabled until Mission defines a mode and for connected LoadEnergy inputs.
-
-Results cover every configured spacecraft mode. Shared values appear normally. Differing values appear as **By mode**, with mode values in the tooltip. Split parameter rows show their own mode results. Verification feedback lists each mode's result. The workbook checkbox passes when all modes pass.
-
-The requirement list shows an unset variable's bare name in monospace, without its units. Numeric values with magnitude above 999 show no decimal places. Other values show four significant figures. Numeric values and their units use monospace in the requirement list and parameter results. Write unit powers with Python's `**` syntax, such as `m**2` or `s**(-2)`. These powers appear as superscripts. Existing unit labels using `^` remain supported. Leave literal units out of requirement prose when using the Units column.
-
-**Save requirement** applies the edit and triggers autosave. **Cancel** or Escape discards the pane's changes, including new parameters. Opening a different requirement asks before discarding a changed draft. Saving preserves edits made in other tables while the pane was open. Ctrl+Enter or Cmd+Enter saves. Existing parameter values and equation inputs stay accessible even when their names are absent from the text. Removing a marker preserves populated cells. Empty, unused names created during the current edit are discarded. Use `$$name$$` markers consistently in requirement text.
-
-## COTS facts and compatibility
-
-COTS selections remain in the EPS table. Use the pencil beside a selected product, or press F2 in its product cell, to open its **COTS pane**. It occupies the same sidebar area as the requirement editor. The requirement pane contains no COTS facts table.
-
-The COTS pane shows searchable catalogue facts with their internal element, typed value, units, minimum/typical/maximum meaning, conditions and datasheet source. Numeric properties come from `framework/cots/parameters.tsv`. Boolean and String features come from `features.tsv`. `definitions.tsv` supplies their types. Conditions, additional condition parameters, internal elements and source revisions remain attached to each fact. Catalogue values are read-only.
-
-1. Choose **Use fact** to create a named reference, such as `CMP001.input_voltage_max`. Each COTS instance owns up to 64 references, separate from the workbook's 256 shared parameter names.
-2. Rename references to distinguish records with different meanings or conditions. Select the exact record in its dropdown. Multiple requirements can reuse the same reference.
-3. Choose **Save COTS** to apply the selections. This saves no open requirement draft.
-4. In a requirement's **Verification methods**, choose the COTS component under **Values from** and enter a Python condition, for example:
-
-```python
-CMP001.input_voltage_min <= operating_voltage_V <= CMP001.input_voltage_max
-CMP001.autonomous_overcurrent_protection
+```sh
+python3 -m pip install -e framework/python  # from the repository root
+python3
 ```
 
-The second example uses an existing Boolean feature. An explicitly false feature returns false. An unknown reference name gives an expression error. A missing, changed or substituted catalogue record stays pending. A COTS-backed method requires at least one selected reference, and all references owned by that component must be current.
+```python
+from nanosat_mbse import Session
 
-Keep requirement allocations and limits independently entered. Hardware characteristics can instead use catalogue references in their existing parameter expressions. **Insert reference** saves the COTS selections and inserts a reference into the last active parameter, verification condition or script input expression. The requirement edit remains unsaved until **Save requirement**. Scripts can continue to bind exclusively to requirement parameters.
+session = Session.open("/path/to/mission.py")
+period = session.get("ORB001").value("orbit_period_s")
+session.get("ORB001").set_value("altitude_km", 500)
+session.save()
+session = session.reload()
+```
 
-Click a qualified COTS reference or **Inspect CMP001** to open its pane. **Used by** links show requirements using each reference, with script input uses listed alongside them. **Back to** navigation preserves both drafts. **Save as** and JSON exports include both valid drafts. Renaming a reference updates expressions across requirements, scripts and a suspended requirement draft. Referenced facts and components remain protected from deletion.
+Reload the browser after a REPL save and reload the REPL session after a browser save.
+Revision checks reject a stale save from either writer.
+A conflict keeps the local draft available for reload or Save as.
+This is shared model access with safe independent drafts, without automatic live collaboration.
+See the [runnable REPL demonstration](../python/docs/repl.md).
 
-Selecting a product and linking requirements records an allocation. It adds no compatibility condition automatically. The component checkbox still aggregates its affected requirements. Add COTS-backed methods to those requirements to establish the product compatibility checks.
+**Python sessions and native calculation functions are trusted local code running with your user permissions.**
+Opening a session constructs its model.
+Analyses remain unexecuted until **Run Python** or an explicit native execution call.
+Handwritten files without the canonical format marker open read-only for replacement and require Save as.
+The browser cannot submit Python files, import paths, shell commands or interpreter arguments.
 
-### Conditions, units and revisions
+## Workbook and requirements
 
-Select the applicable internal element, value meaning and conditions explicitly. The app displays conditions and performs no automatic interpolation or worst-case envelope selection. A typical value establishes no guaranteed limit. Operating limits and absolute maxima retain their separate meanings.
+External, Mission, bus, subsystem, payload and ground tabs are described by the Python model.
+Adding an EPS initializes its default components and reusable requirements.
+Adding another Battery creates its applicable EPS requirements.
+Defaults are idempotent, and deliberate deletions remain deleted after reopening.
+Source relationships and affected-element assignments remain separate links to actual model objects.
 
-References use catalogue units. The existing Units column is a display label, so conversions remain explicit in Python expressions. A Kelvin catalogue value can be converted with `CMP001.temperature_K - 273.15` when a Celsius value is needed.
-
-Each reference pins a record identity, source revision, conditions, type and units. Product substitutions retain the reference names and leave unresolved records pending. Reopen the COTS pane or use **Refresh catalogue** to review current facts. **Update fact** accepts a changed revision of the same record. Select another record when its identity changed. Dependent calculations discard stale Python execution evidence. Rerun the scripts after reviewing the selections.
-
-The supervised Python worker reads trusted local catalogue files for each COTS calculation. Its cache is keyed by file contents. Browser requests and saved workspaces supply selections, never authoritative fact values. Inspection uses read-only `GET /api/cots?product=<product-id>` and executes no registered Python analysis source.
-
-Version 14 workspaces retain optional `components[].facts` selections and `verifications[].component` source keys. Existing workspaces need no migration or reseeding. JSON stores reference names, record identities, revisions, types and units. It stores no copied catalogue values or execution evidence.
-
-## Verification methods and Python analyses
-
-The requirement pane has a **Verification methods** table with **Values from**, **Python condition** and **Result** columns. It uses the workbook's green header, plus button and delete gutter. Its plus button focuses the trailing empty row. Entering a condition adds another empty row. Empty placeholders are excluded from saved data. Each requirement supports up to 32 configured methods. Every method must pass in every configured spacecraft mode for the workbook checkbox to pass. Missing inputs or execution results keep the affected method pending. Errors appear beside that method's condition.
-
-**Requirement values** uses the current requirement's parameters and references such as `REQ002.mass`. Selecting a COTS component supplies its named fact references. Selecting a script instance keeps the condition in Python and supplies external outputs such as `SCR001.upper`. The selected script must have a successful execution for the current inputs, including when the condition is a constant. Script output references also work in ordinary parameter expressions and in other script instances' inputs.
-
-### Use a Python script
-
-1. Use the **Python scripts** table inside the requirement pane. Its plus button focuses the definition picker in the trailing empty row.
-2. Choose a registered definition to add an instance. Each instance receives a stable key and an editable ID such as `SCR001`. Edit its ID and name in the table. Use its delete gutter to remove an unreferenced instance.
-3. The instance's parameter table stays visible below the script list. It shows input names, output references, direction, type, expression, units and evaluated value. Script parameters have their own names and types, separate from the workspace's shared requirement variables. Bind inputs using literals, local input names or references such as `REQ001.mass`. Inputs start unset.
-4. Select the instance in a verification method's **Values from** column and enter a condition such as `SCR001.upper <= REQ002.limit`. Boolean script outputs can be used directly in conditions.
-5. Click **Run Python** to execute for every configured mode. Dependent scripts run first when their outputs are needed. Differing values show **By mode**, with mode values in the tooltip. The execution status tooltip retains mode diagnostics, execution times and logs.
-
-Definitions are reusable across instances and requirements in the workspace. ID renames update expression references. Remove expression and verification links before deleting an instance. Requirement **Save**, **Cancel** and **Save as** include script configuration edits. Concurrent changes to the same script or verification table produce a conflict. Saved JSON sessions retain each instance's interface, bindings and source revision.
-
-Execution results stay in the current browser session. They are never stored as parameter expressions or verification flags. Changing calculation inputs, modes, types, units, script bindings or pinned revisions invalidates prior results. Prose and verification conditions can change without rerunning an unchanged calculation. Saving retains current evidence in that browser. Reloading or switching sessions requires another run. Late results from an earlier input configuration are discarded.
-
-The default script directory is `framework/requirements-ui/scripts`. It includes **Normal distribution interval**, **Orbit illumination scenario** and **MPPT perturb and observe**. All three use the Python standard library. New instances added from the script picker start with unset inputs. Set `VERIFICATION_PYTHON` to select an interpreter or virtual environment. Set `VERIFICATION_SCRIPTS_DIR` to use another trusted directory. See [scripts/README.md](scripts/README.md) for registration, the JSON protocol and execution limits.
-
-**Run only trusted local scripts. Python runs with your user permissions. This is not a sandbox.** Opening, editing, saving and exporting never execute registered script source. Automatic Python expressions use the restricted calculation worker. The browser can run registered script source only through an explicit local POST. It cannot submit source, file paths, shell commands or interpreter arguments.
-
-JSON downloads contain each analysis's typed interface, input expressions and pinned definition revision. They contain no execution success flags or cached output bindings. Reopening a download requires fresh execution evidence before script-backed verification methods can pass.
-
-### Illumination and MPPT studies
-
-The Session picker includes **Illumination + MPPT test bench**. It contains both scripts, 15 linked requirements and populated synthetic inputs and acceptance limits. Open MPT008 in EPS and click **Run Python** for SCR001 (MPPT). Its irradiance bindings run the illumination script first. All 15 checks pass with the supplied test values. Results remain transient.
-
-Create another populated test bench with `node tools/create-analysis-session.mjs demo --name "My test bench"`. The `mppt` and `scenario` commands still create separate configurations with unset inputs. The illumination script can also be selected directly in any session's existing script table. No generic catalog, UI or schema changes are needed. See [analyses/README.md](analyses/README.md) for the input audit, proposed requirements, result destinations, model limits and session options.
-
-## Report coverage and additional assessments
-
-[Report coverage audit](analyses/REPORT-COVERAGE.md) compares all 23 framework requirements and all 20 EPS product requirements with the application. It separates implemented numerical scope from remaining record, baseline, evidence and integration work.
-
-Generic EPS requirements now include configuration, voltage/current paths, charging, nominal/survival energy and charge reserves, temperature bounds, surplus, protection, control, interfaces, installation geometry, model fitting and reliability. They appear automatically in new and existing EPS sessions. Their quantities and limits start unset. The requirement list itself identifies the studies and decisions that remain to be done.
-
-Restart the server and reload the existing session. No command or separate study session is needed to receive these requirements. Use the same requirement pane to enter allocations, source product limits, bind study outputs and add verification methods. Registered scripts execute only through **Run Python**. Optional isolated test benches remain available through `node tools/create-report-session.mjs --list`.
-
-Sourced catalog additions are documented in [COTS enrichment](../cots/ENRICHMENT.md). Missing feature information remains unknown.
-
-## Reusable sizing requirements
-
-`worker/catalog_data.py` and `worker/report_requirements.py` own the generic requirement definitions, Python equations and acceptance predicates. Its typed models supply table text, parameters, units, sources and assignments. Preloaded unit labels live in the Units column. Requirement prose uses variable markers without literal unit labels. Mission files contain typed usages and mission inputs. Editing a mission leaves these generic definitions unchanged.
-
-The Generic EPS starter has 76 generic requirements. Mission has ORB001 through ORB003. EPS retains its original 24 sizing and resource requirements and adds 49 study requirements. Every report criterion EPS-01 through EPS-20 has a generic requirement. EPR001 through EPR027 separate distinct obligations. CAL001 through CAL004 cover model fit errors, MIL001 covers settling time, and RAM001 through RAM002 cover reliability and conditional failure probability. Each requirement contains one sentence and at least one meaningful numeric parameter. Existing IDs remain preserved. Separate obligations have their own rows, with **Source** links to the requirement they derive from. Python `derives_from` relationships supply these links. IDs can differ when an existing mission already uses them. Each new Power subsystem gets independent EPS inputs and local equation links.
-
-Requirement text references named `$$variables$$`. Their definitions and equations appear in the parameter matrix. For example, SIZ007 references `$$battery_min_J$$`, whose expression is `eclipse_energy_J / dod_max * (1 + degradation_margin)`. Entering mission inputs evaluates the text and its dependent parameters without changing the generic definitions.
-
-Populate these inputs in order:
-
-1. **ORB001:** `altitude_km`. The sourced reference Earth constants are `earthRadius_km = 6378` and `gravitationalParameter_km3_s2 = 398601`. They remain editable. ORB001 and ORB002 derive the orbit, sunlight and eclipse periods in seconds.
-2. **SIZ001:** Choose **Component modes** as its load input source, or enter `sunlight_power_W`, `eclipse_power_W`, `sunlight_duty` and `eclipse_duty` manually. Use disjoint load totals. Already duty-weighted totals use duty 1. The row derives energy in joules.
-3. **SIZ002:** `sunlight_efficiency` and `eclipse_efficiency`, each in (0, 1]. The row derives minimum panel power in watts.
-4. **SIZ003:** `cell_eol_V` and `cell_eol_A` from compatible EOL conditions. **SIZ004:** `installed_cells`. Required physical counts round upward.
-5. **SIZ005:** `lifetime_years` and `days_per_year`. Orbits per day derive from the orbit period. The preliminary assumption is one nominal battery cycle per orbit.
-6. **SIZ006:** sourced `cycle_a`, `cycle_b`, `fit_dod_min`, `fit_dod_max` and selected `dod_max`. The decreasing power-law fit requires `a > 0` and `b < 0`. The selected DoD must be inside its sourced fit domain and support the required cycles. No chemistry or fit coefficients are assumed.
-7. **SIZ007:** `degradation_margin`. Minimum battery energy is `E_e / DoD * (1 + M)` in joules. **SIZ008:** `pack_bol_J` and applicable `retained_energy_factor`. Convert Wh to J by multiplying by 3600. Margin enters preliminary sizing once. Retained capacity is derived separately.
-
-Every expression cell in the pane stores editable Python expression text. All catalog equations are Python. A literal such as `500` and an equation such as `2 * pi * sqrt(x)` use the same representation. The expression stays visible beside its evaluated value. You can edit or replace any prefilled equation. Editing a cell recalculates dependent values across tabs. Empty cells stay unset. Expressions that depend on empty cells show Pending. Syntax, reference, type and arithmetic errors appear in the affected cell with details in its tooltip. Insufficient cell counts, cycle life or capacity remain visible through the requirement conditions. Conditions also check that edited derived expressions still satisfy the generic sizing equations. Mission altitude, lifetime, duty cycles, efficiencies, selected products and margins have no default values. Existing free-text orbit statements are preserved. They do not silently supply sizing inputs.
-
-These equations implement the preliminary circular orbit case in `final_report/design-proposal.tex`. They establish no seasonal illumination, peak-current, thermal or survival compliance. The original EPS requirements cover generation, battery capacity and cycling, energy closure, mass, volume, memory and processor utilization. The additional generic requirements expose the remaining numerical study obligations, including thermal bounds and protection scenarios. Each row retains its report source. Report criteria without defined numeric parameters remain in the report and are excluded from the workbook and generic requirement library. Complete scenario assessments remain unverified until applicable evidence and verification conditions are supplied. Python requirement models retain executable numerical and engineering acceptance predicates. Their `assess(values)` method accepts explicit numeric and Boolean evidence inputs. Missing evidence remains pending. These model assessments stay separate from the engineer's editable verification method table and supply no automatic compliance claim.
-
-Click **Export workspace JSON** in the requirements table header to download the full current workspace, including valid unsaved inputs, expressions and provenance. Execution results stay transient. The download preserves expressions as data and establishes no verification or qualification claim.
-
-## Tables
-
-- Both ID columns are text fields. Stakeholder and domain element IDs have three uppercase letters, such as `LPR` or `ORB`. Statement IDs have three uppercase letters followed by three digits, such as `REQ001`. IDs are assigned automatically and remain editable.
-- Enter stakeholders and choose Regulatory Agency, Mission Stakeholder, Launch Provider or Partner.
-- External accepts requirements, needs, objectives, concerns and constraints. Its statement type dropdown is in the requirement editor. Other tabs list derived requirements.
-- Dropdown cells use plain text and a small arrow at the right edge. Linked IDs are plain links with no pill background.
-- **Source** links to individual rows anywhere in the workbook. Open the picker and check the rows to link. Click a linked ID to open its tab and focus that row. Source and assignment links survive ID changes. Source cycles are blocked across all tabs.
-- Write `$$mass$$` in the pane's requirement text to add a parameter row. The list substitutes formatted values with units. Unset values show the variable name in monospace.
-- Numeric expressions retain the model's declared types. Integer results must be safe JavaScript integers. Real results must be finite. Clearing an expression leaves the parameter unset.
-- **Verified** shows a read-only checkbox and a pencil. Click the pencil or press F2 to open the requirement pane at its verification methods. The checkbox cannot be toggled manually. All configured methods must pass. A row without a verification method stays unverified. Enter `True` or `False` only when you intend an explicit constant Python condition.
-- Each table starts with one empty placeholder row. Filling the last row adds a new placeholder. Empty placeholders are excluded from saved data.
-- The **+** beside a table title inserts a row. Hover over a row to reveal its trash button in the left gutter. This deletes that row directly, regardless of selection. Remove its source and assignment links before deleting it. Rows with children remain protected.
-- Tab moves between cells and their edit buttons. Enter moves down in ordinary fields. Enter, Space or F2 on requirement text opens its editor. Shift reverses navigation. Shift+Tab from an ID cell focuses that row's trash button. Enter activates it. Requirement text supports line breaks inside the pane.
-- Headers use text labels. Click a column header to sort. Paste tab separated cells from Google Sheets in data column order, starting with ID. The delete gutter is separate from the data. Pasted sources and assignments accept comma separated row IDs or unique element names. Text and verification cells accept edits only through the pane. Grid pastes that would overwrite them are rejected as a whole. Paste a single column of expressions or units down the corresponding pane column, following its displayed state rows. Invalid expressions remain drafts and show cell errors.
-
-## Parameter and verification expressions
-
-Parameters accept numeric expressions without an assignment or leading `=`:
+Open a requirement with either pencil.
+Edit its single statement, rationale, parameter rows and verification methods in the pane.
+A `$$parameter_name$$` marker creates a provisional row while typing and a real Python `Parameter` on application.
+Each requirement owns its typed parameters and units.
+Expressions remain visible beside evaluated values.
 
 ```python
-12
-1.2e3
-mass * 2
-REQ002.mass / 2
-math.sqrt(x)
+REQ002.mass_kg * 1.2
 18 if mode == "Downlink" else 3
-REQ002.mass * 1.2 if mode == "Nominal" else None
 sum(i ** 2 for i in range(10))
-statistics.mean([REQ001.mass, REQ002.mass])
 ```
 
-Use a Boolean expression in each **Verification methods** row to check a requirement. Use the current row's variable names directly. Use another statement's ID and a variable name for a reference, including statements on other tabs. IDs are unique across the workbook:
+Automatic source expressions use the bounded restricted Python interpreter.
+Imports, arbitrary calls, assignments, object introspection and unbounded collections are unavailable there.
+Numbers must remain finite, and integer values must be safe for browser transport.
+Missing inputs stay pending and malformed drafts retain diagnostics.
+Units are labels, so conversions are explicit in expressions.
 
-```python
-mass <= 2.5
-mass <= NED001.mass and cell_count >= 3
-not (x > 10) or y == 0
-0 < x <= REQ002.x
-all(i >= 0 for i in range(10))
-math.isclose(x, REQ002.x, rel_tol=1e-6)
+Native imported callable bindings from a REPL or reusable subclass display read-only labels in the UI.
+Their scoped identities are preserved through edits and saves.
+Their calculated results use the same evaluation context as editable expressions.
+
+Save and Cancel apply to the pane's drafts.
+Cmd+Enter or Ctrl+Enter saves the active requirement or component editor.
+Source and assignment pickers, stable IDs, trailing empty rows, plus buttons, delete gutters, sorting and tab navigation remain available.
+Python handles naming, reference rewriting, ownership constraints and protected deletion.
+
+## Power, mass and volume
+
+Define spacecraft modes and sunlight/eclipse fractions in Mission.
+Define component quantities, accounting, states and power values in each component pane.
+Allocate states to spacecraft modes in the subsystem table.
+Power limit requirements link spacecraft, subsystem and component allocations.
+
+Connect the EPS **LoadEnergy** requirement to component modes and selected load domains.
+Its weighted sunlight and eclipse averages feed the existing energy equations.
+Disconnecting restores the previous manual bindings.
+Software uses its execution host, and passive hardware, battery storage and solar generation start excluded from load demand.
+
+Mass and volume requirements account for physical hardware independently from power accounting.
+Parent sums reference child values and allocations.
+Unchanged default sums extend with newly added children.
+Custom expressions and cleared cells remain editable.
+These are preliminary budgets, with energy closure, chronological peaks, mechanical fit and hardware qualification assessed separately.
+
+## COTS facts
+
+COTS classes inherit both their generic engineering component and `DatabaseBacked`.
+For example, `CotsBattery` inherits `Battery` and the shared database loader.
+Database rows populate the instances without changing their engineering inheritance.
+
+The default provider reads the live `framework/cots/` tables.
+Set `NANOSAT_MBSE_COTS_DIR` for another complete database directory.
+New rows are read through content-aware caches, and no fixed catalog size is assumed.
+Use **Refresh catalogue** to inspect current records.
+
+Choose exact facts by internal element, value meaning, conditions, unit and source revision.
+Named references such as `CMP001.mass` pin identity and revision without copying authoritative values into the session.
+Changed or substituted facts remain pending until reviewed.
+Renaming a reference updates dependent bindings in Python.
+Typical values establish no guaranteed hardware limit, and operating limits remain distinct from absolute maxima.
+
+## Verification and analyses
+
+Every configured method must pass in every configured mode for the requirement checkbox to pass.
+A requirement with no method stays unset.
+Selecting a COTS component or script as a value source also requires its current evidence.
+Successful script execution alone establishes no compliance claim.
+
+The built-in analyses are importable `VerificationScript` subclasses in `nanosat_mbse.verifications`.
+Their typed interfaces and calculations are defined in Python.
+Use the script picker, bind inputs to literals or requirement references, add conditions and click **Run Python**.
+Dependencies run first, and per-mode outputs, logs and diagnostics remain inspectable.
+
+Execution evidence is transient and held outside session configuration.
+Input, mode, implementation and selected-fact changes invalidate stale evidence.
+Unrelated new COTS rows leave existing pinned evidence current.
+Reloading or switching sessions requires fresh execution.
+The primary download is **Export Python session** and retains executable bindings without cached success flags or outputs.
+
+Trusted external analyses can still use registered `.py`/`.json` pairs through `VERIFICATION_SCRIPTS_DIR`.
+See [analysis registration](scripts/README.md), [model scope](analyses/README.md) and [report coverage](analyses/REPORT-COVERAGE.md).
+
+## Optional study sessions
+
+The compatibility commands delegate to native Python factories and the shared repository.
+They create independent named sessions without running analyses:
+
+```sh
+node tools/create-analysis-session.mjs demo --name "My test bench"
+node tools/create-analysis-session.mjs mppt --name "My MPPT study"
+node tools/create-analysis-session.mjs scenario --from current --name "My illumination study"
+node tools/create-report-session.mjs --list
+node tools/create-report-session.mjs energy --name "My energy assessment"
 ```
 
-Supported syntax:
+Use `--mission /path/to/mission.py` to choose the neighboring session directory.
+A retained JSON source is also accepted.
+The installed equivalents are `nanosat-mbse analysis ...` and `nanosat-mbse report ...`.
 
-- Finite numeric literals, including scientific notation.
-- Variable names and `ROW001.variable` references.
-- Parentheses and unary `+`, `-`, `not`.
-- Arithmetic `+`, `-`, `*`, `/`, `//`, `%` and `**` (power).
-- Comparisons `<`, `<=`, `>`, `>=`, `==`, `!=`, including chained comparisons.
-- Boolean literals `True`, `False` and operators `and`, `or`, `not`. Boolean operators and conditions require Boolean operands.
-- Conditional expressions `value if condition else alternative`, including nested conditions. The built-in `mode` input compares with a quoted spacecraft mode name. Only the selected branch is evaluated. All branches are checked for syntax, references and compatible types. A selected `None` branch remains pending.
-- Numeric functions `sqrt`, `acos`, `arccos`, `floor`, `ceil`, `abs`, `round`, `exp`, `log`, `log10`, `sin`, `cos`, `tan`, `hypot`, `min` and `max`. Use the `math.` prefix for Python math module functions, such as `math.sqrt` and `math.acos`. Built-ins such as `abs` and `round` use their bare names. Constants include `pi`, `math.pi`, `math.e` and `math.tau`. Trigonometric arguments and results use radians.
-- Lists, tuples, `sum`, `len`, bounded `range`, and a single comprehension generator with optional Boolean filters. `all` and `any` consume Boolean collections. Comprehension variables have their own local names and cannot shadow module, function, row-ID or mode names. Collections and ranges contain at most 1,024 items.
-- `statistics.mean`, `statistics.median`, `statistics.stdev` and `statistics.pstdev`. `math.isclose` accepts `rel_tol` and `abs_tol`. `math.isfinite` returns a Boolean.
-
-This is a restricted native Python expression evaluator. It parses Python with `ast` and evaluates explicitly permitted nodes and functions. It uses no `eval` or `exec`. Imports, assignment, arbitrary calls, object introspection, private attributes and unbounded collections are unavailable. Put comments in the rationale field. Registered scripts provide the explicit trusted execution path for unrestricted Python and installed packages.
-
-Expressions contain at most 5,000 characters, 2,048 AST nodes and 64 nesting levels. Dependency depth is limited to 64 and each calculation request has an operation budget. Numeric results stay finite. The import adapter converts old SysML conditional syntax, Boolean spellings, qualified math calls and `^` powers once. Canonical JSON workspaces use Python directly. Write `**` for powers. A newly entered `^` is rejected by the restricted evaluator and is never silently treated as a power.
-
-Parameter expressions must produce numbers of their model's declared type. Conditions must produce a Boolean. Parameters are evaluated even when the row has no verification condition. An unset dependency gives a pending result. Cycles, invalid syntax, unknown references, invalid result types and nonfinite arithmetic give an error. A parameter error appears beside its expression. Pending and error conditions use an indeterminate checkbox with details in its tooltip. Results recalculate when expressions change, including references to other rows.
-
-Expression references use visible row IDs. Renaming an ID through the UI updates condition and equation references. Renaming a spacecraft mode updates its quoted expression references. Remove these references before deleting a mode. Deleting an unused mode preserves the requirement rows. Source links use stable internal keys and remain intact.
-
-## JSON storage
-
-Edits autosave to the selected JSON workspace without a success toast. The footer reports saves and errors. Files contain the workspace object directly, with no generated code or wrapper. Expressions, stable keys, visible IDs, source links, allocations, states, units, rationale and script configuration are retained. Execution evidence and calculated values are never stored in their place.
-
-JSON files are authoritative. An invalid or unsupported JSON file produces an error and is never replaced by a template. Writes use a temporary file, a filesystem sync and atomic publication. Existing workspace permissions are retained. Revision tokens include both file identity and contents, so a revision from another session cannot authorize a save. Queues and per-file `.lock` files protect concurrent saves across browser tabs, store instances and server processes. New JSON files are published with create-only semantics. Concurrent writers cannot replace another writer's new file.
-
-After an interrupted server, a stale `.json.lock` may remain. Stop or confirm the owning server is no longer running before removing that lock. The lock contains its process ID and creation time. Never remove an active server's lock. Stale revisions and external edits keep local drafts open for recovery. Reload to use the current file, or use **Save as** to preserve a separate valid draft.
-
-The stored mission and saved sessions are already version 14 JSON with Python expressions. Older versions, wrapped model files and non-Python expression formats are rejected. Reading a workspace adds newly introduced generic study requirements in memory. It preserves existing rows and writes no file. Version 14 JSON retains optional `requirementSeeds` metadata on save and export, recording initialized templates per EPS. This preserves deliberate later deletions and permits future generic additions. The shared numeric-name limit is 256. Existing tables and editor controls are unchanged.
-
-The maintained catalog is Python code and is trusted application configuration. It retains requirement text, units, parameter order, derivation links, declared attributes and acceptance predicates. JavaScript handles presentation, structural editing and JSON transport. Python is the sole calculation engine, including verification state carried into KiCad downloads.
-
-## Test
+## Focused checks
 
 ```sh
 npm test
 ```
 
-No SysML compiler, renderer or model library is required for the app or its test suite.
-
-Tests use temporary files and leave project models unchanged. Optional browser tests exercise the pane, sessions, saved copies, autosave isolation, workbook navigation, cancellation, generated columns, evaluation, persistence and download:
-
-```sh
-PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs npm test
-```
+This runs the retained requirement presentation checks.
+The obsolete architecture tests are clearly archived under `test/legacy/` with `.txt` suffixes.
+They are outside active Node test discovery.
+Native examples and browser workflows exercise the current model and service.
+The active test command makes no claim of full old-suite parity.

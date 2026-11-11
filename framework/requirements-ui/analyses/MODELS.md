@@ -7,26 +7,28 @@ requirement definitions. New picker instances have **all inputs unset**. No scri
 supplies mission, product, reliability or safety defaults. The examples below are
 **synthetic test fixtures, not recommended designs or acceptance targets**.
 
-Each `.py`/`.json` pair is in `../scripts/`. Each uses only the Python 3.8+
-standard library. Each is self-contained under isolated execution and uses no
-relative imports. Stdin is one JSON
-object `{ "inputs": {...}, "requirements": {...}, "mode": null }` (or the existing
-mode object). Bind every declared input. `requirements` and `mode` supply no
-hidden defaults. Stdout contains exactly the declared scalar outputs. Diagnostics
-and the generated fault-tree representation use stderr. Invalid types, domains,
-unsupported dependence or input work bounds exit nonzero with no stdout. Known
-engineering failures return signed residuals/false. Undefined or unavailable
-results are `null`. Null outputs remain pending in the existing UX. Names are at
-most 40 characters. All interfaces have at most 32 inputs and 32 outputs. Metadata
-is authoritative for exact scalar types. No framework-conformity claim follows
-from these calculations or passing their software tests.
+The current implementations are the `Sizing`, `Geometry`, `Fit` and `RAM`
+`VerificationScript` subclasses in `framework/python/src/nanosat_mbse/verifications/`.
+They use the Python 3.8+ standard library and declare their exact typed ports in Python.
+The UI and native sessions call the same classes through the isolated runner.
+The JSON blocks below describe input objects, with declared inputs bound explicitly.
+`requirements` and `mode` supply no hidden defaults.
+The runner retains exactly declared scalar outputs, diagnostics and any generated fault-tree representation.
+Invalid types, domains, unsupported dependence or work bounds produce execution errors.
+Known engineering failures return signed residuals or false.
+Undefined or unavailable results are null and remain pending in the UI.
+Interfaces have at most 32 inputs and 32 outputs.
+No framework-conformity claim follows from these calculations or passing their software checks.
 
-Run focused verification from `framework/requirements-ui`:
+Create an unset native study from `framework/requirements-ui`:
 
 ```sh
-node --test test/report-models.test.mjs
-node --test test/analyses.test.mjs
+node tools/create-report-session.mjs sizing --mission /tmp/nanosat-studies/mission.py
 ```
+
+`geometry`, `fit` and `ram` select the other studies. Creation executes no analyses.
+The former numerical regression sources are archived under `test/legacy/` with `.txt` suffixes.
+See the [native API](../../python/README.md) for direct class execution.
 
 ## Report mapping and boundaries
 
@@ -420,7 +422,8 @@ criteria remain pending on zero-probability evidence, not automatically passing.
 
 ## Verification coverage and numerical limits
 
-`test/report-models.test.mjs` loads definitions through `loadScriptCatalog`, checks
+The archived `test/legacy/report-models.test.mjs.txt` records earlier numerical coverage.
+That earlier implementation loaded definitions through `loadScriptCatalog` and checked
 names/counts/types and exactly declared finite outputs, creates unset picker
 instances, and executes Python via the public JSON protocol and `runScripts`.
 It includes independent analytic power/Wh/Ah/area calculations, fixed/inadequate

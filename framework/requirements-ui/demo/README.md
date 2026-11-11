@@ -5,7 +5,7 @@
 - `analysis-workspace.json`: the populated illumination and MPPT test bench.
 - `poster.jpg`: video preview.
 
-The walkthrough uses the same recorded UI with slower actions and longer pauses on inputs and results. Camera movements and edited transitions are slower. The transition from the power calculation to COTS selection includes the actual save and page scroll. Native UI focus indicators remain visible. Application source and example inputs are unchanged.
+The walkthrough uses the same recorded UI with slower actions and longer pauses on inputs and results. Camera movements and edited transitions are slower. The transition from the power calculation to COTS selection includes the actual save and page scroll. Native UI focus indicators remain visible. The video records the previous implementation, and its JSON inputs remain the reproducible baseline. The current UI uses the native Python model and session storage.
 
 ## Chapters
 
@@ -57,22 +57,35 @@ Power values and non-battery physical values are illustrative estimates. The sel
 
 ## Open the examples
 
-From `framework/requirements-ui/`:
+Prepare independent native copies from the repository root:
 
 ```sh
-MISSION_FILE=demo/example-workspace.json PORT=3002 npm start
+PYTHONPATH=framework/python/src python3 framework/python/examples/repl_demo.py \
+  --prepare /tmp/nanosat-demo
+cd framework/requirements-ui
+MISSION_FILE=/tmp/nanosat-demo/sizing.py PORT=3002 npm start
 ```
 
-For the analysis test bench, use `MISSION_FILE=demo/analysis-workspace.json` instead. Open <http://127.0.0.1:3002>. Open MPT008 in EPS and run SCR001 to execute MPPT and its illumination dependency.
+Choose a new output directory because preparation uses create-only saves. Original JSON inputs and live COTS data remain unchanged.
+For the analysis test bench, use `MISSION_FILE=/tmp/nanosat-demo/analysis.py` instead. Open <http://127.0.0.1:3002>. Open MPT008 in EPS and run SCR001 to execute MPPT and its illumination dependency.
 
-To recreate the named test bench in the sizing example's Session picker:
+To create another native named test bench in the sizing example's Session picker:
 
 ```sh
-node tools/create-analysis-session.mjs demo --mission demo/example-workspace.json
+node tools/create-analysis-session.mjs demo --mission /tmp/nanosat-demo/sizing.py
 ```
 
-The app autosaves edits. Copy the example files first to preserve the recorded inputs.
+This calls the native Python factory and shared repository. Creating a bench executes no analyses.
+The app autosaves to the selected Python session. The primary download is executable Python configuration with no cached output literals.
+A legacy `MISSION_FILE=demo/example-workspace.json` is still accepted, with its first open creating an adjacent authoritative `.py` file while retaining the JSON source.
+
+## REPL demonstration
+
+Use `python3 -i framework/python/examples/repl_demo.py --prepare /tmp/nanosat-repl-demo` with `PYTHONPATH=framework/python/src` from the repository root.
+The REPL exposes native `session`, `sizing`, `eps`, `battery` and `mppt` objects.
+Add `--run` for a rehearsal that calculates actual outputs, changes an input, demonstrates evidence invalidation, restores the binding, saves and reopens.
+See the [REPL sequence and recording recipe](../../python/docs/repl.md).
 
 ## Recording observation
 
-The scripts are demonstrated in the supplied standalone test bench. During recording, script outputs remained pending in the COTS-linked sizing session because `public/verification-editor.js` omitted the returned `cotsSignature` when merging execution evidence. The Python runs themselves completed. Application source was left unchanged.
+The scripts are demonstrated in the supplied standalone test bench. During that earlier recording, script outputs remained pending in the COTS-linked sizing session because the old `public/verification-editor.js` omitted the returned `cotsSignature` when merging execution evidence. The Python runs themselves completed, and application source was left unchanged during recording. The current native service uses scoped evidence tokens, and the migrated editor retains them.

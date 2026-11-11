@@ -1,65 +1,61 @@
-# Registered Python analyses
+# Verification implementations and external registration
 
-Use Python 3.8 or later. The automatic calculation worker also uses this interpreter. Registered script source runs only when **Run Python** is clicked. Set `VERIFICATION_PYTHON` to select an interpreter, including one in a virtual environment. Set `VERIFICATION_SCRIPTS_DIR` to choose a trusted directory, relative to where the server starts:
+Built-in analyses live in `framework/python/src/nanosat_mbse/verifications/`.
+Each implementation inherits `VerificationScript`, declares typed Python ports and provides its calculation in the same module.
+The UI and REPL execute these same classes.
+The former duplicate `.py` and `.json` files have been retired from this directory.
+Reviewed legacy revision aliases remain in `nanosat_mbse.verifications._legacy` so unchanged saved configurations retain their migration identity.
 
-```sh
-VERIFICATION_PYTHON=/path/to/venv/bin/python3 \
-VERIFICATION_SCRIPTS_DIR=/path/to/reviewed/scripts npm start
+Examples include `MPPT`, `Illumination`, `NormalInterval`, `PowerPath`, `EnergySegment`, `BatteryStep`, `Thermal`, `Sizing`, `Geometry`, `Fit` and `RAM`.
+Their public registry IDs, such as `mppt_po` and `scenario_illumination`, remain stable.
+See the [native verification API](../../python/README.md#interoperable-verification-scripts) and [analysis scope](../analyses/README.md).
+
+## Native use
+
+```python
+from nanosat_mbse import NormalInterval, Session
+
+session = Session()
+analysis = session.add(NormalInterval("SCR001"))
+analysis.set_value("mean", 4)
+analysis.set_value("standard_deviation", 1)
+analysis.set_value("confidence", 0.95)
+evidence = analysis.run()
+upper = analysis.value("upper")
 ```
 
-The default directory is this one. Each registered analysis uses the Python standard library:
+Construction and imports execute no analysis.
+`run()` resolves typed inputs and dependencies, runs the same importable calculation through the isolated runner and returns transient evidence.
+Session files contain instances and bindings, with explicit verification calls separated from construction.
 
-- `normal_interval` calculates a two-sided normal distribution interval with a known standard deviation.
-- `scenario_illumination` estimates circular orbit illumination, conical eclipse and direct irradiance on one panel section.
-- `mppt_po` simulates an ideal perturb and observe tracker over one environmental step.
-- `eps_energy_segment` propagates chronological energy and independent charge balances, reserves, service shortages and surplus.
-- `eps_converter_step` evaluates a declared first-order converter command/startup response.
-- `eps_guidance` proposes model/activity eligibility and reports missing prerequisites from an explicit input inventory.
-- `eps_power_path` assesses declared conversion, path losses and steady/pulse supply limits.
-- `eps_protection` executes declared protection and recovery scenarios.
-- `eps_battery_step` evaluates a supplied battery equivalent-circuit step.
-- `eps_thermal` evaluates one-node thermal response and state temperature limits.
-- `eps_sizing` proposes bounded integer cell-assembly arrangements and resource measures.
-- `eps_geometry` checks declared installation and keep-out envelopes.
-- `eps_fit` estimates parameters of declared models from checked supplied samples.
-- `eps_ram` executes a bounded authored fault tree with quantitative failure measures.
+## Trusted external scripts
 
-New instances added from the script picker start with unset inputs. The combined test bench supplies synthetic values for both engineering analyses. See [analyses/README.md](../analyses/README.md) for engineering assumptions, required inputs, proposed requirements, result bindings and the optional named-session creator. These scripts provide preliminary model evidence within their declared scope.
+A configured external directory can register `<id>.py` and `<id>.json` pairs:
 
-The [report coverage audit](../analyses/REPORT-COVERAGE.md) documents the generic study requirements populated in every EPS session and the optional analysis benches. The generic requirement list provides the activity guidance. These scripts are tools for obtaining its study values and evidence through the existing pane. They use the same protocol and explicit execution boundary below. All independent model choices, product inputs and acceptance limits start unset.
+```sh
+VERIFICATION_SCRIPTS_DIR=/path/to/reviewed/scripts \
+VERIFICATION_PYTHON=/path/to/venv/bin/python3 npm start
+```
 
-## Interface
-
-A definition consists of `<id>.py` and `<id>.json` in the configured directory. IDs use lowercase letters, digits and underscores, starting with a letter. The JSON declares `id`, `name`, `description`, `inputs`, `outputs` and an optional `timeoutMs`:
+`RegisteredScript` adapts them through the same `VerificationScript` interface.
+The application-configured directory is trusted.
+The browser can choose registered identities and bindings and cannot supply source files or paths.
+External definitions can override built-in IDs only through that trusted configuration.
 
 ```json
 {
   "id": "square_root_margin",
   "name": "Square root margin",
   "description": "Example external analysis interface.",
-  "inputs": [{ "name": "input_value", "type": "float" }],
-  "outputs": [{ "name": "margin", "type": "float" }],
+  "inputs": [{"name": "input_value", "type": "float"}],
+  "outputs": [{"name": "margin", "type": "float"}],
   "timeoutMs": 3000
 }
 ```
 
-Each input and output declares `name`, `type` and optional display `unit`. Types are `float`, `integer` and `boolean`. Names are unique across the inputs and outputs. They follow the requirement parameter identifier rules. Each definition supports up to 32 inputs and 1 to 32 outputs. Each workspace supports up to 64 script instances.
-
-## JSON protocol
-
-The script reads one JSON object from stdin:
-
-```json
-{
-  "inputs": { "input_value": 4 },
-  "requirements": { "REQ001": { "mass": 4, "unset_input": null } },
-  "mode": { "key": "nominal", "name": "Nominal" }
-}
-```
-
-`inputs` contains evaluated bindings with validated types. `requirements` is a snapshot of evaluated requirement parameters for that mode. Unresolved or invalid cells appear as `null` in that snapshot. Declare dependencies through input bindings to ensure their values are resolved before execution. Bindings can reference other script outputs. Dependency cycles give an error. `mode` is `null` when the workspace has no spacecraft modes. Scripts receive evaluated JSON data directly.
-
-The script writes exactly one JSON object to stdout, with exactly its declared output names:
+The script reads one JSON object from stdin with `inputs`, a requirement-value snapshot in `requirements`, and the selected `mode` or `null`.
+Declare dependencies through input bindings.
+Write exactly the declared output names to stdout and diagnostics to stderr:
 
 ```python
 import json
@@ -67,22 +63,26 @@ import math
 import sys
 
 request = json.load(sys.stdin)
-value = request["inputs"]["input_value"]
-json.dump({"margin": math.sqrt(value)}, sys.stdout, allow_nan=False)
+json.dump({"margin": math.sqrt(request["inputs"]["input_value"])}, sys.stdout, allow_nan=False)
 ```
 
-Write diagnostics to stderr. Outputs must match their declared types. Numeric outputs must be finite. Integer outputs must be safe JavaScript integers. A `null` output stays pending. Invalid JSON, unexpected output names, invalid values, a nonzero exit or a timeout gives an execution error. Missing inputs prevent execution.
-
-Each instance pins a SHA-256 revision of its interface and Python source. If either file changes, reopen **Python scripts** and use **Update definition** before rerunning. Matching input expressions are retained. New inputs start unset. Review changed outputs and their references. Include the registered script files when sharing a saved mission.
+Inputs and outputs support `float`, `integer` and `boolean`, with optional unit labels.
+Each definition permits up to 32 input and 32 output ports.
+Numeric values must be finite and integers safe for browser transport.
+A `null` output remains unresolved.
+The interface and reviewed source revision are pinned on each instance.
+Use **Update definition** after reviewing a changed interface or implementation.
 
 ## Execution boundary
 
-**Run only trusted local scripts. Python runs with your user permissions. This is not a sandbox.** Registered scripts can access files and the network through normal Python APIs.
+**Run only trusted code. Python executes with your user permissions and is not sandboxed.**
+The default isolated runner uses the selected interpreter, per-script timeouts, a total run budget, cancellation and bounded output.
+Each script timeout ranges from 10 ms through 10 seconds.
+A run defaults to a 30-second total budget and 1 MiB combined output per invocation.
+Unix cleanup terminates the child process group.
+External source is copied to a temporary directory, so neighboring relative imports are unavailable.
+Installed packages in the selected interpreter remain available.
 
-Execution requires an explicit `POST /api/scripts/run`. Opening, editing, saving and exporting never execute registered script source. Automatic Python expressions run in the separate restricted calculation worker. The browser cannot submit Python source, shell commands, paths or interpreter arguments. Only registered files inside the configured directory can run. Symlink escapes are rejected.
-
-The server copies the verified source into a temporary working directory. It starts Python with `-I -u`, without a shell or inherited Python path configuration. Installed packages from the selected interpreter remain available. Scripts should receive data through the JSON protocol and use installed packages for reusable code. Relative imports from neighboring script files are unsupported. The working directory is deleted after execution.
-
-The default invocation timeout is 3 seconds. `timeoutMs` can range from 10 ms to 10 seconds. Each request has a 30-second execution budget. Combined stdout and stderr are limited to 1 MiB. The server permits two simultaneous run requests. Cancellation, timeout and excessive output terminate the process group on Unix. These limits reduce accidental resource use and provide no security boundary for hostile code.
-
-Execution evidence stays in the current browser session and is associated with the exact calculation context and pinned revision. Reloading or switching sessions clears it. JSON downloads retain typed interfaces, input expressions and pinned revisions, without cached outputs or execution flags.
+Opening, editing, saving and exporting a session never execute registered analysis source.
+Execution evidence stays separate from configuration and requires current inputs, modes, implementation and selected COTS pins.
+A successful process supplies evidence only, with requirement predicates establishing the declared pass/fail result.

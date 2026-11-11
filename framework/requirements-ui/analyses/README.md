@@ -1,6 +1,6 @@
 # Illumination and MPPT analyses
 
-These analyses use the existing **Python scripts**, parameter and verification method tables. They use the same UI and require explicit execution. The generic study requirements described in [REPORT-COVERAGE.md](REPORT-COVERAGE.md) populate independently in every EPS session. Python 3.8 or later and its standard library are sufficient.
+These analyses are native `Illumination` and `MPPT` subclasses of `VerificationScript` in `nanosat_mbse.verifications`. The UI's **Python scripts**, parameter and verification tables call those same classes as the REPL and require explicit execution. The generic study requirements described in [REPORT-COVERAGE.md](REPORT-COVERAGE.md) populate independently in every EPS session. Python 3.8 or later and its standard library are sufficient.
 
 The supplied session is **Illumination + MPPT test bench**. It combines both scripts with synthetic inputs and acceptance limits. Open MPT008 in EPS and run SCR001 (MPPT). Its dependencies execute SCR002 (illumination) first. All 15 original test-bench checks pass with the supplied values. Newly populated generic study requirements remain unverified until their own quantities and evidence are supplied. The original mission and other sessions remain unchanged.
 
@@ -15,7 +15,7 @@ The original 27 generic requirements establish preliminary sizing. The normal ca
 
 The current `sunlight_efficiency` and `eclipse_efficiency` describe aggregate energy paths. They do not define a tracker algorithm or its efficiency. Cell MPP voltage and current alone determine no I-V characteristic. `installed_cells` supplies no series/parallel arrangement.
 
-The Generic EPS workspace uses 161 shared parameter names, or 166 with power and resource allocation names. The internal limit is 256. Script inputs and outputs have separate namespaces and consume no shared parameter columns. The optional illumination configuration adds two acceptance parameters. Saved analysis benches also receive the generic study requirements. Existing populated cells remain intact.
+The full orbit and EPS model uses 161 shared parameter names, or 166 with power and resource allocation names. The internal limit is 256. Script inputs and outputs have separate namespaces and consume no shared parameter columns. The optional illumination configuration adds two acceptance parameters. Saved analysis benches also receive the generic study requirements. Existing populated cells remain intact.
 
 ### Result destinations
 
@@ -106,7 +106,7 @@ The `scenario` command copies the current mission, binds its unique `OrbitPeriod
 
 Use `--from <session-id>` to copy another named session. Use `--orbit <requirement-key>` when several orbit definitions exist. An ambiguous orbit gives an error. The tool never chooses one silently.
 
-Use `--mission /path/to/mission.json` for another workspace and its neighboring session directory. `MISSION_FILE`, `VERIFICATION_SCRIPTS_DIR` and `VERIFICATION_PYTHON` are also honored. The command creates a normal saved copy through the existing session store and prints its path and URL query. It never runs registered script source. Duplicate names are rejected.
+Use `--mission /path/to/mission.py` for another workspace and its neighboring session directory. A retained version-14 JSON source is also accepted and stays unchanged during conversion. `MISSION_FILE`, `VERIFICATION_SCRIPTS_DIR` and `VERIFICATION_PYTHON` are honored. The compatibility launcher calls native bench factories and the shared Python session repository, then prints the session path and URL query. It executes no analyses and rejects duplicate names. Installed equivalents use `nanosat-mbse analysis ...`.
 
 A scenario copy needs two free shared parameter names. A full workspace gives an actionable error and leaves the source unchanged. You can still select **Orbit illumination scenario** directly in any requirement's existing Python script picker and supply script inputs and a verification condition without adding shared columns.
 
@@ -201,15 +201,18 @@ Voltage temperature coefficient is -0.02 V/°C, relative current temperature coe
 
 The test limits are 2400 s maximum eclipse, 800 W/m² minimum mean irradiance, 9 V maximum source Voc, 1.2 A maximum source Isc, 0.95 minimum tracking efficiency and 400 J minimum delivered energy. Settling has a 15 s limit, 0.02 relative power band and 5 s hold duration.
 
-Expected results are approximately 2140 s longest eclipse, 853.1 W/m² mean irradiance, 98.46% tracking efficiency, 540.2 J delivered energy and 6 s settling time. The automated tests also exercise a separate half-irradiance change and failure cases.
+Expected results are approximately 2140 s longest eclipse, 853.1 W/m² mean irradiance, 98.46% tracking efficiency, 540.2 J delivered energy and 6 s settling time. The archived earlier numerical checks also exercised a separate half-irradiance change and failure cases.
 
 The illumination maximum and mean supply two constant MPPT test levels through requirement parameters. They do not replay the orbital time history. Both scripts run through the existing dependency mechanism. Execution results remain transient.
 
-## Tests
+## Native and REPL examples
 
 ```sh
-node --test test/analyses.test.mjs
-npm test
+# From the repository root, with a new destination directory:
+PYTHONPATH=framework/python/src python3 framework/python/examples/repl_demo.py \
+  --prepare /tmp/nanosat-analysis-rehearsal --run
 ```
 
-Tests cover circular eclipse geometry, finite solar disk effects, beta angle, panel orientation, seasonal irradiance, J2 node drift, sampling convergence, P&O reacquisition, energy conservation, tracking limits, darkness, settling failure, invalid inputs, workload limits, per-mode execution, missing evidence, namespace collisions, the combined test bench and independent saved sessions.
+This computes the example through the same native classes as the UI, demonstrates stale evidence after an input change, restores the binding and saves/reopens a Python session.
+See the [REPL recording recipe](../../python/docs/repl.md).
+The old `analyses.test.mjs` source is preserved under `test/legacy/analyses.test.mjs.txt` as historical numerical coverage. Active `npm test` runs only the retained presentation checks.
