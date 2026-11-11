@@ -234,15 +234,7 @@ def _rename_field(session, identifier, old, new):
         rewritten = _field_source(source, identifier, old, new)
         if rewritten == source:
             continue
-        expression = restored_expression(rewritten)
-        if kind == "parameter":
-            configure_parameter(
-                session, row, replace(row.parameters[name], expression=expression)
-            )
-        else:
-            methods = list(row.verifications)
-            methods[name] = replace(methods[name], condition=expression)
-            row.verifications = methods
+        session._set_expression(row, kind, name, restored_expression(rewritten))
     for link in session.power.links:
         for name, parameter in tuple(link.previous.items()):
             source = (

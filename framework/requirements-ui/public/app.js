@@ -41,7 +41,8 @@ function captureFocus() {
   const input = document.activeElement, row = input?.closest('tr[data-key]');
   const selector = row && input.dataset.field ? `tr[data-key="${row.dataset.key}"] [data-field="${input.dataset.field}"]`
     : input?.dataset.modeKey ? `[data-mode-key="${input.dataset.modeKey}"][data-mode-field="${input.dataset.modeField}"]`
-      : input?.dataset.powerAssignment ? `[data-power-assignment="${input.dataset.powerAssignment}"][data-mode="${input.dataset.mode}"]` : null;
+      : input?.dataset.powerAssignment ? `[data-power-assignment="${input.dataset.powerAssignment}"][data-mode="${input.dataset.mode}"]`
+        : input?.dataset.powerDuty ? `[data-power-duty="${input.dataset.powerDuty}"][data-mode="${input.dataset.mode}"]` : null;
   return selector ? { selector, start: input.selectionStart, end: input.selectionEnd } : null;
 }
 function restoreFocus(focus) {

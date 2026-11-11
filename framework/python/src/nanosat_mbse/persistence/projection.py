@@ -379,6 +379,7 @@ def from_projection(data, *, session_class=None, callables=None, **kwargs):
                     modes[mode]: by_key[state]
                     for mode, state in row["assignments"].items()
                 },
+                {modes[mode]: duty for mode, duty in row.get("duties", {}).items()},
             )
         )
     session.power.links = [
@@ -540,6 +541,15 @@ def to_projection(session, *, callables=None):
                     "assignments": {
                         mode.key: state.key for mode, state in load.assignments.items()
                     },
+                    **(
+                        {
+                            "duties": {
+                                mode.key: duty for mode, duty in load.duties.items()
+                            }
+                        }
+                        if load.duties
+                        else {}
+                    ),
                 }
                 for load in session.power.loads
             ],

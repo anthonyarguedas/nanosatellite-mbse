@@ -834,6 +834,30 @@ class Session:
                     if isinstance(source, str):
                         yield value, "condition", index, source
 
+        for load in self.power.loads:
+            for state in load.states:
+                if isinstance(state.watts, str):
+                    yield load.element, "power_state", state.key, state.watts
+
+    def _set_expression(self, row, kind, name, expression):
+        """Rewrite every supported binding through the same lifecycle seam."""
+        if kind == "parameter":
+            self.configure_parameter(
+                row, replace(row.parameters[name], expression=expression)
+            )
+        elif kind == "power_state":
+            load = self.power.load_for(row)
+            state = next(state for state in load.states if state.key == name)
+            state.watts = (
+                expression.source
+                if isinstance(expression, DraftExpression)
+                else expression
+            )
+        else:
+            methods = list(row.verifications)
+            methods[name] = replace(methods[name], condition=expression)
+            row.verifications = methods
+
     def rename(self, identity, new_id):
         value = self.get(identity)
         if not isinstance(new_id, str) or not new_id.strip():
@@ -851,16 +875,7 @@ class Session:
         value._id = new_id
         self._model_state_present = True
         for row, kind, name, expression in updates:
-            if kind == "parameter":
-                replacement = replace(row.parameters[name], expression=expression)
-                if isinstance(row, Statement):
-                    row._parameters[name] = replacement
-                else:
-                    row.parameters[name] = replacement
-            else:
-                methods = list(row.verifications)
-                methods[name] = replace(methods[name], condition=expression)
-                row.verifications = methods
+            self._set_expression(row, kind, name, expression)
         for link in self.power.links:
             for name, parameter in tuple(link.previous.items()):
                 source = (
@@ -1006,20 +1021,7 @@ class Session:
             rewritten = rewrite_mode(source, previous, name)
             if rewritten == source:
                 continue
-            if kind == "parameter":
-                replacement = replace(
-                    row.parameters[field], expression=restored_expression(rewritten)
-                )
-                if isinstance(row, Statement):
-                    row._parameters[field] = replacement
-                else:
-                    row.parameters[field] = replacement
-            else:
-                methods = list(row.verifications)
-                methods[field] = replace(
-                    methods[field], condition=restored_expression(rewritten)
-                )
-                row.verifications = methods
+            self._set_expression(row, kind, field, restored_expression(rewritten))
         for link in self.power.links:
             for field, parameter in tuple(link.previous.items()):
                 source = (
@@ -1058,6 +1060,7 @@ class Session:
         self._model_state_present = True
         for load in self.power.loads:
             load.assignments.pop(selected, None)
+            load.duties.pop(selected, None)
         return selected
 
     def configure_parameter_states(self, target, parameter, **changes):

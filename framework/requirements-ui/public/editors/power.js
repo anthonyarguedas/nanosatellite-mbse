@@ -23,7 +23,7 @@ export function createPowerEditor({ section, panel, getWorkspace, getActive, onC
       <div class="table-frame"><table class="power-table" aria-label="Spacecraft modes"><colgroup><col class="row-actions-col"><col><col class="power-share-col"><col class="power-share-col"></colgroup><thead><tr><th class="row-actions-heading" aria-label="Row actions"></th><th scope="col">Mode</th><th scope="col">Sunlight (%)</th><th scope="col">Eclipse (%)</th></tr></thead><tbody>${modeRows.map((mode, index) => `<tr data-mode-row="${mode.key}"><td class="row-actions"><button type="button" class="row-delete" data-power-remove-mode="${mode.key}" aria-label="Delete mode ${escape(mode.name || index + 1)}" ${mode === modeDraft ? 'disabled' : ''}>${deleteIcon}</button></td><td><input data-mode-key="${mode.key}" data-mode-field="name" value="${escape(mode.name)}" maxlength="80" aria-label="Mode name, row ${index + 1}"></td>${['sunlight', 'eclipse'].map(period => `<td><input type="number" min="0" max="100" step="any" data-mode-key="${mode.key}" data-mode-field="${period}" value="${mode[period] ?? ''}" aria-label="${period === 'sunlight' ? 'Sunlight' : 'Eclipse'} share, row ${index + 1}"></td>`).join('')}</tr>`).join('')}</tbody></table></div></section>` : ''}
       ${!mission && modes.length ? `<section class="sheet power-allocations"><div class="table-top"><h2>Component State Allocation</h2></div><div class="table-frame"><table class="power-table" aria-label="Component state allocation"><colgroup><col class="power-reference-col">${modes.map(() => '<col class="power-mode-col">').join('')}</colgroup><thead><tr><th scope="col">Component</th>${modes.map(mode => `<th scope="col">${escape(mode.name)}</th>`).join('')}</tr></thead><tbody>${components.map(element => {
         const load = powerFor(workspace, element);
-        return `<tr data-power-row="${element.key}"><td><div class="row-sources"><a href="#row-${element.key}" data-row-link="${element.key}" title="${escape(element.name)}">${escape(element.id)}</a></div></td>${modes.map(mode => `<td><select data-power-assignment="${element.key}" data-mode="${mode.key}" aria-label="${escape(element.id)} state in ${escape(mode.name)}" ${load.states.length ? '' : 'disabled'}><option value=""> </option>${load.states.map(state => `<option value="${state.key}" ${load.assignments[mode.key] === state.key ? 'selected' : ''}>${escape(state.name)}</option>`).join('')}</select></td>`).join('')}</tr>`;
+        return `<tr data-power-row="${element.key}"><td><div class="row-sources"><a href="#row-${element.key}" data-row-link="${element.key}" title="${escape(element.name)}">${escape(element.id)}</a></div></td>${modes.map(mode => `<td><div class="power-assignment"><select data-power-assignment="${element.key}" data-mode="${mode.key}" aria-label="${escape(element.id)} state in ${escape(mode.name)}" ${load.states.length ? '' : 'disabled'}><option value=""> </option>${load.states.map(state => `<option value="${state.key}" ${load.assignments[mode.key] === state.key ? 'selected' : ''}>${escape(state.name)}</option>`).join('')}</select><label class="power-duty"><input type="number" min="0" max="100" step="any" data-power-duty="${element.key}" data-mode="${mode.key}" value="${escape(load.duties?.[mode.key] ?? 100)}" aria-label="${escape(element.id)} duty percentage in ${escape(mode.name)}" title="Duty within this spacecraft mode. Inactive consumption needs separate accounting." ${load.assignments[mode.key] ? '' : 'disabled'}><span>%</span></label></div></td>`).join('')}</tr>`;
       }).join('')}</tbody></table></div></section>` : ''}`;
   }
   async function change(mutator) {
@@ -46,11 +46,17 @@ export function createPowerEditor({ section, panel, getWorkspace, getActive, onC
       } else await command(input.dataset.modeField === 'name'
         ? { name: 'rename_mode', target: input.dataset.modeKey, label: input.value.trim() }
         : { name: 'configure_mode', target: input.dataset.modeKey, [input.dataset.modeField]: inputNumber(input) });
-    } else if (input.dataset.powerAssignment) change(workspace => {
-      let load = workspace.power.loads.find(load => load.element === input.dataset.powerAssignment);
-      if (!load) { load = structuredClone(powerFor(workspace, workspace.elements.find(row => row.key === input.dataset.powerAssignment))); workspace.power.loads.push(load); }
-      if (input.value) load.assignments[input.dataset.mode] = input.value;
-      else delete load.assignments[input.dataset.mode];
+    } else if (input.dataset.powerAssignment || input.dataset.powerDuty) await change(workspace => {
+      const elementKey = input.dataset.powerAssignment ?? input.dataset.powerDuty;
+      let load = workspace.power.loads.find(load => load.element === elementKey);
+      if (!load) { load = structuredClone(powerFor(workspace, workspace.elements.find(row => row.key === elementKey))); workspace.power.loads.push(load); }
+      load.duties ??= {};
+      if (input.dataset.powerDuty) {
+        const value = inputNumber(input);
+        if (value === null) delete load.duties[input.dataset.mode];
+        else load.duties[input.dataset.mode] = value;
+      } else if (input.value) load.assignments[input.dataset.mode] = input.value;
+      else { delete load.assignments[input.dataset.mode]; delete load.duties[input.dataset.mode]; }
     });
   });
   section.addEventListener('click', event => {
@@ -88,7 +94,7 @@ export function createPowerEditor({ section, panel, getWorkspace, getActive, onC
     panel.hidden = false; document.body.classList.add('power-editor-open'); renderDraft(); panel.querySelector('input')?.focus();
   }
   function stateRow(state, index, placeholder = false) {
-    return `<tr data-state-key="${state.key}"><td class="row-actions"><button type="button" class="row-delete" data-remove-state="${state.key}" aria-label="Delete state ${escape(state.name || index + 1)}" ${placeholder ? 'disabled' : ''}>${deleteIcon}</button></td><td><input data-state-field="name" value="${escape(state.name)}" maxlength="80" aria-label="State ${index + 1} name"></td><td><input type="number" min="0" step="any" data-state-field="watts" value="${state.watts ?? ''}" aria-label="State ${index + 1} power in W"></td><td><select data-state-field="basis" aria-label="State ${index + 1} value meaning">${['estimated', 'typical', 'maximum', 'measured'].map(value => `<option value="${value}" ${state.basis === value ? 'selected' : ''}>${value[0].toUpperCase() + value.slice(1)}</option>`).join('')}</select></td><td><input data-state-field="source" value="${escape(state.source)}" maxlength="2000" aria-label="State ${index + 1} source"></td><td><input data-state-field="conditions" value="${escape(state.conditions)}" maxlength="2000" aria-label="State ${index + 1} operating conditions"></td></tr>`;
+    return `<tr data-state-key="${state.key}"><td class="row-actions"><button type="button" class="row-delete" data-remove-state="${state.key}" aria-label="Delete state ${escape(state.name || index + 1)}" ${placeholder ? 'disabled' : ''}>${deleteIcon}</button></td><td><input data-state-field="name" value="${escape(state.name)}" maxlength="80" aria-label="State ${index + 1} name"></td><td><input type="text" data-state-field="watts" value="${escape(state.watts ?? '')}" maxlength="5000" autocomplete="off" spellcheck="false" placeholder="0.72 or REQ001.power_W" aria-label="State ${index + 1} power expression in W" title="Per unit active power: a number or Python expression. Set duty in the allocation table."></td><td><select data-state-field="basis" aria-label="State ${index + 1} value meaning">${['estimated', 'typical', 'maximum', 'measured'].map(value => `<option value="${value}" ${state.basis === value ? 'selected' : ''}>${value[0].toUpperCase() + value.slice(1)}</option>`).join('')}</select></td><td><input data-state-field="source" value="${escape(state.source)}" maxlength="2000" aria-label="State ${index + 1} source"></td><td><input data-state-field="conditions" value="${escape(state.conditions)}" maxlength="2000" aria-label="State ${index + 1} operating conditions"></td></tr>`;
   }
   function renderDraft() {
     const element = getWorkspace().elements.find(row => row.key === draft.elementKey), load = draft.load;
@@ -97,6 +103,7 @@ export function createPowerEditor({ section, panel, getWorkspace, getActive, onC
     panel.innerHTML = `<form id="power-component-form"><header class="requirement-editor-heading"><h2>Edit ${escape(element.id)}</h2><button type="button" data-power-cancel aria-label="Close component power editor">×</button></header><div class="requirement-editor-content">
       <div class="power-editor-fields"><label>Quantity<input type="number" min="1" max="1000000" step="1" data-load-field="quantity" value="${load.quantity}" ${software ? 'disabled' : ''}></label><label>Accounting<select data-load-field="accounting">${options.map(value => [value, { host: 'On execution host', counted: 'Count once', excluded: 'Excluded' }[value]]).map(([value, label]) => `<option value="${value}" ${load.accounting === value ? 'selected' : ''}>${label}</option>`).join('')}</select></label></div>
       ${software ? `<label>Execution host<select data-load-field="host"><option value=""> </option>${spacecraftComponents(getWorkspace()).filter(row => (metadata(getWorkspace()).executionHosts ?? []).includes(row.key)).map(row => `<option value="${row.key}" ${load.host === row.key ? 'selected' : ''}>${escape(row.id)}</option>`).join('')}</select></label>` : `<section class="sheet power-state-sheet"><div class="table-top"><h2>Component States</h2><button type="button" class="add-row" data-add-state aria-label="Add component state" title="Add row" ${load.states.length >= limits().states ? 'disabled' : ''}>${addIcon}</button></div><div class="table-frame"><table class="power-table" aria-label="Component states"><colgroup><col class="row-actions-col"><col class="power-state-name-col"><col class="power-state-watts-col"><col class="power-state-basis-col"><col><col></colgroup><thead><tr><th class="row-actions-heading" aria-label="Row actions"></th><th scope="col">State</th><th scope="col">Power (W)</th><th scope="col">Meaning</th><th scope="col">Source</th><th scope="col">Conditions</th></tr></thead><tbody>${load.states.map((state, index) => stateRow(state, index)).join('')}${load.states.length < limits().states ? stateRow(draft.emptyState, load.states.length, true) : ''}</tbody></table></div></section>`}
+      ${software ? '' : '<p class="power-expression-help">Power is per unit while the state is active. Enter a number or Python expression. Set duty beside each mode assignment.</p>'}
       <label>Accounting rationale<textarea data-load-field="rationale" maxlength="2000" rows="3">${escape(load.rationale)}</textarea></label></div><footer class="requirement-editor-actions"><p id="power-editor-error" role="alert"></p><button type="button" data-power-cancel>Cancel</button><button type="submit" class="primary">Save component</button></footer></form>`;
   }
   panel.addEventListener('input', event => {
@@ -106,7 +113,7 @@ export function createPowerEditor({ section, panel, getWorkspace, getActive, onC
     if (input.dataset.stateField) {
       const row = input.closest('[data-state-key]');
       const state = draft.load.states.find(state => state.key === row.dataset.stateKey) ?? draft.emptyState;
-      state[input.dataset.stateField] = input.dataset.stateField === 'watts' ? inputNumber(input) : input.value;
+      state[input.dataset.stateField] = input.dataset.stateField === 'watts' ? (input.value.trim() || null) : input.value;
       if (state === draft.emptyState && (state.name || state.watts !== null || state.source || state.conditions)) {
         draft.load.states.push(state); draft.emptyState = blankState(); row.querySelector('.row-delete').disabled = false;
         if (draft.load.states.length < limits().states) row.closest('tbody').insertAdjacentHTML('beforeend', stateRow(draft.emptyState, draft.load.states.length, true));
@@ -126,7 +133,7 @@ export function createPowerEditor({ section, panel, getWorkspace, getActive, onC
     if (!element || element.definition !== draft.definition) throw new Error('This component changed. Reopen its power editor.');
     const current = powerFor(workspace, element);
     for (const field of ['states', 'quantity', 'accounting', 'host', 'rationale']) if (JSON.stringify(current[field]) !== JSON.stringify(draft.original[field])) throw new Error('This component’s power data changed. Reopen its editor.');
-    const load = { ...structuredClone(draft.load), assignments: { ...current.assignments } };
+    const load = { ...structuredClone(draft.load), assignments: { ...current.assignments }, duties: { ...(current.duties ?? {}) } };
     workspace.power.loads = [...workspace.power.loads.filter(load => load.element !== element.key), load];
     return workspace;
   }

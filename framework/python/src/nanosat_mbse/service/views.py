@@ -203,6 +203,7 @@ def describe(session, *, callables=None):
             "assignments": {
                 mode.key: state.key for mode, state in load.assignments.items()
             },
+            "duties": {mode.key: duty for mode, duty in load.duties.items()},
         }
     return {
         "tabs": contexts,

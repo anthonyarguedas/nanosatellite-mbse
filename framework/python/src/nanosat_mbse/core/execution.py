@@ -457,7 +457,7 @@ def run(
             if time.monotonic() >= deadline:
                 raise ExecutionLimit("The Python run exceeded its total time limit.")
             target.assert_current()
-            for _ in range(len(session.scripts) + 1):
+            for _ in range(len(session.scripts) * max(1, len(session.power.modes)) + 1):
                 try:
                     bound = session.script_inputs(
                         target, mode=selected, evidence=snapshot()
@@ -467,9 +467,14 @@ def run(
                     if error.script_key is None:
                         raise
                     dependency = session.get(error.script_key)
-                    if run_key(dependency, selected) in runs:
+                    dependency_mode = (
+                        selected
+                        if error.mode_key is None
+                        else session.resolve_mode(error.mode_key)
+                    )
+                    if run_key(dependency, dependency_mode) in runs:
                         raise
-                    ensure(dependency, selected)
+                    ensure(dependency, dependency_mode)
             else:
                 raise ValueError("Could not resolve analysis dependencies.")
             if (

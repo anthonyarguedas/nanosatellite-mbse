@@ -6,7 +6,7 @@ These objects hold bindings and relationships. They contain no execution output.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, Optional, Tuple, Type
+from typing import Dict, Optional, Tuple, Type, Union
 from uuid import uuid4
 
 from .elements import Component, Element
@@ -48,7 +48,7 @@ class Mode:
 @dataclass(eq=False)
 class ComponentState:
     name: str
-    watts: Optional[float] = None
+    watts: Optional[Union[float, str]] = None
     basis: str = "estimated"
     source: str = ""
     conditions: str = ""
@@ -63,7 +63,11 @@ class ComponentState:
             or len(self.name) > 80
         ):
             raise ValueError("Name the component state using 1 to 80 characters.")
-        if self.watts is not None and finite_number(self.watts) < 0:
+        if isinstance(self.watts, str):
+            from .predicates import validate_expression
+
+            validate_expression(self.watts)
+        elif self.watts is not None and finite_number(self.watts) < 0:
             raise ValueError("Component power draw must be nonnegative.")
         if self.basis not in ("estimated", "typical", "maximum", "measured"):
             raise ValueError("Choose a component power value meaning.")
@@ -82,6 +86,9 @@ class LoadProfile:
     rationale: str = ""
     states: Tuple[ComponentState, ...] = ()
     assignments: Dict[Mode, ComponentState] = field(default_factory=dict)
+    # Independent component duty percentages within each spacecraft mode.
+    # An omitted percentage preserves continuous operation (100%).
+    duties: Dict[Mode, float] = field(default_factory=dict)
 
 
 @dataclass(eq=False)

@@ -43,12 +43,14 @@ def restored_expression(source: str) -> Expression:
 class PendingValue(ValueError):
     """A required input or execution result is unavailable.
 
-    script_key identifies a dependency for an explicit verification runner.
+    script_key and optional mode_key identify a dependency for an explicit
+    verification runner, including budgets that combine multiple modes.
     """
 
-    def __init__(self, message, script_key=None):
+    def __init__(self, message, script_key=None, mode_key=None):
         super().__init__(message)
         self.script_key = script_key
+        self.mode_key = mode_key
 
 
 class VerificationState(str, Enum):

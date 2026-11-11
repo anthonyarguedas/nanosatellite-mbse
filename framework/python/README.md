@@ -199,13 +199,52 @@ Units remain labels, with conversions explicit in calculations.
 Use `configure_mode()`, `rename_mode()` and `remove_mode()` to retain expression and state links.
 Removing a mode with expression references is protected.
 
-Use `configure_load(component, quantity=..., accounting=..., states=..., assignments=...)` for component demand.
+Use `configure_load(component, quantity=..., accounting=..., states=..., assignments=..., duties=...)` for component demand.
 States are `ComponentState` objects, and assignments reference actual `Mode` and state objects.
+A state's `watts` accepts a nonnegative number or a restricted Python expression in W per installed unit.
+Expressions can reference qualified requirement parameters, selected COTS facts, script outputs and `mode`.
+They use the common evaluation context, dependency guards, evidence gating and reference renaming.
+Unset upstream inputs remain pending. Negative or nonnumeric results are errors.
+
+`duties` maps modes, mode keys or mode names to independent component duty percentages from 0 to 100.
+Omitted entries mean 100 percent, preserving existing sessions.
+Each table supplied to `configure_load()` replaces that table.
+For an existing component and a configured Downlink mode:
+
+```python
+from nanosat_mbse import ComponentState
+
+state = ComponentState("Transmit", "RAD001.current_A * RAD001.voltage_V")
+session.configure_load(
+    component,
+    quantity=1,
+    states=(state,),
+    assignments={"Downlink": state},
+    duties={"Downlink": 10},
+)
+```
+
+Active draw is quantity times state power. Average draw additionally multiplies by component duty divided by 100.
+Duty applies to a declared load contribution with zero consumption while inactive.
+Account for quiescent draw or another nonzero state explicitly, including through a weighted state power expression.
+Power limit checks retain active draw, so low duty cannot conceal an active overload.
 Software demand belongs to its execution host.
 Battery storage, generation and passive components start excluded from load demand.
 Mass and volume accounting still includes physical hardware.
 
+Each power limit requirement exposes `draw_power_W`, `average_power_W`, `assessment_duration_s` and `energy_Wh`.
+Set the spacecraft requirement's `assessment_duration_s` through the existing parameter editor or Python API.
+Subsystems and components inherit their parent's duration unless explicitly overridden.
+Use the editor's State selector or `configure_parameter_states()` for different assessment durations by spacecraft mode.
+Independent cases need no orbital mode shares and their durations need no normalization.
+Energy is average power times assessment duration divided by 3600.
+Unset durations leave energy pending while power checks remain usable. Configured durations must be positive when energy is evaluated.
+These energies assess independent constant-average operating cases and imply no chronological battery closure.
+Reconciliation adds missing assessment parameters to older budget requirements while preserving existing bindings and deliberately deleted requirements.
+
 `connect_power(eps, roots=...)` binds its LoadEnergy requirement to weighted component-mode demand.
+Component duty is applied within each mode before the separate sunlight/eclipse mode shares.
+Expressions and upstream parameters are evaluated in the mode whose share is being counted.
 Zero-share modes need no draw for that illumination period.
 The connected inputs are protected until `disconnect_power(eps)` restores their previous `Parameter` bindings.
 
@@ -220,6 +259,37 @@ Import remains hook-free and preserves the original projection.
 `Session.reconcile_defaults(generic=True, budgets=True)` explicitly introduces new catalog studies and legacy budget initialization.
 Seed history preserves deliberate requirement deletions through reconciliation and restoration.
 Native edits enable `modelState` metadata so parameter ownership, literal bindings and deletion history survive transport.
+
+### Circular orbit illumination
+
+The existing `IlluminationPeriods` requirement owns `beta_deg`, in degrees, with a default of zero.
+Beta is the signed angle between the Sun direction and the orbital plane. Its valid range is -90 to 90 degrees.
+Edit it in the existing parameter table, bind it to another requirement parameter, or use Python:
+
+```python
+session.get("ORB002").set_value("beta_deg", 73)
+```
+
+The preliminary calculation assumes a circular orbit, constant beta, parallel solar rays and a cylindrical Earth shadow.
+It reduces to the former geometry at beta zero and gives equal eclipse durations for positive and negative beta of equal magnitude.
+At or above the critical absolute beta angle, eclipse duration is zero and sunlight lasts the full orbit.
+This model excludes penumbra, eccentricity and variation of beta over time. Use the separate `Illumination` analysis for its epoch dependent geometry.
+
+`LoadEnergy` returns zero energy for an absent sunlight or eclipse period without requiring that period's power or duty inputs.
+A connected budget also skips the absent period's mode shares and state assignments.
+A positive period still requires valid loads and mode shares, and the total assessed interval must be positive.
+Power averages remain usable before orbit durations are supplied.
+
+Opening a saved session or calling `reconcile_defaults()` adds a missing beta input and upgrades exact former library expressions and checks.
+Authored expressions, conditions, cleared inputs and deliberately deleted requirements retain their configuration.
+Direct source and projection imports remain unchanged until explicit reconciliation.
+
+Regression checks for illumination geometry, load expressions, duty accounting, assessment durations, persistence and UI transport:
+
+```sh
+PYTHONPATH=framework/python/src python3 -m unittest discover -s framework/python/tests -v
+npm test --prefix framework/requirements-ui
+```
 
 ## Interoperable verification scripts
 

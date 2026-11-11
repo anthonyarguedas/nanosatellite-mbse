@@ -5,7 +5,7 @@ from __future__ import annotations
 import ast
 from dataclasses import dataclass, replace
 
-from ..core.configuration import LoadConnection, LoadProfile
+from ..core.configuration import ComponentState, LoadConnection, LoadProfile
 from ..core.elements import Subsystem
 from ..core.expressions import finite_number
 from ..core.requirements import Parameter, Requirement
@@ -348,6 +348,26 @@ def seed_power_limits(session, scopes=None):
         )
         if parent is not None:
             row.derive_from(parent)
+        # Ordinary owned parameters use the existing mode-aware parameter editor.
+        # Retain authored bindings when reconciling an older session.
+        assessment_parameters = (
+            Parameter(
+                "average_power_W",
+                unit="W",
+                expression="PowerAllocation.average_power_W",
+            ),
+            Parameter(
+                "assessment_duration_s",
+                unit="s",
+                expression=None
+                if parent is None
+                else f"{parent.id}.assessment_duration_s",
+            ),
+            Parameter("energy_Wh", unit="Wh", expression="PowerAllocation.energy_Wh"),
+        )
+        for parameter in assessment_parameters:
+            if parameter.name not in row.parameters:
+                row.add_parameter(parameter)
         if row.power_scope is session.mission:
             row.affected = subjects[0].affected
         if row in defaults:
@@ -549,6 +569,9 @@ def reconcile_defaults(session, *, generic=True, budgets=True):
             )
             if templates:
                 session._seed_templates(owner, templates)
+        from .illumination import reconcile_illumination_defaults
+
+        reconcile_illumination_defaults(session)
     if budgets:
         seed_resource_budgets(session)
         seed_power_limits(session)
@@ -579,8 +602,17 @@ def power_allocation(context, row, name):
     if row.definition not in POWER_MODELS or name not in (
         "allocated_power_W",
         "draw_power_W",
+        "average_power_W",
+        "energy_Wh",
     ):
         raise ValueError("PowerAllocation belongs to a power limit requirement.")
+    if name == "energy_Wh":
+        duration = finite_number(context.parameter(row, "assessment_duration_s"))
+        if duration <= 0:
+            raise ValueError("Assessment duration must be positive.")
+        return finite_number(
+            context.parameter(row, "average_power_W") * duration / 3600
+        )
     children = _power_children(session, row)
     if name == "allocated_power_W" or children:
         total = 0
@@ -588,9 +620,11 @@ def power_allocation(context, row, name):
             requirement = power_limit_for(session, child.target)
             if requirement is None:
                 raise PendingValue(f"Define a power limit for {child.target.id}.")
-            value = context.parameter(
-                requirement,
-                "power_limit_W" if name == "allocated_power_W" else "draw_power_W",
+            field = "power_limit_W" if name == "allocated_power_W" else name
+            value = (
+                context.parameter(requirement, field)
+                if field in requirement.parameters
+                else power_allocation(context, requirement, field)
             )
             if value < 0:
                 raise ValueError(f"{requirement.id} power must be nonnegative.")
@@ -608,7 +642,9 @@ def power_allocation(context, row, name):
         load = load_for(session, element)
         if load.accounting != "counted":
             continue
-        total += component_draw(load, context.mode)
+        total += component_draw(
+            load, context.mode, context=context, average=name == "average_power_W"
+        )
     return finite_number(total)
 
 
@@ -620,13 +656,28 @@ def in_roots(element, roots):
     return False
 
 
-def component_draw(load, mode):
+def component_draw(load, mode, *, context=None, average=False):
     if mode is None:
         raise PendingValue("Select a spacecraft mode to calculate power draw.")
+    duty = finite_number(load.duties.get(mode, 100)) if average else 100
+    if not 0 <= duty <= 100:
+        raise ValueError("Component duty must be between 0 and 100 percent.")
+    # No energy is consumed by this contribution at zero duty. Active power
+    # remains independently assessed by the unchanged power limit checks.
+    if duty == 0:
+        return 0.0
     state = load.assignments.get(mode)
     if state is None or state.watts is None:
         raise PendingValue(f"Select a state and power draw for {load.element.id}.")
-    return finite_number(load.quantity) * finite_number(state.watts)
+    if context is not None:
+        watts = context.component_state_power(load.element, state)
+    elif isinstance(state.watts, str):
+        raise PendingValue("Use a session evaluation context for power expressions.")
+    else:
+        watts = finite_number(state.watts)
+    if watts < 0:
+        raise ValueError("Component power draw must be nonnegative.")
+    return finite_number(finite_number(load.quantity) * watts * duty / 100)
 
 
 def load_budget(context, row, name):
@@ -639,6 +690,20 @@ def load_budget(context, row, name):
     if name not in ("sunlight_power_W", "eclipse_power_W"):
         raise ValueError("Unknown LoadBudget input.")
     period = "sunlight" if name == "sunlight_power_W" else "eclipse"
+    duration_name = f"{period}_s"
+    if duration_name in row.parameters:
+        try:
+            duration = context.parameter(row, duration_name)
+        except PendingValue as error:
+            if error.script_key is not None:
+                raise
+            # Power averages remain usable before orbit durations are supplied.
+            duration = None
+        if duration is not None:
+            if duration < 0:
+                raise ValueError("Illumination durations must be nonnegative.")
+            if duration == 0:
+                return 0.0
     weights = [getattr(mode, period) for mode in session.power.modes]
     if (
         not weights
@@ -661,7 +726,15 @@ def load_budget(context, row, name):
         for element in components:
             load = load_for(session, element)
             if load.accounting == "counted":
-                total += component_draw(load, mode) * weight / 100
+                # A binding and its upstream parameters belong to the mode
+                # whose orbital share is being counted, not the caller's mode.
+                total += (
+                    component_draw(
+                        load, mode, context=context.for_mode(mode), average=True
+                    )
+                    * weight
+                    / 100
+                )
     return finite_number(total)
 
 
@@ -795,6 +868,14 @@ def configure_load(session, element, **changes):
             selected_state = states[state] if isinstance(state, str) else state
             assignments[selected_mode] = selected_state
         load.assignments = assignments
+    if "duties" in changes:
+        load.duties = {
+            session.resolve_mode(mode): duty for mode, duty in changes["duties"].items()
+        }
+    else:
+        load.duties = dict(previous.duties)
+    for mode in previous.assignments.keys() - load.assignments.keys():
+        load.duties.pop(mode, None)
     validate_load(session, load)
     existing = session.power.load_for(element)
     if existing is None:
@@ -836,15 +917,14 @@ def validate_load(session, load):
         [state.name.strip().lower() for state in load.states], "Component state names"
     )
     for state in load.states:
-        if not state.name.strip() or state.basis not in (
-            "estimated",
-            "typical",
-            "maximum",
-            "measured",
-        ):
-            raise ValueError("Name each component state and its value meaning.")
-        if state.watts is not None and finite_number(state.watts) < 0:
-            raise ValueError("Component power draw must be nonnegative.")
+        if not isinstance(state, ComponentState):
+            raise TypeError("Configure ComponentState instances.")
+        state.__post_init__()
+    for mode, duty in load.duties.items():
+        if mode not in load.assignments or not 0 <= finite_number(duty) <= 100:
+            raise ValueError(
+                "Component duties reference state assignments and percentages from 0 to 100."
+            )
     for mode, state in load.assignments.items():
         if mode not in session.power.modes or state not in load.states:
             raise ValueError(

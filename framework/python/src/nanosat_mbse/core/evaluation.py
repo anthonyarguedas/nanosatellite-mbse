@@ -219,6 +219,9 @@ def calculation_signature(session, *, cots_signature=ALL_MODES):
                         (mode.key, state.key)
                         for mode, state in load.assignments.items()
                     ),
+                    "duties": sorted(
+                        (mode.key, duty) for mode, duty in load.duties.items()
+                    ),
                 }
                 for load in sorted(
                     session.power.loads, key=lambda load: load.element.key
@@ -375,6 +378,25 @@ class EvaluationContext:
             else _signature
         )
         self.engine = RestrictedPython(self, budget)
+        self._mode_contexts = {self.mode: self}
+
+    def for_mode(self, mode):
+        """Reuse one snapshot, operation budget and dependency guard across modes."""
+        mode = None if mode is None else self.session.resolve_mode(mode)
+        if mode not in self._mode_contexts:
+            context = EvaluationContext(
+                self.session,
+                mode,
+                evidence=self.evidence,
+                source_ready=self.source_callback,
+                budget=self.engine.budget,
+                _snapshot=(self.cots_values, self.cots_signature),
+                _signature=self.signature,
+            )
+            context.resolving = self.resolving
+            context._mode_contexts = self._mode_contexts
+            self._mode_contexts[mode] = context
+        return self._mode_contexts[mode]
 
     @contextmanager
     def activate(self):
@@ -388,7 +410,7 @@ class EvaluationContext:
         if name == "mode":
             return "string"
         if "." not in name:
-            parameter = row.parameters.get(name)
+            parameter = getattr(row, "parameters", {}).get(name)
             if parameter is None:
                 raise ValueError(f"Unknown variable “{name}”.")
             return _kind(parameter.value_type)
@@ -396,6 +418,8 @@ class EvaluationContext:
         if identifier == "PowerAllocation" and field in (
             "allocated_power_W",
             "draw_power_W",
+            "average_power_W",
+            "energy_Wh",
         ):
             return "number"
         if identifier == "LoadBudget" and field in (
@@ -478,7 +502,7 @@ class EvaluationContext:
 
     def parameter(self, row, name):
         row = self.session.get(row)
-        key = (row.key, name)
+        key = (row.key, name, None if self.mode is None else self.mode.key)
         if key in self.cache:
             value = self.cache[key]
             if isinstance(value, Exception):
@@ -508,6 +532,41 @@ class EvaluationContext:
                 else:
                     value = parameter.value
             value = coerce(value, parameter.value_type, f"{row.id}.{name}")
+            self.cache[key] = value
+            return value
+        except Exception as error:
+            self.cache[key] = error
+            raise
+        finally:
+            self.resolving.remove(key)
+
+    def component_state_power(self, element, state):
+        """Resolve a state binding with the common cache and cycle detection."""
+        key = (
+            element.key,
+            f"power-state:{state.key}",
+            None if self.mode is None else self.mode.key,
+        )
+        if key in self.cache:
+            value = self.cache[key]
+            if isinstance(value, Exception):
+                raise value
+            return value
+        if key in self.resolving or len(self.resolving) >= 64:
+            raise ValueError(
+                f"Cyclic or excessively nested power expression at {element.id}."
+            )
+        self.resolving.add(key)
+        try:
+            with self.activate():
+                value = (
+                    self.engine.evaluate(state.watts, element, "number")
+                    if isinstance(state.watts, str)
+                    else state.watts
+                )
+            value = coerce(value, float, f"{element.id} state {state.name} power")
+            if value < 0:
+                raise ValueError("Component power draw must be nonnegative.")
             self.cache[key] = value
             return value
         except Exception as error:
@@ -549,6 +608,7 @@ class EvaluationContext:
             raise PendingValue(
                 f"{script.id}: the implementation changed. Review and update its definition before running.",
                 script_key=script.key,
+                mode_key=None if self.mode is None else self.mode.key,
             )
         evidence = self.evidence
         signature = _field(evidence, "signature")
@@ -563,6 +623,7 @@ class EvaluationContext:
             raise PendingValue(
                 f"Run {script.id} for the current inputs{' and mode' if self.mode else ''}.",
                 script_key=script.key,
+                mode_key=None if self.mode is None else self.mode.key,
             )
         if hasattr(evidence, "result_for"):
             result = evidence.result_for(script, self.mode)
@@ -582,6 +643,7 @@ class EvaluationContext:
             raise PendingValue(
                 f"Run {script.id} for the current inputs{' and mode' if self.mode else ''}.",
                 script_key=script.key,
+                mode_key=None if self.mode is None else self.mode.key,
             )
         state = _field(result, "state")
         if isinstance(state, VerificationState):
@@ -589,7 +651,11 @@ class EvaluationContext:
         if state != "value":
             message = _field(result, "message", "The script has no execution result.")
             if state == "pending":
-                raise PendingValue(message, script_key=script.key)
+                raise PendingValue(
+                    message,
+                    script_key=script.key,
+                    mode_key=None if self.mode is None else self.mode.key,
+                )
             raise ValueError(message)
         return result
 

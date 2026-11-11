@@ -364,12 +364,14 @@ def validate_projection(data, *, allow_new_ids=False):
                 "rationale",
                 "states",
                 "assignments",
+                "duties",
             },
         )
         key(load.get("element"), "Load component")
         text(load.get("rationale", ""), "Accounting rationale", 2000)
         text(load.get("host", ""), "Execution host", 80)
         mapping(load.get("assignments"), "State assignments")
+        mapping(load.get("duties", {}), "Component duty percentages")
         for state in collection(load.get("states"), "Component states", 32):
             mapping(
                 state,
@@ -378,6 +380,8 @@ def validate_projection(data, *, allow_new_ids=False):
             )
             key(state.get("key"), "State key")
             text(state.get("name"), "State name", 80, required=True)
+            if isinstance(state.get("watts"), str):
+                expression(state["watts"], "State power")
             text(state.get("source", ""), "State source", 2000)
             text(state.get("conditions", ""), "State conditions", 2000)
     for link in power["links"]:

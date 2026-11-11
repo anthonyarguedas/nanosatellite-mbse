@@ -10,6 +10,14 @@ from .definitions import (
     RequirementDefinition as R,
 )
 from ._report import REQUIREMENTS as REPORT_REQUIREMENTS
+from ._illumination import (
+    CLOSURE_CHECK,
+    ECLIPSE_PERIOD,
+    ILLUMINATION_CHECK,
+    LOAD_ENERGY_CHECK,
+    LOAD_ENERGY_EXPRESSIONS,
+    SUNLIGHT_PERIOD,
+)
 
 ELEMENTS = (
     E(
@@ -652,7 +660,7 @@ REQUIREMENTS = (
         name="IlluminationPeriods",
         id="ORB002",
         context="mission",
-        text="The preliminary circular orbit at altitude $$altitude_km$$ shall provide $$sunlight_s$$ of sunlight and $$eclipse_s$$ of eclipse per $$orbit_period_s$$ orbit, using Earth radius $$earthRadius_km$$ and horizon angle $$horizon_angle_rad$$.",
+        text="The preliminary circular orbit at altitude $$altitude_km$$ and beta angle $$beta_deg$$ shall provide $$sunlight_s$$ of sunlight and $$eclipse_s$$ of eclipse per $$orbit_period_s$$ orbit, using Earth radius $$earthRadius_km$$ and horizon angle $$horizon_angle_rad$$.",
         origin="final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period, eq:eclipse-geometry",
         affected=("Orbit",),
         parameters=(
@@ -674,6 +682,7 @@ REQUIREMENTS = (
                 expression="@OrbitPeriod.orbit_period_s",
                 unit="s",
             ),
+            P("beta_deg", kind="float", expression="0", unit="deg"),
             P(
                 "horizon_angle_rad",
                 kind="float",
@@ -683,18 +692,18 @@ REQUIREMENTS = (
             P(
                 "sunlight_s",
                 kind="float",
-                expression="((0.5 + (horizon_angle_rad / math.pi)) * orbit_period_s)",
+                expression=SUNLIGHT_PERIOD,
                 unit="s",
             ),
             P(
                 "eclipse_s",
                 kind="float",
-                expression="((0.5 - (horizon_angle_rad / math.pi)) * orbit_period_s)",
+                expression=ECLIPSE_PERIOD,
                 unit="s",
             ),
         ),
-        condition="(((((((((altitude_km > 0) and (earthRadius_km > 0)) and (orbit_period_s > 0)) and (sunlight_s > 0)) and (eclipse_s > 0)) and (horizon_angle_rad == math.acos((earthRadius_km / (earthRadius_km + altitude_km))))) and (sunlight_s == ((0.5 + (horizon_angle_rad / math.pi)) * orbit_period_s))) and (eclipse_s == ((0.5 - (horizon_angle_rad / math.pi)) * orbit_period_s))) and (abs(((sunlight_s + eclipse_s) - orbit_period_s)) <= (1e-9 * orbit_period_s)))",
-        acceptance="(((((((((altitude_km > 0) and (earthRadius_km > 0)) and (orbit_period_s > 0)) and (horizon_angle_rad == math.acos((earthRadius_km / (earthRadius_km + altitude_km))))) and (sunlight_s == ((0.5 + (horizon_angle_rad / math.pi)) * orbit_period_s))) and (eclipse_s == ((0.5 - (horizon_angle_rad / math.pi)) * orbit_period_s))) and (sunlight_s > 0)) and (eclipse_s > 0)) and (abs(((sunlight_s + eclipse_s) - orbit_period_s)) <= (1e-9 * orbit_period_s)))",
+        condition=ILLUMINATION_CHECK,
+        acceptance=ILLUMINATION_CHECK,
     ),
     R(
         name="LoadEnergy",
@@ -723,18 +732,18 @@ REQUIREMENTS = (
             P(
                 "sunlight_energy_J",
                 kind="float",
-                expression="((sunlight_power_W * sunlight_duty) * sunlight_s)",
+                expression=LOAD_ENERGY_EXPRESSIONS["sunlight_energy_J"],
                 unit="J",
             ),
             P(
                 "eclipse_energy_J",
                 kind="float",
-                expression="((eclipse_power_W * eclipse_duty) * eclipse_s)",
+                expression=LOAD_ENERGY_EXPRESSIONS["eclipse_energy_J"],
                 unit="J",
             ),
         ),
-        condition="((((((((((sunlight_power_W >= 0) and (eclipse_power_W >= 0)) and (sunlight_duty >= 0)) and (sunlight_duty <= 1)) and (eclipse_duty >= 0)) and (eclipse_duty <= 1)) and (sunlight_s > 0)) and (eclipse_s > 0)) and (sunlight_energy_J == ((sunlight_power_W * sunlight_duty) * sunlight_s))) and (eclipse_energy_J == ((eclipse_power_W * eclipse_duty) * eclipse_s)))",
-        acceptance="((((((((((sunlight_power_W >= 0) and (eclipse_power_W >= 0)) and (sunlight_s > 0)) and (eclipse_s > 0)) and (sunlight_duty >= 0)) and (sunlight_duty <= 1)) and (eclipse_duty >= 0)) and (eclipse_duty <= 1)) and (sunlight_energy_J == ((sunlight_power_W * sunlight_duty) * sunlight_s))) and (eclipse_energy_J == ((eclipse_power_W * eclipse_duty) * eclipse_s)))",
+        condition=LOAD_ENERGY_CHECK,
+        acceptance=LOAD_ENERGY_CHECK,
     ),
     R(
         name="MinimumPanelPower",
@@ -1124,7 +1133,7 @@ REQUIREMENTS = (
         name="OrbitPeriodClosure",
         id="ORB003",
         context="mission",
-        text="The positive sunlight and eclipse periods shall sum to $$orbit_period_s$$ within numerical tolerance.",
+        text="The nonnegative sunlight and eclipse periods shall sum to the positive orbit period $$orbit_period_s$$ within numerical tolerance.",
         origin="final_report/design-proposal.tex#eq:sunlight-period, eq:eclipse-period",
         affected=("Orbit",),
         parameters=(
@@ -1147,8 +1156,8 @@ REQUIREMENTS = (
                 unit="s",
             ),
         ),
-        condition="((((orbit_period_s > 0) and (sunlight_s > 0)) and (eclipse_s > 0)) and (abs(((sunlight_s + eclipse_s) - orbit_period_s)) <= (1e-9 * orbit_period_s)))",
-        acceptance="((((orbit_period_s > 0) and (sunlight_s > 0)) and (eclipse_s > 0)) and (abs(((sunlight_s + eclipse_s) - orbit_period_s)) <= (1e-9 * orbit_period_s)))",
+        condition=CLOSURE_CHECK,
+        acceptance=CLOSURE_CHECK,
         derives_from=("IlluminationPeriods",),
     ),
     R(

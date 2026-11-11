@@ -146,13 +146,33 @@ Python handles naming, reference rewriting, ownership constraints and protected 
 
 Define spacecraft modes and sunlight/eclipse fractions in Mission.
 Define component quantities, accounting, states and power values in each component pane.
-Allocate states to spacecraft modes in the subsystem table.
-Power limit requirements link spacecraft, subsystem and component allocations.
+The **Power (W)** field accepts a number or a Python expression such as `RAD001.current_A * RAD001.voltage_V`.
+State power is per installed unit while that state is active.
+Allocate states to spacecraft modes in the subsystem table and enter **Duty (%)** beside each state selector.
+Component duty defaults to 100 percent and is independent of the spacecraft's sunlight/eclipse mode shares.
+Account for inactive consumption explicitly when it is nonzero.
+Power limit requirements link spacecraft, subsystem and component allocations and retain active state power for their checks.
+Their `average_power_W` parameter includes component duty.
+
+Open the spacecraft power limit requirement and set `assessment_duration_s` in its existing parameter table.
+Use the **State** selector to enter different durations for different spacecraft modes, such as 5400 s for standby and 600 s for a pass.
+Subsystem and component power requirements inherit that duration unless overridden.
+The `energy_Wh` parameter calculates average power times assessment duration divided by 3600.
+A missing duration leaves energy pending without affecting power limit checks.
+These are independent case assessments. Their durations need no normalization and imply no chronological battery assessment.
 
 Connect the EPS **LoadEnergy** requirement to component modes and selected load domains.
-Its weighted sunlight and eclipse averages feed the existing energy equations.
+Its weighted sunlight and eclipse averages include component duty and feed the existing energy equations.
 Disconnecting restores the previous manual bindings.
 Software uses its execution host, and passive hardware, battery storage and solar generation start excluded from load demand.
+
+The existing **IlluminationPeriods** requirement in Mission includes `beta_deg`, defaulting to zero degrees.
+Set it in the parameter table or reference a parameter in another requirement.
+Its valid range is -90 to 90 degrees.
+The circular orbit calculation assumes constant beta and a cylindrical Earth shadow.
+High absolute beta can produce zero eclipse duration and a full orbit of sunlight.
+An absent period has zero load energy and needs no power, duty, mode shares or assignments for that period.
+Opening older sessions introduces beta and updates unchanged library defaults while preserving custom bindings.
 
 Mass and volume requirements account for physical hardware independently from power accounting.
 Parent sums reference child values and allocations.

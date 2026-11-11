@@ -387,8 +387,17 @@ def _load_changes(session, data, base):
     for element, row in following.items():
         if row == previous.get(element):
             continue
+        old_states = {
+            state["key"]: state for state in previous.get(element, {}).get("states", [])
+        }
+        current = session.power.load_for(session.get(element))
+        native_states = (
+            {} if current is None else {state.key: state for state in current.states}
+        )
         states = tuple(
-            ComponentState(
+            native_states[state["key"]]
+            if state == old_states.get(state["key"]) and state["key"] in native_states
+            else ComponentState(
                 state["name"],
                 state["watts"],
                 state["basis"],
@@ -406,6 +415,7 @@ def _load_changes(session, data, base):
             rationale=row["rationale"],
             states=states,
             assignments=row["assignments"],
+            duties=row.get("duties", previous.get(element, {}).get("duties", {})),
         )
     session.power.loads = [
         load
