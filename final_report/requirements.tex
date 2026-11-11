@@ -1,26 +1,7 @@
-\section{Analyze System Requirements}
+\section{System Requirements Analysis}
 \label{section:analyze-system-requirements}
-
-OOSEM specifies the framework's required behavior before defining its architecture. The mission requirements state EPS engineering outcomes. The framework requirements (FRs) specify the behavior that supports those outcomes \citep[Sec.~17.3.3]{friedenthal2014practical}. Engineers supply mission assumptions and approve interpretations, requirements, designs and changes. The framework executes EPS analyses and assesses their results against declared engineering and numerical criteria.
-
-\subsection{External interfaces}
-\label{subsection:framework-context}
-
-Figure~\ref{fig:framework-context} shows the framework as a black box with four labeled boundary ports and their external participants. Each port groups one interface's exchanges. The specifications below define each interface's participants and exchanges.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{fig/framework-context.pdf}
-\caption[Framework boundary and external exchanges.]{Framework boundary and external exchanges. The framework is a black box with interface labels on its boundary ports. Each port groups one interface's exchanges. Solid and dotted arrows distinguish directed information exchanges. Simulation tools receive spacecraft models, parameters and states and return numerical analysis results. The framework executes EPS analyses and assesses results.}
-\label{fig:framework-context}
-\end{figure}
-
-\begin{description}
-\item[IF-01: Engineering use.] Engineers and mission stakeholders submit expectations, mission definitions, requirement drafts, parameters and change requests. Responses contain validity checks of the supplied requirements and their parameters, evaluated values for computable parameters, and the updated state of the requirements after a change.
-\item[IF-02: Knowledge and supplied data.] Knowledge sources supply component descriptions, parameters, models and other reference data in response to source queries. Missing properties remain unknown.
-\item[IF-03: Simulation coupling.] Simulation tools receive spacecraft models, parameters and states. They return numerical analysis results.
-\item[IF-06: Technical review.] Reviewers receive a package for an identified baseline. They return findings.
-\end{description}
+System Requirements Analysis defines how the to-be (desired) stakeholder capabilities can be obtained with support from the system of interest, the framework in this case.
+The requirements define what the framework must accomplish for the stakeholders constrained by acceptable ranges of measurable system variables (Measures of Performance in OOSEM), which make them verifiable.
 
 \subsection{Verifiable framework requirements}
 \label{subsection:framework-requirements}
@@ -46,32 +27,27 @@ Table~\ref{tab:framework-requirements} gives the 23 FRs. Table~\ref{tab:logical-
 \bottomrule
 \endfoot
 \multicolumn{2}{@{}l}{\textbf{Requirements management}} \\*
-FR-01 & The framework shall retain each requirement with its identifier, statement, product level, source and parent, rationale, conditions or quantities, applicable units, verification method, and resolution status, including reasons for unresolved or inapplicable fields. \\
-FR-02 & The framework shall check created or edited requirement drafts on each edit or request for declared deterministic syntax errors, returning affected text. \\
-FR-03 & The framework shall recommend analysis, verification and validation methods or models on edits or requests using requirements and available inputs. \\
-FR-04 & The framework shall retrieve forward and reverse links among scenarios, requirements, and component allocations. \\
-FR-17 & The framework shall produce proposed EPS and component requirement allocations from spacecraft or mission requirements. \\
-FR-39 & The framework shall propose next engineering activities and repeated assessments from the current activity and inputs. identifying unmet prerequisites. \\
-FR-25 & The framework shall retain mission expectations, constraints and ConOps scenarios with mission identity, orbit, attitude, duration, environmental conditions, subsystem modes, and load schedules as inputs to EPS requirements and analysis. \\
-FR-15 & The framework shall configure EPS design representations covering generation, storage, conversion, regulation, protection, distribution, control, and requirement allocations. \\
-FR-13 & The framework shall calculate revision-linked EPS mass and occupied volume estimates from aggregate or component design data and assess margins against allocations, retaining sources, units, and unknown values. \\
-FR-14 & The framework shall compare EPS concepts and architectures through common feasibility checks covering applicable choices of cell technology, array/battery series and parallel configurations, bus voltage, direct energy transfer or maximum power point tracking, and buck/boost regulation, reporting raw measures and unknown values. \\
+FR-01 & The framework shall retain each requirement with its identifier, statement, parents and children, rationale, conditions or quantities, applicable units, verification method, and resolution status, including reasons for unresolved fields. \\
+FR-03 & The framework shall recommend analysis, verification and validation methods or models on edits or requests using available inputs. \\
+FR-04 & The framework shall retain forward and reverse links among requirements and component allocations. \\
+FR-17 & The framework shall propose COTS EPS components from available requirements. \\
+FR-39 & The framework shall propose next engineering activities and from the current activity and inputs. identifying unmet prerequisites. \\
+FR-25 & The framework shall retain mission orbit, attitude, duration, environmental conditions, subsystem modes, and load schedules as inputs to EPS requirements and analysis. \\
+FR-15 & The framework shall allocate EPS requirements among components covering generation, storage, conversion, regulation, protection, distribution, and control components as per the CSRM Profile 1.1 specification. \\
+FR-13 & The framework shall calculate EPS mass and occupied volume estimates from aggregate or component data and assess margins against allocations, retaining sources, units, and unknown values. \\
 FR-20 & The framework shall calculate mode-dependent power, sunlight/eclipse energy budgets, and beginning/end-of-life array and battery sizing, including duty cycles, illumination, temperature, degradation, cycle life, allowable depth of discharge and user-defined margins, reporting integer cell counts, series/parallel arrangements, array area, battery capacity and allocation/operating-limit findings. \\
+FR-14 & The framework shall compare EPS concepts and architectures through common feasibility checks covering applicable choices of cell technology, array/battery series and parallel configurations, bus voltage, direct energy transfer or maximum power point tracking, and buck/boost regulation, reporting raw measures and unknown values. \\
 \multicolumn{2}{@{}l}{\textbf{Simulation and analysis}} \\*
-FR-16 & The framework shall execute EPS analyses covering mission energy balance and survival autonomy, photovoltaic I--V/P--V characteristics, converter/regulator responses, conversion/distribution losses, battery voltage and state of charge, electrothermal behavior, and stress on protection components. It shall apply time-dependent loads, schedules, mode transitions and supplied orbit, attitude, illumination, eclipse and thermal conditions, dissipation, energy shortages and margins against declared electrical, battery, thermal, and component-rating limits. \\
-FR-22 & The framework shall estimate photovoltaic, battery electrical/electrothermal and dynamic EPS/load model parameters from quality-checked supplied data. \\
-FR-26 & The framework shall identify applicable EPS RAM analyses covering failure modes, effects and criticality, conditional failure scenarios and combinations, and failure propagation. \\
-FR-27 & The framework shall generate and execute applicable EPS RAM representations for the analyses in FR-26 using identified components and failure dependencies, assessing failure effects, qualitative/quantitative criticality, minimal failure combinations, conditional failure probabilities, and mission reliability against declared criteria. \\
-FR-19 & The framework shall execute and assess MIL scenarios covering nominal operation, direct energy transfer, MPPT/end-of-charge transitions, command/mode changes, overcurrent/undervoltage/overvoltage faults, load shedding and recovery. \\
+FR-16 & The framework shall execute EPS analyses covering mission energy balance and survival autonomy, photovoltaic I--V/P--V characteristics, converter/regulator responses, direct energy transfer, MPPT, battery voltage and state of charge, electrothermal behavior, overcurrent/undervoltage/overvoltage faults, load shedding and recovery, applying time-dependent loads, schedules, mode transitions and supplied orbit, attitude, illumination, eclipse and thermal conditions, dissipation, energy shortages and margins against available electrical, battery, thermal, and component-rating limits. \\
+FR-22 & The framework shall estimate photovoltaic, battery electrical/electrothermal and dynamic EPS/load model parameters from quality-checked data. \\
+FR-26 & The framework shall execute EPS RAM analyses covering failure modes, effects and criticality, conditional failure scenarios and combinations, and failure propagation. \\
 \multicolumn{2}{@{}l}{\textbf{Configuration management}} \\*
-FR-34 & The framework shall produce or coordinate checked mappings of the EPS specification to an F Prime integration profile, covering component and port definitions and identifying version compatibility. \\
+FR-34 & The framework shall produce or coordinate checked mappings of the EPS specification to an F Prime integration profile, covering component and port definitions. \\
 FR-05 & The framework shall identify impacts of a proposed mission, requirement, component, or model change on requirements and EPS design. \\
 FR-07 & The framework shall retain retrievable phase baselines that resolve exact requirement, mission, design, and model revisions with revision history and the authorized decisions that control them. \\
-FR-09 & The framework shall associate each analysis or software result with its requirement/expectation, method, scenario, parameters, raw outputs, and execution status, preserving failed runs. \\
-FR-11 & The framework shall report missing, rejected, stale, failed, or unresolved evidence against the affected requirements. \\
+FR-09 & The framework shall associate each analysis or software result with its requirement/expectation, method, scenario, parameters, raw outputs, and execution status. \\
 \multicolumn{2}{@{}l}{\textbf{Collaboration and communication}} \\*
-FR-10 & The framework shall provide the controlled inputs, dependencies and instructions to reconstruct all analyses. \\
-FR-37 & The framework shall generate filtered mission, requirement-allocation, design, interface and analysis views from requirement and analysis records. \\
+FR-10 & The framework shall provide the inputs, dependencies and instructions to reconstruct all analyses of a mission. \\
 \end{longtable}
 }
 
@@ -81,8 +57,6 @@ FR-37 & The framework shall generate filtered mission, requirement-allocation, d
 These MOPs make the framework requirements measurable under declared workloads and reference configurations. Table~\ref{tab:framework-mop-protocols} gives one measure for each FR and links it to the enterprise MOEs it supports \citep[Sec.~17.3.3]{friedenthal2014practical}. The links express qualitative contributions. Framework conformity and enterprise effectiveness are assessed separately. Desired ranges are proposed verification targets under the conditions below. They describe no achieved performance. Empty cells and untargeted parts of a composite measure have no transferable quantitative basis.
 
 MOP-FR03 supports MOE-05 through method and model recommendations for the supplied requirements and inputs. Cost and access burden require separate enterprise observations. MOP-FR11 and MOP-FR37 support MOE-06 through evidence gap records and view interpretation. Their performance supports evaluation of clear scope and evidence limits without establishing physical or operational outcomes.
-
-% TODO: Extend the downstream research evaluation protocol to MOE-05 and MOE-06 observations. The qualitative support links here introduce no new capability or achieved outcome.
 
 The FR-07 delay target applies to an indexed single-baseline lookup under a declared record size and host configuration, excluding archive restoration and new analysis. It adopts the 20~s ceiling proposed for browser access to engineering parameters as an engineering interpretation for comparable data access, measured here from query submission to display \citep[Sec.~2, RQ-4]{kanavouras2024lightweight}. It sets no retrieval-correctness percentage. FR-34 adopts a complete-preservation target for component and port mappings in the declared F Prime profile, following the specified agreement between generated connections and the modeled architecture \citep[Sec.~3, p.~7]{review-0853}.
 

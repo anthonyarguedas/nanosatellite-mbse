@@ -1,25 +1,42 @@
-\section{Define Logical Architecture}
+\section{Logical Architecture}
 \label{section:define-logical-architecture}
 
-OOSEM allocates required behavior to cooperating logical components before selecting implementation tools and deployment \citep[Sec.~17.3.4]{friedenthal2014practical}. Table~\ref{tab:logical-responsibilities} allocates the 23 FRs to three logical components. Figure~\ref{fig:framework-logical} presents two coordinated views. The first shows the three components and six directed exchange bundles. The second connects all four external interfaces to their responsible components. Exchanges between responsibilities within the same component remain internal to that component.
+According to OOSEM, framework is first modeled as a black box interacting with selected external actors, which can be human users or other systems, to fulfill the requirements.
+The required inputs from the external actors are listed, as are the outputs returned to the users, and then grouped into a set of external interfaces,
+
+OOSEM then allocates requirements to logical components connected by internal interfaces, which are abstract units of behavior independent of a particular implementation technology \citep[Sec.~17.3.4]{friedenthal2014practical}. Table~\ref{tab:logical-responsibilities} allocates the 23 FRs to three logical components. Figure~\ref{fig:framework-logical} presents two coordinated views. The first shows the three components and six internal interfaces. The second connects all four external interfaces to their responsible components.
+
+\subsection{External interfaces}
+\label{subsection:framework-context}
+
+Figure~\ref{fig:framework-context} shows the framework as a black box with four labeled boundary ports and their external participants. Each port groups one interface's exchanges.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig/framework-context.pdf}
+\caption[Framework boundary and external exchanges.]{Framework boundary and external exchanges. The framework is a black box with interface labels on its boundary ports. Each port groups one interface's exchanges. Solid and dotted arrows distinguish different exchanges visually.}
+\label{fig:framework-context}
+\end{figure}
+
+\section{Logical Components}
 
 {\small
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.05}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.21\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.52\linewidth-2\tabcolsep\relax}@{}}
-\caption{Three logical components, complete primary FR allocations and interface directions.}\label{tab:logical-responsibilities}\\
+\caption{Framework requirement and interfaces allocations to the logical components.}\label{tab:logical-responsibilities}\\
 \toprule
-\textbf{Logical component} & \textbf{FR numbers} & \textbf{Inputs $\rightarrow$ outputs} \\
+\textbf{Logical component} & \textbf{FR numbers} & \textbf{Interfaces} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Logical component} & \textbf{FR numbers} & \textbf{Inputs $\rightarrow$ outputs} \\
+\textbf{Logical component} & \textbf{FR numbers} & \textbf{Interfaces} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-L01 Engineering Interface & 01--04, 11, 15, 17, 22, 25, 37, 39 & Expectations, drafts, mission/design inputs, sources, supplied data and analysis results $\rightarrow$ requirement and mission/design records, syntax findings, recommendations, allocations, estimated parameters, evidence gaps, engineering views and review packages. \\
-L03 Simulation and Analysis & 10, 13--14, 16, 19--20, 26--27, 34 & EPS configurations, mission conditions, component data, criteria and analysis inputs $\rightarrow$ mass and occupied volume estimates, feasibility comparisons, budgets, sizing, EPS/MIL/RAM results, F Prime mappings and reconstructed analyses. \\
+L01 Engineering Interface & 01--04, 11, 15, 17, 22, 25, 37, 39 & Engineers and mission stakeholders submit expectations, mission definitions, requirement drafts, parameters and change requests. Responses contain validity checks of the supplied requirements and their parameters, evaluated values for computable parameters, and the updated state of the requirements after a change. \\
+L03 Simulation and Analysis & 10, 13--14, 16, 19--20, 26--27, 34 & Simulation tools receive spacecraft models, parameters and states. They return numerical analysis results. \\
 L06 Configuration Management & 05, 07, 09 & Change requests, engineering records, analysis results and authorized decisions $\rightarrow$ impact findings, revision histories, retrievable baselines and result records. \\
 \end{longtable}
 }
@@ -27,8 +44,6 @@ L06 Configuration Management & 05, 07, 09 & Change requests, engineering records
 L01 manages engineering inputs, requirements, mission definitions and EPS design representations. It checks requirement syntax, recommends methods and activities, proposes allocations and retrieves trace links. L01 estimates model parameters from quality-checked supplied data. It also reports evidence gaps and prepares engineering views and baseline review packages.
 
 L03 calculates mass and volume estimates, compares EPS alternatives and performs power/energy budgeting and sizing. L03 executes electrical, energy and electrothermal analyses, MIL scenarios and RAM assessments. It maps EPS component and port definitions to F Prime and reconstructs analyses. L06 identifies change impacts and retains baselines and analysis result records.
-
-The views use named information and control flows at the level of component responsibilities, following the logical decomposition and interface examples in OOSEM \citep[Figs.~17.17, 17.23--17.25]{friedenthal2014practical}. L01 supplies models, mission inputs and analysis requests to L03. L03 returns results, budgets and run histories. Both components send records to L06. L06 supplies current baselines, change impacts and controlled analysis inputs. Parameter estimation, design authoring and evidence presentation exchange information within L01.
 
 Engineering use, knowledge sources and technical review connect to L01 through IF-01, IF-02 and IF-06. Simulation tools connect to L03 through IF-03. L01 forwards change requests to L06 and analysis inputs to L03. Section~\ref{subsection:framework-context} specifies the external exchanges. Requests and human decision records carry information. Engineers authorize baseline decisions. Record retention and tool execution confer no engineering approval or satisfaction.
 
