@@ -34,7 +34,7 @@ test('the existing mission remains available without creating or changing sessio
   const { sessions } = await response.json();
   assert.equal(sessions.length, 1);
   assert.equal(sessions[0].id, 'current');
-  assert.equal((await get()).workspace.statements.filter(row => row.definition.startsWith('FrameworkRequirements::')).length, 27);
+  assert.equal((await get()).workspace.statements.filter(row => row.definition.startsWith('FrameworkRequirements::')).length, 76);
   assert.deepEqual(await readdir(directory), ['mission.json']);
   assert.equal(await readFile(modelPath, 'utf8'), original);
 });
@@ -53,7 +53,7 @@ test('Blank and Generic EPS create independent, persistent workspaces', async t 
   const genericResponse = await create({ name: 'Generic EPS study', template: 'generic-eps' });
   assert.equal(genericResponse.status, 201);
   const generic = await genericResponse.json();
-  assert.equal(generic.workspace.statements.filter(row => row.definition.startsWith('FrameworkRequirements::')).length, 27);
+  assert.equal(generic.workspace.statements.filter(row => row.definition.startsWith('FrameworkRequirements::')).length, 76);
   const orbit = generic.workspace.statements.find(row => row.definition === 'FrameworkRequirements::OrbitPeriod');
   assert.equal(orbit.parameters.altitude_km, null);
   assert.equal(orbit.parameters.earthRadius_km, '6378');
@@ -190,7 +190,7 @@ test('session browser workflow keeps templates, saved copies and in-flight autos
   assert.equal((await get(blankId)).workspace.statements[0].parameters.mass, '2');
   const genericId = await createFrom('generic-eps', 'Generic EPS baseline');
   assert.equal(await page.getByRole('tab', { name: 'EPS', exact: true }).getAttribute('aria-selected'), 'true');
-  assert.equal((await get(genericId)).workspace.statements.filter(row => row.definition.startsWith('FrameworkRequirements::')).length, 27);
+  assert.equal((await get(genericId)).workspace.statements.filter(row => row.definition.startsWith('FrameworkRequirements::')).length, 76);
   await page.getByRole('tab', { name: 'Mission', exact: true }).click();
   await page.locator('[data-requirement-edit="generic-ORB-OrbitPeriod"]').click();
   await pane.locator('[data-parameter="altitude_km"]').fill('600');

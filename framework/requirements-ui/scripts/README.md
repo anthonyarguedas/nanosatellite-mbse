@@ -12,8 +12,21 @@ The default directory is this one. Each registered analysis uses the Python stan
 - `normal_interval` calculates a two-sided normal distribution interval with a known standard deviation.
 - `scenario_illumination` estimates circular orbit illumination, conical eclipse and direct irradiance on one panel section.
 - `mppt_po` simulates an ideal perturb and observe tracker over one environmental step.
+- `eps_energy_segment` propagates chronological energy and independent charge balances, reserves, service shortages and surplus.
+- `eps_converter_step` evaluates a declared first-order converter command/startup response.
+- `eps_guidance` proposes model/activity eligibility and reports missing prerequisites from an explicit input inventory.
+- `eps_power_path` assesses declared conversion, path losses and steady/pulse supply limits.
+- `eps_protection` executes declared protection and recovery scenarios.
+- `eps_battery_step` evaluates a supplied battery equivalent-circuit step.
+- `eps_thermal` evaluates one-node thermal response and state temperature limits.
+- `eps_sizing` proposes bounded integer cell-assembly arrangements and resource measures.
+- `eps_geometry` checks declared installation and keep-out envelopes.
+- `eps_fit` estimates parameters of declared models from checked supplied samples.
+- `eps_ram` executes a bounded authored fault tree with quantitative failure measures.
 
 New instances added from the script picker start with unset inputs. The combined test bench supplies synthetic values for both engineering analyses. See [analyses/README.md](../analyses/README.md) for engineering assumptions, required inputs, proposed requirements, result bindings and the optional named-session creator. These scripts provide preliminary model evidence within their declared scope.
+
+The [report coverage audit](../analyses/REPORT-COVERAGE.md) documents the generic study requirements populated in every EPS session and the optional analysis benches. The generic requirement list provides the activity guidance. These scripts are tools for obtaining its study values and evidence through the existing pane. They use the same protocol and explicit execution boundary below. All independent model choices, product inputs and acceptance limits start unset.
 
 ## Interface
 

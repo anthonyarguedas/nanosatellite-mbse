@@ -94,10 +94,21 @@ def aggregate(results, modes, methods=False):
     parameters = {}
     for name in results[0]["parameters"]:
         cells = [result["parameters"][name] for result in results]
-        same = all(cell["state"] == "value" and cell["value"] == cells[0]["value"] for cell in cells)
+        same = (all(cell["state"] == "value" and cell["value"] == cells[0]["value"] for cell in cells)
+                or all(cell == cells[0] for cell in cells))
         parameters[name] = cells[0] if same else {"state": "varying" if all(cell["state"] == "value" for cell in cells) else state_of(cells), "value": None, "message": describe(cells)}
+    mode_results = []
+    for mode, result in zip(modes, results):
+        item = {"mode": mode["key"], **result}
+        if methods:
+            # The editor already represents empty per-mode expressions as unset.
+            # Keep complete aggregate cells and transport only populated mode
+            # cells, avoiding a dense variables x requirements x modes response.
+            item["parameters"] = {name: cell for name, cell in result["parameters"].items() if cell["state"] != "unset"}
+            item["values"] = {name: cell["value"] for name, cell in item["parameters"].items()}
+        mode_results.append(item)
     combined = {"key": results[0]["key"], "parameters": parameters, "values": {name: cell["value"] for name, cell in parameters.items()},
-                "modes": [{"mode": mode["key"], **result} for mode, result in zip(modes, results)]}
+                "modes": mode_results}
     if methods:
         combined.update(state=state_of(results), message=describe(results), methods=[])
         for index, method in enumerate(results[0]["methods"]):

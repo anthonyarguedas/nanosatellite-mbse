@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { loadCatalog } from '../catalog.mjs';
 import {
-  declareRequirementVariables, emptyWorkspace, interpolateRequirement, mergeRequirementDraft, requirementMarkers,
+  declareRequirementVariables, emptyWorkspace, interpolateRequirement, MAX_VARIABLES, mergeRequirementDraft, requirementMarkers,
   requirementParameterNames, validateWorkspace,
 } from '../model.mjs';
 import { evaluateChecks } from './helpers.mjs';
@@ -77,10 +77,10 @@ test('unknown, invalid and incomplete markers cannot silently become saved requi
     assert.throws(() => validateWorkspace(workspace), /declare each|variable name|Close each/);
   }
   const workspace = fixture();
-  workspace.variables = Array.from({ length: 64 }, (_, index) => ({ name: `v${index}`, type: 'float' }));
+  workspace.variables = Array.from({ length: MAX_VARIABLES }, (_, index) => ({ name: `v${index}`, type: 'float' }));
   workspace.statements[0].text = '$$extra$$';
-  assert.throws(() => declareRequirementVariables(workspace, workspace.statements[0]), /64 variable names/);
-  assert.equal(workspace.variables.length, 64);
+  assert.throws(() => declareRequirementVariables(workspace, workspace.statements[0]), /256 variable names/);
+  assert.equal(workspace.variables.length, MAX_VARIABLES);
 });
 
 test('marker previews format evaluated values, preserve zero and show unknown variable names', () => {

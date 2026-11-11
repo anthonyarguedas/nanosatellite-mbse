@@ -447,3 +447,7 @@ REQUIREMENTS = (
         derives_from=("EPS21",),
     ),
 )
+
+# New study obligations use the same generic requirement model and editor.
+from report_requirements import REQUIREMENTS as REPORT_REQUIREMENTS
+REQUIREMENTS += REPORT_REQUIREMENTS

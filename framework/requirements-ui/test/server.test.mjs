@@ -220,7 +220,7 @@ test('JSON downloads retain generic definitions, provenance and unsaved inputs w
   assert.match(response.headers.get('content-disposition'), /mission-export\.json/);
   const exported = await response.json(); assert.deepEqual(exported, workspace);
   const generic = exported.statements.filter(row => row.definition.startsWith('FrameworkRequirements::'));
-  assert.equal(generic.length, 27);
+  assert.equal(generic.length, 76);
   assert.ok(generic.every(row => row.origin && row.affected.length));
   assert.ok(exported.statements.some(isResourceRequirement));
   assert.equal(exported.statements.find(row => row.key === orbit.key).parameters.altitude_km, '650');

@@ -120,7 +120,7 @@ test('power limit seeding is idempotent and preserves assigned data', () => {
   assert.deepEqual(workspace.power, original.power);
   assert.deepEqual(workspace.statements.filter(row => !isPowerRequirement(row)).map(row => row.id), original.statements.map(row => row.id));
   assert.ok(workspace.statements.filter(isPowerRequirement).every(row => row.parameters.power_limit_W === null));
-  assert.equal(workspace.variables.length, 62); validateWorkspace(workspace, catalog);
+  assert.equal(workspace.variables.length, original.variables.length + parameters.size); validateWorkspace(workspace, catalog);
   const before = workspace.statements.length; addPowerLimits(workspace); assert.equal(workspace.statements.length, before);
   assert.deepEqual(readWorkspace(renderManaged(workspace), catalog), workspace);
 });

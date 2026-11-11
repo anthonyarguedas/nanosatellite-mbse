@@ -43,6 +43,7 @@ class RequirementDefinition:
     acceptance: str
     derives_from: Tuple[str, ...] = ()
     parameter_order: Tuple[str, ...] = ()
+    auto_populate: bool = False
 
     @property
     def model(self):
@@ -50,6 +51,8 @@ class RequirementDefinition:
         return f"FrameworkRequirements::{self.name}"
 
     def validate(self):
+        if type(self.auto_populate) is not bool:
+            raise ValueError(f'{self.name}: invalid generic population flag.')
         if not re.fullmatch(r"[A-Z]{3}\d{3}", self.id) or self.context not in ("mission", "eps"):
             raise ValueError(f"{self.name}: invalid requirement identity or context.")
         names = [parameter.name for parameter in self.parameters]
@@ -124,6 +127,8 @@ class RequirementDefinition:
             result["integers"] = integers
         if self.derives_from:
             result["derivesFrom"] = list(self.derives_from)
+        if self.auto_populate:
+            result["autoPopulate"] = True
         return result
 
 

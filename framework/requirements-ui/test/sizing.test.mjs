@@ -43,7 +43,7 @@ test('generic definitions retain only parameterized report requirements and sizi
     assert.match(template.origin, new RegExp(`EPS-${id}$|EPS-${id};`));
     assert.match(template.text, new RegExp(`^EPS-${id}\\.`));
   }
-  assert.equal(templates.length, 27);
+  assert.equal(templates.length, 76);
   assert.ok(templates.every(template => Object.keys(template.parameters).length > 0 && !Object.hasOwn(template, 'formulas')
     && Object.values(template.parameters).every(value => value === null || typeof value === 'string')));
   for (const name of ['OrbitPeriod', 'IlluminationPeriods', 'LoadEnergy', 'MinimumPanelPower', 'SolarCellPower', 'SolarCellCount', 'MissionCycles', 'CycleLife', 'MinimumBatteryEnergy', 'BatteryCapacityScreen']) {
@@ -137,7 +137,7 @@ test('a new mission seeds only sourced Earth constants as literal parameter valu
 
 test('a new mission starts with generic, assigned requirements and unset mission inputs', () => {
   const workspace = emptyWorkspace(catalog);
-  assert.equal(workspace.statements.length, 27);
+  assert.equal(workspace.statements.length, templates.length);
   assert.equal(workspace.stakeholders.length, 0);
   assert.equal(workspace.statements.filter(row => row.context === 'mission').length, 3);
   assert.ok(workspace.statements.every(row => row.affected.length && row.origin && row.definition));
@@ -252,7 +252,7 @@ test('JSON retains mission edits, COTS selections and requirement deletions', ()
   workspace.statements = workspace.statements.filter(row => row.definition !== 'FrameworkRequirements::EPS89');
   const restored = readWorkspace(renderManaged(workspace), catalog);
   assert.deepEqual(restored, workspace);
-  assert.equal(restored.statements.length, 26);
+  assert.equal(restored.statements.length, templates.length - 1);
 });
 
 test('ID changes preserve equation references, including simultaneous swaps', () => {
@@ -276,7 +276,7 @@ test('a second EPS gets independent inputs, formulas, assignments and local depe
   addElementChildren(workspace, power, catalog);
   assert.equal(workspace.statements.length, count);
   const energy = find(workspace, 'LoadEnergy', power.key), panel = find(workspace, 'MinimumPanelPower', power.key);
-  assert.equal(workspace.statements.filter(row => row.context === power.key).length, 24);
+  assert.equal(workspace.statements.filter(row => row.context === power.key).length, templates.filter(template => template.context === 'eps').length);
   for (const name of ['EPS47', 'EPS52', 'EPS88']) {
     const child = find(workspace, name, power.key);
     assert.ok(child.sources.every(key => workspace.statements.find(row => row.key === key).context === power.key));
@@ -307,7 +307,7 @@ test('another Orbit gets its own geometry and an ambiguous new EPS leaves orbit 
 test('JSON retains requirement definitions, formulas, provenance and traceability without cached values', () => {
   const workspace = populated(), source = renderExport(workspace, { catalog }), snapshot = JSON.parse(source);
   assert.doesNotMatch(source, /requirements-ui:data|<requirements-ui>|@OrbitPeriod/);
-  assert.equal(snapshot.statements.length, 27);
+  assert.equal(snapshot.statements.length, templates.length);
   assert.equal(find(snapshot, 'EPS21').parameters.required_data_bytes, '256');
   assert.equal(find(snapshot, 'EPS11').parameters.energy_end_J, '50000');
   assert.equal(find(snapshot, 'EPS19').parameters.mass_allocation_kg, '1');

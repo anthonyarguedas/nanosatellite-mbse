@@ -7,6 +7,10 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 
+# Matches workspace-limits.mjs. Other collection and expression bounds are separate.
+MAX_VARIABLES = 256
+
+
 class Pending(ValueError):
     def __init__(self, message, script_key=None):
         super().__init__(message)
@@ -65,7 +69,7 @@ class Requirement:
         if not isinstance(data, dict) or not isinstance(data.get("key"), str) or not isinstance(data.get("id"), str):
             raise ValueError("Every requirement needs a key and ID.")
         parameters = data.get("parameters", {})
-        if not isinstance(parameters, dict) or len(parameters) > 64:
+        if not isinstance(parameters, dict) or len(parameters) > MAX_VARIABLES:
             raise ValueError("Invalid requirement parameters.")
         methods = data.get("verifications")
         if methods is None:
@@ -147,7 +151,7 @@ class Workspace:
     def read(cls, data, runs=None, cots_signature=None):
         if not isinstance(data, dict):
             raise ValueError("A calculation request needs a workspace object.")
-        variables = [Parameter.read(item) for item in collection(data.get("variables"), 64, "Variables")]
+        variables = [Parameter.read(item) for item in collection(data.get("variables"), MAX_VARIABLES, "Variables")]
         requirements = [Requirement.read(item) for item in collection(data.get("statements"), 10000, "Requirements")]
         scripts = [Script.read(item) for item in collection(data.get("scripts", []), 64, "Scripts")]
         elements = collection(data.get("elements", []), 10000, "Elements")

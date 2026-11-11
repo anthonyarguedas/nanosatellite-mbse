@@ -1813,6 +1813,14 @@ ti_bq24610rger	self	termination_current	0.3	nominal	A	conversion_bq24610_referen
 ti_bq24610rger	self	termination_current_floor	0.125	typical	A	conversion_bq24610_rsense_10mohm	conversion_bq24610_datasheet	page=18;row=minimum_termination_clamp
 ti_bq24610rger	self	undervoltage_hysteresis	0.35	typical	V		conversion_bq24610_datasheet	page=8;row=VUVLO_HYS
 ti_bq24610rger	self	undervoltage_release	3.85	typical	V		conversion_bq24610_datasheet	page=8;row=VUVLO_rising
+ti_bq24650rvar	self	charge_overcurrent_sense_voltage	0.08	typical	V	enrichment_bq24650_ocp_sync	enrichment_bq24650_20261110	page=8;section=electrical_characteristics;row=VOC
+ti_bq24650rvar	self	thermal_shutdown_temperature	418.15	typical	K		enrichment_bq24650_20261110	page=8;section=electrical_characteristics;row=TSHUT
+ti_bq24650rvar	self	thermal_shutdown_hysteresis	15	typical	K		enrichment_bq24650_20261110	page=8;section=electrical_characteristics;row=TSHUT_HYS
+ti_bq24650rvar	self	undervoltage_release	3.65	minimum	V		enrichment_bq24650_20261110	page=7;section=electrical_characteristics;row=VUVLO
+ti_bq24650rvar	self	undervoltage_release	4	maximum	V		enrichment_bq24650_20261110	page=7;section=electrical_characteristics;row=VUVLO
+ti_bq24650rvar	vcc	overvoltage_threshold	31	minimum	V		enrichment_bq24650_20261110	page=7;section=electrical_characteristics;row=VACOV
+ti_bq24650rvar	vcc	overvoltage_threshold	32	typical	V		enrichment_bq24650_20261110	page=7;section=electrical_characteristics;row=VACOV
+ti_bq24650rvar	vcc	overvoltage_threshold	33	maximum	V		enrichment_bq24650_20261110	page=7;section=electrical_characteristics;row=VACOV
 ti_bq24650rvar	battery	standby_current	0.000015	maximum	A	conversion_sleep_below_battery	conversion_bq24650_datasheet	page=6;row=IBAT_sleep
 ti_bq24650rvar	self	cell_count_max	6	maximum	1		conversion_bq24650_product_page	tag=meta_description
 ti_bq24650rvar	self	cell_count_min	1	minimum	1		conversion_bq24650_product_page	tag=meta_description
@@ -1899,6 +1907,8 @@ ti_bq25798rqmr	battery	quiescent_current	0.000024	maximum	A	conversion_bq25798_b
 ti_bq25798rqmr	battery	quiescent_current	0.00054	typical	A	conversion_bq25798_battery_only_adc_on	conversion_bq25798_datasheet	page=8;row=IQ_BAT_ON_ADC
 ti_bq25798rqmr	battery	shutdown_current	0.0000005	typical	A	conversion_bq25798_battery_shutdown	conversion_bq25798_datasheet	page=8;row=ISD_BAT
 ti_bq25798rqmr	battery	shutdown_current	0.0000007	maximum	A	conversion_bq25798_battery_shutdown	conversion_bq25798_datasheet	page=8;row=ISD_BAT
+ti_bq25798rqmr	self	system_power_reset_off_time	0.35	typical	s	enrichment_bq25798_external_ship_fet_reset	enrichment_bq25798_20261110	page=51;section=7.3.12.3;row=tRST_SFET
+ti_bq25798rqmr	self	watchdog_timeout_max	160	nominal	s		enrichment_bq25798_20261110	page=72;table=7-26;field=WATCHDOG_2:0;meaning=largest_programmable_nominal_setting
 ti_bq25798rqmr	self	cell_count_max	4	maximum	1		conversion_bq25798_datasheet	page=1;row=cell_count
 ti_bq25798rqmr	self	cell_count_min	1	minimum	1		conversion_bq25798_datasheet	page=1;row=cell_count
 ti_bq25798rqmr	self	charge_current_max	5	maximum	A	conversion_bq25798_current_setpoint_ceiling	conversion_bq25798_datasheet	page=11;row=ICHG_RANGE
@@ -3836,3 +3846,15 @@ ti_tps63802dlar	self	switching_frequency	1600000	typical	Hz	conversion_tps63802_
 ti_tps63802dlar	self	switching_frequency	2100000	typical	Hz	conversion_tps63802_freq_2p3	conversion_tps63802_datasheet	page=7;row=fSW
 ti_tps63802dlar	self	undervoltage_release	1.7	typical	V		conversion_tps63802_datasheet	page=6;row=UVLO_rising
 ti_tps63802dlar	self	undervoltage_threshold	1.25	typical	V		conversion_tps63802_datasheet	page=6;row=VUVLO_falling
+ti_tps63802dlar	self	undervoltage_threshold	1.2	minimum	V	enrichment_tps63802_uvlo_falling	enrichment_tps63802_20261110	page=6;section=8.5;row=UVLO;condition=VIN_falling_VOUT_ge_1p8_once_started
+ti_tps63802dlar	self	undervoltage_threshold	1.29	maximum	V	enrichment_tps63802_uvlo_falling	enrichment_tps63802_20261110	page=6;section=8.5;row=UVLO;condition=VIN_falling_VOUT_ge_1p8_once_started
+ti_tps63802dlar	self	undervoltage_release	1.6	minimum	V		enrichment_tps63802_20261110	page=6;section=8.5;row=UVLO;condition=VIN_rising
+ti_tps63802dlar	self	undervoltage_release	1.79	maximum	V		enrichment_tps63802_20261110	page=6;section=8.5;row=UVLO;condition=VIN_rising
+ti_tps63802dlar	self	thermal_shutdown_temperature	423.15	typical	K		enrichment_tps63802_20261110	page=6;section=8.5;row=TSD
+ti_tps63802dlar	self	thermal_shutdown_hysteresis	20	typical	K		enrichment_tps63802_20261110	page=6;section=8.5;row=TSD_HYST
+ti_tps63802dlar	input_supply	overvoltage_threshold	5.5	minimum	V		enrichment_tps63802_20261110	page=6;section=8.5;row=overvoltage_protection_threshold;condition=VIN_rising
+ti_tps63802dlar	input_supply	overvoltage_threshold	5.7	typical	V		enrichment_tps63802_20261110	page=6;section=8.5;row=overvoltage_protection_threshold;condition=VIN_rising
+ti_tps63802dlar	input_supply	overvoltage_threshold	5.9	maximum	V		enrichment_tps63802_20261110	page=6;section=8.5;row=overvoltage_protection_threshold;condition=VIN_rising
+ti_tps63802dlar	output_supply	overvoltage_threshold	5.5	minimum	V		enrichment_tps63802_20261110	page=6;section=8.5;row=overvoltage_protection_threshold;condition=VOUT_rising
+ti_tps63802dlar	output_supply	overvoltage_threshold	5.7	typical	V		enrichment_tps63802_20261110	page=6;section=8.5;row=overvoltage_protection_threshold;condition=VOUT_rising
+ti_tps63802dlar	output_supply	overvoltage_threshold	5.9	maximum	V		enrichment_tps63802_20261110	page=6;section=8.5;row=overvoltage_protection_threshold;condition=VOUT_rising

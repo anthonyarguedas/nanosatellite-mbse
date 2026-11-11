@@ -1,5 +1,6 @@
 // Shared editing and structural validation for the Python power model.
 import { expressionReferences } from './expression-metadata.mjs';
+import { MAX_VARIABLES } from './workspace-limits.mjs';
 
 export const emptyPower = () => ({ modes: [], loads: [], links: [] });
 export const powerInputNames = ['sunlight_power_W', 'eclipse_power_W', 'sunlight_duty', 'eclipse_duty'];
@@ -74,7 +75,7 @@ export function seedPowerLimits(workspace, { scopes = null } = {}, identity) {
     const existing = workspace.variables.find(variable => variable.name === name);
     if (existing && (existing.type !== 'float' || (existing.unit && existing.unit !== 'W'))) throw new Error(`${name} requires a Float parameter in W.`);
     if (!existing) {
-      if (workspace.variables.length >= 64) throw new Error('Power limits need three numeric parameters within the 64 parameter limit.');
+      if (workspace.variables.length >= MAX_VARIABLES) throw new Error(`Power limits need three numeric parameters within the ${MAX_VARIABLES} parameter limit.`);
       workspace.variables.push({ name, type: 'float', unit: 'W' });
       for (const row of workspace.statements) row.parameters[name] = null;
     } else existing.unit = 'W';

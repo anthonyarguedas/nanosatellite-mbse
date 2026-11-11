@@ -123,6 +123,7 @@ feature	power_control_independent_of_mcu	EPSModel::ElectricalElement	Boolean
 feature	power_stage_topology	EPSModel::ElectricalElement	String	
 feature	protection_controller	EPSModel::ElectricalElement	String	
 feature	recommended_current_bound_exclusive	EPSModel::ElectricalElement	Boolean	
+feature	reset_policy	EPSModel::ElectricalElement	String	""
 feature	reverse_current_blocking	EPSModel::ElectricalElement	Boolean	
 feature	shared_current_budget_group	EPSModel::ElectricalElement	String	
 feature	soft_start	EPSModel::ElectricalElement	Boolean	
@@ -143,6 +144,7 @@ feature	interface_smbus	EPSModel::HardwareComponent	Boolean
 feature	interface_spi	EPSModel::HardwareComponent	Boolean	
 feature	interface_uart	EPSModel::HardwareComponent	Boolean	
 feature	package_id	EPSModel::HardwareComponent	String	
+feature	required_external_circuitry	EPSModel::HardwareComponent	String	""
 feature	pin_map_complete	EPSModel::HardwareComponent	Boolean	
 feature	technology	EPSModel::HardwareComponent	String	
 feature	external_temperature_control_required	EPSModel::Heater	Boolean	
@@ -221,6 +223,7 @@ feature	charge_cc_cv	EPSModel::RegulatorConverter	Boolean
 feature	charge_current_programming	EPSModel::RegulatorConverter	String	
 feature	charge_temperature_inhibit	EPSModel::RegulatorConverter	Boolean	
 feature	charge_temperature_inhibit_responsibility	EPSModel::RegulatorConverter	String	
+feature	charge_temperature_policy	EPSModel::RegulatorConverter	String	""
 feature	charge_termination_configurable	EPSModel::RegulatorConverter	Boolean	
 feature	configurable_charge_current	EPSModel::RegulatorConverter	Boolean	
 feature	configurable_output_voltage	EPSModel::RegulatorConverter	Boolean	
@@ -340,6 +343,7 @@ parameter	reset_pulse_duration_min	EPSModel::ElectricalElement	Real	s
 parameter	series_cell_count	EPSModel::ElectricalElement	Integer	1
 parameter	standby_current_per_cell	EPSModel::ElectricalElement	Real	A
 parameter	startup_time	EPSModel::ElectricalElement	Real	s
+parameter	system_power_reset_off_time	EPSModel::ElectricalElement	Real	s
 parameter	telemetry_update_frequency	EPSModel::ElectricalElement	Real	Hz
 parameter	thermal_recovery_hysteresis	EPSModel::ElectricalElement	Real	K
 parameter	trickle_charge_current	EPSModel::ElectricalElement	Real	A

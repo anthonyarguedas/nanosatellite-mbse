@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
 import { addScenarioAnalysis, createAnalysisTestWorkspace, createMPPTWorkspace } from '../analyses/workspaces.mjs';
 import { loadCatalog } from '../catalog.mjs';
-import { addPowerLimits, blankWorkspace, emptyWorkspace, requirementMarkers, rewriteRowReferences, validateWorkspace } from '../model.mjs';
+import { addPowerLimits, blankWorkspace, emptyWorkspace, MAX_VARIABLES, requirementMarkers, rewriteRowReferences, validateWorkspace } from '../model.mjs';
 import { loadScriptCatalog, runScripts } from '../python.mjs';
 import { createSessions } from '../sessions.mjs';
 import { runKey, verificationMethods } from '../verification-methods.mjs';
@@ -238,14 +238,14 @@ test('scenario configurations fit a full Generic EPS workspace, survive ID chang
   const original = emptyWorkspace(catalog);
   original.power.modes = [{ key: 'nominal', name: 'Nominal', sunlight: 100, eclipse: 100 }];
   addPowerLimits(original);
-  assert.equal(original.variables.length, 62);
+  assert.equal(original.variables.length, emptyWorkspace(catalog).variables.length + 3);
   const orbit = original.statements.find(row => row.id === 'ORB001');
   orbit.parameters.altitude_km = '500';
   rewriteRowReferences(original, new Map([['ORB001', 'MIS099']])); orbit.id = 'MIS099';
   const before = structuredClone(original);
   const workspace = addScenarioAnalysis(original, catalog, definitions);
   assert.deepEqual(original, before);
-  assert.equal(workspace.variables.length, 64);
+  assert.equal(workspace.variables.length, original.variables.length + 2);
   const script = workspace.scripts[0];
   assert.equal(script.parameters.altitude_km, 'MIS099.altitude_km');
   for (const [name, value] of Object.entries(scenario)) {
@@ -280,9 +280,9 @@ test('scenario attachment handles blank sessions, namespace collisions, ambiguou
   const chosen = addScenarioAnalysis(original, catalog, definitions, { orbitKey: 'second-orbit' });
   assert.equal(chosen.scripts[0].parameters.altitude_km, 'ORB099.altitude_km');
   const full = blankWorkspace();
-  full.variables = Array.from({ length: 64 }, (_, index) => ({ name: `value_${index}`, type: 'float' }));
+  full.variables = Array.from({ length: MAX_VARIABLES }, (_, index) => ({ name: `value_${index}`, type: 'float' }));
   const before = structuredClone(full);
-  assert.throws(() => addScenarioAnalysis(full, catalog, definitions), /64 shared parameter/);
+  assert.throws(() => addScenarioAnalysis(full, catalog, definitions), /256 shared parameter/);
   assert.deepEqual(full, before);
   const collision = blankWorkspace();
   collision.variables.push({ name: 'eclipse_limit_s', type: 'integer' });

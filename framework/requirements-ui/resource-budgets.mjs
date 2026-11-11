@@ -1,5 +1,6 @@
 // Static spacecraft budgets use ordinary requirement parameters and Python sums.
 import { powerScopes } from './power.mjs';
+import { MAX_VARIABLES } from './workspace-limits.mjs';
 
 export const budgetResources = [
   { name: 'mass', unit: 'kg', value: 'mass_kg', limit: 'mass_allocation_kg', allocated: 'allocated_mass_kg', model: 'Mass', prefixes: ['MAS', 'MSS', 'MSC'] },
@@ -45,7 +46,7 @@ export function seedResourceBudgets(workspace, { scopes = null } = {}, identity)
   }
   const parameters = budgetResources.flatMap(resource => [resource.limit, resource.value, resource.allocated].map(name => ({ name, unit: resource.unit })));
   const additions = parameters.filter(parameter => !workspace.variables.some(variable => variable.name === parameter.name));
-  if (workspace.variables.length + additions.length > 64) throw new Error('Mass and volume budgets need six shared parameters within the 64 parameter limit. Remove unused variable names before adding budgets.');
+  if (workspace.variables.length + additions.length > MAX_VARIABLES) throw new Error(`Mass and volume budgets need six shared parameters within the ${MAX_VARIABLES} parameter limit. Remove unused variable names before adding budgets.`);
   for (const parameter of parameters) {
     const existing = workspace.variables.find(variable => variable.name === parameter.name);
     if (existing && (existing.type !== 'float' || (existing.unit && existing.unit !== parameter.unit && !(parameter.unit === 'm^3' && existing.unit === 'm**3')))) {

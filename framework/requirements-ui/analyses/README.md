@@ -1,12 +1,12 @@
 # Illumination and MPPT analyses
 
-These analyses use the existing **Python scripts**, parameter and verification method tables. They add no UI, workspace schema, automatic execution or generic EPS requirements. Python 3.8 or later and its standard library are sufficient.
+These analyses use the existing **Python scripts**, parameter and verification method tables. They use the same UI and require explicit execution. The generic study requirements described in [REPORT-COVERAGE.md](REPORT-COVERAGE.md) populate independently in every EPS session. Python 3.8 or later and its standard library are sufficient.
 
-The supplied session is **Illumination + MPPT test bench**. It combines both scripts with synthetic inputs and acceptance limits. Open MPT008 in EPS and run SCR001 (MPPT). Its dependencies execute SCR002 (illumination) first. All 15 requirements pass with the supplied values. The original mission and other sessions remain unchanged.
+The supplied session is **Illumination + MPPT test bench**. It combines both scripts with synthetic inputs and acceptance limits. Open MPT008 in EPS and run SCR001 (MPPT). Its dependencies execute SCR002 (illumination) first. All 15 original test-bench checks pass with the supplied values. Newly populated generic study requirements remain unverified until their own quantities and evidence are supplied. The original mission and other sessions remain unchanged.
 
 ## Input and result audit
 
-The current 27 generic requirements establish preliminary sizing. They provide only part of either analysis's input interface.
+The original 27 generic requirements establish preliminary sizing. The normal catalog now also includes 49 generic study requirements with unset quantities. They provide only part of either analysis's input interface.
 
 | Analysis | Reusable current inputs | Missing inputs |
 | --- | --- | --- |
@@ -15,7 +15,7 @@ The current 27 generic requirements establish preliminary sizing. They provide o
 
 The current `sunlight_efficiency` and `eclipse_efficiency` describe aggregate energy paths. They do not define a tracker algorithm or its efficiency. Cell MPP voltage and current alone determine no I-V characteristic. `installed_cells` supplies no series/parallel arrangement.
 
-The Generic EPS workspace uses 59 shared parameter names. Component power requirements raise this to 62 of the supported 64. Script inputs and outputs have separate namespaces and consume no shared parameter columns. The optional illumination configuration adds two shared acceptance parameters. The blank MPPT configuration uses 28 shared names and gives every MPPT script input a requirement binding. The combined test bench uses 37 shared names. No limit is raised and no populated columns are removed.
+The Generic EPS workspace uses 161 shared parameter names, or 166 with power and resource allocation names. The internal limit is 256. Script inputs and outputs have separate namespaces and consume no shared parameter columns. The optional illumination configuration adds two acceptance parameters. Saved analysis benches also receive the generic study requirements. Existing populated cells remain intact.
 
 ### Result destinations
 
@@ -50,7 +50,7 @@ The compact configuration adds these two requirements to Mission:
 - **SCN001:** The longest total eclipse within the assessed interval shall be at most `$$eclipse_limit_s$$`.
 - **SCN002:** The assessed panel section shall receive interval mean direct irradiance of at least `$$irradiance_min_W_m2$$`.
 
-The missing scenario data remain editable typed inputs in the script table. Their input expressions can reference any requirement. This keeps the configuration usable in a full 62-column EPS session.
+The missing scenario data remain editable typed inputs in the script table. Their input expressions can reference any requirement. This keeps scenario inputs in their own script namespace within a full generic EPS session.
 
 For a mission that needs separate requirement ownership of every scenario input, the following additional parameterized assessment requirements are proposed. They require enough free shared parameter columns, or a separate scenario session. They are not silently inserted into existing sessions.
 

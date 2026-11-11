@@ -1,6 +1,6 @@
 // Optional analysis configurations. They leave the generic catalog and UX intact.
 import { randomUUID } from 'node:crypto';
-import { blankWorkspace, nextId, requirementMarkers, seedRequirements, validateWorkspace } from '../model.mjs';
+import { blankWorkspace, MAX_VARIABLES, nextId, requirementMarkers, seedRequirements, validateWorkspace } from '../model.mjs';
 import { scriptInstance, setVerificationMethods } from '../verification-methods.mjs';
 
 function addScript(workspace, definitions, id) {
@@ -18,7 +18,7 @@ function addRequirement(workspace, { text, parameters, context, affected = [], s
       throw new Error(`${name}: the analysis needs a Float parameter with units ${unit || '(none)'}. Rename the conflicting variable first.`);
     }
     if (!existing) {
-      if (workspace.variables.length >= 64) throw new Error('This analysis exceeds the 64 shared parameter limit. Use a separate session or remove unused variable columns.');
+      if (workspace.variables.length >= MAX_VARIABLES) throw new Error(`This analysis exceeds the ${MAX_VARIABLES} shared parameter limit. Remove unused variable columns.`);
       workspace.variables.push({ name, type: 'float', ...(unit ? { unit } : {}) });
       for (const row of workspace.statements) row.parameters[name] = null;
     }

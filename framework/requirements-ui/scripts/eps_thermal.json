@@ -1,0 +1,42 @@
+{
+  "id": "eps_thermal",
+  "name": "EPS one-node thermal interval",
+  "description": "Exact constant dissipation/heater, constant ambient one-node C/G thermal interval, including adiabatic G=0. Endpoint extrema, energy balance and optional state/charging temperature limits. A declared node only: no inferred junction or spatial temperature. Heater power must also be supplied as a chronological electrical load. See analyses/PATHS.md.",
+  "timeoutMs": 3000,
+  "inputs": [
+    { "name": "initial_temp_K", "type": "float", "unit": "K" },
+    { "name": "ambient_temp_K", "type": "float", "unit": "K" },
+    { "name": "dissipation_W", "type": "float", "unit": "W" },
+    { "name": "heater_W", "type": "float", "unit": "W" },
+    { "name": "heat_capacity_J_K", "type": "float", "unit": "J/K" },
+    { "name": "conductance_W_K", "type": "float", "unit": "W/K" },
+    { "name": "duration_s", "type": "float", "unit": "s" },
+    { "name": "temp_limits_known", "type": "boolean" },
+    { "name": "temp_min_K", "type": "float", "unit": "K" },
+    { "name": "temp_max_K", "type": "float", "unit": "K" },
+    { "name": "charge_active", "type": "boolean" },
+    { "name": "charge_limits_known", "type": "boolean" },
+    { "name": "charge_min_K", "type": "float", "unit": "K" },
+    { "name": "charge_max_K", "type": "float", "unit": "K" }
+  ],
+  "outputs": [
+    { "name": "end_temp_K", "type": "float", "unit": "K" },
+    { "name": "min_temp_K", "type": "float", "unit": "K" },
+    { "name": "max_temp_K", "type": "float", "unit": "K" },
+    { "name": "mean_temp_K", "type": "float", "unit": "K" },
+    { "name": "thermal_time_constant_s", "type": "float", "unit": "s" },
+    { "name": "dissipation_energy_J", "type": "float", "unit": "J" },
+    { "name": "heater_energy_J", "type": "float", "unit": "J" },
+    { "name": "total_generated_J", "type": "float", "unit": "J" },
+    { "name": "stored_heat_change_J", "type": "float", "unit": "J" },
+    { "name": "ambient_heat_out_J", "type": "float", "unit": "J" },
+    { "name": "energy_residual_J", "type": "float", "unit": "J" },
+    { "name": "temp_low_margin_K", "type": "float", "unit": "K" },
+    { "name": "temp_high_margin_K", "type": "float", "unit": "K" },
+    { "name": "charge_low_margin_K", "type": "float", "unit": "K" },
+    { "name": "charge_high_margin_K", "type": "float", "unit": "K" },
+    { "name": "temp_ok", "type": "boolean" },
+    { "name": "charge_ok", "type": "boolean" },
+    { "name": "thermal_ok", "type": "boolean" }
+  ]
+}

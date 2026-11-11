@@ -1,4 +1,6 @@
 import { expressionIdentifiers, modeReferences, rewriteModeReferences, rewriteReferences } from './expression-metadata.mjs';
+import { MAX_VARIABLES } from './workspace-limits.mjs';
+export { MAX_VARIABLES } from './workspace-limits.mjs';
 import { emptyPower, isPowerRequirement, powerRequirementTemplates, seedPowerLimits, validatePower } from './power.mjs';
 import { verificationMethods } from './verification-methods.mjs';
 import { isResourceRequirement, resourceRequirementTemplates, seedResourceBudgets, validateResourceBudgets } from './resource-budgets.mjs';
@@ -98,7 +100,10 @@ export function seedRequirements(workspace, catalog, owners = workspace.elements
         const type = template.integers?.includes(name) ? 'integer' : 'float';
         const existing = workspace.variables.find(variable => variable.name === name);
         if (existing && existing.type !== type) throw new Error(`Generic parameter ${name} requires a ${type} column. Rename the existing column before upgrading.`);
-        if (!existing) workspace.variables.push({ name, type, ...(template.units?.[name] ? { unit: template.units[name] } : {}) });
+        if (!existing) {
+          if (workspace.variables.length >= MAX_VARIABLES) throw new Error(`Generic requirements exceed the ${MAX_VARIABLES} shared parameter limit. Remove unused variable names before adding requirements.`);
+          workspace.variables.push({ name, type, ...(template.units?.[name] ? { unit: template.units[name] } : {}) });
+        }
       }
       const row = { key: elementKey(workspace, `generic-${owner.id}-${template.name}`),
         id: allRows(workspace).some(row => row.id === template.id) ? nextId(workspace, 'Requirement', template.id.slice(0, 3)) : template.id,
@@ -109,6 +114,11 @@ export function seedRequirements(workspace, catalog, owners = workspace.elements
         parameters: { ...template.parameters } };
       workspace.statements.push(row);
       created.push({ row, derivesFrom: template.derivesFrom ?? [] });
+    }
+    const managed = (catalog.find(type => type.model === owner.definition)?.requirements ?? []).filter(template => template.autoPopulate);
+    if (managed.length) {
+      const previous = Object.hasOwn(workspace.requirementSeeds ?? {}, owner.key) ? workspace.requirementSeeds[owner.key] : [];
+      workspace.requirementSeeds = { ...workspace.requirementSeeds, [owner.key]: [...new Set([...previous, ...managed.map(template => template.model)])] };
     }
   }
   for (const { row, derivesFrom } of created) {
@@ -134,6 +144,21 @@ export function seedRequirements(workspace, catalog, owners = workspace.elements
   }
   for (const row of workspace.statements) {
     for (const variable of workspace.variables) if (!Object.hasOwn(row.parameters, variable.name)) row.parameters[variable.name] = null;
+  }
+  return workspace;
+}
+
+// Add newly introduced generic study obligations once per owning EPS. Existing
+// rows keep their text, values, methods and keys. Remembered seeds preserve later
+// deliberate deletions while allowing future catalog additions to appear.
+export function addGenericRequirements(workspace, catalog = domainTypes) {
+  for (const owner of workspace.elements) {
+    const remembered = Object.hasOwn(workspace.requirementSeeds ?? {}, owner.key) ? workspace.requirementSeeds[owner.key] : [];
+    const templates = (catalog.find(type => type.model === owner.definition)?.requirements ?? [])
+      .filter(template => template.autoPopulate && !remembered.includes(template.model));
+    if (!templates.length) continue;
+    const selected = catalog.map(type => type.model === owner.definition ? { ...type, requirements: templates } : type);
+    seedRequirements(workspace, selected, [owner]);
   }
   return workspace;
 }
@@ -169,7 +194,7 @@ export function declareRequirementVariables(workspace, row) {
   const markers = requirementMarkers(row.text);
   const existing = new Set(workspace.variables.map(variable => variable.name));
   const additions = markers.names.filter(name => !existing.has(name));
-  if (workspace.variables.length + additions.length > 64) throw new Error('A workspace can contain up to 64 variable names.');
+  if (workspace.variables.length + additions.length > MAX_VARIABLES) throw new Error(`A workspace can contain up to ${MAX_VARIABLES} variable names.`);
   for (const name of additions) {
     workspace.variables.push({ name, type: 'float' });
     for (const statement of workspace.statements) statement.parameters[name] = null;
@@ -376,7 +401,15 @@ export function validateWorkspace(workspace, catalog = domainTypes, products = n
       || !Array.isArray(workspace.scripts)) fail('Invalid workspace format.');
   if (Object.hasOwn(workspace, 'scriptResults')) fail('Python execution results are transient and cannot be stored in the workspace.');
   if (workspace.expressionLanguage !== 'python') fail('The workspace expression language must be Python.');
-  if (workspace.variables.length > 64) fail('A workspace can contain up to 64 variable columns.');
+  if (workspace.variables.length > MAX_VARIABLES) fail(`A workspace can contain up to ${MAX_VARIABLES} variable columns.`);
+  if (workspace.requirementSeeds !== undefined) {
+    const seeds = workspace.requirementSeeds;
+    if (!seeds || typeof seeds !== 'object' || Array.isArray(seeds) || Object.keys(seeds).length > 10000) fail('Invalid generic requirement seed history.');
+    for (const [owner, definitions] of Object.entries(seeds)) {
+      if (!/^[a-zA-Z0-9_-]{1,80}$/.test(owner) || !Array.isArray(definitions) || definitions.length > 1000
+          || new Set(definitions).size !== definitions.length || definitions.some(name => typeof name !== 'string' || !name || name.length > 200)) fail('Invalid generic requirement seed history.');
+    }
+  }
   const variableNames = new Set();
   for (const variable of workspace.variables) {
     if (!variable || !validVariableName(variable.name)) fail('Variable names must start with a letter or underscore and contain letters, digits or underscores. Reserved names and row IDs are excluded.');

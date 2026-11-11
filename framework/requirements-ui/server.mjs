@@ -28,6 +28,7 @@ const publicFiles = new Map([
   ['/requirement-preview.js', ['public/requirement-preview.js', 'text/javascript; charset=utf-8']],
   ['/style.css', ['public/style.css', 'text/css; charset=utf-8']],
   ['/model.mjs', ['model.mjs', 'text/javascript; charset=utf-8']],
+  ['/workspace-limits.mjs', ['workspace-limits.mjs', 'text/javascript; charset=utf-8']],
   ['/verification-worker.js', ['public/verification-worker.js', 'text/javascript; charset=utf-8']],
 ]);
 

@@ -17,10 +17,11 @@ const templates = catalog => catalog.flatMap(type => type.requirements ?? []);
 
 test('Python owns the same domain hierarchy, parameterized requirements, units, sources and allocations', async () => {
   const current = await loadCatalog();
-  assert.equal(current.length, 52); assert.equal(templates(current).length, 27);
+  assert.equal(current.length, 52); assert.equal(templates(current).length, 76);
+  assert.equal(templates(current).filter(template => template.autoPopulate).length, 49);
   assert.equal(new Set(current.map(type => type.model)).size, 52);
   for (const type of current) if (type.parent) assert.ok(current.some(parent => parent.model === type.parent));
-  assert.deepEqual(templates(current).map(template => template.id).sort(), ['ORB001','ORB002','ORB003','SIZ001','SIZ002','SIZ003','SIZ004','SIZ005','SIZ006','SIZ007','SIZ008','SIZ011','SIZ013','SIZ014','SIZ016','EPS002','EPS008','EPS009','EPS011','EPS019','EPS021','EPS047','EPS052','EPS053','EPS078','EPS088','EPS089'].sort());
+  assert.deepEqual(templates(current).filter(template => !template.autoPopulate).map(template => template.id).sort(), ['ORB001','ORB002','ORB003','SIZ001','SIZ002','SIZ003','SIZ004','SIZ005','SIZ006','SIZ007','SIZ008','SIZ011','SIZ013','SIZ014','SIZ016','EPS002','EPS008','EPS009','EPS011','EPS019','EPS021','EPS047','EPS052','EPS053','EPS078','EPS088','EPS089'].sort());
   for (const after of templates(current)) {
     assert.ok(after.origin && after.affected.length && Object.keys(after.parameters).length);
     assert.equal(requirementMarkers(after.text).errors.length, 0);
@@ -34,7 +35,7 @@ test('Python owns the same domain hierarchy, parameterized requirements, units, 
   assert.deepEqual(Object.keys(templates(current).find(template => template.name === 'EPS09').parameters), ['required_cycles','supported_cycles','dod_max','nominal_dod']);
   const instance = emptyWorkspace(current);
   assert.doesNotThrow(() => validateWorkspace(instance, current));
-  assert.equal(instance.statements.length, 27);
+  assert.equal(instance.statements.length, 76);
   const props = current.find(type => type.role === 'eps').properties;
   assert.deepEqual(props.map(property => property.name), ['power_consumption_W', 'power_consumption']);
   assert.ok(props.every(property => property.unit === 'W' && property.value === null));
@@ -90,6 +91,7 @@ test('Python catalog validation rejects invalid declarations, unresolved referen
     ['REQUIREMENTS = (replace(REQUIREMENTS[0], text="No numeric marker."), *REQUIREMENTS[1:])', /prose must reference/],
     ['REQUIREMENTS = (replace(REQUIREMENTS[0], condition="unknown_value > 0"), *REQUIREMENTS[1:])', /Unknown variable/],
     ['REQUIREMENTS = (replace(REQUIREMENTS[0], derives_from=("Missing",)), *REQUIREMENTS[1:])', /invalid derivation/],
+    ['REQUIREMENTS = (replace(REQUIREMENTS[0], auto_populate=1), *REQUIREMENTS[1:])', /population flag/],
     ['REQUIREMENTS = (replace(REQUIREMENTS[0], parameters=(replace(REQUIREMENTS[0].parameters[0], kind="boolean"), *REQUIREMENTS[0].parameters[1:])), *REQUIREMENTS[1:])', /must be numeric/],
     ['REQUIREMENTS = (replace(REQUIREMENTS[0], parameters=(replace(REQUIREMENTS[0].parameters[0], unit="m"), *REQUIREMENTS[0].parameters[1:])), *REQUIREMENTS[1:])', /inconsistent catalog units/],
     ['ELEMENTS = (replace(ELEMENTS[0], parent="Missing"), *ELEMENTS[1:])', /missing catalog parent/],
@@ -116,7 +118,7 @@ test('the app starts, edits, evaluates and saves Generic EPS without any framewo
   const base = `http://127.0.0.1:${server.address().port}`;
   const initial = await (await fetch(base + '/api/workspace')).json();
   assert.equal(initial.workspace.expressionLanguage, 'python');
-  assert.equal(initial.workspace.statements.filter(row => row.definition.startsWith('FrameworkRequirements::')).length, 27);
+  assert.equal(initial.workspace.statements.filter(row => row.definition.startsWith('FrameworkRequirements::')).length, 76);
   assert.equal(initial.catalog.length, 52); assert.equal(initial.modelName, 'mission.json');
   assert.ok(initial.products.length); assert.equal(initial.error, undefined);
   const orbit = initial.workspace.statements.find(row => row.definition === 'FrameworkRequirements::OrbitPeriod');
@@ -132,5 +134,5 @@ test('the app starts, edits, evaluates and saves Generic EPS without any framewo
   const data = await created.json(); assert.equal(created.status, 201);
   const folder = join(root, 'missions', 'sessions', data.session.id);
   assert.deepEqual((await readdir(folder)).sort(), [`${data.session.id}.json`, 'session.json'].sort());
-  assert.equal(data.workspace.statements.filter(row => row.definition.startsWith('FrameworkRequirements::')).length, 27);
+  assert.equal(data.workspace.statements.filter(row => row.definition.startsWith('FrameworkRequirements::')).length, 76);
 });

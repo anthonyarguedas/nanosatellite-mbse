@@ -180,6 +180,7 @@ function snapshot(state = workspace) {
   return {
     version: WORKSPACE_VERSION, ...(state.expressionLanguage ? { expressionLanguage: state.expressionLanguage } : {}), variables: structuredClone(state.variables), power: structuredClone(state.power), scripts: structuredClone(state.scripts),
     ...(state.resourceBudgets ? { resourceBudgets: true } : {}),
+    ...(state.requirementSeeds ? { requirementSeeds: structuredClone(state.requirementSeeds) } : {}),
     stakeholders: state.stakeholders.filter(row => used(row, 'stakeholders')).map(row => ({ key: row.key, id: row.id.trim(), name: row.name, type: row.type })),
     elements: state.elements.filter(row => used(row, 'stakeholders')).map(row => ({ key: row.key, id: row.id.trim(), name: row.name, owner: row.owner, definition: row.definition })),
     components: state.components.filter(row => used(row, 'components')).map(row => ({

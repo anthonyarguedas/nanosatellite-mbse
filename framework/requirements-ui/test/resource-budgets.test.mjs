@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { loadCatalog } from '../catalog.mjs';
 import * as cotsCatalog from '../cots.mjs';
-import { addElementChildren, addPowerLimits, addResourceBudgets, emptyWorkspace, requirementParameterNames, rewriteRowReferences, validateWorkspace } from '../model.mjs';
+import { addElementChildren, addPowerLimits, addResourceBudgets, emptyWorkspace, MAX_VARIABLES, requirementParameterNames, rewriteRowReferences, validateWorkspace } from '../model.mjs';
 import { powerFor } from '../power.mjs';
 import { budgetResources, isResourceRequirement, parentResourceLimit, resourceForRequirement, resourceLimitFor, resourceScopes, resourceSumExpression } from '../resource-budgets.mjs';
 import { createServer } from '../server.mjs';
@@ -39,7 +39,7 @@ test('mass and volume seed every spacecraft hardware scope without modes and ret
   const original = emptyWorkspace(catalog), { workspace } = fixture();
   const scopes = resourceScopes(workspace), budgets = workspace.statements.filter(isResourceRequirement);
   assert.equal(budgets.length, scopes.length * 2);
-  assert.equal(workspace.variables.length, 61);
+  assert.equal(workspace.variables.length, original.variables.length + 2);
   assert.deepEqual(workspace.power, original.power);
   for (const old of original.statements) {
     const row = workspace.statements.find(row => row.key === old.key);
@@ -64,7 +64,7 @@ test('mass and volume seed every spacecraft hardware scope without modes and ret
   assert.ok(scopes.every(scope => scope.key === 'mission' || !workspace.elements.find(row => row.key === scope.key).definition.startsWith('GroundSegment')));
   workspace.power.modes.push({ key: 'nominal', name: 'Nominal', sunlight: 100, eclipse: 100 });
   addPowerLimits(workspace);
-  assert.equal(workspace.variables.length, 64);
+  assert.equal(workspace.variables.length, original.variables.length + 5);
   assert.doesNotThrow(() => validateWorkspace(workspace, catalog));
 });
 
@@ -154,11 +154,11 @@ test('resource scope validation rejects duplicate limits, software budgets and d
   for (const mutate of [
     workspace => { workspace.variables.find(row => row.name === 'mass_kg').type = 'integer'; },
     workspace => { workspace.variables.find(row => row.name === 'volume_m3').unit = 'cm^3'; },
-    workspace => { while (workspace.variables.length < 64) workspace.variables.push({ name: `unused_${workspace.variables.length}`, type: 'float' }); },
+    workspace => { while (workspace.variables.length < MAX_VARIABLES) workspace.variables.push({ name: `unused_${workspace.variables.length}`, type: 'float' }); },
   ]) {
     const workspace = emptyWorkspace(catalog); mutate(workspace);
     const original = structuredClone(workspace);
-    assert.throws(() => addResourceBudgets(workspace), /requires a Float|64 parameter limit/);
+    assert.throws(() => addResourceBudgets(workspace), /requires a Float|256 parameter limit/);
     assert.deepEqual(workspace, original);
   }
 });

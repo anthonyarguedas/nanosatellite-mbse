@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { link, lstat, mkdir, open, readFile, rename, unlink } from 'node:fs/promises';
 import { basename, dirname, extname, resolve } from 'node:path';
-import { addResourceBudgets, domainTypes, emptyWorkspace, validateWorkspace } from './model.mjs';
+import { addGenericRequirements, addResourceBudgets, domainTypes, emptyWorkspace, validateWorkspace } from './model.mjs';
 import { expandPowerAllocations } from './power.mjs';
 
 const queues = new Map();
@@ -14,6 +14,7 @@ export function workspacePaths(path) {
 }
 export async function canonicalWorkspace(workspace, { catalog = domainTypes, products = null } = {}) {
   const validated = validateWorkspace(structuredClone(workspace), catalog, products);
+  addGenericRequirements(validated, catalog);
   if (!validated.resourceBudgets) {
     addResourceBudgets(validated);
     validated.resourceBudgets = true;
