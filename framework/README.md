@@ -18,7 +18,7 @@ print(bus.EPS.Battery.mass.value)
 
 See [the model API](models/README.md) for properties, COTS, functions, modes and verification traces.
 The ordinary [example session](sessions/example_mission.py) demonstrates transitive verification.
-The [EPS sizing session](sessions/example_eps_sizing.py) demonstrates circular/eccentric illumination and preliminary energy sizing.
+The [EPS sizing session](sessions/example_eps_sizing.py) demonstrates circular/eccentric illumination, preliminary energy sizing and checks of the entered array, battery and load-rail configuration.
 From the repository root, run them with `python3 -m framework.sessions.example_mission` or `python3 -m framework.sessions.example_eps_sizing`.
 There is no CLI.
 

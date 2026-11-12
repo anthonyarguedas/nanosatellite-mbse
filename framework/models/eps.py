@@ -10,18 +10,33 @@ class EPS(Subsystem):
     available_sunlight_energy = Property(unit="J")
     available_eclipse_energy = Property(unit="J")
 
-    def _sizing_requirement(self, name, available, required, unit, basis, statement, *, integer=False, **inputs):
-        measure = "self.parent.available" if integer else "0 if self.parent.required.value == 0 else self.parent.available"
-        condition = "math.isfinite(measure) and 0 <= target <= measure"
+    def _sizing_requirement(self, name, available, required, unit, basis, statement, *, integer=False, maximum=False, **inputs):
+        measure = "self.parent.available" if integer or maximum else "0 if self.parent.required.value == 0 else self.parent.available"
+        comparison = "0 <= measure <= target" if maximum else "0 <= target <= measure"
+        condition = f"math.isfinite(measure) and math.isfinite(target) and {comparison}"
         if integer:
             condition += " and type(measure) is int"
         return self.add_requirement(
             name,
             statement=statement,
-            rationale=f"final_report/design-proposal.tex#eq:{basis}. Preliminary sizing at the declared accounting boundary.",
-            available=available, required=Property(required, unit),
-            conditions=(VerificationCondition("minimum", Property(measure, unit), Property("self.parent.required", unit), condition),),
+            rationale=f"final_report/design-proposal.tex#eq:{basis}. Verification at the declared accounting boundary.",
+            available=available, required=required if isinstance(required, Property) else Property(required, unit),
+            conditions=(VerificationCondition("maximum" if maximum else "minimum", Property(measure, unit), Property("self.parent.required", unit), condition),),
             **inputs,
+        )
+
+    def _voltage_requirement(self, name, minimum, maximum, basis):
+        return self.add_requirement(
+            name,
+            statement="The source voltage shall remain between {self.minimum_allowed} and {self.maximum_allowed}.",
+            rationale=f"final_report/design-proposal.tex#eq:{basis}. Receiving limits are explicitly assigned to this path.",
+            minimum_voltage=minimum, maximum_voltage=maximum,
+            minimum_allowed=Property(unit="V"), maximum_allowed=Property(unit="V"),
+            conditions=(VerificationCondition(
+                "range", Property("(self.parent.minimum_voltage.value, self.parent.maximum_voltage.value)", "V"),
+                Property("(self.parent.minimum_allowed.value, self.parent.maximum_allowed.value)", "V"),
+                "all(math.isfinite(v) for v in (*measure, *target)) and 0 <= target[0] <= measure[0] <= measure[1] <= target[1]",
+            ),),
         )
 
     def create_requirements(self):
@@ -58,6 +73,10 @@ class EPS(Subsystem):
             cell_power=self.SolarArray.cell_eol_power,
             fractional_count=Property(
                 "0 if self.required_power.value == 0 else sizing.cell_count(required_power=self.required_power, eol_cell_power=self.cell_power).fractional", "cell"),
+            series_count=self.SolarArray.series_count,
+            minimum_parallel_count=Property(
+                "0 if self.required_power.value == 0 else sizing.parallel_strings(required_total=self.required_power, "
+                "per_cell=self.cell_power, series_count=self.series_count).required", "string"),
         )
         self._sizing_requirement(
             "battery_energy", self.Battery.bol_energy,
@@ -78,6 +97,79 @@ class EPS(Subsystem):
             fit_dod_min=self.Battery.fit_dod_min,
             fit_dod_max=self.Battery.fit_dod_max,
             degradation_margin=self.Battery.degradation_margin,
+            cell_energy=self.Battery.cell_bol_energy,
+            series_count=self.Battery.series_count,
+            minimum_parallel_count=Property(
+                "0 if self.required.value == 0 else sizing.parallel_strings(required_total=self.required, "
+                "per_cell=self.cell_energy, series_count=self.series_count).required", "string"),
+        )
+        for name, component, basis in (
+            ("solar_configuration", self.SolarArray, "pv-integer-configuration"),
+            ("battery_configuration", self.Battery, "battery-assembly-capacity"),
+        ):
+            self.add_requirement(
+                name,
+                statement="The assembly shall contain {total.target.value:d} cells in positive integer series and parallel counts.",
+                rationale=f"final_report/design-proposal.tex#eq:{basis}. Counts are supplied by the engineer.",
+                series_count=component.series_count, parallel_count=component.parallel_count,
+                conditions=(
+                    VerificationCondition("series", component.series_count, Property(1, "cell"), "type(measure) is int and measure >= target"),
+                    VerificationCondition("parallel", component.parallel_count, Property(1, "string"), "type(measure) is int and measure >= target"),
+                    VerificationCondition("total", component.cell_count,
+                                          Property("self.parent.series_count.value * self.parent.parallel_count.value", "cell"),
+                                          "type(measure) is int and type(target) is int and measure == target"),
+                ),
+            )
+
+        self._sizing_requirement(
+            "solar_area", self.SolarArray.active_area,
+            "0 if self.required_power.value == 0 else sizing.minimum_array_area("
+            "required_power=self.required_power, power_density=self.context.SolarArray.eol_power_density).square_metres",
+            "m2", "array-incidence-area",
+            "The array shall have at least {minimum.target} of active area at the assessed conditions.",
+            required_power=solar_power.required,
+            effective_area=Property(
+                "0 if self.required_power.value == 0 else sizing.minimum_array_area(required_power=self.required_power, "
+                "power_density=self.context.SolarArray.normal_power_density).square_metres", "m2"),
+            tumbling_panel_area=Property(
+                "sizing.tumbling_array_area(effective_area=self.effective_area, "
+                "packing_fraction=self.context.SolarArray.packing_fraction).square_metres", "m2"),
+        )
+        self._sizing_requirement(
+            "solar_area_fit", self.SolarArray.panel_area, self.SolarArray.usable_area,
+            "m2", "array-area-fit", "The installed panel area shall not exceed {maximum.target}.", maximum=True,
+        )
+        self._sizing_requirement(
+            "solar_generation", self.SolarArray.available_power, solar_power.required,
+            "W", "array-generation-screen",
+            "The array shall provide at least {minimum.target} as mean available power during sunlight.",
+        )
+        self._voltage_requirement("solar_voltage", self.SolarArray.eol_voltage, self.SolarArray.eol_voltage, "mppt-voltage-compatibility")
+        self._voltage_requirement("battery_voltage", self.Battery.minimum_voltage, self.Battery.maximum_voltage, "battery-assembly-ratings")
+        for name, available, unit, basis, statement, maximum in (
+            ("solar_open_circuit_voltage", self.SolarArray.open_circuit_voltage, "V", "pv-input-ratings",
+             "The array open-circuit voltage shall not exceed {maximum.target}.", True),
+            ("solar_short_circuit_current", self.SolarArray.short_circuit_current, "A", "pv-input-ratings",
+             "The array short-circuit current shall not exceed {maximum.target}.", True),
+            ("bus_current", Property(unit="A"), "A", "battery-assembly-ratings",
+             "The selected bus path shall supply at least {minimum.target}.", False),
+            ("battery_charge_current", self.Battery.maximum_charge_current, "A", "battery-assembly-ratings",
+             "The battery shall accept at least {minimum.target} of charging current.", False),
+            ("battery_discharge_current", self.Battery.maximum_discharge_current, "A", "battery-assembly-ratings",
+             "The battery shall supply at least {minimum.target} of discharge current.", False),
+        ):
+            self._sizing_requirement(name, available, None, unit, basis, statement, maximum=maximum)
+        self.add_requirement(
+            "bus_voltage",
+            statement="The selected bus path shall provide {match.target} within {self.tolerance}.",
+            rationale="The engineer assigns the source and load state on the same rail. This checks their nominal voltage match.",
+            available=Property(unit="V"), required=Property(unit="V"), tolerance=Property(0, "V"),
+            conditions=(VerificationCondition(
+                "match", Property("self.parent.available", "V"), Property("self.parent.required", "V"),
+                "all(math.isfinite(v) for v in (measure, target, self.parent.tolerance.value)) "
+                "and measure >= 0 and target >= 0 and 0 <= self.parent.tolerance.value "
+                "and abs(measure - target) <= self.parent.tolerance.value",
+            ),),
         )
 
     @property
@@ -92,9 +184,24 @@ class EPSComponent(Component):
 
 
 class Battery(EPSComponent):
-    rated_capacity = Property(unit="Ah")
-    rated_energy = Property(unit="Wh")
-    nominal_voltage = Property(unit="V")
+    series_count = Property(unit="cell")
+    parallel_count = Property(unit="string")
+    cell_count = Property("self.series_count.value * self.parallel_count.value", "cell")
+    cell_rated_capacity = Property(unit="Ah")
+    cell_rated_energy = Property(unit="Wh")
+    cell_nominal_voltage = Property(unit="V")
+    cell_minimum_voltage = Property(unit="V")
+    cell_maximum_voltage = Property(unit="V")
+    cell_maximum_charge_current = Property(unit="A")
+    cell_maximum_discharge_current = Property(unit="A")
+    cell_bol_energy = Property("self.cell_rated_energy.value * 3600", "J")
+    rated_capacity = Property("self.parallel_count.value * self.cell_rated_capacity.value", "Ah")
+    rated_energy = Property("self.cell_count.value * self.cell_rated_energy.value", "Wh")
+    nominal_voltage = Property("self.series_count.value * self.cell_nominal_voltage.value", "V")
+    minimum_voltage = Property("self.series_count.value * self.cell_minimum_voltage.value", "V")
+    maximum_voltage = Property("self.series_count.value * self.cell_maximum_voltage.value", "V")
+    maximum_charge_current = Property("self.parallel_count.value * self.cell_maximum_charge_current.value", "A")
+    maximum_discharge_current = Property("self.parallel_count.value * self.cell_maximum_discharge_current.value", "A")
     cycle_coefficient = Property(unit="cycle")
     cycle_exponent = Property(unit="1")
     fit_dod_min = Property(unit="1")
@@ -109,20 +216,50 @@ class Battery(EPSComponent):
 
 class SolarArray(EPSComponent):
     maximum_power = Property(unit="W")
-    active_area = Property(unit="m2")
-    open_circuit_voltage = Property(unit="V")
-    short_circuit_current = Property(unit="A")
+    series_count = Property(unit="cell")
+    parallel_count = Property(unit="string")
+    cell_count = Property("self.series_count.value * self.parallel_count.value", "cell")
+    cell_active_area = Property(unit="m2")
+    active_area = Property("self.cell_count.value * self.cell_active_area.value", "m2")
+    packing_fraction = Property(unit="1")
+    usable_area = Property(unit="m2")
+    panel_area = Property("sizing.panel_area(active_area=self.active_area, packing_fraction=self.packing_fraction).square_metres", "m2")
+    cell_open_circuit_voltage = Property(unit="V")
+    cell_short_circuit_current = Property(unit="A")
+    open_circuit_voltage = Property("self.series_count.value * self.cell_open_circuit_voltage.value", "V")
+    short_circuit_current = Property("self.parallel_count.value * self.cell_short_circuit_current.value", "A")
     sunlight_path_efficiency = Property(unit="1")
     eclipse_path_efficiency = Property(unit="1")
     cell_eol_voltage = Property(unit="V")
     cell_eol_current = Property(unit="A")
-    cell_count = Property(unit="cell")
+    eol_voltage = Property("self.series_count.value * self.cell_eol_voltage.value", "V")
+    eol_current = Property("self.parallel_count.value * self.cell_eol_current.value", "A")
     cell_eol_power = Property("sizing.cell_power(eol_voltage=self.cell_eol_voltage, eol_current=self.cell_eol_current).watts", "W")
     eol_power = Property("self.cell_count.value * self.cell_eol_power.value", "W")
+    bol_efficiency = Property(unit="1")
+    lifetime_retention = Property(unit="1")
+    temperature_factor = Property(unit="1")
+    eol_efficiency = Property(
+        "sizing.solar_efficiency(bol_efficiency=self.bol_efficiency, lifetime_retention=self.lifetime_retention, "
+        "temperature_factor=self.temperature_factor).fraction", "1")
+    irradiance = Property(unit="W/m2")
+    inherent_retention = Property(unit="1")
+    assembly_efficiency = Property(unit="1")
+    incidence_angle = Property(unit="deg")
+    normal_power_density = Property("self.irradiance.value * self.eol_efficiency.value", "W/m2")
+    eol_power_density = Property(
+        "sizing.array_power_density(irradiance=self.irradiance, eol_efficiency=self.eol_efficiency, "
+        "inherent_retention=self.inherent_retention, assembly_efficiency=self.assembly_efficiency, "
+        "incidence_angle=self.incidence_angle).watts_per_square_metre", "W/m2")
+    available_power = Property("self.active_area.value * self.eol_power_density.value", "W")
 
 
 class RegulatorAndConverter(EPSComponent):
     input_voltage = Property(unit="V")
+    minimum_input_voltage = Property(unit="V")
+    maximum_input_voltage = Property(unit="V")
+    absolute_maximum_input_voltage = Property(unit="V")
+    maximum_input_current = Property(unit="A")
     output_voltage = Property(unit="V")
     maximum_output_current = Property(unit="A")
     efficiency = Property(unit="1")

@@ -42,6 +42,18 @@ class RetainedValue(NamedTuple):
     retained: float
 
 
+class Area(NamedTuple):
+    square_metres: float
+
+
+class Efficiency(NamedTuple):
+    fraction: float
+
+
+class PowerDensity(NamedTuple):
+    watts_per_square_metre: float
+
+
 def _finite(*values):
     if not all(math.isfinite(value) for value in values):
         raise ValueError("Sizing inputs and results must be finite.")
@@ -258,3 +270,60 @@ def retained_value(initial: float, retention: float) -> RetainedValue:
     if initial < 0 or not 0 <= retention <= 1:
         raise ValueError("Require a nonnegative rating and retention in [0, 1].")
     return RetainedValue(initial * retention)
+
+
+def parallel_strings(required_total: float, per_cell: float, series_count: int) -> CellCount:
+    """Check-bound for an entered series count. Both quantities use the same unit."""
+    _finite(required_total, per_cell)
+    if required_total < 0 or per_cell <= 0 or type(series_count) is not int or series_count <= 0:
+        raise ValueError("Require a nonnegative total, positive cell rating and positive integer series count.")
+    fractional = required_total / per_cell / series_count
+    _finite(fractional)
+    return CellCount(fractional, math.ceil(fractional))
+
+
+def panel_area(active_area: float, packing_fraction: float) -> Area:
+    _finite(active_area, packing_fraction)
+    if active_area < 0 or not 0 < packing_fraction <= 1:
+        raise ValueError("Require nonnegative active area and packing in (0, 1].")
+    area = active_area / packing_fraction
+    _finite(area)
+    return Area(area)
+
+
+def solar_efficiency(bol_efficiency: float, lifetime_retention: float, temperature_factor: float) -> Efficiency:
+    _finite(bol_efficiency, lifetime_retention, temperature_factor)
+    if not 0 <= bol_efficiency <= 1 or not 0 <= lifetime_retention <= 1 or temperature_factor < 0:
+        raise ValueError("Efficiencies and retention lie in [0, 1]. The temperature factor is nonnegative.")
+    efficiency = bol_efficiency * lifetime_retention * temperature_factor
+    if not 0 <= efficiency <= 1:
+        raise ValueError("Corrected solar efficiency must lie in [0, 1].")
+    return Efficiency(efficiency)
+
+
+def array_power_density(irradiance: float, eol_efficiency: float, inherent_retention: float,
+                        assembly_efficiency: float, incidence_angle: float) -> PowerDensity:
+    """Uniform fixed conditions. Incidence angle is in degrees."""
+    _finite(irradiance, eol_efficiency, inherent_retention, assembly_efficiency, incidence_angle)
+    if irradiance < 0 or not 0 <= incidence_angle <= 180:
+        raise ValueError("Require nonnegative irradiance and incidence in [0, 180] degrees.")
+    if not all(0 <= factor <= 1 for factor in (eol_efficiency, inherent_retention, assembly_efficiency)):
+        raise ValueError("Solar efficiency and loss factors must lie in [0, 1].")
+    projection = math.cos(math.radians(incidence_angle)) if incidence_angle < 90 else 0.0
+    density = irradiance * eol_efficiency * inherent_retention * assembly_efficiency * projection
+    _finite(density)
+    return PowerDensity(density)
+
+
+def minimum_array_area(required_power: float, power_density: float) -> Area:
+    _finite(required_power, power_density)
+    if required_power < 0 or power_density <= 0:
+        raise ValueError("Require nonnegative power and positive available power density.")
+    area = required_power / power_density
+    _finite(area)
+    return Area(area)
+
+
+def tumbling_array_area(effective_area: float, packing_fraction: float) -> Area:
+    """Nogrady's six-face, half-illuminated, 50 degree incidence approximation."""
+    return panel_area(2 * effective_area / math.cos(math.radians(50)), packing_fraction)

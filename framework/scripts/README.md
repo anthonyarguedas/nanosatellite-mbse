@@ -1,6 +1,6 @@
 # Engineering calculations
 
-`sizing.py` implements the preliminary EPS sizing subsection of `final_report/design-proposal.tex`.
+`sizing.py` implements the preliminary EPS sizing and scalar array/battery configuration calculations in `final_report/design-proposal.tex`.
 It uses the Python standard library.
 Public functions have required annotated inputs and return annotated NamedTuples.
 They can be called directly with numbers or through the model's Property-binding interface.
@@ -43,6 +43,12 @@ It provides no Earth precession, penumbra, evolving Sun direction or atmospheric
 - `depth_of_discharge`: invert `N = a * DoD**b` for positive `a` and negative `b`.
 - `battery_energy`: `E_e / DoD * (1 + M)`, in J.
 - `retained_value`: apply a declared retention factor between zero and one.
+- `parallel_strings`: fractional and ceiling parallel-string bounds for an entered positive integer series count. Total demand and per-cell rating use the same unit, such as W or J.
+- `panel_area`: active area divided by packing fraction, in m2.
+- `solar_efficiency`: BOL efficiency times lifetime retention and a temperature factor.
+- `array_power_density`: irradiance times corrected cell efficiency, inherent retention, assembly efficiency and projected incidence angle, in W/m2. Angle inputs use degrees.
+- `minimum_array_area`: required power divided by positive available power density, in m2.
+- `tumbling_array_area`: Nogrady's six-face, half-illuminated, 50 degree approximation divided by packing fraction.
 
 The cycle model uses an explicit characterized DoD interval inside `(0, 1]`.
 The chosen DoD is the largest value within that interval that meets the required cycle count.
@@ -54,8 +60,15 @@ Efficiencies, EOL cell ratings, mission lifetime, calendar convention, battery c
 They are supplied by a session.
 Nonfinite inputs and invalid physical domains raise errors.
 
-These equations provide preliminary scalar screens.
-Installed cell count alone establishes no series/parallel arrangement or illumination-dependent generation capability.
+These equations provide scalar comparison bounds for the current configuration.
+Series/parallel counts are explicit user inputs. No product counting, topology inference, configuration search or mode sweep is performed.
+Array power density describes uniform fixed conditions. The model's generation screen needs a conservative sunlight bound or constant sunlight conditions.
+A supplied external history can instead provide mean available power.
+Zero irradiance, zero efficiency or incidence of at least 90 degrees produces zero power density.
+Positive demand at zero density fails the generation screen and has no finite required area.
+The required-area calculation therefore requires positive power density.
+The tumbling approximation applies only to its stated geometry and uniform packing.
+All loss factors, efficiencies and geometric assumptions remain explicit inputs.
 BOL sizing margin is applied once.
 Battery retained energy and charge use their separate factors without applying the margin again.
 The battery energy screen compares its BOL rating with the report's preliminary BOL requirement.

@@ -201,7 +201,8 @@ An efficiency for a zero-energy term is unused. Its effective factor is the iden
 The panel power screen compares installed EOL power with its required power.
 The cell screen requires an integer installed count at least as large as the ceiling.
 The unrounded ratio is available as `eps.solar_cell_count.fractional_count`.
-These are preliminary uniform-cell power screens. Series/parallel layout and illumination-dependent available generation require separate checks.
+These remain preliminary uniform-cell power screens.
+The configuration checks below assess the entered arrangement and supplied generation conditions.
 
 `Battery` owns cycle-law coefficient/exponent, `fit_dod_min`, `fit_dod_max`, degradation margin and separate energy/capacity retention factors.
 Mission lifetime and days per year remain unset until supplied explicitly.
@@ -209,6 +210,8 @@ The battery Requirement exposes `required_cycles` and `maximum_dod`.
 It assumes one cycle per orbit and chooses the largest supported DoD meeting that lifetime.
 Unsupported extrapolation beyond the characterized DoD interval is an error.
 The BOL capacity screen uses `Battery.bol_energy`, explicitly converting `rated_energy` from Wh to J.
+Cell assemblies derive `rated_energy`, `rated_capacity` and `nominal_voltage` from the entered counts and cell ratings.
+Purchased pack ratings can be bound directly to those Properties.
 Margin M is applied once in this screen.
 `Battery.eol_energy` is retained energy in J. `eol_capacity` is retained charge in Ah.
 Neither retained value applies M again.
@@ -221,6 +224,102 @@ A zero demand needs no delivered-energy evidence for that criterion.
 All sizing Requirements participate in `mission.verify()` and retain the ordinary transitive failure paths.
 Restoration and deliberate default deletions retain their existing behavior.
 See [the complete synthetic session](../sessions/example_eps_sizing.py) and [calculation assumptions](../scripts/README.md).
+
+## Array, battery and rail configuration
+
+`SolarArray.series_count`, `SolarArray.parallel_count`, `Battery.series_count` and `Battery.parallel_count` start unset.
+They accept literals or ordinary expressions supplied by the user.
+For example, a user-defined **1S assembly of single-cell COTS products** can count its parallel cells with:
+
+```python
+battery.series_count = 1
+battery.parallel_count = "len(self.cots)"
+```
+
+The user implements and validates this expression for the actual arrangement.
+The framework does not infer topology, divide an installed count into strings, count products automatically or select another configuration.
+Each `cell_count` defaults to `series_count * parallel_count`.
+The configuration Requirements check positive native integer counts and consistency with the installed count.
+Explicitly overriding `cell_count` preserves this consistency check.
+`eps.solar_cell_count.minimum_parallel_count` and `eps.battery_energy.minimum_parallel_count` expose comparison bounds for the entered series count. They do not change it.
+
+Array voltages scale with series count and currents with parallel count.
+`eol_voltage` and `eol_current` use the existing EOL cell maximum power point ratings.
+`open_circuit_voltage` and `short_circuit_current` use their separate cell ratings.
+Battery charge capacity scales with parallel count, energy with total cell count and voltage with series count.
+Battery voltage bounds and separate charge/discharge current limits have corresponding `cell_*` inputs.
+These relations assume identical cells, matched conditions and balanced sharing.
+Packaging, protection and interconnect limits can require stricter aggregate ratings.
+
+The additional EPS Requirements are:
+
+| Requirement | Check |
+| --- | --- |
+| `solar_configuration`, `battery_configuration` | Positive integer series/parallel counts and consistent installed count |
+| `solar_area` | Active area at least required power divided by available power density |
+| `solar_area_fit` | Panel area at most usable installation area |
+| `solar_generation` | Available sunlight power at least the power budget requirement |
+| `solar_voltage` | Array EOL operating voltage within explicitly assigned receiving limits |
+| `battery_voltage` | Complete pack voltage interval within explicitly assigned receiving limits |
+| `solar_open_circuit_voltage` | Array open-circuit voltage at most the assigned absolute input limit |
+| `solar_short_circuit_current` | Array short-circuit current at most the assigned permissible source current |
+| `bus_voltage` | Nominal source voltage matches the required load voltage within an explicit tolerance |
+| `bus_current` | Selected path capacity at least the declared load current |
+| `battery_charge_current`, `battery_discharge_current` | Separate battery current capacity at least the current declared at its terminals |
+
+### Area and generation assumptions
+
+`active_area` defaults to cell count times `cell_active_area`.
+`panel_area` is active area divided by `packing_fraction`, which must be in `(0, 1]`.
+`usable_area` is supplied separately. Area alone establishes no two-dimensional layout or clearance claim.
+Purchased panels can bind their specified active and panel areas directly.
+
+`eol_efficiency` applies `bol_efficiency * lifetime_retention * temperature_factor`.
+Bind supplied EOL efficiency directly when those effects are already included.
+`eol_power_density` applies irradiance, EOL efficiency, inherent retention, assembly efficiency and the projected incidence angle in degrees.
+No numerical loss factors, packing fraction or orientation are assumed.
+`available_power` defaults to active area times that density.
+These scalar conditions must describe a conservative sunlight bound or a constant sunlight case for the generation criterion.
+An external calculation can instead supply sunlight-mean `available_power` from a history.
+Shading, mismatched sections, DET operating points and shared trackers require their applicable model. The framework does not synthesize their combined I--V characteristic.
+
+`eps.solar_area.effective_area` exposes the normal-incidence power/area relation.
+`eps.solar_area.tumbling_panel_area` exposes Nogrady's six-face, half-illuminated, 50 degree approximation with uniform packing.
+This is an alternative comparison value. It is not automatically imposed on other geometries.
+A zero-power source fails the generation check for positive demand. Its required area has no finite value, so the area calculation reports an error.
+Physical losses must enter the chosen source boundary once.
+These checks establish no chronological energy balance, charging acceptance or EOL service claim.
+
+### Required bus voltage and current
+
+A state's `voltage` can be the **nominal required voltage for its declared rail**.
+It is not a minimum bus voltage, and a larger source voltage does not automatically pass.
+Different load voltages require separate paths or conversion. Taking the maximum over all states would lose that distinction.
+Only currents on the same rail at the same operating point can be added directly.
+The user supplies allocations, source bindings and conversions between rail and battery current.
+
+For an existing `state` and a selected converter on that load path:
+
+```python
+eps.bus_voltage.available = eps.RegulatorAndConverter.output_voltage
+eps.bus_voltage.required = state.voltage
+eps.bus_current.available = eps.RegulatorAndConverter.maximum_output_current
+eps.bus_current.required = state.current
+```
+
+The voltage tolerance defaults to zero, an exact nominal match.
+Set `eps.bus_voltage.tolerance` explicitly when an accepted voltage tolerance is known.
+A nominal match establishes no transient or full operating-envelope compliance.
+Use ordinary `.bind(mode, expression)` overrides and `mission.verify(mode=mode)` for a selected spacecraft mode or component state.
+No automatic all-mode verification, allocation or averaging is introduced.
+For an unpowered switched path, bind its actual voltage and required voltage to zero in that state. Other rails remain separate.
+
+The source receiving intervals use `eps.solar_voltage.minimum_allowed`/`maximum_allowed` and `eps.battery_voltage.minimum_allowed`/`maximum_allowed`.
+Their values start unset because the model has no inferred wiring.
+For MPPT, assign the applicable tracking interval and assess startup separately.
+Assign the absolute voltage and permissible source-current limits through the two solar rating Requirements' `required` Properties.
+`RegulatorAndConverter` provides separate operating input, absolute input voltage, input current and output ratings for these explicit links.
+Battery charge/discharge Requirements also have explicit `required` current inputs. They do not assume battery current equals load-rail current.
 
 ## COTS and aggregation
 
