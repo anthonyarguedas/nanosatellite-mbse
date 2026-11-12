@@ -142,6 +142,86 @@ A Subsystem reads its parent's current Spacecraft Modes.
 Use `mission.verify(mode=nominal)` to assess one selected mode.
 No automatic all-mode compliance policy is assumed.
 
+## Orbit and preliminary EPS sizing
+
+Every Mission imports `framework.scripts.sizing` as `sizing` alongside `math`.
+The numerical code stays in [the sizing script](../scripts/sizing.py).
+Model Properties declare its inputs and expose its results.
+Attach Orbit to a Mission before evaluating calculations that use these session imports.
+
+Orbit owns Earth radius (6378 km), gravitational parameter (398601 km3/s2), semimajor axis, mean motion, period, orbits per day and eclipse/sunlight durations.
+The defaults for Earth constants follow the report.
+Altitude, eccentricity and beta remain explicit inputs.
+`semimajor_axis` defaults to Earth radius plus `altitude`, so altitude is the offset of the semimajor axis from Earth's surface.
+Supply `semimajor_axis` directly when that is the known eccentric-orbit parameter.
+Perigee must remain above the spherical Earth.
+
+Beta and `sun_projection_angle` use degrees at the model interface.
+The script converts them to radians.
+For an eccentric orbit, `sun_projection_angle` is the angle from perigee to the Sun's projection in the direction of motion.
+Circular orbits and beta angles of ±90 degrees need no projection angle.
+The model supports the report's cylindrical-shadow entry/exit method, including eclipse intervals crossing the angular origin.
+It returns zero eclipse duration when the orbit is fully sunlit.
+
+Adding an EPS creates these ordinary Requirements directly in Mission.
+Names include the model path, such as `BUS_EPS_solar_power`, so multiple EPS instances remain independent.
+
+| Requirement | Its `required` Property |
+| --- | --- |
+| `sunlight_energy` | Mean sunlight load power times sunlight duration, in J |
+| `eclipse_energy` | Mean eclipse load power times eclipse duration, in J |
+| `solar_power` | `(E_s / X_s + E_e / X_e) / T_s`, in W |
+| `solar_cell_count` | Ceiling of required power divided by EOL cell power |
+| `battery_energy` | `E_e / DoD * (1 + M)`, in J at BOL |
+
+```python
+mission = Mission(lifetime=2, days_per_year=365.25)
+mission.orbit.altitude = 600
+mission.orbit.eccentricity = 0
+mission.orbit.beta_angle = 0
+bus = mission.add(CubeSatBus("BUS", units=1))
+eps = bus.EPS
+mission.BUS_EPS_sunlight_energy.average_power = 5
+mission.BUS_EPS_eclipse_energy.average_power = 3
+eps.SolarArray.sunlight_path_efficiency = 0.8
+eps.SolarArray.eclipse_path_efficiency = 0.65
+eps.SolarArray.cell_eol_voltage = 2.3
+eps.SolarArray.cell_eol_current = 0.45
+print(mission.BUS_EPS_solar_power.required.value)
+print(mission.BUS_EPS_solar_cell_count.required.value)
+```
+
+The average powers represent complete illumination-period means, including duty cycles and EPS consumption at the declared load boundary.
+Their products with duration equal the stated energy integrals by definition.
+No component schedule, mode normalization or average power is invented.
+An absent period contributes zero energy without requiring its average power.
+An efficiency for a zero-energy term is unused. Its effective factor is the identity 1, while the SolarArray's actual input remains unchanged.
+
+`SolarArray` owns sunlight/eclipse path efficiencies, EOL cell maximum power point voltage/current, `cell_eol_power`, installed `cell_count` and `eol_power`.
+The panel power screen compares installed EOL power with its required power.
+The cell screen requires an integer installed count at least as large as the ceiling.
+The unrounded ratio is available as `mission.BUS_EPS_solar_cell_count.fractional_count`.
+These are preliminary uniform-cell power screens. Series/parallel layout and illumination-dependent available generation require separate checks.
+
+`Battery` owns cycle-law coefficient/exponent, `fit_dod_min`, `fit_dod_max`, degradation margin and separate energy/capacity retention factors.
+Mission lifetime and days per year remain unset until supplied explicitly.
+The battery Requirement exposes `required_cycles` and `maximum_dod`.
+It assumes one cycle per orbit and chooses the largest supported DoD meeting that lifetime.
+Unsupported extrapolation beyond the characterized DoD interval is an error.
+The BOL capacity screen uses `Battery.bol_energy`, explicitly converting `rated_energy` from Wh to J.
+Margin M is applied once in this screen.
+`Battery.eol_energy` is retained energy in J. `eol_capacity` is retained charge in Ah.
+Neither retained value applies M again.
+This preliminary screen establishes no chronological battery or EOL service claim.
+
+Delivered-energy data are separate inputs: `eps.available_sunlight_energy` and `eps.available_eclipse_energy`, in J at the same load boundary as demand.
+They stay pending until supplied from an applicable study or explicit allocation.
+The two phase energy criteria compare those inputs with their required energies.
+A zero demand needs no delivered-energy evidence for that criterion.
+All sizing Requirements participate in `mission.verify()` and retain the ordinary transitive failure paths.
+Restoration and deliberate default deletions retain their existing behavior.
+See [the complete synthetic session](../sessions/example_eps_sizing.py) and [calculation assumptions](../scripts/README.md).
+
 ## COTS and aggregation
 
 Product classes fix their property bindings:
@@ -185,7 +265,7 @@ A CubeSatBus owns a numeric `units` Property annotated with `U`.
 It starts unset. Select a size explicitly, such as `CubeSatBus("BUS", units=3)`.
 Positive fractional sizes such as 1.5U are also supported.
 
-The first add creates two ordinary Requirements under the bus:
+The first add creates two ordinary Requirements directly in Mission, with names such as `BUS_mass_limit`:
 
 | Requirement | Measure | Target | Default per-U limit |
 | --- | --- | --- | --- |
@@ -194,16 +274,16 @@ The first add creates two ordinary Requirements under the bus:
 
 ```python
 bus.units = 3
-assert bus.mass_limit.maximum.target.value == 6
-assert bus.volume_limit.maximum.target.value == 0.003
-bus.mass_limit.maximum_per_u = 1.5  # An explicitly chosen stricter allocation.
+assert mission.BUS_mass_limit.maximum.target.value == 6
+assert mission.BUS_volume_limit.maximum.target.value == 0.003
+mission.BUS_mass_limit.maximum_per_u = 1.5  # An explicitly chosen stricter allocation.
 ```
 
 Each Requirement owns `units`, linked to the bus, and an editable `maximum_per_u` Property.
 Changing the bus size or either per-U limit updates its Target through the stored expression.
 Known values pass when the size is positive and finite and the Measure lies between zero and the Target.
 Unset inputs remain pending.
-`mission.requirements` includes Requirements nested under domain elements, so `mission.verify()` checks these automatically.
+`mission.requirements` lists Mission's direct Requirement children, and `mission.verify()` checks them all.
 Repeated initialization and restoration preserve deliberate deletions and custom edits.
 
 The mass baseline follows [CubeSat Design Specification Rev 14.1, Table 1](../../final_report/corpus/standards/cds-14.1/cds-14.1.md).
@@ -211,6 +291,27 @@ It is a typical planning maximum and must be checked against the selected launch
 The volume baseline is the nominal 10 cm cube definition of one U.
 These are scalar budgets over the contributions included in the bus aggregates.
 Packing, bounding dimensions and dispenser fit require separate assessments.
+
+## Requirement ownership
+
+Only Mission accepts Requirements as children.
+Bus and EPS initialization add defaults to Mission through `mission.add_requirement(context, name, ...)`.
+Generated names prefix the local role with the context's model path, such as `BUS_EPS_solar_power`.
+Name collisions with another context raise an error.
+
+Each generated Requirement has a read-only `context` reference to the bus or EPS used in its calculations.
+Context provides grouping and calculation inputs.
+Verification coverage follows Measure dependencies independently of context.
+`bus.requirements` and `eps.requirements` are read-only contextual views of Mission-owned Requirements.
+Their `parent` is always Mission.
+Authored Requirements can be added directly with `mission.add(Requirement(...))`, without any context.
+
+Physical defaults can be constructed before attachment.
+Requirement creation waits until their model objects belong to a Mission.
+Repeated initialization preserves edits and deletions.
+A failed add rolls back newly generated Mission Requirements.
+Restoration suppresses default requirement creation.
+Removing a physical object leaves the Mission's Requirements in place, with unavailable bindings diagnosed until explicitly rewired or reattached.
 
 ## Requirement prose
 
@@ -255,5 +356,4 @@ Restore a saved configuration with `Class.restore(...)` and explicit remaining c
 No file loading, source generation or browser metadata is part of this API.
 Ordinary Python session files construct the saved instances directly.
 
-Eccentricity is an Orbit Property.
-Illumination calculations and detailed allocation policies remain deferred.
+Detailed allocation policies and chronological energy simulation remain deferred.

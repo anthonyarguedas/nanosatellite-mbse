@@ -3,20 +3,15 @@
 from .modes import ComponentMode, SpacecraftMode
 from .objects import ModelObject
 from .properties import Property
-from .requirements import Requirement
 
 
 class DomainElement(ModelObject):
-    @property
-    def requirements(self):
-        return tuple(child for child in self.children if isinstance(child, Requirement))
-
     @property
     def subsystems(self):
         return tuple(child for child in self.children if isinstance(child, Subsystem))
 
     def accepts(self, child):
-        return isinstance(child, (Subsystem, Requirement))
+        return isinstance(child, Subsystem)
 
 
 class SpaceSegment(DomainElement):
@@ -104,3 +99,23 @@ class Orbit(ModelObject):
     altitude = Property(unit="km")
     beta_angle = Property(unit="deg")
     eccentricity = Property(unit="1")
+    earth_radius = Property("6378", "km")
+    gravitational_parameter = Property("398601", "km3/s2")
+    semimajor_axis = Property("self.earth_radius.value + self.altitude.value", "km")
+    sun_projection_angle = Property(unit="deg")
+    perigee_altitude = Property("self.semimajor_axis.value * (1 - self.eccentricity.value) - self.earth_radius.value", "km")
+    period = Property(
+        "sizing.orbit_period(semimajor_axis=self.semimajor_axis, eccentricity=self.eccentricity, "
+        "earth_radius=self.earth_radius, gravitational_parameter=self.gravitational_parameter).seconds", "s",
+    )
+    mean_motion = Property("2 * math.pi / self.period.value", "rad/s")
+    orbits_per_day = Property("86400 / self.period.value", "orbit/day")
+    eclipse_duration = Property(
+        "sizing.circular_illumination(semimajor_axis=self.semimajor_axis, earth_radius=self.earth_radius, "
+        "beta_angle=self.beta_angle, period=self.period).eclipse "
+        "if self.eccentricity.value == 0 or abs(self.beta_angle.value) == 90 else "
+        "sizing.eccentric_illumination(semimajor_axis=self.semimajor_axis, eccentricity=self.eccentricity, "
+        "earth_radius=self.earth_radius, beta_angle=self.beta_angle, "
+        "sun_projection_angle=self.sun_projection_angle, period=self.period).eclipse", "s",
+    )
+    sunlight_duration = Property("self.period.value - self.eclipse_duration.value", "s")

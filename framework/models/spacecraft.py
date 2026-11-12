@@ -3,7 +3,7 @@
 from .elements import GroundSegment, SpaceSegment, Subsystem
 from .eps import EPS
 from .properties import Property
-from .requirements import Requirement, VerificationCondition
+from .requirements import VerificationCondition
 
 
 class CommandAndDataHandling(Subsystem):
@@ -52,8 +52,7 @@ class CubeSatBus(SpaceSegment):
         Payload,
     )
 
-    def create_defaults(self):
-        super().create_defaults()
+    def create_requirements(self):
         limits = (
             (
                 "mass", "kg", "2", "kg/U",
@@ -68,22 +67,20 @@ class CubeSatBus(SpaceSegment):
         )
         for quantity, unit, per_u, per_u_unit, rationale in limits:
             name = f"{quantity}_limit"
-            if any(requirement.name == name for requirement in self.requirements):
-                continue
             condition = VerificationCondition(
                 "maximum", getattr(self, quantity),
                 Property("self.parent.units.value * self.parent.maximum_per_u.value", unit),
                 "type(self.parent.units.value) in (int, float) and self.parent.units.value > 0 "
                 "and 0 < target and math.isfinite(target) and 0 <= measure <= target",
             )
-            self.add(Requirement(
-                name,
-                statement=f"The complete {{self.parent.name}} {quantity} shall not exceed {{maximum.target}}.",
+            self.mission.add_requirement(
+                self, name,
+                statement=f"The complete {{self.context.name}} {quantity} shall not exceed {{maximum.target}}.",
                 rationale=rationale,
                 units=self.units,
                 maximum_per_u=Property(per_u, per_u_unit),
                 conditions=(condition,),
-            ))
+            )
 
 
 class GroundStation(GroundSegment):

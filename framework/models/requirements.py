@@ -136,18 +136,32 @@ class VerificationCondition(ModelObject):
 
 
 class Requirement(ModelObject):
-    def __init__(self, name, *, statement="", rationale="", text=None, conditions=(), **bindings):
+    def __init__(self, name, *, statement="", rationale="", text=None, context=None, conditions=(), **bindings):
         if text is not None:
             if statement:
                 raise TypeError("Specify statement or its text alias, not both.")
             statement = text
         if not isinstance(statement, str) or not isinstance(rationale, str):
             raise TypeError("Statement and rationale are text.")
+        if context is not None and not isinstance(context, ModelObject):
+            raise TypeError("A requirement context is a model object.")
         super().__init__(name, **bindings)
+        self._context = context
         self.statement = statement
         self.rationale = rationale
         for condition in conditions:
             self.add(condition)
+
+    @property
+    def context(self):
+        """Calculation context, separate from Mission ownership and verification coverage."""
+        return self._context
+
+    def validate_attachment(self):
+        if self.parent is None or not self.parent.is_mission:
+            raise TypeError("A Requirement belongs directly to a Mission.")
+        if self.context is not None and self.context.mission is not self.parent:
+            raise ValueError("The requirement context must belong to its Mission.")
 
     @property
     def text(self):

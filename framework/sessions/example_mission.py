@@ -25,7 +25,7 @@ eps.SolarArray.volume = 0.00015
 eps.RegulatorAndConverter.volume = 0.00005
 eps.PowerCircuit.volume = 0.00002
 
-requirement = bus.mass_limit
+requirement = mission.BUS_mass_limit
 requirement.maximum_per_u = 0.25
 requirement.statement = "The bus mass {maximum.measure:.2f} shall be at most {maximum.target:.2f}."
 requirement.rationale = "Synthetic stricter allocation of 0.25 kg/U for this example."

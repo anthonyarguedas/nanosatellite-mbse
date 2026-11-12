@@ -22,6 +22,7 @@ class ModelObject:
         self._parent = None
         self._children = []
         self._initialized = False
+        self._requirements_initialized = False
         definitions = {}
         for cls in reversed(type(self).__mro__):
             definitions.update({key: value for key, value in vars(cls).items() if isinstance(value, Property)})
@@ -106,6 +107,11 @@ class ModelObject:
     def children(self):
         return tuple(self._children)
 
+    @property
+    def requirements(self):
+        mission = self.mission
+        return tuple(req for req in mission.requirements if req.context is self) if mission is not None else ()
+
     def walk(self):
         yield self
         for child in self.children:
@@ -138,6 +144,9 @@ class ModelObject:
         if child.name in self.__dict__ or hasattr(type(self), child.name) or child.name in self.properties:
             if alias_type is None or not isinstance(child, alias_type):
                 raise ValueError(f"Child name {child.name!r} conflicts with an existing attribute.")
+        mission = self.mission
+        requirements_before = set(mission.requirements) if mission is not None else set()
+        states_before = {item: item._requirements_initialized for item in child.walk()}
         child._parent = self
         self._children.append(child)
         try:
@@ -150,9 +159,17 @@ class ModelObject:
                 child.initialize()
             else:
                 child._initialized = True
+                for item in child.walk():
+                    item._requirements_initialized = True
         except Exception:
             self._children.remove(child)
             child._parent = None
+            if mission is not None:
+                for requirement in mission.requirements:
+                    if requirement not in requirements_before:
+                        mission.remove(requirement)
+            for item in child.walk():
+                item._requirements_initialized = states_before.get(item, False)
             raise
         return child
 
@@ -166,15 +183,24 @@ class ModelObject:
         if not self._initialized:
             self.create_defaults()
             self._initialized = True
+        if self.mission is not None:
+            for item in self.walk():
+                if not item._requirements_initialized:
+                    item.create_requirements()
+                    item._requirements_initialized = True
         return self
 
     def create_defaults(self):
-        """Create declared defaults on an explicit first add."""
+        """Create declared physical defaults on an explicit first add."""
+
+    def create_requirements(self):
+        """Add default requirements to the Mission after attachment."""
 
     @classmethod
     def restore(cls, name, **bindings):
         value = cls(name, **bindings)
         value._initialized = True
+        value._requirements_initialized = True
         return value
 
     @property

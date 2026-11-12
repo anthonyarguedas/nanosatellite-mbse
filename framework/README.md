@@ -18,7 +18,8 @@ print(bus.EPS.Battery.mass.value)
 
 See [the model API](models/README.md) for properties, COTS, functions, modes and verification traces.
 The ordinary [example session](sessions/example_mission.py) demonstrates transitive verification.
-From the repository root, run it with `python3 -m framework.sessions.example_mission`.
+The [EPS sizing session](sessions/example_eps_sizing.py) demonstrates circular/eccentric illumination and preliminary energy sizing.
+From the repository root, run them with `python3 -m framework.sessions.example_mission` or `python3 -m framework.sessions.example_eps_sizing`.
 There is no CLI.
 
 ## Layout
@@ -31,15 +32,17 @@ framework/
 │   │   └── legacy/          # Compatibility for the existing workbook and sessions
 │   ├── public/              # Browser code
 │   └── server/              # Node HTTP server
-├── scripts/                 # Future numerical analyses
+├── scripts/                 # Typed numerical calculations, including EPS sizing
 ├── cots/                    # Existing product tables used by the GUI
 └── sessions/                # Ordinary session files
 ```
 
 The public models have no GUI, database or workbook dependencies.
+All Requirements are direct Mission children, including defaults generated for a bus or EPS.
 Units are annotations.
 Python expressions and custom functions execute trusted code with user permissions.
 Custom function inputs are explicitly bound to Properties.
+Mission expressions import the shipped EPS sizing functions as `sizing` by default.
 Calculations have no cache or execution protection.
 
 The current GUI retains its older workbook schema through `gui/backend/legacy/`.
@@ -59,7 +62,7 @@ npm start --prefix framework/gui
 
 Open <http://127.0.0.1:3000>.
 `MISSION_FILE`, `PORT` and `VERIFICATION_PYTHON` select the GUI workspace, port and interpreter.
-The old numerical analyses remain unavailable.
+The old GUI numerical analyses remain unavailable. New sizing functions are used by the public model API.
 See [GUI](gui/README.md).
 
 Validation uses live Python and HTTP workflows.

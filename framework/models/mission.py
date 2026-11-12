@@ -5,8 +5,9 @@ from types import MappingProxyType
 
 from .elements import DomainElement, Orbit
 from .functions import ModuleImport
-from .objects import ModelObject
+from .objects import ModelObject, identifier
 from .requirements import Requirement, VerificationReport
+from .properties import Property
 from .stakeholders import Stakeholder, ThirdParty
 
 _DEFAULT_ORBIT = object()
@@ -15,11 +16,14 @@ _DEFAULT_ORBIT = object()
 class Mission(ModelObject):
     is_mission = True
     child_aliases = {"orbit": Orbit}
+    lifetime = Property(unit="year")
+    days_per_year = Property(unit="day/year")
 
     def __init__(self, name="mission", *, orbit=_DEFAULT_ORBIT, imports=(), **bindings):
         super().__init__(name, **bindings)
         self._imports = {}
         self.add_import("import math as math")
+        self.add_import("import framework.scripts.sizing as sizing")
         for source in imports:
             self.add_import(source)
         if orbit is _DEFAULT_ORBIT:
@@ -75,7 +79,21 @@ class Mission(ModelObject):
 
     @property
     def requirements(self):
-        return tuple(item for item in self.walk() if isinstance(item, Requirement))
+        return tuple(child for child in self.children if isinstance(child, Requirement))
+
+    def add_requirement(self, context, name, **definition):
+        """Create a namespaced default once, preserving authored replacements."""
+        identifier(name)
+        if not isinstance(context, ModelObject) or context.mission is not self:
+            raise ValueError("The requirement context must belong to this Mission.")
+        prefix = context.path[len(self.path):].strip(".").replace(".", "_")
+        name = f"{prefix}_{name}" if prefix else name
+        existing = next((child for child in self.children if child.name == name), None)
+        if existing is not None:
+            if not isinstance(existing, Requirement) or existing.context is not context:
+                raise ValueError(f"Generated requirement name {name!r} conflicts with another object or context.")
+            return existing
+        return self.add(Requirement(name, context=context, **definition))
 
     def accepts(self, child):
         if child.name in (*self.imports, self.name, "self", "mode"):
