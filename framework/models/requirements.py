@@ -136,11 +136,34 @@ class VerificationCondition(ModelObject):
 
 
 class Requirement(ModelObject):
-    def __init__(self, name, *, text="", conditions=(), **bindings):
+    def __init__(self, name, *, statement="", rationale="", text=None, conditions=(), **bindings):
+        if text is not None:
+            if statement:
+                raise TypeError("Specify statement or its text alias, not both.")
+            statement = text
+        if not isinstance(statement, str) or not isinstance(rationale, str):
+            raise TypeError("Statement and rationale are text.")
         super().__init__(name, **bindings)
-        self.text = text
+        self.statement = statement
+        self.rationale = rationale
         for condition in conditions:
             self.add(condition)
+
+    @property
+    def text(self):
+        """Compatibility alias for the statement template."""
+        return self.statement
+
+    @text.setter
+    def text(self, value):
+        self.statement = value
+
+    def render_statement(self, *, mode=None):
+        """Render prose independently of verification, using owned condition names."""
+        fields = {condition.name: condition for condition in self.conditions}
+        fields.update(self=self, mode=mode)
+        with EvaluationContext(self.mission, mode):
+            return self.statement.format_map(fields)
 
     @property
     def conditions(self):

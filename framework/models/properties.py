@@ -215,6 +215,11 @@ class Property:
     def __repr__(self):
         return f"Property({self.reference!r}, expression={self.expression!r}, unit={str(self.unit)!r})"
 
+    def __format__(self, spec):
+        value = format(self.value, spec)
+        unit = str(self.unit)
+        return f"{value} {unit}" if unit else value
+
     def assess(self, **options):
         try:
             return EvaluationResult(EvaluationStatus.VALUE, self.evaluate(**options))

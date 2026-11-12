@@ -75,7 +75,7 @@ class Mission(ModelObject):
 
     @property
     def requirements(self):
-        return tuple(child for child in self.children if isinstance(child, Requirement))
+        return tuple(item for item in self.walk() if isinstance(item, Requirement))
 
     def accepts(self, child):
         if child.name in (*self.imports, self.name, "self", "mode"):

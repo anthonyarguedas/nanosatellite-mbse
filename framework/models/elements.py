@@ -3,15 +3,20 @@
 from .modes import ComponentMode, SpacecraftMode
 from .objects import ModelObject
 from .properties import Property
+from .requirements import Requirement
 
 
 class DomainElement(ModelObject):
+    @property
+    def requirements(self):
+        return tuple(child for child in self.children if isinstance(child, Requirement))
+
     @property
     def subsystems(self):
         return tuple(child for child in self.children if isinstance(child, Subsystem))
 
     def accepts(self, child):
-        return isinstance(child, Subsystem)
+        return isinstance(child, (Subsystem, Requirement))
 
 
 class SpaceSegment(DomainElement):

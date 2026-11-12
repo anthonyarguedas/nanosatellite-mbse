@@ -11,7 +11,7 @@ python3 -m pip install -e framework
 from framework.models import Mission, CubeSatBus
 
 mission = Mission()
-bus = mission.add(CubeSatBus("BUS"))
+bus = mission.add(CubeSatBus("BUS", units=1))
 bus.EPS.Battery.mass = 0.2
 print(bus.EPS.Battery.mass.value)
 ```

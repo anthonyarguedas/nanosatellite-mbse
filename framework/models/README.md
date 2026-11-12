@@ -27,7 +27,7 @@ Values and verification results are recomputed on every request.
 from framework.models import Mission, CubeSatBus, Property, Requirement, VerificationCondition
 
 mission = Mission()
-bus = mission.add(CubeSatBus("BUS"))
+bus = mission.add(CubeSatBus("BUS", units=1))
 eps = bus.EPS
 battery = eps.Battery
 battery.mass = Property("0.2", "kg")
@@ -178,6 +178,63 @@ Each class can replace its aggregate expressions to choose its accounting bounda
 The EPS demand sum excludes Battery and SolarArray instances by default.
 Override `EPS.power_consumers` for a different boundary or an integrated device.
 No quantity, efficiency or loss is silently inferred.
+
+## CubeSat size and bus limits
+
+A CubeSatBus owns a numeric `units` Property annotated with `U`.
+It starts unset. Select a size explicitly, such as `CubeSatBus("BUS", units=3)`.
+Positive fractional sizes such as 1.5U are also supported.
+
+The first add creates two ordinary Requirements under the bus:
+
+| Requirement | Measure | Target | Default per-U limit |
+| --- | --- | --- | --- |
+| `mass_limit` | Entire bus mass | Units times maximum mass per U | 2 kg/U |
+| `volume_limit` | Entire accounted bus volume | Units times maximum volume per U | 0.001 m3/U |
+
+```python
+bus.units = 3
+assert bus.mass_limit.maximum.target.value == 6
+assert bus.volume_limit.maximum.target.value == 0.003
+bus.mass_limit.maximum_per_u = 1.5  # An explicitly chosen stricter allocation.
+```
+
+Each Requirement owns `units`, linked to the bus, and an editable `maximum_per_u` Property.
+Changing the bus size or either per-U limit updates its Target through the stored expression.
+Known values pass when the size is positive and finite and the Measure lies between zero and the Target.
+Unset inputs remain pending.
+`mission.requirements` includes Requirements nested under domain elements, so `mission.verify()` checks these automatically.
+Repeated initialization and restoration preserve deliberate deletions and custom edits.
+
+The mass baseline follows [CubeSat Design Specification Rev 14.1, Table 1](../../final_report/corpus/standards/cds-14.1/cds-14.1.md).
+It is a typical planning maximum and must be checked against the selected launch provider and dispenser.
+The volume baseline is the nominal 10 cm cube definition of one U.
+These are scalar budgets over the contributions included in the bus aggregates.
+Packing, bounding dimensions and dispenser fit require separate assessments.
+
+## Requirement prose
+
+Every Requirement has plain text `rationale` and a `statement` template.
+Statements use Python's brace-format syntax and can reference owned conditions by name:
+
+```python
+requirement.rationale = "Preliminary mass allocation."
+requirement.statement = "The mass {maximum.measure:.2f} shall be at most {maximum.target:.2f}."
+print(requirement.render_statement())
+```
+
+A Property placeholder evaluates its value and appends its Unit annotation.
+Use `{maximum.target.value:.2f}` for the number alone and `{maximum.target.unit}` for the unit alone.
+`self` refers to the Requirement, including its additional Properties.
+`mode` is the selected mode passed to `render_statement(mode=nominal)`.
+Double braces, such as `{{literal}}`, produce literal braces.
+The former `text` field remains an alias for `statement`.
+
+Statement content is arbitrary and has no checked relationship to verification conditions.
+Rendering evaluates only the referenced Properties and never runs a condition's predicate.
+A literal statement renders even if verification is pending or failed.
+Requested unset values and template errors raise on rendering and leave verification definitions unchanged.
+Rationale is ordinary text with no interpolation.
 
 ## Verification and restoration
 
