@@ -1,734 +1,358 @@
 {
-  "schema": 5,
+  "schema": 6,
   "requirements": [
     "FR-01",
     "FR-02",
     "FR-03",
     "FR-04",
     "FR-05",
+    "FR-06",
     "FR-07",
+    "FR-08",
     "FR-09",
     "FR-10",
     "FR-11",
+    "FR-12",
     "FR-13",
     "FR-14",
     "FR-15",
     "FR-16",
     "FR-17",
+    "FR-18",
     "FR-19",
-    "FR-20",
-    "FR-22",
-    "FR-25",
-    "FR-26",
-    "FR-27",
-    "FR-34",
-    "FR-37",
-    "FR-39"
+    "FR-20"
   ],
   "components": [
     {
       "id": "L01",
-      "name": "Engineering Interface",
+      "name": "MBSE Workspace",
       "requirements": [
         "FR-01",
         "FR-02",
         "FR-03",
         "FR-04",
-        "FR-11",
-        "FR-15",
+        "FR-05",
+        "FR-06",
+        "FR-07",
         "FR-17",
-        "FR-22",
-        "FR-25",
-        "FR-37",
-        "FR-39"
+        "FR-19"
+      ]
+    },
+    {
+      "id": "L02",
+      "name": "COTS Database",
+      "requirements": [
+        "FR-16"
       ]
     },
     {
       "id": "L03",
       "name": "Simulation and Analysis",
       "requirements": [
+        "FR-08",
+        "FR-09",
         "FR-10",
+        "FR-11",
+        "FR-12",
         "FR-13",
         "FR-14",
-        "FR-16",
-        "FR-19",
-        "FR-20",
-        "FR-26",
-        "FR-27",
-        "FR-34"
+        "FR-15"
       ]
     },
     {
-      "id": "L06",
+      "id": "L04",
       "name": "Configuration Management",
       "requirements": [
-        "FR-05",
-        "FR-07",
-        "FR-09"
+        "FR-18",
+        "FR-20"
       ]
+    }
+  ],
+  "actors": [
+    {
+      "id": "users",
+      "name": "Users"
     }
   ],
   "peer_exchanges": [
     {
       "id": "E01",
-      "name": "engineeringAnalysisInputs",
-      "source_component": "L01",
-      "target_component": "L03",
+      "name": "cotsParameterLinkRequests",
+      "source": "L01",
+      "target": "L02",
       "kind": "information",
-      "mappings": [
-        {
-          "source_requirement": "FR-01",
-          "target_requirement": "FR-14",
-          "mapping": "Requirements and allocations"
-        },
-        {
-          "source_requirement": "FR-15",
-          "target_requirement": "FR-16",
-          "mapping": "Models and scenarios"
-        },
-        {
-          "source_requirement": "FR-25",
-          "target_requirement": "FR-16",
-          "mapping": "Models and scenarios"
-        },
-        {
-          "source_requirement": "FR-15",
-          "target_requirement": "FR-19",
-          "mapping": "Models and scenarios"
-        },
-        {
-          "source_requirement": "FR-15",
-          "target_requirement": "FR-34",
-          "mapping": "Models and scenarios"
-        },
-        {
-          "source_requirement": "FR-15",
-          "target_requirement": "FR-26",
-          "mapping": "Models and scenarios"
-        }
+      "path": "M410 100 H600",
+      "labels": [
+        "COTS parameter",
+        "link requests"
       ],
-      "display": {
-        "page": 1,
-        "arrow": "arrow-E01",
-        "label": "Models, mission inputs & analysis requests"
-      }
+      "label_region": [
+        427,
+        80,
+        159
+      ],
+      "line_style": "solid",
+      "page": 1
     },
     {
       "id": "E02",
-      "name": "analysisResponses",
-      "source_component": "L03",
-      "target_component": "L01",
+      "name": "cotsParameterIdentifiers",
+      "source": "L02",
+      "target": "L01",
       "kind": "information",
-      "mappings": [
-        {
-          "source_requirement": "FR-20",
-          "target_requirement": "FR-17",
-          "mapping": "Mission and budget inputs"
-        },
-        {
-          "source_requirement": "FR-16",
-          "target_requirement": "FR-22",
-          "mapping": "Calibration histories"
-        }
+      "path": "M600 140 H410",
+      "labels": [
+        "COTS parameter",
+        "identifiers"
       ],
-      "display": {
-        "page": 1,
-        "arrow": "arrow-E02",
-        "label": "Results, budgets & run histories"
-      }
+      "label_region": [
+        427,
+        120,
+        159
+      ],
+      "line_style": "dotted",
+      "page": 1
     },
     {
       "id": "E03",
-      "name": "engineeringRecords",
-      "source_component": "L01",
-      "target_component": "L06",
+      "name": "computationInputs",
+      "source": "L01",
+      "target": "L03",
       "kind": "information",
-      "mappings": [
-        {
-          "source_requirement": "FR-01",
-          "target_requirement": "FR-07",
-          "mapping": "Engineering records"
-        },
-        {
-          "source_requirement": "FR-17",
-          "target_requirement": "FR-07",
-          "mapping": "Engineering records"
-        },
-        {
-          "source_requirement": "FR-03",
-          "target_requirement": "FR-07",
-          "mapping": "Engineering records"
-        },
-        {
-          "source_requirement": "FR-15",
-          "target_requirement": "FR-07",
-          "mapping": "Design records"
-        },
-        {
-          "source_requirement": "FR-25",
-          "target_requirement": "FR-07",
-          "mapping": "Design records"
-        },
-        {
-          "source_requirement": "FR-22",
-          "target_requirement": "FR-07",
-          "mapping": "Parameter records"
-        },
-        {
-          "source_requirement": "FR-22",
-          "target_requirement": "FR-09",
-          "mapping": "Parameter records"
-        },
-        {
-          "source_requirement": "FR-37",
-          "target_requirement": "FR-07",
-          "mapping": "Evidence records"
-        },
-        {
-          "source_requirement": "FR-11",
-          "target_requirement": "FR-07",
-          "mapping": "Evidence records"
-        }
+      "path": "M410 165 H465 V365 H600",
+      "labels": [
+        "MBSE models,",
+        "parameters, states",
+        "& computation",
+        "requests"
       ],
-      "display": {
-        "page": 1,
-        "arrow": "arrow-E03",
-        "label": "Engineering records & change requests"
-      }
+      "label_region": [
+        480,
+        313,
+        108
+      ],
+      "line_style": "solid",
+      "page": 1
     },
     {
       "id": "E04",
-      "name": "analysisRecords",
-      "source_component": "L03",
-      "target_component": "L06",
+      "name": "numericalResultIdentifiers",
+      "source": "L03",
+      "target": "L01",
       "kind": "information",
-      "mappings": [
-        {
-          "source_requirement": "FR-20",
-          "target_requirement": "FR-09",
-          "mapping": "Design records"
-        },
-        {
-          "source_requirement": "FR-16",
-          "target_requirement": "FR-09",
-          "mapping": "Analysis records"
-        },
-        {
-          "source_requirement": "FR-19",
-          "target_requirement": "FR-09",
-          "mapping": "Analysis records"
-        },
-        {
-          "source_requirement": "FR-27",
-          "target_requirement": "FR-09",
-          "mapping": "Analysis records"
-        },
-        {
-          "source_requirement": "FR-34",
-          "target_requirement": "FR-07",
-          "mapping": "Analysis records"
-        },
-        {
-          "source_requirement": "FR-10",
-          "target_requirement": "FR-07",
-          "mapping": "Analysis records"
-        }
+      "path": "M600 420 H445 V185 H410",
+      "labels": [
+        "Numerical result",
+        "identifiers"
       ],
-      "display": {
-        "page": 1,
-        "arrow": "arrow-E04",
-        "label": "Analysis, mapping & reconstruction records"
-      }
+      "label_region": [
+        480,
+        393,
+        108
+      ],
+      "line_style": "dotted",
+      "page": 1
     },
     {
       "id": "E05",
-      "name": "engineeringContext",
-      "source_component": "L06",
-      "target_component": "L01",
-      "kind": "control",
-      "mappings": [
-        {
-          "source_requirement": "FR-07",
-          "target_requirement": "FR-01",
-          "mapping": "Current engineering basis"
-        },
-        {
-          "source_requirement": "FR-05",
-          "target_requirement": "FR-01",
-          "mapping": "Current engineering basis"
-        },
-        {
-          "source_requirement": "FR-07",
-          "target_requirement": "FR-03",
-          "mapping": "Current engineering basis"
-        },
-        {
-          "source_requirement": "FR-07",
-          "target_requirement": "FR-39",
-          "mapping": "Current engineering basis"
-        },
-        {
-          "source_requirement": "FR-07",
-          "target_requirement": "FR-15",
-          "mapping": "Design basis"
-        },
-        {
-          "source_requirement": "FR-05",
-          "target_requirement": "FR-15",
-          "mapping": "Design basis"
-        },
-        {
-          "source_requirement": "FR-07",
-          "target_requirement": "FR-22",
-          "mapping": "Model basis"
-        },
-        {
-          "source_requirement": "FR-07",
-          "target_requirement": "FR-37",
-          "mapping": "Evidence basis"
-        },
-        {
-          "source_requirement": "FR-09",
-          "target_requirement": "FR-11",
-          "mapping": "Evidence basis"
-        }
+      "name": "linkedCotsParameterRequests",
+      "source": "L03",
+      "target": "L02",
+      "kind": "information",
+      "path": "M616 335 V195",
+      "labels": [
+        "Linked COTS",
+        "parameter",
+        "requests"
       ],
-      "display": {
-        "page": 1,
-        "arrow": "arrow-E05",
-        "label": "Current baselines & change impacts"
-      }
+      "label_region": [
+        630,
+        235,
+        88
+      ],
+      "line_style": "solid",
+      "page": 1
     },
     {
       "id": "E06",
-      "name": "controlledAnalysisInputs",
-      "source_component": "L06",
-      "target_component": "L03",
-      "kind": "control",
-      "mappings": [
-        {
-          "source_requirement": "FR-09",
-          "target_requirement": "FR-10",
-          "mapping": "Analysis inputs"
-        }
+      "name": "cotsParameterValues",
+      "source": "L02",
+      "target": "L03",
+      "kind": "information",
+      "path": "M730 195 V335",
+      "labels": [
+        "COTS parameter",
+        "values"
       ],
-      "display": {
-        "page": 1,
-        "arrow": "arrow-E06",
-        "label": "Controlled inputs & dependencies"
-      }
-    }
-  ],
-  "internal_exchanges": [
-    {
-      "source_requirement": "FR-17",
-      "target_requirement": "FR-15",
-      "mapping": "Requirements and allocations",
-      "component": "L01"
+      "label_region": [
+        630,
+        294,
+        88
+      ],
+      "line_style": "dotted",
+      "page": 1
     },
     {
-      "source_requirement": "FR-25",
-      "target_requirement": "FR-17",
-      "mapping": "Mission and budget inputs",
-      "component": "L01"
+      "id": "E07",
+      "name": "changeRequests",
+      "source": "L04",
+      "target": "L01",
+      "kind": "information",
+      "path": "M275 480 V195",
+      "labels": [
+        "Change",
+        "requests"
+      ],
+      "label_region": [
+        288,
+        245,
+        97
+      ],
+      "line_style": "solid",
+      "page": 1
     },
     {
-      "source_requirement": "FR-16",
-      "target_requirement": "FR-14",
-      "mapping": "Design study results",
-      "component": "L03"
-    },
-    {
-      "source_requirement": "FR-16",
-      "target_requirement": "FR-20",
-      "mapping": "Design study results",
-      "component": "L03"
-    },
-    {
-      "source_requirement": "FR-27",
-      "target_requirement": "FR-14",
-      "mapping": "Design study results",
-      "component": "L03"
-    },
-    {
-      "source_requirement": "FR-22",
-      "target_requirement": "FR-15",
-      "mapping": "Estimated parameters",
-      "component": "L01"
-    },
-    {
-      "source_requirement": "FR-01",
-      "target_requirement": "FR-37",
-      "mapping": "Requirement views",
-      "component": "L01"
-    },
-    {
-      "source_requirement": "FR-04",
-      "target_requirement": "FR-37",
-      "mapping": "Requirement views",
-      "component": "L01"
-    },
-    {
-      "source_requirement": "FR-15",
-      "target_requirement": "FR-37",
-      "mapping": "Design views",
-      "component": "L01"
-    },
-    {
-      "source_requirement": "FR-25",
-      "target_requirement": "FR-37",
-      "mapping": "Design views",
-      "component": "L01"
-    },
-    {
-      "source_requirement": "FR-11",
-      "target_requirement": "FR-39",
-      "mapping": "Evidence gaps",
-      "component": "L01"
+      "id": "E08",
+      "name": "engineeringRecordsAndImpactFindings",
+      "source": "L01",
+      "target": "L04",
+      "kind": "information",
+      "path": "M395 195 V480",
+      "labels": [
+        "Engineering records",
+        "& impact findings"
+      ],
+      "label_region": [
+        284,
+        437,
+        105
+      ],
+      "line_style": "dashdot",
+      "page": 1
     }
   ],
   "interfaces": [
     {
       "id": "IF-01",
-      "native_id": "IF01",
-      "type": "EngineeringUseInterface",
-      "port": "p01",
-      "port_type": "EngineeringUsePort",
-      "actor": "engineers",
-      "actor_label": "Engineers and stakeholders",
+      "name": "Engineering use",
+      "actor": "users",
       "component": "L01",
-      "delegation": "L01.p01",
+      "port": "p01",
       "flows": [
         {
           "id": "X01.1",
           "name": "engineeringSubmission",
-          "feature": "engineeringSubmission",
-          "type": "EngineeringSubmission",
-          "qualified_type": "EngineeringSubmission",
-          "source": "engineers.p.engineeringSubmission",
-          "target": "framework.p01.engineeringSubmission",
-          "direction": "in",
+          "source": "users",
+          "target": "L01",
           "kind": "information",
-          "display": {
-            "page": 2,
-            "arrow": "arrow-X01.1",
-            "component": "L01",
-            "boundary_port_crossing": [
-              258.0,
-              140
-            ]
-          }
+          "path": "M25 265 V110 H260",
+          "labels": [
+            "Requirements &",
+            "parameters"
+          ],
+          "label_region": [
+            90,
+            89,
+            125
+          ],
+          "line_style": "solid",
+          "page": 1,
+          "direction": "in"
         },
         {
           "id": "X01.2",
           "name": "engineeringResponse",
-          "feature": "engineeringResponse",
-          "type": "EngineeringResponse",
-          "qualified_type": "EngineeringResponse",
-          "source": "framework.p01.engineeringResponse",
-          "target": "engineers.p.engineeringResponse",
-          "direction": "out",
+          "source": "L01",
+          "target": "users",
           "kind": "information",
-          "display": {
-            "page": 2,
-            "arrow": "arrow-X01.2",
-            "component": "L01",
-            "boundary_port_crossing": [
-              258.0,
-              260
-            ]
-          }
+          "path": "M260 175 H60 V265",
+          "labels": [
+            "Validity checks,",
+            "computed values,",
+            "updated requirements",
+            "& next activity"
+          ],
+          "label_region": [
+            90,
+            128,
+            125
+          ],
+          "line_style": "dotted",
+          "page": 1,
+          "direction": "out"
         }
       ]
     },
     {
       "id": "IF-02",
-      "native_id": "IF02",
-      "type": "KnowledgeInterface",
+      "name": "Configuration management",
+      "actor": "users",
+      "component": "L04",
       "port": "p02",
-      "port_type": "KnowledgePort",
-      "actor": "sources",
-      "actor_label": "Knowledge and data sources",
-      "component": "L01",
-      "delegation": "L01.p02",
       "flows": [
         {
           "id": "X02.1",
-          "name": "sourceSubmission",
-          "feature": "sourceSubmission",
-          "type": "SourceSubmission",
-          "qualified_type": "SourceSubmission",
-          "source": "sources.p.sourceSubmission",
-          "target": "framework.p02.sourceSubmission",
-          "direction": "in",
+          "name": "configurationSubmission",
+          "source": "users",
+          "target": "L04",
           "kind": "information",
-          "display": {
-            "page": 2,
-            "arrow": "arrow-X02.1",
-            "component": "L01",
-            "boundary_port_crossing": [
-              432.0,
-              140
-            ]
-          }
+          "path": "M60 345 V520 H260",
+          "labels": [
+            "Change & history",
+            "requests, authorized",
+            "decisions"
+          ],
+          "label_region": [
+            90,
+            486,
+            125
+          ],
+          "line_style": "solid",
+          "page": 1,
+          "direction": "in"
         },
         {
           "id": "X02.2",
-          "name": "sourceQuery",
-          "feature": "sourceQuery",
-          "type": "SourceQuery",
-          "qualified_type": "SourceQuery",
-          "source": "framework.p02.sourceQuery",
-          "target": "sources.p.sourceQuery",
-          "direction": "out",
+          "name": "configurationResponse",
+          "source": "L04",
+          "target": "users",
           "kind": "information",
-          "display": {
-            "page": 2,
-            "arrow": "arrow-X02.2",
-            "component": "L01",
-            "boundary_port_crossing": [
-              432.0,
-              220
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "IF-03",
-      "native_id": "IF03",
-      "type": "AnalysisInterface",
-      "port": "p03",
-      "port_type": "AnalysisPort",
-      "actor": "tools",
-      "actor_label": "Simulation tools",
-      "component": "L03",
-      "delegation": "L03.p03",
-      "flows": [
-        {
-          "id": "X03.1",
-          "name": "simulationInputs",
-          "feature": "simulationInputs",
-          "type": "SpacecraftSimulationInputs",
-          "qualified_type": "SpacecraftSimulationInputs",
-          "source": "framework.p03.simulationInputs",
-          "target": "tools.p.simulationInputs",
-          "direction": "out",
-          "kind": "information",
-          "display": {
-            "page": 2,
-            "arrow": "arrow-X03.1",
-            "component": "L03",
-            "boundary_port_crossing": [
-              258.0,
-              350
-            ]
-          }
-        },
-        {
-          "id": "X03.4",
-          "name": "analysisResults",
-          "feature": "analysisResults",
-          "type": "NumericalAnalysisResults",
-          "qualified_type": "NumericalAnalysisResults",
-          "source": "tools.p.analysisResults",
-          "target": "framework.p03.analysisResults",
-          "direction": "in",
-          "kind": "information",
-          "display": {
-            "page": 2,
-            "arrow": "arrow-X03.4",
-            "component": "L03",
-            "boundary_port_crossing": [
-              258.0,
-              390
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "IF-06",
-      "native_id": "IF06",
-      "type": "TechnicalReviewInterface",
-      "port": "p06",
-      "port_type": "TechnicalReviewPort",
-      "actor": "reviewers",
-      "actor_label": "Reviewers",
-      "component": "L01",
-      "delegation": "L01.p06",
-      "flows": [
-        {
-          "id": "X06.1",
-          "name": "reviewSubmission",
-          "feature": "reviewSubmission",
-          "type": "ReviewFindings",
-          "qualified_type": "ReviewFindings",
-          "source": "reviewers.p.reviewSubmission",
-          "target": "framework.p06.reviewSubmission",
-          "direction": "in",
-          "kind": "information",
-          "display": {
-            "page": 2,
-            "arrow": "arrow-X06.1",
-            "component": "L01",
-            "boundary_port_crossing": [
-              432.0,
-              255
-            ]
-          }
-        },
-        {
-          "id": "X06.2",
-          "name": "reviewResponse",
-          "feature": "reviewResponse",
-          "type": "ReviewPackage",
-          "qualified_type": "ReviewPackage",
-          "source": "framework.p06.reviewResponse",
-          "target": "reviewers.p.reviewResponse",
-          "direction": "out",
-          "kind": "information",
-          "display": {
-            "page": 2,
-            "arrow": "arrow-X06.2",
-            "component": "L01",
-            "boundary_port_crossing": [
-              432.0,
-              305
-            ]
-          }
+          "path": "M260 580 H25 V345",
+          "labels": [
+            "Impact findings,",
+            "revision histories",
+            "& baselines"
+          ],
+          "label_region": [
+            90,
+            546,
+            125
+          ],
+          "line_style": "dotted",
+          "page": 1,
+          "direction": "out"
         }
       ]
     }
   ],
-  "boundary_routes": [
+  "panels": [
     {
-      "id": "B01",
-      "name": "requirementSubmission",
-      "interface": "IF-01",
-      "direction": "in",
-      "component": "L01",
-      "fr_basis": [
-        "FR-01"
-      ],
-      "via_exchange": null
-    },
-    {
-      "id": "B02",
-      "name": "missionSubmission",
-      "interface": "IF-01",
-      "direction": "in",
-      "component": "L01",
-      "fr_basis": [
-        "FR-25"
-      ],
-      "via_exchange": null
-    },
-    {
-      "id": "B03",
-      "name": "designSubmission",
-      "interface": "IF-01",
-      "direction": "in",
-      "component": "L01",
-      "fr_basis": [
-        "FR-15"
-      ],
-      "via_exchange": null
-    },
-    {
-      "id": "B04",
-      "name": "changeSubmission",
-      "interface": "IF-01",
-      "direction": "in",
-      "component": "L06",
-      "fr_basis": [
-        "FR-05"
-      ],
-      "via_exchange": "E03"
-    },
-    {
-      "id": "B05",
-      "name": "guidanceResponse",
-      "interface": "IF-01",
-      "direction": "out",
-      "component": "L01",
-      "fr_basis": [
-        "FR-01",
-        "FR-02",
-        "FR-03"
-      ],
-      "via_exchange": null
-    },
-    {
-      "id": "B06",
-      "name": "referenceSubmission",
-      "interface": "IF-02",
-      "direction": "in",
-      "component": "L01",
-      "fr_basis": [
-        "FR-22"
-      ],
-      "via_exchange": null
-    },
-    {
-      "id": "B07",
-      "name": "sourceMethods",
-      "interface": "IF-02",
-      "direction": "in",
-      "component": "L01",
-      "fr_basis": [
-        "FR-03"
-      ],
-      "via_exchange": null
-    },
-    {
-      "id": "B08",
-      "name": "componentProperties",
-      "interface": "IF-02",
-      "direction": "in",
-      "component": "L03",
-      "fr_basis": [
-        "FR-13"
-      ],
-      "via_exchange": "E01"
-    },
-    {
-      "id": "B09",
-      "name": "boundedSourceQuery",
-      "interface": "IF-02",
-      "direction": "out",
-      "component": "L01",
-      "fr_basis": [
-        "FR-03",
-        "FR-13"
-      ],
-      "via_exchange": null
+      "page": 1
     }
   ],
-  "source_contract_status": "Authored report illustration. No native model validation or simulation.",
+  "source_contract_status": "Authored report illustration. No simulation is executed.",
   "report_source_sha256": {
-    "final_report/requirements.tex": "7367ff2ce191c7d31227ecc5d1f61505916d352d9b80ac0d04cbb21ff22a6dd3",
-    "final_report/logical.tex": "3fe75364096bff79249c2ef25c2e9f2b084daa17fe7f1ae56ad72d9c4953e5d2"
+    "final_report/requirements.tex": "685d5eb4469c48a904b01d534e81cf151b88c221ce0a1b690f483d638a7bb230",
+    "final_report/logical.tex": "8e241a0e7d9b3a9887d4fbadf750a958bc5004955de5558cb5c07d651fbb1ae7"
   },
   "counts": {
-    "framework_requirements": 23,
-    "logical_components": 3,
-    "peer_exchange_groups": 6,
-    "peer_requirement_links": 33,
-    "internal_requirement_links": 11,
-    "black_box_interfaces": 4,
-    "black_box_directed_flows": 8,
-    "boundary_refinement_routes": 9
+    "framework_requirements": 20,
+    "logical_components": 4,
+    "peer_exchange_groups": 8,
+    "external_interfaces": 2,
+    "external_directed_flows": 4
   },
   "checks": {
-    "boundary_exchange_label_clearance_checked": true,
-    "three_components_checked": true,
-    "all_six_peer_exchanges_displayed": true,
-    "all_internal_requirement_relations_retained": true,
-    "all_eight_external_flows_displayed": true,
-    "all_four_shared_ports_checked": true,
-    "component_names_containment_and_directed_endpoints_checked": true,
-    "terminal_heads_skip_intermediate_ports": true,
     "monochrome_paint_checked": true,
     "serif_labels_checked": true,
     "square_block_corners_checked": true,
@@ -736,22 +360,21 @@
     "foreground_arrowheads_checked": true,
     "single_painted_head_per_terminal_path_checked": true,
     "interface_labels_on_ports_checked": true,
+    "exchange_routes_do_not_cross": true,
+    "exchange_labels_clear_routes": true,
+    "four_components_checked": true,
+    "only_users_external": true,
+    "all_eight_internal_exchanges_displayed": true,
+    "all_four_user_flows_displayed": true,
+    "two_shared_ports_checked": true,
+    "report_requirement_allocations_checked": true,
+    "component_names_containment_and_directed_endpoints_checked": true,
+    "terminal_heads_skip_intermediate_ports": true,
     "pdf_text_within_page": true,
     "exact_svg_preserved_during_conversion": true,
-    "pdf_pages": 2,
-    "native_semantic_validation": "Not performed. Authored report illustration."
+    "pdf_pages": 1
   },
-  "generator_sha256": "b18701cdd4dcbb833ddf29f0c383bbcf9b81730c92e75ec3823006ee4321eacb",
+  "generator_sha256": "793f637c28051cfec5b115b2bf4f93723bf3265b266fb9f803f11deae853baee",
   "style_sha256": "d207e6a5ec4a0bb5f561e9f132291ba723e8fd8000c7c15c9548c640a819be7c",
-  "panels": [
-    {
-      "page": 1,
-      "svg": "final_report/fig/logical-architecture.svg"
-    },
-    {
-      "page": 2,
-      "svg": "final_report/fig/logical-architecture-panel-02.svg"
-    }
-  ],
-  "semantics": "Three logical components. Merged producer/consumer relations remain internal. Information uses solid, dotted and dash-dot routes. L06 control uses dashed routes."
+  "semantics": "Four logical components inside Framework. Only users are external. L02 returns COTS parameter identifiers to L01 and values to L03. L03 returns numerical result identifiers to L01."
 }

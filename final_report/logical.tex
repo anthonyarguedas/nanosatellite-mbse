@@ -1,22 +1,7 @@
 \section{Logical Architecture}
 \label{section:define-logical-architecture}
 
-According to OOSEM, framework is first modeled as a black box interacting with selected external actors, which can be human users or other systems, to fulfill the requirements.
-The required inputs from the external actors are listed, as are the outputs returned to the users, and then grouped into a set of external interfaces,
-
-OOSEM then allocates requirements to logical components connected by internal interfaces, which are abstract units of behavior independent of a particular implementation technology \citep[Sec.~17.3.4]{friedenthal2014practical}. Table~\ref{tab:logical-responsibilities} allocates the 23 FRs to three logical components. Figure~\ref{fig:framework-logical} presents two coordinated views. The first shows the three components and six internal interfaces. The second connects all four external interfaces to their responsible components.
-
-\subsection{External interfaces}
-\label{subsection:framework-context}
-
-Figure~\ref{fig:framework-context} shows the framework as a black box with four labeled boundary ports and their external participants. Each port groups one interface's exchanges.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{fig/framework-context.pdf}
-\caption[Framework boundary and external exchanges.]{Framework boundary and external exchanges. The framework is a black box with interface labels on its boundary ports. Each port groups one interface's exchanges. Solid and dotted arrows distinguish different exchanges visually.}
-\label{fig:framework-context}
-\end{figure}
+Following OOSEM, the framework requirements are allocated to logical components, which are abstract units of behavior independent of a particular implementation technology \citep[Sec.~17.3.4]{friedenthal2014practical}. Table~\ref{tab:logical-responsibilities} allocates the FRs to four logical components. Figure~\ref{fig:framework-logical} shows their exchanges in one view, with users outside the framework boundary and simulation and analysis inside it.
 
 \section{Logical Components}
 
@@ -35,25 +20,18 @@ Figure~\ref{fig:framework-context} shows the framework as a black box with four 
 \endhead
 \bottomrule
 \endfoot
-L01 Engineering Interface & 01--04, 11, 15, 17, 22, 25, 37, 39 & Engineers and mission stakeholders submit expectations, mission definitions, requirement drafts, parameters and change requests. Responses contain validity checks of the supplied requirements and their parameters, evaluated values for computable parameters, and the updated state of the requirements after a change. \\
-L03 Simulation and Analysis & 10, 13--14, 16, 19--20, 26--27, 34 & Simulation tools receive spacecraft models, parameters and states. They return numerical analysis results. \\
-L06 Configuration Management & 05, 07, 09 & Change requests, engineering records, analysis results and authorized decisions $\rightarrow$ impact findings, revision histories, retrievable baselines and result records. \\
+L01 MBSE Workspace & 01--07, 17, 19 & Stakeholders submit requirements and parameters. Responses use an underlying MBSE model to return validity checks of the supplied requirements and their parameters, evaluated values for computable parameters, and the updated state of the requirements and recommended next activity after a submission. L01 forwards any computation requests to L03, and links the obtained results to the parameters of the MBSE model. \\
+L02 COTS Database & 16 & L01 submits requests to link COTS parameters to the MBSE model, and receives identifiers for said parameters. L03 requests the linked parameters as reported in the MBSE model and receives their values. \\
+L03 Simulation and Analysis & 08--15 & Simulation and analysis scripts receive spacecraft MBSE models, parameters and states. They return identifiers to numerical analysis results. \\
+L04 Configuration Management & 18, 20 & Users submit change requests and receive impact findings. Users submit change history requests and receive revision histories, retrievable baselines. \\
 \end{longtable}
 }
-
-L01 manages engineering inputs, requirements, mission definitions and EPS design representations. It checks requirement syntax, recommends methods and activities, proposes allocations and retrieves trace links. L01 estimates model parameters from quality-checked supplied data. It also reports evidence gaps and prepares engineering views and baseline review packages.
-
-L03 calculates mass and volume estimates, compares EPS alternatives and performs power/energy budgeting and sizing. L03 executes electrical, energy and electrothermal analyses, MIL scenarios and RAM assessments. It maps EPS component and port definitions to F Prime and reconstructs analyses. L06 identifies change impacts and retains baselines and analysis result records.
-
-Engineering use, knowledge sources and technical review connect to L01 through IF-01, IF-02 and IF-06. Simulation tools connect to L03 through IF-03. L01 forwards change requests to L06 and analysis inputs to L03. Section~\ref{subsection:framework-context} specifies the external exchanges. Requests and human decision records carry information. Engineers authorize baseline decisions. Record retention and tool execution confer no engineering approval or satisfaction.
 
 \begin{figure}[p]
 \centering
 \captionsetup{font=small,skip=4pt}
-\includegraphics[page=1,width=\linewidth]{fig/logical-architecture.pdf}
-\par\medskip
-\includegraphics[page=2,width=\linewidth]{fig/logical-architecture.pdf}
-\caption[Logical architecture: component cooperation and external interfaces.]{Logical architecture: component cooperation and external interfaces. The upper view shows the three components and their exchanges. The lower view connects all external participants, including simulation tools, through four shared boundary ports. Solid, dotted and dash-dot arrows distinguish information exchanges. Dashed arrows carry baseline context and analysis input control. Engineers authorize baseline decisions. Reviewers receive baseline packages and return findings. Record retention confers no engineering approval.}
+\includegraphics[width=\linewidth]{fig/logical-architecture.pdf}
+\caption[Logical architecture: component cooperation and user interfaces.]{Logical architecture: component cooperation and user interfaces. Users exchange engineering inputs and responses with L01 through interface IF-01, and configuration requests, decisions and responses with L04 through IF-02. Solid arrows carry requests and analysis inputs. Dotted arrows carry identifiers, parameter values and user responses. Dash-dot arrows carry engineering records and impact findings.}
 \label{fig:framework-logical}
 \end{figure}
 \clearpage

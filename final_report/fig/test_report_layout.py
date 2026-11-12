@@ -1,35 +1,32 @@
 """Check compact figure placement and removal of the concern-to-MOE appendix."""
+import json
 from pathlib import Path
 import re
 import unittest
-import xml.etree.ElementTree as ET
 
 REPORT = Path(__file__).resolve().parent.parent
 
 
 class ReportLayoutTests(unittest.TestCase):
-    def test_three_component_architecture_uses_two_compact_canvases(self):
-        internal = ET.parse(REPORT / 'fig/logical-architecture.svg').getroot()
-        boundary = ET.parse(REPORT / 'fig/logical-architecture-panel-02.svg').getroot()
-        self.assertEqual(internal.attrib['viewBox'], '0 0 690 330')
-        self.assertEqual(boundary.attrib['viewBox'], '0 0 690 420')
-        self.assertEqual(len(internal.findall('.//{*}g[@data-component]')), 3)
-        self.assertEqual(len(boundary.findall('.//{*}rect[@data-port]')), 4)
-        self.assertEqual(len(boundary.findall('./{*}g[@data-flow]')), 8)
+    def test_four_component_architecture_uses_one_compact_canvas(self):
+        provenance = json.loads((REPORT / 'fig/logical-architecture.provenance.json').read_text())
+        inventory = json.loads((REPORT / 'fig/logical-architecture.inventory.json').read_text())
+        self.assertEqual(provenance['dimensions'], {'pdf_pt': [760, 620], 'pdf_pages': 1})
+        self.assertEqual(len(inventory['components']), 4)
+        self.assertEqual(len(inventory['interfaces']), 2)
+        self.assertEqual(sum(len(i['flows']) for i in inventory['interfaces']), 4)
 
-    def test_simulation_is_merged_into_the_portrait_external_interface_view(self):
+    def test_simulation_is_inside_the_single_architecture_view(self):
         text = (REPORT / 'logical.tex').read_text()
         self.assertNotIn('\\begin{landscape}', text)
         self.assertEqual(text.count('\\begin{figure}[p]'), 1)
         self.assertEqual(text.count('\\caption['), 1)
         self.assertNotIn('\\ContinuedFloat', text)
-        self.assertIn('\\includegraphics[page=1,width=\\linewidth]', text)
-        self.assertIn('\\includegraphics[page=2,width=\\linewidth]', text)
-        self.assertNotIn('page=3,', text)
-        self.assertNotIn('Logical architecture: simulation coupling', text)
         figure = text.split('\\begin{figure}[p]', 1)[1].split('\\end{figure}', 1)[0]
-        self.assertIn('page=1,', figure)
-        self.assertIn('page=2,', figure)
+        self.assertEqual(figure.count('\\includegraphics'), 1)
+        self.assertIn('\\includegraphics[width=\\linewidth]{fig/logical-architecture.pdf}', figure)
+        self.assertNotIn('page=', figure)
+        self.assertNotIn('including simulation tools', figure)
 
     def test_csrm_figures_can_share_portrait_float_pages(self):
         text = (REPORT / 'generic-cubesat-structure.tex').read_text()

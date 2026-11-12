@@ -1,30 +1,19 @@
 {
   "artifact": "logical-architecture",
   "kind": "Authored illustrative logical architecture",
-  "producer": "logical-architecture.py, three components and two coordinated views",
+  "producer": "logical-architecture.py, four components in one view",
   "native_syside_render": false,
   "executed_simulation": false,
-  "basis": "Authored report illustration. No native model validation or simulation.",
+  "basis": "Authored report illustration. No simulation is executed.",
   "inventory": "logical-architecture.inventory.json",
   "counts": {
-    "framework_requirements": 23,
-    "logical_components": 3,
-    "peer_exchange_groups": 6,
-    "peer_requirement_links": 33,
-    "internal_requirement_links": 11,
-    "black_box_interfaces": 4,
-    "black_box_directed_flows": 8,
-    "boundary_refinement_routes": 9
+    "framework_requirements": 20,
+    "logical_components": 4,
+    "peer_exchange_groups": 8,
+    "external_interfaces": 2,
+    "external_directed_flows": 4
   },
   "checks": {
-    "boundary_exchange_label_clearance_checked": true,
-    "three_components_checked": true,
-    "all_six_peer_exchanges_displayed": true,
-    "all_internal_requirement_relations_retained": true,
-    "all_eight_external_flows_displayed": true,
-    "all_four_shared_ports_checked": true,
-    "component_names_containment_and_directed_endpoints_checked": true,
-    "terminal_heads_skip_intermediate_ports": true,
     "monochrome_paint_checked": true,
     "serif_labels_checked": true,
     "square_block_corners_checked": true,
@@ -32,23 +21,26 @@
     "foreground_arrowheads_checked": true,
     "single_painted_head_per_terminal_path_checked": true,
     "interface_labels_on_ports_checked": true,
+    "exchange_routes_do_not_cross": true,
+    "exchange_labels_clear_routes": true,
+    "four_components_checked": true,
+    "only_users_external": true,
+    "all_eight_internal_exchanges_displayed": true,
+    "all_four_user_flows_displayed": true,
+    "two_shared_ports_checked": true,
+    "report_requirement_allocations_checked": true,
+    "component_names_containment_and_directed_endpoints_checked": true,
+    "terminal_heads_skip_intermediate_ports": true,
     "pdf_text_within_page": true,
     "exact_svg_preserved_during_conversion": true,
-    "pdf_pages": 2,
-    "native_semantic_validation": "Not performed. Authored report illustration."
+    "pdf_pages": 1
   },
   "dimensions": {
-    "panels_pt": [
-      [
-        690,
-        330
-      ],
-      [
-        690,
-        420
-      ]
+    "pdf_pt": [
+      760,
+      620
     ],
-    "pdf_pages": 2
+    "pdf_pages": 1
   },
   "font": {
     "family": "Times New Roman",
@@ -63,25 +55,19 @@
       }
     }
   },
-  "generator_sha256": "b18701cdd4dcbb833ddf29f0c383bbcf9b81730c92e75ec3823006ee4321eacb",
+  "generator_sha256": "793f637c28051cfec5b115b2bf4f93723bf3265b266fb9f803f11deae853baee",
   "style_sha256": "d207e6a5ec4a0bb5f561e9f132291ba723e8fd8000c7c15c9548c640a819be7c",
   "report_source_sha256": {
-    "final_report/requirements.tex": "7367ff2ce191c7d31227ecc5d1f61505916d352d9b80ac0d04cbb21ff22a6dd3",
-    "final_report/logical.tex": "3fe75364096bff79249c2ef25c2e9f2b084daa17fe7f1ae56ad72d9c4953e5d2"
+    "final_report/requirements.tex": "685d5eb4469c48a904b01d534e81cf151b88c221ce0a1b690f483d638a7bb230",
+    "final_report/logical.tex": "8e241a0e7d9b3a9887d4fbadf750a958bc5004955de5558cb5c07d651fbb1ae7"
   },
   "artifact_sha256": {
-    "svg": "9b522808e3190a8894814ed9eae0c19e8db29ae67b9f1e7b28cf24880793fe59",
-    "pdf": "714c94ae3ac5d5f576414f2f84deea73abb88a19d103c3578f76a42bb97e5c83",
-    "png": "12a657a855028f7941b47760f14a4d16ed15fe2599082f43eb1a012fc2b6991c"
+    "pdf": "00098f97f64ffa123a577ca2643261f7b84ca46ed9b655ce3c2ea3f739d4d474"
   },
-  "coordinated_panel_sha256": {
-    "logical-architecture.svg": "9b522808e3190a8894814ed9eae0c19e8db29ae67b9f1e7b28cf24880793fe59",
-    "logical-architecture.png": "12a657a855028f7941b47760f14a4d16ed15fe2599082f43eb1a012fc2b6991c",
-    "logical-architecture-overview.pdf": "c1c2f3064dc01aa6eb03d0517aa48215d41b0e5138bbadd408bd9227ea8a1940",
-    "logical-architecture-panel-02.svg": "f339eb4732962a17528d2a8a9d5666293db17e32cc9c24144992d7cb3a719744",
-    "logical-architecture-panel-02.png": "0a5987f95f1e8f5873e424fdcd589938d0dc95c7dd73a32739826cd9ba350678",
-    "logical-architecture-panel-02.pdf": "e7b5a59c47ec423d3fc36eb35a15c3f64738c96a72426b3f8501c8952bb044eb",
-    "logical-architecture.pdf": "714c94ae3ac5d5f576414f2f84deea73abb88a19d103c3578f76a42bb97e5c83"
+  "rendering_sha256": {
+    "svg": "215720f53c536f96e27b7b7b3680fef52f62512e8d731c03b636dc259bbe8593",
+    "pdf": "00098f97f64ffa123a577ca2643261f7b84ca46ed9b655ce3c2ea3f739d4d474",
+    "png": "fde74177f4ad5fef67efa2a9959bc736137e9536e52c39dbeeacf94449a1db98"
   },
   "reproduction": [
     "python3 final_report/fig/logical-architecture.py --jobdir /absolute/external/check-dir"
