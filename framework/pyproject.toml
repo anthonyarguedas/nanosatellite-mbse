@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nanosat-mbse"
+version = "0.1.0"
+description = "Python models for nanosatellite requirements and verification"
+requires-python = ">=3.8"
+
+[tool.setuptools]
+packages = [
+    "framework",
+    "framework.models",
+    "framework.models.eps",
+    "framework.models.persistence",
+    "framework.gui",
+    "framework.gui.backend",
+]
+package-dir = {framework = "."}
+
+[tool.setuptools.package-data]
+framework = ["cots/*.tsv"]
