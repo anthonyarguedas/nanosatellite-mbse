@@ -119,3 +119,13 @@ The battery energy screen compares its BOL rating with the report's preliminary 
 It establishes no chronological reserve, charging acceptance or EOL service claim.
 
 See [the example session](../sessions/example_eps_sizing.py) for synthetic inputs and [the model guide](../models/README.md) for ownership.
+
+## BIRDS-4 comparison tables
+
+`birds4_tables.py` formats the [BIRDS-4 example session](../sessions/example_birds4_power_budget.py) as standalone HTML and CSV tables.
+Run `python3 -m framework.scripts.birds4_tables` from the repository root.
+Use `--output DIRECTORY` to choose another destination.
+The default output is `framework/sessions/birds4/`.
+The generator preserves the reference table layouts and shows reference, model and difference values.
+All engineering formulas remain in model Property expressions and the existing numerical scripts.
+The [reconstruction notes](../sessions/birds4/README.md) distinguish measured inputs, supplied MATLAB results, independent calculations and source discrepancies.

@@ -21,8 +21,9 @@ The [COTS input guide](cots/README.md) maps sourced ratings and explicit data ga
 The ordinary [example session](sessions/example_mission.py) demonstrates transitive verification.
 The [EPS sizing session](sessions/example_eps_sizing.py) demonstrates circular/eccentric illumination, preliminary energy sizing and checks of the entered array, battery and load-rail configuration.
 The [COTS configuration example](sessions/example_cots_configuration.py) runs the report equations with sourced solar and battery ratings, explicit mission assumptions and unresolved checks kept visible. Run it with `python3 -m framework.sessions.example_cots_configuration`.
+The [BIRDS-4 reconstruction](sessions/birds4/README.md) rebuilds the reference load matrix and loss budgets, exposes source discrepancies and compares an independent ideal nadir generation case. Run `python3 -m framework.sessions.example_birds4_power_budget` to generate matching HTML and CSV tables in `framework/sessions/birds4/`.
 From the repository root, run them with `python3 -m framework.sessions.example_mission` or `python3 -m framework.sessions.example_eps_sizing`.
-There is no CLI.
+Use the model API directly from Python.
 
 ## Layout
 
