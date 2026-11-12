@@ -2,6 +2,7 @@
 
 from .properties import EvaluationResult, EvaluationStatus, PendingValue, Property, Unit
 from .objects import ModelObject
+from .geometry import Face, Pointing
 from .functions import Function, ModuleImport
 from .stakeholders import Stakeholder, RegulatoryAgency, MissionStakeholder, LaunchProvider, Partner, ThirdParty
 from .elements import DomainElement, SpaceSegment, GroundSegment, Subsystem, Component, Orbit
@@ -14,7 +15,7 @@ from .requirements import Requirement, VerificationCondition, ConditionResult, V
 from .mission import Mission, Session
 
 __all__ = [
-    "Mission", "Session", "ModelObject", "Property", "Unit", "Function", "ModuleImport",
+    "Mission", "Session", "ModelObject", "Property", "Unit", "Function", "ModuleImport", "Face", "Pointing",
     "EvaluationResult", "EvaluationStatus", "PendingValue",
     "Stakeholder", "RegulatoryAgency", "MissionStakeholder", "LaunchProvider", "Partner", "ThirdParty",
     "DomainElement", "SpaceSegment", "GroundSegment", "Subsystem", "Component", "Orbit",

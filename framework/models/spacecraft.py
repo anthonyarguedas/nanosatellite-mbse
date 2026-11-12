@@ -15,7 +15,10 @@ class Communication(Subsystem):
 
 
 class AttitudeDeterminationAndControl(Subsystem):
-    pass
+    pointing = Property(unit="1")
+    pointing_face = Property(unit="1")
+    clocking_angle = Property(unit="deg")
+    effective_clocking_angle = Property("0 if self.pointing.value == 'sun_pointing' else self.clocking_angle", "deg")
 
 
 class GuidanceNavigationAndControl(Subsystem):
@@ -40,6 +43,9 @@ class Payload(Subsystem):
 
 class CubeSatBus(SpaceSegment):
     units = Property(unit="U")
+    length_x = Property("illumination.cubesat_dimensions(units=self.units).x", "m")
+    length_y = Property("illumination.cubesat_dimensions(units=self.units).y", "m")
+    length_z = Property("illumination.cubesat_dimensions(units=self.units).z", "m")
     default_subsystems = (
         EPS,
         CommandAndDataHandling,

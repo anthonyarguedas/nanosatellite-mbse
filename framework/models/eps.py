@@ -125,7 +125,7 @@ class EPS(Subsystem):
             "solar_area", self.SolarArray.active_area,
             "0 if self.required_power.value == 0 else sizing.minimum_array_area("
             "required_power=self.required_power, power_density=self.context.SolarArray.eol_power_density).square_metres",
-            "m2", "array-incidence-area",
+            "m2", "array-generation-screen",
             "The array shall have at least {minimum.target} of active area at the assessed conditions.",
             required_power=solar_power.required,
             effective_area=Property(
@@ -221,6 +221,11 @@ class SolarArray(EPSComponent):
     cell_count = Property("self.series_count.value * self.parallel_count.value", "cell")
     cell_active_area = Property(unit="m2")
     active_area = Property("self.cell_count.value * self.cell_active_area.value", "m2")
+    mounting_face = Property(unit="1")
+    normal_body = Property("illumination.face_normal(face=self.mounting_face).vector", "1")
+    body_face_area = Property(
+        "illumination.face_area(face=self.mounting_face, length_x=self.spacecraft.length_x, "
+        "length_y=self.spacecraft.length_y, length_z=self.spacecraft.length_z).square_metres", "m2")
     packing_fraction = Property(unit="1")
     usable_area = Property(unit="m2")
     panel_area = Property("sizing.panel_area(active_area=self.active_area, packing_fraction=self.packing_fraction).square_metres", "m2")
@@ -245,13 +250,23 @@ class SolarArray(EPSComponent):
     irradiance = Property(unit="W/m2")
     inherent_retention = Property(unit="1")
     assembly_efficiency = Property(unit="1")
-    incidence_angle = Property(unit="deg")
+    sunlight_projection = Property(
+        "illumination.orbital_projection(normal_body=self.normal_body, "
+        "pointing=self.spacecraft.AttitudeDeterminationAndControl.pointing, "
+        "pointing_face=self.spacecraft.AttitudeDeterminationAndControl.pointing_face, "
+        "clocking_angle=self.spacecraft.AttitudeDeterminationAndControl.effective_clocking_angle, "
+        "semimajor_axis=self.mission.orbit.semimajor_axis, eccentricity=self.mission.orbit.eccentricity, "
+        "earth_radius=self.mission.orbit.earth_radius, beta_angle=self.mission.orbit.beta_angle, "
+        "sun_projection_angle=self.mission.orbit.effective_sun_projection_angle, "
+        "period=self.mission.orbit.period).sunlight_mean", "1")
+    projected_sunlight_duration = Property("self.sunlight_projection.value * self.mission.orbit.sunlight_duration.value", "s")
     normal_power_density = Property("self.irradiance.value * self.eol_efficiency.value", "W/m2")
     eol_power_density = Property(
         "sizing.array_power_density(irradiance=self.irradiance, eol_efficiency=self.eol_efficiency, "
         "inherent_retention=self.inherent_retention, assembly_efficiency=self.assembly_efficiency, "
-        "incidence_angle=self.incidence_angle).watts_per_square_metre", "W/m2")
+        "sunlight_projection=self.sunlight_projection).watts_per_square_metre", "W/m2")
     available_power = Property("self.active_area.value * self.eol_power_density.value", "W")
+    source_energy = Property("self.available_power.value * self.mission.orbit.sunlight_duration.value", "J")
 
 
 class RegulatorAndConverter(EPSComponent):

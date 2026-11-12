@@ -24,6 +24,7 @@ class Mission(ModelObject):
         self._imports = {}
         self.add_import("import math as math")
         self.add_import("import framework.scripts.sizing as sizing")
+        self.add_import("import framework.scripts.illumination as illumination")
         for source in imports:
             self.add_import(source)
         if orbit is _DEFAULT_ORBIT:

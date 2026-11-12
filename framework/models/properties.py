@@ -39,7 +39,9 @@ def expression(source):
     """Accept one Python expression, including literal input conveniences."""
     if source is None:
         return None
-    if type(source) in (bool, int, float):
+    if isinstance(source, Enum):
+        source = repr(source.value)
+    elif type(source) in (bool, int, float):
         source = repr(source)
     if not isinstance(source, str) or "\n" in source or "\r" in source:
         raise ValueError("Supply a Python one-line expression.")

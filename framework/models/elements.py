@@ -78,13 +78,15 @@ class Component(ModelObject):
         return tuple(child for child in self.children if isinstance(child, ComponentMode))
 
     @property
-    def spacecraft_modes(self):
+    def spacecraft(self):
         parent = self.parent
-        while parent is not None:
-            if isinstance(parent, SpaceSegment):
-                return parent.modes
+        while parent is not None and not isinstance(parent, SpaceSegment):
             parent = parent.parent
-        return ()
+        return parent
+
+    @property
+    def spacecraft_modes(self):
+        return self.spacecraft.modes if self.spacecraft is not None else ()
 
     @property
     def cots(self):
@@ -104,6 +106,8 @@ class Orbit(ModelObject):
     gravitational_parameter = Property("398601", "km3/s2")
     semimajor_axis = Property("self.earth_radius.value + self.altitude.value", "km")
     sun_projection_angle = Property(unit="deg")
+    effective_sun_projection_angle = Property(
+        "0 if self.eccentricity.value == 0 or abs(self.beta_angle.value) == 90 else self.sun_projection_angle", "deg")
     perigee_altitude = Property("self.semimajor_axis.value * (1 - self.eccentricity.value) - self.earth_radius.value", "km")
     period = Property(
         "sizing.orbit_period(semimajor_axis=self.semimajor_axis, eccentricity=self.eccentricity, "

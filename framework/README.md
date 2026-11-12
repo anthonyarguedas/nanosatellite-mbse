@@ -20,6 +20,7 @@ See [the model API](models/README.md) for properties, COTS, functions, modes and
 The [COTS input guide](cots/README.md) maps sourced ratings and explicit data gaps to the native EPS inputs.
 The ordinary [example session](sessions/example_mission.py) demonstrates transitive verification.
 The [EPS sizing session](sessions/example_eps_sizing.py) demonstrates circular/eccentric illumination, preliminary energy sizing and checks of the entered array, battery and load-rail configuration.
+The [COTS configuration example](sessions/example_cots_configuration.py) runs the report equations with sourced solar and battery ratings, explicit mission assumptions and unresolved checks kept visible. Run it with `python3 -m framework.sessions.example_cots_configuration`.
 From the repository root, run them with `python3 -m framework.sessions.example_mission` or `python3 -m framework.sessions.example_eps_sizing`.
 There is no CLI.
 
@@ -45,7 +46,8 @@ Mission verification includes Requirements throughout the containment tree.
 Units are annotations.
 Python expressions and custom functions execute trusted code with user permissions.
 Custom function inputs are explicitly bound to Properties.
-Mission expressions import the shipped EPS sizing functions as `sizing` by default.
+Mission expressions import the shipped EPS sizing functions as `sizing` and geometry calculations as `illumination` by default.
+Fixed face and pointing inputs produce sunlight-mean generation and source energy per orbit. Changing orbital state stays inside the scripts.
 Calculations have no cache or execution protection.
 
 The current GUI retains its older workbook schema through `gui/backend/legacy/`.

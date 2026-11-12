@@ -59,7 +59,8 @@ It does not select the mission's illumination or temperature history.
 
 ## Inputs that can remain unresolved
 
-Usable installation area, packing, attitude, lifetime, engineer degradation margin, path efficiency and mode allocations normally belong to the mission or installation.
+Usable installation area, packing, mounting face, prescribed pointing, lifetime, engineer degradation margin, path efficiency and mode allocations normally belong to the mission or installation.
+The illumination script calculates sunlight projection from fixed geometry and pointing inputs. Incidence angle is internal to the assessment.
 A new assembly's counts belong to its configuration.
 The extraction does not invent these inputs.
 

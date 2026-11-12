@@ -1,6 +1,6 @@
 """Synthetic EPS sizing and configuration checks. Importing constructs configuration only."""
 
-from framework.models import Component, ComponentMode, CubeSatBus, Mission
+from framework.models import Component, ComponentMode, CubeSatBus, Face, Mission, Pointing
 
 mission = Mission(lifetime=2, days_per_year=365.25)
 orbit = mission.orbit
@@ -10,6 +10,9 @@ orbit.beta_angle = 0
 orbit.sun_projection_angle = 30
 
 bus = mission.add(CubeSatBus("BUS", units=1))
+attitude = bus.AttitudeDeterminationAndControl
+attitude.pointing = Pointing.SUN_POINTING
+attitude.pointing_face = Face.POS_Z
 eps = bus.EPS
 for component in eps.components:
     component.mass = 0.1
@@ -31,7 +34,7 @@ panel.series_count = 6
 panel.parallel_count = 4
 panel.cell_active_area = 0.00345
 panel.packing_fraction = 0.9
-panel.usable_area = 0.1
+panel.usable_area = 0.1  # Assumed deployed area, larger than the 1U body face.
 panel.cell_open_circuit_voltage = 2.6
 panel.cell_short_circuit_current = 0.5
 panel.bol_efficiency = 0.32
@@ -40,7 +43,7 @@ panel.temperature_factor = 1
 panel.irradiance = 1000
 panel.inherent_retention = 1
 panel.assembly_efficiency = 1
-panel.incidence_angle = 0
+panel.mounting_face = Face.POS_Z
 
 battery = eps.Battery
 battery.series_count = 1
@@ -100,5 +103,7 @@ if __name__ == "__main__":
     print("Minimum battery parallel strings:", eps.battery_energy.minimum_parallel_count.value)
     print("Installed panel area:", f"{panel.panel_area:.4f}")
     print("Required active area:", f"{eps.solar_area.required:.4f}")
+    print("Mean sunlight projection:", f"{panel.sunlight_projection:.4f}")
+    print("Source energy per orbit:", f"{panel.source_energy:.2f}")
     print("Battery EOL energy:", f"{battery.eol_energy:.2f}")
     print("Battery EOL capacity:", f"{battery.eol_capacity:.2f}")

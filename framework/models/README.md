@@ -15,6 +15,7 @@ Values and verification results are recomputed on every request.
 | `functions.py` | Explicit imports and required Function inputs |
 | `stakeholders.py` | Stakeholders, their classifications and ThirdParty |
 | `elements.py` | Segments, subsystems, components and Orbit |
+| `geometry.py` | Body face and prescribed pointing enums |
 | `spacecraft.py` | CubeSatBus and named subsystem types |
 | `eps.py` | EPS defaults, component properties and fixed COTS classes |
 | `modes.py` | Distinct mode, state and allocation classes |
@@ -50,6 +51,7 @@ for failure in report.for_instance(battery).failures:
 A `Property` is a binding object. Read `battery.mass.value` to evaluate it.
 Set `battery.mass.expression` to change its formula.
 Assigning a literal such as `battery.mass = 0.2` stores its Python literal expression.
+Assigning an Enum member stores its underlying value as a Python literal, so `panel.mounting_face = Face.POS_Y` evaluates to `"+Y"`.
 Assigning another bound Property stores a live reference to that Property, including before attachment.
 Additional properties use `object.define("name", Property(...))`.
 Inherited declarations are copied into independent instance bindings.
@@ -144,9 +146,10 @@ No automatic all-mode compliance policy is assumed.
 
 ## Orbit and preliminary EPS sizing
 
-Every Mission imports `framework.scripts.sizing` as `sizing` alongside `math`.
-The numerical code stays in [the sizing script](../scripts/sizing.py).
-Model Properties declare its inputs and expose its results.
+Every Mission imports `framework.scripts.sizing` as `sizing` and `framework.scripts.illumination` as `illumination` alongside `math`.
+The numerical code stays in [the sizing script](../scripts/sizing.py) and [the illumination script](../scripts/illumination.py).
+Model Properties declare fixed inputs and expose scalar results for the assessed configuration.
+Orbital phase, instantaneous orientation, panel incidence and Earth shadow stay internal to the scripts.
 Attach Orbit to a Mission before evaluating calculations that use these session imports.
 
 Orbit owns Earth radius (6378 km), gravitational parameter (398601 km3/s2), semimajor axis, mean motion, period, orbits per day and eclipse/sunlight durations.
@@ -160,6 +163,7 @@ Beta and `sun_projection_angle` use degrees at the model interface.
 The script converts them to radians.
 For an eccentric orbit, `sun_projection_angle` is the angle from perigee to the Sun's projection in the direction of motion.
 Circular orbits and beta angles of ±90 degrees need no projection angle.
+`effective_sun_projection_angle` supplies the arbitrary angular reference zero in those cases and otherwise reads the explicit input.
 The model supports the report's cylindrical-shadow entry/exit method, including eclipse intervals crossing the angular origin.
 It returns zero eclipse duration when the orbit is fully sunlit.
 
@@ -267,6 +271,62 @@ The additional EPS Requirements are:
 | `bus_current` | Selected path capacity at least the declared load current |
 | `battery_charge_current`, `battery_discharge_current` | Separate battery current capacity at least the current declared at its terminals |
 
+### Fixed geometry and illumination
+
+`Face` has `POS_X`, `NEG_X`, `POS_Y`, `NEG_Y`, `POS_Z` and `NEG_Z` members.
+Their values are the corresponding body face identifiers, such as `"+Y"`.
+`CubeSatBus.length_x`, `length_y` and `length_z` use nominal 10 cm unit layouts in m:
+
+| Units | X, Y, Z unit counts |
+| --- | --- |
+| 1, 1.5, 2, 3 | 1, 1, units |
+| 6 | 2, 1, 3 |
+| 12 | 2, 2, 3 |
+
+These allocation boxes exclude rails and dispenser allowances.
+They establish no mechanical compliance or panel layout claim.
+Override the three dimensions for a specified bus or another form factor.
+Unsupported nominal layouts raise an error when their dimensions are evaluated.
+
+`SolarArray.mounting_face` determines its outward `normal_body` and nominal `body_face_area`.
+The area uses the two body dimensions perpendicular to the selected face normal.
+`usable_area` remains an explicit installation allocation after clearances.
+For example, `panel.usable_area = "0.8 * self.body_face_area.value"` allocates 80% of the nominal body face.
+A deployed section can override `normal_body` with a constant three-component body-frame expression and supply its deployed usable area.
+The face remains its mounting reference. Its nominal body area is a comparison value.
+The illumination script normalizes every nonzero panel normal.
+
+`AttitudeDeterminationAndControl` owns `pointing`, `pointing_face` and `clocking_angle`.
+All three inputs start unset.
+`Pointing.SUN_POINTING` keeps the declared body face toward the Sun.
+`Pointing.NADIR` keeps it toward Earth's center with fixed clocking in the local orbital frame.
+At zero clocking, the next cyclic positive body axis (+Y for ±X, +Z for ±Y, +X for ±Z) aligns with the along-track direction.
+Positive clocking follows the right-hand rule about the pointing direction.
+Clocking has no effect on panel projection under ideal Sun pointing and can remain unset.
+`effective_clocking_angle` supplies the unused value zero for that law and otherwise reads `clocking_angle`.
+
+```python
+from framework.models import Face, Pointing
+
+attitude = bus.AttitudeDeterminationAndControl
+attitude.pointing = Pointing.NADIR
+attitude.pointing_face = Face.NEG_Z
+attitude.clocking_angle = 0
+panel = bus.EPS.SolarArray
+panel.mounting_face = Face.POS_Z
+panel.usable_area = "0.8 * self.body_face_area.value"
+print(panel.sunlight_projection.value)
+```
+
+The script calculates `sunlight_projection` as the sunlight-time mean of `max(0, normal dot Sun direction)` over one full orbit.
+It accounts for Earth shadow using the same geometry as the orbit duration calculations.
+An initial epoch or phase is unnecessary for these prescribed full-orbit averages.
+No changing state, eclipse flag or incidence angle is exposed as a model Property.
+The model assumes exact prescribed pointing, a fixed Sun per orbit and an unobstructed section.
+Slew, pointing error, deployment motion, self shading, penumbra and attitude dynamics need a separate assessment.
+The default array represents one uniformly oriented section. Other orientations need separate sections and explicit aggregation.
+Electrical topology remains independent of mounting geometry.
+
 ### Area and generation assumptions
 
 `active_area` defaults to cell count times `cell_active_area`.
@@ -276,11 +336,15 @@ Purchased panels can bind their specified active and panel areas directly.
 
 `eol_efficiency` applies `bol_efficiency * lifetime_retention * temperature_factor`.
 Bind supplied EOL efficiency directly when those effects are already included.
-`eol_power_density` applies irradiance, EOL efficiency, inherent retention, assembly efficiency and the projected incidence angle in degrees.
-No numerical loss factors, packing fraction or orientation are assumed.
-`available_power` defaults to active area times that density.
-These scalar conditions must describe a conservative sunlight bound or a constant sunlight case for the generation criterion.
-An external calculation can instead supply sunlight-mean `available_power` from a history.
+`eol_power_density` applies constant irradiance, EOL efficiency, inherent retention, assembly efficiency and the calculated `sunlight_projection`.
+It is a sunlight-mean power density. The area and generation criteria use this same mean.
+No numerical loss factors, packing fraction or pointing inputs are assumed.
+`available_power` defaults to active area times that mean density.
+`projected_sunlight_duration` is the mean projection times sunlight duration.
+`source_energy` is mean available power times sunlight duration, in J per orbit at the declared source boundary.
+It is separate from delivered energy at the load boundary.
+An external calculation can instead supply a mean density, projection or power under its stated conditions.
+Overriding available power alone leaves the area calculation unchanged, so the engineer must keep those assessments consistent.
 Shading, mismatched sections, DET operating points and shared trackers require their applicable model. The framework does not synthesize their combined I--V characteristic.
 
 `eps.solar_area.effective_area` exposes the normal-incidence power/area relation.

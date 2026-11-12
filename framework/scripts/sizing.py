@@ -161,14 +161,8 @@ def _mean_anomaly(t, eccentricity, cos_lambda, sin_lambda):
     return anomaly - eccentricity * math.sin(anomaly)
 
 
-def eccentric_illumination(semimajor_axis: float, eccentricity: float, earth_radius: float,
-                           beta_angle: float, sun_projection_angle: float,
-                           period: float) -> Illumination:
-    _orbit(semimajor_axis, eccentricity, earth_radius)
-    _illumination_inputs(semimajor_axis, earth_radius, beta_angle, period)
-    _finite(sun_projection_angle)
-    if abs(beta_angle) == 90:
-        return Illumination(0.0, period)
+def _shadow_intervals(semimajor_axis, eccentricity, earth_radius, beta_angle, sun_projection_angle):
+    """Night-side shadow arcs in t = tan((nu - lambda - pi)/2). Inputs are validated by callers."""
     angle = math.radians(sun_projection_angle % 360)
     beta = math.radians(beta_angle)
     p = semimajor_axis * (1 - eccentricity) * (1 + eccentricity)
@@ -183,12 +177,25 @@ def eccentric_illumination(semimajor_axis: float, eccentricity: float, earth_rad
     scale = max(abs(value) for value in coefficients)
     coefficients = [value / scale for value in coefficients]
     boundaries = [-1.0, *(root for root in _roots(coefficients, -1.0, 1.0) if -1 < root < 1), 1.0]
+    return [(entry, exit) for entry, exit in zip(boundaries, boundaries[1:])
+            if _polynomial(coefficients, (entry + exit) / 2) < 0]
+
+
+def eccentric_illumination(semimajor_axis: float, eccentricity: float, earth_radius: float,
+                           beta_angle: float, sun_projection_angle: float,
+                           period: float) -> Illumination:
+    _orbit(semimajor_axis, eccentricity, earth_radius)
+    _illumination_inputs(semimajor_axis, earth_radius, beta_angle, period)
+    _finite(sun_projection_angle)
+    if abs(beta_angle) == 90:
+        return Illumination(0.0, period)
+    angle = math.radians(sun_projection_angle % 360)
+    cos_lambda, sin_lambda = math.cos(angle), math.sin(angle)
     mean_span = 0.0
-    for entry, exit in zip(boundaries, boundaries[1:]):
-        if _polynomial(coefficients, (entry + exit) / 2) < 0:
-            start = _mean_anomaly(entry, eccentricity, cos_lambda, sin_lambda)
-            end = _mean_anomaly(exit, eccentricity, cos_lambda, sin_lambda)
-            mean_span += (end - start) % (2 * math.pi)
+    for entry, exit in _shadow_intervals(semimajor_axis, eccentricity, earth_radius, beta_angle, sun_projection_angle):
+        start = _mean_anomaly(entry, eccentricity, cos_lambda, sin_lambda)
+        end = _mean_anomaly(exit, eccentricity, cos_lambda, sin_lambda)
+        mean_span += (end - start) % (2 * math.pi)
     eclipse = min(period, max(0.0, period * (mean_span / (2 * math.pi))))
     return Illumination(eclipse, period - eclipse)
 
@@ -302,15 +309,14 @@ def solar_efficiency(bol_efficiency: float, lifetime_retention: float, temperatu
 
 
 def array_power_density(irradiance: float, eol_efficiency: float, inherent_retention: float,
-                        assembly_efficiency: float, incidence_angle: float) -> PowerDensity:
-    """Uniform fixed conditions. Incidence angle is in degrees."""
-    _finite(irradiance, eol_efficiency, inherent_retention, assembly_efficiency, incidence_angle)
-    if irradiance < 0 or not 0 <= incidence_angle <= 180:
-        raise ValueError("Require nonnegative irradiance and incidence in [0, 180] degrees.")
+                        assembly_efficiency: float, sunlight_projection: float) -> PowerDensity:
+    """Sunlight mean density at constant irradiance, efficiency and losses."""
+    _finite(irradiance, eol_efficiency, inherent_retention, assembly_efficiency, sunlight_projection)
+    if irradiance < 0 or not 0 <= sunlight_projection <= 1:
+        raise ValueError("Require nonnegative irradiance and sunlight projection in [0, 1].")
     if not all(0 <= factor <= 1 for factor in (eol_efficiency, inherent_retention, assembly_efficiency)):
         raise ValueError("Solar efficiency and loss factors must lie in [0, 1].")
-    projection = math.cos(math.radians(incidence_angle)) if incidence_angle < 90 else 0.0
-    density = irradiance * eol_efficiency * inherent_retention * assembly_efficiency * projection
+    density = irradiance * eol_efficiency * inherent_retention * assembly_efficiency * sunlight_projection
     _finite(density)
     return PowerDensity(density)
 
