@@ -5,7 +5,7 @@ from types import MappingProxyType
 
 from .elements import DomainElement, Orbit
 from .functions import ModuleImport
-from .objects import ModelObject, identifier
+from .objects import ModelObject
 from .requirements import Requirement, VerificationReport
 from .properties import Property
 from .stakeholders import Stakeholder, ThirdParty
@@ -77,24 +77,6 @@ class Mission(ModelObject):
     def third_parties(self):
         return tuple(child for child in self.children if isinstance(child, ThirdParty))
 
-    @property
-    def requirements(self):
-        return tuple(child for child in self.children if isinstance(child, Requirement))
-
-    def add_requirement(self, context, name, **definition):
-        """Create a namespaced default once, preserving authored replacements."""
-        identifier(name)
-        if not isinstance(context, ModelObject) or context.mission is not self:
-            raise ValueError("The requirement context must belong to this Mission.")
-        prefix = context.path[len(self.path):].strip(".").replace(".", "_")
-        name = f"{prefix}_{name}" if prefix else name
-        existing = next((child for child in self.children if child.name == name), None)
-        if existing is not None:
-            if not isinstance(existing, Requirement) or existing.context is not context:
-                raise ValueError(f"Generated requirement name {name!r} conflicts with another object or context.")
-            return existing
-        return self.add(Requirement(name, context=context, **definition))
-
     def accepts(self, child):
         if child.name in (*self.imports, self.name, "self", "mode"):
             raise ValueError("The child name conflicts with the expression namespace.")
@@ -116,7 +98,11 @@ class Mission(ModelObject):
         return current
 
     def verify(self, *, mode=None):
-        results = tuple(condition.evaluate(mode=mode) for requirement in self.requirements for condition in requirement.conditions)
+        results = tuple(
+            condition.evaluate(mode=mode)
+            for requirement in self.walk() if isinstance(requirement, Requirement)
+            for condition in requirement.conditions
+        )
         return VerificationReport(self, results)
 
     @classmethod

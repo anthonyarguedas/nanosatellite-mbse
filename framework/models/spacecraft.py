@@ -73,8 +73,8 @@ class CubeSatBus(SpaceSegment):
                 "type(self.parent.units.value) in (int, float) and self.parent.units.value > 0 "
                 "and 0 < target and math.isfinite(target) and 0 <= measure <= target",
             )
-            self.mission.add_requirement(
-                self, name,
+            self.add_requirement(
+                name,
                 statement=f"The complete {{self.context.name}} {quantity} shall not exceed {{maximum.target}}.",
                 rationale=rationale,
                 units=self.units,

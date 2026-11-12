@@ -154,13 +154,11 @@ class Requirement(ModelObject):
 
     @property
     def context(self):
-        """Calculation context, separate from Mission ownership and verification coverage."""
+        """Calculation context, separate from containment and verification coverage."""
         return self._context
 
     def validate_attachment(self):
-        if self.parent is None or not self.parent.is_mission:
-            raise TypeError("A Requirement belongs directly to a Mission.")
-        if self.context is not None and self.context.mission is not self.parent:
+        if self.mission is not None and self.context is not None and self.context.mission is not self.mission:
             raise ValueError("The requirement context must belong to its Mission.")
 
     @property

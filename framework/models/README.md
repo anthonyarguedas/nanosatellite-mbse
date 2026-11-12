@@ -36,7 +36,7 @@ for component in eps.components:
     if component is not battery:
         component.mass = 0.05
 
-requirement = mission.add(Requirement("mass_limit"))
+requirement = eps.add(Requirement("mass_limit"))
 condition = requirement.add(VerificationCondition(
     "maximum", eps.mass, Property("0.3", "kg"), "measure <= target",
 ))
@@ -60,7 +60,7 @@ Expressions reference values explicitly:
 ```python
 battery.mass.expression = "0.1 + 0.1"
 requirement.define("margin", Property("1.1"))
-condition.measure.expression = "mission.BUS.EPS.mass.value * mission.mass_limit.margin.value"
+condition.measure.expression = "mission.BUS.EPS.mass.value * mission.BUS.EPS.mass_limit.margin.value"
 ```
 
 Names are Python identifiers and remain fixed.
@@ -98,7 +98,7 @@ mission.add_import("import calculations as calc")
 requirement.define("power", Property("2", "W"))
 requirement.define("duration", Property("10", "s"))
 requirement.define("energy", Property(
-    "calc.energy(power=mission.mass_limit.power, duration=mission.mass_limit.duration).joules",
+    "calc.energy(power=mission.BUS.EPS.mass_limit.power, duration=mission.BUS.EPS.mass_limit.duration).joules",
     "J",
 ))
 ```
@@ -163,8 +163,8 @@ Circular orbits and beta angles of ±90 degrees need no projection angle.
 The model supports the report's cylindrical-shadow entry/exit method, including eclipse intervals crossing the angular origin.
 It returns zero eclipse duration when the orbit is fully sunlit.
 
-Adding an EPS creates these ordinary Requirements directly in Mission.
-Names include the model path, such as `BUS_EPS_solar_power`, so multiple EPS instances remain independent.
+Adding an EPS creates these ordinary Requirements as its own children.
+Names are local to the EPS, such as `eps.solar_power`, so multiple EPS instances remain independent.
 
 | Requirement | Its `required` Property |
 | --- | --- |
@@ -181,14 +181,14 @@ mission.orbit.eccentricity = 0
 mission.orbit.beta_angle = 0
 bus = mission.add(CubeSatBus("BUS", units=1))
 eps = bus.EPS
-mission.BUS_EPS_sunlight_energy.average_power = 5
-mission.BUS_EPS_eclipse_energy.average_power = 3
+eps.sunlight_energy.average_power = 5
+eps.eclipse_energy.average_power = 3
 eps.SolarArray.sunlight_path_efficiency = 0.8
 eps.SolarArray.eclipse_path_efficiency = 0.65
 eps.SolarArray.cell_eol_voltage = 2.3
 eps.SolarArray.cell_eol_current = 0.45
-print(mission.BUS_EPS_solar_power.required.value)
-print(mission.BUS_EPS_solar_cell_count.required.value)
+print(eps.solar_power.required.value)
+print(eps.solar_cell_count.required.value)
 ```
 
 The average powers represent complete illumination-period means, including duty cycles and EPS consumption at the declared load boundary.
@@ -200,7 +200,7 @@ An efficiency for a zero-energy term is unused. Its effective factor is the iden
 `SolarArray` owns sunlight/eclipse path efficiencies, EOL cell maximum power point voltage/current, `cell_eol_power`, installed `cell_count` and `eol_power`.
 The panel power screen compares installed EOL power with its required power.
 The cell screen requires an integer installed count at least as large as the ceiling.
-The unrounded ratio is available as `mission.BUS_EPS_solar_cell_count.fractional_count`.
+The unrounded ratio is available as `eps.solar_cell_count.fractional_count`.
 These are preliminary uniform-cell power screens. Series/parallel layout and illumination-dependent available generation require separate checks.
 
 `Battery` owns cycle-law coefficient/exponent, `fit_dod_min`, `fit_dod_max`, degradation margin and separate energy/capacity retention factors.
@@ -265,7 +265,7 @@ A CubeSatBus owns a numeric `units` Property annotated with `U`.
 It starts unset. Select a size explicitly, such as `CubeSatBus("BUS", units=3)`.
 Positive fractional sizes such as 1.5U are also supported.
 
-The first add creates two ordinary Requirements directly in Mission, with names such as `BUS_mass_limit`:
+The first add creates two ordinary Requirements owned by the bus, accessible as `bus.mass_limit` and `bus.volume_limit`:
 
 | Requirement | Measure | Target | Default per-U limit |
 | --- | --- | --- | --- |
@@ -274,16 +274,17 @@ The first add creates two ordinary Requirements directly in Mission, with names 
 
 ```python
 bus.units = 3
-assert mission.BUS_mass_limit.maximum.target.value == 6
-assert mission.BUS_volume_limit.maximum.target.value == 0.003
-mission.BUS_mass_limit.maximum_per_u = 1.5  # An explicitly chosen stricter allocation.
+assert bus.mass_limit.maximum.target.value == 6
+assert bus.volume_limit.maximum.target.value == 0.003
+bus.mass_limit.maximum_per_u = 1.5  # An explicitly chosen stricter allocation.
 ```
 
 Each Requirement owns `units`, linked to the bus, and an editable `maximum_per_u` Property.
 Changing the bus size or either per-U limit updates its Target through the stored expression.
 Known values pass when the size is positive and finite and the Measure lies between zero and the Target.
 Unset inputs remain pending.
-`mission.requirements` lists Mission's direct Requirement children, and `mission.verify()` checks them all.
+`bus.requirements` lists the bus's direct Requirement children.
+`mission.verify()` checks Requirements throughout the containment tree.
 Repeated initialization and restoration preserve deliberate deletions and custom edits.
 
 The mass baseline follows [CubeSat Design Specification Rev 14.1, Table 1](../../final_report/corpus/standards/cds-14.1/cds-14.1.md).
@@ -294,24 +295,25 @@ Packing, bounding dimensions and dispenser fit require separate assessments.
 
 ## Requirement ownership
 
-Only Mission accepts Requirements as children.
-Bus and EPS initialization add defaults to Mission through `mission.add_requirement(context, name, ...)`.
-Generated names prefix the local role with the context's model path, such as `BUS_EPS_solar_power`.
-Name collisions with another context raise an error.
+Mission, Orbit, DomainElement, Subsystem, Component and Stakeholder accept Requirements as children.
+Each object's `requirements` is a read-only tuple of its direct Requirement children.
+Bus and EPS initialization create their own defaults through `self.add_requirement(name, ...)`.
+Names are local to the owner, with full paths such as `mission.BUS.EPS.solar_power`.
+Sibling name collisions raise an error.
 
-Each generated Requirement has a read-only `context` reference to the bus or EPS used in its calculations.
-Context provides grouping and calculation inputs.
-Verification coverage follows Measure dependencies independently of context.
-`bus.requirements` and `eps.requirements` are read-only contextual views of Mission-owned Requirements.
-Their `parent` is always Mission.
-Authored Requirements can be added directly with `mission.add(Requirement(...))`, without any context.
+Each generated Requirement has a read-only `context` reference to its owner for calculation inputs.
+Authored Requirements may use another context from the same Mission or omit it.
+Verification coverage follows Measure dependencies independently of ownership and context.
+Authored Requirements can be added with `eps.add(Requirement(...))` or `mission.add(Requirement(...))`.
+`mission.requirements` lists only Mission's direct Requirements.
+`mission.verify()` checks Requirements at every level of the containment tree.
 
-Physical defaults can be constructed before attachment.
-Requirement creation waits until their model objects belong to a Mission.
+Physical defaults and authored Requirements can be constructed before attachment.
+Default requirement creation waits until their owners belong to a Mission.
 Repeated initialization preserves edits and deletions.
-A failed add rolls back newly generated Mission Requirements.
+A failed add rolls back newly generated Requirements.
 Restoration suppresses default requirement creation.
-Removing a physical object leaves the Mission's Requirements in place, with unavailable bindings diagnosed until explicitly rewired or reattached.
+Removing an owner keeps its Requirements attached to it and excludes them from Mission verification until reattachment.
 
 ## Requirement prose
 

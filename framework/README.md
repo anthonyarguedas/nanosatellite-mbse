@@ -38,7 +38,9 @@ framework/
 ```
 
 The public models have no GUI, database or workbook dependencies.
-All Requirements are direct Mission children, including defaults generated for a bus or EPS.
+Mission, Orbit, Stakeholder, DomainElement, Subsystem and Component can own Requirements.
+Bus and EPS defaults belong to the bus and EPS respectively.
+Mission verification includes Requirements throughout the containment tree.
 Units are annotations.
 Python expressions and custom functions execute trusted code with user permissions.
 Custom function inputs are explicitly bound to Properties.

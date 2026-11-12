@@ -1,10 +1,12 @@
 """Stakeholder classifications and third parties."""
 
 from .objects import ModelObject
+from .requirements import Requirement
 
 
 class Stakeholder(ModelObject):
-    pass
+    def accepts(self, child):
+        return isinstance(child, Requirement)
 
 
 class RegulatoryAgency(Stakeholder):

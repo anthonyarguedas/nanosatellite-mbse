@@ -15,8 +15,8 @@ class EPS(Subsystem):
         condition = "math.isfinite(measure) and 0 <= target <= measure"
         if integer:
             condition += " and type(measure) is int"
-        return self.mission.add_requirement(
-            self, name,
+        return self.add_requirement(
+            name,
             statement=statement,
             rationale=f"final_report/design-proposal.tex#eq:{basis}. Preliminary sizing at the declared accounting boundary.",
             available=available, required=Property(required, unit),

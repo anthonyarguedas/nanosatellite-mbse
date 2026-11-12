@@ -109,8 +109,22 @@ class ModelObject:
 
     @property
     def requirements(self):
-        mission = self.mission
-        return tuple(req for req in mission.requirements if req.context is self) if mission is not None else ()
+        from .requirements import Requirement
+
+        return tuple(child for child in self.children if isinstance(child, Requirement))
+
+    def add_requirement(self, name, **definition):
+        """Create an owned default once, preserving authored replacements."""
+        from .requirements import Requirement
+
+        identifier(name)
+        existing = next((child for child in self.children if child.name == name), None)
+        if existing is not None:
+            if not isinstance(existing, Requirement):
+                raise ValueError(f"Generated requirement name {name!r} conflicts with another object.")
+            return existing
+        definition.setdefault("context", self)
+        return self.add(Requirement(name, **definition))
 
     def walk(self):
         yield self
@@ -144,8 +158,8 @@ class ModelObject:
         if child.name in self.__dict__ or hasattr(type(self), child.name) or child.name in self.properties:
             if alias_type is None or not isinstance(child, alias_type):
                 raise ValueError(f"Child name {child.name!r} conflicts with an existing attribute.")
-        mission = self.mission
-        requirements_before = set(mission.requirements) if mission is not None else set()
+        roots = (self.mission or self, child)
+        requirements_before = {req for root in roots for item in root.walk() for req in item.requirements}
         states_before = {item: item._requirements_initialized for item in child.walk()}
         child._parent = self
         self._children.append(child)
@@ -164,10 +178,11 @@ class ModelObject:
         except Exception:
             self._children.remove(child)
             child._parent = None
-            if mission is not None:
-                for requirement in mission.requirements:
-                    if requirement not in requirements_before:
-                        mission.remove(requirement)
+            for root in roots:
+                for item in root.walk():
+                    for requirement in item.requirements:
+                        if requirement not in requirements_before:
+                            item.remove(requirement)
             for item in child.walk():
                 item._requirements_initialized = states_before.get(item, False)
             raise
@@ -194,7 +209,7 @@ class ModelObject:
         """Create declared physical defaults on an explicit first add."""
 
     def create_requirements(self):
-        """Add default requirements to the Mission after attachment."""
+        """Add owned default requirements after joining a Mission."""
 
     @classmethod
     def restore(cls, name, **bindings):

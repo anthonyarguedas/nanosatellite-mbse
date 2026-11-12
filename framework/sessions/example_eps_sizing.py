@@ -16,8 +16,8 @@ for component in eps.components:
     component.volume = 0.0001
 
 # These are period-average loads, including duties at the chosen load boundary.
-mission.BUS_EPS_sunlight_energy.average_power = 5
-mission.BUS_EPS_eclipse_energy.average_power = 3
+eps.sunlight_energy.average_power = 5
+eps.eclipse_energy.average_power = 3
 # Synthetic delivered-energy allocations, supplied separately from demand.
 eps.available_sunlight_energy = 25000
 eps.available_eclipse_energy = 8000
@@ -45,9 +45,10 @@ if __name__ == "__main__":
     print("Orbit:", f"{orbit.period:.2f}")
     print("Sunlight:", f"{orbit.sunlight_duration:.2f}")
     print("Eclipse:", f"{orbit.eclipse_duration:.2f}")
-    for requirement in mission.requirements:
-        print(requirement.render_statement(), requirement.verified)
-    print("Fractional cell estimate:", mission.BUS_EPS_solar_cell_count.fractional_count.value)
-    print("Maximum DoD:", mission.BUS_EPS_battery_energy.maximum_dod.value)
+    for owner in mission.walk():
+        for requirement in owner.requirements:
+            print(requirement.render_statement(), requirement.verified)
+    print("Fractional cell estimate:", eps.solar_cell_count.fractional_count.value)
+    print("Maximum DoD:", eps.battery_energy.maximum_dod.value)
     print("Battery EOL energy:", f"{battery.eol_energy:.2f}")
     print("Battery EOL capacity:", f"{battery.eol_capacity:.2f}")

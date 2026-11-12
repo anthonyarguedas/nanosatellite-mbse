@@ -3,6 +3,7 @@
 from .modes import ComponentMode, SpacecraftMode
 from .objects import ModelObject
 from .properties import Property
+from .requirements import Requirement
 
 
 class DomainElement(ModelObject):
@@ -11,7 +12,7 @@ class DomainElement(ModelObject):
         return tuple(child for child in self.children if isinstance(child, Subsystem))
 
     def accepts(self, child):
-        return isinstance(child, Subsystem)
+        return isinstance(child, (Subsystem, Requirement))
 
 
 class SpaceSegment(DomainElement):
@@ -54,7 +55,7 @@ class Subsystem(ModelObject):
         return getattr(self.parent, "modes", ())
 
     def accepts(self, child):
-        return isinstance(child, Component) and (
+        return isinstance(child, Requirement) or isinstance(child, Component) and (
             type(child) is Component
             or child.subsystem_type is not None and isinstance(self, child.subsystem_type)
         )
@@ -90,7 +91,7 @@ class Component(ModelObject):
         return tuple(child for child in self.children if isinstance(child, Component) and child.fixed_properties)
 
     def accepts(self, child):
-        if isinstance(child, ComponentMode):
+        if isinstance(child, (ComponentMode, Requirement)):
             return True
         return isinstance(child, Component) and child.fixed_properties and isinstance(child, type(self))
 
@@ -119,3 +120,6 @@ class Orbit(ModelObject):
         "sun_projection_angle=self.sun_projection_angle, period=self.period).eclipse", "s",
     )
     sunlight_duration = Property("self.period.value - self.eclipse_duration.value", "s")
+
+    def accepts(self, child):
+        return isinstance(child, Requirement)
