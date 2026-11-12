@@ -36,7 +36,7 @@ FR-25 & The framework shall retain mission orbit, attitude, duration, environmen
 FR-15 & The framework shall allocate EPS requirements among components covering generation, storage, conversion, regulation, protection, distribution, and control components as per the CSRM Profile 1.1 specification. \\
 FR-13 & The framework shall calculate EPS mass and occupied volume estimates from aggregate or component data and assess margins against allocations, retaining sources, units, and unknown values. \\
 FR-20 & The framework shall calculate mode-dependent power, sunlight/eclipse energy budgets, and beginning/end-of-life array and battery sizing, including duty cycles, illumination, temperature, degradation, cycle life, allowable depth of discharge and user-defined margins, reporting integer cell counts, series/parallel arrangements, array area, battery capacity and allocation/operating-limit findings. \\
-FR-14 & The framework shall compare EPS concepts and architectures through common feasibility checks covering applicable choices of cell technology, array/battery series and parallel configurations, bus voltage, direct energy transfer or maximum power point tracking, and buck/boost regulation, reporting raw measures and unknown values. \\
+FR-14 & The framework shall compare EPS concepts and architectures through common feasibility checks covering different choices of cell technology, array/battery series and parallel configurations, bus voltage, direct energy transfer or maximum power point tracking, and buck/boost regulation, reporting raw measures and unknown values. \\
 \multicolumn{2}{@{}l}{\textbf{Simulation and analysis}} \\*
 FR-16 & The framework shall execute EPS analyses covering mission energy balance and survival autonomy, photovoltaic I--V/P--V characteristics, converter/regulator responses, direct energy transfer, MPPT, battery voltage and state of charge, electrothermal behavior, overcurrent/undervoltage/overvoltage faults, load shedding and recovery, applying time-dependent loads, schedules, mode transitions and supplied orbit, attitude, illumination, eclipse and thermal conditions, dissipation, energy shortages and margins against available electrical, battery, thermal, and component-rating limits. \\
 FR-22 & The framework shall estimate photovoltaic, battery electrical/electrothermal and dynamic EPS/load model parameters from quality-checked data. \\
@@ -54,15 +54,7 @@ FR-10 & The framework shall provide the inputs, dependencies and instructions to
 \subsection{Measures of performance}
 \label{subsection:framework-mops}
 
-These MOPs make the framework requirements measurable under declared workloads and reference configurations. Table~\ref{tab:framework-mop-protocols} gives one measure for each FR and links it to the enterprise MOEs it supports \citep[Sec.~17.3.3]{friedenthal2014practical}. The links express qualitative contributions. Framework conformity and enterprise effectiveness are assessed separately. Desired ranges are proposed verification targets under the conditions below. They describe no achieved performance. Empty cells and untargeted parts of a composite measure have no transferable quantitative basis.
-
-MOP-FR03 supports MOE-05 through method and model recommendations for the supplied requirements and inputs. Cost and access burden require separate enterprise observations. MOP-FR11 and MOP-FR37 support MOE-06 through evidence gap records and view interpretation. Their performance supports evaluation of clear scope and evidence limits without establishing physical or operational outcomes.
-
-The FR-07 delay target applies to an indexed single-baseline lookup under a declared record size and host configuration, excluding archive restoration and new analysis. It adopts the 20~s ceiling proposed for browser access to engineering parameters as an engineering interpretation for comparable data access, measured here from query submission to display \citep[Sec.~2, RQ-4]{kanavouras2024lightweight}. It sets no retrieval-correctness percentage. FR-34 adopts a complete-preservation target for component and port mappings in the declared F Prime profile, following the specified agreement between generated connections and the modeled architecture \citep[Sec.~3, p.~7]{review-0853}.
-
-FR-20 has a benchmark-reproduction target only for the power, energy and effective-area outputs in the published EPS calculation fixture \citep[Table~III and Fig.~7, p.~7]{review-0764}. With identical inputs and equations and rounding to the nearest published 0.001~W, Wh or m\textsuperscript{2}, the proposed absolute-error bound is half that increment. This is a derived reference band, not a general arithmetic or physical-prediction tolerance. Other budget and sizing outputs retain no numerical range. Published model-to-hardware errors, design margins and subjective usability ratings supply no ranges for these different framework metrics.
-
-Fix workload, versions, reference populations and observation windows. Shares use applicable reference records or cases. Report numerators, denominators, defect/profile families, critical errors and expert disagreement. Report unsupported and unfinished cases separately. Measure precision and recall against blind independent experts and record fidelity against controlled inputs. Compare numerical errors with an independent implementation of the same declared model, inputs and method. Assess physical prediction validity separately. MIL measures score scenario execution and criterion assessment separately from product pass rates.
+These MOPs make the framework requirements measurable. Table~\ref{tab:framework-mop-protocols} gives one measure for each FR and links it to the enterprise MOEs it supports \citep[Sec.~17.3.3]{friedenthal2014practical}.
 
 \begingroup
 \small
@@ -72,21 +64,23 @@ Fix workload, versions, reference populations and observation windows. Shares us
 \setlength{\LTpost}{0.4\baselineskip}
 \renewcommand{\arraystretch}{1.0}
 \setlength{\ReportTableBodyWidth}{\dimexpr\linewidth-6\tabcolsep\relax}
-\begin{longtable}{@{}P{0.16\ReportTableBodyWidth}P{0.49\ReportTableBodyWidth}P{0.23\ReportTableBodyWidth}P{0.12\ReportTableBodyWidth}@{}}
-\caption{Framework measures of performance and their qualitative MOE contributions.}\label{tab:framework-mop-protocols}\\
+\begin{longtable}{@{}P{0.16\ReportTableBodyWidth}P{0.65\ReportTableBodyWidth}P{0.23\ReportTableBodyWidth}@{}}
+\caption{Framework measures of performance.}\label{tab:framework-mop-protocols}\\
 \hline
-\textbf{FR/MOP} & \textbf{Definition and unit} & \textbf{Desired range/source} & \textbf{Supports MOEs} \\
+\textbf{FR/MOP} & \textbf{Definition and unit} & \textbf{Desired range}
 \hline
 \endfirsthead
 \hline
-\textbf{FR/MOP} & \textbf{Definition and unit} & \textbf{Desired range/source} & \textbf{Supports MOEs} \\
+\textbf{FR/MOP} & \textbf{Definition and unit} & \textbf{Desired range}
 \hline
 \endhead
 \hline
 \endfoot
-FR-01\newline MOP-FR01 & Records recovered with correct required fields and resolution reasons (\%). & & \hyperref[moe:MOE-03]{MOE-03} \\
-FR-02\newline MOP-FR02 & Syntax defect precision and recall, including correct affected text (fractions). & & \hyperref[moe:MOE-02]{MOE-02}\newline \hyperref[moe:MOE-03]{MOE-03} \\
-FR-03\newline MOP-FR03 & Method and model recommendation precision and recall for the supplied requirements and inputs (fractions). & & \hyperref[moe:MOE-02]{MOE-02}\newline \hyperref[moe:MOE-03]{MOE-03}\newline \hyperref[moe:MOE-05]{MOE-05} \\
+\multicolumn{2}{@{}l}{\textbf{User trials}} \\*
+\multicolumn{2}{@{}l}{\textbf{Case studies}} \\*
+FR-01\newline MOP-FR01 & Records recovered with correct required fields and resolution reasons (\%). & \\
+FR-02\newline MOP-FR02 & Syntax defect precision and recall, including correct affected text (fractions). & \\
+FR-03\newline MOP-FR03 & Method and model recommendation precision and recall for the supplied requirements and inputs (fractions). & \\
 FR-04\newline MOP-FR04 & Forward/reverse scenario, requirement and allocation links retrieved correctly (fractions). & & \hyperref[moe:MOE-03]{MOE-03} \\
 FR-05\newline MOP-FR05 & Requirement and EPS design change impact precision and recall, including critical missed impacts (fractions). & & \hyperref[moe:MOE-02]{MOE-02}\newline \hyperref[moe:MOE-03]{MOE-03} \\
 FR-07\newline MOP-FR07 & Applicable baseline revisions, decisions and history recovered correctly, plus retrieval delay (\%, s). & $\leq 20$~s (indexed lookup)\newline \citep[Sec.~2, RQ-4]{kanavouras2024lightweight} & \hyperref[moe:MOE-01]{MOE-01}\newline \hyperref[moe:MOE-03]{MOE-03} \\
