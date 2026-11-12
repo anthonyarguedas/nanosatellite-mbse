@@ -146,25 +146,33 @@ Python handles naming, reference rewriting, ownership constraints and protected 
 ## Power, mass and volume
 
 Define spacecraft modes and sunlight/eclipse fractions in Mission.
-Edit component quantities, accounting, state names, powers and duties directly in **Component State Allocation**.
-The **Power per unit (W)** field accepts a number or a Python expression such as `RAD001.current_A * RAD001.voltage_V`.
-State power is per installed unit while that state is active.
-Use **Add state** beside a component to start a new state row. Enter its name to create the state, then its power and duties.
-Use a state's delete button to remove it and its allocations.
-Use **Show other components** to include excluded components and software whose demand belongs to an execution host.
-Accounting and software execution host controls are inline. Component names open no panel.
-States store only their name, power and allocation identity. The unused Meaning, Source and Conditions fields have been removed.
-Duties for one component and mode total at most 100 percent and remain independent of sunlight/eclipse mode shares.
-Unallocated time contributes zero power. Allocate an explicit Off state to represent a complete zero-power mode.
-Existing single-state allocations retain their former duty, including the default of 100 percent.
-Power limit checks use the largest allocated state power per component, independently of duty.
-Their `average_power_W` parameter uses the weighted state powers.
-The sum of component maxima is a conservative assessment and establishes no simultaneous peak schedule.
+Open a component's power requirement in the existing requirement editor.
+Set `power_limit_W` to its allowable draw and `draw_power_W` to its installed active draw.
+`average_power_W` defaults to `draw_power_W`. Use an expression such as `draw_power_W * 0.2` for a 20 percent duty cycle.
+Use the **State** selector for different inputs in each spacecraft mode.
+Power limit checks use active draw. Case energy and the connected EPS budget use average draw.
 
-Use **Add loss** in the allocation table to create a native `PowerLoss` instance.
-A new loss starts with an inline state row and supports the same quantity, state powers and duties.
-Losses enter demand once and have no hardware mass or volume allocation.
-Enter losses only when they are absent from the other counted loads. No automatic loss solver is used.
+The actual `mass_kg`, `volume_m3`, `draw_power_W` and `average_power_W` inputs belong to the linked Python component.
+Their existing parameter rows show the component ID and edit that single input binding.
+Limits remain owned by the requirement. Linked component inputs use fixed canonical units.
+Enter installed totals, including quantities and auxiliaries. Product properties remain separate and can be referenced in expressions.
+Default actual totals include the component even after its limit requirement is deleted.
+Authored expression references still protect requirement deletion.
+
+Budget parameters use the same editable **Expression**, **State** and **Units** cells as other requirement parameters.
+The **Expression** column shows the stored Python expression, including references such as `MISSION.budget.draw_power_W`.
+You can extend a total expression, for example `MISSION.budget.mass_kg * 1.1`, or replace it.
+Connected EPS inputs remain managed until their load source is changed to manual expressions.
+Python exposes the same totals through `session.budget(scope)` and `session.load_budget(eps)`.
+Saved expressions name the scope explicitly, for example `MISSION.budget.draw_power_W` and `EPS.load_budget.sunlight_power_W`.
+Older aliases are migrated when a session is opened. Invalid drafts remain available for correction.
+
+The Component State Allocation table has been removed.
+Saved state allocations remain live until their component input bindings are replaced.
+Replace both `draw_power_W` and `average_power_W` to stop using a legacy state profile.
+Include losses once at the chosen accounting boundary.
+An optional **Power Loss** element can also be added through the existing element table. It has no mass or volume allocation.
+No automatic loss solver is used.
 
 Open the spacecraft power limit requirement and set `assessment_duration_s` in its existing parameter table.
 Use the **State** selector to enter different durations for different spacecraft modes, such as 5400 s for standby and 600 s for a pass.
@@ -174,7 +182,7 @@ A missing duration leaves energy pending without affecting power limit checks.
 These are independent case assessments. Their durations need no normalization and imply no chronological battery assessment.
 
 Connect the EPS **LoadEnergy** requirement to component modes and selected load domains.
-Its weighted sunlight and eclipse averages include component duty and feed the existing energy equations.
+Its weighted sunlight and eclipse averages read the component inputs for each mode and feed the existing energy equations.
 Disconnecting restores the previous manual bindings.
 Software uses its execution host, and passive hardware, battery storage and solar generation start excluded from load demand.
 
@@ -196,8 +204,8 @@ Internal time steps produce energy, mean power and sampled extrema without plots
 Use separate sessions for different operating assumptions or failed-panel cases.
 
 Mass and volume requirements account for physical hardware independently from power accounting.
-Parent sums reference child values and allocations.
-Unchanged default sums extend with newly added children.
+Actual totals read the live component inputs for their named scope.
+Allocation sums reference child requirement limits and extend with newly added children.
 Custom expressions and cleared cells remain editable.
 These are preliminary budgets, with energy closure, chronological peaks, mechanical fit and hardware qualification assessed separately.
 

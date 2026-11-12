@@ -14,8 +14,8 @@ from pathlib import Path
 from types import MappingProxyType
 
 from ..catalogs.database import DatabaseBacked, digest
-from ..domains.budgets import load_budget, power_allocation
 from .configuration import ScriptConfiguration
+from .elements import Component
 from .identity import ALL_MODES
 from .expressions import CONSTANTS, RestrictedPython, finite_number, symbol
 from .requirements import Statement
@@ -189,6 +189,7 @@ def calculation_signature(session, *, cots_signature=ALL_MODES):
                     "owner": None if element.owner is None else element.owner.key,
                     "selection": element.selection,
                     "properties": dict(element.property_values),
+                    "budgetParameters": [_binding(parameter) for parameter in element.parameters.values()] if isinstance(element, Component) else [],
                     "propertyDefinitions": {name: [spec.value_type.__name__, spec.unit] for name, spec in element.property_definitions().items()},
                     "quantity": element.quantity,
                     "requirements": [row.key for row in element.requirement_links],
@@ -279,6 +280,7 @@ def calculation_signature(session, *, cots_signature=ALL_MODES):
                     "usage": None if component.usage is None else component.usage.key,
                     "requirements": [row.key for row in component.requirement_links],
                     "facts": [reference.projection() for reference in component.facts],
+                    "budgetParameters": [_binding(parameter) for parameter in component.parameters.values()] if isinstance(component, Component) else [],
                     "quantity": component.quantity,
                     "types": [f"{base.__module__}.{base.__qualname__}" for base in type(component).__mro__],
                     "propertyDefinitions": {name: [spec.value_type.__name__, spec.unit] for name, spec in component.property_definitions().items()},
@@ -388,11 +390,13 @@ class EvaluationContext:
             else evidence
         )
         self.source_callback = source_ready
-        self.rows = {row.id: row for row in session.statements}
+        self.rows = {row.id: row for row in (*session.statements, *session.components)}
         self.scripts = {script.id: script for script in session.scripts}
         self.cots = {component.id: component for component in session.cots_components}
         self.property_owners = {element.id: element for element in session.all_elements if element.property_definitions()}
-        self.identifiers = {*self.rows, *self.scripts, *self.cots, *self.property_owners}
+        self.namespaces = session.expression_namespaces()
+        self.identifiers = {*self.rows, *self.scripts, *self.cots, *self.property_owners,
+                            *(name.split(".")[0] for name in self.namespaces)}
         self.cache, self.resolving = {}, set()
         self.cots_values, self.cots_signature = (
             _cots_snapshot(session) if _snapshot is None else _snapshot
@@ -431,6 +435,21 @@ class EvaluationContext:
         finally:
             _ACTIVE.reset(token)
 
+    def _parameter_owner(self, identifier, field):
+        owner = self.rows.get(identifier)
+        if owner is None or field not in owner.parameters:
+            return None
+        if isinstance(owner, DatabaseBacked) and any(fact.name == field for fact in owner.facts):
+            parameter = owner.parameters[field]
+            default = parameter.value is None and parameter.expression is None
+            if field == "average_power_W" and parameter.expression == "draw_power_W":
+                draw = owner.parameters["draw_power_W"]
+                default = draw.value is None and draw.expression is None
+            if not default:
+                raise ValueError(f"Rename the selected fact {owner.id}.{field} before using that name for an installed budget input.")
+            return None
+        return owner
+
     def reference_type(self, name, row):
         if name == "mode":
             return "string"
@@ -439,23 +458,19 @@ class EvaluationContext:
             if parameter is None:
                 raise ValueError(f"Unknown variable “{name}”.")
             return _kind(parameter.value_type)
-        identifier, field = name.split(".")
-        if identifier == "PowerAllocation" and field in (
-            "allocated_power_W",
-            "draw_power_W",
-            "average_power_W",
-            "energy_Wh",
-        ):
-            return "number"
-        if identifier == "LoadBudget" and field in (
-            "sunlight_power_W",
-            "eclipse_power_W",
-        ):
-            return "number"
+        identifier, field = name.rsplit(".", 1)
+        if identifier in self.namespaces:
+            parameter = self.namespaces[identifier].parameters.get(field)
+            if parameter is None:
+                raise ValueError(f"Unknown calculated value “{name}”.")
+            return _kind(parameter.value_type)
         if identifier in self.property_owners:
             specification = self.property_owners[identifier].property_definitions().get(field)
             if specification is not None:
                 return _kind(specification.value_type)
+        owner = self._parameter_owner(identifier, field)
+        if owner is not None:
+            return _kind(owner.parameters[field].value_type)
         if identifier in self.cots:
             reference = next(
                 (
@@ -505,13 +520,26 @@ class EvaluationContext:
             return self.mode.name
         if "." not in name:
             return self.parameter(row, name)
-        identifier, field = name.split(".")
-        if identifier == "PowerAllocation":
-            return power_allocation(self, row, field)
-        if identifier == "LoadBudget":
-            return load_budget(self, row, field)
+        identifier, field = name.rsplit(".", 1)
+        if identifier in self.namespaces:
+            self.reference_type(name, row)
+            key = (row.key, f"calculated:{name}", None if self.mode is None else self.mode.key)
+            if key not in self.cache:
+                if key in self.resolving:
+                    raise ValueError(f"Cyclic calculated value at {name}.")
+                self.resolving.add(key)
+                try:
+                    namespace = self.namespaces[identifier]
+                    self.cache[key] = coerce(namespace.resolve(self, row, field),
+                                             namespace.parameters[field].value_type, name)
+                finally:
+                    self.resolving.remove(key)
+            return self.cache[key]
         if identifier in self.property_owners and field in self.property_owners[identifier].property_definitions():
             return self.component_property(self.property_owners[identifier], field)
+        owner = self._parameter_owner(identifier, field)
+        if owner is not None:
+            return self.parameter(owner, field)
         if identifier in self.cots:
             return self.cots_fact(self.cots[identifier], field)
         if identifier in self.scripts:
@@ -525,6 +553,10 @@ class EvaluationContext:
 
     def value(self, row, name):
         row = self.session.get(row)
+        if "." in name:
+            reference = f"{row.id}.{name}"
+            self.reference_type(reference, row)
+            return self.resolve_reference(reference, row)
         if hasattr(row, "property_definitions") and name in row.property_definitions():
             return self.component_property(row, name)
         if isinstance(row, ScriptConfiguration) and name not in row.parameters:
@@ -565,6 +597,10 @@ class EvaluationContext:
                 else:
                     value = parameter.value
             value = coerce(value, parameter.value_type, f"{row.id}.{name}")
+            if isinstance(row, Statement):
+                row.validate_parameter_value(name, value)
+            if isinstance(row, Component) and value < 0:
+                raise ValueError("Component budget contributions must be nonnegative.")
             self.cache[key] = value
             return value
         except Exception as error:
@@ -965,7 +1001,8 @@ def branches(context, source):
 
 
 def parameter_result(context, row, name):
-    parameter = row.parameters.get(name)
+    link = row.linked_parameter(name) if hasattr(row, "linked_parameter") else None
+    parameter = link[0].parameters[link[1]] if link else row.parameters.get(name)
     if (
         parameter is None
         or parameter.value is None
@@ -1126,6 +1163,9 @@ def evaluate(session, *, mode=ALL_MODES, evidence=None, source_ready=None):
     metadata = contexts[0]
     for row, result in zip(session.statements, results):
         for name, parameter in row.parameters.items():
+            link = row.linked_parameter(name)
+            if link is not None:
+                parameter = link[0].parameters[link[1]]
             branch = branches(metadata, parameter.expression)
             if branch is not None:
                 result["parameters"][name]["branches"] = branch

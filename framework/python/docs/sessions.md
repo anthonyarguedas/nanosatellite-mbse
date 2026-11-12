@@ -122,6 +122,26 @@ Arbitrary additional code in a handwritten file is outside this round-trip contr
 A trusted file without the format marker can be opened but is read-only for replacement.
 Save it to a new `.py` path to preserve its original source.
 
+## Component budget inputs
+
+Every component owns typed `mass_kg`, `volume_m3`, `draw_power_W` and `average_power_W` parameter bindings.
+Generated budget requirements reference those inputs and retain their own limits.
+The source writer stores the component bindings as `budget_parameters` records.
+Browser projections carry their sources in `modelState.componentBudgets` and their type metadata in `modelState.parameters`.
+Linked requirement rows edit those same inputs through the existing parameter editor.
+Local requirement inputs used by component expressions retain explicit qualified references.
+Mode renames, protected deletion and execution evidence include component bindings.
+
+Default actual totals aggregate component contributions independently of limit requirements.
+Saved total expressions use explicit scope references such as `MISSION.budget.mass_kg` and `BUS.budget.draw_power_W`.
+Connected EPS inputs use references such as `EPS.load_budget.sunlight_power_W`.
+`Budget` and `ConnectedLoadBudget` are read-only views over the restored scope and connection objects.
+Views are composed from the graph and add no stored results or separate initialization state.
+Legacy input and alias migration occurs during reconciliation and leaves deliberate requirement deletions intact.
+Source loading and saving execute no budget expressions.
+Existing state profiles and trusted native functions retain their behavior.
+Legacy native functions keep their requirement context until explicitly replaced.
+
 ## State allocations and losses
 
 A `LoadProfile` can retain legacy `assignments` and `duties`, or use `allocations` for a mode.

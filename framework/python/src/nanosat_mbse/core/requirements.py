@@ -226,6 +226,13 @@ class Statement:
             self._session.register_parameter(parameter)
         self._mark_changed()
 
+    def linked_parameter(self, name):
+        """Optional editable input owned by another explicitly linked object."""
+        return None
+
+    def validate_parameter_value(self, name, value):
+        """Domain hook for constraints on evaluated parameter values."""
+
     def set_value(self, name: str, value: Optional[Scalar]) -> None:
         parameter = replace(self._parameters[name], value=value, expression=None)
         if self._session is not None:

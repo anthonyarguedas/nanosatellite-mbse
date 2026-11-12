@@ -22,7 +22,7 @@ from ..core.configuration import (
     Variable,
 )
 from ..core.drafts import DraftRequirement, DraftStatement
-from ..core.elements import Stakeholder
+from ..core.elements import Component, Stakeholder
 from ..core.requirements import Parameter, Requirement, Statement
 from ..core.session import SeedRule, expression_source
 from ..core.verification import DraftExpression, VerificationMethod, restored_expression
@@ -347,6 +347,16 @@ def from_projection(data, *, session_class=None, callables=None, **kwargs):
             ]
             if len(candidates) == 1:
                 value.usage = candidates[0]
+    for key, parameters in state.get("componentBudgets", {}).items():
+        component = session.get(key)
+        if not isinstance(component, Component):
+            raise TypeError("Budget inputs belong to a Component.")
+        for name, source in parameters.items():
+            component._configure_budget(_parameter(
+                name, source, Variable(name, float, component.budget_units.get(name)),
+                parameter_metadata.get(key, {}).get(name), callables,
+                ("parameter", key, name),
+            ))
     for key, values in state.get("componentProperties", {}).items():
         component = session.get(key)
         for name, literal in values.items():
@@ -480,7 +490,7 @@ def to_projection(session, *, callables=None):
 
     variables = list(session.variables)
     names = {variable.name for variable in variables}
-    for statement in session.statements:
+    for statement in (*session.statements, *session.components):
         for parameter in statement.parameters.values():
             if parameter.name not in names:
                 variables.append(
@@ -688,14 +698,14 @@ def to_projection(session, *, callables=None):
     }
     native_parameters = any(
         callable(parameter.expression)
-        for value in (*session.statements, *session.scripts)
+        for value in (*session.statements, *session.scripts, *session.components)
         for parameter in value.parameters.values()
     ) or any(
         callable(parameter.expression)
         for link in session.power.links
         for parameter in link.previous.values()
     )
-    if session._model_state_present or native_conditions or native_parameters:
+    if session._model_state_present or native_conditions or native_parameters or session.components:
         result["modelState"] = {
             "seedRules": [
                 {"owner": rule.owner, "subject": rule.subject, "rule": rule.rule}
@@ -714,6 +724,10 @@ def to_projection(session, *, callables=None):
                 value.key: {method.key: method.name for method in value.verifications}
                 for value in session.statements
                 if value.verifications
+            },
+            "componentBudgets": {
+                value.key: {name: expression_source(parameter, callables=callables) for name, parameter in value.parameters.items()}
+                for value in session.components
             },
             "componentProperties": {
                 value.key: dict(value.property_values)
@@ -746,7 +760,7 @@ def to_projection(session, *, callables=None):
                     name: parameter_metadata(parameter, ("parameter", value.key, name))
                     for name, parameter in value.parameters.items()
                 }
-                for value in (*session.statements, *session.scripts)
+                for value in (*session.statements, *session.scripts, *session.components)
             },
         }
         if native_conditions:

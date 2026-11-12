@@ -19,7 +19,7 @@ from uuid import uuid4
 
 from ..catalogs.database import DatabaseBacked
 from ..core.configuration import ScriptConfiguration
-from ..core.elements import Element
+from ..core.elements import Component, Element
 from ..core.requirements import Parameter, Requirement, Statement
 from ..core.session import Session
 from .source import SESSION_FORMAT, SessionSourceError, dumps
@@ -190,12 +190,14 @@ def validate_session(session):
         for reference in references:
             if reference is not None:
                 session.get(reference)
-        if isinstance(value, (Statement, ScriptConfiguration)):
+        if isinstance(value, (Statement, ScriptConfiguration, Component)):
             for name, parameter in value.parameters.items():
                 if not isinstance(parameter, Parameter) or parameter.name != name:
                     raise SessionFileError(
                         "Owned parameter names must match their records."
                     )
+                if isinstance(value, Component):
+                    value.validate_budget_parameter(parameter)
     session.validate_budgets()
     return session
 

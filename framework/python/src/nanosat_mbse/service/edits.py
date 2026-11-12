@@ -15,7 +15,7 @@ from ..catalogs.cots import component_for_product
 from ..catalogs.database import DatabaseBacked, FactReference
 from ..core.configuration import ComponentState, Mode, ScriptPort, Variable
 from ..core.drafts import DraftRequirement, DraftStatement
-from ..core.elements import Element, Stakeholder
+from ..core.elements import Component, Element, Stakeholder
 from ..core.requirements import Parameter, Requirement, Statement
 from ..core.predicates import VerificationMethod, restored_expression
 from ..core.verification import VerificationScript
@@ -239,7 +239,8 @@ def _new_object(session, table, row, data):
 def _configure_parameters(session, value, row, original, data, base):
     supplied, previous = row["parameters"], original.get("parameters", {})
     variables, old_variables = _variables(data), _variables(base)
-    for name in supplied:
+    names = sorted(supplied, key=lambda name: isinstance(value, Statement) and value.linked_parameter(name) is not None)
+    for name in names:
         current = value.parameters.get(name)
         source = supplied[name]
         meta, old_meta = (
@@ -430,6 +431,13 @@ def _load_changes(session, data, base):
 
 
 def _component_changes(session, data, base):
+    previous = base.get("modelState", {}).get("componentBudgets", {})
+    following = data.get("modelState", {}).get("componentBudgets", {})
+    for key, parameters in following.items():
+        value = session.get(key)
+        if not isinstance(value, Component):
+            raise TypeError("Budget inputs belong to a Component.")
+        _configure_parameters(session, value, {"parameters": parameters}, {"parameters": previous.get(key, {})}, data, base)
     for field in ("componentProperties", "componentAssignments"):
         previous = base.get("modelState", {}).get(field, {})
         following = data.get("modelState", {}).get(field, {})

@@ -1,6 +1,6 @@
 import {
   declareRequirementVariables, mergeRequirementDraft, parameterExpression, parameterUnit,
-  parseTSV, requirementParameterNames, parameterInfo, nativeParameter, metadata, objectMetadata,
+  parseTSV, requirementParameterNames, parameterInfo, parameterSource, linkedInput, nativeParameter, calculatedParameter, metadata, objectMetadata,
   verificationMethods, managedPowerInput, snapshot as projectionSnapshot,
 } from '/workbook.js';
 import * as native from '/native-client.js';
@@ -54,7 +54,7 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
   });
   parameterResize.observe(frame);
   function stateView(name) {
-    const source = row().parameters[name], modes = getWorkspace().power.modes;
+    const source = parameterSource(draft.workspace, row(), name), modes = getWorkspace().power.modes;
     let view = draft.parameterViews.get(name);
     if (!view || view.source !== source) {
       view = { source, states: managedPowerInput(draft.workspace, row(), name) ? null : parameterStates(source, modes) };
@@ -78,10 +78,11 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
       const variable = parameterInfo(draft.workspace, row(), name);
       const { states } = stateView(name);
       return states ? getWorkspace().power.modes.map(mode => ({ variable, mode: mode.key, expression: states.values[mode.key] }))
-        : [{ variable, mode: '', expression: row().parameters[name] }];
+        : [{ variable, mode: '', expression: parameterSource(draft.workspace, row(), name) }];
     });
   }
   function editExpression(name, mode, value) {
+    if (nativeParameter(draft.workspace, row(), name)) throw new Error('Native Python bindings are read only.');
     const source = parameterExpression(value, { name }, row().id), view = stateView(name);
     if (mode && view.states) {
       view.states.values[mode] = source;
@@ -101,7 +102,8 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
   function renderParameters(force = false) {
     const rows = parameterRows(), modes = getWorkspace().power.modes;
     const signature = JSON.stringify([rows.map(({ variable: { name, type }, mode }) => ({ name, type, mode,
-      managed: managedPowerInput(draft.workspace, row(), name), native: nativeParameter(draft.workspace, row(), name)?.label })), modes]);
+      managed: managedPowerInput(draft.workspace, row(), name), native: nativeParameter(draft.workspace, row(), name)?.label,
+      owner: linkedInput(draft.workspace, row(), name)?.id })), modes]);
     if (!force && signature === draft.columns) return;
     draft.columns = signature;
     const focused = document.activeElement;
@@ -115,8 +117,8 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
       + rows.map(({ variable, mode, expression }) => {
         const suffix = mode ? ` in ${modes.find(state => state.key === mode).name}` : '';
         const managed = managedPowerInput(draft.workspace, row(), variable.name);
-        const binding = nativeParameter(draft.workspace, row(), variable.name);
-        return `<tr data-parameter-row="${variable.name}" data-mode="${mode}"><th scope="row"><code>${escape(variable.name)}</code></th><td><select data-parameter-state="${variable.name}" data-mode="${mode}" aria-label="State for ${variable.name}${escape(suffix)}" ${!modes.length || managed || binding ? 'disabled' : ''}><option value="">All states</option>${modes.map(state => `<option value="${state.key}" ${state.key === mode ? 'selected' : ''} ${mode && state.key !== mode ? 'disabled' : ''}>${escape(state.name)}</option>`).join('')}</select></td><td class="parameter parameter-expression"><textarea data-parameter="${variable.name}" data-mode="${mode}" aria-label="Expression for ${variable.name}${escape(suffix)}" rows="1" wrap="soft" maxlength="5000" autocomplete="off" spellcheck="false" ${binding ? 'readonly data-native-binding' : ''}>${escape(binding?.label ?? expression)}</textarea><div data-cots-parameter-links class="cots-expression-links"></div></td><td class="parameter"><input data-parameter-unit="${variable.name}" data-mode="${mode}" aria-label="Units for ${variable.name}${escape(suffix)}" value="${escape(variable.unit)}" ${binding ? 'readonly' : ''} maxlength="100" placeholder="e.g. m**2" autocomplete="off" spellcheck="false"></td><td class="parameter-value"><span class="parameter-result" aria-label="Evaluated ${variable.name}${escape(suffix)}"></span></td></tr>`;
+        const binding = nativeParameter(draft.workspace, row(), variable.name), link = linkedInput(draft.workspace, row(), variable.name);
+        return `<tr data-parameter-row="${variable.name}" data-mode="${mode}"><th scope="row"><code>${escape(variable.name)}</code>${link ? `<small class="parameter-owner" title="Input owned by this component">${escape(link.id)}</small>` : ''}</th><td><select data-parameter-state="${variable.name}" data-mode="${mode}" aria-label="State for ${variable.name}${escape(suffix)}" ${!modes.length || managed || binding ? 'disabled' : ''}><option value="">All states</option>${modes.map(state => `<option value="${state.key}" ${state.key === mode ? 'selected' : ''} ${mode && state.key !== mode ? 'disabled' : ''}>${escape(state.name)}</option>`).join('')}</select></td><td class="parameter parameter-expression"><textarea data-parameter="${variable.name}" data-mode="${mode}" aria-label="Expression for ${variable.name}${escape(suffix)}" rows="1" wrap="soft" maxlength="5000" autocomplete="off" spellcheck="false" ${binding ? 'readonly data-native-binding' : ''}>${escape(binding?.label ?? expression)}</textarea><div data-cots-parameter-links class="cots-expression-links"></div></td><td class="parameter"><input data-parameter-unit="${variable.name}" data-mode="${mode}" aria-label="Units for ${variable.name}${escape(suffix)}" value="${escape(variable.unit)}" ${binding || link ? 'readonly' : ''} maxlength="100" placeholder="e.g. m**2" autocomplete="off" spellcheck="false"></td><td class="parameter-value"><span class="parameter-result" aria-label="Evaluated ${variable.name}${escape(suffix)}"></span></td></tr>`;
       }).join('') + '</tbody>';
     fitExpressions();
     const target = parameter ? table.querySelector(`[${field}="${parameter}"][data-mode="${focusedMode}"]`)
@@ -133,6 +135,7 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
     for (const input of table.querySelectorAll('[data-parameter]')) {
       const name = input.dataset.parameter, parameterRow = input.closest('tr'), output = parameterRow.querySelector('.parameter-result');
       const managed = managedPowerInput(draft.workspace, row(), name);
+      const calculated = calculatedParameter(draft.workspace, row(), name);
       input.readOnly = managed || Boolean(nativeParameter(draft.workspace, row(), name));
       const populated = Boolean(input.value.trim());
       const stateResult = input.dataset.mode ? result?.modes?.find(result => result.mode === input.dataset.mode) ?? result : result;
@@ -141,12 +144,12 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
       if (check.state === 'value') output.innerHTML = parameterValueHTML(check.value, parameterInfo(draft.workspace, row(), name).unit);
       else output.textContent = { error: 'Error', pending: 'Pending', varying: 'By mode', unset: 'Unset' }[check.state] ?? 'Unset';
       output.title = check.message;
-      parameterRow.querySelector('[data-cots-parameter-links]').innerHTML = expressionReferences(input.value).flatMap(reference => {
+      parameterRow.querySelector('[data-cots-parameter-links]').innerHTML = expressionReferences(parameterSource(draft.workspace, row(), name) ?? '').flatMap(reference => {
         const component = draft.workspace.components.find(component => component.id === reference.id);
         return component ? [`<button type="button" class="reference-link" data-inspect-cots="${component.key}" data-cots-name="${escape(reference.name)}">${escape(component.id)}.${escape(reference.name)}</button>`] : [];
       }).join('');
       input.setAttribute('aria-invalid', String(check.state === 'error'));
-      const message = managed ? `Component modes. ${check.message}` : check.message;
+      const message = calculated ? `${calculated.description} ${check.message}` : managed ? `Component modes. ${check.message}` : check.message;
       input.setAttribute('aria-description', message);
       input.title = [input.value, message].filter(Boolean).join('\n');
     }
@@ -216,7 +219,7 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
         if (!draft || token !== generation) return;
         draft.results.set(draft.key, { state: 'error', message,
           parameters: Object.fromEntries(draft.workspace.variables.map(variable => [variable.name, {
-            state: row().parameters[variable.name]?.trim() ? 'error' : 'unset', message,
+            state: parameterSource(draft.workspace, row(), variable.name)?.trim() ? 'error' : 'unset', message,
           }])) });
         setError(message); updateResults(); worker?.terminate(); worker = null;
       };
@@ -311,6 +314,7 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
   kind.addEventListener('change', synchronize);
   rationale.addEventListener('input', () => { if (draft) row().rationale = rationale.value; });
   function setUnit(name, value) {
+    if (linkedInput(draft.workspace, row(), name)) throw new Error('Component inputs use canonical units. Convert units in the expression.');
     const state = draft.workspace.modelState ??= {};
     const parameters = state.parameters ??= {};
     const owned = parameters[draft.key] ??= {};
@@ -342,6 +346,10 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
       const start = columns.findIndex(column => column.variable.name === name && column.mode === (event.target.dataset.mode ?? ''));
       if (rows.some(row => row.length !== 1) || start + rows.length > columns.length) throw new Error(`Paste one column of ${units ? 'units' : 'expressions'} within the displayed parameter rows.`);
       if (!units && rows.some((_, index) => managedPowerInput(draft.workspace, row(), columns[start + index].variable.name))) throw new Error('Select Manual expressions before changing these inputs.');
+      if (rows.some((_, index) => {
+        const name = columns[start + index].variable.name;
+        return nativeParameter(draft.workspace, row(), name) || (units && linkedInput(draft.workspace, row(), name));
+      })) throw new Error('The paste includes native Python bindings or fixed component units.');
       if (units) {
         const values = rows.map(([value], index) => parameterUnit(value, columns[start + index].variable));
         values.forEach((value, index) => setUnit(columns[start + index].variable.name, value));
@@ -398,6 +406,7 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
   panel.addEventListener('focusin', event => {
     if (!draft) return;
     const input = event.target;
+    if (input.readOnly) { draft.insertion = null; return; }
     let selector;
     if (input.dataset.parameter) selector = `[data-parameter="${input.dataset.parameter}"][data-mode="${input.dataset.mode ?? ''}"]`;
     if (input.dataset.methodField === 'condition') selector = `[data-method-key="${input.closest('[data-method-key]').dataset.methodKey}"] [data-method-field="condition"]`;
@@ -417,7 +426,7 @@ export function createRequirementEditor({ panel, getWorkspace, getCatalog, valid
     if (!draft?.insertion) return;
     const target = { ...draft.insertion }; resume();
     const input = panel.querySelector(target.selector);
-    if (!input) return;
+    if (!input || input.readOnly) return;
     input.setRangeText(reference, target.start ?? input.value.length, target.end ?? input.value.length, 'end');
     input.focus(); input.dispatchEvent(new Event('input', { bubbles: true }));
   }

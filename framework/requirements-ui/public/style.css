@@ -194,7 +194,9 @@ select[data-category="Ground Segment"] { color: #3d6b44; }
 .editor-sheet tbody tr:last-child th { border-bottom: 0; }
 .editor-sheet th code { display: block; overflow-wrap: anywhere; font-size: 11px; }
 .editor-sheet .cell-text { padding: 10px 12px; font-size: 12px; overflow-wrap: anywhere; }
-.requirement-parameter-frame table, .script-parameters table { min-width: 720px; }
+.requirement-parameter-frame table { min-width: 0; }
+.script-parameters table { min-width: 720px; }
+.requirement-parameter-frame .parameter-name-col, .requirement-parameter-frame .parameter-state-col { width: 20%; }
 .parameter-name-col { width: 18%; }
 .parameter-state-col { width: 18%; }
 .parameter-unit-col { width: 10%; }
@@ -256,42 +258,11 @@ td.element-name-cell > input { padding-right: 38px; }
 .element-open { position: absolute; right: 5px; top: 10px; display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 4px; color: #637568; background: none; }
 .element-open:hover { background: #e2ebe0; }
 .element-open svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.parameter-owner { display: block; margin-top: 4px; color: #637568; font-size: 11px; font-weight: 400; }
 .power-workspace { grid-column: 1 / -1; display: grid; gap: 28px; width: 100%; }
 .power-modes { width: min(100%, 580px); }
 .power-table th { padding: 10px 12px; height: 50px; font-size: 12px; }
 .power-share-col { width: 130px; }
-.power-reference-col { width: 190px; }
-.power-mode-col { width: 150px; }
-.power-accounting-col { width: 140px; }
-.power-duty { display: flex; align-items: center; gap: 4px; margin: 0; font-size: 12px; }
-.power-duty input { min-width: 0; }
-.power-allocations th small { display: block; margin-top: 4px; font-weight: 400; }
-.power-allocations .table-top { width: 100%; justify-content: space-between; border-radius: 8px 8px 0 0; }
-.power-allocation-help { margin: 8px 12px 12px; font-size: 12px; line-height: 1.5; color: #526157; }
-.power-component-label { vertical-align: top; padding: 12px; }
-.power-component-label > span, .power-component-label > small { display: block; margin-top: 4px; }
-.power-component-label > small { color: #637568; }
-.power-component-label .power-quantity { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 11px; }
-.power-component-label .power-quantity input { width: 64px; min-height: 26px; height: 26px; padding: 3px 6px; border: 1px solid #d7dfd5; background: #fff; }
-.power-add-state { display: inline-flex; align-items: center; gap: 4px; margin-top: 10px; padding: 0; border: 0; background: transparent; color: #375e47; font-size: 11px; }
-.power-add-state:disabled { opacity: 0.5; cursor: default; }
-.power-add-state svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; }
-.power-state-label { padding: 0; }
-.power-state-name { display: grid; grid-template-columns: 26px minmax(0, 1fr); align-items: center; }
-.power-no-states { display: block; padding: 12px; color: #8e978c; font-size: 12px; }
-.power-accounting { vertical-align: top; }
-.power-accounting > label { display: block; padding: 6px; font-size: 11px; }
-.power-accounting label select { margin-top: 4px; min-height: 32px; padding: 6px; border: 1px solid #d7dfd5; }
-.power-show-others { display: flex; align-items: center; gap: 6px; margin-left: auto; padding: 0 12px; font-size: 11px; }
-.power-component-start td { border-top: 2px solid #b5c5bb; }
-.power-loss-row .power-component-label { background: #f0f4ef; }
-.power-allocations .table-top > .power-add-loss { display: inline-flex; gap: 6px; align-items: center; padding: 0 14px; border-left: 1px solid #2c5144; cursor: pointer; }
-.power-allocations .power-duty { padding-right: 10px; }
-.power-add-loss svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
-[data-power-watts] { font-family: ui-monospace, monospace; }
-.power-allocations table { min-width: 840px; }
-.power-state-name-col { width: 160px; }
-.power-state-watts-col { width: 240px; }
 #requirement-power-source { width: 100%; padding: 10px 12px; border: 1px solid #b5c5bb; border-radius: 5px; background: #fff; }
 #requirement-power-domains { margin: 14px 0; padding: 0; border: 0; }
 #requirement-power-domains legend { font-size: 12px; font-weight: 600; }

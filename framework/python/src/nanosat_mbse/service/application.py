@@ -711,7 +711,7 @@ class Application:
         elif name in ("set_value", "set_expression", "set_unit", "replace_binding"):
             value = graph.get(target)
             if not hasattr(value, "parameters"):
-                raise ServiceError("Choose a requirement or analysis parameter.")
+                raise ServiceError("Choose a component, requirement or analysis parameter.")
             parameter = command["parameter"]
             if name == "set_unit":
                 text(command["unit"], "Units", 100, line=True)

@@ -40,11 +40,7 @@ const variableNames = () => workspace.variables.map(variable => variable.name);
 function captureFocus() {
   const input = document.activeElement, row = input?.closest('tr[data-key]');
   const selector = row && input.dataset.field ? `tr[data-key="${row.dataset.key}"] [data-field="${input.dataset.field}"]`
-    : input?.dataset.modeKey ? `[data-mode-key="${input.dataset.modeKey}"][data-mode-field="${input.dataset.modeField}"]`
-      : input?.dataset.powerName ? `[data-power-name="${input.dataset.powerName}"][data-state="${input.dataset.state}"]`
-        : input?.dataset.powerWatts ? `[data-power-watts="${input.dataset.powerWatts}"][data-state="${input.dataset.state}"]`
-          : input?.dataset.powerLoad ? `[data-power-load="${input.dataset.powerLoad}"][data-load-field="${input.dataset.loadField}"]`
-            : input?.dataset.powerDuty ? `[data-power-duty="${input.dataset.powerDuty}"][data-mode="${input.dataset.mode}"][data-state="${input.dataset.state}"]` : null;
+    : input?.dataset.modeKey ? `[data-mode-key="${input.dataset.modeKey}"][data-mode-field="${input.dataset.modeField}"]` : null;
   return selector ? { selector, start: input.selectionStart, end: input.selectionEnd } : null;
 }
 function restoreFocus(focus) {
@@ -117,7 +113,6 @@ const powerTable = createPowerTable({
   section: document.querySelector('#power-workspace'),
   getWorkspace: () => workspace, getActive: () => active,
   onError: message => showStatus(message, true),
-  onChange: commitCandidate,
   onCommand: operation => enqueue(async () => {
     const before = structuredClone(workspace), view = await native.command(workspace, operation);
     adoptCanonical(view, before); requirementEditor.refresh(); scheduleSave(); scheduleEvaluation();

@@ -129,6 +129,20 @@ def configure_parameter_states(
     if type(merge) is not bool:
         raise ValueError("Parameter state merge is a Boolean choice.")
     row = session.get(target)
+    link = row.linked_parameter(parameter) if hasattr(row, "linked_parameter") else None
+    if link is not None:
+        if values is not None:
+            if not isinstance(values, dict) or any(value is not None and not isinstance(value, str) for value in values.values()):
+                raise ValueError("State expressions must map configured modes to Python source.")
+            from .requirements import Parameter
+            values = {
+                key: None if source is None else row.component_input(
+                    Parameter(parameter, unit=row.parameters[parameter].unit, expression=restored_expression(source))
+                ).expression
+                for key, source in values.items()
+            }
+            values = {key: source.source if hasattr(source, "source") else source for key, source in values.items()}
+        return configure_parameter_states(session, link[0], link[1], values=values, last_edited=last_edited, merge=merge)
     binding = row.parameters[parameter]
     if callable(binding.expression):
         raise ValueError("Native callable parameters retain their Python binding.")

@@ -7,7 +7,20 @@ export const allowedDefinitions = (state, owner) => metadata(state).allowedDefin
 export const contextForRow = row => row.context ?? row.owner ?? 'external';
 export const parameterExpression = value => value === null || value === undefined || value === '' ? null : value;
 export const parameterUnit = value => value;
-export const nativeParameter = (state, row, name) => state.modelState?.parameters?.[row.key]?.[name]?.callable;
+export const linkedInput = (state, row, name) => objectMetadata(state, row.key).linkedInputs?.[name];
+export const parameterSource = (state, row, name) => {
+  const link = linkedInput(state, row, name);
+  return link && row.parameters[name] === link.reference
+    ? state.modelState?.componentBudgets?.[link.component]?.[link.name] ?? null : row.parameters[name];
+};
+export const calculatedParameter = (state, row, name) => {
+  const binding = objectMetadata(state, row.key).calculatedParameters?.[name];
+  return binding && parameterSource(state, row, name) === binding.reference ? binding : null;
+};
+export const nativeParameter = (state, row, name) => {
+  const link = linkedInput(state, row, name);
+  return state.modelState?.parameters?.[link?.component ?? row.key]?.[link?.name ?? name]?.callable;
+};
 export const nativeCondition = (state, row, key) => state.modelState?.verificationBindings?.[row.key]?.[key];
 export const parameterInfo = (state, row, name) => ({ name,
   ...(state.variables.find(variable => variable.name === name) ?? { type: 'float', unit: '' }),
@@ -46,8 +59,6 @@ export const availableSources = (state, key) => (objectMetadata(state, key).sour
 export const assignableElements = (state, row) => (objectMetadata(state, row.key).affected ?? []).map(key => state.elements.find(row => row.key === key)).filter(Boolean);
 export const componentRequirements = (state, row) => (objectMetadata(state, row.key).requirements ?? []).map(key => state.statements.find(row => row.key === key)).filter(Boolean);
 export const hasFixedBudgetScope = (state, row) => Boolean(objectMetadata(state, row.key).powerRequirement || objectMetadata(state, row.key).resourceRequirement);
-export const spacecraftComponents = state => (metadata(state).powerComponents ?? []).map(key => state.elements.find(row => row.key === key)).filter(Boolean);
-export const powerFor = (state, element) => state.power.loads.find(load => load.element === element.key) ?? metadata(state).powerDefaults?.[element.key];
 export const managedPowerInput = (state, row, name) => (objectMetadata(state, row.key).managedParameters ?? []).includes(name);
 export const formatParameterValue = value => Math.abs(value) > 999
   ? value.toLocaleString('en-US', { useGrouping: false, maximumFractionDigits: 0 }) : value.toPrecision(4);
@@ -125,6 +136,13 @@ export function mergeRequirementDraft(state, original, edited, key) {
   merge(connection(original), connection(edited), connection(candidate), value => { candidate.power.links = candidate.power.links.filter(link => link.eps !== after.context); if (value) candidate.power.links.push(value); });
   if (edited.modelState) {
     candidate.modelState ??= {};
+    const componentKeys = new Set(Object.values(objectMetadata(edited, key).linkedInputs ?? {}).map(link => link.component));
+    candidate.modelState.componentBudgets ??= {};
+    for (const component of componentKeys) {
+      const previous = original.modelState?.componentBudgets?.[component] ?? {}, updated = edited.modelState.componentBudgets?.[component] ?? {};
+      const actual = candidate.modelState.componentBudgets[component] ??= {};
+      for (const name of new Set([...Object.keys(previous), ...Object.keys(updated)])) merge(previous[name], updated[name], actual[name], value => { actual[name] = value; });
+    }
     for (const field of ['parameters', 'verificationBindings', 'verificationNames']) {
       candidate.modelState[field] ??= {};
       const keys = new Set([key, ...edited.scripts.map(script => script.key)]);

@@ -7,6 +7,7 @@ from ..core.configuration import ScriptConfiguration
 from ..core.elements import Element
 from ..core.requirements import Statement
 from ..core.properties import PROPERTY_TYPES
+from ..domains.aggregates import calculated_parameters
 from ..domains.budgets import (
     BUDGET_CLASSES,
     POWER_MODELS,
@@ -133,6 +134,7 @@ def describe(session, *, callables=None):
     projection = session.to_projection(callables=callables)
     contexts = tabs(session)
     elements = list(session.elements)
+    namespaces = session.expression_namespaces()
     descriptions = {}
     for row in session.objects:
         if row in (session.mission, session.external):
@@ -145,6 +147,12 @@ def describe(session, *, callables=None):
             metadata.update(
                 {
                     "parameterNames": list(row.parameters),
+                    "calculatedParameters": calculated_parameters(session, row, namespaces=namespaces),
+                    "linkedInputs": {
+                        name: {"component": link[0].key, "name": link[1], "id": link[0].id,
+                               "reference": f"{link[0].id}.{link[1]}"}
+                        for name in row.parameters if (link := row.linked_parameter(name)) is not None
+                    },
                     "parameters": projection.get("modelState", {})
                     .get("parameters", {})
                     .get(row.key, {}),

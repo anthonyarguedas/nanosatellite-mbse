@@ -327,7 +327,7 @@ class Session:
             raise ValueError(f"The ID {value.id!r} is already in use.")
         value._session = self
         self._objects[value.key] = value
-        if isinstance(value, Statement):
+        if isinstance(value, (Statement, Component)):
             for parameter in value.parameters.values():
                 self.register_parameter(parameter)
         return value
@@ -572,6 +572,7 @@ class Session:
             row: (dict(row.parameters), row.sources, row.affected)
             for row in self.statements
         }
+        component_state = {component: dict(component.parameters) for component in self.components}
         self._register(value)
         try:
             if initialize:
@@ -591,6 +592,8 @@ class Session:
             self._requirement_seeds_present = seeds_present
             self._model_state_present = model_state_present
             self.resource_budgets, self._resource_budgets_present = budget_flags
+            for component, parameters in component_state.items():
+                component._budget_parameters = parameters
             for row, (parameters, sources, affected) in statement_state.items():
                 row._parameters, row._sources, row._affected = (
                     parameters,
@@ -823,7 +826,7 @@ class Session:
         return tuple(created)
 
     def _expressions(self):
-        for value in (*self.statements, *self.scripts):
+        for value in (*self.statements, *self.scripts, *self.components):
             for name, parameter in value.parameters.items():
                 source = (
                     parameter.expression.source
@@ -904,9 +907,10 @@ class Session:
         value = self.get(identity)
         if value in (self.mission, self.external):
             raise ValueError("Session roots cannot be removed.")
-        from ..domains.budgets import protect_budget_removal
+        from ..domains.budgets import protect_budget_removal, refresh_budget_sum
 
-        protect_budget_removal(self, value)
+        budget_updates = protect_budget_removal(self, value)
+        managed = {(row, name) for row, name in budget_updates}
         for other in self.objects:
             if other is value:
                 continue
@@ -931,9 +935,10 @@ class Session:
                 raise ValueError(
                     f"{value.id} is referenced by {other.id}. Remove that relationship first."
                 )
-        for row, _, _, source in self._expressions():
+        for row, kind, name, source in self._expressions():
             if (
                 row is not value
+                and not (kind == "parameter" and (row, name) in managed)
                 and _rewrite(source, value.id, "__referenced__") != source
             ):
                 raise ValueError(f"{value.id} is used by an expression in {row.id}.")
@@ -949,6 +954,8 @@ class Session:
         del self._objects[value.key]
         self.requirement_seeds.pop(value, None)
         value._session = None
+        for row, name in budget_updates:
+            refresh_budget_sum(self, row, name)
         self._model_state_present = True
         return value
 
@@ -1121,6 +1128,33 @@ class Session:
         from ..domains.budgets import validate_parameter_binding
 
         validate_parameter_binding(self, row, parameter)
+
+    def expression_namespaces(self):
+        """Compose trusted scalar views for the generic expression evaluator."""
+        from ..domains.aggregates import budget_namespaces
+
+        return budget_namespaces(self)
+
+    def budget(self, scope):
+        """Return an explicit read-only view of a spacecraft scope's contributions."""
+        from ..domains.aggregates import Budget
+        from ..domains.budgets import power_scopes
+
+        scope = self.get(scope)
+        scopes = power_scopes(self)
+        if scope not in scopes[0].affected and not any(item.target is scope for item in scopes):
+            raise ValueError("Choose a spacecraft budget scope.")
+        return Budget(scope)
+
+    def load_budget(self, eps):
+        """Return an EPS's explicitly connected load domain."""
+        from ..domains.aggregates import ConnectedLoadBudget
+
+        eps = self.get(eps)
+        link = next((link for link in self.power.links if link.eps is eps), None)
+        if link is None:
+            raise ValueError("Connect this EPS to a load budget first.")
+        return ConnectedLoadBudget(link)
 
     def evaluation_context(self, mode=None, **kwargs):
         from .evaluation import EvaluationContext

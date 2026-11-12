@@ -6,10 +6,10 @@ import ast
 from dataclasses import dataclass, replace
 
 from ..core.configuration import ComponentState, LoadConnection, LoadProfile, StateAllocation
-from ..core.elements import Subsystem
-from ..core.expressions import finite_number
+from ..core.elements import Component, Subsystem
+from ..core.expressions import finite_number, qualify_names, rewrite_references
 from ..core.requirements import Parameter, Requirement
-from ..core.verification import DraftExpression, PendingValue, VerificationMethod
+from ..core.verification import DraftExpression, PendingValue, VerificationMethod, restored_expression
 
 
 POWER_INPUTS = ("sunlight_power_W", "eclipse_power_W", "sunlight_duty", "eclipse_duty")
@@ -49,24 +49,87 @@ RESOURCES = (
 )
 
 
-class PowerLimit(Requirement):
+class BudgetRequirement(Requirement):
+    contribution_fields = ()
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("definition", getattr(type(self), "model", ""))
+        super().__init__(*args, **kwargs)
+
+    @property
+    def target(self):
+        return self.power_scope or self.budget_scope
+
+    def linked_parameter(self, name):
+        target = self.target
+        parameter = self.parameters.get(name)
+        if (
+            isinstance(target, Component)
+            and name in self.contribution_fields
+            and parameter is not None
+            and parameter.expression == f"{target.id}.{name}"
+        ):
+            return target, name
+        return None
+
+    def component_input(self, parameter):
+        target, name = self.target, parameter.name
+        if not isinstance(target, Component) or name not in self.contribution_fields:
+            raise ValueError("Choose an input of the linked component budget.")
+        source = parameter.expression
+        if isinstance(source, str):
+            source = restored_expression(qualify_names(source, {
+                field: f"{self.id}.{field}"
+                for field in self.parameters if field not in target.parameters
+            }))
+        return replace(parameter, name=name, expression=source)
+
+    def set_value(self, name, value):
+        link = self.linked_parameter(name)
+        if link is None:
+            return super().set_value(name, value)
+        target, field = link
+        target.set_value(field, value)
+
+    def set_expression(self, name, expression):
+        link = self.linked_parameter(name)
+        if link is None or expression == f"{link[0].id}.{link[1]}":
+            return super().set_expression(name, expression)
+        parameter = self.component_input(replace(self.parameters[name], value=None, expression=expression))
+        link[0].set_expression(link[1], parameter.expression)
+
+    def set_unit(self, name, unit):
+        link = self.linked_parameter(name)
+        if link is not None and unit != link[0].parameters[link[1]].unit:
+            raise ValueError("Linked component budget inputs retain their canonical units.")
+        super().set_unit(name, unit)
+
+
+class PowerLimit(BudgetRequirement):
     model = POWER_MODELS[0]
+    contribution_fields = ("draw_power_W", "average_power_W")
+
+    def validate_parameter_value(self, name, value):
+        if name == "assessment_duration_s" and value <= 0:
+            raise ValueError("Assessment duration must be positive.")
 
 
 class ComponentPowerLimit(PowerLimit):
     model = POWER_MODELS[1]
 
 
-class MassLimit(Requirement):
+class MassLimit(BudgetRequirement):
     model = "ResourceBudgetModel::MassLimit"
+    contribution_fields = ("mass_kg",)
 
 
 class ComponentMassLimit(MassLimit):
     model = "ResourceBudgetModel::ComponentMassLimit"
 
 
-class VolumeLimit(Requirement):
+class VolumeLimit(BudgetRequirement):
     model = "ResourceBudgetModel::VolumeLimit"
+    contribution_fields = ("volume_m3",)
 
 
 class ComponentVolumeLimit(VolumeLimit):
@@ -148,7 +211,7 @@ def power_limit_for(session, scope):
         (
             row
             for row in session.requirements
-            if row.definition in POWER_MODELS and row.power_scope is scope
+            if isinstance(row, PowerLimit) and row.power_scope is scope
         ),
         None,
     )
@@ -181,11 +244,7 @@ def resource_for(row):
         (
             resource
             for resource in RESOURCES
-            if row.definition
-            in (
-                f"ResourceBudgetModel::{resource.model}Limit",
-                f"ResourceBudgetModel::Component{resource.model}Limit",
-            )
+            if isinstance(row, MassLimit if resource.name == "mass" else VolumeLimit)
         ),
         None,
     )
@@ -215,8 +274,19 @@ def resource_limit_for(session, scope, resource):
     )
 
 
-def resource_sum_expression(session, row, name, *, skip_missing=False):
+def resource_sum_expression(session, row, name, *, skip_missing=False, legacy=False, explicit=True):
     resource = resource_for(row)
+    if name == resource.value and not legacy:
+        if explicit:
+            return f"{row.budget_scope.id}.budget.{name}"
+        components = sorted(
+            (scope.target for scope in resource_scopes(session)
+             if scope.kind == "component"
+             and (row.budget_scope is session.mission or in_roots(scope.target, (row.budget_scope,)))),
+            key=lambda element: element.key,
+        )
+        references = [f"{element.id}.{resource.value}" for element in components]
+        return f"sum([{', '.join(references)}])" if references else "0"
     children = sorted(
         (
             scope
@@ -243,6 +313,39 @@ def _source(parameter):
     if parameter.expression is not None:
         return parameter.expression
     return None if parameter.value is None else repr(parameter.value)
+
+
+def bind_component_budget(session, row):
+    """Move legacy requirement inputs to their component without evaluating them."""
+    if not isinstance(row, BudgetRequirement) or not isinstance(row.target, Component):
+        return
+    target = row.target
+    updates = []
+    for name in row.contribution_fields:
+        parameter = row.parameters.get(name)
+        reference = f"{target.id}.{name}"
+        if parameter is None or parameter.expression == reference:
+            continue
+        if callable(parameter.expression):
+            # Trusted legacy functions retain their original requirement context.
+            continue
+        source = _source(parameter)
+        if source in ("PowerAllocation.draw_power_W", "PowerAllocation.average_power_W"):
+            if not load_for(session, target).states:
+                parameter = replace(parameter, value=None, expression="draw_power_W" if name == "average_power_W" else None)
+        current = target.parameters[name]
+        default = _source(current) in ((None, "draw_power_W") if name == "average_power_W" else (None,))
+        if source is not None and not default and _source(parameter) != _source(current):
+            raise ValueError(f"Resolve conflicting budget inputs for {target.id}.{name} before reconciliation.")
+        binding = Parameter(name, unit=target.budget_units[name], expression=reference)
+        component_input = row.component_input(parameter) if default and _source(parameter) is not None else None
+        if component_input is not None:
+            target.validate_budget_parameter(component_input)
+        updates.append((name, binding, component_input))
+    for name, binding, component_input in updates:
+        if component_input is not None:
+            target._configure_budget(component_input)
+        row._parameters[name] = binding
 
 
 def _rule(session, scope, model):
@@ -314,10 +417,16 @@ def seed_power_limits(session, scopes=None):
             owner=scope.owner,
             affected=scope.affected,
             definition=cls.model,
+            rationale=(
+                "Enter total installed active draw, including quantity and losses at this component's accounting boundary. "
+                "Average draw defaults to active draw. Override average_power_W for duty cycles or state mixtures."
+                if component else ""
+            ),
             parameters=(
                 Parameter("power_limit_W", unit="W"),
                 Parameter(
-                    "draw_power_W", unit="W", expression="PowerAllocation.draw_power_W"
+                    "draw_power_W", unit="W",
+                    expression=f"{scope.target.id}.draw_power_W" if component else f"{scope.target.id}.budget.draw_power_W",
                 ),
                 *((Parameter("allocated_power_W", unit="W"),) if not component else ()),
             ),
@@ -349,13 +458,12 @@ def seed_power_limits(session, scopes=None):
         )
         if parent is not None:
             row.derive_from(parent)
-        # Ordinary owned parameters use the existing mode-aware parameter editor.
-        # Retain authored bindings when reconciling an older session.
+        component = scope is not None and scope.kind == "component"
         assessment_parameters = (
             Parameter(
                 "average_power_W",
                 unit="W",
-                expression="PowerAllocation.average_power_W",
+                expression=f"{scope.target.id}.average_power_W" if component else f"{scope.target.id}.budget.average_power_W",
             ),
             Parameter(
                 "assessment_duration_s",
@@ -364,7 +472,7 @@ def seed_power_limits(session, scopes=None):
                 if parent is None
                 else f"{parent.id}.assessment_duration_s",
             ),
-            Parameter("energy_Wh", unit="Wh", expression="PowerAllocation.energy_Wh"),
+            Parameter("energy_Wh", unit="Wh", expression="average_power_W * assessment_duration_s / 3600"),
         )
         for parameter in assessment_parameters:
             if parameter.name not in row.parameters:
@@ -375,7 +483,9 @@ def seed_power_limits(session, scopes=None):
             row.set_expression(
                 "allocated_power_W", power_allocation_expression(session, row)
             )
+        bind_component_budget(session, row)
     expand_power_allocations(session)
+    migrate_budget_references(session)
     return tuple(created)
 
 
@@ -397,6 +507,9 @@ def seed_resource_budgets(session, scopes=None):
                 in (
                     resource_sum_expression(session, row, name),
                     resource_sum_expression(session, row, name, skip_missing=True),
+                    resource_sum_expression(session, row, name, legacy=True),
+                    resource_sum_expression(session, row, name, skip_missing=True, legacy=True),
+                    resource_sum_expression(session, row, name, explicit=False),
                 )
             )
     created = []
@@ -477,6 +590,7 @@ def seed_resource_budgets(session, scopes=None):
             row.affected = by_scope[session.mission].affected
         for name in defaults.get(row, ()):
             row.set_expression(name, resource_sum_expression(session, row, name))
+        bind_component_budget(session, row)
     session.resource_budgets = True
     session._resource_budgets_present = True
     return tuple(created)
@@ -555,6 +669,44 @@ def expand_power_allocations(session):
         )
 
 
+def migrate_budget_references(session):
+    """Name scopes explicitly while retaining custom formulas and invalid drafts."""
+    for row in (*session.requirements, *session.components):
+        if isinstance(row, PowerLimit):
+            scope = row.power_scope
+            if scope is None:
+                continue
+            namespace = "power_profile" if isinstance(scope, Component) else "budget"
+            references = {f"PowerAllocation.{name}": f"{scope.id}.{namespace}.{name}"
+                          for name in ("draw_power_W", "average_power_W")}
+            references["PowerAllocation.energy_Wh"] = f"({row.id}.average_power_W * {row.id}.assessment_duration_s / 3600)"
+        elif isinstance(row, Component):
+            references = {f"PowerAllocation.{name}": f"{row.id}.power_profile.{name}"
+                          for name in ("draw_power_W", "average_power_W")}
+        else:
+            references = {}
+        if row.definition == "FrameworkRequirements::LoadEnergy" and any(
+            link.eps is row.owner for link in session.power.links
+        ):
+            references.update({f"LoadBudget.{name}": f"{row.owner.id}.load_budget.{name}"
+                               for name in ("sunlight_power_W", "eclipse_power_W")})
+        for name, parameter in tuple(row.parameters.items()):
+            source = parameter.expression
+            if isinstance(row, PowerLimit) and source == "PowerAllocation.energy_Wh":
+                updated = "average_power_W * assessment_duration_s / 3600"
+            else:
+                updated = rewrite_references(source, references)
+            if updated != source:
+                # Migration retains the exact binding owner, including legacy rows.
+                if isinstance(row, Component):
+                    row._configure_budget(replace(parameter, expression=updated))
+                else:
+                    row._parameters[name] = replace(parameter, expression=updated)
+        if isinstance(row, Requirement):
+            row.verifications = tuple(replace(method, condition=rewrite_references(method.condition, references))
+                                      for method in row.verifications)
+
+
 def reconcile_defaults(session, *, generic=True, budgets=True):
     """Explicitly introduce catalog additions and legacy budgets once per scope.
 
@@ -577,6 +729,7 @@ def reconcile_defaults(session, *, generic=True, budgets=True):
         seed_resource_budgets(session)
         seed_power_limits(session)
         expand_power_allocations(session)
+        migrate_budget_references(session)
     return session
 
 
@@ -598,9 +751,39 @@ def after_element_added(session, element):
     seed_power_limits(session, scopes)
 
 
+def component_contribution(context, component, name):
+    """Read the component input, with a read-only adapter for older sessions."""
+    parameter = component.parameters[name]
+    source = _source(parameter)
+    unset = source is None or (
+        name == "average_power_W" and source == "draw_power_W"
+        and _source(component.parameters["draw_power_W"]) is None
+    )
+    if unset:
+        row = power_limit_for(context.session, component) if name.endswith("power_W") else resource_limit_for(
+            context.session, component, next(resource for resource in RESOURCES if resource.value == name)
+        )
+        old = None if row is None else row.parameters.get(name)
+        if old is not None and old.expression != f"{component.id}.{name}":
+            if _source(old) in ("PowerAllocation.draw_power_W", "PowerAllocation.average_power_W"):
+                value = component_draw(load_for(context.session, component), context.mode, context=context, average=name == "average_power_W")
+            else:
+                value = context.parameter(row, name)
+            value = finite_number(value)
+            if value < 0:
+                raise ValueError("Component budget contributions must be nonnegative.")
+            return value
+    return context.parameter(component, name)
+
+
 def power_allocation(context, row, name):
     session = context.session
-    if row.definition not in POWER_MODELS or name not in (
+    if isinstance(row, Component) and name in ("draw_power_W", "average_power_W"):
+        load = load_for(session, row)
+        if load.accounting != "counted":
+            return 0.0
+        return component_draw(load, context.mode, context=context, average=name == "average_power_W")
+    if not isinstance(row, PowerLimit) or name not in (
         "allocated_power_W",
         "draw_power_W",
         "average_power_W",
@@ -614,19 +797,13 @@ def power_allocation(context, row, name):
         return finite_number(
             context.parameter(row, "average_power_W") * duration / 3600
         )
-    children = _power_children(session, row)
-    if name == "allocated_power_W" or children:
+    if name == "allocated_power_W":
         total = 0
-        for child in children:
+        for child in _power_children(session, row):
             requirement = power_limit_for(session, child.target)
             if requirement is None:
                 raise PendingValue(f"Define a power limit for {child.target.id}.")
-            field = "power_limit_W" if name == "allocated_power_W" else name
-            value = (
-                context.parameter(requirement, field)
-                if field in requirement.parameters
-                else power_allocation(context, requirement, field)
-            )
+            value = context.parameter(requirement, "power_limit_W")
             if value < 0:
                 raise ValueError(f"{requirement.id} power must be nonnegative.")
             total += value
@@ -643,9 +820,11 @@ def power_allocation(context, row, name):
         load = load_for(session, element)
         if load.accounting != "counted":
             continue
-        total += component_draw(
-            load, context.mode, context=context, average=name == "average_power_W"
-        )
+        if element is row.power_scope and _source(element.parameters[name]) is None:
+            # A legacy component requirement may still own its input.
+            total += component_draw(load, context.mode, context=context, average=name == "average_power_W")
+        else:
+            total += component_contribution(context, element, name)
     return finite_number(total)
 
 
@@ -687,9 +866,11 @@ def component_draw(load, mode, *, context=None, average=False):
     return finite_number(load.quantity * (sum(powers) if average else max(powers)))
 
 
-def load_budget(context, row, name):
+def load_budget(context, row, name, *, connection=None):
     session = context.session
-    link = next((link for link in session.power.links if link.eps is row.owner), None)
+    link = connection if connection is not None else next(
+        (link for link in session.power.links if link.eps is row.owner), None
+    )
     if link is None:
         raise ValueError(
             "Connect this EPS to a load budget before using LoadBudget inputs."
@@ -733,15 +914,10 @@ def load_budget(context, row, name):
         for element in components:
             load = load_for(session, element)
             if load.accounting == "counted":
-                # A binding and its upstream parameters belong to the mode
-                # whose orbital share is being counted, not the caller's mode.
-                total += (
-                    component_draw(
-                        load, mode, context=context.for_mode(mode), average=True
-                    )
-                    * weight
-                    / 100
-                )
+                value = component_contribution(context.for_mode(mode), element, "average_power_W")
+                if value < 0:
+                    raise ValueError(f"{element.id} power must be nonnegative.")
+                total += value * weight / 100
     return finite_number(total)
 
 
@@ -787,14 +963,19 @@ def connect_power(session, eps, roots=None):
     previous = {name: row.parameters[name] for name in POWER_INPUTS}
     link = LoadConnection(eps, roots, previous)
     session.power.links.append(link)
-    row.set_expression("sunlight_power_W", "LoadBudget.sunlight_power_W")
-    row.set_expression("eclipse_power_W", "LoadBudget.eclipse_power_W")
+    row.set_expression("sunlight_power_W", f"{eps.id}.load_budget.sunlight_power_W")
+    row.set_expression("eclipse_power_W", f"{eps.id}.load_budget.eclipse_power_W")
     row.set_expression("sunlight_duty", "1")
     row.set_expression("eclipse_duty", "1")
     return link
 
 
 def validate_parameter_binding(session, row, parameter):
+    link = row.linked_parameter(parameter.name)
+    if link is not None:
+        owned = link[0].parameters[link[1]]
+        if parameter.value_type is not owned.value_type or parameter.unit != owned.unit:
+            raise ValueError("Linked component budget inputs retain their canonical type and unit.")
     if (
         row.definition != "FrameworkRequirements::LoadEnergy"
         or parameter.name not in POWER_INPUTS
@@ -808,7 +989,9 @@ def validate_parameter_binding(session, row, parameter):
             ("LoadBudget.sunlight_power_W", "LoadBudget.eclipse_power_W", "1", "1"),
         )
     )
-    if _source(parameter) != expected[parameter.name]:
+    source = _source(parameter)
+    explicit = expected[parameter.name].replace("LoadBudget.", f"{row.owner.id}.load_budget.")
+    if source not in (expected[parameter.name], explicit):
         raise ValueError(
             "Disconnect the EPS budget before changing its managed LoadEnergy inputs."
         )
@@ -823,6 +1006,27 @@ def protect_budget_removal(session, value):
         raise ValueError(
             "Disconnect the EPS budget before deleting its LoadEnergy requirement."
         )
+    if not isinstance(value, (BudgetRequirement, Component)):
+        return ()
+    updates = []
+    for row in session.requirements:
+        if row is value:
+            continue
+        resource = resource_for(row)
+        if isinstance(value, (PowerLimit, Component)) and isinstance(row, PowerLimit) and "allocated_power_W" in row.parameters:
+            if _source(row.parameters["allocated_power_W"]) == power_allocation_expression(session, row):
+                updates.append((row, "allocated_power_W"))
+        elif resource is not None and (isinstance(value, Component) or resource_for(value) == resource):
+            for name in (resource.value, resource.allocated):
+                source = _source(row.parameters.get(name))
+                if source in (resource_sum_expression(session, row, name), resource_sum_expression(session, row, name, legacy=True)):
+                    updates.append((row, name))
+    return tuple(updates)
+
+
+def refresh_budget_sum(session, row, name):
+    row.set_expression(name, power_allocation_expression(session, row) if isinstance(row, PowerLimit)
+                       else resource_sum_expression(session, row, name))
 
 
 def disconnect_power(session, eps):
@@ -906,6 +1110,11 @@ def configure_load(session, element, **changes):
         session.power.loads.append(load)
     else:
         session.power.loads[session.power.loads.index(existing)] = load
+    if load.states and _source(element.parameters["draw_power_W"]) is None:
+        # Explicit legacy configuration supplies still-unset component inputs.
+        element.set_expression("draw_power_W", f"{element.id}.power_profile.draw_power_W")
+        if _source(element.parameters["average_power_W"]) == "draw_power_W":
+            element.set_expression("average_power_W", f"{element.id}.power_profile.average_power_W")
     seed_power_limits(session)
     return load
 
@@ -1048,7 +1257,7 @@ def validate_budgets(session):
             "1",
         )
         if row is None or any(
-            _source(row.parameters.get(name)) != value
+            _source(row.parameters.get(name)) not in (value, value.replace("LoadBudget.", f"{link.eps.id}.load_budget."))
             for name, value in zip(POWER_INPUTS, expected)
         ):
             raise ValueError(

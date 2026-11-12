@@ -6,7 +6,7 @@ Run from the repository root:
 The component draws below are illustrative estimates, not product guarantees.
 """
 
-from nanosat_mbse import ComponentState, CubeSat, GroundStation, Orbit, Payload, Session
+from nanosat_mbse import CubeSat, GroundStation, Orbit, Payload, Session
 
 
 def main():
@@ -21,12 +21,9 @@ def main():
     for component in session.physical_components:
         if component.default_accounting != "counted":
             continue
-        active = ComponentState("Active", watts=1.0)
-        standby = ComponentState("Standby", watts=0.1)
-        session.configure_load(
-            component,
-            states=(active, standby),
-            assignments={nominal: active, safe: standby},
+        session.configure_parameter_states(
+            component, "draw_power_W",
+            values={nominal.key: "1.0", safe.key: "0.1"},
         )
     session.connect_power("EPS")
     load = session.get("SIZ001")

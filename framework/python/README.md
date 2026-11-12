@@ -334,7 +334,89 @@ Units remain labels, with conversions explicit in calculations.
 Use `configure_mode()`, `rename_mode()` and `remove_mode()` to retain expression and state links.
 Removing a mode with expression references is protected.
 
-Use `configure_load(component, quantity=..., accounting=..., states=..., allocations=...)` for component demand.
+### Component inputs and requirement limits
+
+Every `Component`, including CDH hardware and EPS hardware, owns four typed budget parameters:
+`mass_kg`, `volume_m3`, `draw_power_W` and `average_power_W`.
+Mass and volume describe installed totals. Power describes installed active and average demand at the chosen accounting boundary.
+Average power defaults to active power. Include quantities, duty cycles and losses explicitly in expressions.
+Product properties such as `Battery.mass` and `Battery.rated_energy` retain their separate per-product meaning.
+For an existing component and configured `nominal` and `downlink` mode objects:
+
+```python
+component.set_value("mass_kg", 0.15)
+component.set_value("volume_m3", 0.0001)
+component.set_expression("draw_power_W", '10 if mode == "Downlink" else 1')
+component.set_expression("average_power_W", "draw_power_W * 0.2")
+session.configure_parameter_states(component, "draw_power_W", values={
+    nominal.key: "1", downlink.key: "10",
+})
+print(component.value("average_power_W", mode=downlink))
+```
+
+`ComponentMassLimit`, `ComponentVolumeLimit` and `ComponentPowerLimit` remain separate `Requirement` subclasses.
+Their actual-value parameters reference the corresponding component inputs.
+Their limits remain requirement parameters.
+Their shared `BudgetRequirement.linked_parameter(name)` interface exposes the editable component link.
+Calling a linked requirement's `set_value()`, `set_expression()` or `configure_parameter_states()` edits the same component input.
+Local auxiliary requirement parameters in those expressions become qualified references to retain their ownership.
+Linked inputs retain their canonical types and units. Convert units explicitly in expressions.
+
+The browser uses its existing requirement parameter table and State selector for these linked inputs.
+A small component ID identifies their owner. No component allocation table or additional editor is required.
+Actual totals aggregate physical component contributions once, independently of the presence of limit requirements.
+Deleting a limit updates unchanged default allocation expressions and leaves actual contributions in the budget.
+Custom expression and relationship references retain deletion protection.
+
+Reconciliation moves legacy literal and source inputs from component budget requirements to their components without evaluating them.
+Configured state profiles remain live through explicit legacy bindings.
+Trusted legacy native functions retain their requirement context until explicitly replaced.
+Saved source and projections preserve component parameter bindings, mode expressions and native capabilities.
+An existing COTS fact name remains resolvable while the corresponding installed input is unset.
+Rename that fact before configuring an installed input with the same name.
+
+### Explicit budget views
+
+`session.budget(scope)` returns a read-only `Budget` object that retains the actual scope element.
+Views cover the mission, bus, payload, subsystems and physical components.
+Their mass, volume, active power and average power totals read live component inputs.
+Power totals include counted loads. Mass and volume totals include physical hardware independently of load accounting.
+Views contain no copied inputs or calculated caches.
+
+```python
+budget = session.budget(bus)
+print(budget.scope is bus)
+print(budget.value("mass_kg"))
+print(budget.value("draw_power_W", mode=nominal))
+requirement.set_expression("draw_power_W", budget.reference("draw_power_W"))
+# The saved expression names its scope: BUS.budget.draw_power_W
+```
+
+Generated aggregate requirements use explicit references such as `MISSION.budget.mass_kg` and `EPS.budget.average_power_W`.
+Allocation parameters retain their explicit sums of child requirement limits.
+Case energy uses the ordinary expression `average_power_W * assessment_duration_s / 3600`.
+Assessment durations must be positive when evaluated.
+
+After `session.connect_power(eps, roots=(bus,))`, `session.load_budget(eps)` returns a `ConnectedLoadBudget` with the actual connection and roots.
+Its `value("sunlight_power_W")` and `value("eclipse_power_W")` methods return mode weighted demand.
+Expressions use explicit references such as `EPS.load_budget.sunlight_power_W`.
+The EPS LoadEnergy requirement owns the illumination durations used to skip an absent period.
+Reading a connected total from another requirement retains this same meaning.
+
+The browser uses the ordinary editable Expression, State and Units cells for budget parameters.
+Stored expressions remain visible and can be extended or replaced, for example `MISSION.budget.mass_kg * 1.1`.
+The Python budget views remain read only. Editing a requirement expression changes its binding to those views.
+Component input cells remain editable, including references to legacy power profiles.
+The generic evaluator resolves declared scalar namespaces and has no built-in budget names or arbitrary attribute access.
+
+Older `PowerAllocation` and `LoadBudget` expressions remain readable through domain compatibility views.
+Explicit reconciliation replaces valid legacy references with named scopes without executing them.
+Custom formulas retain their calculations. Invalid drafts remain unchanged.
+Optional state profiles use scoped references such as `CPU.power_profile.draw_power_W`.
+
+### Optional legacy load profiles
+
+Use `configure_load(component, quantity=..., accounting=..., states=..., allocations=...)` to retain explicit state profiles or configure accounting boundaries.
 Legacy `assignments` and `duties` remain supported without changing saved single-state sessions.
 States are `ComponentState` objects, and assignments reference actual `Mode` and state objects.
 `ComponentState` stores only its name, per-unit power and stable key.
@@ -348,8 +430,8 @@ Unset upstream inputs remain pending. Negative or nonnumeric results are errors.
 `duties` maps modes, mode keys or mode names to independent component duty percentages from 0 to 100.
 Omitted entries mean 100 percent, preserving existing sessions.
 Each table supplied to `configure_load()` replaces that table.
-The browser edits state names, powers, quantities and allocations directly in Component State Allocation.
-Adding and deleting states needs no separate component panel.
+The former browser allocation table has been removed. Existing profiles remain available through the Python API.
+Replace both component power bindings to switch from a legacy state profile to direct inputs.
 For an existing component and a configured Downlink mode:
 
 ```python
@@ -397,6 +479,8 @@ It is never automatically instantiated and has no mass or volume budget.
 Count a loss only when it is absent from the other loads at the declared accounting boundary.
 No converter-loss solver or automatic efficiency model is introduced.
 
+### Assessments and lifecycle
+
 Each power limit requirement exposes `draw_power_W`, `average_power_W`, `assessment_duration_s` and `energy_Wh`.
 Set the spacecraft requirement's `assessment_duration_s` through the existing parameter editor or Python API.
 Subsystems and components inherit their parent's duration unless explicitly overridden.
@@ -408,7 +492,7 @@ These energies assess independent constant-average operating cases and imply no 
 Reconciliation adds missing assessment parameters to older budget requirements while preserving existing bindings and deliberately deleted requirements.
 
 `connect_power(eps, roots=...)` binds its LoadEnergy requirement to weighted component-mode demand.
-Component duty is applied within each mode before the separate sunlight/eclipse mode shares.
+The budget reads each component's average power before applying the separate sunlight/eclipse mode shares.
 Expressions and upstream parameters are evaluated in the mode whose share is being counted.
 Zero-share modes need no draw for that illumination period.
 The connected inputs are protected until `disconnect_power(eps)` restores their previous `Parameter` bindings.

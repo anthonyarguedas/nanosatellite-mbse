@@ -61,7 +61,9 @@ from .domains import (
     RegulatorAndConverter,
     SolarArray,
 )
+from .domains.aggregates import Budget, ConnectedLoadBudget
 from .domains.budgets import (
+    BudgetRequirement,
     BudgetScope,
     ComponentMassLimit,
     ComponentPowerLimit,
@@ -147,6 +149,9 @@ __all__ = [
     "ModeVerification",
     "VerificationReport",
     "calculation_signature",
+    "Budget",
+    "ConnectedLoadBudget",
+    "BudgetRequirement",
     "BudgetScope",
     "Resource",
     "PowerLimit",

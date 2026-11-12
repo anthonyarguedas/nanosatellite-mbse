@@ -11,199 +11,102 @@ class Surface {
   listeners = new Map();
   innerHTML = '';
   hidden = true;
+  focused = null;
   addEventListener(type, callback) { this.listeners.set(type, callback); }
   replaceChildren() { this.innerHTML = ''; }
-  querySelector() { return { focus() {} }; }
+  querySelector(selector) { return { focus: () => { this.focused = selector; } }; }
   async emit(type, target) { await this.listeners.get(type)?.({ target }); }
 }
 
-function fixture() {
+function fixture(active = 'mission') {
   const section = new Surface();
-  const element = { key: 'radio', id: 'RAD', name: 'Radio', owner: 'com', definition: 'Radio' };
-  let workspace = {
-    elements: [element],
+  const workspace = {
     power: {
-      modes: [{ key: 'standby', name: 'Standby' }, { key: 'pass', name: 'Pass' }],
-      loads: [{
-        element: 'radio', quantity: 1, accounting: 'counted', host: '', rationale: '',
-        states: [{ key: 'rx', name: 'Receive', watts: .72 }, { key: 'tx', name: 'Transmit', watts: 7.2 }, { key: 'off', name: 'Off', watts: 0 }],
-        assignments: { standby: 'rx', pass: 'tx' },
-      }],
+      modes: [{ key: 'standby', name: 'Standby', sunlight: 60, eclipse: 20 }],
+      loads: [{ element: 'radio', states: [{ key: 'rx', name: 'Receive', watts: .72 }], assignments: { standby: 'rx' } }],
       links: [],
     },
-    _native: { metadata: {
-      limits: { modes: 24, states: 32 },
-      powerScopes: [{ key: 'com', kind: 'subsystem' }],
-      powerComponents: ['radio'],
-      powerLossDefinitions: { com: 'Communication::PowerLoss' },
-      accountingOptions: { radio: ['counted', 'excluded'] },
-      objects: { radio: { className: 'ReceiveAntennaAndEquipment' } },
-    } },
+    _native: { metadata: { limits: { modes: 24 }, powerScopes: [{ key: 'cdh', kind: 'subsystem' }] } },
   };
   const errors = [], commands = [];
   const table = createPowerTable({
-    section,
-    getWorkspace: () => workspace,
-    getActive: () => 'com',
-    onChange: async candidate => { workspace = candidate; },
+    section, getWorkspace: () => workspace, getActive: () => active,
     onCommand: async operation => {
       commands.push(operation);
-      if (operation.name === 'add_element') {
-        workspace.elements.push({ key: operation.key, id: 'LOS', name: 'Power Loss', owner: operation.owner, definition: operation.definition });
-        workspace.power.loads.push({ element: operation.key, quantity: 1, accounting: 'counted', host: '', rationale: '', states: [], assignments: {}, allocations: {} });
-        workspace._native.metadata.powerComponents.push(operation.key);
-        workspace._native.metadata.objects[operation.key] = { className: 'PowerLoss' };
-        workspace._native.metadata.accountingOptions[operation.key] = ['counted', 'excluded'];
-      }
+      if (operation.name === 'add_mode') workspace.power.modes.push({ key: operation.key, name: operation.label, sunlight: operation.sunlight, eclipse: operation.eclipse });
+      if (operation.name === 'rename_mode') workspace.power.modes.find(mode => mode.key === operation.target).name = operation.label;
+      if (operation.name === 'configure_mode') Object.assign(workspace.power.modes.find(mode => mode.key === operation.target), Object.fromEntries(Object.entries(operation).filter(([key]) => ['sunlight', 'eclipse'].includes(key))));
+      if (operation.name === 'remove_mode') workspace.power.modes = workspace.power.modes.filter(mode => mode.key !== operation.target);
     },
     onError: message => errors.push(message),
   });
-  return { table, section, errors, commands, workspace: () => workspace };
+  return { table, section, errors, commands, workspace, activate: value => { active = value; } };
 }
-
-const dutyInput = (state, mode, value) => ({ dataset: { powerDuty: 'radio', state, mode }, value });
+const modeInput = (modeKey, modeField, value) => ({ dataset: { modeKey, modeField }, value });
 const action = (selector, dataset = {}) => ({ closest(actual) { return actual === selector ? { dataset } : null; } });
-const draftKey = (f, component = 'radio') => f.section.innerHTML.match(new RegExp(`data-power-name="${component}" data-state="([^"]+)" value=""`))[1];
+const draftKey = f => f.section.innerHTML.match(/data-mode-key="([^"]+)" data-mode-field="name" value=""/)[1];
 
-test('all state fields are inline and component names have no drawer action', () => {
-  const f = fixture();
+test('Mission retains spacecraft mode and illumination share inputs', () => {
+  const f = fixture(); f.table.render();
+  assert.equal(f.section.hidden, false);
+  assert.match(f.section.innerHTML, /Spacecraft Modes/);
+  assert.match(f.section.innerHTML, /data-mode-key="standby" data-mode-field="sunlight" value="60"/);
+  assert.doesNotMatch(f.section.innerHTML, /Component State Allocation|data-power-load|data-power-watts|data-power-duty|Add loss/);
+});
+
+test('all subsystem tabs hide the allocation surface and preserve legacy data', () => {
+  const f = fixture(), original = structuredClone(f.workspace.power);
   f.table.render();
-  assert.match(f.section.innerHTML, /Component State Allocation/);
-  assert.match(f.section.innerHTML, /rowspan="3"/);
-  assert.match(f.section.innerHTML, /data-power-name="radio" data-state="rx"/);
-  assert.match(f.section.innerHTML, /data-power-watts="radio" data-state="rx"/);
-  assert.match(f.section.innerHTML, /data-power-duty="radio" data-mode="standby" data-state="rx" value="100"/);
-  assert.match(f.section.innerHTML, /data-power-load="radio" data-load-field="quantity"/);
-  assert.match(f.section.innerHTML, /Add state/);
-  assert.doesNotMatch(f.section.innerHTML, /data-open-power|Meaning|Conditions|Source/);
-  assert.equal(f.table.open, undefined);
-  assert.equal(f.table.snapshot, undefined);
+  for (const active of ['cdh', 'eps', 'payload', 'external']) {
+    f.activate(active); f.table.render();
+    assert.equal(f.section.hidden, true);
+    assert.equal(f.section.innerHTML, '');
+  }
+  assert.deepEqual(f.workspace.power, original);
 });
 
-test('editing duties converts one legacy mode to multiple state entries', async () => {
+test('mode names and shares are changed through Python commands', async () => {
   const f = fixture();
-  await f.section.emit('change', dutyInput('rx', 'standby', '99'));
-  await f.section.emit('change', dutyInput('tx', 'standby', '1'));
-  const load = f.workspace().power.loads[0];
-  assert.deepEqual(load.allocations.standby, [{ state: 'rx', duty: 99 }, { state: 'tx', duty: 1 }]);
-  assert.equal(load.assignments.standby, undefined);
-  assert.equal(load.assignments.pass, 'tx');
-  assert.deepEqual(f.errors, []);
-});
-
-test('zero duty is retained and clearing removes only that state contribution', async () => {
-  const f = fixture();
-  await f.section.emit('change', dutyInput('tx', 'pass', '0'));
-  assert.deepEqual(f.workspace().power.loads[0].allocations.pass, [{ state: 'tx', duty: 0 }]);
-  await f.section.emit('change', dutyInput('tx', 'pass', ''));
-  assert.deepEqual(f.workspace().power.loads[0].allocations.pass, []);
-});
-
-test('inline power preserves expression text without JavaScript evaluation', async () => {
-  const f = fixture();
-  await f.section.emit('change', { dataset: { powerWatts: 'radio', state: 'rx' }, value: 'REQ001.current_A * REQ001.voltage_V' });
-  assert.equal(f.workspace().power.loads[0].states[0].watts, 'REQ001.current_A * REQ001.voltage_V');
-  assert.equal(f.workspace().power.loads[0].assignments.pass, 'tx');
-});
-
-test('state names and quantities are edited in the same table', async () => {
-  const f = fixture();
-  await f.section.emit('change', { dataset: { powerName: 'radio', state: 'rx' }, value: ' Receiving ' });
-  await f.section.emit('change', { dataset: { powerLoad: 'radio', loadField: 'quantity' }, value: '2' });
-  assert.equal(f.workspace().power.loads[0].states[0].name, 'Receiving');
-  assert.equal(f.workspace().power.loads[0].quantity, 2);
-  assert.equal(f.workspace().power.loads[0].assignments.standby, 'rx');
-});
-
-test('adding a state uses an inline draft and submits only name, power and key', async () => {
-  const f = fixture();
-  await f.section.emit('click', action('[data-power-add-state]', { powerAddState: 'radio' }));
-  const state = draftKey(f);
-  await f.section.emit('change', { dataset: { powerWatts: 'radio', state }, value: 'REQ001.idle_W' });
-  assert.equal(f.workspace().power.loads[0].states.length, 3);
-  await f.section.emit('change', { dataset: { powerName: 'radio', state }, value: 'Idle' });
-  assert.deepEqual(f.workspace().power.loads[0].states[3], { key: state, name: 'Idle', watts: 'REQ001.idle_W' });
-  assert.deepEqual(f.errors, []);
-});
-
-test('rapid name and power edits create one state with both values', async () => {
-  const f = fixture();
-  await f.section.emit('click', action('[data-power-add-state]', { powerAddState: 'radio' }));
-  const state = draftKey(f);
-  await Promise.all([
-    f.section.emit('change', { dataset: { powerName: 'radio', state }, value: 'Idle' }),
-    f.section.emit('change', { dataset: { powerWatts: 'radio', state }, value: '0.05' }),
+  await f.section.emit('change', modeInput('standby', 'name', ' Safe '));
+  await f.section.emit('change', modeInput('standby', 'sunlight', '80'));
+  await f.section.emit('change', modeInput('standby', 'eclipse', ''));
+  assert.deepEqual(f.commands, [
+    { name: 'rename_mode', target: 'standby', label: 'Safe' },
+    { name: 'configure_mode', target: 'standby', sunlight: 80 },
+    { name: 'configure_mode', target: 'standby', eclipse: null },
   ]);
-  assert.equal(f.workspace().power.loads[0].states.length, 4);
-  assert.deepEqual(f.workspace().power.loads[0].states[3], { key: state, name: 'Idle', watts: '0.05' });
 });
 
-test('deleting a state submits its removal without changing other allocations', async () => {
-  const f = fixture();
-  await f.section.emit('click', action('[data-power-remove-state]', { powerRemoveState: 'radio', state: 'off' }));
-  assert.deepEqual(f.workspace().power.loads[0].states.map(state => state.key), ['rx', 'tx']);
-  assert.equal(f.workspace().power.loads[0].assignments.standby, 'rx');
+test('adding and deleting modes retain the existing inline workflow', async () => {
+  const f = fixture(); f.table.render();
+  const key = draftKey(f);
+  await f.section.emit('change', modeInput(key, 'sunlight', '40'));
+  assert.equal(f.commands.length, 0);
+  await f.section.emit('change', modeInput(key, 'name', 'Pass'));
+  assert.deepEqual(f.commands[0], { name: 'add_mode', key, label: 'Pass', sunlight: 40, eclipse: null });
+  assert.notEqual(draftKey(f), key);
+  await f.section.emit('click', action('[data-power-remove-mode]', { powerRemoveMode: key }));
+  assert.deepEqual(f.commands[1], { name: 'remove_mode', target: key });
+  assert.equal(f.workspace.power.modes.length, 1);
 });
 
-test('an unnamed draft can be discarded without creating model state', async () => {
-  const f = fixture();
-  await f.section.emit('click', action('[data-power-add-state]', { powerAddState: 'radio' }));
-  const state = draftKey(f);
-  await f.section.emit('click', action('[data-power-remove-state]', { powerRemoveState: 'radio', state }));
-  assert.equal(f.workspace().power.loads[0].states.length, 3);
-  assert.doesNotMatch(f.section.innerHTML, new RegExp(state));
-});
-
-test('excluding a component keeps its inline accounting control available', async () => {
-  const f = fixture();
-  await f.section.emit('change', { dataset: { powerLoad: 'radio', loadField: 'accounting' }, value: 'excluded' });
+test('mode limits, escaping and draft reset still work', () => {
+  const f = fixture(); f.table.render();
+  const before = draftKey(f); f.table.reset(); f.table.render();
+  assert.notEqual(draftKey(f), before);
+  f.workspace.power.modes[0].name = 'Safe <test>';
+  f.workspace._native.metadata.limits.modes = 1;
   f.table.render();
-  assert.equal(f.workspace().power.loads[0].accounting, 'excluded');
-  assert.match(f.section.innerHTML, /data-power-show-others checked/);
-  assert.match(f.section.innerHTML, /data-load-field="accounting" aria-label="RAD accounting"/);
-  await f.section.emit('change', { dataset: { powerLoad: 'radio', loadField: 'accounting' }, value: 'counted' });
-  assert.equal(f.workspace().power.loads[0].accounting, 'counted');
+  assert.match(f.section.innerHTML, /value="Safe &lt;test&gt;"/);
+  assert.match(f.section.innerHTML, /title="Add row" disabled/);
+  assert.doesNotMatch(f.section.innerHTML, /data-mode-field="name" value=""/);
 });
 
-test('software execution host is available inline when other components are shown', async () => {
-  const f = fixture(), w = f.workspace();
-  w.elements.push({ key: 'software', id: 'SFW', name: 'Software', owner: 'com' });
-  w.power.loads.push({ element: 'software', quantity: 1, accounting: 'host', host: 'radio', states: [], assignments: {} });
-  w._native.metadata.powerComponents.push('software');
-  w._native.metadata.accountingOptions.software = ['host', 'excluded'];
-  w._native.metadata.executionHosts = ['radio'];
-  await f.section.emit('change', { dataset: {}, checked: true, matches: () => true });
-  assert.match(f.section.innerHTML, /data-power-load="software" data-load-field="host"/);
-  assert.match(f.section.innerHTML, /option value="radio" selected/);
-});
-
-test('power expressions and editable state names are HTML escaped', () => {
-  const f = fixture();
-  f.workspace().power.loads[0].states[0].watts = '1 if mode == "Pass" else 0';
-  f.workspace().power.loads[0].states[0].name = 'Receive <test>';
-  f.table.render();
-  assert.match(f.section.innerHTML, /value="1 if mode == &quot;Pass&quot; else 0"/);
-  assert.match(f.section.innerHTML, /value="Receive &lt;test&gt;"/);
-});
-
-test('Add loss creates a native catalog instance and starts an inline state row', async () => {
-  const f = fixture();
-  await f.section.emit('click', action('[data-power-add-loss]'));
-  assert.equal(f.commands[0].name, 'add_element');
-  assert.equal(f.commands[0].definition, 'Communication::PowerLoss');
-  assert.equal(f.commands[0].owner, 'com');
-  const element = f.workspace().elements[1];
-  const state = draftKey(f, element.key);
-  await f.section.emit('change', { dataset: { powerName: element.key, state }, value: 'Dissipation' });
-  await f.section.emit('change', { dataset: { powerWatts: element.key, state }, value: '0.08' });
-  const load = f.workspace().power.loads[1];
-  assert.deepEqual(load.states, [{ key: state, name: 'Dissipation', watts: '0.08' }]);
-  assert.doesNotMatch(f.section.innerHTML, /data-open-power/);
-});
-
-test('panel markup and lifecycle bindings are removed from the application', async () => {
+test('removed component allocation bindings have no application or CSS leftovers', async () => {
   const html = await readFile(new URL('../public/index.html', import.meta.url), 'utf8');
   const app = await readFile(new URL('../public/app.js', import.meta.url), 'utf8');
+  const css = await readFile(new URL('../public/style.css', import.meta.url), 'utf8');
   assert.doesNotMatch(html, /id="power-editor"/);
-  assert.doesNotMatch(app, /powerEditor|data-open-power|#power-editor/);
+  assert.doesNotMatch(app, /powerEditor|data-open-power|dataset\.powerName|dataset\.powerWatts|dataset\.powerLoad|dataset\.powerDuty/);
+  assert.doesNotMatch(css, /power-allocations|power-add-state|power-add-loss/);
 });

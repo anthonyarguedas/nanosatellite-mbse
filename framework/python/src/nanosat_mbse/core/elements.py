@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
+from types import MappingProxyType
 from typing import Optional
 from uuid import uuid4
 
-from .requirements import Requirement, _text
+from .identity import ALL_MODES
+from .requirements import Parameter, Requirement, _text
 from .properties import PropertyOwner
 
 
@@ -196,6 +199,75 @@ class Component(Element):
     default_name = "Component"
     role = "component"
     default_accounting = "counted"
+    budget_units = {
+        "mass_kg": "kg",
+        "volume_m3": "m^3",
+        "draw_power_W": "W",
+        "average_power_W": "W",
+    }
+
+    def __init__(self, *args, budget_parameters=(), **kwargs):
+        self._initialize_budget(budget_parameters)
+        super().__init__(*args, **kwargs)
+
+    @classmethod
+    def restore(cls, id="", *, budget_parameters=(), **configuration):
+        value = super().restore(id, **configuration)
+        value._initialize_budget(budget_parameters)
+        return value
+
+    def _initialize_budget(self, parameters):
+        self._budget_parameters = {
+            name: Parameter(name, unit=unit, expression="draw_power_W" if name == "average_power_W" else None)
+            for name, unit in self.budget_units.items()
+        }
+        for parameter in parameters:
+            self._configure_budget(parameter)
+
+    @property
+    def parameters(self):
+        """Installed budget contributions, separate from product properties."""
+        return MappingProxyType(self._budget_parameters)
+
+    def validate_budget_parameter(self, parameter):
+        if (
+            not isinstance(parameter, Parameter)
+            or parameter.name not in self.budget_units
+            or parameter.value_type is not float
+            or parameter.unit != self.budget_units[parameter.name]
+        ):
+            raise ValueError("Use a declared component budget parameter with its canonical type and unit.")
+        if parameter.value is not None and parameter.value < 0:
+            raise ValueError("Component budget contributions must be nonnegative.")
+
+    def _configure_budget(self, parameter):
+        self.validate_budget_parameter(parameter)
+        self._budget_parameters[parameter.name] = parameter
+        if getattr(self, "_session", None) is not None:
+            self.session._model_state_present = True
+
+    def set_value(self, name, value):
+        parameter = replace(self.parameters[name], value=value, expression=None)
+        if self.session is None:
+            self._configure_budget(parameter)
+        else:
+            self.session.configure_parameter(self, parameter)
+
+    def set_expression(self, name, expression):
+        parameter = replace(self.parameters[name], value=None, expression=expression)
+        if self.session is None:
+            self._configure_budget(parameter)
+        else:
+            self.session.configure_parameter(self, parameter)
+
+    def set_unit(self, name, unit):
+        if unit != self.parameters[name].unit:
+            raise ValueError("Component budget inputs retain their canonical units.")
+
+    def value(self, name, *, mode=ALL_MODES):
+        if self.session is None:
+            raise ValueError("Attach the component to a session before evaluating its budget.")
+        return self.session.value(self, name, mode=mode)
 
     def on_added(self, session):
         if isinstance(self.owner, Subsystem):

@@ -428,10 +428,16 @@ def validate_projection(data, *, allow_new_ids=False):
                 "verificationBindings",
                 "componentProperties",
                 "componentAssignments",
+                "componentBudgets",
             },
         )
         if len(repr(state)) > 4 * 1024 * 1024:
             raise ValueError("Native model metadata exceeds its transport limit.")
+        for component, values in mapping(state.get("componentBudgets", {}), "Component budgets").items():
+            key(component, "Component key")
+            for name, source in mapping(values, "Owned budget inputs").items():
+                _parameter_name(name)
+                expression(source, "Component budget expression")
         for component, values in mapping(state.get("componentProperties", {}), "Component properties").items():
             key(component, "Component key")
             for name, value in mapping(values, "Owned component properties").items():

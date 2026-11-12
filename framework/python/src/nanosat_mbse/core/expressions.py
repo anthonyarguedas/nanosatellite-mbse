@@ -98,6 +98,90 @@ COMPARE = {
 }
 
 
+def qualify_names(source, references):
+    """Qualify free parameter names while retaining formatting and local scopes."""
+    if len(source) > 5000:
+        return source
+    try:
+        tree = ast.parse(source.strip(), mode="eval")
+    except (SyntaxError, ValueError, RecursionError):
+        return source
+    prefix = len(source) - len(source.lstrip())
+    lines = source.strip().splitlines(keepends=True)
+    offsets = [0]
+    for line in lines:
+        offsets.append(offsets[-1] + len(line))
+    changes = []
+
+    def position(line, column):
+        return prefix + offsets[line - 1] + len(lines[line - 1].encode()[:column].decode())
+
+    def visit(node, bound=frozenset()):
+        if isinstance(node, ast.Name):
+            if node.id in references and node.id not in bound:
+                start = position(node.lineno, node.col_offset)
+                end = position(node.end_lineno, node.end_col_offset)
+                changes.append((start, end, references[node.id]))
+        elif isinstance(node, (ast.ListComp, ast.GeneratorExp)):
+            nested = set(bound)
+            for generator in node.generators:
+                visit(generator.iter, nested)
+                nested.update(item.id for item in ast.walk(generator.target) if isinstance(item, ast.Name))
+                for condition in generator.ifs:
+                    visit(condition, nested)
+            visit(node.elt, nested)
+        elif isinstance(node, ast.Call):
+            for item in (*node.args, *(keyword.value for keyword in node.keywords)):
+                visit(item, bound)
+        elif not isinstance(node, ast.Attribute):
+            for child in ast.iter_child_nodes(node):
+                visit(child, bound)
+
+    try:
+        visit(tree)
+    except RecursionError:
+        return source
+    for start, end, replacement in sorted(changes, reverse=True):
+        source = source[:start] + replacement + source[end:]
+    return source
+
+
+def rewrite_references(source, references):
+    """Replace complete expression references, preserving strings and formatting."""
+    if not isinstance(source, str) or len(source) > 5000:
+        return source
+    try:
+        tree = ast.parse(source.strip(), mode="eval")
+    except (SyntaxError, ValueError, RecursionError):
+        return source
+    prefix = len(source) - len(source.lstrip())
+    lines = source.strip().splitlines(keepends=True)
+    offsets = [0]
+    for line in lines:
+        offsets.append(offsets[-1] + len(line))
+    changes = []
+
+    def position(line, column):
+        return prefix + offsets[line - 1] + len(lines[line - 1].encode()[:column].decode())
+
+    def visit(node):
+        name = symbol(node)
+        if name in references:
+            changes.append((position(node.lineno, node.col_offset),
+                            position(node.end_lineno, node.end_col_offset), references[name]))
+        else:
+            for child in ast.iter_child_nodes(node):
+                visit(child)
+
+    try:
+        visit(tree)
+    except RecursionError:
+        return source
+    for start, end, value in sorted(changes, reverse=True):
+        source = source[:start] + value + source[end:]
+    return source
+
+
 def finite_number(value):
     if type(value) not in (int, float):
         raise ValueError("This operation requires numeric operands.")
@@ -113,15 +197,17 @@ def finite_number(value):
 def symbol(node):
     if isinstance(node, ast.Name):
         return node.id
-    if isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name):
-        return f"{node.value.id}.{node.attr}"
+    if isinstance(node, ast.Attribute):
+        parent = symbol(node.value)
+        if parent is not None:
+            return f"{parent}.{node.attr}"
     return None
 
 
 def function_name(node):
     name = symbol(node)
     if name and "." in name:
-        namespace, name = name.split(".")
+        namespace, name = name.rsplit(".", 1)
         if namespace not in ("math", "statistics"):
             return None
         if namespace == "statistics" and name not in (
@@ -317,8 +403,6 @@ class RestrictedPython:
                 "mode",
                 "math",
                 "statistics",
-                "PowerAllocation",
-                "LoadBudget",
             }
             if generator.target.id in reserved:
                 raise ValueError(

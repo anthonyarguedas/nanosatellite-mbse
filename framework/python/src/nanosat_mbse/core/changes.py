@@ -6,7 +6,7 @@ import io
 import tokenize
 from dataclasses import replace
 
-from .elements import Element
+from .elements import Component, Element
 from .requirements import Parameter, Statement
 from .predicates import DraftExpression, restored_expression
 from ..catalogs.database import DatabaseBacked, FactReference
@@ -28,6 +28,11 @@ def retype_element(session, identity, definition):
     if (
         value.children
         or value.property_values
+        or isinstance(value, Component) and any(
+            parameter.value is not None or parameter.expression is not None
+            and not (parameter.name == "average_power_W" and parameter.expression == "draw_power_W")
+            for parameter in value.parameters.values()
+        )
         or value.requirement_links
         or value.quantity != 1
         or any(row.owner is value for row in session.statements)
@@ -60,8 +65,14 @@ def retype_element(session, identity, definition):
         row: (dict(row.parameters), row.sources, row.affected)
         for row in session.statements
     }
+    component_state = {component: dict(component.parameters) for component in session.components}
+    budget = getattr(value, "_budget_parameters", None)
     value.__class__, value.definition = element_class(definition), definition
     try:
+        if isinstance(value, Component) and budget is None:
+            value._initialize_budget(())
+        elif not isinstance(value, Component) and budget is not None:
+            del value._budget_parameters
         session._initialized.discard(value.key)
         session.initialize(value)
         value.on_added(session)
@@ -81,6 +92,10 @@ def retype_element(session, identity, definition):
         for row, (parameters, sources, affected) in statements.items():
             row._parameters, row._sources, row._affected = parameters, sources, affected
         value.__class__, value.definition = old_class, old_definition
+        for component, parameters in component_state.items():
+            component._budget_parameters = parameters
+        if budget is None:
+            value.__dict__.pop("_budget_parameters", None)
         raise
     session._model_state_present = True
     return value
@@ -107,8 +122,17 @@ def substitute_product(session, identity, product):
         value.product,
         value.usage,
     )
+    budget = getattr(value, "_budget_parameters", None)
     value.__class__ = cls
     try:
+        if isinstance(value, Component) and budget is None:
+            value._initialize_budget(())
+        elif not isinstance(value, Component) and budget is not None:
+            if any(parameter.value is not None or parameter.expression is not None
+                   and not (parameter.name == "average_power_W" and parameter.expression == "draw_power_W")
+                   for parameter in budget.values()):
+                raise ValueError("Clear installed budget inputs before substituting a product without component accounting.")
+            del value._budget_parameters
         value.definition = replacement.definition
         value.product = product
         if (
@@ -134,6 +158,10 @@ def substitute_product(session, identity, product):
             old_product,
             old_usage,
         )
+        if budget is None:
+            value.__dict__.pop("_budget_parameters", None)
+        else:
+            value._budget_parameters = budget
         raise
     session._model_state_present = True
     return value
@@ -143,8 +171,13 @@ def configure_parameter(session, identity, parameter):
     """Replace an owned binding after validating its domain constraints."""
     value = session.get(identity)
     if not isinstance(parameter, Parameter) or not hasattr(value, "parameters"):
-        raise TypeError("Configure a typed Parameter on a requirement or analysis.")
-    if isinstance(value, Statement):
+        raise TypeError("Configure a typed Parameter on a component, requirement or analysis.")
+    if isinstance(value, Component):
+        value._configure_budget(parameter)
+    elif isinstance(value, Statement):
+        link = value.linked_parameter(parameter.name)
+        if link is not None and parameter.expression != f"{link[0].id}.{link[1]}":
+            return configure_parameter(session, link[0], value.component_input(parameter))
         session.validate_parameter_binding(value, parameter)
         if parameter.name not in value.parameters:
             value.add_parameter(parameter)

@@ -22,7 +22,7 @@ from ..core.configuration import (
     ScriptPort,
     Variable,
 )
-from ..core.elements import Element, Stakeholder
+from ..core.elements import Component, Element, Stakeholder
 from ..core.predicates import DraftExpression, VerificationMethod
 from ..core.requirements import Parameter, Statement
 from ..core.session import SeedRule, Session
@@ -90,6 +90,7 @@ _ELEMENT_FIELDS = {
     "_projection_fields",
     "stakeholder_type",
     "_property_values",
+    "_budget_parameters",
     "_quantity",
     "_requirement_links",
 }
@@ -353,6 +354,8 @@ class _Writer:
                 self.emit(f"property_values={self.expression(dict(value.property_values))},", 3)
             if value.quantity != 1:
                 self.emit(f"quantity={value.quantity!r},", 3)
+            if isinstance(value, Component):
+                self.tuple_field("budget_parameters", value.parameters.values(), 3)
             if isinstance(value, Stakeholder):
                 self.emit(f"stakeholder_type={value.stakeholder_type!r},", 3)
             if isinstance(value, DatabaseBacked):
