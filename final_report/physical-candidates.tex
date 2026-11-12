@@ -1,140 +1,119 @@
 \section{Synthesize Candidate Physical Architectures}
 \label{section:synthesize-physical-architectures}
 
-Three logical components define the same functional scope for five proposed configurations. Table~\ref{tab:framework-physical-alternatives} groups five documented choices for each method group under their assigned logical component. Each source covers part of its assigned role. L01 retains mission and configuration records. The EP methods supply sizing and comparison functions in L03. The identified gaps column describes missing coverage and integration work alongside the common completion below. Analysis methods listed there are proposed choices for closing the gaps across the combined configurations. Published cases and current commercial documentation support their own subsets. Connections between independent workflows remain proposed. Documented capabilities beyond the allocated FRs receive no required-coverage credit.
-
-All configurations require F Prime component and port mappings. External simulation tools remain implementation choices. Zhu demonstrates battery geometry/data mappings and numerical outputs to Omniverse. This is one documented simulation approach \citep{handpicked-0001}. Janiak and Cristiano present industrial co-simulation and developing USD--FMI integration at minimum viable product/proof-of-concept stage \citep{handpicked-0002}.
-
-Virtual commissioning supports model and software engineering. Hardware fabrication or test authorization remains outside framework behavior. Simulation evidence grants neither hardware nor flight readiness.
-
-Physical synthesis compares models, algorithms, numerical libraries and solvers, exchange representations and transports under engineer-approved scenarios and criteria. Criteria cover intended use, represented mechanisms, data sufficiency and identifiability, prediction and diagnostic errors, and uncertainty interpretation. They also cover failure dependencies, recovery assumptions, numerical convergence, computing resources, runtime and coupling compatibility.
+\section{Logical Component Alternatives}
+Logical components break down the required framework behavior into four building blocks.
+Table~\ref{tab:framework-physical-alternatives} gives five alternatives to implement each logical component. For each alternative, a concise description of how it implements each logical component is given.
+Valispace Requirements Manager and CATIA Stimulus were studied as alternatives at the request of the stakeholders, and are considered for all logical components given that they are integrated solutions with ample functionality.
+An analysis of Microsoft Excel, Python, MATLAB, and Github was also requested for the applicable logical components.
+The rest of the alternatives were chosen from a review of the state of the art.
 
 {\small
 \setlength{\tabcolsep}{4pt}
+\setlength{\parskip}{0pt}
 \renewcommand{\arraystretch}{1.02}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.07\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.41\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.52\linewidth-2\tabcolsep\relax}@{}}
-\caption{Thirty partial physical choices and identified gaps. Methods to close the gaps are proposed.}\label{tab:framework-physical-alternatives}\\
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.27\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.63\linewidth-2\tabcolsep\relax}@{}}
+\caption{Five physical implementation alternatives for each logical component. Descriptions include proposed custom extensions and external tools.}\label{tab:framework-physical-alternatives}\\
 \toprule
-\textbf{ID} & \textbf{Source-supported subset} & \textbf{Identified Gaps} \\
+\textbf{ID} & \textbf{Alternative} & \textbf{Implementation} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{ID} & \textbf{Source-supported subset} & \textbf{Identified Gaps} \\
+\textbf{ID} & \textbf{Alternative} & \textbf{Implementation} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-\multicolumn{3}{@{}l@{}}{\textbf{L01 Engineering Interface}}\\*
-\multicolumn{3}{@{}l@{}}{FR-01--04, FR-11, FR-15, FR-17, FR-22, FR-25, FR-37, FR-39}\\*
-\multicolumn{3}{@{}l@{}}{Requirements and engineering use}\\*
-AR1 & COMET: shared requirements, parameters and numerical links \citep{deutsch2022comet}. & Requirement-quality rules, contextual guidance and evidence traces. \\
-AR2 & Valispace Requirements Manager, now Altium Requirements Portal: cloud subscriptions, requirement hierarchies and parameters linked by formulas \citep{altiumrequirementsportal,altiumrequirementsportaldocs}. The Engineering Assistant uses artificial intelligence to review drafts and propose changes for user approval \citep{altiumengineeringassistant}. & Deterministic draft rules, source/explanation validation, EPS method/model eligibility and controlled guidance. EPS methods, numerical plants and independent credibility assessment require separate implementations. \\
-AR3 & Nanospace authoring plus separate first-valid hierarchical task-network (HTN) planning \citep{review-0340}. & Planner integration, richer requirement relations and reviewed guidance. \\
-AR4 & SeaLion: YAML needs/stories/data relationships and generated views \citep{chiu2023sealion}. & Requirement semantics, quality checks and engineering guidance. \\
-AR5 & CubeSat System Reference Model (CSRM): tailored requirements, architecture and V\&V relationships \citep{kaslow2019csrm}. & Mission content and executable contextual guidance. \\
+\multicolumn{3}{@{}l@{}}{\textbf{L01 MBSE Workspace}}\\*
+L01-A & Valispace Requirements Manager & Store linked requirements and computed parameters in Altium Requirements Portal. Configure the Engineering Assistant with EPS AI Skills for requirement review and verification criteria \citep{altiumengineeringassistant,altiumrequirementsportalskills}. A custom checker reads project data through the REST/Python API, evaluates the EPS activity rules and returns recommendations for user review \citep{altiumrequirementsportalapi}. \\
+L01-B & CATIA Stimulus & Simulate formalized behavioral requirements to expose inconsistencies \citep{dassaultstimulus,dassaultstimuluseducation}. Mission inputs, component records, result links, and activity guidance would have to be implemented externally. \\
+L01-C & Microsoft Excel & Represent requirements, components and parameters in linked worksheets. Use formulas for checks and custom macros for activity guidance, analysis requests and result links. \\
+L01-D & Python & Build a custom model editor with requirement and component links, input checks, activity rules and analysis calls. Python model exchange in the Nanospace studies provides a precedent \citep{luccisano2024formalization,review-0340}, but its code is unavailable. \\
+L01-E & COMET & Use shared requirements, engineering parameters and numerical links as the MBSE model. Add external EPS selection rules, activity guidance and analysis \citep{deutsch2022comet}. \\
+\midrule
+\multicolumn{3}{@{}l@{}}{\textbf{L02 COTS Database}}\\*
+L02-A & Valispace Requirements Manager & Populate component hierarchies with catalogue parameters and supplier references. A custom API adapter would have to supply catalogue identifiers and exchange values with L01 and L03 \citep{altiumrequirementsportaldocs,altiumrequirementsportalapi}. \\
+L02-B & CATIA Stimulus & Load component properties into model parameters through a custom catalogue adapter. Use an external database for persistent part records, datasheets and identifiers. \\
+L02-C & Microsoft Excel & Maintain one catalogue row per part with identifiers, units, limits and datasheet links. Lookup formulas or custom adapters supply selected values to the MBSE model \citep{deutsch2022comet}. \\
+L02-D & Python & Provide a custom catalogue database with parameter identifiers, units, sources and queries. Interfaces resolve MBSE component references and return numerical values to L03, extending the Nanospace data exchange approach \citep{review-0340} (original code unavailable). \\
+L02-E & COMET & Use component catalogue entries and datasheet-linked parameters in a shared engineering model. Add external catalogue revision tracking and mappings from part properties to mission parameters \citep{deutsch2022comet}. \\
 \midrule
 \multicolumn{3}{@{}l@{}}{\textbf{L03 Simulation and Analysis}}\\*
-\multicolumn{3}{@{}l@{}}{FR-10, FR-13--14, FR-16, FR-19--20, FR-26--27, FR-34}\\*
-\multicolumn{3}{@{}l@{}}{Sizing and design comparisons}\\*
-EP1 & CSRM: mission components and physical-property rollups \citep{kaslow2019csrm}. & Executable EPS/volume parametrics, selection and maintained component data. \\
-EP2 & COMET/Excel: state-dependent budgets and datasheet-linked catalogue \citep{deutsch2022comet}. & Dynamic EPS analyses, volume estimates, catalogue currency and a sensitivity method such as parameter sweeps. \\
-EP3 & GREATCUBE+: commercial off-the-shelf (COTS) matches, power/battery sizing and geometry concepts \citep{review-0711}. & Broader mission coverage, maintained records and dynamic models. \\
-EP4 & Boan: load modes, ephemeris/flux files and Opalis energy sizing \citep{review-0289}. & Requirement traces, technical mass/volume links and specialist analyses. \\
-EP5 & Casado: characterized EPS plant and orbital simulation \citep{review-0573}. & Reusable component selection, aging/uncertainty and design estimates. \\
+L03-A & Valispace Requirements Manager & Evaluate static budgets using linked formulas. Send dynamic EPS and fault analyses to external solvers through a custom API connector, then link their results to model parameters \citep{altiumrequirementsportaldocs,altiumrequirementsportalapi}. \\
+L03-B & CATIA Stimulus & Generate constrained test scenarios and check requirement behavior with external EPS models coupled through the Functional Mock-up Interface. Retain numerical outputs, test traces and requirement coverage \citep{dassaultstimulus,dassaultfmi}. \\
+L03-C & Microsoft Excel & Calculate mass, volume, mode power, eclipse energy and array and battery sizing with formulas. Add scenario tables for concept comparisons and external solvers for dynamic electrical and fault analyses \citep{deutsch2022comet}. \\
+L03-D & Python & Execute custom scripts for budgets, sizing, concept comparisons and electrical and fault models. Return raw outputs and execution status. Quantitative Python component models provide a demonstrated reference without code \citep{review-1251}. \\
+L03-E & MATLAB/Simulink & Run sizing and parameter studies in MATLAB and dynamic EPS and fault models in Simulink. A custom connector imports model parameters and returns numerical results. \\
 \midrule
-\multicolumn{3}{@{}l@{}}{\textbf{Simulation, RAM and F Prime mappings (L03)}}\\*
-\multicolumn{3}{@{}l@{}}{FR-10, FR-16, FR-19, FR-26--27, FR-34}\\*
-IN1 & F Prime: architecture export and component unit-test mechanism \citep{review-0853}. & Mission behavior, plant feedback, system-level SIL and EPS/RAM analysis implementations. RAM representation choices include functional/component FMEA/FMECA, event/fault trees with minimal cut sets and series/parallel reliability block diagrams \citep[Secs.~3.1--3.3]{review-1158}\citep[Sec.~4.3]{citation-3814}. \\
-IN2 & Zhu: battery OpenUSD mappings, electrothermal outputs and SOH prediction with uncertainty indicators linked to Omniverse \citep[pp.~4--9]{handpicked-0001}. & Spacecraft/subsystem coverage, F Prime feedback and battery applicability beyond the demonstrated data. SOH choices include empirical degradation relations, physics-based models, learned predictors and hybrid methods such as physics-informed neural networks. Uncertainty choices include sensitivity bounds, probabilistic intervals and deep autoencoding Gaussian mixture scores \citep[pp.~7--9]{handpicked-0001}. Capacity retention and resistance growth are example health quantities. Estimates use checked electrical, thermal and use histories, supported degradation assumptions and reference conditions. Predictions also require a future use profile and horizon. \\
-IN3 & Janiak/Cristiano: industrial Functional Mock-up Interface (FMI) co-simulation/virtual commissioning \citep{handpicked-0002}. & Spacecraft plants, developing USD--FMI adapters and verified time/port contracts. Solver/library, transport and synchronization choices require convergence, resource/runtime and numerical-coupling assessment. RAM computational choices include Monte Carlo fault scenarios, Markov failure/recovery states and Bayesian propagation \citep[Appendix~A]{review-1158}\citep[Sec.~2]{citation-1752,review-0933}. Markov service-state definitions determine contributing state probabilities. Service definitions and recovery assumptions determine availability interpretation. Missing failure/recovery data leaves affected quantitative results unavailable. \\
-IN4 & CATIA Stimulus: consistency exploration for executable requirements (Stimulus for Requirements), constrained test stimuli, code response observation, requirement coverage and checks of supplied logs (Stimulus for Test) \citep{dassaultstimulus,dassaultstimuluseducation}. FMI routes include co-simulation and model exchange import, and co-simulation export \citep{dassaultfmi}. & EPS plants, synchronized F Prime/Omniverse coupling and independent replay. Engineers must assess the correctness of requirement formalization for the partial L01 consistency role. Commercial licenses and connector dependencies form part of the execution basis. Detailed electrical, electrothermal, SOH, diagnostic and RAM methods require separate integration. Diagnostic choices include thresholded residuals, observers and dependency conflict sets with minimal hitting sets \citep[Secs.~1 and~3.3]{review-1251}. \\
-IN5 & Casado: EPS twin, Python inputs and control/power hardware-in-the-loop comparisons \citep{review-0573}. & Portable software plant and whole-system adapters. Model choices include empirical photovoltaic curves or single-diode representations, steady-state, averaged or switching conversion, and empirical, equivalent circuit, SPM or DFN battery representations. Thermal choices include lumped or spatial models. Coupled mechanisms and temporal resolution remain comparison variables \citep[Secs.~2--3]{review-0573}\citep[pp.~7--9]{handpicked-0001}. Declared fidelity must support the required loss, electrothermal, conducted-emission and protection-stress assessments. SOH, diagnosis and RAM require additional methods. \\
-\midrule
-\multicolumn{3}{@{}l@{}}{\textbf{Model parameter estimation (L01)}}\\*
-\multicolumn{3}{@{}l@{}}{FR-22}\\*
-CR1 & Casado: EPS outputs compared with physical reference waveforms \citep{review-0573}. & Identified supplied histories, portable comparisons and independent assessment. Electrical calibration choices include manual fitting and two-step linear least squares \citep[Secs.~2.1 and~2.3]{review-0573}. \\
-CR2 & Zhu: electrochemical/thermal calibration and physical-consistency checks \citep{handpicked-0001}. & Cell/boundary applicability and assessment independent of calibration. Bayesian optimization is a calibration candidate \citep[p.~8]{handpicked-0001}. \\
-CR3 & Djebko: root mean square error (RMSE) calibration and conditional valid-signal mappings \citep{review-1251}. & Independent assessment, timing/uncertainty and retained validity masks. Calibration choices include manual fitting or cyclic genetic search with a hill climber. Parameter bounds and fitting objectives, including RMSE, require comparison \citep[Sec.~4.1]{review-1251}. \\
-CR4 & UPPAAL CORA schedules with separate stochastic kinetic battery model (KiBaM) validation \citep{review-1303}. & Scenario constraints and assessment of assumptions/model mismatch. \\
-CR5 & CSRM: model V\&V activities linked to requirements/objectives \citep{kaslow2019csrm}. & Executable checks, numerical evidence and independent review. \\
-\midrule
-\multicolumn{3}{@{}l@{}}{\textbf{Evidence and technical review (L01)}}\\*
-\multicolumn{3}{@{}l@{}}{FR-11, FR-37}\\*
-EC1 & SeaLion: generated diagrams, tables and documents \citep{chiu2023sealion}. & EPS result ingestion, verdicts and review packages. \\
-EC2 & Latserus: requirement/procedure/verdict records and feedback concept \citep{citation-0569}. & Result write-back, criteria and reviewer acceptance. \\
-EC3 & CATIA Stimulus: requirement coverage, behavior traces and violation findings \citep{dassaultstimulus,dassaultstimuluseducation}. & Preserved raw runs, exact requirement/baseline links, EPS review packages and authorized acceptance. Behavioral coverage establishes neither physical prediction accuracy nor quantitative RAM results. \\
-EC4 & COMET: numerical requirement--parameter compliance \citep{deutsch2022comet}. & Dynamic/software evidence, EPS reports and review decisions. \\
-EC5 & Requirements Portal: linked V\&V activities, file evidence, verification status and document export \citep{altiumrequirementsportaldocs}. & EPS result ingestion, independent verdict assessment and authorized phase-review acceptance. Test case management depends on subscription tier \citep{altiumrequirementsportal}. \\
-\midrule
-\multicolumn{3}{@{}l@{}}{\textbf{L06 Configuration Management}}\\*
-\multicolumn{3}{@{}l@{}}{FR-05, FR-07, FR-09}\\*
-EC1 & SeaLion: Git history for YAML inputs and generated views \citep{chiu2023sealion}. & Approved releases, technical authority and stale-view flags. \\
-EC2 & Latserus: managed requirement records and collaborative web views \citep{citation-0569}. & Released configurations, change authority and result-currency checks. \\
-EC3 & Nanospace: common database/API and dependency paths \citep{review-0340}. & Frozen releases, field authority and dependency-currency checks. \\
-EC4 & COMET: server synchronization and owner/state parameters \citep{deutsch2022comet}. & Released snapshots, exchange authority and stale-import checks. \\
-EC5 & Requirements Portal: requirement/parameter histories, change notifications and authenticated API exchange \citep{altiumrequirementsportaldocs,altiumrequirementsportalapi}. & Exact framework baselines, transfer authority, stale-guidance controls and preserved service versions. Advanced permissions depend on subscription tier \citep{altiumrequirementsportal}. Legacy review, release and hosted scripting features receive no credit in this allocation. \\
+\multicolumn{3}{@{}l@{}}{\textbf{L04 Configuration Management}}\\*
+L04-A & Valispace Requirements Manager & Use requirement and parameter histories and change notifications to review revisions. Add and external archives for exact mission, design, model and analysis revisions and authorized decisions \citep{altiumrequirementsportaldocs,altiumrequirementsportalapi}. \\
+L04-B & CATIA Stimulus & Treat executable requirements, simulation models and test records as controlled engineering items \citep{dassaultstimulus}. An external configuration system provides revision history, approved baselines and analysis reconstruction instructions. \\
+L04-C & GitHub & Version text models, catalogue records, scripts and analysis settings in Git repositories. Use reviewed change requests and tagged releases with baseline records, dependency versions and reconstruction instructions. \\
+L04-D & SeaLion approach & Keep model inputs and generated engineering views under Git as demonstrated by SeaLion. Extend release records with approvals, exact analysis dependencies and reconstruction instructions \citep{chiu2023sealion}. \\
+L04-E & Nanospace & Maintain engineering records and dependency links in a shared database. Add immutable revision records, baseline snapshots, authorized change decisions and analysis reconstruction packages \citep{review-0340}. \\
 \end{longtable}
 }
 
-\paragraph{Candidate screening.}
-The removals follow qualitative judgments of completion risk under the four critical MOPs in Section~\ref{section:optimize-and-evaluate-alternatives}. The Capella/Valispace thesis publishes its connector scripts in Appendices A and B. Its fragmented imports and generated destination identifiers add trace and revision consistency risks \citep[Secs.~3.3--3.4, Apps.~A--B]{citation-4690}. Requirements Portal replaces the Capella-based engineering and evidence paths in L01 and the configuration path in L06. Capella's AIV/AIT modeling requires formalized syntax and semantics \citep[pp.~19--21]{citation-1573}. Stimulus supplies scenario generation and requirement checking in L03 \citep{dassaultstimulus}. Its evidence mechanisms are assigned to L01, replacing Nanospace's shared results path because preserved run identities and requirement verdict links are unestablished in that source \citep{review-0340}. Boan supplies sizing inputs in L03. Nanospace remains in L01 and L06. No substantial unreleased base-tool customization was established for these source subsets. The removals express design risk, with achieved MOP values unknown.
+\section{Synthesized Candidates}
 
-\paragraph{Combined configurations.}
-The matrix defines four combinations of documented methods and the fifth user custom proposal. Each cell is one proposed physical component. A plus sign combines partial methods inside that component. Identifiers denote choices within their LC. L01 combines requirements, model parameter estimation and evidence methods. L03 combines sizing, simulation and analysis methods. EC3 denotes Stimulus evidence in L01 and Nanospace exchanges in L06. PA-VS uses Requirements Portal directly, with no inherited Capella connector. PA-NS combines Stimulus with the Casado EPS plant and Boan mission/energy inputs. Candidate identifiers refer to the exact compositions below. Every row also requires common completion.
+Valispace Requirements Manager (C1) and CATIA Stimulus (C2) were compared as integrated solutions spanning all logical components. Other two candidates were synthesized by combining different alternatives: Version-controlled Python (C3) consists of using native Python for L01-L03, and Github for L04, while Version-controlled Excel with Python adapters (C4) uses Microsoft Excel for L01-L02, Python for L03, and Github for L04. A fifth candidate representing the as-is capabilities (C5) was introduced to serve as the baseline.
 
-{\small
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.08}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}*{3}{>{\raggedright\arraybackslash}p{\dimexpr0.28\linewidth-2\tabcolsep\relax}}@{}}
-\caption{Exact candidate composition by logical component.}\label{tab:framework-candidate-inventories}\\
-\toprule
-\textbf{Candidate} & \textbf{L01} & \textbf{L03} & \textbf{L06} \\
-\midrule
-\endfirsthead
-\toprule
-\textbf{Candidate} & \textbf{L01} & \textbf{L03} & \textbf{L06} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
-PA-COM & AR1+CR1+CR5\newline +EC4+EC2 & EP2+EP3+IN1+IN2 & EC4+EC1 \\
-PA-VS & AR2+CR1+CR2\newline +EC5+EC2 & EP5+IN1+IN5 & EC5+EC1 \\
-PA-NS & AR3+CR3+CR4\newline +EC3+EC2 & EP4+IN1+IN4+IN5 & EC3+EC1 \\
-PA-GY & AR4+AR5+CR4+CR5\newline +EC1+EC2 & EP1+EP3+IN1+IN3 & EC1+EC2 \\
-PA-CDT & Native + Jev + DB\newline + Param. + Py\newline + CR1 + CR5 + EC2 & Param. + Py\newline + IN1 + IN2 & Native + EC1 \\
-\end{longtable}
-}
+The candidates were compared based on a set of weighted criteria, which have value zero if they match the baseline, +1 to +2 if they improve them, and -1 to -2 if they worsen them. Greater is better.
+These criteria are not Measures of Performance, as all considered candidates are assumed to be capable of attaining the target MOP values, but merely a decision-making aid informed by the stakeholder analysis.
+The criteria were development complexity (20\%), cost per year (30\%), learning curve (30\%), evidence centralization (10\%) and extensibility (10\%).
 
-\paragraph{User custom PA-CDT.}
-Its native SysML v2 CSRM baseline is enriched with native requirements and parametrics: subjects, quantity properties, assumptions, constraints, calculations and bindings. Jev classifiers recommend analyses and V\&V. Python implements calculations and orchestrates declared analyses. A maintained COTS database supplies engineering data. L01 exposes requirements, mission/design records and evidence and estimates model parameters. L03 evaluates the parametric calculations and executes analyses. L06 manages baselines and result records. The cited CSRM supplies reference relationships and omits physical power and weight parametrics \citep{kaslow2019csrm}. These enrichments, classifiers, execution services and database maintenance are required proposed custom roles. Classifier scores, human applicability and acceptance decisions, executed analyses and retained evidence remain separate. In the matrix, Native means native model records, Param. means parametrics, Py means Python and DB means the maintained COTS database.
+\subsection{Candidate scores and rationales}
 
-\paragraph{Common completion.}
-All configurations must realize all 23 FRs, including requirement management, EPS sizing and analysis, RAM assessment, MIL scenarios, parameter estimation, F Prime mappings, evidence views and baseline retrieval. The proposed RAM profile adapts the published transformation of authored SysML failure data into fault trees \citep[p.~15]{handpicked-0004}. Numerical reliability assumptions require sourced data. Define requirement/scenario/result links and comparison criteria. Validate the required F Prime component and port mappings. SeaLion's reported model/prototype divergence illustrates the need for enforced change control \citep{chiu2023sealion}. The allocations express intended responsibility. Verification must establish achieved FR coverage.
+Table~\ref{tab:framework-candidate-scores} records each score and its rationale. Lower development complexity, costs and learning effort count as improvements. Greater evidence centralization and extensibility also count as improvements. The weighted total for candidate $j$ is $S_j=\sum_{i=1}^{6}w_i s_{ij}$, where $s_{ij}$ is the criterion score and $w_i$ is its percentage weight expressed as a fraction. C5 has zero for every criterion and a weighted total of zero.
 
-\paragraph{Comparison under critical MOPs.}
-Table~\ref{tab:framework-commercial-mops} compares the two offerings under the same four critical MOPs. It identifies documented mechanisms and required completion. Common tests assess syntax defect precision and recall, recommendation applicability, F Prime mapping fidelity and analysis reconstruction. Vendor feature descriptions supply no achieved MOP values.
-
+% Enter integer scores from -2 to +2 and a short rationale in each blank row.
+% Weighted totals use the fractional weights, so they also range from -2 to +2.
 {\small
 \setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.02}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.42\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.42\linewidth-2\tabcolsep\relax}@{}}
-\caption{Commercial mechanisms and completion gaps under the critical MOPs.}\label{tab:framework-commercial-mops}\\
+\setlength{\parskip}{0pt}
+\renewcommand{\arraystretch}{1.0}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.31\linewidth}>{\centering\arraybackslash}p{\dimexpr0.10\linewidth-2\tabcolsep\relax}>{\centering\arraybackslash}p{\dimexpr0.09\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash\rule{0pt}{1.4\baselineskip}}p{\dimexpr0.50\linewidth-2\tabcolsep\relax}@{}}
+\caption{Candidate scores and rationales relative to the as-is baseline C5. Criterion scores range from $-2$ to $+2$, with higher scores preferred.}\label{tab:framework-candidate-scores}\\
 \toprule
-\textbf{MOP} & \textbf{Requirements Portal} & \textbf{CATIA Stimulus} \\
+\textbf{Criterion} & \textbf{Weight} & \textbf{Score} & \textbf{Rationale} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{MOP} & \textbf{Requirements Portal} & \textbf{CATIA Stimulus} \\
+\textbf{Criterion} & \textbf{Weight} & \textbf{Score} & \textbf{Rationale} \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-MOP-FR02 & Engineering Assistant draft review supplies suggestions. Deterministic syntax checks and affected-text accuracy need separate assessment. & Executable constraints expose behavioral conflicts. Requirement syntax checking and affected-text accuracy need separate assessment. \\
+\multicolumn{4}{@{}l@{}}{\textbf{C1 Valispace Requirements Manager}}\\*
+Development complexity & 20\% & -2 & Requires custom extensions to cover all requirements, and its interfaces are propietary and not well documented. \\*
+Yearly cost & 2\% & CA\$1418 & Included in Altium Develop, a professional subscription service. \\*
+Learning curve & 29\% & 0 & Includes AI assistance, but the array of controls is large. \\*
+Evidence centralization & 10\% & +1 & Depends on the degree of integration allowed by the propietary interfaces. \\*
+Extensibility & 10\% & 0 & Requires a long-term commitment to an expensive product whose usability depends on propietary interfaces. \\*
+\textbf{Weighted total} & \textbf{100\%} & & \\
 \midrule
-MOP-FR03 & The assistant can suggest verification methods and criteria. Sourced EPS method/model eligibility against phase, data, validity and resources needs separate assessment. & EPS method/model eligibility requires a separate sourced guidance service. Intended use, prerequisites, alternatives and rationale need expert assessment. \\
+\multicolumn{4}{@{}l@{}}{\textbf{C2 CATIA Stimulus}}\\*
+Development complexity & 20\% & -2 & Requires custom extensions to cover all requirements, and its interfaces are propietary and not well documented. \\*
+Yearly cost & 2\% & -1 & CA\$249 via an INCOSE individual membersip, for private or academic use only. \\*
+Learning curve & 29\% & 0 & Includes AI assistance, but the array of controls is large. \\*
+Evidence centralization & 10\% & +1 & Depends on the degree of integration allowed by the propietary interfaces. \\*
+Extensibility & 10\% & & Requires a long-term commitment to an expensive product whose usability depends on propietary interfaces. 3DXPERIENCE integration is limited for unauthorized developers. \\*
+\textbf{Weighted total} & \textbf{100\%} & & \\
 \midrule
-MOP-FR34 & Block and requirement records supply allocation context. F Prime component and port mappings require checked translations and version-compatibility findings. & Architecture import supplies no F Prime profile mapping. Component and port translations and version checks remain required. \\
+\multicolumn{4}{@{}l@{}}{\textbf{C3 Version-controlled Python}}\\*
+Development complexity & 20\% & -1 & A widely-used object-oriented programming language. Several publications provide reference patterns, even if code is unavailable. \\*
+Yearly cost & 2\% & 0 & No cost to develop, operate, and maintain. \\*
+Learning curve & 29\% & 0 & Only the included requirements are developed. Python files can be read and edited by AI agents to provide assistance. Custom assistance can be tailored to user trials. \\*
+Evidence centralization & 10\% & +2 & Covers all requirements natively. Includes database management, object-oriented modeling via classes, numerical analysis, and version control with online uploads and authorship traceability. \\*
+Extensibility & 10\% & +2 & Ample ecosystem of open-source libraries. \\*
+\textbf{Weighted total} & \textbf{100\%} & & \\
 \midrule
-MOP-FR10 & Histories, files and API exports retain part of the evidence. Complete replay needs raw outputs, inputs, dependencies and access. Preservation of hosted execution versions is unestablished. & Replay needs executed stimuli, formalized specifications, FMI models, run settings, engine/connector versions and license access. The reviewed sources establish no replay guarantee from a seed alone. \\
+\multicolumn{4}{@{}l@{}}{\textbf{C4 Version-controlled Excel with Python adapters}}\\*
+Development complexity & 20\% & -1 & A widely-used and programmable spreadsheet software. Documentation on its use for systems engineering is scarce. \\*
+Yearly cost & 2\% & CA\$115 & Yearly cost of a Microsoft 365 subscription. \\*
+Learning curve & 29\% & 0 & Excel is widely used, but macro programming is an specialist topic. \\*
+Evidence centralization & 10\% & +1 & Macros require a completely difference interface for development, usage, and configuration management.  \\*
+Extensibility & 10\% & +1 & The core spreadsheet is propietary software. The files it generates aren't easily readably for version contr \\*
+\textbf{Weighted total} & \textbf{100\%} & & \\
 \end{longtable}
 }
