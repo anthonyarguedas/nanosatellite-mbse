@@ -11,19 +11,19 @@ import re
 from dataclasses import replace
 from uuid import uuid4
 
-from ...models.cots import component_for_product
-from ...models.database import DatabaseBacked, FactReference
-from ...models.configuration import ComponentState, Mode, ScriptPort, Variable
-from ...models.drafts import DraftRequirement, DraftStatement
-from ...models.elements import Component, Element, Stakeholder
-from ...models.requirements import Parameter, Requirement, Statement
-from ...models.predicates import VerificationMethod, restored_expression
-from ...models.verification import VerificationScript
-from ...models.budgets import BUDGET_CLASSES
-from ...models.eps.requirements import GenericRequirement
-from ...models.registry import element_class
-from ...models.persistence.repository import dumps, loads, validate_session
-from ...models.persistence.projection import _local_names
+from .legacy.cots import component_for_product
+from .legacy.database import DatabaseBacked, FactReference
+from .legacy.configuration import ComponentState, Mode, ScriptPort, Variable
+from .legacy.drafts import DraftRequirement, DraftStatement
+from .legacy.elements import Component, Element, Stakeholder
+from .legacy.requirements import Parameter, Requirement, Statement
+from .legacy.predicates import VerificationMethod, restored_expression
+from .legacy.verification import VerificationScript
+from .legacy.budgets import BUDGET_CLASSES
+from .legacy.eps.requirements import GenericRequirement
+from .legacy.registry import element_class
+from .legacy.persistence.repository import dumps, loads, validate_session
+from .legacy.persistence.projection import _local_names
 from .validation import TABLES, TYPES, normalize_projection, validate_projection
 from .views import allowed_definitions
 
@@ -46,7 +46,7 @@ def rows_by_key(projection):
 
 
 def _source(parameter):
-    from ...models.session import expression_source
+    from .legacy.session import expression_source
 
     return expression_source(parameter, callables=True)
 

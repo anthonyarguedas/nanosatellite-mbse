@@ -1,138 +1,224 @@
-"""Typed component contracts, independent of product databases and verification."""
+"""Expression bindings, descriptive units and evaluation without a value cache."""
 
-from __future__ import annotations
-
-from dataclasses import dataclass, field
+from contextvars import ContextVar
+from dataclasses import dataclass
+from enum import Enum
+import math
 from types import MappingProxyType
-
-from .requirements import Parameter, _parameter_name
-from .predicates import PendingValue
-
-
-PROPERTY_TYPES = {}
-
-
-def property_type(cls):
-    """Register a trusted generic type for editable assignment expressions."""
-    previous = PROPERTY_TYPES.get(cls.__name__)
-    if previous is not None and previous is not cls:
-        raise ValueError(f"The component type {cls.__name__!r} is already registered.")
-    PROPERTY_TYPES[cls.__name__] = cls
-    return cls
-
-
-def resolve_property_type(value):
-    if isinstance(value, str):
-        try:
-            return PROPERTY_TYPES[value]
-        except KeyError:
-            raise ValueError(f"Unknown component type {value!r}.") from None
-    if not isinstance(value, type) or not issubclass(value, PropertyOwner):
-        raise TypeError("Select a generic component type.")
-    return value
 
 
 @dataclass(frozen=True)
-class ComponentProperty:
-    """A scalar property in its canonical unit, inherited through normal Python MRO."""
+class Unit:
+    symbol: str = ""
 
-    value_type: type = float
-    unit: str = ""
-    name: str = field(default="", init=False)
+    def __str__(self):
+        return self.symbol
+
+
+class EvaluationStatus(str, Enum):
+    VALUE = "value"
+    PENDING = "pending"
+    ERROR = "error"
+
+
+@dataclass(frozen=True)
+class EvaluationResult:
+    status: EvaluationStatus
+    value: object = None
+    message: str = ""
+
+
+class PendingValue(ValueError):
+    """A referenced property has no expression yet."""
+
+
+_ACTIVE = ContextVar("model_evaluation", default=None)
+
+
+def expression(source):
+    """Accept one Python expression, including literal input conveniences."""
+    if source is None:
+        return None
+    if type(source) in (bool, int, float):
+        source = repr(source)
+    if not isinstance(source, str) or "\n" in source or "\r" in source:
+        raise ValueError("Supply a Python one-line expression.")
+    compile(source, "<property>", "eval")
+    return source
+
+
+class EvaluationContext:
+    """One evaluation's call stack and observed property dependencies."""
+
+    def __init__(self, mission=None, mode=None):
+        self.mission, self.mode = mission, mode
+        self.stack = []
+        self.dependencies = {}
+
+    def __enter__(self):
+        self._token = _ACTIVE.set(self)
+        return self
+
+    def __exit__(self, *_):
+        _ACTIVE.reset(self._token)
+
+    def execute(self, source, owner=None, **bindings):
+        namespace = dict(self.mission.namespace) if self.mission else {"math": math}
+        namespace.update(self=owner, mode=self.mode, **bindings)
+        # Session code is trusted Python. There is deliberately no sandbox.
+        return eval(compile(expression(source), "<expression>", "eval"), namespace)
+
+    def read(self, prop):
+        if self.stack:
+            edges = self.dependencies.setdefault(self.stack[-1], [])
+            if prop not in edges:
+                edges.append(prop)
+        if prop in self.stack:
+            path = " -> ".join(item.reference for item in (*self.stack, prop))
+            raise ValueError(f"Property dependency cycle: {path}")
+        mission = prop.owner.mission if prop.owner is not None else None
+        if self.mission is None:
+            self.mission = mission
+        elif prop.owner is not None and mission is not self.mission:
+            raise ValueError(f"{prop.reference} belongs outside this Mission.")
+        if self.mode is not None and self.mission is not None:
+            if getattr(self.mode, "mission", None) is not self.mission:
+                raise ValueError("The evaluation mode must belong to this Mission.")
+        source = prop._modes.get(self.mode, prop.expression)
+        if source is None:
+            raise PendingValue(f"{prop.reference} is unset.")
+        self.stack.append(prop)
+        try:
+            linked = prop._source if self.mode not in prop._modes else None
+            value = self.read(linked) if linked is not None else self.execute(source, prop.owner)
+            return self.read(value) if isinstance(value, Property) else value
+        finally:
+            self.stack.pop()
+
+    def paths(self, root):
+        """Return each observed path from a measure to its input properties."""
+        def walk(path):
+            for child in self.dependencies.get(path[-1], ()):
+                if child not in path:
+                    extended = (*path, child)
+                    yield extended
+                    yield from walk(extended)
+        return tuple(walk((root,)))
+
+
+class Property:
+    """An expression and annotation. Read .value to evaluate it."""
+
+    def __init__(self, source=None, unit=None):
+        self.owner, self.name = None, ""
+        self._frozen = False
+        self._source = None
+        self._modes = {}
+        self.expression = source
+        self.unit = unit
 
     def __set_name__(self, owner, name):
-        _parameter_name(name)
-        Parameter(name, self.value_type, self.unit)
-        object.__setattr__(self, "name", name)
+        self.name = name
 
     def __get__(self, instance, owner=None):
-        return self if instance is None else instance.property_value(self.name)
+        return self if instance is None else instance.properties[self.name]
 
     def __set__(self, instance, value):
-        instance.set_property(self.name, value)
+        instance._set_property(self.name, value)
 
-
-class PropertyOwner:
-    """Cooperative property storage, specialized by database adapters."""
-
-    def __init__(self, *, property_values=None, **kwargs):
-        self._property_values = {}
-        for name, value in (property_values or {}).items():
-            self.set_property(name, value)
-        super().__init__(**kwargs)
+    def copy(self, owner, name, *, frozen=False):
+        prop = Property(self.expression, self.unit)
+        prop.owner, prop.name = owner, name
+        prop._modes = dict(self._modes)
+        prop._source = self._source
+        prop._frozen = frozen
+        return prop
 
     @classmethod
-    def property_definitions(cls):
-        definitions = {}
-        for base in reversed(cls.__mro__):
-            for name, value in vars(base).items():
-                if isinstance(value, ComponentProperty):
-                    previous = definitions.get(name)
-                    if previous is not None and (
-                        previous.value_type is not value.value_type
-                        or previous.unit != value.unit
-                    ):
-                        raise TypeError(f"Conflicting inherited property {cls.__name__}.{name}.")
-                    definitions[name] = value
-        return MappingProxyType(definitions)
+    def link(cls, source):
+        prop = cls(unit=source.unit)
+        prop._source = source
+        return prop
+
+    def _editable(self):
+        if self._frozen:
+            raise AttributeError(f"{self.reference} is fixed by its COTS class.")
 
     @property
-    def property_values(self):
-        return MappingProxyType(self._property_values)
+    def expression(self):
+        return self._source.reference if self._source is not None else self._expression
 
-    def set_property(self, name, value):
-        specification = self.property_definitions().get(name)
-        if specification is None:
-            raise ValueError(f"Unknown component property {name!r}.")
-        parameter = Parameter(name, specification.value_type, specification.unit, value=value)
-        if value is None:
-            self._property_values.pop(name, None)
-        else:
-            self._property_values[name] = parameter.value
-        if self.session is not None:
-            self.session._model_state_present = True
+    @expression.setter
+    def expression(self, source):
+        self._editable()
+        self._expression = expression(source)
+        self._source = None
 
-    def property_value(self, name):
-        if name not in self.property_definitions():
-            raise ValueError(f"Unknown component property {name!r}.")
-        if self.session is not None:
-            return self.session.value(self, name)
-        return self._property_value(name)
+    @property
+    def unit(self):
+        return self._unit
 
-    def _property_value(self, name):
-        value = self._property_values.get(name)
-        if value is None:
-            raise PendingValue(f"{self.id}.{name} is unset.")
-        return value
+    @unit.setter
+    def unit(self, value):
+        self._editable()
+        if value is not None and not isinstance(value, (str, Unit)):
+            raise TypeError("A unit is a Unit annotation or a string.")
+        self._unit = value if isinstance(value, Unit) else Unit(value or "")
 
+    @property
+    def modes(self):
+        return MappingProxyType(self._modes)
 
-# Conversion is deliberately bounded. Unlisted units must match exactly.
-# Each entry is (dimension, scale to the base unit, offset in the base unit).
-_UNITS = {
-    "": ("ratio", 1, 0), "1": ("ratio", 1, 0), "%": ("ratio", .01, 0),
-    "J": ("energy", 1, 0), "Wh": ("energy", 3600, 0), "mWh": ("energy", 3.6, 0),
-    "W": ("power", 1, 0), "mW": ("power", .001, 0), "uW": ("power", .000001, 0),
-    "V": ("voltage", 1, 0), "mV": ("voltage", .001, 0),
-    "A": ("current", 1, 0), "mA": ("current", .001, 0), "uA": ("current", .000001, 0),
-    "C": ("charge", 1, 0), "Ah": ("charge", 3600, 0), "mAh": ("charge", 3.6, 0),
-    "s": ("time", 1, 0), "ms": ("time", .001, 0), "min": ("time", 60, 0), "h": ("time", 3600, 0),
-    "K": ("temperature", 1, 0), "degC": ("temperature", 1, 273.15),
-    "kg": ("mass", 1, 0), "g": ("mass", .001, 0),
-    "m": ("length", 1, 0), "cm": ("length", .01, 0), "mm": ("length", .001, 0),
-    "m2": ("area", 1, 0), "cm2": ("area", .0001, 0), "mm2": ("area", .000001, 0),
-    "Hz": ("frequency", 1, 0), "kHz": ("frequency", 1000, 0), "MHz": ("frequency", 1000000, 0),
-    "ohm": ("resistance", 1, 0), "kohm": ("resistance", 1000, 0),
-}
+    def bind(self, mode, source):
+        """Override this expression for an explicitly selected mode or state."""
+        from .modes import ComponentMode, ComponentState, SpacecraftMode
 
+        self._editable()
+        if not isinstance(mode, (SpacecraftMode, ComponentMode, ComponentState)):
+            raise TypeError("Choose a spacecraft mode, component mode or component state.")
+        if self.owner is not None and self.owner.mission is not None:
+            if mode.mission is not self.owner.mission:
+                raise ValueError("The binding mode must belong to this Mission.")
+        self._modes[mode] = expression(source)
+        return self
 
-def conversion(source, target, *, aggregate=False):
-    """Return scale and offset, rejecting incompatible or offset-based sums."""
-    if source == target:
-        return 1, 0
-    first, second = _UNITS.get(source), _UNITS.get(target)
-    if first is None or second is None or first[0] != second[0]:
-        raise ValueError(f"Cannot convert property unit {source!r} to target unit {target!r}.")
-    scale, offset = first[1] / second[1], (first[2] - second[2]) / second[1]
-    if aggregate and offset:
-        raise ValueError("Quantity weighted sums require units without an offset conversion.")
-    return scale, offset
+    @property
+    def reference(self):
+        return f"{self.owner.path}.{self.name}" if self.owner is not None else "<property>"
+
+    @property
+    def value(self):
+        return self.evaluate()
+
+    def evaluate(self, *, mission=None, mode=None):
+        active = _ACTIVE.get()
+        if active is not None:
+            if mission is not None and mission is not active.mission:
+                raise ValueError("Nested evaluation uses the active Mission.")
+            if mode is not None and mode is not active.mode:
+                raise ValueError("Nested evaluation uses the active mode.")
+            return active.read(self)
+        with EvaluationContext(mission, mode) as context:
+            return context.read(self)
+
+    @property
+    def verification(self):
+        from .requirements import InstanceVerification
+
+        mission = self.owner.mission if self.owner is not None else None
+        return mission.verify().for_instance(self) if mission else InstanceVerification(self, ())
+
+    @property
+    def verified(self):
+        return self.verification.verified
+
+    def __repr__(self):
+        return f"Property({self.reference!r}, expression={self.expression!r}, unit={str(self.unit)!r})"
+
+    def assess(self, **options):
+        try:
+            return EvaluationResult(EvaluationStatus.VALUE, self.evaluate(**options))
+        except PendingValue as error:
+            return EvaluationResult(EvaluationStatus.PENDING, message=str(error))
+        except Exception as error:
+            return EvaluationResult(EvaluationStatus.ERROR, message=f"{type(error).__name__}: {error}")

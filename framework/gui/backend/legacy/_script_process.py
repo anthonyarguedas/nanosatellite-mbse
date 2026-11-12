@@ -11,9 +11,9 @@ from pathlib import Path
 # -I ignores PYTHONPATH. Insert only the installed/source package's own root.
 # Invocation metadata is built by IsolatedRunner, never supplied by the browser.
 if __package__ in (None, ""):
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 
-from framework.models.verification import VerificationScript
+from framework.gui.backend.legacy.verification import VerificationScript
 
 
 def main():

@@ -1,169 +1,27 @@
-"""Python models for nanosatellite requirements and verification."""
+"""Small, trusted Python model API. Start with Mission and Property."""
 
-from .requirements import ExpressionEvaluator, Identified, Parameter, Requirement, Statement
-from .drafts import DraftRequirement, DraftStatement
-from .elements import Component, Element, Stakeholder, Subsystem
-from .properties import ComponentProperty, property_type
-from .assignments import all_assigned, count_assigned, sum_assigned
-from .configuration import (
-    ComponentState,
-    StateAllocation,
-    LoadConnection,
-    LoadProfile,
-    Mode,
-    ScriptConfiguration,
-    ScriptPort,
-)
-from .session import SeedRule, Session
-from .identity import ALL_MODES
-from .evaluation import (
-    EvaluationContext,
-    ModeVerification,
-    VerificationReport,
-    calculation_signature,
-)
-from .verification import (
-    DraftExpression,
-    MethodResult,
-    PendingValue,
-    VerificationMethod,
-    VerificationResult,
-    VerificationState,
-    ScriptDefinition,
-    VerificationScript,
-    UnresolvedVerification,
-)
-from .execution import (
-    CancellationToken,
-    ExecutionEvidence,
-    ExecutionResult,
-    InlineRunner,
-    IsolatedRunner,
-)
-from .mission import (
-    Mission,
-    Orbit,
-    CubeSat,
-    Payload,
-    GroundStation,
-    CommandAndDataHandling,
-)
-from .eps import EPS, Battery, SolarArray, RegulatorAndConverter, PowerCircuit, PowerLoss
-from .aggregates import Budget, ConnectedLoadBudget
-from .budgets import (
-    BudgetRequirement,
-    BudgetScope,
-    ComponentMassLimit,
-    ComponentPowerLimit,
-    ComponentVolumeLimit,
-    MassLimit,
-    PowerLimit,
-    Resource,
-    VolumeLimit,
-)
-from .database import DatabaseBacked, FactReference, PropertySource, TabularDatabase
-from .catalog import FrameworkCatalog
-from .cots import CotsBattery, CotsSolarArray, component_for_product
-from .script_registry import ScriptRegistry, default_registry
-from .persistence import (
-    CallableRegistry,
-    SessionConflict,
-    SessionFileError,
-    SessionMetadata,
-    SessionNotFound,
-    SessionRepository,
-    SessionSourceError,
-    StorageStatus,
-    UnserializableCallable,
-    convert_json,
-)
+from .properties import EvaluationResult, EvaluationStatus, PendingValue, Property, Unit
+from .objects import ModelObject
+from .functions import Function, ModuleImport
+from .stakeholders import Stakeholder, RegulatoryAgency, MissionStakeholder, LaunchProvider, Partner, ThirdParty
+from .elements import DomainElement, SpaceSegment, GroundSegment, Subsystem, Component, Orbit
+from .modes import SpacecraftMode, ComponentMode, ComponentState, TimeAllocation, OrbitAllocation, ModeAllocation, StateAllocation
+from .eps import EPS, EPSComponent, Battery, SolarArray, RegulatorAndConverter, PowerCircuit, COTS
+from .eps import CotsBattery, CotsSolarArray, CotsRegulatorAndConverter, CotsPowerCircuit
+from .spacecraft import CubeSatBus, GroundStation, CommandAndDataHandling, Communication
+from .spacecraft import AttitudeDeterminationAndControl, GuidanceNavigationAndControl, StructuresAndMechanisms, Thermal, Propulsion, Payload
+from .requirements import Requirement, VerificationCondition, ConditionResult, VerificationReport, InstanceVerification, VerificationFailure
+from .mission import Mission, Session
 
 __all__ = [
-    "ALL_MODES",
-    "Battery",
-    "Budget",
-    "BudgetRequirement",
-    "BudgetScope",
-    "CallableRegistry",
-    "CancellationToken",
-    "CommandAndDataHandling",
-    "Component",
-    "ComponentMassLimit",
-    "ComponentPowerLimit",
-    "ComponentProperty",
-    "ComponentState",
-    "ComponentVolumeLimit",
-    "ConnectedLoadBudget",
-    "CotsBattery",
-    "CotsSolarArray",
-    "CubeSat",
-    "DatabaseBacked",
-    "DraftExpression",
-    "DraftRequirement",
-    "DraftStatement",
-    "EPS",
-    "Element",
-    "EvaluationContext",
-    "ExecutionEvidence",
-    "ExecutionResult",
-    "ExpressionEvaluator",
-    "FactReference",
-    "FrameworkCatalog",
-    "GroundStation",
-    "Identified",
-    "InlineRunner",
-    "IsolatedRunner",
-    "LoadConnection",
-    "LoadProfile",
-    "MassLimit",
-    "MethodResult",
-    "Mission",
-    "Mode",
-    "ModeVerification",
-    "Orbit",
-    "Parameter",
-    "Payload",
-    "PendingValue",
-    "PowerCircuit",
-    "PowerLimit",
-    "PowerLoss",
-    "PropertySource",
-    "RegulatorAndConverter",
-    "Requirement",
-    "Resource",
-    "ScriptConfiguration",
-    "ScriptDefinition",
-    "ScriptPort",
-    "ScriptRegistry",
-    "SeedRule",
-    "Session",
-    "SessionConflict",
-    "SessionFileError",
-    "SessionMetadata",
-    "SessionNotFound",
-    "SessionRepository",
-    "SessionSourceError",
-    "SolarArray",
-    "Stakeholder",
-    "StateAllocation",
-    "Statement",
-    "StorageStatus",
-    "Subsystem",
-    "TabularDatabase",
-    "UnresolvedVerification",
-    "UnserializableCallable",
-    "VerificationMethod",
-    "VerificationReport",
-    "VerificationResult",
-    "VerificationScript",
-    "VerificationState",
-    "VolumeLimit",
-    "all_assigned",
-    "calculation_signature",
-    "component_for_product",
-    "convert_json",
-    "count_assigned",
-    "default_registry",
-    "property_type",
-    "sum_assigned",
+    "Mission", "Session", "ModelObject", "Property", "Unit", "Function", "ModuleImport",
+    "EvaluationResult", "EvaluationStatus", "PendingValue",
+    "Stakeholder", "RegulatoryAgency", "MissionStakeholder", "LaunchProvider", "Partner", "ThirdParty",
+    "DomainElement", "SpaceSegment", "GroundSegment", "Subsystem", "Component", "Orbit",
+    "SpacecraftMode", "ComponentMode", "ComponentState", "TimeAllocation", "OrbitAllocation", "ModeAllocation", "StateAllocation",
+    "EPS", "EPSComponent", "Battery", "SolarArray", "RegulatorAndConverter", "PowerCircuit", "COTS",
+    "CotsBattery", "CotsSolarArray", "CotsRegulatorAndConverter", "CotsPowerCircuit",
+    "CubeSatBus", "GroundStation", "CommandAndDataHandling", "Communication",
+    "AttitudeDeterminationAndControl", "GuidanceNavigationAndControl", "StructuresAndMechanisms", "Thermal", "Propulsion", "Payload",
+    "Requirement", "VerificationCondition", "ConditionResult", "VerificationReport", "InstanceVerification", "VerificationFailure",
 ]

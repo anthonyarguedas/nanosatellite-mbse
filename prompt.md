@@ -1,21 +1,21 @@
-0. there is a Mission aka session. at a technical level, a session has some imports, like math for math.pi by default.
+0. A Mission is a session representing one configuration. Alternatives use separate sessions. Session imports include `import math as math` by default.
 
-1. a Mission has Stakeholders and Third Parties. Stakeholders are specialised into child classes for which the only difference is the name of the child class (RegulatoryAgency, MissionStakeholder, LaunchProvider, Partner). these classes do nothing else.
+1. A Mission has Stakeholders and Third Parties. Stakeholder subclasses (RegulatoryAgency, MissionStakeholder, LaunchProvider and Partner) differ only by class name.
 
-2. a Mission has Domain Elements, which specialise into Space Segment and Ground Segment. Space Segment has Cumulative Properties, in this case Power, Cost, Mass and Volume. A Cumulative Property is a recommended pattern that sums a property for all children. Space Segment has a set of Modes. Each mode has an allocation of the orbit period. Power can have different values for each Mode. A Mission Domain Element has a property Subsystems. a Space Segment has an init to get itself some predefined Subsystems.
+2. A Mission has Domain Elements specialised into Space Segment and Ground Segment. Domain Elements have Subsystems. A newly added Space Segment creates predefined Subsystems. Space Segment has Cumulative Properties for Power, Cost, Mass and Volume. Each class defines its aggregation scope and counts each included physical instance once. Aggregation is a recommended pattern. Space Segment has Spacecraft Modes with orbit period allocations. Power can vary by Spacecraft Mode.
 
-3. A Subsystem has Cumulative Properties. it has the same set of Modes as its parent.
+3. A Subsystem has Cumulative Properties and shares its parent's Spacecraft Modes. Spacecraft Modes, Component Modes, Component States and time allocations are distinct classes. Their detailed timing and mapping rules remain to be specified.
 
-3. a Mission has an Orbit. Orbit has properties Altitude, Beta Angle, and Eccentricity.
+4. A Mission has an Orbit with Altitude, Beta Angle and Eccentricity. Illumination support for Eccentricity is deferred.
 
-4. A Subsystem has a property Components. each Component has properties Cost, Mass, and Volume. It has its own set of Modes mapped to the Modes of its parent with their own period allocations. It has Voltage, Current for the on and off states of its own Modes.
+5. A Subsystem has Components. Each Component has Cost, Mass and Volume. Its Component Modes map to its parent's Spacecraft Modes through separate allocations. Voltage and Current are defined for the on and off Component States of each Component Mode.
 
-5. There are several specialisations of Components, which are all specific to a certain specialisation of Subsystem. On init, Subsystems will assign themselves some Components.
+6. Component specialisations belong to specific Subsystem specialisations. A newly added Subsystem creates predefined Components. Default creation runs once per instance. Restoration preserves saved objects and deliberate deletions.
 
-6. Specialisations of Components assigned to the EPS subsystem specialisation may have several properties. They also have a property COTS. COTS are specialisations of EPS components that do nothing else than fixing their property values. COTS can inherit from more than one EPS component to model integrated solutions. The property values of EPS components can reference the properties of COTS. it is a recommended pattern that property expressions of EPS components use the class of COTS to filter them.
+7. EPS Component specialisations have a COTS property. COTS specialise EPS Components by fixing their property values. COTS can inherit from several EPS Component classes to represent integrated solutions. EPS Component properties can reference COTS properties. Filtering COTS by class is a recommended expression pattern.
 
-7. there are Requirements. requirements have properties Verification Conditions. Verification Conditions have properties Measure and Target and resolve to a boolean.
+8. Requirements have Verification Conditions. Each condition has Measure, Target and a Python one-line expression returning a boolean. Evaluation status is separate from the boolean result.
 
-8. Properties are Python one-line expressions, including functions from math by default. for more than one line, an expression can call an arbitrary Function imported from a package at the session level. all imports must be in the format import package as pkg, then used as pkg.function(). the Function must have type-annotated and named inputs and outputs. the expression has to explicitly assign one available Property to each input of the Function. expressions can reference the properties of any instance in Mission.
+9. A Property holds a Python one-line expression and a Unit annotation. The Unit class provides descriptive annotations only. Expressions can reference any instance's Properties in the Mission and use math functions. Longer calculations can call arbitrary imported Functions. Session imports use `import package as pkg`, with calls as `pkg.function(...)`. Custom Functions have named, annotated inputs with no optional inputs or defaults. They return a NamedTuple with annotated fields. Each call explicitly binds every input to a Property. Calls execute independently without caching or execution protection. Hidden Function dependencies are an accepted gap.
 
-9. an instance whose property is referenced in the Measure of a Requirement is said to be verified by that requirement. if the associated Verification Condition resolves to false, the instance is said to be unverified. properties referenced inside properties also bear the verification condition.
+10. An instance whose Property is referenced in a Requirement's Measure is verified by that Requirement. A false Verification Condition makes the instance unverified. Properties referenced transitively inherit that condition. Each propagated failure exposes its originating Requirement, condition and dependency path.

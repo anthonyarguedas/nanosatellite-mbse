@@ -1,8 +1,9 @@
 # GUI
 
-A local JavaScript workbook over `framework.models`.
+A local JavaScript workbook with a GUI-private compatibility model.
 The browser handles rendering, navigation and unsaved editor drafts.
-The Python backend handles model edits, validation and session storage.
+The Python backend handles workbook edits, validation and session storage.
+The new `framework.models` API is independent and is not yet edited by this GUI.
 
 ## Run
 
@@ -16,7 +17,7 @@ npm start --prefix framework/gui
 Open <http://127.0.0.1:3000>.
 The server listens only on the local machine.
 There are no npm dependencies or browser build steps.
-The source bootstrap at `backend/service.py` loads the sibling Python library.
+The source bootstrap at `backend/service.py` loads the GUI backend.
 
 Environment settings:
 
@@ -32,7 +33,8 @@ Environment settings:
 - `server/`: HTTP routes and supervised Python transport.
 - `server/exporters/`: KiCad and Fprime formatting over validated data.
 - `backend/`: Python application service and browser edit validation.
-- `../models/`: reusable Python library, including session persistence.
+- `backend/legacy/`: existing workbook classes, expressions and session persistence.
+- `../models/`: independent public model API for new Python scripts.
 - `../cots/`: shared product facts and sources.
 - `../sessions/`: current and named sessions.
 
@@ -52,15 +54,19 @@ The GUI can migrate a retained version-14 JSON workspace to an adjacent Python f
 It preserves the original JSON.
 Existing native metadata prevents a missing Python session from being silently regenerated.
 
-Use the same model directly from Python:
+Existing workbook sessions can be inspected through the compatibility package:
 
 ```python
-from framework.models import Session
+from framework.gui.backend.legacy import Session
 
 session = Session.open("framework/sessions/current.py")
-# Inspect or edit the model, then save explicitly.
 session.save()
 ```
+
+New Python configurations use `framework.models.Mission`.
+See the [model API](../models/README.md).
+Canonical version 1 workbook imports are redirected in memory when loaded.
+New GUI saves use the compatibility package's import paths.
 
 Python session files and native functions are trusted local code.
 Opening a session constructs configuration without running analysis scripts.

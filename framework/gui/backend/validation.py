@@ -5,7 +5,7 @@ from __future__ import annotations
 import copy
 import re
 
-from ...models.requirements import _parameter_name
+from .legacy.requirements import _parameter_name
 
 TABLES = ("stakeholders", "elements", "statements", "components", "scripts")
 TYPES = {"float": float, "integer": int, "boolean": bool, "string": str}

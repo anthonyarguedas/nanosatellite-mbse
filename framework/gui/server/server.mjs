@@ -1,4 +1,4 @@
-// HTTP and static-file transport. framework.models owns model behavior.
+// HTTP and static-file transport. The GUI backend owns workbook compatibility.
 import { createServer as httpServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -170,7 +170,7 @@ export function startServer() {
   });
   server.listen(port, '127.0.0.1', () => {
     console.log(`Requirements UI: http://127.0.0.1:${server.address().port}`);
-    console.log('Model behavior and session storage use framework.models. Legacy JSON sources are retained.');
+    console.log('Workbook behavior and storage use the GUI compatibility model. Legacy JSON sources are retained.');
   });
   return server;
 }

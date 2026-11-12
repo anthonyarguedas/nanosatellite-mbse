@@ -14,27 +14,27 @@ from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
 
-from ...models.cots import component_for_product, product_facts, products
-from ...models.database import FactReference, TabularDatabase
-from ...models.catalog import default_catalog
-from ...models.configuration import Mode
-from ...models.elements import Element, Stakeholder
-from ...models.predicates import VerificationMethod, restored_expression
-from ...models.requirements import Parameter, Requirement, Statement
-from ...models.verification import VerificationScript
-from ...models.session import Session
-from ...models.registry import element_class
-from ...models.persistence.callables import CallableRegistry
-from ...models.persistence.locations import default_workspace, named_sessions_directory
-from ...models.persistence.migrate import SessionMetadata, convert_json
-from ...models.persistence.repository import (
+from .legacy.cots import component_for_product, product_facts, products
+from .legacy.database import FactReference, TabularDatabase
+from .legacy.catalog import default_catalog
+from .legacy.configuration import Mode
+from .legacy.elements import Element, Stakeholder
+from .legacy.predicates import VerificationMethod, restored_expression
+from .legacy.requirements import Parameter, Requirement, Statement
+from .legacy.verification import VerificationScript
+from .legacy.session import Session
+from .legacy.registry import element_class
+from .legacy.persistence.callables import CallableRegistry
+from .legacy.persistence.locations import default_workspace, named_sessions_directory
+from .legacy.persistence.migrate import SessionMetadata, convert_json
+from .legacy.persistence.repository import (
     SessionConflict,
     SessionFileError,
     SessionNotFound,
     SessionRepository,
 )
-from ...models.persistence.source import dumps
-from ...models.script_registry import default_registry
+from .legacy.persistence.source import dumps
+from .legacy.script_registry import default_registry
 from .edits import apply_projection, clone_session, validate_graph
 from .validation import TYPES, mapping, text, validate_projection
 from .views import describe, tabs
@@ -849,7 +849,7 @@ class Application:
                 "assignments", "duties", "allocations",
             }))
             if "states" in changes:
-                from ...models.configuration import ComponentState
+                from .legacy.configuration import ComponentState
 
                 changes["states"] = tuple(
                     ComponentState(**state) for state in changes["states"]

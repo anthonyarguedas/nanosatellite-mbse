@@ -1,146 +1,109 @@
-"""Mission domains and spacecraft subsystem specializations."""
+"""One configuration, its imports, orbit, domain elements and requirements."""
 
-from .elements import Element, Subsystem
+from collections import Counter
+from types import MappingProxyType
 
+from .elements import DomainElement, Orbit
+from .functions import ModuleImport
+from .objects import ModelObject
+from .requirements import Requirement, VerificationReport
+from .stakeholders import Stakeholder, ThirdParty
 
-class Mission(Element):
-    model = "Mission"
-    default_name = "Mission"
-    id_prefix = "MIS"
-    role = "mission"
-    expandable = True
-
-    def initialize(self, session):
-        for definition in session.catalog.elements:
-            if definition.parent is None:
-                session.add(session.element_from_definition(definition), owner=self)
+_DEFAULT_ORBIT = object()
 
 
-class External(Element):
-    model = "External"
-    default_name = "External"
-    role = "external"
+class Mission(ModelObject):
+    is_mission = True
+    child_aliases = {"orbit": Orbit}
+
+    def __init__(self, name="mission", *, orbit=_DEFAULT_ORBIT, imports=(), **bindings):
+        super().__init__(name, **bindings)
+        self._imports = {}
+        self.add_import("import math as math")
+        for source in imports:
+            self.add_import(source)
+        if orbit is _DEFAULT_ORBIT:
+            orbit = Orbit("orbit")
+        if orbit is not None:
+            self.add(orbit)
+        self._initialized = True
+
+    @property
+    def imports(self):
+        return MappingProxyType(self._imports)
+
+    def add_import(self, source):
+        imported = ModuleImport(source)
+        if imported.alias in (self.name, "self", "mode"):
+            raise ValueError("The import alias conflicts with the expression namespace.")
+        old = self._imports.get(imported.alias)
+        if old is not None:
+            if old.package != imported.package:
+                raise ValueError(f"Import alias {imported.alias!r} is already used.")
+            return old
+        if any(child.name == imported.alias for child in self.children):
+            raise ValueError("An import alias cannot replace a Mission child.")
+        self._imports[imported.alias] = imported
+        return imported
+
+    @property
+    def namespace(self):
+        objects = tuple(self.walk())
+        counts = Counter(item.name for item in objects)
+        namespace = {name: imported.namespace for name, imported in self.imports.items()}
+        namespace[self.name] = self
+        for item in objects:
+            if counts[item.name] == 1 and item.name not in ("self", "mode"):
+                namespace.setdefault(item.name, item)
+        return namespace
+
+    @property
+    def orbit(self):
+        return next((child for child in self.children if isinstance(child, Orbit)), None)
+
+    @property
+    def elements(self):
+        return tuple(child for child in self.children if isinstance(child, DomainElement))
+
+    @property
+    def stakeholders(self):
+        return tuple(child for child in self.children if isinstance(child, Stakeholder))
+
+    @property
+    def third_parties(self):
+        return tuple(child for child in self.children if isinstance(child, ThirdParty))
+
+    @property
+    def requirements(self):
+        return tuple(child for child in self.children if isinstance(child, Requirement))
+
+    def accepts(self, child):
+        if child.name in (*self.imports, self.name, "self", "mode"):
+            raise ValueError("The child name conflicts with the expression namespace.")
+        if isinstance(child, Orbit):
+            return self.orbit is None
+        return isinstance(child, (DomainElement, Stakeholder, ThirdParty, Requirement))
+
+    def get(self, path):
+        parts = path.split(".")
+        if parts[0] == self.name:
+            current = self
+        else:
+            matches = [item for item in self.walk() if item.name == parts[0]]
+            if len(matches) != 1:
+                raise KeyError(f"{parts[0]!r} is missing or ambiguous. Use its full path.")
+            current = matches[0]
+        for name in parts[1:]:
+            current = current.properties[name] if name in current.properties else current.child(name)
+        return current
+
+    def verify(self, *, mode=None):
+        results = tuple(condition.evaluate(mode=mode) for requirement in self.requirements for condition in requirement.conditions)
+        return VerificationReport(self, results)
+
+    @classmethod
+    def restore(cls, name="mission", *, orbit=None, **configuration):
+        return cls(name, orbit=orbit, **configuration)
 
 
-class Orbit(Element):
-    model = "Orbit"
-    default_name = "Orbit"
-    id_prefix = "ORB"
-    role = "orbit"
-
-
-class CubeSat(Element):
-    model = "SpaceSegment::CubeSat"
-    default_name = "CubeSat Bus"
-    id_prefix = "BUS"
-    role = "bus"
-    expandable = True
-
-
-class Payload(Subsystem):
-    model = "SpaceSegment::CubeSat::PayloadSubsystem"
-    default_name = "Payload"
-    id_prefix = "PAY"
-    role = "payload"
-
-
-class GroundStation(Element):
-    model = "GroundSegment::GroundStation"
-    default_name = "Ground Station"
-    id_prefix = "GND"
-    role = "ground"
-    expandable = True
-
-
-class CommandAndDataHandling(Subsystem):
-    model = "SpaceSegment::CubeSat::CommandAndDataHandlingSubsystem"
-    default_name = "Command and Data Handling"
-    id_prefix = "CDH"
-
-
-class Communication(Subsystem):
-    model = "SpaceSegment::CubeSat::CommunicationSubsystem"
-    default_name = "Communication"
-    id_prefix = "COM"
-
-
-class AttitudeDeterminationAndControl(Subsystem):
-    model = "SpaceSegment::CubeSat::AttitudeDeterminationAndControlSubsystem"
-    default_name = "Attitude Determination and Control"
-    id_prefix = "ADC"
-
-
-class GuidanceNavigationAndControl(Subsystem):
-    model = "SpaceSegment::CubeSat::GuidanceNavigationAndControlSubsystem"
-    default_name = "Guidance Navigation and Control"
-    id_prefix = "GNC"
-
-
-class StructuresAndMechanisms(Subsystem):
-    model = "SpaceSegment::CubeSat::StructuresAndMechanismsSubsystem"
-    default_name = "Structures and Mechanisms"
-    id_prefix = "STR"
-
-
-class Thermal(Subsystem):
-    model = "SpaceSegment::CubeSat::ThermalSubsystem"
-    default_name = "Thermal"
-    id_prefix = "THE"
-
-
-class Propulsion(Subsystem):
-    model = "SpaceSegment::CubeSat::PropulsionSubsystem"
-    default_name = "Propulsion"
-    id_prefix = "PRO"
-
-
-class GroundSubsystem(Subsystem):
-    expandable = False
-
-
-class PlanAndSchedule(GroundSubsystem):
-    model = "GroundSegment::PlanAndScheduleSubsystem"
-    default_name = "Plan and Schedule"
-    id_prefix = "PLS"
-
-
-class SpacecraftCommand(GroundSubsystem):
-    model = "GroundSegment::SpacecraftCommandSubsystem"
-    default_name = "Spacecraft Command"
-    id_prefix = "SCC"
-
-
-class GroundEquipmentControl(GroundSubsystem):
-    model = "GroundSegment::GroundEquipmentControlSubsystem"
-    default_name = "Ground Equipment Control"
-    id_prefix = "GEC"
-
-
-class SpaceGroundCommunication(GroundSubsystem):
-    model = "GroundSegment::SpaceGroundCommunicationSubsystem"
-    default_name = "Space Ground Communication"
-    id_prefix = "SGC"
-
-
-class MissionDataProcessing(GroundSubsystem):
-    model = "GroundSegment::MissionDataProcessingSubsystem"
-    default_name = "Mission Data Processing"
-    id_prefix = "MDP"
-
-
-class MissionDataDissemination(GroundSubsystem):
-    model = "GroundSegment::MissionDataDisseminationSubsystem"
-    default_name = "Mission Data Dissemination"
-    id_prefix = "MDD"
-
-
-class Network(GroundSubsystem):
-    model = "GroundSegment::NetworkSubsystem"
-    default_name = "Network"
-    id_prefix = "NET"
-
-
-class TelemetryProcessing(GroundSubsystem):
-    model = "GroundSegment::TelemetryProcessingSubsystem"
-    default_name = "Telemetry Processing"
-    id_prefix = "TLM"
+Session = Mission

@@ -1,193 +1,99 @@
-"""Spacecraft mode references and identity-preserving mode operations."""
+"""Distinct modes, electrical states and explicit allocation records.
 
-from __future__ import annotations
+Allocation normalization, averaging and chronology are intentionally unspecified.
+"""
 
-import ast
-import io
-import json
-import tokenize
-
-
-def _offsets(lines):
-    result = [0]
-    for line in lines:
-        result.append(result[-1] + len(line))
-    return result
+from .objects import ModelObject
+from .properties import Property
 
 
-def _draft_references(source, name):
-    """Retain mode links even while an expression is an incomplete draft."""
-    tokens = []
-    try:
-        for token in tokenize.generate_tokens(io.StringIO(source).readline):
-            if token.type not in (
-                tokenize.NL,
-                tokenize.NEWLINE,
-                tokenize.INDENT,
-                tokenize.DEDENT,
-                tokenize.COMMENT,
-            ):
-                tokens.append(token)
-    except (tokenize.TokenError, IndentationError):
-        pass
-    offsets = _offsets(source.splitlines(keepends=True))
-    spans = set()
-    for first, operation, last in zip(tokens, tokens[1:], tokens[2:]):
-        literal = (
-            last
-            if first.type == tokenize.NAME and first.string == "mode"
-            else first
-            if last.type == tokenize.NAME and last.string == "mode"
-            else None
-        )
-        if (
-            operation.string not in ("==", "!=")
-            or literal is None
-            or literal.type != tokenize.STRING
-        ):
-            continue
-        try:
-            value = ast.literal_eval(literal.string)
-        except (SyntaxError, ValueError):
-            continue
-        if value == name:
-            spans.add(
-                (
-                    offsets[literal.start[0] - 1] + literal.start[1],
-                    offsets[literal.end[0] - 1] + literal.end[1],
-                )
-            )
-    return tuple(sorted(spans))
+class TimeAllocation(ModelObject):
+    fraction = Property(unit="1")
+
+    def __init__(self, name, fraction=None):
+        super().__init__(name, fraction=fraction)
 
 
-def _references(source, name):
-    if not isinstance(source, str):
-        return ()
-    normalized = source.strip()
-    try:
-        tree = ast.parse(normalized, mode="eval")
-    except (ValueError, SyntaxError):
-        return _draft_references(source, name)
-    prefix = len(source) - len(source.lstrip())
-    lines = normalized.splitlines(keepends=True)
-    offsets = _offsets(lines)
-
-    def position(line, column):
-        # AST columns are UTF-8 bytes. Python string slices use characters.
-        return (
-            prefix
-            + offsets[line - 1]
-            + len(lines[line - 1].encode("utf-8")[:column].decode("utf-8"))
-        )
-
-    selected = set()
-    for node in ast.walk(tree):
-        if not isinstance(node, ast.Compare):
-            continue
-        operands = [node.left, *node.comparators]
-        for left, right in zip(operands, operands[1:]):
-            literal = (
-                right
-                if isinstance(left, ast.Name) and left.id == "mode"
-                else left
-                if isinstance(right, ast.Name) and right.id == "mode"
-                else None
-            )
-            if isinstance(literal, ast.Constant) and literal.value == name:
-                selected.add(
-                    (
-                        position(literal.lineno, literal.col_offset),
-                        position(literal.end_lineno, literal.end_col_offset),
-                    )
-                )
-    return tuple(sorted(selected))
+class OrbitAllocation(TimeAllocation):
+    def validate_attachment(self):
+        if not isinstance(self.parent, SpacecraftMode):
+            raise TypeError("An OrbitAllocation belongs to a SpacecraftMode.")
 
 
-def mode_referenced(source, name):
-    return bool(_references(source, name))
+class ModeAllocation(TimeAllocation):
+    def __init__(self, name, spacecraft_mode, fraction=None):
+        if not isinstance(spacecraft_mode, SpacecraftMode):
+            raise TypeError("A ModeAllocation references a SpacecraftMode.")
+        super().__init__(name, fraction)
+        self._spacecraft_mode = spacecraft_mode
+
+    @property
+    def spacecraft_mode(self):
+        return self._spacecraft_mode
+
+    def validate_attachment(self):
+        if not isinstance(self.parent, ComponentMode):
+            raise TypeError("A ModeAllocation belongs to a ComponentMode.")
+        if self.mission is not None:
+            component = self.parent.parent
+            if self.spacecraft_mode not in component.spacecraft_modes:
+                raise ValueError("Allocate a mode from the component's own Space Segment.")
 
 
-def rewrite_mode(source, old_name, new_name):
-    spans = _references(source, old_name)
-    if not spans:
-        return source
-    replacement = json.dumps(new_name, ensure_ascii=False)
-    for start, end in reversed(spans):
-        source = source[:start] + replacement + source[end:]
-    return source
+class StateAllocation(TimeAllocation):
+    def __init__(self, name, state, fraction=None):
+        if not isinstance(state, ComponentState):
+            raise TypeError("A StateAllocation references a ComponentState.")
+        super().__init__(name, fraction)
+        self._state = state
+
+    @property
+    def state(self):
+        return self._state
+
+    def validate_attachment(self):
+        if not isinstance(self.parent, ComponentMode) or self.state.parent is not self.parent:
+            raise ValueError("Allocate a state from this ComponentMode.")
 
 
-def configure_parameter_states(
-    session, target, parameter, *, values=None, last_edited=None, merge=False
-):
-    """Bind per-mode editor inputs using the same native rule in UI and REPL."""
-    from dataclasses import replace
-    from .session import expression_source
-    from .predicates import restored_expression
-    from .evaluation import branches
+class SpacecraftMode(ModelObject):
+    child_aliases = {"allocation": OrbitAllocation}
 
-    if type(merge) is not bool:
-        raise ValueError("Parameter state merge is a Boolean choice.")
-    row = session.get(target)
-    link = row.linked_parameter(parameter) if hasattr(row, "linked_parameter") else None
-    if link is not None:
-        if values is not None:
-            if not isinstance(values, dict) or any(value is not None and not isinstance(value, str) for value in values.values()):
-                raise ValueError("State expressions must map configured modes to Python source.")
-            from .requirements import Parameter
-            values = {
-                key: None if source is None else row.component_input(
-                    Parameter(parameter, unit=row.parameters[parameter].unit, expression=restored_expression(source))
-                ).expression
-                for key, source in values.items()
-            }
-            values = {key: source.source if hasattr(source, "source") else source for key, source in values.items()}
-        return configure_parameter_states(session, link[0], link[1], values=values, last_edited=last_edited, merge=merge)
-    binding = row.parameters[parameter]
-    if callable(binding.expression):
-        raise ValueError("Native callable parameters retain their Python binding.")
-    modes = tuple(session.power.modes)
-    if not modes:
-        raise ValueError("Define a spacecraft mode before splitting a parameter.")
-    keys = {mode.key for mode in modes}
-    source = expression_source(binding)
-    existing = branches(session.evaluation_context(), source) if source else None
-    if values is None:
-        values = (
-            existing["values"] if existing else {mode.key: source for mode in modes}
-        )
-    if not isinstance(values, dict) or set(values) - keys:
-        raise ValueError("State expressions must reference configured modes.")
-    if any(
-        value is not None
-        and (
-            not isinstance(value, str)
-            or len(value) > 5000
-            or "\n" in value
-            or "\r" in value
-        )
-        for value in values.values()
-    ):
-        raise ValueError("Enter one Python expression per state row.")
-    selected = (
-        session.resolve_mode(last_edited).key
-        if last_edited is not None
-        else (existing["lastEdited"] if existing else modes[0].key)
-    )
-    if selected not in keys:
-        raise ValueError("Select a configured state for the parameter.")
-    if merge:
-        source = values.get(selected)
-    else:
-        ordered = sorted(modes, key=lambda mode: mode.key != selected)
-        source = "None"
-        for mode in reversed(ordered):
-            value = values.get(mode.key)
-            source = f"({value if value and value.strip() else 'None'}) if mode == {json.dumps(mode.name, ensure_ascii=False)} else {source}"
-    result = replace(
-        binding,
-        value=None,
-        expression=None if source is None else restored_expression(source),
-    )
-    session.configure_parameter(row, result)
-    return result
+    def accepts(self, child):
+        return isinstance(child, OrbitAllocation) and self.allocation is None
+
+    @property
+    def allocation(self):
+        return next((child for child in self.children if isinstance(child, OrbitAllocation)), None)
+
+    def create_defaults(self):
+        if self.allocation is None:
+            self.add(OrbitAllocation("allocation"))
+
+
+class ComponentState(ModelObject):
+    voltage = Property(unit="V")
+    current = Property(unit="A")
+    power = Property("self.voltage.value * self.current.value", "W")
+
+
+class ComponentMode(ModelObject):
+    @property
+    def states(self):
+        return tuple(child for child in self.children if isinstance(child, ComponentState))
+
+    @property
+    def allocations(self):
+        return tuple(child for child in self.children if isinstance(child, ModeAllocation))
+
+    @property
+    def state_allocations(self):
+        return tuple(child for child in self.children if isinstance(child, StateAllocation))
+
+    def accepts(self, child):
+        return isinstance(child, (ComponentState, ModeAllocation, StateAllocation))
+
+    def create_defaults(self):
+        for name in ("on", "off"):
+            if not any(child.name == name for child in self.children):
+                self.add(ComponentState(name))

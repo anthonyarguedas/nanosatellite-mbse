@@ -17,7 +17,7 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import redirect_stdout
 from pathlib import Path
 
-from ...models.execution import CancellationToken
+from .legacy.execution import CancellationToken
 from .application import Application, ServiceError
 
 MAX_REQUEST = 8 * 1024 * 1024

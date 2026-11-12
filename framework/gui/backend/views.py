@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from ...models.database import DatabaseBacked
-from ...models.configuration import ScriptConfiguration
-from ...models.elements import Element
-from ...models.requirements import Statement
-from ...models.properties import PROPERTY_TYPES
-from ...models.aggregates import calculated_parameters
-from ...models.budgets import (
+from .legacy.database import DatabaseBacked
+from .legacy.configuration import ScriptConfiguration
+from .legacy.elements import Element
+from .legacy.requirements import Statement
+from .legacy.properties import PROPERTY_TYPES
+from .legacy.aggregates import calculated_parameters
+from .legacy.budgets import (
     BUDGET_CLASSES,
     POWER_MODELS,
     RESOURCES,

@@ -234,7 +234,15 @@ def _construct(source, *, filename, session_class=Session, **providers):
     module.__package__ = None
     sys.modules[module_name] = module
     try:
-        code = compile(source, str(filename), "exec")
+        tree = ast.parse(source, filename=str(filename))
+        if _canonical_source(source):
+            # Version 1 workbooks predate the public Mission model. Redirect
+            # their imports in memory without modifying the saved source.
+            for node in ast.walk(tree):
+                if isinstance(node, ast.ImportFrom) and node.module is not None:
+                    if node.module == "framework.models" or node.module.startswith("framework.models."):
+                        node.module = "framework.gui.backend.legacy" + node.module[len("framework.models"):]
+        code = compile(tree, str(filename), "exec")
         exec(code, module.__dict__)
         marker = module.__dict__.get("SESSION_FORMAT")
         if marker is not None and (type(marker) is not int or marker != SESSION_FORMAT):
