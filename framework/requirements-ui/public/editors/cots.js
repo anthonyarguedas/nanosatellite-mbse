@@ -1,6 +1,6 @@
 import { cotsBinding, cotsBindingState, cotsUses, mergeCotsDraft } from '/cots-view.js';
 import * as native from '/native-client.js';
-import { metadata } from '/workbook.js';
+import { metadata, objectMetadata } from '/workbook.js';
 import { parameterValueHTML } from '/requirement-preview.js';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -13,7 +13,7 @@ export function createCotsEditor({ panel, getWorkspace, getReferenceWorkspace, g
   let draft = null, token = 0, controller = null;
   const isOpen = () => Boolean(draft);
   const isVisible = () => Boolean(draft && !panel.hidden);
-  const isDirty = () => Boolean(draft && JSON.stringify(draft.component.facts ?? []) !== JSON.stringify(draft.original.facts ?? []));
+  const isDirty = () => Boolean(draft && (JSON.stringify(draft.component.facts ?? []) !== JSON.stringify(draft.original.facts ?? []) || (draft.component.quantity ?? 1) !== (draft.original.quantity ?? 1)));
   const error = message => { const label = panel.querySelector('[data-cots-error]'); if (label) label.textContent = message; };
   function usesHTML(name = null) {
     const uses = cotsUses(getReferenceWorkspace(), draft.original, name);
@@ -38,10 +38,16 @@ export function createCotsEditor({ panel, getWorkspace, getReferenceWorkspace, g
     panel.querySelector('[data-cots-reference-list]').innerHTML = (draft.component.facts ?? []).map(binding => {
       const state = cotsBindingState(binding, facts);
       const before = draft.original.facts?.find(fact => fact.key === binding.key);
-      return `<tr data-cots-binding="${binding.key}" data-state="${state.state}"><td><input data-cots-name aria-label="Reference name ${escape(binding.name)}" maxlength="40" autocomplete="off" spellcheck="false" value="${escape(binding.name)}"><code class="cots-qualified">${escape(draft.component.id)}.${escape(binding.name)}</code></td><td><select data-cots-record aria-label="Catalogue record for ${escape(binding.name)}">${!state.fact ? `<option value="${binding.fact}">Unavailable record</option>` : ''}${facts.map(fact => `<option value="${fact.id}" ${fact.id === binding.fact ? 'selected' : ''}>${escape(recordLabel(fact))}</option>`).join('')}</select><div class="cots-reference-status">${escape(state.message)}</div>${state.fact && state.state !== 'value' ? '<button type="button" class="cell-button" data-cots-update>Update fact</button>' : ''}</td><td class="cell-text" title="${escape(state.fact?.value)}">${state.state === 'value' ? valueHTML(state.fact) : 'Pending'}</td><td class="cell-text">${usesHTML(before?.name ?? binding.name)}</td><td><button type="button" class="cell-button" data-cots-copy>Copy reference</button>${canInsert() ? '<button type="button" class="cell-button" data-cots-insert>Insert reference</button>' : ''}<button type="button" class="cell-button" data-cots-remove>Remove</button></td></tr>`;
+      return `<tr data-cots-binding="${binding.key}" data-state="${state.state}"><td><input data-cots-name aria-label="Reference name ${escape(binding.name)}" maxlength="100" autocomplete="off" spellcheck="false" value="${escape(binding.name)}"><code class="cots-qualified">${escape(draft.component.id)}.${escape(binding.name)}</code></td><td><select data-cots-record aria-label="Catalogue record for ${escape(binding.name)}">${!state.fact ? `<option value="${binding.fact}">Unavailable record</option>` : ''}${facts.map(fact => `<option value="${fact.id}" ${fact.id === binding.fact ? 'selected' : ''}>${escape(recordLabel(fact))}</option>`).join('')}</select><div class="cots-reference-status">${escape(state.message)}</div>${state.fact && state.state !== 'value' ? '<button type="button" class="cell-button" data-cots-update>Update fact</button>' : ''}</td><td class="cell-text" title="${escape(state.fact?.value)}">${state.state === 'value' ? valueHTML(state.fact) : 'Pending'}</td><td class="cell-text">${usesHTML(before?.name ?? binding.name)}</td><td><button type="button" class="cell-button" data-cots-copy>Copy reference</button>${canInsert() ? '<button type="button" class="cell-button" data-cots-insert>Insert reference</button>' : ''}<button type="button" class="cell-button" data-cots-remove>Remove</button></td></tr>`;
     }).join('');
     panel.querySelector('[data-cots-no-references]').hidden = Boolean(draft.component.facts?.length);
     panel.querySelector('[data-cots-used-by]').innerHTML = usesHTML();
+    const properties = objectMetadata(getWorkspace(), draft.component.key).componentProperties ?? [];
+    panel.querySelector('[data-cots-typed-properties]').innerHTML = properties.map(property => {
+      const binding = draft.component.facts?.find(binding => binding.name === property.name);
+      const state = binding && cotsBindingState(binding, facts);
+      return `<tr><th scope="row"><code>${escape(property.name)}</code></th><td><code>${escape(property.element)}.${escape(property.factName)}</code></td><td><code>${escape(property.unit)}</code></td><td>${state?.state === 'value' && state.fact.name === property.factName && state.fact.element === property.element ? valueHTML(state.fact) : 'Pending'}</td></tr>`;
+    }).join('');
   }
   function renderFacts() {
     if (!draft) return;
@@ -59,7 +65,9 @@ export function createCotsEditor({ panel, getWorkspace, getReferenceWorkspace, g
     panel.innerHTML = `<form><header class="requirement-editor-heading"><h2>COTS ${escape(component.id)}</h2><button type="button" data-cots-cancel aria-label="Close COTS pane">×</button></header><div class="requirement-editor-content">
       ${back ? `<button type="button" class="reference-link cots-back" data-cots-back>Back to ${escape(back)}</button>` : ''}
       <h3>${escape(product?.name ?? component.product)}</h3><p>${escape(component.product)}${url ? ` · <a href="${url}" target="_blank" rel="noopener noreferrer">Datasheet</a>` : ''}</p>
-      <p>Catalogue facts are read-only. Select the element, value meaning and conditions that apply to your assessment. References use catalogue units. Convert explicitly in expressions.</p>
+      <p>Catalogue facts are read-only. Select the element, value meaning and conditions that apply to your assessment. References use catalogue units. Convert explicitly in ordinary expressions.</p>
+      <p><label>Quantity for assignment sums <input type="number" data-cots-quantity aria-label="COTS quantity" min="1" step="1" value="${escape(component.quantity ?? 1)}"></label></p>
+      <details><summary>Typed component properties</summary><p>Assignment checks read these canonical reference names. Choose the applicable fact and keep its canonical name. Each check filters by generic type, including inherited types. It converts the property to the requirement target unit.</p><table aria-label="Typed component properties"><thead><tr><th>Property reference</th><th>Source fact</th><th>Units</th><th>Selected value</th></tr></thead><tbody data-cots-typed-properties></tbody></table></details>
       <section class="sheet editor-sheet"><div class="table-top"><h3>Named fact references</h3></div><div class="table-frame cots-reference-frame"><table aria-label="COTS fact references"><colgroup><col class="cots-name-col"><col class="cots-record-col"><col class="cots-value-col"><col class="cots-uses-col"><col class="cots-actions-col"></colgroup><thead><tr><th>Reference</th><th>Catalogue record</th><th>Value</th><th>Used by</th><th>Actions</th></tr></thead><tbody data-cots-reference-list></tbody></table></div><p data-cots-no-references>Choose Use fact below to create a named reference.</p></section>
       <p>Used by: <span data-cots-used-by></span></p>
       <section class="sheet editor-sheet"><div class="table-top"><h3>Catalogue facts</h3></div><div class="cots-search"><input type="search" data-cots-search aria-label="Search COTS facts" placeholder="Find a property, condition, source or element"><button type="button" class="cell-button" data-cots-refresh>Refresh catalogue</button></div><p data-cots-fact-count></p><div class="table-frame cots-fact-frame"><table aria-label="COTS catalogue facts"><colgroup><col class="cots-property-col"><col class="cots-value-col"><col class="cots-meaning-col"><col class="cots-condition-col"><col class="cots-source-col"><col class="cots-uses-col"></colgroup><thead><tr><th>Property and element</th><th>Value and units</th><th>Meaning</th><th>Conditions</th><th>Source</th><th>Reference</th></tr></thead><tbody data-cots-fact-list></tbody></table></div></section>
@@ -115,6 +123,7 @@ export function createCotsEditor({ panel, getWorkspace, getReferenceWorkspace, g
   panel.addEventListener('input', event => {
     if (!draft) return;
     if (event.target.matches('[data-cots-search]')) renderFacts();
+    if (event.target.matches('[data-cots-quantity]')) draft.component.quantity = Number(event.target.value);
     if (event.target.matches('[data-cots-name]')) {
       const binding = draft.component.facts.find(binding => binding.key === event.target.closest('[data-cots-binding]').dataset.cotsBinding);
       binding.name = event.target.value;

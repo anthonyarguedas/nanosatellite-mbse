@@ -14,6 +14,7 @@ export function cotsUses(workspace, component, name = null) {
   const uses = [];
   for (const row of workspace.statements) {
     const fields = Object.entries(row.parameters).filter(([, source]) => references(source).length).map(([field]) => field);
+    if (name === null && component.requirements?.includes(row.key)) fields.push('assignment');
     for (const method of verificationMethods(row, workspace)) if (references(method.condition).length || name === null && method.component === component.key) fields.push('verification');
     if (fields.length) uses.push({ key: row.key, id: row.id, kind: 'requirement', fields: [...new Set(fields)] });
   }
@@ -25,8 +26,11 @@ export function cotsUses(workspace, component, name = null) {
 }
 export function mergeCotsDraft(base, original, edited) {
   const workspace = structuredClone(base), current = workspace.components.find(component => component.key === edited.key);
-  if (!current || current.id !== original.id || current.product !== original.product
-      || JSON.stringify(current.facts) !== JSON.stringify(original.facts) && JSON.stringify(current.facts) !== JSON.stringify(edited.facts)) throw new Error('This COTS component changed. Reopen its pane before saving.');
-  current.facts = structuredClone(edited.facts ?? []);
+  if (!current || current.id !== original.id || current.product !== original.product) throw new Error('This COTS component changed. Reopen its pane before saving.');
+  for (const field of ['facts', 'quantity']) {
+    if (JSON.stringify(original[field]) === JSON.stringify(edited[field])) continue;
+    if (JSON.stringify(current[field]) !== JSON.stringify(original[field]) && JSON.stringify(current[field]) !== JSON.stringify(edited[field])) throw new Error('This COTS component changed. Reopen its pane before saving.');
+    if (edited[field] === undefined) delete current[field]; else current[field] = structuredClone(edited[field]);
+  }
   return workspace;
 }

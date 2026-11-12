@@ -6,6 +6,7 @@ from ..catalogs.database import DatabaseBacked
 from ..core.configuration import ScriptConfiguration
 from ..core.elements import Element
 from ..core.requirements import Statement
+from ..core.properties import PROPERTY_TYPES
 from ..domains.budgets import (
     BUDGET_CLASSES,
     POWER_MODELS,
@@ -175,10 +176,21 @@ def describe(session, *, callables=None):
                     ],
                     "usage": None if row.usage is None else row.usage.key,
                     "genericClass": type(row).__mro__[1].__name__,
+                    "genericTypes": [name for name, cls in PROPERTY_TYPES.items() if isinstance(row, cls)],
                 }
             )
         if isinstance(row, Element):
             metadata["expandable"] = row.expandable and not row.selection
+            metadata["componentProperties"] = [
+                {
+                    "name": name,
+                    "type": {float: "float", int: "integer", bool: "boolean", str: "string"}[spec.value_type],
+                    "unit": spec.unit,
+                    **({"factName": row.property_source(name).name, "element": row.property_source(name).element}
+                       if isinstance(row, DatabaseBacked) else {}),
+                }
+                for name, spec in row.property_definitions().items()
+            ]
         descriptions[row.key] = metadata
     power = {}
     for component in spacecraft_components(session):
@@ -215,6 +227,14 @@ def describe(session, *, callables=None):
         },
         "stakeholderTypes": list(STAKEHOLDERS),
         "statementKinds": list(KINDS),
+        "propertyTypes": {
+            name: [
+                {"name": field, "type": {float: "float", int: "integer", bool: "boolean", str: "string"}[spec.value_type], "unit": spec.unit}
+                for field, spec in cls.property_definitions().items()
+            ]
+            for name, cls in PROPERTY_TYPES.items()
+        },
+        "assignmentFunctions": ["all_assigned", "sum_assigned", "count_assigned"],
         "objects": descriptions,
         "powerDefaults": power,
         "powerComponents": list(power),

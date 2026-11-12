@@ -552,7 +552,7 @@ class Session:
             ]
             if len(candidates) == 1:
                 value.usage = candidates[0]
-        if isinstance(value, DatabaseBacked):
+        if isinstance(value, Element):
             for requirement in value.requirement_links:
                 self.get(requirement)
         if isinstance(value, DatabaseBacked) and value.usage is not None:
@@ -668,11 +668,15 @@ class Session:
     def _component_templates(self, component):
         if component.owner is None or component.owner.role != "eps":
             return ()
-        terminal = component.definition.rsplit("::", 1)[-1]
+        terminals = {
+            component.definition.rsplit("::", 1)[-1],
+            *(base.__dict__["model"].rsplit("::", 1)[-1]
+              for base in type(component).__mro__ if base.__dict__.get("model")),
+        }
         return tuple(
             template
             for template in self.catalog.requirements_for(component.owner.definition)
-            if template.affected == (terminal,)
+            if len(template.affected) == 1 and template.affected[0] in terminals
         )
 
     def remember_component_defaults(self, component):
@@ -703,7 +707,9 @@ class Session:
                 continue
             self.seed_history.add(rule)
             affected = (
-                ((getattr(subject, "usage", None) or subject),)
+                ((subject.usage,) if subject.usage is not None else ())
+                if isinstance(subject, DatabaseBacked) and subject.selection
+                else (subject,)
                 if subject is not None
                 else (owner,)
                 if template.context == "mission"
@@ -919,7 +925,7 @@ class Session:
                         *(method.source for method in other.verifications),
                     )
                 )
-            if isinstance(other, DatabaseBacked):
+            if isinstance(other, Element):
                 references.extend(other.requirement_links)
             if any(reference is value for reference in references):
                 raise ValueError(

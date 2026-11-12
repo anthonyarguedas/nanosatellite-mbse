@@ -140,6 +140,141 @@ A newly added COTS component inherits component initialization and links its gen
 `ScriptConfiguration` and `ScriptPort` preserve registered analysis interfaces and input bindings.
 They contain no execution output.
 
+## Typed component properties and assignment checks
+
+`Battery` and `SolarArray` declare typed properties in canonical catalogue units.
+Examples include `Battery.rated_energy` in Wh and `SolarArray.maximum_power` in W.
+Several other EPS types declare their common electrical properties too.
+`component.property_definitions()` returns the inherited contract.
+Additional catalogue facts remain available as ordinary named references.
+
+Generic components own literal property values:
+
+```python
+battery = Battery(property_values={"rated_energy": 10}, quantity=2)
+assert battery.rated_energy == 10
+battery.rated_energy = 12
+```
+
+COTS components resolve these same properties through selected fact pins:
+
+```python
+matches = [fact for fact in selected.product_record.facts
+           if fact.name == "rated_energy" and fact.element == "self"
+           and fact.value_kind == "nominal" and not fact.condition["id"]]
+assert len(matches) == 1
+selected.select_property("rated_energy", matches[0])
+energy_Wh = selected.rated_energy
+```
+
+`select_property()` validates the source name, internal element, scalar type and unit.
+It retains the fact identity and revision without copying the database value.
+Missing selections and changed records remain pending.
+COTS properties accept no literal overrides.
+Use explicit fact selection to choose the applicable conditions and value meaning.
+The COTS pane lists typed properties and suggests their canonical reference names.
+
+### Assignment ownership
+
+`component.requirement_links` is the authoritative verification assignment relation.
+Both generic components and COTS selections support it.
+`component.assign_to(requirement)` adds a link.
+`requirement.assign_component(component)` edits that same relation.
+`requirement.unassign_component(component)` removes the link.
+`requirement.assigned_components(Battery)` reads the inverse, filtered with `isinstance`.
+Pass `cots_only=True` to select database-backed instances only.
+Duplicate links count once.
+
+`requirement.affected` remains the separate engineering scope relationship.
+It creates no verification assignment.
+A selection's `usage` also creates no assignment.
+
+### Reusable verification conditions
+
+These conditions run in the existing requirement verification editor and native evaluator:
+
+```python
+all_assigned("Battery", "nominal_voltage", "==", target_voltage, cots_only=True)
+sum_assigned("SolarArray", "maximum_power", ">=", minimum_power_W, cots_only=True)
+count_assigned("Battery", cots_only=True) <= max_batteries
+```
+
+For `all_assigned` and `sum_assigned`, the last positional argument names a parameter owned by the requirement.
+The property and target must have compatible scalar types and units.
+Supported comparisons are `==`, `!=`, `<`, `<=`, `>` and `>=`.
+Strings and Booleans support per-component equality and inequality only.
+Numeric equality defaults to exact comparison.
+Set `abs_tol` in the target unit or dimensionless `rel_tol` for an explicit tolerance.
+Inequality comparisons use their exact boundaries.
+
+Both property checks convert into the target unit before comparison.
+Conversions include Wh/J, Ah/C, W/mW, V/mV, A/mA, s/h, kg/g, m/mm, m2/cm2 and K/degC.
+Other units must match exactly.
+Sums reject offset conversions such as K to degC.
+Ordinary arithmetic expressions retain their existing explicit unit conversion policy.
+
+`all_assigned` checks each assigned instance once and ignores quantity.
+`sum_assigned` adds each property multiplied by `component.quantity`.
+Quantity is a positive integer that defaults to one.
+This quantity describes the units represented by the assignment selection.
+It is independent of the physical load budget's quantity.
+The COTS pane edits this quantity alongside fact selections.
+
+Empty property selections remain pending.
+Every matching property's evidence is resolved before reduction.
+An unset property cannot disappear behind a failed comparison.
+Unavailable product types remain pending because the filter cannot classify them.
+
+`count_assigned` counts distinct assigned objects without reading property facts.
+Its default includes generic and COTS instances.
+`cots_only=True` restricts it to COTS instances.
+`by_quantity=True` counts represented units instead of selection rows.
+An empty assignment set counts as zero, so an upper bound can pass with no assignments.
+
+For example, this requirement limits assigned COTS battery selections to four:
+
+```python
+requirement = Requirement(
+    "CNT001",
+    "No more than $$max_batteries$$ COTS batteries shall be assigned to this requirement.",
+    parameters=(Parameter("max_batteries", int, "1", value=4),),
+    verifications=(VerificationMethod(
+        "Assigned COTS battery count",
+        'count_assigned("Battery", cots_only=True) <= max_batteries',
+    ),),
+)
+```
+
+Attach the requirement and components to the same session before checking assignments.
+Trusted native conditions can call `values.all_assigned(Battery, "rated_energy", ">=", "minimum_energy_J")`, `values.sum_assigned(...)` and `values.count_assigned(Battery, cots_only=True)`.
+Equivalent functions are exported from `nanosat_mbse` and take `values` as their first argument.
+Property values, assignments, quantities and source mappings participate in evidence freshness.
+Native source and browser projections preserve the same configuration.
+
+### Combined COTS types
+
+Combined products use ordinary multiple inheritance.
+A class inheriting both `CotsBattery` and `CotsSolarArray` participates in both generic filters.
+Each instance appears once in each check.
+Requirements need no list of combination types.
+The Battery + SolarArray combination currently exists only as a regression fixture in `tests/test_component_properties.py`.
+
+Production combinations are added only for encountered catalogue products.
+`CotsIntegratedBatteryEPS` represents the existing ICEPS2 Type A and IMEPS2 battery assemblies.
+It inherits `CotsIntegratedEPS` and `CotsBattery`.
+Their internal `battery.battery_capacity` and `battery.battery_energy` facts map to the canonical battery properties through `PropertySource` declarations.
+Absent ratings remain pending.
+Pumpkin EPSM1 retains its standalone integrated EPS type because its battery connections do not establish an included battery.
+MPPT inputs establish no solar array inheritance.
+
+The `product_type(model, products=(...))` decorator registers an exact product combination.
+Omit `products` to register a whole catalogue model family.
+Registration sets the combined class's product identity contract and lets factory creation, product substitution and projection restoration recover its actual inheritance.
+Use `property_sources` overrides when an encountered combination stores a property under another fact name or internal element.
+Existing Python sessions retain their explicit class declarations.
+Call `session.substitute_product(component, component.product)` to accept a newly registered exact combination for an existing family instance.
+This retains identities, assignments, quantities and fact pins without rerunning initialization.
+
 ## Common native evaluation
 
 ```python

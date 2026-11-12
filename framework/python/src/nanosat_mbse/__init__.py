@@ -15,6 +15,11 @@ from .core import (
     VerificationReport,
     calculation_signature,
     Component,
+    ComponentProperty,
+    property_type,
+    all_assigned,
+    count_assigned,
+    sum_assigned,
     ComponentState,
     StateAllocation,
     DraftExpression,
@@ -66,7 +71,7 @@ from .domains.budgets import (
     Resource,
     VolumeLimit,
 )
-from .catalogs import DatabaseBacked, FactReference, FrameworkCatalog, TabularDatabase
+from .catalogs import DatabaseBacked, FactReference, FrameworkCatalog, PropertySource, TabularDatabase
 from .catalogs.cots import CotsBattery, CotsSolarArray, component_for_product
 from .verifications import (
     BatteryStep,
@@ -170,6 +175,12 @@ __all__ = [
     "CotsSolarArray",
     "component_for_product",
     "Component",
+    "ComponentProperty",
+    "PropertySource",
+    "property_type",
+    "all_assigned",
+    "count_assigned",
+    "sum_assigned",
     "ComponentState",
     "StateAllocation",
     "DraftExpression",

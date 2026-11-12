@@ -192,10 +192,21 @@ Native commands use this shape:
 }
 ```
 
-Available command names are `add_element`, `add_stakeholder`, `add_cots`, `add_script`, `add_requirement`, `remove`, `rename`, `retype`, `substitute_product`, `set_value`, `set_expression`, `set_unit`, `replace_binding`, `set_text`, `set_relationships`, `set_verifications`, `select_fact`, `set_facts`, `add_mode`, `rename_mode`, `remove_mode`, `configure_mode`, `configure_load`, `connect_power`, `disconnect_power` and `update_definition`.
+Available command names are `add_element`, `add_stakeholder`, `add_cots`, `add_script`, `add_requirement`, `remove`, `rename`, `retype`, `substitute_product`, `set_value`, `set_expression`, `set_unit`, `replace_binding`, `set_property`, `configure_component`, `set_text`, `set_relationships`, `set_verifications`, `select_fact`, `set_facts`, `add_mode`, `rename_mode`, `remove_mode`, `configure_mode`, `configure_load`, `connect_power`, `disconnect_power` and `update_definition`.
 Commands use registered object keys or visible IDs for `target`.
 They accept primitive values, restricted expression source and known definition identities.
 No command accepts Python module paths or executable source files.
+
+`set_property` takes `target`, a declared `property` name and a scalar `value` for a generic component.
+COTS properties use `select_fact` with their canonical property reference name.
+`configure_component` takes `target` and optional `quantity` and `requirements` fields.
+Its requirement keys edit the same authoritative assignments used by the COTS table.
+The quantity weights assignment sums and defaults to one.
+COTS projection rows retain this optional `quantity` field.
+Generic literal properties and assignments round trip through `modelState.componentProperties` and `modelState.componentAssignments`.
+COTS facts remain pins, and their assignments remain in the component row.
+Metadata includes `propertyTypes`, `assignmentFunctions` and each COTS object's `genericTypes` and `componentProperties`.
+The existing condition editor accepts `all_assigned`, `sum_assigned` and `count_assigned` without accepting arbitrary Python class paths.
 
 ## Evidence
 

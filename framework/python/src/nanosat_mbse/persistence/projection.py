@@ -171,6 +171,7 @@ def from_projection(data, *, session_class=None, callables=None, **kwargs):
             id=row["id"],
             key=row["key"],
             allow_unresolved=True,
+            quantity=row.get("quantity", 1),
             facts=tuple(FactReference(**fact) for fact in row.get("facts", [])),
         )
         value._projection_fields = frozenset(row)
@@ -346,6 +347,16 @@ def from_projection(data, *, session_class=None, callables=None, **kwargs):
             ]
             if len(candidates) == 1:
                 value.usage = candidates[0]
+    for key, values in state.get("componentProperties", {}).items():
+        component = session.get(key)
+        for name, literal in values.items():
+            component.set_property(name, literal)
+    for key, assignment in state.get("componentAssignments", {}).items():
+        component = session.get(key)
+        if isinstance(component, DatabaseBacked):
+            raise ValueError("COTS assignments belong to their component row.")
+        component.quantity = assignment.get("quantity", 1)
+        component.requirement_links = tuple(session.get(key) for key in assignment.get("requirements", []))
     for key, subject in state.get("subjects", {}).items():
         session.get(key).subject = session.get(subject)
 
@@ -628,6 +639,8 @@ def to_projection(session, *, callables=None):
                 requirement.key for requirement in value.requirement_links
             ],
         }
+        if value.quantity != 1 or "quantity" in value._projection_fields:
+            row["quantity"] = value.quantity
         if value._facts_present or value.facts:
             row["facts"] = [fact.projection() for fact in value.facts]
         result["components"].append(row)
@@ -701,6 +714,18 @@ def to_projection(session, *, callables=None):
                 value.key: {method.key: method.name for method in value.verifications}
                 for value in session.statements
                 if value.verifications
+            },
+            "componentProperties": {
+                value.key: dict(value.property_values)
+                for value in session.all_elements if value.property_values
+            },
+            "componentAssignments": {
+                value.key: {
+                    "requirements": [row.key for row in value.requirement_links],
+                    "quantity": value.quantity,
+                }
+                for value in session.all_elements
+                if not isinstance(value, DatabaseBacked) and (value.requirement_links or value.quantity != 1)
             },
             "cotsUsages": {
                 value.key: value.usage.key

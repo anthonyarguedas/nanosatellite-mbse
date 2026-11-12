@@ -127,6 +127,8 @@ def _cots_snapshot(session):
                 or fact.unit != reference.unit
             ):
                 message = "The catalogue record changed. Review and update its reference in the COTS pane."
+            if not message:
+                message = component.property_reference_error(reference, fact)
             result = {
                 "state": "pending" if message else "value",
                 "value": None if message else fact.value,
@@ -186,6 +188,11 @@ def calculation_signature(session, *, cots_signature=ALL_MODES):
                     "definition": element.definition,
                     "owner": None if element.owner is None else element.owner.key,
                     "selection": element.selection,
+                    "properties": dict(element.property_values),
+                    "propertyDefinitions": {name: [spec.value_type.__name__, spec.unit] for name, spec in element.property_definitions().items()},
+                    "quantity": element.quantity,
+                    "requirements": [row.key for row in element.requirement_links],
+                    "types": [f"{base.__module__}.{base.__qualname__}" for base in type(element).__mro__],
                 }
                 for element in sorted(session.elements, key=lambda element: element.key)
             ],
@@ -272,6 +279,13 @@ def calculation_signature(session, *, cots_signature=ALL_MODES):
                     "usage": None if component.usage is None else component.usage.key,
                     "requirements": [row.key for row in component.requirement_links],
                     "facts": [reference.projection() for reference in component.facts],
+                    "quantity": component.quantity,
+                    "types": [f"{base.__module__}.{base.__qualname__}" for base in type(component).__mro__],
+                    "propertyDefinitions": {name: [spec.value_type.__name__, spec.unit] for name, spec in component.property_definitions().items()},
+                    "propertySources": {
+                        name: [component.property_source(name).name, component.property_source(name).element]
+                        for name in component.property_definitions()
+                    },
                 }
                 for component in sorted(
                     session.cots_components, key=lambda component: component.key
@@ -336,6 +350,15 @@ class NativeValues(Mapping):
     def __len__(self):
         return len(self.row.parameters)
 
+    def count_assigned(self, component_type, **options):
+        return self.context.count_assignments(self.row, component_type, **options)
+
+    def all_assigned(self, component_type, property_name, comparison, target, **tolerances):
+        return self.context.check_assignments(self.row, "all_assigned", component_type, property_name, comparison, target, **tolerances)
+
+    def sum_assigned(self, component_type, property_name, comparison, target, **tolerances):
+        return self.context.check_assignments(self.row, "sum_assigned", component_type, property_name, comparison, target, **tolerances)
+
 
 class EvaluationContext:
     """A single-mode request-local calculation over authoritative native objects.
@@ -368,7 +391,8 @@ class EvaluationContext:
         self.rows = {row.id: row for row in session.statements}
         self.scripts = {script.id: script for script in session.scripts}
         self.cots = {component.id: component for component in session.cots_components}
-        self.identifiers = {*self.rows, *self.scripts, *self.cots}
+        self.property_owners = {element.id: element for element in session.all_elements if element.property_definitions()}
+        self.identifiers = {*self.rows, *self.scripts, *self.cots, *self.property_owners}
         self.cache, self.resolving = {}, set()
         self.cots_values, self.cots_signature = (
             _cots_snapshot(session) if _snapshot is None else _snapshot
@@ -428,6 +452,10 @@ class EvaluationContext:
             "eclipse_power_W",
         ):
             return "number"
+        if identifier in self.property_owners:
+            specification = self.property_owners[identifier].property_definitions().get(field)
+            if specification is not None:
+                return _kind(specification.value_type)
         if identifier in self.cots:
             reference = next(
                 (
@@ -482,6 +510,8 @@ class EvaluationContext:
             return power_allocation(self, row, field)
         if identifier == "LoadBudget":
             return load_budget(self, row, field)
+        if identifier in self.property_owners and field in self.property_owners[identifier].property_definitions():
+            return self.component_property(self.property_owners[identifier], field)
         if identifier in self.cots:
             return self.cots_fact(self.cots[identifier], field)
         if identifier in self.scripts:
@@ -495,6 +525,8 @@ class EvaluationContext:
 
     def value(self, row, name):
         row = self.session.get(row)
+        if hasattr(row, "property_definitions") and name in row.property_definitions():
+            return self.component_property(row, name)
         if isinstance(row, ScriptConfiguration) and name not in row.parameters:
             reference = f"{row.id}.{name}"
             self.reference_type(reference, row)
@@ -540,6 +572,37 @@ class EvaluationContext:
             raise
         finally:
             self.resolving.remove(key)
+
+    def component_property(self, component, name):
+        component = self.session.get(component)
+        specification = component.property_definitions().get(name)
+        if specification is None:
+            raise ValueError(f"Unknown component property {component.id}.{name}.")
+        key = (component.key, f"property:{name}")
+        if key not in self.cache:
+            try:
+                value = (
+                    self.cots_fact(component, name) if isinstance(component, DatabaseBacked)
+                    else component._property_value(name)
+                )
+                self.cache[key] = coerce(value, specification.value_type, f"{component.id}.{name}")
+            except Exception as error:
+                self.cache[key] = error
+        value = self.cache[key]
+        if isinstance(value, Exception):
+            raise value
+        return value
+
+    def count_assignments(self, row, component_type, **options):
+        from .assignments import count_assigned
+
+        return count_assigned(NativeValues(self, row), component_type, **options)
+
+    def check_assignments(self, row, operation, component_type, property_name, comparison, target, **tolerances):
+        from .assignments import all_assigned, sum_assigned
+
+        function = {"all_assigned": all_assigned, "sum_assigned": sum_assigned}[operation]
+        return function(NativeValues(self, row), component_type, property_name, comparison, target, **tolerances)
 
     def component_state_power(self, element, state):
         """Resolve a state binding with the common cache and cycle detection."""

@@ -7,6 +7,7 @@ from .database import (
     FactResolution,
     ProductDatabase,
     ProductRecord,
+    PropertySource,
     TabularDatabase,
 )
 from .framework import FrameworkCatalog, catalog, default_catalog
@@ -18,6 +19,7 @@ __all__ = [
     "FactResolution",
     "ProductDatabase",
     "ProductRecord",
+    "PropertySource",
     "TabularDatabase",
     "FrameworkCatalog",
     "catalog",

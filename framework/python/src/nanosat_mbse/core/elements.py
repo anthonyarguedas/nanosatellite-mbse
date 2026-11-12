@@ -5,10 +5,11 @@ from __future__ import annotations
 from typing import Optional
 from uuid import uuid4
 
-from .requirements import _text
+from .requirements import Requirement, _text
+from .properties import PropertyOwner
 
 
-class Element:
+class Element(PropertyOwner):
     model = ""
     default_name = "Element"
     id_prefix = "ELM"
@@ -25,6 +26,8 @@ class Element:
         owner=None,
         definition: Optional[str] = None,
         selection: Optional[bool] = None,
+        requirement_links=(),
+        quantity=1,
         **kwargs,
     ):
         self._session = None
@@ -39,6 +42,8 @@ class Element:
         self._owner = None
         self.owner = owner
         self.selection = self.catalog_selection if selection is None else selection
+        self.requirement_links = requirement_links
+        self.quantity = quantity
         self._projection_fields = frozenset()
         super().__init__(**kwargs)
 
@@ -95,6 +100,43 @@ class Element:
                 "An attached element's owner must belong to the same session."
             )
         self._owner = owner
+
+    @property
+    def quantity(self):
+        """Number of represented units for assignment property sums."""
+        return self._quantity
+
+    @quantity.setter
+    def quantity(self, value):
+        if type(value) is not int or not 1 <= value <= 9007199254740991:
+            raise ValueError("Component quantity must be a positive safe integer.")
+        self._quantity = value
+        if self.session is not None:
+            self.session._model_state_present = True
+
+    @property
+    def requirement_links(self):
+        """The authoritative verification assignments, independent of affected scope."""
+        return self._requirement_links
+
+    @requirement_links.setter
+    def requirement_links(self, requirements):
+        unique = {}
+        for requirement in requirements:
+            if not isinstance(requirement, Requirement):
+                raise TypeError("Component assignments must reference Requirement instances.")
+            if requirement.key in unique and unique[requirement.key] is not requirement:
+                raise ValueError("Distinct assigned requirements cannot share a key.")
+            if self.session is not None:
+                self.session.get(requirement)
+            unique[requirement.key] = requirement
+        self._requirement_links = tuple(unique.values())
+        if self.session is not None:
+            self.session._model_state_present = True
+
+    def assign_to(self, *requirements):
+        self.requirement_links = (*self.requirement_links, *requirements)
+        return self
 
     @property
     def children(self):

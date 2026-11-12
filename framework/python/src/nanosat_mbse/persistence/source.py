@@ -22,7 +22,7 @@ from ..core.configuration import (
     ScriptPort,
     Variable,
 )
-from ..core.elements import Stakeholder
+from ..core.elements import Element, Stakeholder
 from ..core.predicates import DraftExpression, VerificationMethod
 from ..core.requirements import Parameter, Statement
 from ..core.session import SeedRule, Session
@@ -89,6 +89,9 @@ _ELEMENT_FIELDS = {
     "selection",
     "_projection_fields",
     "stakeholder_type",
+    "_property_values",
+    "_quantity",
+    "_requirement_links",
 }
 _DATABASE_FIELDS = {
     "database",
@@ -315,6 +318,10 @@ class _Writer:
             self.emit(f"{name} = {cls}.restore(")
             for field in ("id", "key", "name", "definition", "selection"):
                 self.emit(f"{field}={self.expression(getattr(value, field))},", 2)
+            if value.property_values:
+                self.emit(f"property_values={self.expression(dict(value.property_values))},", 2)
+            if value.quantity != 1:
+                self.emit(f"quantity={value.quantity!r},", 2)
             self.emit(")")
             self.emit()
             return
@@ -342,6 +349,10 @@ class _Writer:
         else:
             known = set(_ELEMENT_FIELDS)
             self.emit(f"selection={value.selection!r},", 3)
+            if value.property_values:
+                self.emit(f"property_values={self.expression(dict(value.property_values))},", 3)
+            if value.quantity != 1:
+                self.emit(f"quantity={value.quantity!r},", 3)
             if isinstance(value, Stakeholder):
                 self.emit(f"stakeholder_type={value.stakeholder_type!r},", 3)
             if isinstance(value, DatabaseBacked):
@@ -403,6 +414,7 @@ class _Writer:
                     self.emit(")")
             if isinstance(value, DatabaseBacked):
                 self.emit(f"{name}.usage = {self.reference(value.usage)}")
+            if isinstance(value, Element) and (value.requirement_links or isinstance(value, DatabaseBacked)):
                 self.emit(
                     f"{name}.requirement_links = {self.expression(value.requirement_links)}"
                 )

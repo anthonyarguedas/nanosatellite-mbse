@@ -27,6 +27,9 @@ def retype_element(session, identity, definition):
         return value
     if (
         value.children
+        or value.property_values
+        or value.requirement_links
+        or value.quantity != 1
         or any(row.owner is value for row in session.statements)
         or session.power.load_for(value) is not None
     ):
@@ -85,12 +88,16 @@ def retype_element(session, identity, definition):
 
 def substitute_product(session, identity, product):
     """Use the generic inheritance of the new product while retaining fact names."""
-    from ..catalogs.cots import component_for_product
+    from ..catalogs.cots import PRODUCT_CLASSES, PRODUCT_TYPES, component_for_product
 
     value = session.get(identity)
     if not isinstance(value, DatabaseBacked):
         raise TypeError("Choose a database-backed component.")
-    if value.product == product:
+    upgrade_combination = (
+        type(value) in PRODUCT_TYPES.values()
+        and PRODUCT_CLASSES.get(product) not in (None, type(value))
+    )
+    if value.product == product and not upgrade_combination:
         return value
     replacement = component_for_product(product, database=session.database)
     cls = type(replacement)
@@ -201,6 +208,14 @@ def configure_facts(session, identity, references):
     ) != len(references):
         raise ValueError("Fact keys and names must be unique.")
     previous = {reference.key: reference for reference in value.facts}
+    record = value.product_record
+    records = {} if record is None else {fact.id: fact for fact in record.facts}
+    for reference in references:
+        fact = records.get(reference.fact)
+        if fact is not None and reference != previous.get(reference.key):
+            message = value.property_reference_error(reference, fact)
+            if message:
+                raise ValueError(message)
     following = {reference.key: reference for reference in references}
     removed = [
         reference.name for reference in value.facts if reference.key not in following

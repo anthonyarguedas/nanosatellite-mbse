@@ -40,7 +40,7 @@ FIELDS = {
         "powerScope",
         "budgetScope",
     },
-    "components": {"key", "id", "owner", "product", "requirements", "facts"},
+    "components": {"key", "id", "owner", "product", "requirements", "facts", "quantity"},
     "scripts": {
         "key",
         "id",
@@ -290,6 +290,8 @@ def validate_projection(data, *, allow_new_ids=False):
                 ):
                     raise ValueError("Choose a COTS database product.")
                 references(row.get("requirements"), "COTS requirement links")
+                if type(row.get("quantity", 1)) is not int or not 1 <= row.get("quantity", 1) <= 9007199254740991:
+                    raise ValueError("COTS quantity must be a positive safe integer.")
                 fact_names, fact_keys = set(), set()
                 for fact in collection(
                     row.get("facts", []), "COTS fact selections", 64
@@ -424,8 +426,22 @@ def validate_projection(data, *, allow_new_ids=False):
                 "loadInputs",
                 "parameters",
                 "verificationBindings",
+                "componentProperties",
+                "componentAssignments",
             },
         )
         if len(repr(state)) > 4 * 1024 * 1024:
             raise ValueError("Native model metadata exceeds its transport limit.")
+        for component, values in mapping(state.get("componentProperties", {}), "Component properties").items():
+            key(component, "Component key")
+            for name, value in mapping(values, "Owned component properties").items():
+                _parameter_name(name)
+                if value is not None and type(value) not in (int, float, bool, str):
+                    raise ValueError("Component properties contain scalar literals only.")
+        for component, assignment in mapping(state.get("componentAssignments", {}), "Component assignments").items():
+            key(component, "Component key")
+            mapping(assignment, "Component assignment", {"requirements", "quantity"})
+            references(assignment.get("requirements", []), "Assigned requirements")
+            if type(assignment.get("quantity", 1)) is not int or not 1 <= assignment.get("quantity", 1) <= 9007199254740991:
+                raise ValueError("Component quantity must be a positive safe integer.")
     return data

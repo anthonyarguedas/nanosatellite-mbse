@@ -429,6 +429,25 @@ def _load_changes(session, data, base):
             session.connect_power(eps, row["roots"])
 
 
+def _component_changes(session, data, base):
+    for field in ("componentProperties", "componentAssignments"):
+        previous = base.get("modelState", {}).get(field, {})
+        following = data.get("modelState", {}).get(field, {})
+        for key in previous.keys() | following.keys():
+            old, new = previous.get(key, {}), following.get(key, {})
+            value = session.get(key)
+            if not isinstance(value, Element):
+                raise TypeError("Component configuration belongs to an Element.")
+            if isinstance(value, DatabaseBacked):
+                raise ValueError("COTS properties use fact pins and COTS assignments belong to their component row.")
+            if field == "componentProperties":
+                for name in old.keys() | new.keys():
+                    value.set_property(name, new.get(name))
+            elif old != new:
+                value.quantity = new.get("quantity", 1)
+                value.requirement_links = tuple(session.get(key) for key in new.get("requirements", []))
+
+
 def validate_graph(session):
     """Validate table relationships in addition to common native invariants."""
     validate_session(session)
@@ -611,6 +630,8 @@ def apply_projection(
             if row["product"] != value.product:
                 target.substitute_product(value, row["product"])
             value.owner = target.get(row["owner"])
+            if row.get("quantity", 1) != old.get("quantity", 1):
+                value.quantity = row.get("quantity", 1)
             if old or row["requirements"]:
                 value.requirement_links = tuple(
                     target.get(key) for key in row["requirements"]
@@ -700,6 +721,7 @@ def apply_projection(
             ):
                 _configure_methods(target, value, row, old, data, base)
         value._projection_fields = frozenset(row)
+    _component_changes(target, data, base)
     # Domain remove() supplies protection, including expressions, scopes,
     # children and COTS references. Retry only for dependency order among rows
     # explicitly removed in this same atomic edit.

@@ -18,7 +18,7 @@ from ..catalogs.cots import component_for_product, product_facts, products
 from ..catalogs.database import FactReference, TabularDatabase
 from ..catalogs.framework import default_catalog
 from ..core.configuration import Mode
-from ..core.elements import Stakeholder
+from ..core.elements import Element, Stakeholder
 from ..core.predicates import VerificationMethod, restored_expression
 from ..core.requirements import Parameter, Requirement, Statement
 from ..core.verification import VerificationScript
@@ -656,6 +656,7 @@ class Application:
                 database=self.database,
                 id=command.get("id", ""),
                 key=command.get("key"),
+                quantity=command.get("quantity", 1),
             )
             graph.add(value, owner=graph.get(command["owner"]))
         elif name == "add_script":
@@ -740,6 +741,19 @@ class Application:
                         else restored_expression(source),
                     ),
                 )
+        elif name == "set_property":
+            value = graph.get(target)
+            if not isinstance(value, Element):
+                raise ServiceError("Choose a component property owner.")
+            value.set_property(command["property"], command.get("value"))
+        elif name == "configure_component":
+            value = graph.get(target)
+            if not isinstance(value, Element):
+                raise ServiceError("Choose an existing component.")
+            if "quantity" in command:
+                value.quantity = command["quantity"]
+            if "requirements" in command:
+                value.requirement_links = tuple(graph.get(key) for key in command["requirements"])
         elif name == "set_text":
             value = graph.get(target)
             if not isinstance(value, Statement):

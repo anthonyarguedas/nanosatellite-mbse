@@ -16,7 +16,8 @@ from typing import Mapping, Optional, Protocol, Tuple
 from uuid import uuid4
 
 from ..core.elements import Element
-from ..core.requirements import Requirement, _parameter_name
+from ..core.requirements import _parameter_name
+from ..core.properties import PropertyOwner
 from ..core.verification import PendingValue
 
 FILES = (
@@ -152,6 +153,19 @@ class FactReference:
             "type": self.type,
             "unit": self.unit,
         }
+
+
+@dataclass(frozen=True)
+class PropertySource:
+    """An explicit product fact name and internal element for a typed property."""
+
+    name: str
+    element: str = "self"
+
+    def __post_init__(self):
+        _parameter_name(self.name)
+        if not isinstance(self.element, str) or not self.element:
+            raise ValueError("A property source needs an internal element identity.")
 
 
 @dataclass(frozen=True)
@@ -395,10 +409,12 @@ class TabularDatabase:
         )
 
 
-class DatabaseBacked:
+class DatabaseBacked(PropertyOwner):
     """Cooperative mixin for component classes whose product facts live in a DB."""
 
     product_type = ""
+    product_ids = ()
+    property_sources = {}
 
     def __init__(
         self,
@@ -406,7 +422,6 @@ class DatabaseBacked:
         product="",
         database=None,
         facts=(),
-        requirement_links=(),
         usage=None,
         allow_unresolved=False,
         **kwargs,
@@ -417,7 +432,6 @@ class DatabaseBacked:
         )
         self._product = ""
         self._facts = ()
-        self.requirement_links = tuple(requirement_links)
         self.usage = usage
         self._facts_present = bool(facts)
         self._set_product(product, allow_unresolved=allow_unresolved)
@@ -438,6 +452,8 @@ class DatabaseBacked:
             raise ValueError(
                 f"{type(self).__name__} represents {self.product_type}, not {record.model}."
             )
+        if self.product_ids and product not in self.product_ids:
+            raise ValueError(f"{type(self).__name__} does not represent product {product!r}.")
         self._product = product
 
     @property
@@ -468,25 +484,6 @@ class DatabaseBacked:
             self.session._model_state_present = True
 
     @property
-    def requirement_links(self):
-        return self._requirement_links
-
-    @requirement_links.setter
-    def requirement_links(self, requirements):
-        unique = {}
-        for requirement in requirements:
-            if not isinstance(requirement, Requirement):
-                raise TypeError(
-                    "COTS requirement links must reference Requirement instances."
-                )
-            if requirement.key in unique and unique[requirement.key] is not requirement:
-                raise ValueError("Distinct linked requirements cannot share a key.")
-            if self.session is not None:
-                self.session.get(requirement)
-            unique[requirement.key] = requirement
-        self._requirement_links = tuple(unique.values())
-
-    @property
     def facts(self):
         return self._facts
 
@@ -501,8 +498,55 @@ class DatabaseBacked:
             raise ValueError("COTS reference names and keys must be unique.")
         self._facts = references
 
+    @classmethod
+    def property_source(cls, name):
+        sources = {}
+        for base in reversed(cls.__mro__):
+            sources.update(vars(base).get("property_sources", {}))
+        source = sources.get(name, PropertySource(name))
+        if not isinstance(source, PropertySource):
+            raise TypeError("Typed property sources must be PropertySource records.")
+        return source
+
+    def property_reference_error(self, reference, fact):
+        specification = self.property_definitions().get(reference.name)
+        if specification is None:
+            return ""
+        source = self.property_source(reference.name)
+        expected_type = {
+            float: "float", int: "integer", bool: "boolean", str: "string"
+        }[specification.value_type]
+        expected_kind = "parameter" if specification.value_type in (float, int) else "feature"
+        if (
+            fact.name != source.name or fact.element != source.element
+            or fact.type != expected_type or fact.unit != specification.unit
+            or fact.kind != expected_kind
+        ):
+            return (
+                f"{self.id}.{reference.name} requires {source.element}.{source.name} "
+                f"with type {expected_type} and unit {specification.unit!r}. Select an applicable fact."
+            )
+        return ""
+
+    def set_property(self, name, value):
+        raise TypeError("COTS properties require pinned database facts. Use select_property().")
+
+    def select_property(self, name, fact, *, key=None):
+        if name not in self.property_definitions():
+            raise ValueError(f"Unknown component property {name!r}.")
+        return self.select_fact(name, fact, key=key)
+
+    def _property_value(self, name):
+        if not any(reference.name == name for reference in self.facts):
+            raise PendingValue(f"Select a pinned fact for {self.id}.{name}.")
+        return self.fact_value(name)
+
     def suggested_reference_name(self, fact):
         names = {reference.name for reference in self.facts}
+        for name in self.property_definitions():
+            source = self.property_source(name)
+            if name not in names and (fact.name, fact.element) == (source.name, source.element):
+                return name
         base = fact.name[:35]
         candidates = (base, f"{base[:28]}_{fact.value_kind[:10]}")
         for candidate in (
@@ -532,6 +576,9 @@ class DatabaseBacked:
         ):
             raise ValueError("Select a fact from this component's product.")
         reference = FactReference.select(name, fact, key=key)
+        message = self.property_reference_error(reference, fact)
+        if message:
+            raise ValueError(message)
         self.facts = tuple(item for item in self.facts if item.name != name) + (
             reference,
         )
@@ -560,6 +607,9 @@ class DatabaseBacked:
                 message="The catalogue record changed. Review and update its reference in the COTS pane.",
                 record=fact,
             )
+        message = self.property_reference_error(reference, fact)
+        if message:
+            return FactResolution("pending", message=message, record=fact)
         return FactResolution("value", fact.value, record=fact)
 
     def assess(self, assessments):

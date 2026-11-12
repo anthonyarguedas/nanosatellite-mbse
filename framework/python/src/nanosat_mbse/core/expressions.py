@@ -76,6 +76,9 @@ ARITY = {
     "any": (1, 1),
     "isclose": (2, 2),
     "isfinite": (1, 1),
+    "all_assigned": (4, 4),
+    "sum_assigned": (4, 4),
+    "count_assigned": (1, 1),
 }
 BINOPS = {
     ast.Add: operator.add,
@@ -197,6 +200,19 @@ class RestrictedPython:
                 else expected
             )
             raise ValueError(f"This operator requires {label} operands.")
+
+    @staticmethod
+    def assignment_arguments(node):
+        if (
+            len(node.args) != 4
+            or any(not isinstance(item, ast.Constant) or type(item.value) is not str for item in node.args[:3])
+            or not isinstance(node.args[3], ast.Name)
+        ):
+            raise ValueError(
+                'Use all_assigned("Battery", "nominal_voltage", "==", target_voltage) '
+                "or sum_assigned with an owned target parameter."
+            )
+        return (*[item.value for item in node.args[:3]], node.args[3].id)
 
     def infer(self, node, row, local=None):
         local = {} if local is None else local
@@ -330,6 +346,30 @@ class RestrictedPython:
                     + (f" to {maximum}" if maximum != minimum else "")
                     + " argument(s)."
                 )
+            if name == "count_assigned":
+                from .properties import resolve_property_type
+                from .requirements import Requirement
+
+                if not isinstance(row, Requirement):
+                    raise TypeError("Assignment counts belong to a Requirement.")
+                if not isinstance(node.args[0], ast.Constant) or type(node.args[0].value) is not str:
+                    raise ValueError('Use count_assigned("Battery", cots_only=True).')
+                resolve_property_type(node.args[0].value)
+                for item in node.keywords:
+                    if item.arg not in ("cots_only", "by_quantity"):
+                        raise ValueError("Assignment counts accept cots_only and by_quantity only.")
+                    require(item.value, "boolean")
+                return "number"
+            if name in ("all_assigned", "sum_assigned"):
+                from .assignments import assignment_spec
+
+                arguments = self.assignment_arguments(node)
+                assignment_spec(row, *arguments, aggregate=name == "sum_assigned")
+                for item in node.keywords:
+                    if item.arg not in ("rel_tol", "abs_tol", "cots_only"):
+                        raise ValueError("Assignment checks accept rel_tol, abs_tol and cots_only only.")
+                    require(item.value, "boolean" if item.arg == "cots_only" else "number")
+                return "boolean"
             if node.keywords and (
                 name != "isclose"
                 or any(item.arg not in ("rel_tol", "abs_tol") for item in node.keywords)
@@ -449,6 +489,16 @@ class RestrictedPython:
             return items() if isinstance(node, ast.GeneratorExp) else list(items())
         if isinstance(node, ast.Call):
             name = function_name(node.func)
+            if name == "count_assigned":
+                return self.context.count_assignments(
+                    row, node.args[0].value,
+                    **{item.arg: visit(item.value) for item in node.keywords},
+                )
+            if name in ("all_assigned", "sum_assigned"):
+                return self.context.check_assignments(
+                    row, name, *self.assignment_arguments(node),
+                    **{item.arg: visit(item.value) for item in node.keywords},
+                )
             args = [visit(item) for item in node.args]
             kwargs = {item.arg: visit(item.value) for item in node.keywords}
             if name == "range":

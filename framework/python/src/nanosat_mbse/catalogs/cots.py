@@ -17,16 +17,23 @@ from ..domains.eps.components import (
     TemperatureSensor,
 )
 from ..domains.eps.subsystem import IntegratedEPS
-from .database import DatabaseBacked, TabularDatabase
+from .database import DatabaseBacked, PropertySource, TabularDatabase
 
 PRODUCT_TYPES = {}
+PRODUCT_CLASSES = {}
 
 
-def product_type(model):
+def product_type(model, *, products=()):
+    """Register a product family or an exact, encountered combination of functions."""
     def register(cls):
         cls.product_type = model
+        cls.product_ids = tuple(products)
         cls.catalog_selection = True
-        PRODUCT_TYPES[model] = cls
+        if products:
+            for identity in products:
+                PRODUCT_CLASSES[identity] = cls
+        else:
+            PRODUCT_TYPES[model] = cls
         return cls
 
     return register
@@ -102,17 +109,45 @@ class CotsIntegratedEPS(IntegratedEPS, DatabaseBacked):
     pass
 
 
+@product_type("EPSModel::IntegratedEPS", products=(
+    "isispace_iceps2_type_a", "isispace_imeps2_base_4s1p",
+))
+class CotsIntegratedBatteryEPS(CotsIntegratedEPS, CotsBattery):
+    """The two existing EPS assemblies with included batteries, without PV panels."""
+
+    property_sources = {
+        **{name: PropertySource(name, "battery") for name in (
+            "ac_impedance", "dc_internal_resistance", "dcir_baseline_current",
+            "dcir_baseline_duration", "characterization_charge_current",
+            "characterization_charge_temperature", "characterization_post_discharge_rest_time",
+            "charge_current", "charge_current_max", "charge_voltage", "charge_duration",
+            "charge_temperature_min", "charge_temperature_max", "charge_temperature_cutoff",
+            "charge_termination_current", "discharge_current_continuous", "discharge_current_pulse",
+            "discharge_cutoff_voltage", "discharge_temperature_min", "discharge_temperature_max",
+            "discharge_temperature_cutoff", "cycle_life", "cycle_life_retained_capacity",
+            "heater_power", "heater_resistance", "self_discharge_current", "chemistry",
+            "protection_included", "balancing_included", "heater_included",
+            "heater_control_automatic_available", "heater_control_default", "cutoff_implementation",
+            "external_protection_required", "nominal_voltage", "series_cell_count",
+            "parallel_string_count", "operating_temperature_min", "operating_temperature_max",
+        )},
+        "rated_capacity": PropertySource("battery_capacity", "battery"),
+        "rated_energy": PropertySource("battery_energy", "battery"),
+    }
+
+
 class UnresolvedCotsComponent(Component, DatabaseBacked):
     """An explicit missing product selection, retained for repair."""
 
     catalog_selection = True
+    type_is_resolved = False
 
 
 def component_for_product(product, *, database=None, **kwargs):
     database = database or TabularDatabase()
     record = database.product(product)
     cls = (
-        PRODUCT_TYPES.get(record.model)
+        PRODUCT_CLASSES.get(record.id) or PRODUCT_TYPES.get(record.model)
         if record is not None
         else UnresolvedCotsComponent
     )

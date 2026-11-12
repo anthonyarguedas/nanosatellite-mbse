@@ -19,7 +19,8 @@ from uuid import uuid4
 
 from ..catalogs.database import DatabaseBacked
 from ..core.configuration import ScriptConfiguration
-from ..core.requirements import Parameter, Statement
+from ..core.elements import Element
+from ..core.requirements import Parameter, Requirement, Statement
 from ..core.session import Session
 from .source import SESSION_FORMAT, SessionSourceError, dumps
 
@@ -172,8 +173,20 @@ def validate_session(session):
                     *(method.source for method in value.verifications),
                 )
             )
+        if isinstance(value, Element):
+            references.extend(value.requirement_links)
+            if any(not isinstance(row, Requirement) for row in value.requirement_links):
+                raise SessionFileError("Component assignments must reference requirements.")
+            if type(value.quantity) is not int or not 1 <= value.quantity <= 9007199254740991:
+                raise SessionFileError("Component quantities must be positive safe integers.")
+            definitions = value.property_definitions()
+            for name, literal in value.property_values.items():
+                spec = definitions.get(name)
+                if spec is None or isinstance(value, DatabaseBacked):
+                    raise SessionFileError("Literal properties belong to declared generic component properties.")
+                Parameter(name, spec.value_type, spec.unit, value=literal)
         if isinstance(value, DatabaseBacked):
-            references.extend((*value.requirement_links, value.usage))
+            references.append(value.usage)
         for reference in references:
             if reference is not None:
                 session.get(reference)

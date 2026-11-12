@@ -398,6 +398,36 @@ class Requirement(Statement):
     _requires_parameters = True
     statement_kind = "Requirement"
 
+    def assigned_components(self, component_type=None, *, cots_only=False):
+        """Read the inverse of component.requirement_links, without copied links."""
+        from .properties import resolve_property_type
+
+        cls = None if component_type is None else resolve_property_type(component_type)
+        if self.session is None:
+            return ()
+        components = self.session.cots_components if cots_only else self.session.all_elements
+        return tuple(
+            component for component in components
+            if self in component.requirement_links
+            and (cls is None or isinstance(component, cls))
+        )
+
+    def assign_component(self, component):
+        """Assign an existing component without changing this requirement's scope."""
+        from .elements import Element
+
+        if not isinstance(component, Element):
+            raise TypeError("Assign a component Element instance.")
+        if self.session is not None:
+            self.session.get(component)
+        component.assign_to(self)
+        return component
+
+    def unassign_component(self, component):
+        if self.session is not None:
+            self.session.get(component)
+        component.requirement_links = tuple(row for row in component.requirement_links if row is not self)
+
 
 class _Values(Mapping[str, Scalar]):
     """Lazy, request-local resolution for native functions and source adapters."""

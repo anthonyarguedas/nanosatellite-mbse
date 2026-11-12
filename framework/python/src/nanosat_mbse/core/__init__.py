@@ -9,6 +9,8 @@ from .requirements import (
 )
 from .drafts import DraftRequirement, DraftStatement
 from .elements import Component, Element, Stakeholder, Subsystem
+from .properties import ComponentProperty, property_type
+from .assignments import all_assigned, count_assigned, sum_assigned
 from .configuration import (
     ComponentState,
     StateAllocation,
@@ -60,6 +62,11 @@ __all__ = [
     "VerificationReport",
     "calculation_signature",
     "Component",
+    "ComponentProperty",
+    "property_type",
+    "all_assigned",
+    "count_assigned",
+    "sum_assigned",
     "ComponentState",
     "StateAllocation",
     "DraftExpression",

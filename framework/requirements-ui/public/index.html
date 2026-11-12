@@ -123,6 +123,7 @@
           <section class="sheet editor-sheet" aria-labelledby="requirement-methods-title">
             <div class="table-top"><h3 id="requirement-methods-title">Verification methods</h3><button type="button" class="add-row" data-add-method aria-label="Add verification method" title="Add row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
             <div class="table-frame verification-frame"><table data-method-table aria-label="Verification methods"></table></div>
+            <details><summary>Checks over assigned components</summary><p>Link COTS selections to this requirement in the COTS table. Use Requirement values as the method source. The last argument names a target parameter owned by this requirement, including its unit.</p><p><code>all_assigned("Battery", "nominal_voltage", "==", target_voltage)</code></p><p><code>sum_assigned("SolarArray", "maximum_power", "&gt;=", target_power)</code></p><p><code>count_assigned("Battery", cots_only=True) &lt;= max_batteries</code></p><p>The sum includes each selection's quantity. Counts use distinct entries, or represented units with <code>by_quantity=True</code>. An empty count is zero. Empty property selections and missing facts remain pending. Numeric equality accepts <code>abs_tol</code> in the target unit and <code>rel_tol</code>. Both default to zero.</p></details>
           </section>
           <p id="requirement-check" role="status" aria-live="polite" aria-atomic="true" hidden></p>
           <p id="requirement-mode-results" hidden></p>
