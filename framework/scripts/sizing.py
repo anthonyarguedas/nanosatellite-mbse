@@ -69,6 +69,80 @@ class PVCharacteristics(NamedTuple):
     short_circuit_current: float
 
 
+class Voltage(NamedTuple):
+    volts: float
+
+
+class TransferSelection(NamedTuple):
+    method: str
+
+
+class PVOperatingPoint(NamedTuple):
+    voltage: float
+    current: float
+    power: float
+
+
+def transfer_selection(transfer_method: str) -> TransferSelection:
+    """Validate an explicitly selected solar extraction method."""
+    if transfer_method not in ("DET", "MPPT", "FIXED_VOLTAGE"):
+        raise ValueError("Select DET, MPPT or FIXED_VOLTAGE for the solar power path.")
+    return TransferSelection(transfer_method)
+
+
+def solar_operating_voltage(transfer_method: str, reference_voltage: float,
+                            voltage_drop: float = 0) -> Voltage:
+    """DET uses bus voltage plus drop. Other methods use their selected voltage.
+
+    MPPT is an ideal MPP reference. Tracking, startup and conversion feasibility
+    require separate checks. A DET drop is supplied at the assessed current.
+    """
+    transfer_selection(transfer_method)
+    _finite(reference_voltage, voltage_drop)
+    if reference_voltage <= 0 or voltage_drop < 0:
+        raise ValueError("Require a positive reference voltage and a nonnegative path drop.")
+    if transfer_method != "DET" and voltage_drop != 0:
+        raise ValueError("A bus-to-array voltage drop applies only to DET.")
+    voltage = reference_voltage + voltage_drop
+    _finite(voltage)
+    return Voltage(voltage)
+
+
+def pv_operating_point(pv_points: tuple, series_count: int, parallel_count: int,
+                       operating_voltage: float, interpolation: str = "none") -> PVOperatingPoint:
+    """Current at an imposed array voltage under the selected curve conditions.
+
+    Exact samples are used by default. Linear interpolation requires explicit
+    acceptance. No extrapolation, mismatch or reverse-blocking model is supplied.
+    """
+    points = tuple(tuple(point) for point in pv_points)
+    characteristics = pv_characteristics(points)
+    if any(type(count) is not int or count <= 0 for count in (series_count, parallel_count)):
+        raise ValueError("Require positive integer series and parallel counts.")
+    if interpolation not in ("none", "linear"):
+        raise ValueError("Select none or linear for PV interpolation.")
+    _finite(operating_voltage)
+    if not 0 <= operating_voltage <= series_count * characteristics.open_circuit_voltage:
+        raise ValueError("The operating voltage lies outside the supplied PV characteristic.")
+    points = tuple((series_count * voltage, parallel_count * current) for voltage, current in points)
+    for voltage, current in points:
+        _finite(voltage, current)
+        if operating_voltage == voltage:
+            power = voltage * current
+            _finite(power)
+            return PVOperatingPoint(voltage, current, power)
+    if interpolation == "none":
+        raise ValueError("The operating voltage needs a sampled point or explicitly accepted linear interpolation.")
+    for (left, current_left), (right, current_right) in zip(points, points[1:]):
+        if left < operating_voltage < right:
+            fraction = (operating_voltage - left) / (right - left)
+            current = current_left + fraction * (current_right - current_left)
+            power = operating_voltage * current
+            _finite(current, power)
+            return PVOperatingPoint(operating_voltage, current, power)
+    raise ValueError("The operating voltage is not covered by the supplied PV characteristic.")
+
+
 def extrema(values: tuple) -> Extrema:
     """Finite extrema of explicitly supplied cases on one electrical path."""
     values = tuple(values)

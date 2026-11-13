@@ -105,6 +105,9 @@ Nonfinite inputs and invalid physical domains raise errors.
 These equations provide scalar comparison bounds for the current configuration.
 Series/parallel counts are explicit user inputs. No product counting, topology inference, configuration search or mode sweep is performed.
 Array power density assumes constant irradiance, temperature and losses while orientation varies according to the prescribed pointing law.
+The selected operating-power fraction adjusts the reference MPP efficiency before the area and generation checks.
+This preserves the existing constant-efficiency approximation with a fixed normalized I-V shape and fixed operating voltage for each case.
+It supplies no irradiance-dependent voltage shift or chronological battery/array coupling.
 Area and generation checks use the same sunlight-mean density.
 A supplied external history can instead provide an applicable mean density or available power.
 Source energy is mean available power times sunlight duration, without another eclipse duty factor or path loss.
@@ -148,7 +151,7 @@ Each point uses V and A for one cell or one explicitly represented purchased pan
 Samples must be finite, nonnegative and strictly increasing in voltage.
 They must span `(0, Isc)` to `(Voc, 0)` and include a positive power point.
 The largest sampled `V * I` is the reported MPP. Sparse data must include the manufacturer's MPP point.
-No continuous curve, interpolation, diode fit or extrapolation is inferred.
+The MPP calculation infers no continuous curve, interpolation, diode fit or extrapolation.
 
 `pv_efficiency(pv_points, active_area, reference_irradiance)` returns sampled MPP power divided by incident reference power.
 Area is in m2 and irradiance in W/m2. The resulting efficiency must lie in `(0, 1]`.
@@ -157,7 +160,34 @@ With an empty curve, those checks retain the scalar efficiency path.
 The script reads no catalog files. The caller selects a coherent product, characteristic, condition and units.
 Generation retains the existing linear irradiance scaling at constant efficiency.
 Reference voltage/current characteristics keep their selected temperature, irradiance and degradation conditions.
-There is no automatic temperature, degradation, shading or regulator operating-point correction.
+There is no automatic temperature, degradation or shading correction.
+
+## Solar transfer methods and operating points
+
+- `transfer_selection`: validate `DET`, `MPPT` or `FIXED_VOLTAGE`.
+- `solar_operating_voltage`: add the declared DET drop to bus voltage, or use the MPPT reference or fixed input setpoint.
+- `pv_operating_point`: return array voltage, current and power at an imposed voltage under one selected cell characteristic.
+
+`SolarPowerPath` holds the selector and path inputs.
+`SolarArray.power_path` explicitly identifies that path.
+The model reads only the selected branch's inputs and retains `eol_voltage`, `eol_current` and `eol_power` as MPP references.
+MPPT is an ideal MPP reference. The actual controller's startup, tracking behavior and conversion envelope need separate evidence.
+Fixed input-voltage control uses an explicit setpoint and establishes no automatic MPP search.
+DET uses a supplied voltage drop at the assessed current. Current-dependent wiring losses need their applicable circuit solution.
+
+`pv_operating_point` requires the complete characteristic accepted by `pv_characteristics` and positive integer series/parallel counts.
+The default `interpolation="none"` accepts exact sampled voltages.
+The caller can explicitly accept `interpolation="linear"` between adjacent samples.
+Three catalog anchors support only a declared straight-segment approximation between them.
+The calculation supplies no physical diode fit or guaranteed off-MPP accuracy.
+Voltages outside the characteristic are errors. Reverse blocking, disconnected sources and unavailable arrays require explicit cases.
+A partial graph is still rejected rather than extended to an invented endpoint.
+
+Operating power is at the array terminals.
+DET bus power is bus voltage times array current for the stated simple path.
+MPPT or fixed-setpoint output power needs applicable conversion losses.
+Neither an ideal MPP voltage nor a computed source power establishes delivered energy, charge acceptance or successful tracking.
+Run `python3 -m framework.sessions.example_eps_transfer` for a sourced curve with explicit interpolation and assumed path losses.
 
 Run `python3 -m framework.sessions.example_eps_operating_limits` for sourced PV and no-trip examples.
 The example loads the existing catalog and exercises both scalar and optional PV inputs.

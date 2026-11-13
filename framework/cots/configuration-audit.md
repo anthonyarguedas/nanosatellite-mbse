@@ -2,6 +2,9 @@
 
 Review date: 12 November 2026.
 
+The later solar transfer-method review adds 78 feature facts and 103 native input rows for the same 53 products.
+It preserves all 9,232 fact identities and revisions established by this review.
+
 Four independent extraction tasks inspected the 53 catalog products relevant to the new EPS configuration inputs.
 They used public manufacturer documents, existing catalog evidence, text extraction and visual checks where needed.
 Source URLs, document revisions, hashes and retrieval dates remain in `sources.tsv`.

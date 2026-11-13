@@ -1,8 +1,16 @@
 """EPS component types and fixed COTS specialisations."""
 
+from enum import Enum
+
 from .elements import Component, Subsystem
 from .properties import Property
 from .requirements import VerificationCondition
+
+
+class TransferMethod(str, Enum):
+    DET = "DET"
+    MPPT = "MPPT"
+    FIXED_VOLTAGE = "FIXED_VOLTAGE"
 
 
 class EPS(Subsystem):
@@ -144,7 +152,7 @@ class EPS(Subsystem):
             "W", "array-generation-screen",
             "The array shall provide at least {minimum.target} as mean available power during sunlight.",
         )
-        self._voltage_requirement("solar_voltage", self.SolarArray.eol_voltage, self.SolarArray.eol_voltage, "mppt-voltage-compatibility")
+        self._voltage_requirement("solar_voltage", self.SolarArray.operating_voltage, self.SolarArray.operating_voltage, "mppt-voltage-compatibility")
         self._voltage_requirement("battery_voltage", self.Battery.minimum_voltage, self.Battery.maximum_voltage, "battery-assembly-ratings")
         for name, available, unit, basis, statement, maximum in (
             ("solar_open_circuit_voltage", self.SolarArray.open_circuit_voltage, "V", "pv-input-ratings",
@@ -183,6 +191,16 @@ class EPSComponent(Component):
     subsystem_type = EPS
 
 
+class SolarPowerPath(EPSComponent):
+    """Explicit solar connection, including a converter or a direct path."""
+
+    transfer_method = Property(unit="1")
+    selected_transfer_method = Property("sizing.transfer_selection(transfer_method=self.transfer_method).method", "1")
+    bus_voltage = Property(unit="V")
+    voltage_drop = Property(unit="V")
+    input_voltage_setpoint = Property(unit="V")
+
+
 class Battery(EPSComponent):
     series_count = Property(unit="cell")
     parallel_count = Property(unit="string")
@@ -218,6 +236,19 @@ class SolarArray(EPSComponent):
     maximum_power = Property(unit="W")
     cell_iv_curve = Property("()")
     pv_reference_irradiance = Property(unit="W/m2")
+    power_path = Property()
+    iv_interpolation = Property("'none'", "1")
+    operating_voltage = Property(
+        "sizing.solar_operating_voltage(transfer_method=self.power_path.value.selected_transfer_method, "
+        "**({'reference_voltage': self.power_path.value.bus_voltage, 'voltage_drop': self.power_path.value.voltage_drop} "
+        "if self.power_path.value.selected_transfer_method.value == 'DET' else "
+        "{'reference_voltage': self.eol_voltage if self.power_path.value.selected_transfer_method.value == 'MPPT' "
+        "else self.power_path.value.input_voltage_setpoint})).volts", "V")
+    operating_current = Property(
+        "self.eol_current if self.operating_voltage.value == self.eol_voltage.value else "
+        "sizing.pv_operating_point(pv_points=self.cell_iv_curve, series_count=self.series_count, "
+        "parallel_count=self.parallel_count, operating_voltage=self.operating_voltage, interpolation=self.iv_interpolation).current", "A")
+    operating_power = Property("self.operating_voltage.value * self.operating_current.value", "W")
     series_count = Property(unit="cell")
     parallel_count = Property(unit="string")
     cell_count = Property("self.series_count.value * self.parallel_count.value", "cell")
@@ -276,16 +307,17 @@ class SolarArray(EPSComponent):
         "sizing.pv_efficiency(pv_points=self.cell_iv_curve, active_area=self.cell_active_area, "
         "reference_irradiance=self.pv_reference_irradiance).fraction "
         "if self.cell_iv_curve.value else self.eol_efficiency", "1")
-    normal_power_density = Property("self.irradiance.value * self.generation_efficiency.value", "W/m2")
+    operating_efficiency = Property("self.generation_efficiency.value * self.operating_power.value / self.eol_power.value", "1")
+    normal_power_density = Property("self.irradiance.value * self.operating_efficiency.value", "W/m2")
     eol_power_density = Property(
-        "sizing.array_power_density(irradiance=self.irradiance, eol_efficiency=self.generation_efficiency, "
+        "sizing.array_power_density(irradiance=self.irradiance, eol_efficiency=self.operating_efficiency, "
         "inherent_retention=self.inherent_retention, assembly_efficiency=self.assembly_efficiency, "
         "sunlight_projection=self.sunlight_projection).watts_per_square_metre", "W/m2")
     available_power = Property("self.active_area.value * self.eol_power_density.value", "W")
     source_energy = Property("self.available_power.value * self.mission.orbit.sunlight_duration.value", "J")
 
 
-class RegulatorAndConverter(EPSComponent):
+class RegulatorAndConverter(SolarPowerPath):
     input_voltage = Property(unit="V")
     minimum_input_voltage = Property(unit="V")
     maximum_input_voltage = Property(unit="V")
@@ -296,7 +328,7 @@ class RegulatorAndConverter(EPSComponent):
     efficiency = Property(unit="1")
 
 
-class PowerCircuit(EPSComponent):
+class PowerCircuit(SolarPowerPath):
     maximum_voltage = Property(unit="V")
     maximum_current = Property(unit="A")
 

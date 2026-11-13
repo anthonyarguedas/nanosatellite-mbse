@@ -7,7 +7,7 @@ from .functions import Function, ModuleImport
 from .stakeholders import Stakeholder, RegulatoryAgency, MissionStakeholder, LaunchProvider, Partner, ThirdParty
 from .elements import DomainElement, SpaceSegment, GroundSegment, Subsystem, Component, Orbit
 from .modes import SpacecraftMode, ComponentMode, ComponentState, TimeAllocation, OrbitAllocation, ModeAllocation, StateAllocation
-from .eps import EPS, EPSComponent, Battery, SolarArray, RegulatorAndConverter, PowerCircuit, Protection, COTS
+from .eps import EPS, EPSComponent, SolarPowerPath, TransferMethod, Battery, SolarArray, RegulatorAndConverter, PowerCircuit, Protection, COTS
 from .eps import CotsBattery, CotsSolarArray, CotsRegulatorAndConverter, CotsPowerCircuit, CotsProtection
 from .spacecraft import CubeSatBus, GroundStation, CommandAndDataHandling, Communication
 from .spacecraft import AttitudeDeterminationAndControl, GuidanceNavigationAndControl, StructuresAndMechanisms, Thermal, Propulsion, Payload
@@ -20,7 +20,7 @@ __all__ = [
     "Stakeholder", "RegulatoryAgency", "MissionStakeholder", "LaunchProvider", "Partner", "ThirdParty",
     "DomainElement", "SpaceSegment", "GroundSegment", "Subsystem", "Component", "Orbit",
     "SpacecraftMode", "ComponentMode", "ComponentState", "TimeAllocation", "OrbitAllocation", "ModeAllocation", "StateAllocation",
-    "EPS", "EPSComponent", "Battery", "SolarArray", "RegulatorAndConverter", "PowerCircuit", "Protection", "COTS",
+    "EPS", "EPSComponent", "SolarPowerPath", "TransferMethod", "Battery", "SolarArray", "RegulatorAndConverter", "PowerCircuit", "Protection", "COTS",
     "CotsBattery", "CotsSolarArray", "CotsRegulatorAndConverter", "CotsPowerCircuit", "CotsProtection",
     "CubeSatBus", "GroundStation", "CommandAndDataHandling", "Communication",
     "AttitudeDeterminationAndControl", "GuidanceNavigationAndControl", "StructuresAndMechanisms", "Thermal", "Propulsion", "Payload",

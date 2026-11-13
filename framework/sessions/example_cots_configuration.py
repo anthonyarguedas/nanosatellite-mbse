@@ -39,7 +39,8 @@ def build_mission():
         if len(matches) != 1:
             raise ValueError(f"Choose one catalog fact for {product}.{name}: {len(matches)} matches")
         row = matches[0]
-        return Property(float(row["value"]), row["unit"])
+        value = repr(row["value"]) if name == "transfer_method" else float(row["value"])
+        return Property(value, row["unit"])
 
     class XteLeoReference(CotsSolarArray):
         # Each assigned COTS item is one physical cell.
@@ -64,6 +65,8 @@ def build_mission():
         maximum_discharge_current = fact(BATTERY, "maximum_discharge_current", "", "maximum")
 
     class Bq24650(CotsRegulatorAndConverter):
+        # Explicitly select the reviewed fixed-input capability for this case.
+        transfer_method = fact(CHARGER, "transfer_method", "", "declared")
         minimum_input_voltage = fact(CHARGER, "minimum_input_voltage", "", "minimum")
         maximum_input_voltage = fact(CHARGER, "maximum_input_voltage", "", "maximum")
         absolute_maximum_input_voltage = fact(
@@ -93,6 +96,10 @@ def build_mission():
         battery.add(MolicelM35A(f"cell{index + 1}"))
     charger = converter.add(Bq24650("charger"))
     load_converter = converter.add(Tps62130A("load_converter"))
+    panel.power_path = "self.parent.RegulatorAndConverter"
+    converter.transfer_method = charger.transfer_method
+    # Engineer-selected fixed input setting at this case's MPP, without tracking.
+    converter.input_voltage_setpoint = panel.eol_voltage
 
     # User-authored arrangement and installed-count expressions. No search.
     panel.series_count, panel.parallel_count = 6, 2
@@ -171,8 +178,10 @@ def main():
         ("Mean sunlight projection", panel.sunlight_projection),
         ("Mean available sunlight source power", panel.available_power),
         ("Source energy per orbit", panel.source_energy),
-        ("Array operating voltage", panel.eol_voltage),
-        ("Array operating current", panel.eol_current),
+        ("Array reference MPP voltage", panel.eol_voltage),
+        ("Array operating voltage", panel.operating_voltage),
+        ("Array operating current", panel.operating_current),
+        ("Array operating power", panel.operating_power),
         ("Required active area", eps.solar_area.required),
         ("Installed active area", panel.active_area),
         ("Installed deployed panel area", panel.panel_area),

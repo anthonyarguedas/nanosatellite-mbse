@@ -1,6 +1,6 @@
 """Synthetic EPS sizing and configuration checks. Importing constructs configuration only."""
 
-from framework.models import Component, ComponentMode, CubeSatBus, Face, Mission, Pointing
+from framework.models import Component, ComponentMode, CubeSatBus, Face, Mission, Pointing, TransferMethod
 
 mission = Mission(lifetime=2, days_per_year=365.25)
 orbit = mission.orbit
@@ -26,6 +26,8 @@ eps.available_sunlight_energy = 25000
 eps.available_eclipse_energy = 8000
 
 panel = eps.SolarArray
+panel.power_path = "self.parent.RegulatorAndConverter"
+eps.RegulatorAndConverter.transfer_method = TransferMethod.MPPT  # Ideal MPP reference.
 panel.sunlight_path_efficiency = 0.8
 panel.eclipse_path_efficiency = 0.65
 panel.cell_eol_voltage = 2.3
@@ -104,6 +106,8 @@ if __name__ == "__main__":
     print("Installed panel area:", f"{panel.panel_area:.4f}")
     print("Required active area:", f"{eps.solar_area.required:.4f}")
     print("Mean sunlight projection:", f"{panel.sunlight_projection:.4f}")
+    print("Array operating voltage:", f"{panel.operating_voltage:.2f}")
+    print("Array operating power:", f"{panel.operating_power:.2f}")
     print("Source energy per orbit:", f"{panel.source_energy:.2f}")
     print("Battery EOL energy:", f"{battery.eol_energy:.2f}")
     print("Battery EOL capacity:", f"{battery.eol_capacity:.2f}")

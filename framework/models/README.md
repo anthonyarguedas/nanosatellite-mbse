@@ -17,7 +17,7 @@ Values and verification results are recomputed on every request.
 | `elements.py` | Segments, subsystems, components and Orbit |
 | `geometry.py` | Body face and prescribed pointing enums |
 | `spacecraft.py` | CubeSatBus and named subsystem types |
-| `eps.py` | EPS defaults, component properties and fixed COTS classes |
+| `eps.py` | EPS defaults, solar power paths, component properties and fixed COTS classes |
 | `modes.py` | Distinct mode, state and allocation classes |
 | `requirements.py` | Conditions, evaluation status and failure paths |
 | `mission.py` | One configuration and its expression namespace |
@@ -186,6 +186,8 @@ mission.orbit.eccentricity = 0
 mission.orbit.beta_angle = 0
 bus = mission.add(CubeSatBus("BUS", units=1))
 eps = bus.EPS
+eps.SolarArray.power_path = "self.parent.RegulatorAndConverter"
+eps.RegulatorAndConverter.transfer_method = "'MPPT'"  # Ideal MPP reference.
 eps.sunlight_energy.average_power = 5
 eps.eclipse_energy.average_power = 3
 eps.SolarArray.sunlight_path_efficiency = 0.8
@@ -249,7 +251,7 @@ Explicitly overriding `cell_count` preserves this consistency check.
 `eps.solar_cell_count.minimum_parallel_count` and `eps.battery_energy.minimum_parallel_count` expose comparison bounds for the entered series count. They do not change it.
 
 Array voltages scale with series count and currents with parallel count.
-`eol_voltage` and `eol_current` use the existing EOL cell maximum power point ratings unless `cell_iv_curve` selects PV points.
+`eol_voltage` and `eol_current` remain MPP reference quantities and use the existing EOL cell maximum power point ratings unless `cell_iv_curve` selects PV points.
 `open_circuit_voltage` and `short_circuit_current` use their separate cell ratings.
 Battery charge capacity scales with parallel count, energy with total cell count and voltage with series count.
 Battery voltage bounds and separate charge/discharge current limits have corresponding `cell_*` inputs.
@@ -271,6 +273,66 @@ The additional EPS Requirements are:
 | `bus_voltage` | Nominal source voltage matches the required load voltage within an explicit tolerance |
 | `bus_current` | Selected path capacity at least the declared load current |
 | `battery_charge_current`, `battery_discharge_current` | Separate battery current capacity at least the current declared at its terminals |
+
+### Solar power path and operating point
+
+`SolarPowerPath` owns `transfer_method`, `bus_voltage`, `voltage_drop` and `input_voltage_setpoint`.
+`RegulatorAndConverter` and `PowerCircuit` inherit these inputs.
+The inputs start unset. The model selects no wiring or transfer method.
+`SolarArray.power_path` is an explicit expression returning the connected path object:
+
+```python
+from framework.models import TransferMethod
+
+panel = eps.SolarArray
+panel.power_path = "self.parent.PowerCircuit"
+path = eps.PowerCircuit
+path.transfer_method = TransferMethod.DET
+path.bus_voltage = eps.Battery.nominal_voltage  # One declared battery voltage case.
+path.voltage_drop = 0.2  # V at the assessed current, including blocking and wiring.
+panel.iv_interpolation = "'linear'"  # Explicit acceptance for supplied PV samples.
+print(panel.operating_voltage.value)
+print(panel.operating_current.value)
+print(panel.operating_power.value)
+```
+
+| `TransferMethod` | Array operating voltage |
+| --- | --- |
+| `DET` | Explicit bus voltage plus the declared path drop |
+| `MPPT` | `SolarArray.eol_voltage`, the ideal MPP reference |
+| `FIXED_VOLTAGE` | Explicit `input_voltage_setpoint` on the path |
+
+`selected_transfer_method` validates the path's selector before calculation.
+Enum members and quoted string expressions are equivalent inputs.
+The calculation reads only the inputs used by the selected branch.
+MPPT leaves bus voltage, drop and fixed setpoint unused.
+Fixed input-voltage regulation establishes no automatic search for MPP.
+The ideal MPPT branch establishes no tracking accuracy, startup or conversion feasibility.
+Use the selected controller's applicable settings and additional checks for those claims.
+Fixed-setpoint equality assumes active input-voltage regulation. A source can rise above an inactive voltage floor.
+For fractional-Voc control or curtailment, bind `operating_voltage` to an applicable controller calculation instead of assuming ideal MPP.
+
+`operating_current` uses the MPP current when the selected voltage equals the reference MPP voltage.
+Other voltages require a complete `cell_iv_curve` at the assessed conditions.
+The script scales cell voltage by series count and current by parallel count.
+Exact sampled voltages need no interpolation.
+`iv_interpolation` defaults to `"none"`. Select `"linear"` explicitly to accept straight segments between samples.
+Voltages outside the supplied characteristic are errors. No extrapolation or reverse-blocking behavior is inferred.
+A missing path or method remains pending. Unsupported methods and inadequate curves produce errors.
+
+`operating_power` is array-terminal voltage times current, before path losses.
+`operating_efficiency` multiplies the reference `generation_efficiency` by `operating_power / eol_power`.
+Area and generation screens use this selected operating efficiency consistently.
+The existing constant-efficiency irradiance and projection scaling assumes a fixed normalized I-V shape and a fixed operating voltage for each assessed case.
+It supplies no voltage correction with irradiance, temperature or battery state.
+Changing conditions require applicable curves or an externally established mean power.
+A supplied mean projection alone does not establish an actual DET history.
+MPP cell count and installed MPP power remain preliminary reference screens.
+
+For the simple DET path, delivered bus power is `bus_voltage * operating_current` before any additional consumption.
+For an ideal MPPT reference with a characterized converter efficiency, output power is `efficiency * operating_power` before additional consumption.
+Supply delivered energy separately at its declared load boundary.
+See [the comparison session](../sessions/example_eps_transfer.py) for explicitly assumed losses and sourced PV points.
 
 ### Fixed geometry and illumination
 
@@ -337,7 +399,7 @@ Purchased panels can bind their specified active and panel areas directly.
 
 `eol_efficiency` applies `bol_efficiency * lifetime_retention * temperature_factor`.
 Bind supplied EOL efficiency directly when those effects are already included.
-`eol_power_density` applies constant irradiance, EOL efficiency, inherent retention, assembly efficiency and the calculated `sunlight_projection`.
+`eol_power_density` applies constant irradiance, selected operating efficiency, inherent retention, assembly efficiency and the calculated `sunlight_projection`.
 It is a sunlight-mean power density. The area and generation criteria use this same mean.
 No numerical loss factors, packing fraction or pointing inputs are assumed.
 `available_power` defaults to active area times that mean density.
@@ -346,7 +408,7 @@ No numerical loss factors, packing fraction or pointing inputs are assumed.
 It is separate from delivered energy at the load boundary.
 An external calculation can instead supply a mean density, projection or power under its stated conditions.
 Overriding available power alone leaves the area calculation unchanged, so the engineer must keep those assessments consistent.
-Shading, mismatched sections, DET operating points and shared trackers require their applicable model. The framework does not synthesize their combined I--V characteristic.
+Shading, mismatched sections and shared trackers require their applicable model. The framework does not synthesize their combined I--V characteristic. DET uses the selected voltage and supplied curve under the operating-point assumptions above.
 
 `eps.solar_area.effective_area` exposes the normal-incidence power/area relation.
 `eps.solar_area.tumbling_panel_area` exposes Nogrady's six-face, half-illuminated, 50 degree approximation with uniform packing.
@@ -360,7 +422,8 @@ These checks establish no chronological energy balance, charging acceptance or E
 `SolarArray.cell_iv_curve` defaults to the empty tuple `()` and preserves the scalar sizing path.
 Set it to ordered `(voltage_V, current_A)` points for one cell at one selected condition.
 The characteristic must include short circuit, a positive MPP point and open circuit.
-The calculation uses the largest sampled `V * I`. It performs no interpolation or extrapolation.
+The calculation uses the largest sampled `V * I`. The MPP calculation performs no interpolation or extrapolation.
+The separate operating-point calculation supports explicitly accepted linear interpolation.
 A partial digitized trace without both endpoints is rejected.
 
 ```python
@@ -380,7 +443,7 @@ Keep cell data separate from a complete purchased panel's data and avoid applyin
 Use applicable EOL points for an EOL assessment.
 Reference voltage/current characteristics remain at the selected curve conditions.
 Generation retains the existing constant-efficiency irradiance approximation.
-No temperature correction, tracker restriction, mismatch or shading model is introduced.
+No temperature correction, automatic tracker restriction, mismatch or shading model is introduced.
 See [the sourced operating-limits session](../sessions/example_eps_operating_limits.py) for both scalar and PV paths.
 
 ### Required bus voltage and current

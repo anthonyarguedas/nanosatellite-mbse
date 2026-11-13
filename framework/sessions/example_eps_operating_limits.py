@@ -10,7 +10,7 @@ This example establishes no transient protection or mission compliance claim.
 import csv
 from pathlib import Path
 
-from framework.models import Component, ComponentMode, CotsProtection, CubeSatBus, Mission, Property
+from framework.models import Component, ComponentMode, CotsProtection, CubeSatBus, Mission, Property, TransferMethod
 
 CATALOG = Path(__file__).resolve().parents[1] / "cots"
 SOLAR = "azur_space_81441"
@@ -38,6 +38,8 @@ def build_mission(use_pv_curve=False):
     mission = Mission()
     bus = mission.add(CubeSatBus("BUS", units=3))
     panel = bus.EPS.SolarArray
+    panel.power_path = "self.parent.RegulatorAndConverter"
+    bus.EPS.RegulatorAndConverter.transfer_method = TransferMethod.MPPT  # Ideal MPP reference.
     panel.series_count, panel.parallel_count = 6, 2
     panel.cell_active_area = fact(SOLAR, "active_area", "", "nominal")
     for native, catalog in (
@@ -89,6 +91,8 @@ def main():
         panel = mission.BUS.EPS.SolarArray
         print("PV input:", "catalog I-V points" if use_pv_curve else "scalar ratings")
         print(f"Array reference MPP power: {panel.eol_power:.6f}")
+        print(f"Array operating voltage: {panel.operating_voltage:.6f}")
+        print(f"Array operating power: {panel.operating_power:.6f}")
         print(f"Available source power: {panel.available_power:.6f}")
         requirement = mission.BUS.EPS.PowerCircuit.efuse.no_trip
         for result in requirement.verify().results:

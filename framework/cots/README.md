@@ -34,6 +34,24 @@ Native COTS classes still receive explicit, fixed Property definitions.
 The engineer chooses coherent facts and binds the selected conditions or mode expressions.
 Raw additions remain in the existing `parameters.tsv`, `conditions.tsv`, `condition-parameters.tsv`, `sources.tsv` and related tables.
 
+## Solar transfer methods
+
+The transfer-method records in [model-inputs.tsv](model-inputs.tsv) cover the same 53 products.
+`supported_transfer_method` records 17 sourced channel capabilities: 14 MPPT and three FIXED_VOLTAGE.
+The selected native `SolarPowerPath.transfer_method` remains an independent engineering input.
+`model-inputs.tsv` records both the categorical candidates and blank selection rows.
+Select a coherent product, element, operating mode and source before binding a candidate.
+Use `Property(repr(value), "1")` for its categorical value.
+See [the COTS session](../sessions/example_cots_configuration.py) for an explicit sourced selection.
+
+Generic converters acquire no DET label from the absence of MPPT.
+Bare solar cells and batteries have no intrinsic solar transfer method.
+Their installed path and operating conditions determine array voltage.
+Fixed input-voltage control uses an engineer-selected setpoint in an active-regulation case.
+A controller's MPPT capability establishes no exact ideal MPP voltage.
+BQ25798 fractional-Voc control, Pumpkin curtailment, startup and inactive voltage floors retain their separate qualifications.
+The model's MPPT branch is an explicit ideal reference. Applicable controller calculations can supply the actual operating voltage separately.
+
 ## Binding rules
 
 - Use one cell's ratings for `cell_*` Properties.
