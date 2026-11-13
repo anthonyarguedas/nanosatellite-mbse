@@ -77,7 +77,7 @@ L03 will implement FR-12 and FR-14 to FR-20 through Python expressions and numer
 Each subsection identifies the FRs supported by its equations and algorithms. Variables will correspond to properties of MBSE model elements. Analyses will return numerical measures, comparison limits and verification results. Missing inputs will remain unknown, and invalid inputs will produce an evaluation error.
 
 \subsection{Mass and occupied volume (FR-12)}
-For FR-12, the EPS estimate will sum the contributions of its immediate components. An aggregate estimate can replace a component sum when its accounting boundary is declared. With component masses $m_i$ in kg and occupied-volume estimates $V_i$ in m$^3$, the totals and remaining allocations will be:
+For FR-12, the EPS estimate will sum the contributions of its immediate components. An aggregate estimate can replace a component sum when the included components are identified. With component masses $m_i$ in kg and occupied-volume estimates $V_i$ in m$^3$, the totals and remaining allocations will be:
 \begin{align}
     m_{\mathrm{EPS}}&=\sum_i m_i,
     &V_{\mathrm{EPS}}&=\sum_i V_i,
@@ -132,19 +132,19 @@ Boundary anomalies will be unwrapped in the direction of motion so that each dif
 An orbit without an eclipse has $N_e=0$ and $T_e=0$, including $|\beta|=\pi/2$. The circular limit uses $e=0$, $a_o=R_e+h$ and any common angular reference for $\nu$ and $\lambda$, where $h$ is altitude. At $\beta=0$, this limit recovers El Hachimi et al.'s eclipse relation.
 
 \subsection{Power budgets and preliminary sizing (FR-14)}
-For FR-14, each component state will calculate power from its voltage and current. The engineer will bind component and subsystem powers for each assessed spacecraft mode. At the declared load boundary:
+For FR-14, each component state will calculate power from its voltage and current. The engineer will bind component and subsystem powers for each assessed spacecraft mode. For the loads included in the power budget:
 \begin{equation}
     P_i=V_i I_i,\qquad P_L(t)=\sum_i P_i(t).
     \label{eq:state-load-power}
 \end{equation}
-Mode allocations, duty cycles and load schedules will be explicit inputs. The analysis will use supplied mean powers $\overline P_{L,s}$ and $\overline P_{L,e}$ over the complete sunlight and eclipse intervals, including duty cycles and EPS consumption at that boundary:
+Mode allocations, duty cycles and load schedules will be explicit inputs. The analysis will use supplied mean powers $\overline P_{L,s}$ and $\overline P_{L,e}$ over the complete sunlight and eclipse intervals, including duty cycles and the EPS consumption counted in the budget:
 \begin{align}
     E_s &= \int_{\mathrm{sunlight}}P_L(t)\,dt=\overline P_{L,s}T_s,
     \label{eq:sunlight-load-energy} \\
     E_e &= \int_{\mathrm{eclipse}}P_L(t)\,dt=\overline P_{L,e}T_e.
     \label{eq:eclipse-load-energy}
 \end{align}
-The numerical calculation will multiply each supplied mean power by its duration. It will infer no schedule or allocation normalization. These expressions cover one orbit and give energy in J for power in W and time in s. Separate delivered-energy inputs at the same load boundary will be checked against $E_s$ and $E_e$. An absent interval will contribute zero energy. With corresponding energy path efficiencies $X_s$ and $X_e$, the minimum solar panel power for FR-14 will be:
+The numerical calculation will multiply each supplied mean power by its duration. It will infer no schedule or allocation normalization. These expressions cover one orbit and give energy in J for power in W and time in s. Separate inputs for energy delivered to these loads will be checked against $E_s$ and $E_e$. An absent interval will contribute zero energy. With corresponding energy path efficiencies $X_s$ and $X_e$, the minimum solar panel power for FR-14 will be:
 \begin{equation}
     P_{\mathrm{sp}_{\min}} = \frac{\frac{E_s}{X_s}+\frac{E_e}{X_e}}{T_s}.
     \label{eq:minimum-panel-power}
@@ -252,7 +252,7 @@ For the simple DET path and an MPPT converter with characterized efficiency $\et
     \qquad P_{\mathrm{bus,MPPT}}=\eta_{\mathrm{conv}}P_{\mathrm{op},g}.
     \label{eq:solar-delivered-power}
 \end{equation}
-The engineer will compare DET and MPPT under common array, battery, illumination and load conditions, using their respective path losses and the electrical checks above. Delivered energy at the load boundary will remain a separate input unless established by an applicable calculation. Ideal MPP extraction will establish a reference operating point. Actual tracker startup, tracking accuracy and conversion feasibility will require the selected controller's data. Fixed-voltage regulation will establish no automatic MPP search.
+The engineer will compare DET and MPPT under common array, battery, illumination and load conditions, using their respective path losses and the electrical checks above. Energy delivered to the loads will remain a separate input unless established by an applicable calculation. Ideal MPP extraction will establish a reference operating point. Actual tracker startup, tracking accuracy and conversion feasibility will require the selected controller's data. Fixed-voltage regulation will establish no automatic MPP search.
 
 \subsection{Array area and illumination (FR-14)}
 For FR-14, the array area and illumination algorithm will use the following body dimensions, mounting faces and section normals. The same calculations will support the FR-15 and FR-16 comparisons:
@@ -374,7 +374,7 @@ For FR-14, Vasile and Alicino include inherent degradation, electrical assembly 
     \notag
 \end{align}
 The last relation recovers the fixed-incidence expression, where $\theta$ is the angle between the array normal and the Sun direction.
-The active area will be checked for $A_{\mathrm{active}}\geq A_{\mathrm{active,min}}$ under these common conditions. The factors $I_d$ and $\eta_a$ represent inherent degradation and electrical assembly efficiency. Each loss will enter the assessment once. The path efficiencies in Equation~\eqref{eq:minimum-panel-power} will retain the same source boundary. Packing will remain a separate geometric constraint.
+The active area will be checked for $A_{\mathrm{active}}\geq A_{\mathrm{active,min}}$ under these common conditions. The factors $I_d$ and $\eta_a$ represent inherent degradation and electrical assembly efficiency. Each loss will enter the assessment once. The path efficiencies in Equation~\eqref{eq:minimum-panel-power} will describe losses from the assessed array output to the loads. Packing will remain a separate geometric constraint.
 
 For FR-14's preliminary tumbling approximation, Nogrady considers a CubeSat with cells on all six faces and assumes half the faces are illuminated at an average incidence angle of $50^\circ$. With uniform packing, the required total panel area becomes \citep[Sec.~4.3.4, Eq.~(27)]{review-1009}:
 \begin{equation}
@@ -382,7 +382,7 @@ For FR-14's preliminary tumbling approximation, Nogrady considers a CubeSat with
     \frac{2A_{\mathrm{effective,min}}}{\cos(50^\circ)f_{\mathrm{packing}}}.
     \label{eq:array-tumbling-area}
 \end{equation}
-For this geometry, the check will be $\sum_g A_{\mathrm{panel},g}\geq A_{\mathrm{tumbling,min}}$. For FR-14 and FR-19, each section's available source power $P_{g,\mathrm{avail}}(t)$ will use its selected operating point and the calculated sunlight-mean projection \citep[Sec.~II]{review-1231}. An external attitude and illumination analysis can instead supply an applicable mean power. With assessed irradiance $G_g$ and $T_s>0$, generation will be checked at the same source boundary as the power budget:
+For this geometry, the check will be $\sum_g A_{\mathrm{panel},g}\geq A_{\mathrm{tumbling,min}}$. For FR-14 and FR-19, each section's available source power $P_{g,\mathrm{avail}}(t)$ will use its selected operating point and the calculated sunlight-mean projection \citep[Sec.~II]{review-1231}. An external attitude and illumination analysis can instead supply an applicable mean power. With assessed irradiance $G_g$ and $T_s>0$, generated and required power will be compared at the same point in the circuit:
 \begin{align}
     \overline p_{g,s}
     &=G_g\eta_{\mathrm{op},g}I_{d,g}\eta_{a,g}\overline\kappa_g,
@@ -453,7 +453,7 @@ For the assessed load rail and state, the nominal voltage and current checks wil
     \qquad 0\leq I_{\mathrm{required}}\leq I_{\mathrm{out,allow}}.
     \label{eq:bus-output-compatibility}
 \end{equation}
-The accepted voltage tolerance $\epsilon_V\geq0$ will be explicit and will default to zero for an exact nominal match. Currents will be added only on the same rail at the same operating point. Battery and converter input currents will use their own source boundaries and conversion losses. The engineer will link limits to each connected path and assess each selected mode. Supported output settings, dropout and converter-specific operating limits will require explicit conditions from the selected product. These checks will establish operating-point feasibility. They will infer no converter topology or switching behavior.
+The accepted voltage tolerance $\epsilon_V\geq0$ will be explicit and will default to zero for an exact nominal match. Currents will be added only on the same rail at the same operating point. Battery and converter input currents will be calculated at their respective terminals, including applicable conversion losses. The engineer will link limits to each connected path and assess each selected mode. Supported output settings, dropout and converter-specific operating limits will require explicit conditions from the selected product. These checks will establish operating-point feasibility. They will infer no converter topology or switching behavior.
 % FR-17 uses explicit rail checks and product limits. The supplied models contain no dedicated buck/boost operating-envelope calculation or topology search.
 
 \subsection{Protection and electrical extrema (FR-20)}
@@ -463,7 +463,7 @@ For FR-20, adding a protection component will create a requirement that its decl
     \qquad (I_{\min},I_{\max})=(\min_q I_q,\max_q I_q).
     \label{eq:electrical-operating-extrema}
 \end{equation}
-A power budget can supply current bounds when it establishes minimum and maximum power at that protected source boundary, including conversion losses. For nonnegative powers and $0<V_{\min}\leq V_{\max}$, the conservative independent power/voltage bounds will be:
+A power budget can supply current bounds when power and voltage refer to the same point in the protected circuit. The power values will include applicable conversion losses. For nonnegative powers and $0<V_{\min}\leq V_{\max}$, the conservative independent power/voltage bounds will be:
 \begin{equation}
     I_{\min}=\frac{P_{\min}}{V_{\max}},
     \qquad I_{\max}=\frac{P_{\max}}{V_{\min}}.
