@@ -5,7 +5,68 @@ This section reports the verification evidence for the framework requirements.
 The results of the two case studies represent the deliverable of the fifth objective of this project.
 
 \section{User trials}
+\label{section:user-trial-results}
 
+The user trials assess the time required to maintain requirements, retrieve supporting evidence, assess changes and evaluate supplied alternatives through the framework.
+The protocol in Table~\ref{tab:framework-mop-protocols} assigns eleven tasks to each participant, with a limit of $60/11$~min per task and a total allocation of 60~min.
+Each task uses the same prepared initial state for both participants.
+The mission conditions and numerical allocations are purely illustrative.
+They provide controlled starting points for measuring the effort required to perform only the assigned engineering activities, not an entire mission definition.
+
+The trials use the GUI and a prepared mission environment.
+For FR-09, participants are also given access to a terminal.
+Before that task, they are instructed to use \texttt{git status --short} to view repository status and \texttt{git diff} to inspect changes, and practice both commands on the prepared baseline.
+Preparation and this briefing occur before timing begins.
+Task time runs from presentation of the task to submission,
+Submission is when the participant declares verbally that they have completed the task, after which a screenshot is taken for inclusion in the present report.
+
+All submission times for every task were below the limit.
+The sums of the eleven times were 8~min 29~s for the PhD role and 8~min 54~s for the club role.
+Individual times ranged from 19.90 to 79.54~s.
+Each MOP compares its two elapsed times with the limit separately, without averaging or any metric about the correctness of the results.
+Table~\ref{tab:user-trial-first-task} shows the first task, and Appendix~\ref{appendix:user-trials} gives the prepared inputs and the complete table of submissions.
+
+% Keep the evidence layout shared so the first row and its appendix copy agree.
+\newlength{\UserTrialBodyWidth}
+\newcommand{\UserTrialImageMaxHeight}{265pt}
+\newcommand{\UserTrialImage}[1]{%
+\vspace{0pt}\includegraphics[width=\linewidth,height=\UserTrialImageMaxHeight,keepaspectratio]{#1}}
+\newenvironment{UserTrialEvidence}{%
+\footnotesize
+\setlength{\tabcolsep}{3pt}%
+\setlength{\parskip}{0pt}%
+\renewcommand{\arraystretch}{1.08}%
+\setlength{\UserTrialBodyWidth}{\dimexpr\linewidth-12\tabcolsep\relax}%
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.12\UserTrialBodyWidth}>{\centering\arraybackslash}p{0.225\UserTrialBodyWidth}>{\centering\arraybackslash}p{0.225\UserTrialBodyWidth}>{\centering\arraybackslash}p{0.065\UserTrialBodyWidth}>{\centering\arraybackslash}p{0.225\UserTrialBodyWidth}>{\centering\arraybackslash}p{0.065\UserTrialBodyWidth}>{\centering\arraybackslash}p{0.075\UserTrialBodyWidth}@{}}
+\toprule
+\textbf{MOP/Task} & \textbf{Initial state} & \textbf{Final state for PhD student} & \textbf{\shortstack[t]{Time\\taken by\\PhD\\student}} & \textbf{Final state of student club member} & \textbf{\shortstack[t]{Time\\taken by\\student\\club\\member}} & \textbf{Verifies FR?} \\
+\midrule
+}{\bottomrule\end{tabular}}
+\newcommand{\UserTrialRow}[5]{%
+\textbf{MOP-#1}\newline FR-#1\newline #2 &
+\UserTrialImage{fig/user-trials/mop#1-initial.png} &
+\UserTrialImage{fig/user-trials/mop#1-phd.png} & #3 &
+\UserTrialImage{fig/user-trials/mop#1-club.png} & #4 & #5 \\[5pt]}
+\newcommand{\UserTrialFirstRow}{\UserTrialRow{01}{Create and retain a requirement}{56.72}{60.94}{Yes}}
+
+\begin{sidewaystable}[p]
+\centering
+\caption[First user trial task.]{First user trial task. Times are in seconds.}
+\label{tab:user-trial-first-task}
+\begin{UserTrialEvidence}
+\UserTrialFirstRow
+\end{UserTrialEvidence}
+\end{sidewaystable}
+
+The 60~min allocation reflects the duration of the stakeholders' weekly meeting.
+Verification of all eleven user trial MOPs by both stakeholders would suggest that they can assess the impact of requirement changes and evaluate supplied alternatives within that meeting.
+Furthermore, the fact that a single engineering tool was used across requirements, analyses and component comparisons addresses the core problem of evidence fragmentation.
+The framework retains the relationships between requirements, design inputs and supporting results in one model, which reduces the effort needed to reconstruct those relationships during a review and supports evaluating alternatives on a common basis.
+The Git commands run in the terminal provide the configuration control required for FR-09, including inspection of changes and retrieval of an authorized baseline.
+
+% Insert the appendix before main.tex enters back matter, without changing main.tex.
+\AddToHook{cmd/backmatter/before}[user-trials]{%
+\clearpage\appendix\input{user-trials-appendix}}
 
 \section{Economic Analysis}
 \label{section:economic-analysis}
