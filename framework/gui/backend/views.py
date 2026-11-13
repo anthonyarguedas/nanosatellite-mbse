@@ -61,6 +61,24 @@ def detail(item, report, mode):
     return result
 
 
+def recommendations(component, catalog, *, sort_by=None, reverse=False, limit=None, mode=None):
+    matches = models.recommend_cots(component, catalog, sort_by=sort_by, reverse=reverse, limit=limit, mode=mode)
+    compatible = tuple(item for item in dict.fromkeys(catalog) if component.accepts(item))
+    return {
+        "catalogSize": len(catalog), "compatibleCount": len(compatible), "requirements": len(component.requirements),
+        "sortProperties": sorted({name for item in compatible for name in item.properties}),
+        "results": [{
+            "name": match.candidate.name, "className": type(match.candidate).__name__,
+            "sortValue": display(match.sort_value) if sort_by is not None else "",
+            "sortUnit": str(match.candidate.properties[sort_by].unit) if sort_by is not None else "",
+            "checks": [{"requirement": entry.requirement.name, "condition": entry.condition.name,
+                        "measure": display(entry.measure), "measureUnit": str(entry.condition.measure.unit),
+                        "target": display(entry.target), "targetUnit": str(entry.condition.target.unit),
+                        "predicate": entry.condition.expression} for entry in match.report.results],
+        } for match in matches],
+    }
+
+
 def describe(mission, *, mode=None, selected=None):
     report = mission.verify(mode=mode)
     objects, contexts = [], [{"path": "@external", "name": "External"}]
@@ -70,6 +88,7 @@ def describe(mission, *, mode=None, selected=None):
         kind = "requirement" if isinstance(item, models.Requirement) else "mode" if isinstance(item, MODE_ROWS) else "external" if isinstance(item, (models.Stakeholder, models.ThirdParty)) else "element"
         row = {"path": item.path, "name": item.name, "parent": item.parent.path if item.parent else None,
                "className": type(item).__name__, "kind": kind, "fixed": item.fixed_properties,
+               "recommendable": isinstance(item, models.Component) and not item.fixed_properties,
                "properties": parameters(item, report, mode), "verification": verification(coverage(item, report)),
                "context": isinstance(item, CONTEXTS)}
         if isinstance(item, CONTEXTS):

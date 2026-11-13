@@ -153,6 +153,26 @@ dialog label { display: block; font-size: 12px; margin: 14px 0 7px; }
 dialog select, dialog input { width: 100%; }
 dialog p { margin-top: 8px; }
 dialog footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+#recommendations-dialog { width: min(820px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); overflow-y: auto; }
+.recommendations-scope { font-size: 12px; line-height: 1.6; margin: 12px 0 4px; }
+.recommendation-controls { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto; align-items: end; gap: 12px; }
+.recommendation-controls label { font-size: 11px; }
+.recommendation-controls button { min-height: 37px; }
+#recommendations-summary { margin: 22px 0 12px; font-size: 12px; font-weight: 500; }
+#recommendations-error:empty { display: none; }
+#recommendations-results { margin: 12px 0 20px; }
+.recommendation-card { padding: 14px 16px; margin-top: 10px; background: #f8faf6; border: 1px solid #d9e2d5; border-radius: 6px; }
+.recommendation-card > header { display: flex; align-items: center; gap: 14px; }
+.recommendation-card h3 { font-size: 14px; }
+.recommendation-rank { display: grid; place-items: center; flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: #e5ede1; color: var(--green); font-size: 11px; }
+.recommendation-card .result { margin-left: auto; }
+.recommendation-value { min-width: 76px; text-align: right; font-size: 14px; font-weight: 500; }
+.recommendation-card details { margin-top: 12px; }
+.recommendation-card summary { cursor: pointer; color: var(--green); font-size: 11px; }
+.recommendation-card .table-frame { margin-top: 12px; border-radius: 4px; }
+.recommendation-card table { min-width: 540px; }
+.recommendation-card th, .recommendation-card td { font-size: 11px; }
+@media (max-width: 650px) { .recommendation-controls { grid-template-columns: 1fr 1fr; } .recommendation-value { min-width: 0; } }
 @media (hover: none) { .row-delete { opacity: 1; } }
 @media (max-width: 1100px) { #storage { display: none; } .workspace { grid-template-columns: minmax(320px, 1fr) minmax(0, 1.5fr); padding: 24px 20px 90px; gap: 24px; } }
 @media (max-width: 900px) {

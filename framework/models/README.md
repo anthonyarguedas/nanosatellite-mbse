@@ -20,6 +20,7 @@ Values and verification results are recomputed on every request.
 | `eps.py` | EPS defaults, solar power paths, component properties and fixed COTS classes |
 | `modes.py` | Distinct mode, state and allocation classes |
 | `requirements.py` | Conditions, evaluation status and failure paths |
+| `recommendations.py` | COTS filtering against owned requirements and optional numeric ranking |
 | `mission.py` | One configuration and its expression namespace |
 
 ## Objects and Properties
@@ -566,6 +567,60 @@ Each class can replace its aggregate expressions to choose its accounting bounda
 The EPS demand sum excludes Battery and SolarArray instances by default.
 Override `EPS.power_consumers` for a different boundary or an integrated device.
 No quantity, efficiency or loss is silently inferred.
+
+## COTS recommendations
+
+Query an explicit iterable of detached COTS instances from a generic Component:
+
+```python
+from framework.models import CotsBattery, Property, Requirement, VerificationCondition
+
+class PackA(CotsBattery):
+    mass = Property(0.2, "kg")
+    rated_energy = Property(12, "Wh")
+
+class PackB(CotsBattery):
+    mass = Property(0.3, "kg")
+    rated_energy = Property(20, "Wh")
+
+battery.add(Requirement("energy_screen", conditions=(VerificationCondition(
+    "minimum", battery.rated_energy, Property(10, "Wh"), "measure >= target",
+),)))
+cots_catalog = (PackA("pack_a"), PackB("pack_b"))
+for match in battery.recommend_cots(cots_catalog, sort_by="mass", limit=3):
+    print(match.candidate.name, match.sort_value, match.report.verified)
+```
+
+The standalone function `recommend_cots(component, candidates, ...)` has the same interface.
+The component must belong to a Mission.
+Compatibility follows `component.accepts(candidate)`, including combined products.
+Repeated instances in the input appear once.
+
+Each trial copies the Mission and substitutes the candidate's Property definitions on the generic component.
+Expressions evaluate with `self` at the generic component's position.
+Shared unset definitions replace existing values, so missing product data cannot inherit a generic fallback.
+Additional candidate Properties are included. Generic Properties absent from the candidate remain unchanged.
+Existing COTS selections are omitted from the trial.
+The live Mission and candidate instances remain unchanged.
+
+Every direct owned Requirement must have conditions and pass all of them.
+A failed, pending, errored or empty Requirement excludes the candidate.
+Requirements owned elsewhere are outside this query's scope, including EPS and bus defaults.
+With no owned Requirements, compatible candidates are returned without a compliance assessment.
+Their reports have `verified is None`.
+`mode=nominal` selects one explicit mode or state for the trial and its targets.
+
+Without `sort_by`, results retain input order.
+`sort_by="mass"` sorts by a finite real Property value in ascending order.
+`reverse=True` selects descending order. Ties retain input order.
+Missing, pending, errored, Boolean, nonnumeric and nonfinite sort values exclude the candidate.
+`limit=None` returns all matches. A nonnegative integer caps the result after sorting.
+Each `CotsRecommendation` contains the original `candidate`, its trial `report` and optional `sort_value`.
+
+This is a single product parameter query.
+It makes no installation, wiring, topology or assembly choice.
+Units remain annotations, and fact conditions must already be coherent.
+See [the sourced battery example](../sessions/example_cots_recommendations.py) for passing and failing candidates and missing data.
 
 ## CubeSat size and bus limits
 

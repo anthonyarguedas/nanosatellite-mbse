@@ -92,6 +92,12 @@ class Component(ModelObject):
     def cots(self):
         return tuple(child for child in self.children if isinstance(child, Component) and child.fixed_properties)
 
+    def recommend_cots(self, candidates, *, sort_by=None, reverse=False, limit=None, mode=None):
+        """Query compatible products against this component's owned requirements."""
+        from .recommendations import recommend_cots
+
+        return recommend_cots(self, candidates, sort_by=sort_by, reverse=reverse, limit=limit, mode=mode)
+
     def accepts(self, child):
         if isinstance(child, (ComponentMode, Requirement)):
             return True

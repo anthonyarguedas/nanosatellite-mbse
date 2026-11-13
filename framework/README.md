@@ -22,6 +22,7 @@ The ordinary [example session](sessions/example_mission.py) demonstrates transit
 The [EPS sizing session](sessions/example_eps_sizing.py) demonstrates circular/eccentric illumination, preliminary energy sizing and checks of the entered array, battery and load-rail configuration.
 The [COTS configuration example](sessions/example_cots_configuration.py) runs the report equations with sourced solar and battery ratings, explicit mission assumptions and unresolved checks kept visible. Run it with `python3 -m framework.sessions.example_cots_configuration`.
 The [operating-limits example](sessions/example_eps_operating_limits.py) loads sourced protection thresholds and optional PV points, then exercises normal and overload cases.
+The [COTS recommendation example](sessions/example_cots_recommendations.py) filters sourced battery candidates against owned Requirements, sorts by energy and leaves the live configuration unchanged. Run it with `python3 -m framework.sessions.example_cots_recommendations`.
 The [solar transfer example](sessions/example_eps_transfer.py) compares DET and ideal MPP extraction with sourced PV points, explicitly accepted interpolation and assumed path losses. Run it with `python3 -m framework.sessions.example_eps_transfer`. Run it with `python3 -m framework.sessions.example_eps_operating_limits`.
 The [BIRDS-4 reconstruction](sessions/birds4/README.md) rebuilds the reference load matrix and loss budgets, exposes source discrepancies and compares an independent ideal nadir generation case. Run `python3 -m framework.sessions.example_birds4_power_budget` to generate matching HTML and CSV tables in `framework/sessions/birds4/`.
 From the repository root, run them with `python3 -m framework.sessions.example_mission` or `python3 -m framework.sessions.example_eps_sizing`.
@@ -56,6 +57,7 @@ Calculations have no cache or execution protection.
 
 The GUI edits these same Mission classes through their public API.
 Its tables and shared parameter editor add no engineering behavior.
+Generic component tables offer **Recommend COTS**, using the same Python query over the session's `cots_catalog` alternatives.
 Session storage records ordinary Python model calls and preserves authored definitions.
 The legacy workbook and its restricted interpreter have been removed.
 

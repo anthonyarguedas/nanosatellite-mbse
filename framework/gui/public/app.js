@@ -1,4 +1,5 @@
 import { createEditor, escape, icon } from '/editor.js';
+import { createRecommendations } from '/recommendations.js';
 
 const $ = selector => document.querySelector(selector);
 const EXTERNAL = '@external';
@@ -20,6 +21,7 @@ async function api(path, data) {
 const request = (path, data = {}) => api(path, { handle: view.handle, revision: view.revision, mode, ...data });
 const editor = createEditor({ panel: $('#object-editor'), getWorkspace: () => ({ ...workspace, mode }), request,
   onSave: result => { adopt(result); status('Saved'); }, onClose: () => {} });
+const recommendations = createRecommendations({ dialog: $('#recommendations-dialog'), request });
 function busyState(value) {
   busy = value; $('#workspace').inert = busy || !workspace;
   document.querySelectorAll('.session-toolbar button, .session-toolbar select').forEach(node => { node.disabled = busy || !workspace; });
@@ -52,6 +54,7 @@ function render() {
   $('#requirements-title').textContent = external ? 'Stakeholder requirements' : 'Requirements';
   $('.elements table').setAttribute('aria-label', external ? 'Stakeholders and third parties' : 'Elements');
   $('#context-edit').hidden = external;
+  $('#recommend-cots').hidden = !context?.recommendable;
   $('#context-edit').innerHTML = icon;
   $('#context-edit').dataset.edit = active;
   $('#context-edit').setAttribute('aria-label', `Edit ${context?.name || 'mission'}`);
@@ -145,6 +148,9 @@ document.addEventListener('click', async event => {
     finally { busyState(false); }
   }
   if (event.target.closest('[data-close]')) event.target.closest('dialog')?.close();
+});
+$('#recommend-cots').addEventListener('click', () => {
+  if (!busy && editor.close()) { inspection++; recommendations.open(row(active), mode); }
 });
 $('#add-owner').addEventListener('change', updateAddTypes);
 $('#add-type').addEventListener('change', updateAddTarget);

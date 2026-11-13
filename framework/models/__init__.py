@@ -13,6 +13,7 @@ from .spacecraft import CubeSatBus, GroundStation, CommandAndDataHandling, Commu
 from .spacecraft import AttitudeDeterminationAndControl, GuidanceNavigationAndControl, StructuresAndMechanisms, Thermal, Propulsion, Payload
 from .requirements import Requirement, VerificationCondition, ConditionResult, VerificationReport, InstanceVerification, VerificationFailure
 from .mission import Mission, Session
+from .recommendations import CotsRecommendation, recommend_cots
 
 __all__ = [
     "Mission", "Session", "ModelObject", "Property", "Unit", "Function", "ModuleImport", "Face", "Pointing",
@@ -25,4 +26,5 @@ __all__ = [
     "CubeSatBus", "GroundStation", "CommandAndDataHandling", "Communication",
     "AttitudeDeterminationAndControl", "GuidanceNavigationAndControl", "StructuresAndMechanisms", "Thermal", "Propulsion", "Payload",
     "Requirement", "VerificationCondition", "ConditionResult", "VerificationReport", "InstanceVerification", "VerificationFailure",
+    "CotsRecommendation", "recommend_cots",
 ]

@@ -51,6 +51,42 @@ Values, rendered statements, pending inputs, errors and failure paths come from 
 Previews apply the draft to a temporary copy and call the same methods as a saved configuration.
 The GUI adds no allocation, normalization, power averaging or all-mode compliance policy.
 
+## COTS recommendations
+
+Open a generic component's table and click **Recommend COTS**.
+The dialog queries that component's direct owned Requirements in the selected evaluation mode.
+Every Requirement must have conditions and pass all of them.
+Pending inputs, errors and failed conditions exclude a candidate.
+With no Requirements, the dialog labels results as unconstrained.
+
+Choose an optional numeric sort Property and ascending or descending order.
+Set a maximum result count, or leave it blank for all matches.
+Expand a result to see its native verification measures, targets and predicates.
+The query leaves the Mission, session source and catalog unchanged.
+EPS and bus Requirements remain outside the component query's scope.
+
+A session supplies its alternatives as an ordinary Python iterable:
+
+```python
+cots_catalog = (PackA("pack_a"), PackB("pack_b"))
+```
+
+Each entry is a detached, fixed COTS Component instance with explicitly chosen product facts.
+The catalog stays separate from installed COTS children.
+The GUI passes it to the [Python recommendation API](../models/README.md#cots-recommendations).
+It selects no facts automatically from the TSV catalog.
+
+Try the sourced battery demo:
+
+```sh
+MISSION_FILE=framework/sessions/example_cots_recommendations.py npm start --prefix framework/gui
+```
+
+Open **BUS → EPS → Battery → Recommend COTS**.
+Three of the five candidates pass the initial energy, mass and nominal voltage screens.
+Sort by `rated_energy` with **Highest first** to rank them by energy.
+Use **Save as** before editing the example.
+
 ## Python sessions
 
 A session defines a `mission` instance or a `build_mission()` factory returning a Mission.

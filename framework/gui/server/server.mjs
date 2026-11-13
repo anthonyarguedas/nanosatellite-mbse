@@ -8,6 +8,7 @@ const files = new Map([
   ['/', ['index.html', 'text/html; charset=utf-8']],
   ['/app.js', ['app.js', 'text/javascript; charset=utf-8']],
   ['/editor.js', ['editor.js', 'text/javascript; charset=utf-8']],
+  ['/recommendations.js', ['recommendations.js', 'text/javascript; charset=utf-8']],
   ['/style.css', ['style.css', 'text/css; charset=utf-8']],
 ]);
 
@@ -49,7 +50,7 @@ export function createServer({ modelPath = process.env.MISSION_FILE ? resolve(pr
       if (url.pathname === '/api/workspace' && request.method === 'GET') operation = 'open';
       if (url.pathname === '/api/sessions') operation = request.method === 'GET' ? 'sessions' : request.method === 'POST' ? 'create' : null;
       const routes = { '/api/commands': 'command', '/api/preview': 'preview', '/api/inspect': 'inspect',
-        '/api/evaluate': 'evaluate', '/api/python': 'export_python' };
+        '/api/evaluate': 'evaluate', '/api/python': 'export_python', '/api/recommend-cots': 'recommend_cots' };
       if (routes[url.pathname] && request.method === 'POST') operation = routes[url.pathname];
       if (operation) {
         const data = request.method === 'GET' ? { session: url.searchParams.get('session') || 'current' } : await bodyJSON(request);
