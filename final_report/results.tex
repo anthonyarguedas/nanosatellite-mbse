@@ -63,7 +63,9 @@ The longest time, for MOP-06 in the club role, is 9.11~s below the per-task limi
 
 The 60~min allocation reflects the duration of the stakeholders' weekly meeting.
 Verification of all eleven user trial MOPs by both stakeholders would suggest that they can assess the impact of requirement changes and evaluate supplied alternatives within that meeting.
-Furthermore, the fact that a single engineering tool was used across requirements, analyses and component comparisons addresses the core problem of evidence fragmentation.
+This is considerably faster than what was observed during stakeholder analysis, when stakeholders would have to wait until the next weekly meeting to see the results of tasks comparable to those considered in the user trials.
+
+Furthermore, the fact that a single engineering tool was used across requirements, analyses and component comparisons mitigates the core problem of evidence fragmentation.
 The framework retains the relationships between requirements, design inputs and supporting results in one model, which reduces the effort needed to reconstruct those relationships during a review and supports evaluating alternatives on a common basis.
 The Git commands run in the terminal provide the configuration control required for FR-09, including inspection of changes and retrieval of an authorized baseline.
 
@@ -72,9 +74,37 @@ Previous iterations were considered failures since the participants found the us
 Failed trials provided qualitative feedback with which to improve the GUI.
 However, a discussion of the evolution of the GUI and the user feedback is out of the scope of this document.
 
-% Insert the appendix before main.tex enters back matter, without changing main.tex.
-\AddToHook{cmd/backmatter/before}[user-trials]{%
-\clearpage\appendix\input{user-trials-appendix}}
+\section{Catalog inspection}
+Table~\ref{tab:cots-catalog-counts}) provides the counts of COTS components added to the L02 database, per category. Component counts satisfy MOP-10, and thus verify FR-10.
+Battery and solar array categories contain 13 and 12 products, respectively.
+The DC/DC converter and regulator/converter categories together contain 20 products.
+These catalog categories describe product functions.
+
+\begin{table}[htbp]
+\centering
+\caption{COTS product counts by catalog category.}
+\label{tab:cots-catalog-counts}
+\small
+\begin{tabular}{lr@{\hspace{1.5em}}lr}
+\toprule
+Category & Products & Category & Products \\
+\midrule
+Battery & 13 & Solar array & 12 \\
+DC/DC converter & 17 & Regulator/converter & 3 \\
+Integrated EPS & 3 & Battery charger & 5 \\
+Battery protector & 6 & Ideal diode & 7 \\
+Load switch & 17 & Power circuit switch & 11 \\
+Current sensor & 13 & Temperature sensor & 11 \\
+Sensor & 3 & Heater & 6 \\
+Processor & 8 & Nonvolatile memory & 5 \\
+Real-time clock & 5 & Hardware component & 2 \\
+\midrule
+\multicolumn{3}{l}{Total distinct products} & 147 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\input{eps-case-study-results}
 
 \section{Economic Analysis}
 \label{section:economic-analysis}
