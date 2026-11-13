@@ -184,6 +184,12 @@ class Property:
         self._modes[mode] = expression(source)
         return self
 
+    def unbind(self, mode):
+        """Remove an override so evaluation uses the default expression."""
+        self._editable()
+        self._modes.pop(mode, None)
+        return self
+
     @property
     def reference(self):
         return f"{self.owner.path}.{self.name}" if self.owner is not None else "<property>"

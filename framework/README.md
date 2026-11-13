@@ -34,11 +34,10 @@ framework/
 ├── models/                  # Small public Python model API
 ├── gui/
 │   ├── backend/             # GUI application and transport
-│   │   └── legacy/          # Compatibility for the existing workbook and sessions
 │   ├── public/              # Browser code
 │   └── server/              # Node HTTP server
 ├── scripts/                 # Typed numerical calculations, including EPS sizing
-├── cots/                    # Existing product tables used by the GUI
+├── cots/                    # Product facts and reviewed model inputs
 └── sessions/                # Ordinary session files
 ```
 
@@ -55,12 +54,10 @@ The array retains its MPP reference and calculates a separate operating voltage,
 Fixed face and pointing inputs produce sunlight-mean generation and source energy per orbit under the declared constant-shape electrical approximation. Changing orbital state stays inside the scripts.
 Calculations have no cache or execution protection.
 
-The current GUI retains its older workbook schema through `gui/backend/legacy/`.
-It has not been rewritten to edit the new Mission classes.
-Its serializers, draft handling, restricted interpreter and old model adapters stay outside the public API.
-Version 1 saved workbook imports are redirected in memory when opened by the GUI.
-Original saved source files remain unchanged.
-The compatibility package can be retired as the GUI migrates.
+The GUI edits these same Mission classes through their public API.
+Its tables and shared parameter editor add no engineering behavior.
+Session storage records ordinary Python model calls and preserves authored definitions.
+The legacy workbook and its restricted interpreter have been removed.
 
 ## GUI
 
@@ -72,7 +69,7 @@ npm start --prefix framework/gui
 
 Open <http://127.0.0.1:3000>.
 `MISSION_FILE`, `PORT` and `VERIFICATION_PYTHON` select the GUI workspace, port and interpreter.
-The old GUI numerical analyses remain unavailable. New sizing functions are used by the public model API.
+Parameter values, statement rendering, sizing calculations and verification use the public model API.
 See [GUI](gui/README.md).
 
 Validation uses live Python and HTTP workflows.

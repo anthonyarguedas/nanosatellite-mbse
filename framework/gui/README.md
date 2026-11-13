@@ -1,9 +1,9 @@
 # GUI
 
-A local JavaScript workbook with a GUI-private compatibility model.
-The browser handles rendering, navigation and unsaved editor drafts.
-The Python backend handles workbook edits, validation and session storage.
-The new `framework.models` API is independent and is not yet edited by this GUI.
+A local table editor for `framework.models.Mission`.
+The GUI calls the public model API for containment, parameters, modes, states and verification.
+Expressions execute trusted Python with the same permissions and imports as a script or REPL.
+The GUI owns presentation, unsaved editor drafts and file storage.
 
 ## Run
 
@@ -17,66 +17,68 @@ npm start --prefix framework/gui
 Open <http://127.0.0.1:3000>.
 The server listens only on the local machine.
 There are no npm dependencies or browser build steps.
-The source bootstrap at `backend/service.py` loads the GUI backend.
 
-Environment settings:
+Settings:
 
 - `PORT`: HTTP port (default 3000).
 - `VERIFICATION_PYTHON`: Python interpreter (default `python3`).
-- `MISSION_FILE`: current Python session path.
-- `NANOSAT_MBSE_COTS_DIR`: alternate product database directory.
+- `MISSION_FILE`: Python session (default `framework/sessions/current.py`).
 
-## Organization
+For an existing example:
 
-- `public/`: browser presentation and editor drafts.
-- `public/editors/`: requirement, verification, COTS and mode editors.
-- `server/`: HTTP routes and supervised Python transport.
-- `server/exporters/`: KiCad and Fprime formatting over validated data.
-- `backend/`: Python application service and browser edit validation.
-- `backend/legacy/`: existing workbook classes, expressions and session persistence.
-- `../models/`: independent public model API for new Python scripts.
-- `../cots/`: shared product facts and sources.
-- `../sessions/`: current and named sessions.
-
-## Sessions
-
-The default workspace is `framework/sessions/current.py`.
-Named sessions live in `framework/sessions/<id>/session.py`, beside their `metadata.json`.
-A custom workspace uses a neighboring `sessions/` directory.
-A workspace already inside `sessions/` shares that directory.
-
-New sessions start with empty tables.
-Use Save as to copy an existing session, including an example session.
-Example sessions have no automatic creation or regeneration behavior.
-Revision checks reject stale saves from another browser or Python process.
-
-The GUI can migrate a retained version-14 JSON workspace to an adjacent Python file.
-It preserves the original JSON.
-Existing native metadata prevents a missing Python session from being silently regenerated.
-
-Existing workbook sessions can be inspected through the compatibility package:
-
-```python
-from framework.gui.backend.legacy import Session
-
-session = Session.open("framework/sessions/current.py")
-session.save()
+```sh
+MISSION_FILE=framework/sessions/example_eps_sizing.py npm start --prefix framework/gui
 ```
 
-New Python configurations use `framework.models.Mission`.
-See the [model API](../models/README.md).
-Canonical version 1 workbook imports are redirected in memory when loaded.
-New GUI saves use the compatibility package's import paths.
+The selected file is editable. Use Save as before changing an example you want to retain.
 
-Python session files and native functions are trusted local code.
-Opening a session constructs configuration without running analysis scripts.
-Browser expressions use the existing bounded Python expression interpreter.
-The browser supplies no import paths, source files or shell commands.
+## Tables
 
-## Analysis status
+The left table lists the current owner's elements or external stakeholders.
+Names open their child tables. The pencil opens the same parameter editor used for Requirements.
+The heading pencil edits the current owner, including Mission and Orbit.
+Requirement editors also expose statement templates, rationale and Verification Conditions.
+Parameter creation is explicit and independent of statement text.
 
-The previous study factories, CLI and numerical analyses have been removed.
-The default script picker is empty until replacement implementations are supplied.
-Saved script rows retain their interfaces and bindings as unresolved definitions.
-Historical material in `analyses/` and `demo/` describes the removed analyses.
-See the [framework guide](../README.md) for the current library layout.
+Modes, states and allocation records have a separate table.
+Its Add form selects an owner and any required allocation target.
+Their parameters use the same editor.
+The evaluation selector chooses one explicit mode or state for values and verification.
+Parameter override rows call `Property.bind()` and `Property.unbind()`.
+COTS parameters remain fixed by their Python product class.
+
+Values, rendered statements, pending inputs, errors and failure paths come from the models.
+Previews apply the draft to a temporary copy and call the same methods as a saved configuration.
+The GUI adds no allocation, normalization, power averaging or all-mode compliance policy.
+
+## Python sessions
+
+A session defines a `mission` instance or a `build_mission()` factory returning a Mission.
+A single Mission stored under another global name is also accepted.
+Python helpers and custom product classes remain ordinary Python definitions.
+Imports resolve from the session's source directory and the Python environment.
+
+Saving appends readable public model calls before any `if __name__ == "__main__"` block.
+It preserves authored definitions and deliberately removed defaults.
+Saved files have no GUI imports or loading protocol.
+Import them directly or execute them with Python.
+The Python download contains the saved configuration.
+Unsaved editor drafts remain in the browser until Save.
+
+New sessions contain a Mission with its native default Orbit.
+Named sessions live under `framework/sessions/<id>/session.py`, beside `metadata.json`.
+A custom workspace uses its adjacent `sessions/` directory.
+Save as copies the Python configuration and retains its source context for relative resources and helper imports.
+File revisions reject stale saves from another browser or Python process.
+Reopen reloads external edits.
+
+## Layout
+
+- `public/`: tables, navigation and the shared object editor.
+- `server/`: local HTTP routes and Python process transport.
+- `backend/application.py`: session handles and atomic transactions.
+- `backend/edits.py`: browser requests translated into public model calls.
+- `backend/views.py`: native model values and reports formatted for display.
+- `backend/repository.py`: trusted Python loading and revision-checked source storage.
+
+The retired workbook model, restricted expression interpreter, script runners, exporters and migration code have been removed.

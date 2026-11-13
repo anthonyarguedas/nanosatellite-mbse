@@ -1,4 +1,4 @@
-// Compatibility entry point for npm start and existing local launch commands.
+// Entry point for npm start.
 import { pathToFileURL } from 'node:url';
 import { startServer } from './server/server.mjs';
 export { createServer } from './server/server.mjs';

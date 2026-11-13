@@ -1,303 +1,95 @@
-"""Workbook descriptions projected from the native graph and engineering types."""
+"""Browser presentation of public model objects and native evaluation reports."""
 
-from __future__ import annotations
+from framework import models
+from .edits import allowed_types
 
-from .legacy.database import DatabaseBacked
-from .legacy.configuration import ScriptConfiguration
-from .legacy.elements import Element
-from .legacy.requirements import Statement
-from .legacy.properties import PROPERTY_TYPES
-from .legacy.aggregates import calculated_parameters
-from .legacy.budgets import (
-    BUDGET_CLASSES,
-    POWER_MODELS,
-    RESOURCES,
-    POWER_INPUTS,
-    load_for,
-    power_scopes,
-    power_limit_for,
-    resource_for,
-    resource_scopes,
-    resource_limit_for,
-    spacecraft_components,
-)
-from .validation import KINDS, STAKEHOLDERS
+MODES = (models.SpacecraftMode, models.ComponentMode, models.ComponentState)
+MODE_ROWS = (*MODES, models.TimeAllocation)
+CONTEXTS = (models.Mission, models.DomainElement, models.Orbit, models.Subsystem, models.Component, models.Stakeholder)
 
 
-def tabs(session):
-    result = [
-        {
-            "key": "external",
-            "label": "External",
-            "leftTitle": "Stakeholders and Third Parties",
-            "requirementsTitle": "Stakeholder Requirements",
-            "prefix": "REQ",
-        },
-        {
-            "key": "mission",
-            "label": "Mission",
-            "leftTitle": "Mission Domain Elements",
-            "requirementsTitle": "Mission Requirements",
-            "affectedLabel": "Affected domain elements",
-            "prefix": "MIS",
-        },
+def display(value):
+    return format(value, ".10g") if type(value) is float else repr(value)[:4000]
+
+
+def assessment(prop, mode):
+    result = prop.assess(mode=mode)
+    return {"status": result.status.value, "value": display(result.value) if result.status is models.EvaluationStatus.VALUE else "", "message": result.message}
+
+
+def verification(value):
+    return {"verified": value.verified, "status": value.status.value, "failures": [failure.explain() for failure in value.failures]}
+
+
+def coverage(item, report):
+    if isinstance(item, models.Requirement):
+        return models.InstanceVerification(item, tuple(result for result in report.results if result.requirement is item))
+    return report.for_instance(item)
+
+
+def parameters(owner, report, mode, *, evaluate=False):
+    return [
+        {"name": name, "expression": prop.expression, "unit": str(prop.unit),
+         "bindings": [{"mode": key.path, "expression": value} for key, value in prop.modes.items()],
+         **({"assessment": assessment(prop, mode), "verification": verification(report.for_instance(prop))} if evaluate else {})}
+        for name, prop in owner.properties.items()
     ]
-    elements = [row for row in session.elements if row.expandable]
 
-    def label(row):
-        definition = session.catalog.by_model.get(row.definition)
-        return (
-            row.name
-            if definition is None or row.name != definition.name
-            else definition.tab_label or definition.name
-        )
 
-    for row in elements:
-        name = label(row)
-        definition = session.catalog.by_model.get(row.definition)
-        component = row.role in ("eps", "subsystem")
-        result.append(
-            {
-                "key": row.key,
-                "label": f"{name} ({row.id})"
-                if any(other is not row and label(other) == name for other in elements)
-                else name,
-                "leftTitle": f"{name} {'Components' if component else 'Elements' if row.role == 'payload' else 'Subsystems'}",
-                "requirementsTitle": f"{name} {'Parametric Requirements' if row.role == 'eps' else 'Requirements'}",
-                "affectedLabel": "Affected components"
-                if component
-                else "Affected elements"
-                if row.role == "payload"
-                else "Affected subsystems",
-                "prefix": definition.prefix if definition is not None else "REQ",
-            }
-        )
+def detail(item, report, mode):
+    result = {"path": item.path, "name": item.name, "className": type(item).__name__,
+              "fixed": item.fixed_properties, "properties": parameters(item, report, mode, evaluate=True),
+              "verification": verification(coverage(item, report))}
+    if isinstance(item, models.Requirement):
+        try:
+            rendered, message = item.render_statement(mode=mode), ""
+        except Exception as error:
+            rendered, message = item.statement, str(error)
+        condition_results = {entry.condition: entry for entry in report.results}
+        result.update(statement=item.statement, rationale=item.rationale, rendered=rendered, statementMessage=message,
+                      conditions=[{
+                          "name": condition.name, "expression": condition.expression,
+                          "properties": parameters(condition, report, mode, evaluate=True),
+                          "result": {"status": condition_results[condition].status.value,
+                                     "value": condition_results[condition].value,
+                                     "message": condition_results[condition].message,
+                                     "measure": display(condition_results[condition].measure),
+                                     "target": display(condition_results[condition].target)},
+                      } for condition in item.conditions])
+    if isinstance(item, models.Mission):
+        result["imports"] = [imported.source for imported in item.imports.values()]
     return result
 
 
-def allowed_definitions(session, owner):
-    owner = session.get(owner)
-    return [
-        definition.projection()
-        for definition in session.catalog.elements
-        if (
-            definition.parent is None
-            if owner is session.mission
-            else owner.expandable and definition.parent == owner.definition
-        )
-    ]
-
-
-def _source_candidates(session, statement):
-    excluded = {statement.key}
-    changed = True
-    while changed:
-        changed = False
-        for row in session.statements:
-            if row.key not in excluded and any(
-                source.key in excluded for source in row.sources
-            ):
-                excluded.add(row.key)
-                changed = True
-    return [
-        row.key
-        for row in session.objects
-        if row not in (session.mission, session.external)
-        and row.key not in excluded
-        and not isinstance(row, ScriptConfiguration)
-    ]
-
-
-def _required_sources(session, row):
-    scope = row.power_scope or row.budget_scope
-    if scope is None:
-        return []
-    resource = resource_for(row)
-    scopes = (
-        power_scopes(session)
-        if row.power_scope is not None
-        else resource_scopes(session)
-    )
-    subject = next((item for item in scopes if item.target is scope), None)
-    if subject is None or subject.parent is None:
-        return []
-    parent = (
-        power_limit_for(session, subject.parent)
-        if row.power_scope is not None
-        else resource_limit_for(session, subject.parent, resource)
-    )
-    return [] if parent is None else [parent.key]
-
-
-def describe(session, *, callables=None):
-    """Return presentation metadata. Native methods remain the validation boundary."""
-    projection = session.to_projection(callables=callables)
-    contexts = tabs(session)
-    elements = list(session.elements)
-    namespaces = session.expression_namespaces()
-    descriptions = {}
-    for row in session.objects:
-        if row in (session.mission, session.external):
+def describe(mission, *, mode=None, selected=None):
+    report = mission.verify(mode=mode)
+    objects, contexts = [], [{"path": "@external", "name": "External"}]
+    for item in mission.walk():
+        if isinstance(item, models.VerificationCondition):
             continue
-        metadata = {
-            "className": type(row).__name__,
-            "role": getattr(row, "role", "statement"),
-        }
-        if isinstance(row, Statement):
-            metadata.update(
-                {
-                    "parameterNames": list(row.parameters),
-                    "calculatedParameters": calculated_parameters(session, row, namespaces=namespaces),
-                    "linkedInputs": {
-                        name: {"component": link[0].key, "name": link[1], "id": link[0].id,
-                               "reference": f"{link[0].id}.{link[1]}"}
-                        for name in row.parameters if (link := row.linked_parameter(name)) is not None
-                    },
-                    "parameters": projection.get("modelState", {})
-                    .get("parameters", {})
-                    .get(row.key, {}),
-                    "sources": _source_candidates(session, row),
-                    "affected": [
-                        element.key
-                        for element in elements
-                        if element.owner is row.owner
-                    ],
-                    "powerRequirement": row.definition in POWER_MODELS,
-                    "resourceRequirement": row.definition in BUDGET_CLASSES
-                    and row.definition not in POWER_MODELS,
-                    "draftIssues": list(getattr(row, "draft_issues", ())),
-                    "requiredSources": _required_sources(session, row),
-                    "loadInput": row.definition == "FrameworkRequirements::LoadEnergy",
-                    "managedParameters": list(POWER_INPUTS)
-                    if row.definition == "FrameworkRequirements::LoadEnergy"
-                    and any(link.eps is row.owner for link in session.power.links)
-                    else [],
-                }
-            )
-        if isinstance(row, DatabaseBacked):
-            metadata.update(
-                {
-                    "requirements": [
-                        requirement.key
-                        for requirement in session.requirements
-                        if requirement.owner is row.owner
-                    ],
-                    "usage": None if row.usage is None else row.usage.key,
-                    "genericClass": type(row).__mro__[1].__name__,
-                    "genericTypes": [name for name, cls in PROPERTY_TYPES.items() if isinstance(row, cls)],
-                }
-            )
-        if isinstance(row, Element):
-            metadata["expandable"] = row.expandable and not row.selection
-            metadata["componentProperties"] = [
-                {
-                    "name": name,
-                    "type": {float: "float", int: "integer", bool: "boolean", str: "string"}[spec.value_type],
-                    "unit": spec.unit,
-                    **({"factName": row.property_source(name).name, "element": row.property_source(name).element}
-                       if isinstance(row, DatabaseBacked) else {}),
-                }
-                for name, spec in row.property_definitions().items()
-            ]
-        descriptions[row.key] = metadata
-    power = {}
-    for component in spacecraft_components(session):
-        load = load_for(session, component)
-        power[component.key] = {
-            "element": component.key,
-            "quantity": load.quantity,
-            "accounting": load.accounting,
-            "host": "" if load.host is None else load.host.key,
-            "rationale": load.rationale,
-            "states": [
-                {
-                    "key": state.key,
-                    "name": state.name,
-                    "watts": state.watts,
-                }
-                for state in load.states
-            ],
-            "assignments": {
-                mode.key: state.key for mode, state in load.assignments.items()
-            },
-            "duties": {mode.key: duty for mode, duty in load.duties.items()},
-            "allocations": {
-                mode.key: [{"state": item.state.key, "duty": item.duty} for item in entries]
-                for mode, entries in load.allocations.items()
-            },
-        }
-    return {
-        "tabs": contexts,
-        "allowedDefinitions": {
-            context["key"]: allowed_definitions(session, context["key"])
-            for context in contexts
-            if context["key"] != "external"
-        },
-        "stakeholderTypes": list(STAKEHOLDERS),
-        "statementKinds": list(KINDS),
-        "propertyTypes": {
-            name: [
-                {"name": field, "type": {float: "float", int: "integer", bool: "boolean", str: "string"}[spec.value_type], "unit": spec.unit}
-                for field, spec in cls.property_definitions().items()
-            ]
-            for name, cls in PROPERTY_TYPES.items()
-        },
-        "assignmentFunctions": ["all_assigned", "sum_assigned", "count_assigned"],
-        "objects": descriptions,
-        "powerDefaults": power,
-        "powerComponents": list(power),
-        "powerLossDefinitions": {
-            context["key"]: next(
-                (item["model"] for item in allowed_definitions(session, context["key"])
-                 if item["category"] == "Power Loss"), None
-            )
-            for context in contexts if context["key"] != "external"
-        },
-        "powerScopes": [
-            {"key": scope.key, "kind": scope.kind} for scope in power_scopes(session)
-        ],
-        "accountingOptions": {
-            component.key: (
-                ["host", "excluded"]
-                if component.default_accounting == "host"
-                else ["counted", "excluded"]
-            )
-            for component in spacecraft_components(session)
-        },
-        "executionHosts": [
-            component.key
-            for component in spacecraft_components(session)
-            if component.definition.endswith("::ProcessorAndMemory")
-        ],
-        "loadRoots": [
-            row.key
-            for row in session.elements
-            if row.owner is session.mission and row.role in ("bus", "payload")
-        ],
-        "powerInputs": [
-            "sunlight_power_W",
-            "eclipse_power_W",
-            "sunlight_duty",
-            "eclipse_duty",
-        ],
-        "resources": [
-            {
-                "name": resource.name,
-                "unit": resource.unit,
-                "value": resource.value,
-                "limit": resource.limit,
-                "allocated": resource.allocated,
-            }
-            for resource in RESOURCES
-        ],
-        "budgetDefinitions": list(BUDGET_CLASSES),
-        "limits": {
-            "variables": 256,
-            "rows": 10000,
-            "scripts": 64,
-            "methods": 32,
-            "facts": 64,
-            "modes": 24,
-            "states": 32,
-        },
-    }
+        kind = "requirement" if isinstance(item, models.Requirement) else "mode" if isinstance(item, MODE_ROWS) else "external" if isinstance(item, (models.Stakeholder, models.ThirdParty)) else "element"
+        row = {"path": item.path, "name": item.name, "parent": item.parent.path if item.parent else None,
+               "className": type(item).__name__, "kind": kind, "fixed": item.fixed_properties,
+               "properties": parameters(item, report, mode), "verification": verification(coverage(item, report)),
+               "context": isinstance(item, CONTEXTS)}
+        if isinstance(item, CONTEXTS):
+            contexts.append({"path": item.path, "name": item.name})
+            row["types"] = allowed_types(mission, item)
+            row["scopeModes"] = [value.path for value in getattr(item, "modes", ())]
+        if isinstance(item, (models.SpacecraftMode, models.ComponentMode)):
+            row["types"] = allowed_types(mission, item)
+        if isinstance(item, models.Requirement):
+            try:
+                row["rendered"], row["statementMessage"] = item.render_statement(mode=mode), ""
+            except Exception as error:
+                row["rendered"], row["statementMessage"] = item.statement, str(error)
+            row["statement"] = item.statement
+        if isinstance(item, MODE_ROWS):
+            row["values"] = {name: assessment(prop, mode) for name, prop in item.properties.items()}
+            row["target"] = item.spacecraft_mode.path if isinstance(item, models.ModeAllocation) else item.state.path if isinstance(item, models.StateAllocation) else None
+        objects.append(row)
+    return {"mission": mission.path, "objects": objects, "contexts": contexts,
+            "modes": [{"path": item.path, "name": item.name, "className": type(item).__name__} for item in mission.walk() if isinstance(item, MODES)],
+            "imports": [item.source for item in mission.imports.values()],
+            "mode": mode.path if mode is not None else "", "verification": verification(report),
+            "detail": detail(mission.get(selected), report, mode) if selected else None}

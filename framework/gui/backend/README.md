@@ -1,29 +1,25 @@
-# GUI Python backend
+# GUI backend
 
-The backend belongs to `framework.gui`.
-`framework.models` is the independent public Python API.
-The GUI retains its existing workbook model under `legacy/` until its editors migrate.
-Workbook persistence lives in `legacy/persistence/`.
-The new Mission classes have no browser schema or storage protocol.
+This package adapts browser requests to `framework.models`.
+It contains no engineering model or expression interpreter.
 
-## Modules
+- `application.py` manages session handles and atomic edit transactions.
+- `edits.py` calls public model methods and records equivalent Python source.
+- `views.py` formats `assess()`, `render_statement()` and `verify()` results.
+- `repository.py` loads trusted Python sessions and saves source with revision checks.
+- `__main__.py` provides JSON-lines transport.
+- `service.py` launches the source checkout from the Node server.
 
-- `application.py`: session operations, independent browser drafts and execution evidence handles.
-- `edits.py`: apply browser changes to native model objects.
-- `validation.py`: bounded JSON transport validation.
-- `views.py`: workbook metadata projected from compatibility objects.
-- `legacy/`: the old workbook model, expression engine and storage adapters.
-- `__main__.py`: JSON-lines transport, cancellation and bounded requests.
-- `service.py`: source bootstrap used by the Node server, including isolated Python mode.
+The browser stores unsaved editor drafts.
+Preview requests copy the Mission while retaining its imported module interfaces.
+They apply the same model calls used by Save and discard the copy afterward.
+A failed transaction leaves the live Mission and saved source unchanged.
 
-The normal launcher is `npm start --prefix framework/gui` from the repository root.
-The Node server starts `backend/service.py` with `python3 -I -B -u`.
-Installed deployments can launch `python3 -I -m framework.gui.backend`.
+Session files and expressions execute trusted Python with user permissions.
+There is no restricted interpreter, subprocess analysis runner or GUI compliance policy.
+The HTTP server accepts only local, same-origin requests.
+File paths come from launcher configuration and generated session IDs.
 
-The service accepts `--model`, `--sessions` and `--cots-directory` as trusted local launch settings.
-Requests carry model operations and opaque draft/evidence handles.
-Requests cannot configure import paths or launch arbitrary source files.
-The default script registry is empty while analyses are being refactored.
-
-The existing transport protocol and workbook behavior are retained.
-Live validation should use temporary sessions to avoid changing an active workspace.
+Use `python3 -m framework.gui.backend` for JSON-lines access.
+Optional launcher arguments are `--model` and `--sessions`.
+The normal browser launcher is `npm start --prefix framework/gui`.

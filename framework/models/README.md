@@ -144,6 +144,7 @@ Both states start with unset electrical inputs.
 A Subsystem reads its parent's current Spacecraft Modes.
 Use `mission.verify(mode=nominal)` to assess one selected mode.
 No automatic all-mode compliance policy is assumed.
+Call `property.unbind(mode)` to remove an override and use its default expression again.
 
 ## Orbit and preliminary EPS sizing
 
