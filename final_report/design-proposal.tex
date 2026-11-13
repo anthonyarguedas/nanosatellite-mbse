@@ -134,35 +134,9 @@ Requirements owned by the EPS or bus remain outside this component query.
 This database is said to estimate electrical and dynamic EPS model parameters (as per FR-10) because its information comes from datasheets and not empirical modeling.
 For the purposes of this project, a great volume of COTS property values taken from datasheets was deemed preferrable to a small volume of empirical data, given that the framework requirements cover the exploration of alternatives during early design stages and not the qualification of mature physical designs.
 
-The database contains 147 distinct products in 18 catalog categories (Table~\ref{tab:cots-catalog-counts}).
-Battery and solar array categories contain 13 and 12 products, respectively.
-The DC/DC converter and regulator/converter categories together contain 20 products.
-These catalog categories describe product functions. Mapping their facts to the generic EPS classes remains an explicit engineering selection.
+The database contains commercially available products in 18 catalog categories, for which the datasheets were obtained via the Mouser Canada search engine.
+The properties of the generic EPS components were defined based on the information found in the datasheets, and datasheets that didn't provide the necessary values to execute all EPS analyses were discarded unless they are used in one of the case studies (BIRDS-4 or OreSat).
 The reader is referred to Appendix \ref{appendix:cots-database} for the full list of COTS with their corresponding generic EPS component type, part identifier, and mass as one representative property. The full database is available in the project repository \cite{repo} as tab-separated tables.
-
-\begin{table}[htbp]
-\centering
-\caption{COTS product counts by catalog category.}
-\label{tab:cots-catalog-counts}
-\small
-\begin{tabular}{lr@{\hspace{1.5em}}lr}
-\toprule
-Category & Products & Category & Products \\
-\midrule
-Battery & 13 & Solar array & 12 \\
-DC/DC converter & 17 & Regulator/converter & 3 \\
-Integrated EPS & 3 & Battery charger & 5 \\
-Battery protector & 6 & Ideal diode & 7 \\
-Load switch & 17 & Power circuit switch & 11 \\
-Current sensor & 13 & Temperature sensor & 11 \\
-Sensor & 3 & Heater & 6 \\
-Processor & 8 & Nonvolatile memory & 5 \\
-Real-time clock & 5 & Hardware component & 2 \\
-\midrule
-\multicolumn{3}{l}{Total distinct products} & 147 \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 \section{L03: Simulation and analysis}
 L03 will implement FR-12 and FR-14 to FR-20 through Python expressions and numerical analyses referenced by requirements. L01 will retain the mission inputs required by FR-13 and supply them to L03, following Table~\ref{tab:logical-responsibilities}.

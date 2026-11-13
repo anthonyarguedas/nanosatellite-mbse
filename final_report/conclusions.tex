@@ -1,12 +1,20 @@
 \chapter{Conclusions}
 \label{ch:conclusions}
 
-Conclusions explain what follows from the project, with reference to its
-original objectives and results. They state what the graduation project has
-established. Each conclusion should be supported by work presented in the
-report. Observations or claims drawn directly from theory belong in the
-theoretical framework.
+The review of normative documents and state-of-the-art research on MBSE in Chapter \ref{ch:teoria} characterized the needs, requirements, interfaces and technical criteria of nanosatellite EPS, fulfilling the first objective of this project.
+The second objective, to define the operational flow of modeling, analysis, and evidence management of the MBSE framework, was delivered as the Python code that constitutes the framework's models and analyses (presented in full in Appendix \ref{appendix:framework-code}), which is plain text, and can be version-controlled.
 
-Conclusions usually close with future work or suggestions for improving the
-results.
+The third objective's deliverable can also be found in Appendix \ref{appendix:framework-code}, corresponding to the CSRM model classes.
+For the fourth objective, the characterization early EPS verification and validation within the EPS framework was achieved by the automatic assignment of parametric requirements to generic EPS components, for which the list of requirements is given in Appendix \ref{appendix:automatic-eps-requirements}.
 
+Finally, the two case studies of the BIRDS-4 and OreSat CubeSat missions discussed in Chapter \ref{ch:results} delivered the fifth objective.
+The results suggested that the outputs of the analyses bundled with the framework were accurate with respect to the original BIRDS-4 and OreSat values calculated using the same inputs. This implies that the parametric requirements modeled by the framework don't just link quantities but represent real EPS engineering knowledge.
+User trials then motivated the conclusion that, under controlled conditions and represent individual tasks and not a complete mission definition, stakeholders can now manage parametric requirements, assess the impact of a requirement change, and reproduce analyses much faster than before by leveraging the framework.
+
+Future work should expand the COTS database with as many components and parameters as possible and useful, covering subsystems other than EPS.
+In particular, time-dependent properties would enable analyses much more detailed than those currently implemented using only time-independent parameters.
+
+The MBSE models should be expanded to automatically add representative requirements for all subsystems and components defined by CSRM, not just those related to the EPS.
+
+The fact that the models are implemented in plain-text Python makes them legible for artificial intelligence agents.
+The potential of such agents to further speed up design processes in MBSE while respecting their modeled constraints is an interesting subject of study.
