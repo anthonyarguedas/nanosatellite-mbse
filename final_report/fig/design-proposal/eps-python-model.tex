@@ -1,0 +1,38 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Courier New}
+\usepackage{amsmath,graphicx,fancyvrb}
+\setlength{\fboxsep}{7pt}
+\setlength{\fboxrule}{0.5pt}
+\begin{document}
+\begin{minipage}{510pt}
+\fontsize{10}{12}\selectfont
+\begin{minipage}[t]{250pt}
+\vspace{0pt}\textbf{(a) Battery class (selected lines)}\par\smallskip
+\begin{Verbatim}[fontsize=\fontsize{8}{10.24}\selectfont]
+class Battery(EPSComponent):
+    rated_energy = Property(
+        "self.cell_count.value * "
+        "self.cell_rated_energy.value", "Wh")
+    bol_energy = Property(
+        "self.rated_energy.value * 3600", "J")
+\end{Verbatim}
+\end{minipage}\hfill
+\begin{minipage}[t]{250pt}
+\vspace{0pt}\textbf{(b) Interactive Python}\par\smallskip
+\begin{Verbatim}[fontsize=\fontsize{8}{10.24}\selectfont]
+>>> from framework.models import (
+...     Mission, CubeSatBus)
+>>> mission = Mission()
+>>> bus = mission.add(CubeSatBus("BUS"))
+>>> battery = bus.EPS.Battery
+>>> battery.rated_energy = 20.35
+>>> battery.rated_energy.value
+20.35
+>>> battery.bol_energy.value
+73260.0
+\end{Verbatim}
+\end{minipage}
+\end{minipage}
+\end{document}

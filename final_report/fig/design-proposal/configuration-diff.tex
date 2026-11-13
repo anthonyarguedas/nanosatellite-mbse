@@ -1,0 +1,44 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Courier New}
+\usepackage{amsmath,graphicx,fancyvrb}
+\setlength{\fboxsep}{7pt}
+\setlength{\fboxrule}{0.5pt}
+\begin{document}
+\begin{minipage}{510pt}
+\fontsize{10}{12}\selectfont
+\textbf{(a) Git comparison with the retained baseline}\par
+\begin{Verbatim}[fontsize=\fontsize{8.5}{10.88}\selectfont]
+$ git diff -- battery-study.py
+diff --git a/battery-study.py b/battery-study.py
+index ad30670..19d3b45 100644
+--- a/battery-study.py
++++ b/battery-study.py
+@@ -25,3 +25,3 @@ eps.SolarArray.parallel_count = 4
+ battery = eps.Battery
+-battery.rated_energy = 20.35
++battery.rated_energy = 3.0
+ requirement = battery.add_requirement(
+\end{Verbatim}
+\par\medskip
+\begin{minipage}[t]{250pt}
+\vspace{0pt}\textbf{(b) Baseline evaluation}\par\smallskip
+\begin{Verbatim}[fontsize=\fontsize{8.5}{10.88}\selectfont]
+>>> battery.bol_energy.value
+73260.0
+>>> requirement.verify().verified
+True
+\end{Verbatim}
+\end{minipage}\hfill
+\begin{minipage}[t]{250pt}
+\vspace{0pt}\textbf{(c) Edited evaluation}\par\smallskip
+\begin{Verbatim}[fontsize=\fontsize{8.5}{10.88}\selectfont]
+>>> battery.bol_energy.value
+10800.0
+>>> requirement.verify().verified
+False
+\end{Verbatim}
+\end{minipage}
+\end{minipage}
+\end{document}

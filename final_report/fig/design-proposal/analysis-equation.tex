@@ -1,0 +1,35 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Courier New}
+\usepackage{amsmath,graphicx,fancyvrb}
+\setlength{\fboxsep}{7pt}
+\setlength{\fboxrule}{0.5pt}
+\begin{document}
+\begin{minipage}{510pt}
+\fontsize{10}{12}\selectfont
+\begin{minipage}[t]{270pt}
+\vspace{0pt}\textbf{(a) Battery sizing calculation}\par\smallskip
+\begin{Verbatim}[fontsize=\fontsize{8}{10.24}\selectfont]
+energy = (eclipse_energy / depth_of_discharge
+          * (1 + degradation_margin))
+_finite(energy)
+return Energy(energy)
+\end{Verbatim}
+\end{minipage}\hfill
+\begin{minipage}[t]{230pt}
+\vspace{0pt}\textbf{(b) Algebraic expression}\par\smallskip
+\[
+E_{\mathrm{Battery}}=\frac{E_e}{\mathrm{DoD}}(1+M)
+\]
+\begin{tabular}{@{}ll@{}}
+\texttt{eclipse\_energy} & $E_e$ (J)\\
+\texttt{depth\_of\_discharge} & $\mathrm{DoD}$\\
+\texttt{degradation\_margin} & $M$
+\end{tabular}
+\[
+\frac{6000~\mathrm{J}}{0.5}(1+0.2)=14400~\mathrm{J}
+\]
+\end{minipage}
+\end{minipage}
+\end{document}

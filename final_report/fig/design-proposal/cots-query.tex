@@ -1,0 +1,34 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Courier New}
+\usepackage{amsmath,graphicx,fancyvrb}
+\setlength{\fboxsep}{7pt}
+\setlength{\fboxrule}{0.5pt}
+\begin{document}
+\begin{minipage}{510pt}
+\fontsize{10}{12}\selectfont
+\begin{minipage}[t]{210pt}
+\vspace{0pt}\textbf{(a) Candidate acceptance}\par\smallskip
+\begin{Verbatim}[fontsize=\fontsize{7.5}{9.6}\selectfont]
+reports = tuple(
+    requirement.verify(mode=selected_mode)
+    for requirement in owner.requirements)
+if any(report.verified is not True
+       for report in reports):
+    continue
+\end{Verbatim}
+\medskip\textbf{Python query}\par
+\begin{Verbatim}[fontsize=\fontsize{7.5}{9.6}\selectfont]
+matches = battery.recommend_cots(
+    cots_catalog,
+    sort_by="rated_energy",
+    reverse=True, limit=3)
+\end{Verbatim}
+\end{minipage}\hfill
+\begin{minipage}[t]{290pt}
+\vspace{0pt}\textbf{(b) GUI recommendations}\par\smallskip
+\includegraphics[width=290pt]{cots-matches.png}\end{minipage}\par\medskip\textbf{(c) Expanded verification for P45B}\par\smallskip
+\includegraphics[width=510pt]{cots-checks.png}
+\end{minipage}
+\end{document}

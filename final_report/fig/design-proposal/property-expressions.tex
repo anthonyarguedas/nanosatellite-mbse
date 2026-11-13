@@ -1,0 +1,37 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Courier New}
+\usepackage{amsmath,graphicx,fancyvrb}
+\setlength{\fboxsep}{7pt}
+\setlength{\fboxrule}{0.5pt}
+\begin{document}
+\begin{minipage}{510pt}
+\fontsize{10}{12}\selectfont
+\begin{minipage}[t]{245pt}
+\vspace{0pt}\textbf{(a) Property class (selected lines)}\par\smallskip
+\begin{Verbatim}[fontsize=\fontsize{8}{10.24}\selectfont]
+class Property:
+    def __init__(self, source=None, unit=None):
+        self.expression = source
+        self.unit = unit
+
+    @property
+    def value(self):
+        return self.evaluate()
+\end{Verbatim}
+\end{minipage}\hfill
+\begin{minipage}[t]{255pt}
+\vspace{0pt}\textbf{(b) Calculated requirement property}\par\smallskip
+\begin{Verbatim}[fontsize=\fontsize{7.6}{9.728}\selectfont]
+required = Property(
+    "sizing.battery_energy("
+    "eclipse_energy=self.eclipse_energy, "
+    "depth_of_discharge=self.depth_of_discharge, "
+    "degradation_margin=self.degradation_margin"
+    ").joules", "J")
+\end{Verbatim}
+\end{minipage}\par\medskip\textbf{(c) GUI statement after evaluation}\par\smallskip
+\includegraphics[width=510pt]{rendered-statement.png}
+\end{minipage}
+\end{document}

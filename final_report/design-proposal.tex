@@ -28,49 +28,141 @@ Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-cubesat-subsystems} show
 \label{fig:csrm-cubesat-subsystems}
 \end{figure}
 
-The model classes can be imported into any Python execution environment, as shown in Figure x, yet a graphical user interface (GUI) has also been developed to ease their use for people unfamiliar with the Python programming language (Figure y).
-Besides classification, the models allow to assign engineering properties to each component, a capability that was mainly exploited for the EPS components, modeled as per FR-05.
-The properties given to each EPS component type were chosen to represent the values reported by COTS datasheets, and to serve as inputs to all required analysis.
-% x = some EPS component classes, could be a battery with some parameters, presented as a figure, plus a >>> syntax of those classes being imported and used. explain what the shown parameters are.
-% y = a screenshot of the GUI which shows the same classes. make sure both show the same parameter to draw the parallel.
+The model classes can be imported into a Python environment, as shown in Figure~\ref{fig:eps-python-model}.
+A graphical user interface (GUI) exposes the same models for users unfamiliar with Python (Figure~\ref{fig:eps-gui}).
+Besides classification, the models assign engineering properties to components, including the EPS component properties required by FR-05.
+These properties represent COTS datasheet quantities and provide inputs to the analyses.
+The figures use a synthetic battery allocation to demonstrate the same parameter values in both interfaces.
 
-Analyses were implemented as Python scripts that consume the parameters of EPS component classes and return values that can be mapped back to other parameters.
-The scripts follow equations and algorithms extracted from EPS literature and cited in the current chapter where applicable.
-The equations and algorithms are presented in algebraic and textual clarity.
-Their Python implementations resemble Figure x.
-% x = on the left, a fragment of code from an analysis. on the right, the algebraic way to write it.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig/design-proposal/eps-python-model.pdf}
+\caption[EPS properties in Python.]{Selected lines from the Battery class and an interactive Python session. The default \texttt{rated\_energy} expression multiplies cell count by cell energy in Wh. A complete pack rating can be assigned directly, as in the illustrative 20.35~Wh allocation shown here. The \texttt{bol\_energy} property converts this rating to 73260~J at beginning of life.}
+\label{fig:eps-python-model}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\linewidth]{fig/design-proposal/eps-gui.pdf}
+\caption[The same battery properties in the GUI.]{Cropped views of the Battery parameter editor show the same 20.35~Wh rating and calculated 73260~J value as Figure~\ref{fig:eps-python-model}. Each row retains its expression, unit and evaluated value.}
+\label{fig:eps-gui}
+\end{figure}
+
+Analyses are Python functions that consume EPS properties and return results that can be assigned to other properties.
+The functions follow the equations and algorithms cited in this chapter.
+Figure~\ref{fig:analysis-equation} compares a calculation with its algebraic expression.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig/design-proposal/analysis-equation.pdf}
+\caption[Python calculation and algebraic expression.]{The battery energy calculation implements Equation~\eqref{eq:battery-energy}. An eclipse demand of 6000~J, a discharge depth of 0.5 and a degradation margin of 0.2 require 14400~J of beginning-of-life energy. The excerpt shows the calculation and return value. The full function also checks finite inputs and their permitted ranges.}
+\label{fig:analysis-equation}
+\end{figure}
 
 \section{L01: MBSE Workspace}
 This section describes the behavior of logical component L01: MBSE Workspace.
-For FR-01, the framework represents requirements and their associated quantities and veriication methods as Python classes.
-Inspired by the specialty systems engineering language SysML v2 \cite{}, quantities were generalized as a property containing any valid Python expression, meaning that they can include other properties, arithmetic operations, and even function calls.
-% put here an excerpt of the relevant class definitions, as a figure, which show a comple property.
-Statements combine text with numerical values for easier reading (Figure x of the GUI rendering a requirement).
+For FR-01, the framework represents requirements, quantities and verification conditions as Python classes.
+Inspired by the property expressions of SysML v2 \citep{omg2026sysml2}, a Property stores a Python expression that can reference other properties, arithmetic operations and function calls.
+Figure~\ref{fig:property-expressions} shows a calculated property and the GUI rendering of a requirement statement.
+Units accompany values as annotations. The framework performs no automatic unit conversion or dimensional checking.
 
-For FR-02 and FR-03, links between requirements, components, and analyses were modeled in their respective classes. % One sentence here on how this works. Reference a figure containing an excerpt of the classes, and a GUI screenshot on the right.
-To satisfy FR-04, all requirements have a method to evaluate the verification methods that they already have assigned, without the need to redefine verification methods and their inputs. % Reference a figure where the GUI button to run an analysis is visible, with all the input and output mappings. mention in the caption that these mappings are persistent.
-The self-evaluation method has to be called manually if interacting with the Python classes directly, whereas the GUI calls it automatically upon an edit to its inputs.
-The latter behavior allows users to immediately identify the impact of a parameter change, satisfying FR-06.
-% GUI screenshots before/after on left/right, for a parameter change. the displayed values have to change, preferrably a requirement becomes visibly unverified.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig/design-proposal/property-expressions.pdf}
+\caption[Calculated properties and rendered requirement prose.]{Selected Property class lines and a requirement property that calls the battery sizing function. Its named inputs are other properties, and the returned \texttt{joules} field supplies the required energy. The GUI statement combines the calculated 14400~J target with the available 73260~J. The class excerpt omits internal initialization and evaluation details.}
+\label{fig:property-expressions}
+\end{figure}
+
+For FR-02 and FR-03, each verification condition links a requirement to a component property through its measure and to an analysis result through its target expression (Figure~\ref{fig:requirement-links}).
+To satisfy FR-04, the requirement's \texttt{verify()} method evaluates its stored conditions and their input expressions.
+Figure~\ref{fig:analysis-mappings} shows these input and output mappings in the GUI.
+Python users call the evaluation method directly.
+The GUI evaluates expressions during editing and refreshes the requirement table after saving.
+This feedback exposes the impact of a parameter change for FR-06, as illustrated by the passing and failing evaluations in Figure~\ref{fig:parameter-impact}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig/design-proposal/requirement-links.pdf}
+\caption[Requirement, component and analysis links.]{The verification condition stores a measure linked to the battery's \texttt{bol\_energy} property and a target linked to the requirement's calculated \texttt{required} property. The GUI displays these same links and the comparison predicate. The evaluation method reuses all stored conditions.}
+\label{fig:requirement-links}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\linewidth]{fig/design-proposal/analysis-mappings.png}
+\caption[Persistent analysis input and output mappings.]{The requirement editor shows three function inputs, the \texttt{required} output expression and the measure and target bindings. The visible Save button retains these mappings in the Python session. Editing an input evaluates the draft automatically.}
+\label{fig:analysis-mappings}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig/design-proposal/parameter-impact.pdf}
+\caption[Verification before and after a parameter change.]{Changing the battery rating from 20.35~Wh to 3.0~Wh reduces available energy from 73260~J to 10800~J. The target remains 14400~J. After saving the change, the same requirement changes from Pass to Fail without redefining its condition or analysis mappings.}
+\label{fig:parameter-impact}
+\end{figure}
 
 The behavior to satisfy FR-07 and FR-08 is entirely deterministic, despite recommendation being a very open and subjective problem.
 Certain models, mainly subsystems and components, were given methods to automatically self-assign requirements when they are added to the mission.
 The requirements were chosen based on recurring constraints to EPS components in the literature and relevant normative documents, and can be read in full in \ref{appendix:automatic-eps-requirements}.
 % This appendix is just a table with the requirement statement and the EPS component it applies to.
 
-The GUI makes the automatic addition of requirements visually evident, and thus the next engineering activity recommendation (FR-07) becomes to fill in the parameters needed to make the requirements verifiable.
-Said requirements are pre-assigned verification methods that are ready to execute as soon as all inputs have been provided, representing the verification activity recommendation behavior required by FR-08.
-% A picture of the GUI showing the requirements created automatically when adding a certain EPS components. note in the caption that some of the variables appear as numbers because they already have values assigned, while others appear as variable names because their values are pending. explain that adding the pending values thus becomes the next activity recommendation.
+The GUI displays automatically created requirements and their unresolved inputs (Figure~\ref{fig:automatic-requirements}).
+For FR-07, these inputs identify the next engineering activity: supply the quantities needed to evaluate the requirement.
+The requirements already contain verification conditions, which become evaluable when their inputs are supplied, providing the verification activity recommendation required by FR-08.
 
-Owing to the use of generic EPS component models with parameters that correspond to COTS properties, and that those COTS properties are constrainable by the requirements assigned to the generic component, the implementation of FR-11 is simplified to a query of the COTS database for all components matching the type of a generic component (battery, solar array) for which all requirements assigned to the generic component are verified when evaluated on the COTS property values.
-% Add a figure that on the left shows the code that implements this calculation, and on the right a GUI screenshot of a generic component for which COTS have been recommended
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig/design-proposal/automatic-requirements.png}
+\caption[Automatically created EPS requirements.]{The first five of 18 requirements created when the EPS is added to the mission. Known inputs produce numerical targets for sunlight energy, eclipse energy, solar power and cell count. The battery energy statement retains its variable placeholder because mission lifetime and cycle fit inputs are unset. Supplying these quantities is the next engineering activity. The two energy delivery checks also require evidence of available energy, so a numerical target alone does not establish a passing result.}
+\label{fig:automatic-requirements}
+\end{figure}
+
+For FR-11, the framework evaluates an explicitly supplied set of compatible COTS alternatives against the generic component's directly owned requirements (Figure~\ref{fig:cots-query}).
+Each trial substitutes the candidate's property definitions into a copy of the mission and retains the candidate only when every owned requirement passes.
+Unknown inputs, evaluation errors and failed conditions exclude the candidate.
+The engineer selects applicable datasheet facts and conditions before defining the COTS alternatives.
+Requirements owned by the EPS or bus remain outside this component query.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig/design-proposal/cots-query.pdf}
+\caption[COTS filtering in Python and the GUI.]{The implementation rejects a candidate when any directly owned requirement is unverified. The GUI applies the same query to five sourced Molicel cells, requiring at least 11~Wh of rated energy, at most 0.075~kg of mass and a nominal voltage of 3.6~V. P45B, P42A and M35A pass and are ranked by decreasing rated energy. The cropped GUI results show these matches on the right and the expanded P45B measures, targets and predicates below.}
+\label{fig:cots-query}
+\end{figure}
 
 \section{L02: COTS Database}
 This database is said to estimate electrical and dynamic EPS model parameters (as per FR-10) because its information comes from datasheets and not empirical modeling.
 For the purposes of this project, a great volume of COTS property values taken from datasheets was deemed preferrable to a small volume of empirical data, given that the framework requirements cover the exploration of alternatives during early design stages and not the qualification of mature physical designs.
 
-The database contains %how many of each generic EPS type.
-The reader is referred to Appendix \ref{appendix:cots-database} for the full list of COTS with their corresponding generic EPS component type, part identifier, and mass as one representative property. The full database is available in the project repository \cite{repo} as a tab-separated values file.
+The database contains 147 distinct products in 18 catalog categories (Table~\ref{tab:cots-catalog-counts}).
+Battery and solar array categories contain 13 and 12 products, respectively.
+The DC/DC converter and regulator/converter categories together contain 20 products.
+These catalog categories describe product functions. Mapping their facts to the generic EPS classes remains an explicit engineering selection.
+The reader is referred to Appendix \ref{appendix:cots-database} for the full list of COTS with their corresponding generic EPS component type, part identifier, and mass as one representative property. The full database is available in the project repository \cite{repo} as tab-separated tables.
+
+\begin{table}[htbp]
+\centering
+\caption{COTS product counts by catalog category.}
+\label{tab:cots-catalog-counts}
+\small
+\begin{tabular}{lr@{\hspace{1.5em}}lr}
+\toprule
+Category & Products & Category & Products \\
+\midrule
+Battery & 13 & Solar array & 12 \\
+DC/DC converter & 17 & Regulator/converter & 3 \\
+Integrated EPS & 3 & Battery charger & 5 \\
+Battery protector & 6 & Ideal diode & 7 \\
+Load switch & 17 & Power circuit switch & 11 \\
+Current sensor & 13 & Temperature sensor & 11 \\
+Sensor & 3 & Heater & 6 \\
+Processor & 8 & Nonvolatile memory & 5 \\
+Real-time clock & 5 & Hardware component & 2 \\
+\midrule
+\multicolumn{3}{l}{Total distinct products} & 147 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{L03: Simulation and analysis}
 L03 will implement FR-12 and FR-14 to FR-20 through Python expressions and numerical analyses referenced by requirements. L01 will retain the mission inputs required by FR-13 and supply them to L03, following Table~\ref{tab:logical-responsibilities}.
@@ -485,6 +577,15 @@ Only the detectors declared for the selected product will be checked. Thresholds
 A passing result will establish that the supplied normal operating cases remain within the declared no-trip bounds for an enabled, recovered device. A failed comparison will identify a possible trip. Trip delay, hysteresis, startup, fault interruption and recovery will require separate evidence. This will define the scope of the FR-20 analysis.
 
 \section{L04: Configuration Management}
-Finally, L04's assigned requirement FR-09 has an uncomplicated implementation owing to the fact that Python models and analysis scripts are plain-text files, and thus can be version controlled with Github to track changes at the parameter value level and finer.
-Each Github commit represents a retained baseline that can include rationales and authorship information, and can be synchronized across devices using public Github repositories.
-% a figure with a git diff after changing one property value and making a requirement unverified
+For FR-09, Git retains the Python model configuration and analysis functions as text, allowing changes to individual property expressions to be compared (Figure~\ref{fig:configuration-diff}).
+Each commit identifies a retained baseline with its author and rationale.
+A GitHub repository can synchronize these baselines across devices.
+Verification results are recalculated from the retained inputs and analysis definitions.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig/design-proposal/configuration-diff.pdf}
+\caption[Configuration change and verification impact.]{A Git diff records the same battery rating change used in Figure~\ref{fig:parameter-impact}. Evaluating the retained 20.35~Wh configuration gives 73260~J and a passing requirement. Evaluating the edited 3.0~Wh configuration gives 10800~J and a failing requirement against the unchanged 14400~J target. The verdicts are calculated results, separate from the stored input change.}
+\label{fig:configuration-diff}
+\end{figure}
+\endgroup
