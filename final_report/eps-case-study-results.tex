@@ -1,0 +1,59 @@
+\section{EPS case studies}
+\label{section:eps-case-study-results}
+
+The EPS case studies verify the calculations required by FR-12 and FR-14 to FR-20 using BIRDS-4 and OreSat data.
+Mission publications supply component ratings and selected calculation results \citep{birds2021batteryverification,shrestha2022birds4powerbudget,greenberg2021oresat,oresat2025solardesign}.
+Explicit assumptions supply the remaining inputs.
+
+\subsection{Verification setup}
+
+The BIRDS electrical case uses a two-cell 3G30A solar section and a 3S2P NiMH battery.
+The OreSat case uses a two-cell XTE-SF section and two independent 2S1P lithium-ion packs.
+Both baseline sections face the Sun.
+The comparisons also cover changes in illumination, cell technology, series and parallel arrangements, bus voltage and power-transfer method.
+Appendix~\ref{appendix:eps-case-studies} groups the inputs and selected results by the requirement they verify.
+
+Independent reference values were calculated directly from the input data, without calling the framework's numerical functions.
+The reference summed component masses and volumes, calculated duty-weighted state powers, and obtained phase energies from mean power and duration.
+Loss-adjusted phase energies determined source-power demand.
+Battery sizing used eclipse demand, the assumed cycle-life/DoD relation and the energy margin.
+Power and energy ratios were rounded upward to obtain integer cell counts.
+These sums, products and ratios used decimal arithmetic, with 40 significant digits for products and ratios.
+A separate orbital reference solved Kepler's equation at uniformly spaced times and tested Earth shadow in Cartesian coordinates.
+This provided an independent check of the framework's shadow-boundary and panel-projection calculations.
+
+Each nonzero numerical output had to agree with its reference within 1\%.
+Zero values, integer counts and discrete outcomes required exact agreement.
+The appendix reports maximum deviations and representative comparisons, with repeated outputs and deliberately failing cases omitted from the detailed tables.
+
+\subsection{Results and discussion}
+
+The numerical comparisons met the 1\% criterion for every assessed requirement in both mission cases.
+Integer counts and discrete outcomes also matched their references.
+No unexpected mismatch was found.
+Appendix~\ref{appendix:eps-case-studies} separates the evidence for mass accounting, sizing, component choices, electrical configurations, conversion, photovoltaic characteristics, transfer paths and protection.
+
+The largest deviation was 0.331\% in the BIRDS photovoltaic power comparison for FR-18.
+The framework calculated $5.123\times0.050=0.25615$~W, compared with the published 0.257~W label.
+The next largest deviation was 0.315\% for FR-14, where the OreSat cell ratings gave 2.34738~W against a published two-cell value of 2.34~W.
+Both comparisons use printed values with limited precision.
+They check consistency with the publications at the stated tolerance, while the separately calculated references provide a more precise check of the arithmetic.
+
+The largest deviation from an independent calculation was 0.000864\% in the BIRDS battery-energy requirement.
+The framework returned 4243.934~J against 4243.970~J from the reference.
+This difference follows from the finite time grid used to estimate eclipse duration in the orbital reference.
+Doubling that grid changed eclipse duration by at most 0.00205\%.
+The minimum integer cell counts remained unchanged.
+The small energy difference therefore had no effect on the sizing decisions checked here.
+
+These results support using the framework for EPS accounting, preliminary sizing and comparisons of entered component options.
+The evidence includes independent calculations of both the component quantities and the orbital geometry that links illumination to the power budget.
+For FR-15 and FR-16, the technology and arrangement comparisons reproduced the expected changes in power, voltage, energy and capacity.
+For FR-17, FR-19 and FR-20, terminal currents, transfer-path powers and protection comparisons agreed with the separately evaluated electrical relations.
+This connects the numerical agreement to the decisions the framework is intended to support.
+
+The remaining uncertainty concerns specific input models.
+The complete verification curves use three photovoltaic points, and the battery life fits are assumed.
+The published BIRDS 1.575~W measured peak remains unreconstructed.
+OreSat's partial solar sweep supplies power-product checks but lacks the endpoints needed for a complete characteristic.
+The case studies consequently provide stronger evidence for correct calculation and comparison than for reproducing either mission's measured energy performance.

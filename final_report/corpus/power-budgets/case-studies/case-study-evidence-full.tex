@@ -1,0 +1,2975 @@
+\chapter{EPS Case Study Evidence}
+\label{appendix:eps-case-studies}
+These are declared BIRDS-derived and OreSat-derived verification configurations.
+They use published component data and supplied assumptions.
+The 36 scenario groups contain 877 executed comparisons: 812 resolved matches,
+32 expected unknowns and 33 expected errors.
+Every executed comparison meets its rule. False engineering verdicts remain false.
+The largest nonzero numerical deviation is 0.3307393\%.
+The BIRDS measured 1.575~W peak remains outside the reconstructed outputs.
+Complete curves in the verification cases are declared three-anchor approximations.
+These results establish no complete flight reproduction, chronological energy
+simulation, tracker dynamics or hardware qualification.
+
+\section{Method and boundaries}
+BIRDS uses one 2S1P 3G30A section on a 1U bus and a 3S2P NiMH pack.
+OreSat uses one 2S1P XTE-SF section on a 2U bus and two independent 2S1P
+Li-ion packs. Their stored energies are added for bookkeeping.
+Independent branch currents are not silently combined.
+Sun pointing on $+Z$ is a supplied variation from the original mission rotation.
+Nadir variations hold $-Z$ toward Earth with zero clocking.
+The array is one unobstructed section.
+The alternative 4S section and silicon plate are supplied deployed configurations.
+
+The standalone mass cases retain their own boundaries.
+BIRDS first checks the published six-cell 162~g sum, then an assumed complete EPS.
+OreSat uses historical 2016 solar and battery module masses with assumed
+conversion/distribution contributions and volumes.
+They are separate from the later electrical case.
+
+Sources are given in the register below.
+Every quantity without an applicable source is a supplied assumption (A).
+This includes lifetime and DoD fits, complete curve shape between anchors,
+retention assumptions, efficiencies, receiving limits, allocations, charger
+conditions and unavailable occupied volumes.
+The BIRDS cell fluence row supplies its EOL scalar data.
+Those effects are applied once.
+The OreSat and silicon EOL current retention of 0.9 is supplied.
+Each battery sizing margin is 0.2 and its separate retained energy/capacity
+factors are 0.8.
+Scalar volume and area screens establish no mechanical qualification.
+
+The independent orbital method solves Kepler's equation at uniform time
+midpoints and tests Cartesian cylindrical shadow and positive projection.
+It uses 262144 samples, checked against 131072 samples.
+The largest duration-grid bound is below 0.044~s.
+The largest coarse/fine eclipse change is 0.002050\%.
+The largest projection change is 0.0006173\%.
+The reference module imports no framework code.
+
+Native Properties and Requirements provide the implemented model results.
+Mass margins, mean-load aggregation, charger criteria, converter interval
+criteria, storage volume and bus-loss accounting use explicitly authored
+ordinary Properties and Requirements.
+Direct public numerical function calls are labelled in the retained ledger.
+The six JSON/CSV replay artifacts are byte identical.
+The framework revision and all model/script hashes are retained in the evidence.
+
+\section{Baseline numerical results}
+
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3956\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.2162\linewidth} >{\raggedright\arraybackslash}p{0.2162\linewidth}@{}}
+\toprule
+Quantity & Unit & BIRDS actual & OreSat actual \\ \midrule
+\endfirsthead
+\toprule
+Quantity & Unit & BIRDS actual & OreSat actual \\ \midrule
+\endhead
+\bottomrule\endfoot
+Orbital period & s & 5553.452 & 5738.819 \\
+Sunlight duration & s & 3486.475 & 3602.202 \\
+Eclipse duration & s & 2066.977 & 2136.617 \\
+Mean sunlight load & W & 0.6442 & 0.53 \\
+Mean eclipse load & W & 0.6022 & 0.43 \\
+Sunlight load energy & J & 2245.987 & 1909.167 \\
+Eclipse load energy & J & 1244.734 & 918.7453 \\
+Minimum panel power & W & 1.233906 & 0.9635975 \\
+Mean available source power & W & 2.006224 & 1.9468 \\
+Fractional solar count & cell & 1.133517 & 0.9122203 \\
+Minimum integer solar count & cell & 2 & 1 \\
+Minimum solar parallel strings & string & 1 & 1 \\
+Cycle demand & cycle & 5682.52 & 10997.94 \\
+Selected DoD & 1 & 0.3519565 & 0.1818522 \\
+Required BOL battery energy & J & 4243.934 & 6062.585 \\
+Minimum battery parallel strings & string & 1 & 1 \\
+BOL energy per primary pack & Wh & 13.68 & 18.72 \\
+BOL capacity per primary pack & Ah & 3.8 & 2.6 \\
+Retained energy per primary pack & J & 39398.4 & 53913.6 \\
+Retained capacity per primary pack & Ah & 3.04 & 2.08 \\
+Active area & m2 & 0.006036 & 0.0054 \\
+Installed panel area & m2 & 0.007545 & 0.00675 \\
+Required active area & m2 & 0.003712375 & 0.00267281 \\
+Assumed complete storage occupied volume & m3 & 6.92e-05 & 0.000112 \\
+\end{longtable}\endgroup
+
+\section{Complete baseline inputs}
+
+Units are km, degrees, years, V, A, Wh, Ah, m$^2$ and m$^3$ as indicated by field names. Efficiencies, retentions, packing, duties and DoD are fractions. The cycle law is $N=a\,\mathrm{DoD}^{b}$. The supplied phase allocations are not inferred chronology.
+
+\subsection{BIRDS-4}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Input & Value \\ \midrule
+\endfirsthead
+\toprule
+Input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+absolute\_\allowbreak{}max & 15 \\
+altitude & 400 \\
+array.area & 0.003018 \\
+array.bol\_\allowbreak{}imp & 0.5029 \\
+array.bol\_\allowbreak{}isc & 0.5196 \\
+array.bol\_\allowbreak{}vmp & 2.409 \\
+array.bol\_\allowbreak{}voc & 2.69 \\
+array.curve & true \\
+array.imp & 0.4851 \\
+array.isc & 0.5013 \\
+array.packing & 0.8 \\
+array.parallel & 1 \\
+array.product & 3G30A \\
+array.reference\_\allowbreak{}irradiance & 1367 \\
+array.retention\_\allowbreak{}kind & supplied1e15fluence EOL anchors \\
+array.series & 2 \\
+array.source & B-Azur \\
+array.technology & triple-junction GaAs \\
+array.usable & 0.008 \\
+array.vmp & 2.244 \\
+array.voc & 2.512 \\
+assembly & 0.97 \\
+available\_\allowbreak{}eclipse & 1800 \\
+available\_\allowbreak{}sunlight & 3000 \\
+battery.capacity\_\allowbreak{}retention & 0.8 \\
+battery.cell\_\allowbreak{}ah & 1.9 \\
+battery.cell\_\allowbreak{}volume\_\allowbreak{}m3 & 8.2e-06 \\
+battery.cell\_\allowbreak{}wh & 2.28 \\
+battery.charge\_\allowbreak{}limit & 0.95 \\
+battery.chemistry & NiMH \\
+battery.discharge\_\allowbreak{}limit & 2 \\
+battery.energy\_\allowbreak{}retention & 0.8 \\
+battery.fit\_\allowbreak{}a & 2000 \\
+battery.fit\_\allowbreak{}b & -1 \\
+battery.fit\_\allowbreak{}max & 0.8 \\
+battery.fit\_\allowbreak{}min & 0.1 \\
+battery.independent\_\allowbreak{}packs & 1 \\
+battery.margin & 0.2 \\
+battery.maximum & 1.45 \\
+battery.minimum & 1 \\
+battery.nominal & 1.2 \\
+battery.packaging\_\allowbreak{}volume\_\allowbreak{}m3 & 2e-05 \\
+battery.parallel & 2 \\
+battery.product & BK-3MCC mission minimum-capacity convention \\
+battery.series & 3 \\
+battery.source & B-cell; maximum voltage/current limits,\allowbreak{} occupied envelopes and life inputs A \\
+battery.temperature\_\allowbreak{}C & 25 \\
+battery\_\allowbreak{}receiving\_\allowbreak{}max & 5 \\
+battery\_\allowbreak{}receiving\_\allowbreak{}min & 2.5 \\
+battery\_\allowbreak{}usable\_\allowbreak{}volume\_\allowbreak{}m3 & 0.00012 \\
+beta & 30 \\
+bus\_\allowbreak{}tolerance & 0.05 \\
+charger.allowed\_\allowbreak{}max & 4.35 \\
+charger.allowed\_\allowbreak{}min & 3.9 \\
+charger.chemistry & NiMH \\
+charger.current & 0.4 \\
+charger.current\_\allowbreak{}limit & 1.9 \\
+charger.product & supplied NiMH3S charger \\
+charger.required\_\allowbreak{}termination & negative\_\allowbreak{}delta\_\allowbreak{}V \\
+charger.series & 3 \\
+charger.set\_\allowbreak{}voltage & 4.2 \\
+charger.source & A,\allowbreak{} engineering selection. Not the flown LTC3119 charge architecture. \\
+charger.termination & negative\_\allowbreak{}delta\_\allowbreak{}V \\
+converter\_\allowbreak{}current & 1 \\
+converter\_\allowbreak{}efficiency & 0.9 \\
+converter\_\allowbreak{}in\_\allowbreak{}max & 18 \\
+converter\_\allowbreak{}in\_\allowbreak{}min & 2.5 \\
+converter\_\allowbreak{}product & LTC3119 selected5V and TPS63020-Q1 selected3.3V (complete circuits assumed) \\
+days\_\allowbreak{}per\_\allowbreak{}year & 365.25 \\
+earth\_\allowbreak{}radius & 6378 \\
+eccentricity & 0 \\
+eclipse\_\allowbreak{}path & 0.75 \\
+inherent & 0.95 \\
+irradiance & 1367 \\
+lifetime & 1 \\
+loads.source & A. Near B-budget scalar levels,\allowbreak{} with independently supplied currents/duties. Whole spacecraft representative load boundary. \\
+loads.states[0].current & 0.13 \\
+loads.states[0].eclipse\_\allowbreak{}duty & 1 \\
+loads.states[0].name & main \\
+loads.states[0].sun\_\allowbreak{}duty & 1 \\
+loads.states[0].voltage & 3.3 \\
+loads.states[1].current & 0.044 \\
+loads.states[1].eclipse\_\allowbreak{}duty & 1 \\
+loads.states[1].name & receiver \\
+loads.states[1].sun\_\allowbreak{}duty & 1 \\
+loads.states[1].voltage & 3.3 \\
+loads.states[2].current & 0.056 \\
+loads.states[2].eclipse\_\allowbreak{}duty & 0.1 \\
+loads.states[2].name & beacon \\
+loads.states[2].sun\_\allowbreak{}duty & 0.25 \\
+loads.states[2].voltage & 5 \\
+mission & BIRDS-4 \\
+mu & 398601 \\
+pointing & sun\_\allowbreak{}pointing \\
+provenance & ["B-cell",\allowbreak{}"B-Azur",\allowbreak{}"B-orbit",\allowbreak{}"B-rail",\allowbreak{}"A"] \\
+required\_\allowbreak{}charge & 0.4 \\
+required\_\allowbreak{}discharge & 0.8 \\
+source\_\allowbreak{}current\_\allowbreak{}limit & 1.2 \\
+source\_\allowbreak{}note & A unless source map below identifies a published rating \\
+sun\_\allowbreak{}angle & 0 \\
+sun\_\allowbreak{}path & 0.85 \\
+tracker\_\allowbreak{}max & 12 \\
+tracker\_\allowbreak{}min & 2 \\
+units & 1 \\
+\end{longtable}\endgroup
+
+\subsection{OreSat}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Input & Value \\ \midrule
+\endfirsthead
+\toprule
+Input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+absolute\_\allowbreak{}max & 15 \\
+altitude & 550 \\
+array.area & 0.0027 \\
+array.bol\_\allowbreak{}imp & 0.483 \\
+array.bol\_\allowbreak{}isc & 0.502 \\
+array.bol\_\allowbreak{}vmp & 2.43 \\
+array.bol\_\allowbreak{}voc & 2.75 \\
+array.curve & true \\
+array.imp & 0.4347 \\
+array.isc & 0.4518 \\
+array.packing & 0.8 \\
+array.parallel & 1 \\
+array.product & XTE-SF \\
+array.reference\_\allowbreak{}irradiance & 1367 \\
+array.retention\_\allowbreak{}kind & A .9 EOL current at constant voltage \\
+array.series & 2 \\
+array.source & O-solar \\
+array.technology & triple-junction GaAs \\
+array.usable & 0.008 \\
+array.vmp & 2.43 \\
+array.voc & 2.75 \\
+assembly & 0.97 \\
+available\_\allowbreak{}eclipse & 1800 \\
+available\_\allowbreak{}sunlight & 3000 \\
+battery.capacity\_\allowbreak{}retention & 0.8 \\
+battery.cell\_\allowbreak{}ah & 2.6 \\
+battery.cell\_\allowbreak{}volume\_\allowbreak{}m3 & 1.8e-05 \\
+battery.cell\_\allowbreak{}wh & 9.36 \\
+battery.charge\_\allowbreak{}limit & 1.25 \\
+battery.chemistry & Li-ion \\
+battery.discharge\_\allowbreak{}limit & 5 \\
+battery.energy\_\allowbreak{}retention & 0.8 \\
+battery.fit\_\allowbreak{}a & 2000 \\
+battery.fit\_\allowbreak{}b & -1 \\
+battery.fit\_\allowbreak{}max & 0.8 \\
+battery.fit\_\allowbreak{}min & 0.1 \\
+battery.independent\_\allowbreak{}packs & 2 \\
+battery.margin & 0.2 \\
+battery.maximum & 4.2 \\
+battery.minimum & 2.75 \\
+battery.nominal & 3.6 \\
+battery.packaging\_\allowbreak{}volume\_\allowbreak{}m3 & 2e-05 \\
+battery.parallel & 1 \\
+battery.product & Tenergy30005-0,\allowbreak{} one2S string \\
+battery.series & 2 \\
+battery.source & O-pack;Li-ion; occupied envelopes,\allowbreak{} fit and retentions A \\
+battery.temperature\_\allowbreak{}C & 25 \\
+battery\_\allowbreak{}receiving\_\allowbreak{}max & 9 \\
+battery\_\allowbreak{}receiving\_\allowbreak{}min & 5 \\
+battery\_\allowbreak{}usable\_\allowbreak{}volume\_\allowbreak{}m3 & 0.00016 \\
+beta & 0 \\
+bus\_\allowbreak{}tolerance & 0.05 \\
+charger.allowed\_\allowbreak{}max & 8.4 \\
+charger.allowed\_\allowbreak{}min & 8.3 \\
+charger.chemistry & Li-ion \\
+charger.current & 0.4 \\
+charger.current\_\allowbreak{}limit & 1.25 \\
+charger.product & supplied2S Li-ion charger \\
+charger.required\_\allowbreak{}termination & CC\_\allowbreak{}CV \\
+charger.series & 2 \\
+charger.set\_\allowbreak{}voltage & 8.4 \\
+charger.source & A,\allowbreak{}25 C current setting. Not a claim of LT1618 full charger behavior. \\
+charger.termination & CC\_\allowbreak{}CV \\
+converter\_\allowbreak{}current & 1.5 \\
+converter\_\allowbreak{}efficiency & 0.9 \\
+converter\_\allowbreak{}in\_\allowbreak{}max & 17 \\
+converter\_\allowbreak{}in\_\allowbreak{}min & 3.1 \\
+converter\_\allowbreak{}product & TPS62111/12 \\
+days\_\allowbreak{}per\_\allowbreak{}year & 365.25 \\
+earth\_\allowbreak{}radius & 6378 \\
+eccentricity & 0 \\
+eclipse\_\allowbreak{}path & 0.75 \\
+inherent & 0.95 \\
+irradiance & 1367 \\
+lifetime & 2 \\
+loads.source & A. Complete representative whole-spacecraft demand,\allowbreak{} not the2019 full mission schedule. \\
+loads.states[0].current & 0.06 \\
+loads.states[0].eclipse\_\allowbreak{}duty & 1 \\
+loads.states[0].name & main \\
+loads.states[0].sun\_\allowbreak{}duty & 1 \\
+loads.states[0].voltage & 3.3 \\
+loads.states[1].current & 0.04 \\
+loads.states[1].eclipse\_\allowbreak{}duty & 1 \\
+loads.states[1].name & receiver \\
+loads.states[1].sun\_\allowbreak{}duty & 1 \\
+loads.states[1].voltage & 3.3 \\
+loads.states[2].current & 0.2 \\
+loads.states[2].eclipse\_\allowbreak{}duty & 0.1 \\
+loads.states[2].name & payload \\
+loads.states[2].sun\_\allowbreak{}duty & 0.2 \\
+loads.states[2].voltage & 5 \\
+mission & OreSat \\
+mu & 398601 \\
+pointing & sun\_\allowbreak{}pointing \\
+provenance & ["O-pack",\allowbreak{}"O-solar",\allowbreak{}"Li-ion",\allowbreak{}"O-rail",\allowbreak{}"A"] \\
+required\_\allowbreak{}charge & 0.4 \\
+required\_\allowbreak{}discharge & 0.8 \\
+source\_\allowbreak{}current\_\allowbreak{}limit & 1.2 \\
+source\_\allowbreak{}note & A unless source map below identifies a published rating \\
+sun\_\allowbreak{}angle & 0 \\
+sun\_\allowbreak{}path & 0.85 \\
+tracker\_\allowbreak{}max & 12 \\
+tracker\_\allowbreak{}min & 2 \\
+units & 2 \\
+\end{longtable}\endgroup
+
+\section{Variation inputs}
+
+Each variation inherits all baseline inputs not listed. Arrays of invalid values denote separate assessments. The output ledger retains every resulting status or verdict. No input is inferred from a calculated output.
+
+\subsection{BIRDS-4:01-mass-boundaries}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+BIRDS\_\allowbreak{}pack\_\allowbreak{}overhead\_\allowbreak{}assumed\_\allowbreak{}kg & 0.078 \\
+assumed\_\allowbreak{}solar\_\allowbreak{}module\_\allowbreak{}envelope\_\allowbreak{}m & unresolved \\
+mass\_\allowbreak{}allocation\_\allowbreak{}initial\_\allowbreak{}kg & 0.35 \\
+mass\_\allowbreak{}allocation\_\allowbreak{}variations & ["exact total",\allowbreak{}0.1] \\
+masses\_\allowbreak{}kg & [0.24,\allowbreak{}0.018,\allowbreak{}0.025,\allowbreak{}0.017] \\
+mission & BIRDS-4 \\
+solar\_\allowbreak{}module\_\allowbreak{}count & unresolved \\
+source & B-cell; all complete EPS masses/volumes A \\
+unknown & ["SolarArray.mass",\allowbreak{}"SolarArray.volume"] \\
+volume\_\allowbreak{}allocation\_\allowbreak{}m3 & 0.00015 \\
+volumes\_\allowbreak{}m3 & [8e-05,\allowbreak{}6e-06,\allowbreak{}2e-05,\allowbreak{}1.5e-05] \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:02-states-modes-circular}
+
+The numerical inputs are the complete baseline.
+
+\subsection{BIRDS-4:03-eccentric-nadir}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+beta & 25 \\
+eccentricity & 0.02 \\
+pointing & nadir \\
+sun\_\allowbreak{}angle & 47 \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:04-eclipse-free}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+beta & 90 \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:05-baseline-sizing}
+
+The numerical inputs are the complete baseline.
+
+\subsection{BIRDS-4:05-baseline-sizing:BOL}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+array.imp & 0.5029 \\
+array.isc & 0.5196 \\
+array.retention\_\allowbreak{}kind & BOL anchors,\allowbreak{} no solar lifetime reduction \\
+array.vmp & 2.409 \\
+array.voc & 2.69 \\
+solar\_\allowbreak{}age & BOL \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:06-silicon-technology}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+array.area & 9.17e-05 \\
+array.bol\_\allowbreak{}imp & 0.006 \\
+array.bol\_\allowbreak{}isc & 0.0063 \\
+array.bol\_\allowbreak{}vmp & 4.46 \\
+array.bol\_\allowbreak{}voc & 5.53 \\
+array.imp & 0.0054 \\
+array.isc & 0.00567 \\
+array.packing & 0.4983696 \\
+array.parallel & 10 \\
+array.product & IXOLAR SSM \\
+array.reference\_\allowbreak{}irradiance & 1362 \\
+array.retention\_\allowbreak{}kind & A .9 EOL current at constant voltage \\
+array.series & 4 \\
+array.source & Si; A40 packages on deployed .08x.125m plate. Layout8x5 uses.064x.115m. Electrical4S10P is supplied independently of physical placement. Scalar area check establishes no mechanical qualification. \\
+array.technology & monocrystalline silicon \\
+array.temperature\_\allowbreak{}C & 28 \\
+array.usable & 0.01 \\
+array.vmp & 4.46 \\
+array.voc & 5.53 \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:07-battery-chemistry:incompatible}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+battery.cell\_\allowbreak{}ah & 2.6 \\
+battery.cell\_\allowbreak{}volume\_\allowbreak{}m3 & 1.8e-05 \\
+battery.cell\_\allowbreak{}wh & 9.36 \\
+battery.charge\_\allowbreak{}limit & 1.25 \\
+battery.chemistry & Li-ion \\
+battery.discharge\_\allowbreak{}limit & 5 \\
+battery.maximum & 4.2 \\
+battery.minimum & 2.75 \\
+battery.nominal & 3.6 \\
+battery.product & Tenergy30005-0 \\
+battery.series & 1 \\
+battery.source & Li-ion; A occupied envelopes,\allowbreak{} fit and retentions \\
+charger.allowed\_\allowbreak{}max & 4.2 \\
+charger.allowed\_\allowbreak{}min & 4.1 \\
+charger.required\_\allowbreak{}termination & CC\_\allowbreak{}CV \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:07-battery-chemistry:selected-new-charger}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+battery.cell\_\allowbreak{}ah & 2.6 \\
+battery.cell\_\allowbreak{}volume\_\allowbreak{}m3 & 1.8e-05 \\
+battery.cell\_\allowbreak{}wh & 9.36 \\
+battery.charge\_\allowbreak{}limit & 1.25 \\
+battery.chemistry & Li-ion \\
+battery.discharge\_\allowbreak{}limit & 5 \\
+battery.maximum & 4.2 \\
+battery.minimum & 2.75 \\
+battery.nominal & 3.6 \\
+battery.product & Tenergy30005-0 \\
+battery.series & 1 \\
+battery.source & Li-ion; A occupied envelopes,\allowbreak{} fit and retentions \\
+charger.allowed\_\allowbreak{}max & 4.2 \\
+charger.allowed\_\allowbreak{}min & 4.1 \\
+charger.chemistry & Li-ion \\
+charger.current\_\allowbreak{}limit & 2.5 \\
+charger.required\_\allowbreak{}termination & CC\_\allowbreak{}CV \\
+charger.series & 1 \\
+charger.termination & CC\_\allowbreak{}CV \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:08-integer-configurations}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+additional\_\allowbreak{}mutations.Battery.parallel\_\allowbreak{}count & [0,\allowbreak{}-1,\allowbreak{}2.5,\allowbreak{}true] \\
+additional\_\allowbreak{}mutations.SolarArray.cell\_\allowbreak{}count & 99 \\
+additional\_\allowbreak{}mutations.SolarArray.series\_\allowbreak{}count & [0,\allowbreak{}-1,\allowbreak{}2.5,\allowbreak{}true] \\
+array.series & 4 \\
+array.usable & 0.016 \\
+battery.parallel & 1 \\
+battery.series & 2 \\
+deployment.columns & 2 \\
+deployment.edge\_\allowbreak{}clearance\_\allowbreak{}m & 0.003 \\
+deployment.gap\_\allowbreak{}m & 0.002 \\
+deployment.package\_\allowbreak{}dimension\_\allowbreak{}tolerance\_\allowbreak{}m & 0.0001 \\
+deployment.package\_\allowbreak{}length\_\allowbreak{}m & 0.08015 \\
+deployment.package\_\allowbreak{}width\_\allowbreak{}m & 0.04015 \\
+deployment.plate\_\allowbreak{}length\_\allowbreak{}m & 0.17 \\
+deployment.plate\_\allowbreak{}width\_\allowbreak{}m & 0.1 \\
+deployment.rows & 2 \\
+deployment.source & B-Azur nominal assembly dimensions40.15x80.15mm with source +/-0.1mm tolerance. Plate,\allowbreak{}2x2 arrangement,\allowbreak{}gaps and edge clearances are A. \\
+deployment.usable\_\allowbreak{}area\_\allowbreak{}m2 & 0.016 \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:09-converter-rails}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+alternative\_\allowbreak{}converter\_\allowbreak{}interval\_\allowbreak{}V & [3.1,\allowbreak{}17.0] \\
+alternative\_\allowbreak{}converter\_\allowbreak{}product & TPS62111 (3S NiMH lower bound3.0V fails3.1V) \\
+alternative\_\allowbreak{}current\_\allowbreak{}A & 1.1 \\
+alternative\_\allowbreak{}output\_\allowbreak{}V & 5.06 \\
+rail\_\allowbreak{}cases[0].A & 0.5 \\
+rail\_\allowbreak{}cases[0].V & 3.3 \\
+rail\_\allowbreak{}cases[1].A & 0.4 \\
+rail\_\allowbreak{}cases[1].V & 5 \\
+selected\_\allowbreak{}3p3V\_\allowbreak{}product & TPS63020-Q1 input1.8-5.5V \\
+selected\_\allowbreak{}5V\_\allowbreak{}product & LTC3119 input2.5-18V \\
+unknown & converter.efficiency \\
+voltage\_\allowbreak{}tolerance & 0.05 \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:10-characteristics}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+invalid\_\allowbreak{}curves & [["partial",\allowbreak{}[[2.244,\allowbreak{}0.4851],\allowbreak{}[2.512,\allowbreak{}0.0]]],\allowbreak{}["duplicate\_\allowbreak{}voltage",\allowbreak{}[[0.0,\allowbreak{}0.5],\allowbreak{}[1.0,\allowbreak{}0.4],\allowbreak{}[1.0,\allowbreak{}0.3],\allowbreak{}[2.0,\allowbreak{}0.0]]],\allowbreak{}["negative\_\allowbreak{}current",\allowbreak{}[[0.0,\allowbreak{}0.5],\allowbreak{}[1.0,\allowbreak{}-0.1],\allowbreak{}[2.0,\allowbreak{}0.0]]],\allowbreak{}["nonfinite",\allowbreak{}[[0.0,\allowbreak{}0.5],\allowbreak{}[1.0,\allowbreak{}"nan"],\allowbreak{}[2.0,\allowbreak{}0.0]]]] \\
+purchased\_\allowbreak{}panel\_\allowbreak{}variation & 2cell module curve voltage x2,\allowbreak{} active area x2,\allowbreak{} external1S1P \\
+source\_\allowbreak{}curve\_\allowbreak{}limit & Three-anchor approximation,\allowbreak{} not complete measured curve. \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:11-baseline-DET:DET}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+DET\_\allowbreak{}drop\_\allowbreak{}V & 0.2 \\
+bus\_\allowbreak{}nominal\_\allowbreak{}V & 3.6 \\
+common\_\allowbreak{}bus\_\allowbreak{}demand\_\allowbreak{}W & 0.5 \\
+fixed\_\allowbreak{}setpoint\_\allowbreak{}V & unresolved \\
+method & DET \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:12-baseline-ideal-MPPT:MPPT}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+DET\_\allowbreak{}drop\_\allowbreak{}V & 0.2 \\
+bus\_\allowbreak{}nominal\_\allowbreak{}V & 3.6 \\
+common\_\allowbreak{}bus\_\allowbreak{}demand\_\allowbreak{}W & 0.5 \\
+fixed\_\allowbreak{}setpoint\_\allowbreak{}V & unresolved \\
+method & MPPT \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:13-baseline-fixed-voltage:FIXED\_\allowbreak{}VOLTAGE}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+DET\_\allowbreak{}drop\_\allowbreak{}V & 0.2 \\
+bus\_\allowbreak{}nominal\_\allowbreak{}V & 3.6 \\
+common\_\allowbreak{}bus\_\allowbreak{}demand\_\allowbreak{}W & 0.5 \\
+fixed\_\allowbreak{}setpoint\_\allowbreak{}V & 4 \\
+method & FIXED\_\allowbreak{}VOLTAGE \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:14-unflown-4S-pair:DET}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+DET\_\allowbreak{}drop\_\allowbreak{}V & 0.2 \\
+array.series & 4 \\
+array.usable & 0.016 \\
+bus\_\allowbreak{}nominal\_\allowbreak{}V & 3.6 \\
+common\_\allowbreak{}bus\_\allowbreak{}demand\_\allowbreak{}W & 0.5 \\
+deployment.columns & 2 \\
+deployment.edge\_\allowbreak{}clearance\_\allowbreak{}m & 0.003 \\
+deployment.gap\_\allowbreak{}m & 0.002 \\
+deployment.package\_\allowbreak{}dimension\_\allowbreak{}tolerance\_\allowbreak{}m & 0.0001 \\
+deployment.package\_\allowbreak{}length\_\allowbreak{}m & 0.08015 \\
+deployment.package\_\allowbreak{}width\_\allowbreak{}m & 0.04015 \\
+deployment.plate\_\allowbreak{}length\_\allowbreak{}m & 0.17 \\
+deployment.plate\_\allowbreak{}width\_\allowbreak{}m & 0.1 \\
+deployment.rows & 2 \\
+deployment.source & B-Azur nominal assembly dimensions40.15x80.15mm with source +/-0.1mm tolerance. Plate,\allowbreak{}2x2 arrangement,\allowbreak{}gaps and edge clearances are A. \\
+deployment.usable\_\allowbreak{}area\_\allowbreak{}m2 & 0.016 \\
+fixed\_\allowbreak{}setpoint\_\allowbreak{}V & 8 \\
+method & DET \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:14-unflown-4S-pair:FIXED\_\allowbreak{}VOLTAGE}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+DET\_\allowbreak{}drop\_\allowbreak{}V & 0.2 \\
+array.series & 4 \\
+array.usable & 0.016 \\
+bus\_\allowbreak{}nominal\_\allowbreak{}V & 3.6 \\
+common\_\allowbreak{}bus\_\allowbreak{}demand\_\allowbreak{}W & 0.5 \\
+deployment.columns & 2 \\
+deployment.edge\_\allowbreak{}clearance\_\allowbreak{}m & 0.003 \\
+deployment.gap\_\allowbreak{}m & 0.002 \\
+deployment.package\_\allowbreak{}dimension\_\allowbreak{}tolerance\_\allowbreak{}m & 0.0001 \\
+deployment.package\_\allowbreak{}length\_\allowbreak{}m & 0.08015 \\
+deployment.package\_\allowbreak{}width\_\allowbreak{}m & 0.04015 \\
+deployment.plate\_\allowbreak{}length\_\allowbreak{}m & 0.17 \\
+deployment.plate\_\allowbreak{}width\_\allowbreak{}m & 0.1 \\
+deployment.rows & 2 \\
+deployment.source & B-Azur nominal assembly dimensions40.15x80.15mm with source +/-0.1mm tolerance. Plate,\allowbreak{}2x2 arrangement,\allowbreak{}gaps and edge clearances are A. \\
+deployment.usable\_\allowbreak{}area\_\allowbreak{}m2 & 0.016 \\
+fixed\_\allowbreak{}setpoint\_\allowbreak{}V & 8 \\
+method & FIXED\_\allowbreak{}VOLTAGE \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:14-unflown-4S-pair:MPPT}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+DET\_\allowbreak{}drop\_\allowbreak{}V & 0.2 \\
+array.series & 4 \\
+array.usable & 0.016 \\
+bus\_\allowbreak{}nominal\_\allowbreak{}V & 3.6 \\
+common\_\allowbreak{}bus\_\allowbreak{}demand\_\allowbreak{}W & 0.5 \\
+deployment.columns & 2 \\
+deployment.edge\_\allowbreak{}clearance\_\allowbreak{}m & 0.003 \\
+deployment.gap\_\allowbreak{}m & 0.002 \\
+deployment.package\_\allowbreak{}dimension\_\allowbreak{}tolerance\_\allowbreak{}m & 0.0001 \\
+deployment.package\_\allowbreak{}length\_\allowbreak{}m & 0.08015 \\
+deployment.package\_\allowbreak{}width\_\allowbreak{}m & 0.04015 \\
+deployment.plate\_\allowbreak{}length\_\allowbreak{}m & 0.17 \\
+deployment.plate\_\allowbreak{}width\_\allowbreak{}m & 0.1 \\
+deployment.rows & 2 \\
+deployment.source & B-Azur nominal assembly dimensions40.15x80.15mm with source +/-0.1mm tolerance. Plate,\allowbreak{}2x2 arrangement,\allowbreak{}gaps and edge clearances are A. \\
+deployment.usable\_\allowbreak{}area\_\allowbreak{}m2 & 0.016 \\
+fixed\_\allowbreak{}setpoint\_\allowbreak{}V & 8 \\
+method & MPPT \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:15-operating-point-contract}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+interpolation\_\allowbreak{}cases & ["none",\allowbreak{}"linear"] \\
+sampling\_\allowbreak{}voltages\_\allowbreak{}V & [4.488,\allowbreak{}3.5904,\allowbreak{}5.034] \\
+selectors & ["WRONG",\allowbreak{}null] \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:16-normal-extrema}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+OC\_\allowbreak{}A & 2 \\
+OV\_\allowbreak{}V & 4.8 \\
+UV\_\allowbreak{}V & 3.5 \\
+charger\_\allowbreak{}endpoint\_\allowbreak{}cross\_\allowbreak{}check & unresolved \\
+independent\_\allowbreak{}corner\_\allowbreak{}OC\_\allowbreak{}A & 2 \\
+independent\_\allowbreak{}corner\_\allowbreak{}OC\_\allowbreak{}source & BIRDS2A regulatedrail setting. OreSat6A supplied separate spacecraft-bus OC device,\allowbreak{} no PTC behavior claim. \\
+independent\_\allowbreak{}corner\_\allowbreak{}powers\_\allowbreak{}W & [1.0,\allowbreak{}3.0,\allowbreak{}7.5] \\
+independent\_\allowbreak{}corner\_\allowbreak{}voltage\_\allowbreak{}V & [4.75,\allowbreak{}5.25] \\
+mission & BIRDS-4 \\
+sensed\_\allowbreak{}rail\_\allowbreak{}current\_\allowbreak{}A & [0.2,\allowbreak{}0.6,\allowbreak{}1.5] \\
+sensed\_\allowbreak{}voltages\_\allowbreak{}V & [3.9,\allowbreak{}4.0,\allowbreak{}4.2] \\
+source & A battery-node UV3.5OV4.8; battery samples from Tsuru observations. OC2A at distinct5Vregulatedrail,\allowbreak{} rail currents/powers A. Additional3/4A railthresholds sourceB-rail. \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:17-threshold-boundaries}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+OC\_\allowbreak{}A & 2 \\
+OV\_\allowbreak{}V & 4.8 \\
+UV\_\allowbreak{}V & 3.5 \\
+additional\_\allowbreak{}OC\_\allowbreak{}scope & BIRDS Unreg2 and Unreg1 are distinct unregulated rail detectors. OreSat6A is a supplied spacecraft battery-bus detector,\allowbreak{} separate from local heater OC and ABLIC cell sensing. \\
+additional\_\allowbreak{}OC\_\allowbreak{}settings[0].rail & Unreg2 \\
+additional\_\allowbreak{}OC\_\allowbreak{}settings[0].threshold\_\allowbreak{}A & 3 \\
+additional\_\allowbreak{}OC\_\allowbreak{}settings[1].rail & Unreg1 \\
+additional\_\allowbreak{}OC\_\allowbreak{}settings[1].threshold\_\allowbreak{}A & 4 \\
+factors & [0.99,\allowbreak{}1.0,\allowbreak{}1.01] \\
+invalid\_\allowbreak{}current & [[-0.01],\allowbreak{}[],\allowbreak{}null] \\
+invalid\_\allowbreak{}voltages & [null,\allowbreak{}[],\allowbreak{}["nan"]] \\
+mission & BIRDS-4 \\
+unknown\_\allowbreak{}OC\_\allowbreak{}threshold & true \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4:18-unknown-invalid-feasibility}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+inadequate\_\allowbreak{}sunlight\_\allowbreak{}delivery\_\allowbreak{}J & 1 \\
+invalid\_\allowbreak{}cycles & 30000 \\
+invalid\_\allowbreak{}orbit.R & 6378 \\
+invalid\_\allowbreak{}orbit.a & 6500 \\
+invalid\_\allowbreak{}orbit.e & 0.2 \\
+invalid\_\allowbreak{}packing & 0 \\
+invalid\_\allowbreak{}retention & 1.1 \\
+unknown & ["SolarArray.series\_\allowbreak{}count",\allowbreak{}"SolarArray.usable\_\allowbreak{}area",\allowbreak{}"Battery.cycle\_\allowbreak{}coefficient",\allowbreak{}"Battery.energy\_\allowbreak{}retention",\allowbreak{}"orbit.altitude"] \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:01-mass-boundaries}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+BIRDS\_\allowbreak{}pack\_\allowbreak{}overhead\_\allowbreak{}assumed\_\allowbreak{}kg & unresolved \\
+assumed\_\allowbreak{}solar\_\allowbreak{}module\_\allowbreak{}envelope\_\allowbreak{}m & [0.1,\allowbreak{}0.1,\allowbreak{}0.003] \\
+mass\_\allowbreak{}allocation\_\allowbreak{}initial\_\allowbreak{}kg & 0.8 \\
+mass\_\allowbreak{}allocation\_\allowbreak{}variations & ["exact total",\allowbreak{}0.1] \\
+masses\_\allowbreak{}kg & [0.416,\allowbreak{}0.252,\allowbreak{}0.035,\allowbreak{}0.025] \\
+mission & OreSat \\
+solar\_\allowbreak{}module\_\allowbreak{}count & 8 \\
+source & O-mass historical2016; all volumes and converter/distribution masses A \\
+unknown & ["SolarArray.mass",\allowbreak{}"SolarArray.volume"] \\
+volume\_\allowbreak{}allocation\_\allowbreak{}m3 & 0.0005 \\
+volumes\_\allowbreak{}m3 & [0.00016,\allowbreak{}0.00024,\allowbreak{}3e-05,\allowbreak{}2e-05] \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:02-states-modes-circular}
+
+The numerical inputs are the complete baseline.
+
+\subsection{OreSat:03-eccentric-nadir}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+beta & 25 \\
+eccentricity & 0.04 \\
+pointing & nadir \\
+sun\_\allowbreak{}angle & 47 \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:04-eclipse-free}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+beta & 90 \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:05-baseline-sizing}
+
+The numerical inputs are the complete baseline.
+
+\subsection{OreSat:05-baseline-sizing:BOL}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+array.imp & 0.483 \\
+array.isc & 0.502 \\
+array.retention\_\allowbreak{}kind & BOL anchors,\allowbreak{} no solar lifetime reduction \\
+solar\_\allowbreak{}age & BOL \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:06-silicon-technology}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+array.area & 9.17e-05 \\
+array.bol\_\allowbreak{}imp & 0.006 \\
+array.bol\_\allowbreak{}isc & 0.0063 \\
+array.bol\_\allowbreak{}vmp & 4.46 \\
+array.bol\_\allowbreak{}voc & 5.53 \\
+array.imp & 0.0054 \\
+array.isc & 0.00567 \\
+array.packing & 0.4983696 \\
+array.parallel & 10 \\
+array.product & IXOLAR SSM \\
+array.reference\_\allowbreak{}irradiance & 1362 \\
+array.series & 4 \\
+array.source & Si; A40 packages on deployed .08x.125m plate. Layout8x5 uses.064x.115m. Electrical4S10P is supplied independently of physical placement. Scalar area check establishes no mechanical qualification. \\
+array.technology & monocrystalline silicon \\
+array.temperature\_\allowbreak{}C & 28 \\
+array.usable & 0.01 \\
+array.vmp & 4.46 \\
+array.voc & 5.53 \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:07-battery-chemistry:incompatible}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+battery.cell\_\allowbreak{}ah & 1.1 \\
+battery.cell\_\allowbreak{}wh & 3.63 \\
+battery.charge\_\allowbreak{}limit & 0.5 \\
+battery.chemistry & LiFePO4 \\
+battery.discharge\_\allowbreak{}limit & 3 \\
+battery.maximum & 3.6 \\
+battery.minimum & 2 \\
+battery.nominal & 3.3 \\
+battery.product & A123 APR18650m1-B \\
+battery.series & 4 \\
+battery.source & LFP; A occupied envelopes,\allowbreak{} limits,\allowbreak{} fit and retentions. Two independent4S1P packs in one verification storage group. No claim that these fit a flown card. Published29Wh refers to two cards. \\
+charger.allowed\_\allowbreak{}max & 14.4 \\
+charger.allowed\_\allowbreak{}min & 14.2 \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:07-battery-chemistry:selected-new-charger}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+battery.cell\_\allowbreak{}ah & 1.1 \\
+battery.cell\_\allowbreak{}wh & 3.63 \\
+battery.charge\_\allowbreak{}limit & 0.5 \\
+battery.chemistry & LiFePO4 \\
+battery.discharge\_\allowbreak{}limit & 3 \\
+battery.maximum & 3.6 \\
+battery.minimum & 2 \\
+battery.nominal & 3.3 \\
+battery.product & A123 APR18650m1-B \\
+battery.series & 4 \\
+battery.source & LFP; A occupied envelopes,\allowbreak{} limits,\allowbreak{} fit and retentions. Two independent4S1P packs in one verification storage group. No claim that these fit a flown card. Published29Wh refers to two cards. \\
+charger.allowed\_\allowbreak{}max & 14.4 \\
+charger.allowed\_\allowbreak{}min & 14.2 \\
+charger.chemistry & LiFePO4 \\
+charger.current\_\allowbreak{}limit & 0.5 \\
+charger.series & 4 \\
+charger.set\_\allowbreak{}voltage & 14.4 \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:08-integer-configurations}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+additional\_\allowbreak{}mutations.Battery.parallel\_\allowbreak{}count & [0,\allowbreak{}-1,\allowbreak{}2.5,\allowbreak{}true] \\
+additional\_\allowbreak{}mutations.SolarArray.cell\_\allowbreak{}count & 99 \\
+additional\_\allowbreak{}mutations.SolarArray.series\_\allowbreak{}count & [0,\allowbreak{}-1,\allowbreak{}2.5,\allowbreak{}true] \\
+array.series & 4 \\
+array.usable & 0.016 \\
+battery.series & 3 \\
+deployment.columns & 2 \\
+deployment.edge\_\allowbreak{}clearance\_\allowbreak{}m & 0.003 \\
+deployment.gap\_\allowbreak{}m & 0.002 \\
+deployment.package\_\allowbreak{}dimension\_\allowbreak{}tolerance\_\allowbreak{}m & 0.0001 \\
+deployment.package\_\allowbreak{}length\_\allowbreak{}m & 0.0691 \\
+deployment.package\_\allowbreak{}width\_\allowbreak{}m & 0.0397 \\
+deployment.plate\_\allowbreak{}length\_\allowbreak{}m & 0.17 \\
+deployment.plate\_\allowbreak{}width\_\allowbreak{}m & 0.1 \\
+deployment.rows & 2 \\
+deployment.source & A rectangular package envelope39.7x69.1mm,\allowbreak{} based on Spectrolab XTE-SF27cm2 nominal cell outline in the2022-07-27 datasheet p.2. CIC outer envelope is unvalidated. Envelope tolerance,\allowbreak{}plate,\allowbreak{}2x2 layout,\allowbreak{}gaps and clearances are A. \\
+deployment.usable\_\allowbreak{}area\_\allowbreak{}m2 & 0.016 \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:09-converter-rails}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+alternative\_\allowbreak{}converter\_\allowbreak{}interval\_\allowbreak{}V & [1.8,\allowbreak{}5.5] \\
+alternative\_\allowbreak{}converter\_\allowbreak{}product & TPS63020-Q1 (2S Li-ion upper bound8.4V exceeds5.5V) \\
+alternative\_\allowbreak{}current\_\allowbreak{}A & 1.6 \\
+alternative\_\allowbreak{}output\_\allowbreak{}V & 5.06 \\
+rail\_\allowbreak{}cases[0].A & 0.5 \\
+rail\_\allowbreak{}cases[0].V & 3.3 \\
+rail\_\allowbreak{}cases[1].A & 0.4 \\
+rail\_\allowbreak{}cases[1].V & 5 \\
+selected\_\allowbreak{}3p3V\_\allowbreak{}product & TPS62111 input3.1-17V \\
+selected\_\allowbreak{}5V\_\allowbreak{}product & TPS62112 input3.1-17V \\
+unknown & converter.efficiency \\
+voltage\_\allowbreak{}tolerance & 0.05 \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:10-characteristics}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+invalid\_\allowbreak{}curves & [["partial",\allowbreak{}[[2.43,\allowbreak{}0.4347],\allowbreak{}[2.75,\allowbreak{}0.0]]],\allowbreak{}["duplicate\_\allowbreak{}voltage",\allowbreak{}[[0.0,\allowbreak{}0.5],\allowbreak{}[1.0,\allowbreak{}0.4],\allowbreak{}[1.0,\allowbreak{}0.3],\allowbreak{}[2.0,\allowbreak{}0.0]]],\allowbreak{}["negative\_\allowbreak{}current",\allowbreak{}[[0.0,\allowbreak{}0.5],\allowbreak{}[1.0,\allowbreak{}-0.1],\allowbreak{}[2.0,\allowbreak{}0.0]]],\allowbreak{}["nonfinite",\allowbreak{}[[0.0,\allowbreak{}0.5],\allowbreak{}[1.0,\allowbreak{}"nan"],\allowbreak{}[2.0,\allowbreak{}0.0]]]] \\
+purchased\_\allowbreak{}panel\_\allowbreak{}variation & 2cell module curve voltage x2,\allowbreak{} active area x2,\allowbreak{} external1S1P \\
+source\_\allowbreak{}curve\_\allowbreak{}limit & Three-anchor approximation,\allowbreak{} not complete measured curve. \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:11-baseline-DET:DET}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+DET\_\allowbreak{}drop\_\allowbreak{}V & 0.2 \\
+bus\_\allowbreak{}nominal\_\allowbreak{}V & 7.2 \\
+common\_\allowbreak{}bus\_\allowbreak{}demand\_\allowbreak{}W & 0.5 \\
+fixed\_\allowbreak{}setpoint\_\allowbreak{}V & unresolved \\
+method & DET \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:12-baseline-ideal-MPPT:MPPT}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+DET\_\allowbreak{}drop\_\allowbreak{}V & 0.2 \\
+bus\_\allowbreak{}nominal\_\allowbreak{}V & 7.2 \\
+common\_\allowbreak{}bus\_\allowbreak{}demand\_\allowbreak{}W & 0.5 \\
+fixed\_\allowbreak{}setpoint\_\allowbreak{}V & unresolved \\
+method & MPPT \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:13-baseline-fixed-voltage:FIXED\_\allowbreak{}VOLTAGE}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+DET\_\allowbreak{}drop\_\allowbreak{}V & 0.2 \\
+bus\_\allowbreak{}nominal\_\allowbreak{}V & 7.2 \\
+common\_\allowbreak{}bus\_\allowbreak{}demand\_\allowbreak{}W & 0.5 \\
+fixed\_\allowbreak{}setpoint\_\allowbreak{}V & 4 \\
+method & FIXED\_\allowbreak{}VOLTAGE \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:14-unflown-4S-pair:DET}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+DET\_\allowbreak{}drop\_\allowbreak{}V & 0.2 \\
+array.series & 4 \\
+array.usable & 0.016 \\
+bus\_\allowbreak{}nominal\_\allowbreak{}V & 7.2 \\
+common\_\allowbreak{}bus\_\allowbreak{}demand\_\allowbreak{}W & 0.5 \\
+deployment.columns & 2 \\
+deployment.edge\_\allowbreak{}clearance\_\allowbreak{}m & 0.003 \\
+deployment.gap\_\allowbreak{}m & 0.002 \\
+deployment.package\_\allowbreak{}dimension\_\allowbreak{}tolerance\_\allowbreak{}m & 0.0001 \\
+deployment.package\_\allowbreak{}length\_\allowbreak{}m & 0.0691 \\
+deployment.package\_\allowbreak{}width\_\allowbreak{}m & 0.0397 \\
+deployment.plate\_\allowbreak{}length\_\allowbreak{}m & 0.17 \\
+deployment.plate\_\allowbreak{}width\_\allowbreak{}m & 0.1 \\
+deployment.rows & 2 \\
+deployment.source & A rectangular package envelope39.7x69.1mm,\allowbreak{} based on Spectrolab XTE-SF27cm2 nominal cell outline in the2022-07-27 datasheet p.2. CIC outer envelope is unvalidated. Envelope tolerance,\allowbreak{}plate,\allowbreak{}2x2 layout,\allowbreak{}gaps and clearances are A. \\
+deployment.usable\_\allowbreak{}area\_\allowbreak{}m2 & 0.016 \\
+fixed\_\allowbreak{}setpoint\_\allowbreak{}V & 8 \\
+method & DET \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:14-unflown-4S-pair:FIXED\_\allowbreak{}VOLTAGE}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+DET\_\allowbreak{}drop\_\allowbreak{}V & 0.2 \\
+array.series & 4 \\
+array.usable & 0.016 \\
+bus\_\allowbreak{}nominal\_\allowbreak{}V & 7.2 \\
+common\_\allowbreak{}bus\_\allowbreak{}demand\_\allowbreak{}W & 0.5 \\
+deployment.columns & 2 \\
+deployment.edge\_\allowbreak{}clearance\_\allowbreak{}m & 0.003 \\
+deployment.gap\_\allowbreak{}m & 0.002 \\
+deployment.package\_\allowbreak{}dimension\_\allowbreak{}tolerance\_\allowbreak{}m & 0.0001 \\
+deployment.package\_\allowbreak{}length\_\allowbreak{}m & 0.0691 \\
+deployment.package\_\allowbreak{}width\_\allowbreak{}m & 0.0397 \\
+deployment.plate\_\allowbreak{}length\_\allowbreak{}m & 0.17 \\
+deployment.plate\_\allowbreak{}width\_\allowbreak{}m & 0.1 \\
+deployment.rows & 2 \\
+deployment.source & A rectangular package envelope39.7x69.1mm,\allowbreak{} based on Spectrolab XTE-SF27cm2 nominal cell outline in the2022-07-27 datasheet p.2. CIC outer envelope is unvalidated. Envelope tolerance,\allowbreak{}plate,\allowbreak{}2x2 layout,\allowbreak{}gaps and clearances are A. \\
+deployment.usable\_\allowbreak{}area\_\allowbreak{}m2 & 0.016 \\
+fixed\_\allowbreak{}setpoint\_\allowbreak{}V & 8 \\
+method & FIXED\_\allowbreak{}VOLTAGE \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:14-unflown-4S-pair:MPPT}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+DET\_\allowbreak{}drop\_\allowbreak{}V & 0.2 \\
+array.series & 4 \\
+array.usable & 0.016 \\
+bus\_\allowbreak{}nominal\_\allowbreak{}V & 7.2 \\
+common\_\allowbreak{}bus\_\allowbreak{}demand\_\allowbreak{}W & 0.5 \\
+deployment.columns & 2 \\
+deployment.edge\_\allowbreak{}clearance\_\allowbreak{}m & 0.003 \\
+deployment.gap\_\allowbreak{}m & 0.002 \\
+deployment.package\_\allowbreak{}dimension\_\allowbreak{}tolerance\_\allowbreak{}m & 0.0001 \\
+deployment.package\_\allowbreak{}length\_\allowbreak{}m & 0.0691 \\
+deployment.package\_\allowbreak{}width\_\allowbreak{}m & 0.0397 \\
+deployment.plate\_\allowbreak{}length\_\allowbreak{}m & 0.17 \\
+deployment.plate\_\allowbreak{}width\_\allowbreak{}m & 0.1 \\
+deployment.rows & 2 \\
+deployment.source & A rectangular package envelope39.7x69.1mm,\allowbreak{} based on Spectrolab XTE-SF27cm2 nominal cell outline in the2022-07-27 datasheet p.2. CIC outer envelope is unvalidated. Envelope tolerance,\allowbreak{}plate,\allowbreak{}2x2 layout,\allowbreak{}gaps and clearances are A. \\
+deployment.usable\_\allowbreak{}area\_\allowbreak{}m2 & 0.016 \\
+fixed\_\allowbreak{}setpoint\_\allowbreak{}V & 8 \\
+method & MPPT \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:15-operating-point-contract}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+interpolation\_\allowbreak{}cases & ["none",\allowbreak{}"linear"] \\
+sampling\_\allowbreak{}voltages\_\allowbreak{}V & [4.86,\allowbreak{}3.888,\allowbreak{}5.51] \\
+selectors & ["WRONG",\allowbreak{}null] \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:16-normal-extrema}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+OC\_\allowbreak{}A & 0.375 \\
+OV\_\allowbreak{}V & 4.1 \\
+UV\_\allowbreak{}V & 2.5 \\
+charger\_\allowbreak{}endpoint\_\allowbreak{}cross\_\allowbreak{}check.balanced\_\allowbreak{}series\_\allowbreak{}cells & 2 \\
+charger\_\allowbreak{}endpoint\_\allowbreak{}cross\_\allowbreak{}check.nominal\_\allowbreak{}cell\_\allowbreak{}OV\_\allowbreak{}V & 4.1 \\
+charger\_\allowbreak{}endpoint\_\allowbreak{}cross\_\allowbreak{}check.original\_\allowbreak{}normal\_\allowbreak{}cell\_\allowbreak{}samples\_\allowbreak{}V & [3.0,\allowbreak{}3.6,\allowbreak{}4.0] \\
+charger\_\allowbreak{}endpoint\_\allowbreak{}cross\_\allowbreak{}check.pack\_\allowbreak{}voltage\_\allowbreak{}V & 8.4 \\
+independent\_\allowbreak{}corner\_\allowbreak{}OC\_\allowbreak{}A & 6 \\
+independent\_\allowbreak{}corner\_\allowbreak{}OC\_\allowbreak{}source & BIRDS2A regulatedrail setting. OreSat6A supplied separate spacecraft-bus OC device,\allowbreak{} no PTC behavior claim. \\
+independent\_\allowbreak{}corner\_\allowbreak{}powers\_\allowbreak{}W & [6.0,\allowbreak{}30.0] \\
+independent\_\allowbreak{}corner\_\allowbreak{}voltage\_\allowbreak{}V & [6.0,\allowbreak{}8.4] \\
+mission & OreSat \\
+sensed\_\allowbreak{}rail\_\allowbreak{}current\_\allowbreak{}A & [0.265,\allowbreak{}0.314,\allowbreak{}0.362] \\
+sensed\_\allowbreak{}voltages\_\allowbreak{}V & [3.0,\allowbreak{}3.6,\allowbreak{}4.0] \\
+source & O-protect nominalABLIC cellthresholds and suppliedindividualcellnormal3-4V. OC localheaterbranch .245/.294/.342+.020A electronicsassumption,\allowbreak{} enabledMOARPWR. Powercorners at separate spacecraftbatterybus6-8.4V. \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:17-threshold-boundaries}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+OC\_\allowbreak{}A & 0.375 \\
+OV\_\allowbreak{}V & 4.1 \\
+UV\_\allowbreak{}V & 2.5 \\
+additional\_\allowbreak{}OC\_\allowbreak{}scope & BIRDS Unreg2 and Unreg1 are distinct unregulated rail detectors. OreSat6A is a supplied spacecraft battery-bus detector,\allowbreak{} separate from local heater OC and ABLIC cell sensing. \\
+additional\_\allowbreak{}OC\_\allowbreak{}settings[0].rail & spacecraft\_\allowbreak{}battery\_\allowbreak{}bus \\
+additional\_\allowbreak{}OC\_\allowbreak{}settings[0].threshold\_\allowbreak{}A & 6 \\
+factors & [0.99,\allowbreak{}1.0,\allowbreak{}1.01] \\
+invalid\_\allowbreak{}current & [[-0.01],\allowbreak{}[],\allowbreak{}null] \\
+invalid\_\allowbreak{}voltages & [null,\allowbreak{}[],\allowbreak{}["nan"]] \\
+mission & OreSat \\
+unknown\_\allowbreak{}OC\_\allowbreak{}threshold & true \\
+\end{longtable}\endgroup
+
+\subsection{OreSat:18-unknown-invalid-feasibility}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30360000000000004\linewidth} >{\raggedright\arraybackslash}p{0.6164000000000001\linewidth}@{}}
+\toprule
+Changed input & Value \\ \midrule
+\endfirsthead
+\toprule
+Changed input & Value \\ \midrule
+\endhead
+\bottomrule\endfoot
+inadequate\_\allowbreak{}sunlight\_\allowbreak{}delivery\_\allowbreak{}J & 1 \\
+invalid\_\allowbreak{}cycles & 30000 \\
+invalid\_\allowbreak{}orbit.R & 6378 \\
+invalid\_\allowbreak{}orbit.a & 6500 \\
+invalid\_\allowbreak{}orbit.e & 0.2 \\
+invalid\_\allowbreak{}packing & 0 \\
+invalid\_\allowbreak{}retention & 1.1 \\
+unknown & ["SolarArray.series\_\allowbreak{}count",\allowbreak{}"SolarArray.usable\_\allowbreak{}area",\allowbreak{}"Battery.cycle\_\allowbreak{}coefficient",\allowbreak{}"Battery.energy\_\allowbreak{}retention",\allowbreak{}"orbit.altitude"] \\
+\end{longtable}\endgroup
+
+\section{Sources and assumptions}
+
+\paragraph{A} Supplied verification assumptions in the complete input tables. All lifetime/DoD fits,\allowbreak{} retentions other than stated fluence data,\allowbreak{} margins,\allowbreak{} efficiencies,\allowbreak{} allocations,\allowbreak{} unknown mass/volume,\allowbreak{} delivered-energy allocations,\allowbreak{} receiving windows,\allowbreak{} charger selections and settings,\allowbreak{} duties and load currents are supplied assumptions.
+
+\paragraph{B-Azur} 3G30A datasheet DB0003401-01-01,\allowbreak{} 2016-08-19 p.2. AM0 1367 W/m2,\allowbreak{} 28 C. BOL Vmp=2.409 V,\allowbreak{} Imp=.5029 A,\allowbreak{} Voc=2.690 V,\allowbreak{} Isc=.5196 A. 1e15 1 MeV electrons/cm2: Vmp=2.244 V,\allowbreak{} Imp=.4851 A,\allowbreak{} Voc=2.512 V,\allowbreak{} Isc=.5013 A. Active area=.003018 m2. Complete three-anchor curve is an approximation,\allowbreak{} not a measured full curve.
+
+\citep{cots-mission_azur_space_3g30a_review_legacy_ds}.
+
+\paragraph{B-IV} Figs.13-14 pp.6-7,\allowbreak{} Maya-2 +Z two-cell panel. V=5.223 at zero current,\allowbreak{} 5.123 V at 50 mA,\allowbreak{} 5.022 V at 100 mA. Printed P labels .257,\allowbreak{} .502 W and peak1.575 W. High-current x coordinates are not numerically labelled. No reconstruction of the true 1.575 W MPP is claimed.
+
+\citep{shrestha2021birdssafety}.
+
+\paragraph{B-budget} 2022 presentation pp.5,\allowbreak{}8,\allowbreak{}13. 428 mW x 1.5 h=642 mWh,\allowbreak{} 144 mW x 1 h=144 mWh,\allowbreak{} 280 mW x .5 h=140 mWh. p.8 beta30 eclipse35 min: (2173-240)*.8=1546 mWh rounded. p.13 (2507-240)*.8-210=1604 mWh rounded. Free rotation uses supplied external energies only.
+
+\citep{shrestha2022birds4powerbudget}.
+
+\paragraph{B-cell} Battery Verification Report,\allowbreak{} Fig. 1-1 p.21,\allowbreak{} pinned d7eadd98\allowbreak{}f5327e1d\allowbreak{}dea82b64\allowbreak{}0293d49b\allowbreak{}fdb09555. 27 g x 6 = 162 g,\allowbreak{} diameter 14.35 mm,\allowbreak{} height 50.4 mm,\allowbreak{} 3S2P,\allowbreak{} 1.2 V,\allowbreak{} 3800 mAh
+
+\citep{birds2021batteryverification}.
+
+\paragraph{B-orbit} Section 2. 400 km,\allowbreak{} ISS orbit. Reference geometry and prescribed Sun/nadir pointing are supplied variations.
+
+\citep{jara2022birdsepsdataset}.
+
+\paragraph{B-rail} Sec.6.3. 3.3 and 5 V rails,\allowbreak{} OC2/3/4 A regulated/Unreg2/Unreg1. Converter current capacities and efficiencies used here are supplied assumptions.
+
+\citep{kyutech2021birdsicd}.
+
+\paragraph{LFP} Choice\#2 A123 APR18650m1-B. LiFePO4,\allowbreak{}3.3 V nominal,\allowbreak{}1.1 Ah,\allowbreak{}cell2.0-3.6 V. 4S1P x2 cards29 Wh rounded. Room-temperature charge.5 A/discharge3 A and all fit/retention values are assumptions.
+
+\citep{oresatbatteryresearch}.
+
+\paragraph{Li-ion} Tenergy30005-0 datasheet pp.2-4,\allowbreak{} capacity/voltage/current ratings,\allowbreak{} and O-pack for the separate mission nominal3.6 V convention. 2.6 Ah,\allowbreak{}2.75-4.2 V,\allowbreak{} charge1.25 A at15-45 C,\allowbreak{} discharge5 A at5-45 C. Reference temperature25 C. This case uses mission nominal3.6x2.6=9.36 Wh. The datasheet average3.65 V would give9.49 Wh and is not substituted. Neither nominal product is a measured energy guarantee.
+
+\citep{cots-mission_tenergy_30005_0_ds}.
+
+\paragraph{O-budget} 2019 budget standby and battery rows. 1634-623=1011 mWh. Four2S3.3 Ah packs at7.2 V=95.04 Wh and60\% DoD=57.024 Wh. Historical only.
+
+\citep{oresat2019powerbudget}.
+
+\paragraph{O-mass} D.2 pp.21-22. 8 solar modules x31.5 g=252 g,\allowbreak{} 4 battery modules x104 g=416 g. Historical mass boundary only. All volumes and other masses supplied.
+
+\citep{oresat2016csli}.
+
+\paragraph{O-pack} p.6. Two independently protected 2S packs per card,\allowbreak{} 2.6 Ah per branch at mission nominal3.6 V/cell,\allowbreak{}37.4 Wh/card rounded. The branches share the real card bus,\allowbreak{} where currents add by Kirchhoff's current law. These checks retain each branch's ratings and do not assume a current-sharing law.
+
+\citep{greenberg2021oresat}.
+
+\paragraph{O-package} Spectrolab XTE-SF datasheet,\allowbreak{}2022-07-27 p.2,\allowbreak{}27cm2 rectangular cell outline. Cell outline3.97x6.91cm. The verification package envelope uses these nominal dimensions with a supplied0.1mm upper allowance. Actual CIC/contact envelope remains unvalidated.
+
+\citep{cots-solar_src_spectro_xtesf}.
+
+\paragraph{O-protect} ABLIC selection,\allowbreak{} load current,\allowbreak{} heater and MOARPWR sections. S-8209AAA per-cell UV2.50 V,\allowbreak{}OV4.10 V nominal (tolerances absent,\allowbreak{} not worst-case qualification).30 W at6/7.2/8.4 V=5/4.17/3.57 A. Local heater currents.245/.294/.342 A,\allowbreak{}OC.375 A enabled heater setting. Card electronics current.020 A supplied.
+
+\citep{oresat2025batterydesign}.
+
+\paragraph{O-rail} OreSat Power Domain Design Notes,\allowbreak{} stated update2021-08-22,\allowbreak{} TPS62111/TPS62112 section. TPS62111/12 input3.1-17 V,\allowbreak{}out3.3/5 V,\allowbreak{}max1.5 A. Efficiency.9 is supplied. The separate SPV1040 historical rejection uses oresatsolarhistory.
+
+\citep{oresat2021opddesign}.
+
+\paragraph{O-solar} Solar Cells: GaAs. XTE-SF Vmp2.43 V,\allowbreak{} Imp.483 A,\allowbreak{} Voc2.75 V,\allowbreak{} Isc.502 A,\allowbreak{} area.0027 m2,\allowbreak{}28 C AM0;2-cell output2.34 W rounded. Reference G1367 is supplied,\allowbreak{} and EOL current retention.9 is assumed. Complete three anchors are an approximation.
+
+\citep{oresat2025solardesign}.
+
+\paragraph{O-sweep} minicom.cap F2:H206; F197:H197. 205 published samples,\allowbreak{} row1974.435 V,\allowbreak{}.37304 A,\allowbreak{}1.6544324 W; row2 4.77625 V,\allowbreak{}.06406 A,\allowbreak{}.305966575 W. Unsorted/duplicate voltage,\allowbreak{} no endpoints. Raw curve is rejected,\allowbreak{} without sorting or invented endpoint claims.
+
+\citep{oresatsolarsweep}.
+
+\paragraph{SPV} Rev2 historical design notes after1S-to2S change. Published rejection:SPV1040 cannot supply the2S charging voltage. The5.2V numeric ceiling is a declared static compatibility input in this case. No general boost envelope is inferred.
+
+\citep{oresatsolarhistory}.
+
+\paragraph{Si} Table3 p.25042 and Sec.IV.C. IXOLAR SSM silicon Vmp4.46 V,\allowbreak{} Imp.006 A,\allowbreak{}Voc5.53 V,\allowbreak{}Isc.0063 A,\allowbreak{} active.0000917 m2,\allowbreak{} package.008x.023 m. Curve reference1362 W/m2 supplied from article context,\allowbreak{} EOL current retention.9 assumed. Two-dimensional4x10 package layout occupies.032x.23 m if long strip,\allowbreak{} or8x5 layout.064x.115 m. Installation here is an explicit deployed.010 m2 plate,\allowbreak{} not a flush1U fit.
+
+\citep{shrestha2026solarreliability}.
+
+\section{Interpretation and exclusions}
+The silicon configuration fails generation and receiving-voltage screens in both
+missions. The LiFePO4 storage group fails the retained OreSat voltage and assumed
+installation allocations. A newly selected charger passes its supplied static
+conditions. This leaves the other failed engineering criteria unchanged.
+
+OreSat baseline DET requires 7.4~V while its 2S array has 5.5~V open-circuit voltage.
+Its operating current correctly reports an out-of-range error.
+The supplied unflown 4S variation provides a feasible paired comparison.
+All DET, ideal MPPT and fixed-voltage results in each pair use the same curve,
+battery, illumination and load. The source factors are $0.95\times0.97$.
+DET uses a 0.2~V drop. Converter paths use efficiency 0.9.
+No tracker dynamics or full converter envelope is inferred.
+
+Protection compares battery voltage and regulated-rail current at distinct BIRDS
+nodes. OreSat ABLIC samples are individual-cell voltages, while heater OC samples
+belong to the local enabled heater/electronics branch.
+The separate 30~W power corners belong to spacecraft battery-bus terminals.
+Nominal detector thresholds establish no worst-case tolerance qualification.
+Each threshold is tested below, at and above equality.
+Equality fails the strict conservative predicate.
+No PTC thermal rating is used as an instantaneous OC detector.
+
+Excluded inconsistent references include the 2021 BIRDS printed
+$(2184-360)\times0.8=1411$~mWh (literal result 1459.2~mWh),
+the 500~mW for 0.25~h row printed as 150~mWh (literal result 125~mWh),
+and the incompletely mapped 3.023~Wh hybrid simulation.
+Different historical budget revisions retain their own loss assumptions.
+The BIRDS measured 1.575~W peak is not used to infer an unavailable MPP current.
+Only unambiguous labelled scalar products are benchmarked.
+The OreSat raw sweep is not sorted, deduplicated or supplied with invented
+observed endpoints to force acceptance.
+
+\section{Complete executed comparison ledger}
+Expected unknowns compare exact status. Invalid-domain errors require error
+status and ValueError type, so unrelated binding failures do not count as passes.
+Nonzero numerical references use a 1\% relative tolerance.
+Zero references, counts and verdicts compare exactly.
+Numerical table values are rounded to seven significant figures and error
+percentages to three. The retained machine-readable ledger preserves full values.
+A false engineering verdict followed by match is an expected infeasible case.
+
+
+\subsection{BIRDS-4: 01-mass-boundaries}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-12 published\_\allowbreak{}cell\_\allowbreak{}only\_\allowbreak{}mass & kg & 0.162 & 0.162 & 0 & match \\
+MOP-12 cylindrical\_\allowbreak{}cell\_\allowbreak{}volume & m3 & 4.89075e-05 & 4.89075e-05 & 0 & match \\
+MOP-12 cell\_\allowbreak{}source &  & B-cell Fig.1-1 p.21,\allowbreak{} cell-only & B-cell Fig.1-1 p.21,\allowbreak{} cell-only &  & match \\
+MOP-12 mass & kg & 0.3 & 0.3 & 0 & match \\
+MOP-12 volume & m3 & 0.000121 & 0.000121 & 1.12e-14 & match \\
+MOP-12 mass\_\allowbreak{}margin & kg & 0.05 & 0.05 & 2.78e-14 & match \\
+MOP-12 volume\_\allowbreak{}margin & m3 & 2.9e-05 & 2.9e-05 & 9.35e-14 & match \\
+MOP-12 mass\_\allowbreak{}allocation & verdict & true & true &  & match \\
+MOP-12 volume\_\allowbreak{}allocation & verdict & true & true &  & match \\
+MOP-12 aggregate\_\allowbreak{}replacement\_\allowbreak{}no\_\allowbreak{}double\_\allowbreak{}count & kg & 0.3 & 0.3 & 0 & match \\
+MOP-12 zero\_\allowbreak{}margin\_\allowbreak{}passes & verdict & true & true &  & match \\
+MOP-12 negative\_\allowbreak{}margin\_\allowbreak{}fails & verdict & false & false &  & match \\
+MOP-12 unknown\_\allowbreak{}mass\_\allowbreak{}total & kg & unresolved & unresolved &  & expected unknown \\
+MOP-12 unknown\_\allowbreak{}mass\_\allowbreak{}margin & kg & unresolved & unresolved &  & expected unknown \\
+MOP-12 volume\_\allowbreak{}unaffected\_\allowbreak{}by\_\allowbreak{}unknown\_\allowbreak{}mass & m3 & 0.000121 & 0.000121 & 1.12e-14 & match \\
+MOP-12 unknown\_\allowbreak{}mass\_\allowbreak{}allocation & verdict & unresolved & unresolved &  & expected unknown \\
+MOP-12 unknown\_\allowbreak{}volume\_\allowbreak{}total & m3 & unresolved & unresolved &  & expected unknown \\
+MOP-12 unknown\_\allowbreak{}volume\_\allowbreak{}margin & m3 & unresolved & unresolved &  & expected unknown \\
+MOP-12 unknown\_\allowbreak{}volume\_\allowbreak{}allocation & verdict & unresolved & unresolved &  & expected unknown \\
+MOP-12 mass\_\allowbreak{}unit\_\allowbreak{}record &  & kg & kg &  & match \\
+MOP-12 volume\_\allowbreak{}unit\_\allowbreak{}record &  & m3 & m3 &  & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 02-states-modes-circular}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-14a period & s & 5553.452 & 5553.452 & 1.64e-14 & match \\
+MOP-14a sunlight & s & 3486.457 & 3486.475 & 0.000512 & match \\
+MOP-14a eclipse & s & 2066.995 & 2066.977 & 0.000864 & match \\
+MOP-14b projection & 1 & 1 & 1 & 0 & match \\
+MOP-14b projected\_\allowbreak{}duration & s & 3486.457 & 3486.475 & 0.000512 & match \\
+MOP-14a main\_\allowbreak{}state\_\allowbreak{}power & W & 0.429 & 0.429 & 0 & match \\
+MOP-14a receiver\_\allowbreak{}state\_\allowbreak{}power & W & 0.1452 & 0.1452 & 0 & match \\
+MOP-14a beacon\_\allowbreak{}state\_\allowbreak{}power & W & 0.28 & 0.28 & 0 & match \\
+MOP-14a sunlight\_\allowbreak{}mode\_\allowbreak{}aggregation & W & 0.6442 & 0.6442 & 0 & match \\
+MOP-14a sunlight\_\allowbreak{}EPS\_\allowbreak{}consumption\_\allowbreak{}boundary & W & 0 & 0 &  & match \\
+MOP-14a sunlight\_\allowbreak{}mean & W & 0.6442 & 0.6442 & 0 & match \\
+MOP-14a sunlight\_\allowbreak{}energy & J & 2245.976 & 2245.987 & 0.000512 & match \\
+MOP-14a sunlight\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-14a eclipse\_\allowbreak{}mode\_\allowbreak{}aggregation & W & 0.6022 & 0.6022 & 0 & match \\
+MOP-14a eclipse\_\allowbreak{}EPS\_\allowbreak{}consumption\_\allowbreak{}boundary & W & 0 & 0 &  & match \\
+MOP-14a eclipse\_\allowbreak{}mean & W & 0.6022 & 0.6022 & 0 & match \\
+MOP-14a eclipse\_\allowbreak{}energy & J & 1244.744 & 1244.734 & 0.000864 & match \\
+MOP-14a eclipse\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-14a minimum\_\allowbreak{}panel\_\allowbreak{}power & W & 1.233913 & 1.233906 & 0.000531 & match \\
+MOP-14a main\_\allowbreak{}energy & Wh & 0.642 & 0.642 & 0 & match \\
+MOP-14a receiver\_\allowbreak{}energy & Wh & 0.144 & 0.144 & 0 & match \\
+MOP-14a CW\_\allowbreak{}energy & Wh & 0.14 & 0.14 & 0 & match \\
+MOP-14a external\_\allowbreak{}free\_\allowbreak{}rotation\_\allowbreak{}BCR & mWh & 1546 & 1546.4 & 0.0259 & match \\
+MOP-14a external\_\allowbreak{}free\_\allowbreak{}rotation\_\allowbreak{}load & mWh & 1604 & 1603.6 & 0.0249 & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 03-eccentric-nadir}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-14a period & s & 5553.452 & 5553.452 & 1.64e-14 & match \\
+MOP-14a sunlight & s & 3432.076 & 3432.078 & 5.44e-05 & match \\
+MOP-14a eclipse & s & 2121.376 & 2121.374 & 8.8e-05 & match \\
+MOP-14b projection & 1 & 0.4567932 & 0.456793 & 5.44e-05 & match \\
+MOP-14b projected\_\allowbreak{}duration & s & 1567.749 & 1567.749 & 2.1e-10 & match \\
+MOP-14a minimum\_\allowbreak{}panel\_\allowbreak{}power & W & 1.254178 & 1.254177 & 5.64e-05 & match \\
+MOP-14b nontrivial\_\allowbreak{}projection\_\allowbreak{}generation & W & 0.9164296 & 0.9164291 & 5.44e-05 & match \\
+MOP-14b nadir\_\allowbreak{}generation\_\allowbreak{}verdict & verdict & false & false &  & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 04-eclipse-free}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-14a period & s & 5553.452 & 5553.452 & 1.64e-14 & match \\
+MOP-14a sunlight & s & 5553.452 & 5553.452 & 1.64e-14 & match \\
+MOP-14a eclipse & s & 0 & 0 &  & match \\
+MOP-14b projection & 1 & 1 & 1 & 0 & match \\
+MOP-14b projected\_\allowbreak{}duration & s & 5553.452 & 5553.452 & 1.64e-14 & match \\
+MOP-14a zero\_\allowbreak{}eclipse\_\allowbreak{}demand & verdict & true & true &  & match \\
+MOP-14a zero\_\allowbreak{}eclipse\_\allowbreak{}energy & J & 0 & 0 &  & match \\
+MOP-14a unused\_\allowbreak{}eclipse\_\allowbreak{}efficiency\_\allowbreak{}identity & 1 & 1 & 1 & 0 & match \\
+MOP-14a minimum\_\allowbreak{}panel\_\allowbreak{}power & W & 0.7578824 & 0.7578824 & 0 & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 05-baseline-sizing}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-14b cell\_\allowbreak{}power & W & 1.088564 & 1.088564 & 0 & match \\
+MOP-14b array\_\allowbreak{}mpp & W & 2.177129 & 2.177129 & 0 & match \\
+MOP-14b array\_\allowbreak{}voltage & V & 4.488 & 4.488 & 0 & match \\
+MOP-14b array\_\allowbreak{}current & A & 0.4851 & 0.4851 & 0 & match \\
+MOP-14b array\_\allowbreak{}voc & V & 5.024 & 5.024 & 0 & match \\
+MOP-14b array\_\allowbreak{}isc & A & 0.5013 & 0.5013 & 0 & match \\
+MOP-14b active\_\allowbreak{}area & m2 & 0.006036 & 0.006036 & 0 & match \\
+MOP-14b panel\_\allowbreak{}area & m2 & 0.007545 & 0.007545 & 0 & match \\
+MOP-14b required\_\allowbreak{}area & m2 & 0.003712395 & 0.003712375 & 0.000531 & match \\
+MOP-14b effective\_\allowbreak{}area & m2 & 0.003420972 & 0.003420954 & 0.000531 & match \\
+MOP-14b tumbling\_\allowbreak{}area & m2 & 0.01330522 & 0.01330515 & 0.000531 & match \\
+MOP-14b generation\_\allowbreak{}efficiency & 1 & 0.2638556 & 0.2638556 & 2.1e-14 & match \\
+MOP-14b density & W/m2 & 332.3764 & 332.3764 & 1.71e-14 & match \\
+MOP-14b available\_\allowbreak{}power & W & 2.006224 & 2.006224 & 2.21e-14 & match \\
+MOP-14b source\_\allowbreak{}energy & J & 6994.615 & 6994.65 & 0.000512 & match \\
+MOP-14b fractional\_\allowbreak{}count & cell & 1.133523 & 1.133517 & 0.000531 & match \\
+MOP-14b required\_\allowbreak{}count & cell & 2 & 2 &  & match \\
+MOP-14b minimum\_\allowbreak{}solar\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-14b cycles & cycle & 5682.52 & 5682.52 & 0 & match \\
+MOP-14b dod & 1 & 0.3519565 & 0.3519565 & 0 & match \\
+MOP-14b required\_\allowbreak{}battery\_\allowbreak{}energy & J & 4243.97 & 4243.934 & 0.000864 & match \\
+MOP-14b minimum\_\allowbreak{}battery\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-14b pack\_\allowbreak{}wh & Wh & 13.68 & 13.68 & 0 & match \\
+MOP-14b pack\_\allowbreak{}ah & Ah & 3.8 & 3.8 & 0 & match \\
+MOP-14b pack\_\allowbreak{}j & J & 49248 & 49248 & 0 & match \\
+MOP-14b eol\_\allowbreak{}j & J & 39398.4 & 39398.4 & 0 & match \\
+MOP-14b eol\_\allowbreak{}ah & Ah & 3.04 & 3.04 & 0 & match \\
+MOP-14b battery\_\allowbreak{}voltage & V & 3.6 & 3.6 & 1.23e-14 & match \\
+MOP-14b battery\_\allowbreak{}min & V & 3 & 3 & 0 & match \\
+MOP-14b battery\_\allowbreak{}max & V & 4.35 & 4.35 & 0 & match \\
+MOP-14b charge\_\allowbreak{}limit & A & 1.9 & 1.9 & 0 & match \\
+MOP-14b discharge\_\allowbreak{}limit & A & 4 & 4 & 0 & match \\
+MOP-14b solar\_\allowbreak{}power\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b solar\_\allowbreak{}count\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b battery\_\allowbreak{}energy\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b solar\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b battery\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b area\_\allowbreak{}fit\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b active\_\allowbreak{}area\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b generation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b tracking\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b absolute\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b source\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b battery\_\allowbreak{}receiving\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b charge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b discharge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b storage\_\allowbreak{}occupied\_\allowbreak{}volume & m3 & 6.92e-05 & 6.92e-05 & 0 & match \\
+MOP-14b battery\_\allowbreak{}installation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b BOL\_\allowbreak{}cell\_\allowbreak{}power & W & 1.211486 & 1.211486 & 0 & match \\
+MOP-14b EOL\_\allowbreak{}efficiency\_\allowbreak{}once & 1 & 0.2638556 & 0.2638556 & 2.1e-14 & match \\
+MOP-15 baseline\_\allowbreak{}charger & verdict & true & true &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}minimum\_\allowbreak{}panel\_\allowbreak{}power & W & 1.233913 & 1.233906 & 0.000531 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}fractional\_\allowbreak{}count & cell & 1.018512 & 1.018506 & 0.000531 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}required\_\allowbreak{}count & cell & 2 & 2 &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}minimum\_\allowbreak{}solar\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}cell\_\allowbreak{}power & W & 1.211486 & 1.211486 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}array\_\allowbreak{}mpp & W & 2.422972 & 2.422972 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}array\_\allowbreak{}voltage & V & 4.818 & 4.818 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}array\_\allowbreak{}current & A & 0.5029 & 0.5029 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}array\_\allowbreak{}voc & V & 5.38 & 5.38 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}array\_\allowbreak{}isc & A & 0.5196 & 0.5196 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}generation\_\allowbreak{}efficiency & 1 & 0.2936505 & 0.2936505 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}active\_\allowbreak{}area & m2 & 0.006036 & 0.006036 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}panel\_\allowbreak{}area & m2 & 0.007545 & 0.007545 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}required\_\allowbreak{}area & m2 & 0.003335722 & 0.003335704 & 0.000531 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}effective\_\allowbreak{}area & m2 & 0.003073868 & 0.003073852 & 0.000531 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}density & W/m2 & 369.9087 & 369.9087 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}available\_\allowbreak{}power & W & 2.232769 & 2.232769 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}source\_\allowbreak{}energy & J & 7784.453 & 7784.493 & 0.000512 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}solar\_\allowbreak{}power\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}solar\_\allowbreak{}count\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}area\_\allowbreak{}fit\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}active\_\allowbreak{}area\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}generation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 06-silicon-technology}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-15 cell\_\allowbreak{}power & W & 0.024084 & 0.024084 & 0 & match \\
+MOP-15 array\_\allowbreak{}mpp & W & 0.96336 & 0.96336 & 0 & match \\
+MOP-15 array\_\allowbreak{}voltage & V & 17.84 & 17.84 & 0 & match \\
+MOP-15 array\_\allowbreak{}current & A & 0.054 & 0.054 & 1.28e-14 & match \\
+MOP-15 array\_\allowbreak{}voc & V & 22.12 & 22.12 & 0 & match \\
+MOP-15 array\_\allowbreak{}isc & A & 0.0567 & 0.0567 & 0 & match \\
+MOP-15 active\_\allowbreak{}area & m2 & 0.003668 & 0.003668 & 1.18e-14 & match \\
+MOP-15 panel\_\allowbreak{}area & m2 & 0.00736 & 0.00736 & 1.18e-14 & match \\
+MOP-15 required\_\allowbreak{}area & m2 & 0.005079704 & 0.005079677 & 0.000531 & match \\
+MOP-15 effective\_\allowbreak{}area & m2 & 0.004680947 & 0.004680922 & 0.000531 & match \\
+MOP-15 tumbling\_\allowbreak{}area & m2 & 0.02922434 & 0.02922418 & 0.000531 & match \\
+MOP-15 generation\_\allowbreak{}efficiency & 1 & 0.1928334 & 0.1928334 & 0 & match \\
+MOP-15 density & W/m2 & 242.9104 & 242.9104 & 1.17e-14 & match \\
+MOP-15 available\_\allowbreak{}power & W & 0.8909952 & 0.8909952 & 1.25e-14 & match \\
+MOP-15 source\_\allowbreak{}energy & J & 3106.416 & 3106.432 & 0.000512 & match \\
+MOP-15 fractional\_\allowbreak{}count & cell & 51.23371 & 51.23344 & 0.000531 & match \\
+MOP-15 required\_\allowbreak{}count & cell & 52 & 52 &  & match \\
+MOP-15 minimum\_\allowbreak{}solar\_\allowbreak{}parallel & string & 13 & 13 &  & match \\
+MOP-15 cycles & cycle & 5682.52 & 5682.52 & 0 & match \\
+MOP-15 dod & 1 & 0.3519565 & 0.3519565 & 0 & match \\
+MOP-15 required\_\allowbreak{}battery\_\allowbreak{}energy & J & 4243.97 & 4243.934 & 0.000864 & match \\
+MOP-15 minimum\_\allowbreak{}battery\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-15 pack\_\allowbreak{}wh & Wh & 13.68 & 13.68 & 0 & match \\
+MOP-15 pack\_\allowbreak{}ah & Ah & 3.8 & 3.8 & 0 & match \\
+MOP-15 pack\_\allowbreak{}j & J & 49248 & 49248 & 0 & match \\
+MOP-15 eol\_\allowbreak{}j & J & 39398.4 & 39398.4 & 0 & match \\
+MOP-15 eol\_\allowbreak{}ah & Ah & 3.04 & 3.04 & 0 & match \\
+MOP-15 battery\_\allowbreak{}voltage & V & 3.6 & 3.6 & 1.23e-14 & match \\
+MOP-15 battery\_\allowbreak{}min & V & 3 & 3 & 0 & match \\
+MOP-15 battery\_\allowbreak{}max & V & 4.35 & 4.35 & 0 & match \\
+MOP-15 charge\_\allowbreak{}limit & A & 1.9 & 1.9 & 0 & match \\
+MOP-15 discharge\_\allowbreak{}limit & A & 4 & 4 & 0 & match \\
+MOP-15 solar\_\allowbreak{}power\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 solar\_\allowbreak{}count\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 battery\_\allowbreak{}energy\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 solar\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 battery\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 area\_\allowbreak{}fit\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 active\_\allowbreak{}area\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 generation\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 tracking\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 absolute\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 source\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 battery\_\allowbreak{}receiving\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 charge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 discharge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 storage\_\allowbreak{}occupied\_\allowbreak{}volume & m3 & 6.92e-05 & 6.92e-05 & 0 & match \\
+MOP-15 battery\_\allowbreak{}installation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 07-battery-chemistry}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-15 cell\_\allowbreak{}power & W & 1.088564 & 1.088564 & 0 & match \\
+MOP-15 array\_\allowbreak{}mpp & W & 2.177129 & 2.177129 & 0 & match \\
+MOP-15 array\_\allowbreak{}voltage & V & 4.488 & 4.488 & 0 & match \\
+MOP-15 array\_\allowbreak{}current & A & 0.4851 & 0.4851 & 0 & match \\
+MOP-15 array\_\allowbreak{}voc & V & 5.024 & 5.024 & 0 & match \\
+MOP-15 array\_\allowbreak{}isc & A & 0.5013 & 0.5013 & 0 & match \\
+MOP-15 active\_\allowbreak{}area & m2 & 0.006036 & 0.006036 & 0 & match \\
+MOP-15 panel\_\allowbreak{}area & m2 & 0.007545 & 0.007545 & 0 & match \\
+MOP-15 required\_\allowbreak{}area & m2 & 0.003712395 & 0.003712375 & 0.000531 & match \\
+MOP-15 effective\_\allowbreak{}area & m2 & 0.003420972 & 0.003420954 & 0.000531 & match \\
+MOP-15 tumbling\_\allowbreak{}area & m2 & 0.01330522 & 0.01330515 & 0.000531 & match \\
+MOP-15 generation\_\allowbreak{}efficiency & 1 & 0.2638556 & 0.2638556 & 2.1e-14 & match \\
+MOP-15 density & W/m2 & 332.3764 & 332.3764 & 1.71e-14 & match \\
+MOP-15 available\_\allowbreak{}power & W & 2.006224 & 2.006224 & 2.21e-14 & match \\
+MOP-15 source\_\allowbreak{}energy & J & 6994.615 & 6994.65 & 0.000512 & match \\
+MOP-15 fractional\_\allowbreak{}count & cell & 1.133523 & 1.133517 & 0.000531 & match \\
+MOP-15 required\_\allowbreak{}count & cell & 2 & 2 &  & match \\
+MOP-15 minimum\_\allowbreak{}solar\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-15 cycles & cycle & 5682.52 & 5682.52 & 0 & match \\
+MOP-15 dod & 1 & 0.3519565 & 0.3519565 & 0 & match \\
+MOP-15 required\_\allowbreak{}battery\_\allowbreak{}energy & J & 4243.97 & 4243.934 & 0.000864 & match \\
+MOP-15 minimum\_\allowbreak{}battery\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-15 pack\_\allowbreak{}wh & Wh & 18.72 & 18.72 & 0 & match \\
+MOP-15 pack\_\allowbreak{}ah & Ah & 5.2 & 5.2 & 0 & match \\
+MOP-15 pack\_\allowbreak{}j & J & 67392 & 67392 & 0 & match \\
+MOP-15 eol\_\allowbreak{}j & J & 53913.6 & 53913.6 & 1.35e-14 & match \\
+MOP-15 eol\_\allowbreak{}ah & Ah & 4.16 & 4.16 & 0 & match \\
+MOP-15 battery\_\allowbreak{}voltage & V & 3.6 & 3.6 & 0 & match \\
+MOP-15 battery\_\allowbreak{}min & V & 2.75 & 2.75 & 0 & match \\
+MOP-15 battery\_\allowbreak{}max & V & 4.2 & 4.2 & 0 & match \\
+MOP-15 charge\_\allowbreak{}limit & A & 2.5 & 2.5 & 0 & match \\
+MOP-15 discharge\_\allowbreak{}limit & A & 10 & 10 & 0 & match \\
+MOP-15 solar\_\allowbreak{}power\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 solar\_\allowbreak{}count\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 battery\_\allowbreak{}energy\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 solar\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 battery\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 area\_\allowbreak{}fit\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 active\_\allowbreak{}area\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 generation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 tracking\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 absolute\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 source\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 battery\_\allowbreak{}receiving\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 charge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 discharge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 storage\_\allowbreak{}occupied\_\allowbreak{}volume & m3 & 5.6e-05 & 5.6e-05 & 1.21e-14 & match \\
+MOP-15 battery\_\allowbreak{}installation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 unchanged\_\allowbreak{}charger\_\allowbreak{}incompatible & verdict & false & false &  & match \\
+MOP-15 explicit\_\allowbreak{}new\_\allowbreak{}charger\_\allowbreak{}compatible & verdict & true & true &  & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 08-integer-configurations}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-16 cell\_\allowbreak{}power & W & 1.088564 & 1.088564 & 0 & match \\
+MOP-16 array\_\allowbreak{}mpp & W & 4.354258 & 4.354258 & 0 & match \\
+MOP-16 array\_\allowbreak{}voltage & V & 8.976 & 8.976 & 0 & match \\
+MOP-16 array\_\allowbreak{}current & A & 0.4851 & 0.4851 & 0 & match \\
+MOP-16 array\_\allowbreak{}voc & V & 10.048 & 10.048 & 0 & match \\
+MOP-16 array\_\allowbreak{}isc & A & 0.5013 & 0.5013 & 0 & match \\
+MOP-16 active\_\allowbreak{}area & m2 & 0.012072 & 0.012072 & 0 & match \\
+MOP-16 panel\_\allowbreak{}area & m2 & 0.01509 & 0.01509 & 0 & match \\
+MOP-16 required\_\allowbreak{}area & m2 & 0.003712395 & 0.003712375 & 0.000531 & match \\
+MOP-16 effective\_\allowbreak{}area & m2 & 0.003420972 & 0.003420954 & 0.000531 & match \\
+MOP-16 tumbling\_\allowbreak{}area & m2 & 0.01330522 & 0.01330515 & 0.000531 & match \\
+MOP-16 generation\_\allowbreak{}efficiency & 1 & 0.2638556 & 0.2638556 & 2.1e-14 & match \\
+MOP-16 density & W/m2 & 332.3764 & 332.3764 & 1.71e-14 & match \\
+MOP-16 available\_\allowbreak{}power & W & 4.012448 & 4.012448 & 2.21e-14 & match \\
+MOP-16 source\_\allowbreak{}energy & J & 13989.23 & 13989.3 & 0.000512 & match \\
+MOP-16 fractional\_\allowbreak{}count & cell & 1.133523 & 1.133517 & 0.000531 & match \\
+MOP-16 required\_\allowbreak{}count & cell & 2 & 2 &  & match \\
+MOP-16 minimum\_\allowbreak{}solar\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-16 cycles & cycle & 5682.52 & 5682.52 & 0 & match \\
+MOP-16 dod & 1 & 0.3519565 & 0.3519565 & 0 & match \\
+MOP-16 required\_\allowbreak{}battery\_\allowbreak{}energy & J & 4243.97 & 4243.934 & 0.000864 & match \\
+MOP-16 minimum\_\allowbreak{}battery\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-16 pack\_\allowbreak{}wh & Wh & 4.56 & 4.56 & 0 & match \\
+MOP-16 pack\_\allowbreak{}ah & Ah & 1.9 & 1.9 & 0 & match \\
+MOP-16 pack\_\allowbreak{}j & J & 16416 & 16416 & 0 & match \\
+MOP-16 eol\_\allowbreak{}j & J & 13132.8 & 13132.8 & 1.39e-14 & match \\
+MOP-16 eol\_\allowbreak{}ah & Ah & 1.52 & 1.52 & 0 & match \\
+MOP-16 battery\_\allowbreak{}voltage & V & 2.4 & 2.4 & 0 & match \\
+MOP-16 battery\_\allowbreak{}min & V & 2 & 2 & 0 & match \\
+MOP-16 battery\_\allowbreak{}max & V & 2.9 & 2.9 & 0 & match \\
+MOP-16 charge\_\allowbreak{}limit & A & 0.95 & 0.95 & 0 & match \\
+MOP-16 discharge\_\allowbreak{}limit & A & 2 & 2 & 0 & match \\
+MOP-16 solar\_\allowbreak{}power\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 solar\_\allowbreak{}count\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 battery\_\allowbreak{}energy\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 solar\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 battery\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 area\_\allowbreak{}fit\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 active\_\allowbreak{}area\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 generation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 tracking\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 absolute\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 source\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 battery\_\allowbreak{}receiving\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-16 charge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 discharge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 storage\_\allowbreak{}occupied\_\allowbreak{}volume & m3 & 3.64e-05 & 3.64e-05 & 1.86e-14 & match \\
+MOP-16 battery\_\allowbreak{}installation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 deployed\_\allowbreak{}width & m & 0.0885 & 0.0885 & 1.57e-14 & match \\
+MOP-16 deployed\_\allowbreak{}length & m & 0.1685 & 0.1685 & 0 & match \\
+MOP-16 deployed\_\allowbreak{}footprint & m2 & 0.01491225 & 0.01491225 & 1.16e-14 & match \\
+MOP-16 deployed\_\allowbreak{}plate\_\allowbreak{}area & m2 & 0.017 & 0.017 & 0 & match \\
+MOP-16 deployed\_\allowbreak{}layout\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 published\_\allowbreak{}pack\_\allowbreak{}capacity & Ah & 3.8 & 3.8 & 0 & match \\
+MOP-16 published\_\allowbreak{}pack\_\allowbreak{}energy & Wh & 13.68 & 13.68 & 0 & match \\
+MOP-16 invalid\_\allowbreak{}solar\_\allowbreak{}series\_\allowbreak{}0 & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}battery\_\allowbreak{}parallel\_\allowbreak{}0 & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}solar\_\allowbreak{}series\_\allowbreak{}-1 & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}battery\_\allowbreak{}parallel\_\allowbreak{}-1 & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}solar\_\allowbreak{}series\_\allowbreak{}2.5 & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}battery\_\allowbreak{}parallel\_\allowbreak{}2.5 & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}solar\_\allowbreak{}series\_\allowbreak{}True & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}battery\_\allowbreak{}parallel\_\allowbreak{}True & verdict & false & false &  & match \\
+MOP-16 inconsistent\_\allowbreak{}total\_\allowbreak{}count & verdict & false & false &  & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 09-converter-rails}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-17 rail\_\allowbreak{}power\_\allowbreak{}3.3 & W & 1.65 & 1.65 & 0 & match \\
+MOP-17 terminal\_\allowbreak{}battery\_\allowbreak{}current\_\allowbreak{}3.3 & A & 0.5092593 & 0.5092593 & 0 & match \\
+MOP-17 input\_\allowbreak{}interval\_\allowbreak{}3.3 & verdict & true & true &  & match \\
+MOP-17 output\_\allowbreak{}voltage\_\allowbreak{}3.3 & verdict & true & true &  & match \\
+MOP-17 output\_\allowbreak{}current\_\allowbreak{}3.3 & verdict & true & true &  & match \\
+MOP-17 rail\_\allowbreak{}power\_\allowbreak{}5.0 & W & 2 & 2 & 0 & match \\
+MOP-17 terminal\_\allowbreak{}battery\_\allowbreak{}current\_\allowbreak{}5.0 & A & 0.617284 & 0.617284 & 0 & match \\
+MOP-17 input\_\allowbreak{}interval\_\allowbreak{}5.0 & verdict & true & true &  & match \\
+MOP-17 output\_\allowbreak{}voltage\_\allowbreak{}5.0 & verdict & true & true &  & match \\
+MOP-17 output\_\allowbreak{}current\_\allowbreak{}5.0 & verdict & true & true &  & match \\
+MOP-17 voltage\_\allowbreak{}outside\_\allowbreak{}tolerance & verdict & false & false &  & match \\
+MOP-17 over\_\allowbreak{}output\_\allowbreak{}current & verdict & false & false &  & match \\
+MOP-17 incompatible\_\allowbreak{}converter\_\allowbreak{}input & verdict & false & false &  & match \\
+MOP-17 uncharacterized\_\allowbreak{}efficiency\_\allowbreak{}current\_\allowbreak{}unknown & A & unresolved & unresolved &  & expected unknown \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 10-characteristics}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-18 sample\_\allowbreak{}VI\_\allowbreak{}0 & W & 0 & 0 &  & match \\
+MOP-18 sample\_\allowbreak{}VI\_\allowbreak{}1 & W & 1.088564 & 1.088564 & 0 & match \\
+MOP-18 sample\_\allowbreak{}VI\_\allowbreak{}2 & W & 0 & 0 &  & match \\
+MOP-18 mpp\_\allowbreak{}power & W & 1.088564 & 1.088564 & 0 & match \\
+MOP-18 mpp\_\allowbreak{}voltage & V & 2.244 & 2.244 & 0 & match \\
+MOP-18 mpp\_\allowbreak{}current & A & 0.4851 & 0.4851 & 0 & match \\
+MOP-18 voc & V & 2.512 & 2.512 & 0 & match \\
+MOP-18 isc & A & 0.5013 & 0.5013 & 0 & match \\
+MOP-18 curve\_\allowbreak{}efficiency & 1 & 0.2638556 & 0.2638556 & 2.1e-14 & match \\
+MOP-18 tracking\_\allowbreak{}limit & verdict & true & true &  & match \\
+MOP-18 absolute\_\allowbreak{}limit & verdict & true & true &  & match \\
+MOP-18 source\_\allowbreak{}limit & verdict & true & true &  & match \\
+MOP-18 purchased\_\allowbreak{}panel\_\allowbreak{}no\_\allowbreak{}internal\_\allowbreak{}count\_\allowbreak{}repeat & W & 2.177129 & 2.177129 & 0 & match \\
+MOP-18 empty\_\allowbreak{}curve\_\allowbreak{}scalar\_\allowbreak{}fallback & W & 1.088564 & 1.088564 & 0 & match \\
+MOP-18 reject\_\allowbreak{}partial &  & unresolved & unresolved &  & expected error \\
+MOP-18 reject\_\allowbreak{}duplicate\_\allowbreak{}voltage &  & unresolved & unresolved &  & expected error \\
+MOP-18 reject\_\allowbreak{}negative\_\allowbreak{}current &  & unresolved & unresolved &  & expected error \\
+MOP-18 reject\_\allowbreak{}nonfinite &  & unresolved & unresolved &  & expected error \\
+MOP-18 reject\_\allowbreak{}partial\_\allowbreak{}Maya\_\allowbreak{}labelled\_\allowbreak{}subset &  & unresolved & unresolved &  & expected error \\
+MOP-18 Maya\_\allowbreak{}label\_\allowbreak{}50mA & W & 0.257 & 0.25615 & 0.331 & match \\
+MOP-18 Maya\_\allowbreak{}label\_\allowbreak{}100mA & W & 0.502 & 0.5022 & 0.0398 & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 11-baseline-DET}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-19 DET\_\allowbreak{}operating\_\allowbreak{}voltage & V & 3.8 & 3.8 & 1.17e-14 & match \\
+MOP-19 DET\_\allowbreak{}operating\_\allowbreak{}current & A & 0.4875834 & 0.4875834 & 1.14e-14 & match \\
+MOP-19 DET\_\allowbreak{}operating\_\allowbreak{}power & W & 1.852817 & 1.852817 & 1.2e-14 & match \\
+MOP-19 DET\_\allowbreak{}operating\_\allowbreak{}efficiency & 1 & 0.2245509 & 0.2245509 & 1.24e-14 & match \\
+MOP-19 DET\_\allowbreak{}mean\_\allowbreak{}source\_\allowbreak{}power & W & 1.707371 & 1.707371 & 1.3e-14 & match \\
+MOP-19 DET\_\allowbreak{}mean\_\allowbreak{}bus\_\allowbreak{}power & W & 1.617509 & 1.617509 & 1.37e-14 & match \\
+MOP-19 DET\_\allowbreak{}bus\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-19 DET\_\allowbreak{}electrical\_\allowbreak{}window & verdict & true & true &  & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 12-baseline-ideal-MPPT}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}voltage & V & 4.488 & 4.488 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}current & A & 0.4851 & 0.4851 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}power & W & 2.177129 & 2.177129 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}efficiency & 1 & 0.2638556 & 0.2638556 & 2.1e-14 & match \\
+MOP-19 MPPT\_\allowbreak{}mean\_\allowbreak{}source\_\allowbreak{}power & W & 2.006224 & 2.006224 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}mean\_\allowbreak{}bus\_\allowbreak{}power & W & 1.805602 & 1.805602 & 1.23e-14 & match \\
+MOP-19 MPPT\_\allowbreak{}bus\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-19 MPPT\_\allowbreak{}electrical\_\allowbreak{}window & verdict & true & true &  & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 13-baseline-fixed-voltage}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}voltage & V & 4 & 4 & 0 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}current & A & 0.4868615 & 0.4868615 & 0 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}power & W & 1.947446 & 1.947446 & 0 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}efficiency & 1 & 0.2360194 & 0.2360194 & 1.18e-14 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}mean\_\allowbreak{}source\_\allowbreak{}power & W & 1.794571 & 1.794571 & 1.24e-14 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}mean\_\allowbreak{}bus\_\allowbreak{}power & W & 1.615114 & 1.615114 & 1.37e-14 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}bus\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}electrical\_\allowbreak{}window & verdict & true & true &  & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 14-unflown-4S-pair}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-19 shared\_\allowbreak{}4S\_\allowbreak{}deployed\_\allowbreak{}width & m & 0.0885 & 0.0885 & 1.57e-14 & match \\
+MOP-19 shared\_\allowbreak{}4S\_\allowbreak{}deployed\_\allowbreak{}length & m & 0.1685 & 0.1685 & 0 & match \\
+MOP-19 shared\_\allowbreak{}4S\_\allowbreak{}deployed\_\allowbreak{}footprint & m2 & 0.01491225 & 0.01491225 & 1.16e-14 & match \\
+MOP-19 shared\_\allowbreak{}4S\_\allowbreak{}deployed\_\allowbreak{}plate\_\allowbreak{}area & m2 & 0.017 & 0.017 & 0 & match \\
+MOP-19 shared\_\allowbreak{}4S\_\allowbreak{}deployed\_\allowbreak{}layout\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-19 DET\_\allowbreak{}operating\_\allowbreak{}voltage & V & 3.8 & 3.8 & 1.17e-14 & match \\
+MOP-19 DET\_\allowbreak{}operating\_\allowbreak{}current & A & 0.4944417 & 0.4944417 & 0 & match \\
+MOP-19 DET\_\allowbreak{}operating\_\allowbreak{}power & W & 1.878879 & 1.878879 & 1.18e-14 & match \\
+MOP-19 DET\_\allowbreak{}operating\_\allowbreak{}efficiency & 1 & 0.1138547 & 0.1138547 & 1.22e-14 & match \\
+MOP-19 DET\_\allowbreak{}mean\_\allowbreak{}source\_\allowbreak{}power & W & 1.731387 & 1.731387 & 2.56e-14 & match \\
+MOP-19 DET\_\allowbreak{}mean\_\allowbreak{}bus\_\allowbreak{}power & W & 1.640261 & 1.640261 & 2.71e-14 & match \\
+MOP-19 DET\_\allowbreak{}bus\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-19 DET\_\allowbreak{}electrical\_\allowbreak{}window & verdict & true & true &  & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}voltage & V & 8.976 & 8.976 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}current & A & 0.4851 & 0.4851 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}power & W & 4.354258 & 4.354258 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}efficiency & 1 & 0.2638556 & 0.2638556 & 2.1e-14 & match \\
+MOP-19 MPPT\_\allowbreak{}mean\_\allowbreak{}source\_\allowbreak{}power & W & 4.012448 & 4.012448 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}mean\_\allowbreak{}bus\_\allowbreak{}power & W & 3.611204 & 3.611204 & 1.23e-14 & match \\
+MOP-19 MPPT\_\allowbreak{}bus\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-19 MPPT\_\allowbreak{}electrical\_\allowbreak{}window & verdict & true & true &  & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}voltage & V & 8 & 8 & 0 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}current & A & 0.4868615 & 0.4868615 & 0 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}power & W & 3.894892 & 3.894892 & 0 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}efficiency & 1 & 0.2360194 & 0.2360194 & 1.18e-14 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}mean\_\allowbreak{}source\_\allowbreak{}power & W & 3.589143 & 3.589143 & 1.24e-14 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}mean\_\allowbreak{}bus\_\allowbreak{}power & W & 3.230229 & 3.230229 & 1.37e-14 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}bus\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}electrical\_\allowbreak{}window & verdict & true & true &  & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 15-operating-point-contract}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-19 exact & A & 0.4851 & 0.4851 & 0 & match \\
+MOP-19 interpolation & A & 0.48834 & 0.48834 & 0 & match \\
+MOP-19 interpolation\_\allowbreak{}not\_\allowbreak{}accepted & A & unresolved & unresolved &  & expected error \\
+MOP-19 out\_\allowbreak{}of\_\allowbreak{}range & A & unresolved & unresolved &  & expected error \\
+MOP-19 invalid\_\allowbreak{}selector & V & unresolved & unresolved &  & expected error \\
+MOP-19 unknown\_\allowbreak{}selector & V & unresolved & unresolved &  & expected unknown \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 16-normal-extrema}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-20 Vmin & V & [3.9,\allowbreak{}4.2] & [3.9,\allowbreak{}4.2] &  & match \\
+MOP-20 Iminmax & A & [0.2,\allowbreak{}1.5] & [0.2,\allowbreak{}1.5] &  & match \\
+MOP-20 voltage\_\allowbreak{}normal\_\allowbreak{}no\_\allowbreak{}trip & verdict & true & true &  & match \\
+MOP-20 rail\_\allowbreak{}normal\_\allowbreak{}no\_\allowbreak{}trip & verdict & true & true &  & match \\
+MOP-20 bound\_\allowbreak{}current\_\allowbreak{}extrema & A & [0.1904762,\allowbreak{}1.578947] & [0.1904762,\allowbreak{}1.578947] &  & match \\
+MOP-20 conservative\_\allowbreak{}corner\_\allowbreak{}no\_\allowbreak{}trip & verdict & true & true &  & match \\
+MOP-20 independent\_\allowbreak{}PV\_\allowbreak{}corner\_\allowbreak{}minimum & A & 0.1904762 & 0.1904762 & 0 & match \\
+MOP-20 independent\_\allowbreak{}PV\_\allowbreak{}corner\_\allowbreak{}maximum & A & 1.578947 & 1.578947 & 0 & match \\
+MOP-20 source\_\allowbreak{}rail\_\allowbreak{}threshold\_\allowbreak{}2.0 & verdict & true & true &  & match \\
+MOP-20 source\_\allowbreak{}rail\_\allowbreak{}threshold\_\allowbreak{}3.0 & verdict & true & true &  & match \\
+MOP-20 source\_\allowbreak{}rail\_\allowbreak{}threshold\_\allowbreak{}4.0 & verdict & true & true &  & match \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 17-threshold-boundaries}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-20 UV\_\allowbreak{}0.99 & verdict & false & false &  & match \\
+MOP-20 UV\_\allowbreak{}1.0 & verdict & false & false &  & match \\
+MOP-20 UV\_\allowbreak{}1.01 & verdict & true & true &  & match \\
+MOP-20 OV\_\allowbreak{}0.99 & verdict & true & true &  & match \\
+MOP-20 OV\_\allowbreak{}1.0 & verdict & false & false &  & match \\
+MOP-20 OV\_\allowbreak{}1.01 & verdict & false & false &  & match \\
+MOP-20 OC\_\allowbreak{}0.99 & verdict & true & true &  & match \\
+MOP-20 OC\_\allowbreak{}1.0 & verdict & false & false &  & match \\
+MOP-20 OC\_\allowbreak{}1.01 & verdict & false & false &  & match \\
+MOP-20 Unreg2\_\allowbreak{}OC\_\allowbreak{}0.99 & verdict & true & true &  & match \\
+MOP-20 Unreg2\_\allowbreak{}OC\_\allowbreak{}1.0 & verdict & false & false &  & match \\
+MOP-20 Unreg2\_\allowbreak{}OC\_\allowbreak{}1.01 & verdict & false & false &  & match \\
+MOP-20 Unreg1\_\allowbreak{}OC\_\allowbreak{}0.99 & verdict & true & true &  & match \\
+MOP-20 Unreg1\_\allowbreak{}OC\_\allowbreak{}1.0 & verdict & false & false &  & match \\
+MOP-20 Unreg1\_\allowbreak{}OC\_\allowbreak{}1.01 & verdict & false & false &  & match \\
+MOP-20 unknown\_\allowbreak{}voltage\_\allowbreak{}samples & verdict & unresolved & unresolved &  & expected unknown \\
+MOP-20 empty\_\allowbreak{}voltage\_\allowbreak{}samples & verdict & unresolved & unresolved &  & expected error \\
+MOP-20 nonfinite\_\allowbreak{}voltage\_\allowbreak{}samples & verdict & unresolved & unresolved &  & expected error \\
+MOP-20 negative\_\allowbreak{}current\_\allowbreak{}magnitude\_\allowbreak{}fails & verdict & false & false &  & match \\
+MOP-20 empty\_\allowbreak{}current\_\allowbreak{}samples & verdict & unresolved & unresolved &  & expected error \\
+MOP-20 unknown\_\allowbreak{}current\_\allowbreak{}samples & verdict & unresolved & unresolved &  & expected unknown \\
+MOP-20 unknown\_\allowbreak{}threshold & verdict & unresolved & unresolved &  & expected unknown \\
+\end{longtable}\endgroup
+
+\subsection{BIRDS-4: 18-unknown-invalid-feasibility}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-16 unknown\_\allowbreak{}series\_\allowbreak{}count & cell & unresolved & unresolved &  & expected unknown \\
+MOP-15 unknown\_\allowbreak{}installation\_\allowbreak{}allocation & verdict & unresolved & unresolved &  & expected unknown \\
+MOP-14b unknown\_\allowbreak{}life\_\allowbreak{}fit & J & unresolved & unresolved &  & expected unknown \\
+MOP-14b unknown\_\allowbreak{}energy\_\allowbreak{}retention & J & unresolved & unresolved &  & expected unknown \\
+MOP-14a deliberately\_\allowbreak{}inadequate\_\allowbreak{}delivery & verdict & false & false &  & match \\
+MOP-14a unknown\_\allowbreak{}orbit & s & unresolved & unresolved &  & expected unknown \\
+MOP-14a invalid\_\allowbreak{}perigee &  & unresolved & unresolved &  & expected error \\
+MOP-14b unsupported\_\allowbreak{}cycle\_\allowbreak{}fit &  & unresolved & unresolved &  & expected error \\
+MOP-14b invalid\_\allowbreak{}retention &  & unresolved & unresolved &  & expected error \\
+MOP-14b invalid\_\allowbreak{}packing &  & unresolved & unresolved &  & expected error \\
+MOP-20 invalid\_\allowbreak{}current\_\allowbreak{}voltage\_\allowbreak{}interval &  & unresolved & unresolved &  & expected error \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 01-mass-boundaries}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-12 published\_\allowbreak{}battery\_\allowbreak{}module\_\allowbreak{}mass & kg & 0.416 & 0.416 & 0 & match \\
+MOP-12 published\_\allowbreak{}solar\_\allowbreak{}module\_\allowbreak{}mass & kg & 0.252 & 0.252 & 0 & match \\
+MOP-12 assumed\_\allowbreak{}solar\_\allowbreak{}module\_\allowbreak{}volume & m3 & 0.00024 & 0.00024 & 2.26e-14 & match \\
+MOP-12 mass & kg & 0.728 & 0.728 & 0 & match \\
+MOP-12 volume & m3 & 0.00045 & 0.00045 & 2.41e-14 & match \\
+MOP-12 mass\_\allowbreak{}margin & kg & 0.072 & 0.072 & 9.64e-14 & match \\
+MOP-12 volume\_\allowbreak{}margin & m3 & 5e-05 & 5e-05 & 1.76e-13 & match \\
+MOP-12 mass\_\allowbreak{}allocation & verdict & true & true &  & match \\
+MOP-12 volume\_\allowbreak{}allocation & verdict & true & true &  & match \\
+MOP-12 aggregate\_\allowbreak{}replacement\_\allowbreak{}no\_\allowbreak{}double\_\allowbreak{}count & kg & 0.728 & 0.728 & 0 & match \\
+MOP-12 zero\_\allowbreak{}margin\_\allowbreak{}passes & verdict & true & true &  & match \\
+MOP-12 negative\_\allowbreak{}margin\_\allowbreak{}fails & verdict & false & false &  & match \\
+MOP-12 unknown\_\allowbreak{}mass\_\allowbreak{}total & kg & unresolved & unresolved &  & expected unknown \\
+MOP-12 unknown\_\allowbreak{}mass\_\allowbreak{}margin & kg & unresolved & unresolved &  & expected unknown \\
+MOP-12 volume\_\allowbreak{}unaffected\_\allowbreak{}by\_\allowbreak{}unknown\_\allowbreak{}mass & m3 & 0.00045 & 0.00045 & 2.41e-14 & match \\
+MOP-12 unknown\_\allowbreak{}mass\_\allowbreak{}allocation & verdict & unresolved & unresolved &  & expected unknown \\
+MOP-12 unknown\_\allowbreak{}volume\_\allowbreak{}total & m3 & unresolved & unresolved &  & expected unknown \\
+MOP-12 unknown\_\allowbreak{}volume\_\allowbreak{}margin & m3 & unresolved & unresolved &  & expected unknown \\
+MOP-12 unknown\_\allowbreak{}volume\_\allowbreak{}allocation & verdict & unresolved & unresolved &  & expected unknown \\
+MOP-12 mass\_\allowbreak{}unit\_\allowbreak{}record &  & kg & kg &  & match \\
+MOP-12 volume\_\allowbreak{}unit\_\allowbreak{}record &  & m3 & m3 &  & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 02-states-modes-circular}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-14a period & s & 5738.819 & 5738.819 & 1.58e-14 & match \\
+MOP-14a sunlight & s & 3602.217 & 3602.202 & 0.000434 & match \\
+MOP-14a eclipse & s & 2136.601 & 2136.617 & 0.000731 & match \\
+MOP-14b projection & 1 & 1 & 1 & 0 & match \\
+MOP-14b projected\_\allowbreak{}duration & s & 3602.217 & 3602.202 & 0.000434 & match \\
+MOP-14a main\_\allowbreak{}state\_\allowbreak{}power & W & 0.198 & 0.198 & 1.4e-14 & match \\
+MOP-14a receiver\_\allowbreak{}state\_\allowbreak{}power & W & 0.132 & 0.132 & 0 & match \\
+MOP-14a payload\_\allowbreak{}state\_\allowbreak{}power & W & 1 & 1 & 0 & match \\
+MOP-14a sunlight\_\allowbreak{}mode\_\allowbreak{}aggregation & W & 0.53 & 0.53 & 0 & match \\
+MOP-14a sunlight\_\allowbreak{}EPS\_\allowbreak{}consumption\_\allowbreak{}boundary & W & 0 & 0 &  & match \\
+MOP-14a sunlight\_\allowbreak{}mean & W & 0.53 & 0.53 & 0 & match \\
+MOP-14a sunlight\_\allowbreak{}energy & J & 1909.175 & 1909.167 & 0.000434 & match \\
+MOP-14a sunlight\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-14a eclipse\_\allowbreak{}mode\_\allowbreak{}aggregation & W & 0.43 & 0.43 & 0 & match \\
+MOP-14a eclipse\_\allowbreak{}EPS\_\allowbreak{}consumption\_\allowbreak{}boundary & W & 0 & 0 &  & match \\
+MOP-14a eclipse\_\allowbreak{}mean & W & 0.43 & 0.43 & 0 & match \\
+MOP-14a eclipse\_\allowbreak{}energy & J & 918.7386 & 918.7453 & 0.000731 & match \\
+MOP-14a eclipse\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-14a minimum\_\allowbreak{}panel\_\allowbreak{}power & W & 0.9635935 & 0.9635975 & 0.000411 & match \\
+MOP-14a standby\_\allowbreak{}surplus & mWh & 1011 & 1011 & 0 & match \\
+MOP-14a flight\_\allowbreak{}computer\_\allowbreak{}10min & Wh & 0.18 & 0.18 & 1.54e-14 & match \\
+MOP-14a heater\_\allowbreak{}6V & W & 1.47 & 1.47 & 0 & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 03-eccentric-nadir}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-14a period & s & 5738.819 & 5738.819 & 1.58e-14 & match \\
+MOP-14a sunlight & s & 3638.667 & 3638.662 & 0.000133 & match \\
+MOP-14a eclipse & s & 2100.151 & 2100.156 & 0.00023 & match \\
+MOP-14b projection & 1 & 0.4354719 & 0.4354725 & 0.000133 & match \\
+MOP-14b projected\_\allowbreak{}duration & s & 1584.537 & 1584.537 & 2.24e-09 & match \\
+MOP-14a minimum\_\allowbreak{}panel\_\allowbreak{}power & W & 0.9544437 & 0.9544449 & 0.000126 & match \\
+MOP-14b nontrivial\_\allowbreak{}projection\_\allowbreak{}generation & W & 0.8477766 & 0.8477777 & 0.000133 & match \\
+MOP-14b nadir\_\allowbreak{}generation\_\allowbreak{}verdict & verdict & false & false &  & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 04-eclipse-free}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-14a period & s & 5738.819 & 5738.819 & 1.58e-14 & match \\
+MOP-14a sunlight & s & 5738.819 & 5738.819 & 1.58e-14 & match \\
+MOP-14a eclipse & s & 0 & 0 &  & match \\
+MOP-14b projection & 1 & 1 & 1 & 0 & match \\
+MOP-14b projected\_\allowbreak{}duration & s & 5738.819 & 5738.819 & 1.58e-14 & match \\
+MOP-14a zero\_\allowbreak{}eclipse\_\allowbreak{}demand & verdict & true & true &  & match \\
+MOP-14a zero\_\allowbreak{}eclipse\_\allowbreak{}energy & J & 0 & 0 &  & match \\
+MOP-14a unused\_\allowbreak{}eclipse\_\allowbreak{}efficiency\_\allowbreak{}identity & 1 & 1 & 1 & 0 & match \\
+MOP-14a minimum\_\allowbreak{}panel\_\allowbreak{}power & W & 0.6235294 & 0.6235294 & 0 & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 05-baseline-sizing}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-14b cell\_\allowbreak{}power & W & 1.056321 & 1.056321 & 0 & match \\
+MOP-14b array\_\allowbreak{}mpp & W & 2.112642 & 2.112642 & 0 & match \\
+MOP-14b array\_\allowbreak{}voltage & V & 4.86 & 4.86 & 0 & match \\
+MOP-14b array\_\allowbreak{}current & A & 0.4347 & 0.4347 & 0 & match \\
+MOP-14b array\_\allowbreak{}voc & V & 5.5 & 5.5 & 0 & match \\
+MOP-14b array\_\allowbreak{}isc & A & 0.4518 & 0.4518 & 0 & match \\
+MOP-14b active\_\allowbreak{}area & m2 & 0.0054 & 0.0054 & 0 & match \\
+MOP-14b panel\_\allowbreak{}area & m2 & 0.00675 & 0.00675 & 0 & match \\
+MOP-14b required\_\allowbreak{}area & m2 & 0.002672799 & 0.00267281 & 0.000411 & match \\
+MOP-14b effective\_\allowbreak{}area & m2 & 0.002462985 & 0.002462995 & 0.000411 & match \\
+MOP-14b tumbling\_\allowbreak{}area & m2 & 0.00957931 & 0.009579349 & 0.000411 & match \\
+MOP-14b generation\_\allowbreak{}efficiency & 1 & 0.286196 & 0.286196 & 0 & match \\
+MOP-14b density & W/m2 & 360.5184 & 360.5184 & 1.58e-14 & match \\
+MOP-14b available\_\allowbreak{}power & W & 1.9468 & 1.9468 & 1.14e-14 & match \\
+MOP-14b source\_\allowbreak{}energy & J & 7012.795 & 7012.765 & 0.000434 & match \\
+MOP-14b fractional\_\allowbreak{}count & cell & 0.9122166 & 0.9122203 & 0.000411 & match \\
+MOP-14b required\_\allowbreak{}count & cell & 1 & 1 &  & match \\
+MOP-14b minimum\_\allowbreak{}solar\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-14b cycles & cycle & 10997.94 & 10997.94 & 1.65e-14 & match \\
+MOP-14b dod & 1 & 0.1818522 & 0.1818522 & 1.53e-14 & match \\
+MOP-14b required\_\allowbreak{}battery\_\allowbreak{}energy & J & 6062.541 & 6062.585 & 0.000731 & match \\
+MOP-14b minimum\_\allowbreak{}battery\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-14b pack\_\allowbreak{}wh & Wh & 18.72 & 18.72 & 0 & match \\
+MOP-14b pack\_\allowbreak{}ah & Ah & 2.6 & 2.6 & 0 & match \\
+MOP-14b pack\_\allowbreak{}j & J & 67392 & 67392 & 0 & match \\
+MOP-14b eol\_\allowbreak{}j & J & 53913.6 & 53913.6 & 1.35e-14 & match \\
+MOP-14b eol\_\allowbreak{}ah & Ah & 2.08 & 2.08 & 0 & match \\
+MOP-14b battery\_\allowbreak{}voltage & V & 7.2 & 7.2 & 0 & match \\
+MOP-14b battery\_\allowbreak{}min & V & 5.5 & 5.5 & 0 & match \\
+MOP-14b battery\_\allowbreak{}max & V & 8.4 & 8.4 & 0 & match \\
+MOP-14b charge\_\allowbreak{}limit & A & 1.25 & 1.25 & 0 & match \\
+MOP-14b discharge\_\allowbreak{}limit & A & 5 & 5 & 0 & match \\
+MOP-14b solar\_\allowbreak{}power\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b solar\_\allowbreak{}count\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b battery\_\allowbreak{}energy\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b solar\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b battery\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b area\_\allowbreak{}fit\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b active\_\allowbreak{}area\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b generation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b tracking\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b absolute\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b source\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b battery\_\allowbreak{}receiving\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b charge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b discharge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b storage\_\allowbreak{}occupied\_\allowbreak{}volume & m3 & 0.000112 & 0.000112 & 1.21e-14 & match \\
+MOP-14b battery\_\allowbreak{}installation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b independent\_\allowbreak{}packs\_\allowbreak{}energy & Wh & 37.44 & 37.44 & 0 & match \\
+MOP-14b independent\_\allowbreak{}packs\_\allowbreak{}Ah\_\allowbreak{}bookkeeping & Ah & 5.2 & 5.2 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}cell\_\allowbreak{}power & W & 1.17369 & 1.17369 & 1.89e-14 & match \\
+MOP-14b EOL\_\allowbreak{}efficiency\_\allowbreak{}once & 1 & 0.286196 & 0.286196 & 0 & match \\
+MOP-14b published\_\allowbreak{}BOL\_\allowbreak{}module\_\allowbreak{}power & W & 2.34 & 2.34738 & 0.315 & match \\
+MOP-14b published\_\allowbreak{}hot\_\allowbreak{}module\_\allowbreak{}power & W & 2.1 & 2.10105 & 0.05 & match \\
+MOP-15 baseline\_\allowbreak{}charger & verdict & true & true &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}minimum\_\allowbreak{}panel\_\allowbreak{}power & W & 0.9635935 & 0.9635975 & 0.000411 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}fractional\_\allowbreak{}count & cell & 0.8209949 & 0.8209983 & 0.000411 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}required\_\allowbreak{}count & cell & 1 & 1 &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}minimum\_\allowbreak{}solar\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}cell\_\allowbreak{}power & W & 1.17369 & 1.17369 & 1.89e-14 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}array\_\allowbreak{}mpp & W & 2.34738 & 2.34738 & 1.89e-14 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}array\_\allowbreak{}voltage & V & 4.86 & 4.86 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}array\_\allowbreak{}current & A & 0.483 & 0.483 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}array\_\allowbreak{}voc & V & 5.5 & 5.5 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}array\_\allowbreak{}isc & A & 0.502 & 0.502 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}generation\_\allowbreak{}efficiency & 1 & 0.3179956 & 0.3179956 & 1.75e-14 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}active\_\allowbreak{}area & m2 & 0.0054 & 0.0054 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}panel\_\allowbreak{}area & m2 & 0.00675 & 0.00675 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}required\_\allowbreak{}area & m2 & 0.00240552 & 0.002405529 & 0.000411 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}effective\_\allowbreak{}area & m2 & 0.002216686 & 0.002216695 & 0.000411 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}density & W/m2 & 400.5761 & 400.5761 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}available\_\allowbreak{}power & W & 2.163111 & 2.163111 & 0 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}source\_\allowbreak{}energy & J & 7791.995 & 7791.961 & 0.000434 & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}solar\_\allowbreak{}power\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}solar\_\allowbreak{}count\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}area\_\allowbreak{}fit\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}active\_\allowbreak{}area\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-14b BOL\_\allowbreak{}case\_\allowbreak{}generation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 06-silicon-technology}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-15 cell\_\allowbreak{}power & W & 0.024084 & 0.024084 & 0 & match \\
+MOP-15 array\_\allowbreak{}mpp & W & 0.96336 & 0.96336 & 0 & match \\
+MOP-15 array\_\allowbreak{}voltage & V & 17.84 & 17.84 & 0 & match \\
+MOP-15 array\_\allowbreak{}current & A & 0.054 & 0.054 & 1.28e-14 & match \\
+MOP-15 array\_\allowbreak{}voc & V & 22.12 & 22.12 & 0 & match \\
+MOP-15 array\_\allowbreak{}isc & A & 0.0567 & 0.0567 & 0 & match \\
+MOP-15 active\_\allowbreak{}area & m2 & 0.003668 & 0.003668 & 1.18e-14 & match \\
+MOP-15 panel\_\allowbreak{}area & m2 & 0.00736 & 0.00736 & 1.18e-14 & match \\
+MOP-15 required\_\allowbreak{}area & m2 & 0.003966869 & 0.003966885 & 0.000411 & match \\
+MOP-15 effective\_\allowbreak{}area & m2 & 0.00365547 & 0.003655485 & 0.000411 & match \\
+MOP-15 tumbling\_\allowbreak{}area & m2 & 0.02282202 & 0.02282212 & 0.000411 & match \\
+MOP-15 generation\_\allowbreak{}efficiency & 1 & 0.1928334 & 0.1928334 & 0 & match \\
+MOP-15 density & W/m2 & 242.9104 & 242.9104 & 1.17e-14 & match \\
+MOP-15 available\_\allowbreak{}power & W & 0.8909952 & 0.8909952 & 1.25e-14 & match \\
+MOP-15 source\_\allowbreak{}energy & J & 3209.558 & 3209.544 & 0.000434 & match \\
+MOP-15 fractional\_\allowbreak{}count & cell & 40.0097 & 40.00986 & 0.000411 & match \\
+MOP-15 required\_\allowbreak{}count & cell & 41 & 41 &  & match \\
+MOP-15 minimum\_\allowbreak{}solar\_\allowbreak{}parallel & string & 11 & 11 &  & match \\
+MOP-15 cycles & cycle & 10997.94 & 10997.94 & 1.65e-14 & match \\
+MOP-15 dod & 1 & 0.1818522 & 0.1818522 & 1.53e-14 & match \\
+MOP-15 required\_\allowbreak{}battery\_\allowbreak{}energy & J & 6062.541 & 6062.585 & 0.000731 & match \\
+MOP-15 minimum\_\allowbreak{}battery\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-15 pack\_\allowbreak{}wh & Wh & 18.72 & 18.72 & 0 & match \\
+MOP-15 pack\_\allowbreak{}ah & Ah & 2.6 & 2.6 & 0 & match \\
+MOP-15 pack\_\allowbreak{}j & J & 67392 & 67392 & 0 & match \\
+MOP-15 eol\_\allowbreak{}j & J & 53913.6 & 53913.6 & 1.35e-14 & match \\
+MOP-15 eol\_\allowbreak{}ah & Ah & 2.08 & 2.08 & 0 & match \\
+MOP-15 battery\_\allowbreak{}voltage & V & 7.2 & 7.2 & 0 & match \\
+MOP-15 battery\_\allowbreak{}min & V & 5.5 & 5.5 & 0 & match \\
+MOP-15 battery\_\allowbreak{}max & V & 8.4 & 8.4 & 0 & match \\
+MOP-15 charge\_\allowbreak{}limit & A & 1.25 & 1.25 & 0 & match \\
+MOP-15 discharge\_\allowbreak{}limit & A & 5 & 5 & 0 & match \\
+MOP-15 solar\_\allowbreak{}power\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 solar\_\allowbreak{}count\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 battery\_\allowbreak{}energy\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 solar\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 battery\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 area\_\allowbreak{}fit\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 active\_\allowbreak{}area\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 generation\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 tracking\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 absolute\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 source\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 battery\_\allowbreak{}receiving\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 charge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 discharge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 storage\_\allowbreak{}occupied\_\allowbreak{}volume & m3 & 0.000112 & 0.000112 & 1.21e-14 & match \\
+MOP-15 battery\_\allowbreak{}installation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 independent\_\allowbreak{}packs\_\allowbreak{}energy & Wh & 37.44 & 37.44 & 0 & match \\
+MOP-15 independent\_\allowbreak{}packs\_\allowbreak{}Ah\_\allowbreak{}bookkeeping & Ah & 5.2 & 5.2 & 0 & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 07-battery-chemistry}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-15 cell\_\allowbreak{}power & W & 1.056321 & 1.056321 & 0 & match \\
+MOP-15 array\_\allowbreak{}mpp & W & 2.112642 & 2.112642 & 0 & match \\
+MOP-15 array\_\allowbreak{}voltage & V & 4.86 & 4.86 & 0 & match \\
+MOP-15 array\_\allowbreak{}current & A & 0.4347 & 0.4347 & 0 & match \\
+MOP-15 array\_\allowbreak{}voc & V & 5.5 & 5.5 & 0 & match \\
+MOP-15 array\_\allowbreak{}isc & A & 0.4518 & 0.4518 & 0 & match \\
+MOP-15 active\_\allowbreak{}area & m2 & 0.0054 & 0.0054 & 0 & match \\
+MOP-15 panel\_\allowbreak{}area & m2 & 0.00675 & 0.00675 & 0 & match \\
+MOP-15 required\_\allowbreak{}area & m2 & 0.002672799 & 0.00267281 & 0.000411 & match \\
+MOP-15 effective\_\allowbreak{}area & m2 & 0.002462985 & 0.002462995 & 0.000411 & match \\
+MOP-15 tumbling\_\allowbreak{}area & m2 & 0.00957931 & 0.009579349 & 0.000411 & match \\
+MOP-15 generation\_\allowbreak{}efficiency & 1 & 0.286196 & 0.286196 & 0 & match \\
+MOP-15 density & W/m2 & 360.5184 & 360.5184 & 1.58e-14 & match \\
+MOP-15 available\_\allowbreak{}power & W & 1.9468 & 1.9468 & 1.14e-14 & match \\
+MOP-15 source\_\allowbreak{}energy & J & 7012.795 & 7012.765 & 0.000434 & match \\
+MOP-15 fractional\_\allowbreak{}count & cell & 0.9122166 & 0.9122203 & 0.000411 & match \\
+MOP-15 required\_\allowbreak{}count & cell & 1 & 1 &  & match \\
+MOP-15 minimum\_\allowbreak{}solar\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-15 cycles & cycle & 10997.94 & 10997.94 & 1.65e-14 & match \\
+MOP-15 dod & 1 & 0.1818522 & 0.1818522 & 1.53e-14 & match \\
+MOP-15 required\_\allowbreak{}battery\_\allowbreak{}energy & J & 6062.541 & 6062.585 & 0.000731 & match \\
+MOP-15 minimum\_\allowbreak{}battery\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-15 pack\_\allowbreak{}wh & Wh & 14.52 & 14.52 & 0 & match \\
+MOP-15 pack\_\allowbreak{}ah & Ah & 1.1 & 1.1 & 0 & match \\
+MOP-15 pack\_\allowbreak{}j & J & 52272 & 52272 & 0 & match \\
+MOP-15 eol\_\allowbreak{}j & J & 41817.6 & 41817.6 & 1.74e-14 & match \\
+MOP-15 eol\_\allowbreak{}ah & Ah & 0.88 & 0.88 & 1.26e-14 & match \\
+MOP-15 battery\_\allowbreak{}voltage & V & 13.2 & 13.2 & 0 & match \\
+MOP-15 battery\_\allowbreak{}min & V & 8 & 8 & 0 & match \\
+MOP-15 battery\_\allowbreak{}max & V & 14.4 & 14.4 & 0 & match \\
+MOP-15 charge\_\allowbreak{}limit & A & 0.5 & 0.5 & 0 & match \\
+MOP-15 discharge\_\allowbreak{}limit & A & 3 & 3 & 0 & match \\
+MOP-15 solar\_\allowbreak{}power\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 solar\_\allowbreak{}count\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 battery\_\allowbreak{}energy\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 solar\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 battery\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 area\_\allowbreak{}fit\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 active\_\allowbreak{}area\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 generation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 tracking\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 absolute\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 source\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 battery\_\allowbreak{}receiving\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 charge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 discharge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-15 storage\_\allowbreak{}occupied\_\allowbreak{}volume & m3 & 0.000184 & 0.000184 & 0 & match \\
+MOP-15 battery\_\allowbreak{}installation\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-15 independent\_\allowbreak{}packs\_\allowbreak{}energy & Wh & 29.04 & 29.04 & 0 & match \\
+MOP-15 independent\_\allowbreak{}packs\_\allowbreak{}Ah\_\allowbreak{}bookkeeping & Ah & 2.2 & 2.2 & 0 & match \\
+MOP-15 unchanged\_\allowbreak{}charger\_\allowbreak{}incompatible & verdict & false & false &  & match \\
+MOP-15 explicit\_\allowbreak{}new\_\allowbreak{}charger\_\allowbreak{}compatible & verdict & true & true &  & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 08-integer-configurations}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-16 cell\_\allowbreak{}power & W & 1.056321 & 1.056321 & 0 & match \\
+MOP-16 array\_\allowbreak{}mpp & W & 4.225284 & 4.225284 & 0 & match \\
+MOP-16 array\_\allowbreak{}voltage & V & 9.72 & 9.72 & 0 & match \\
+MOP-16 array\_\allowbreak{}current & A & 0.4347 & 0.4347 & 0 & match \\
+MOP-16 array\_\allowbreak{}voc & V & 11 & 11 & 0 & match \\
+MOP-16 array\_\allowbreak{}isc & A & 0.4518 & 0.4518 & 0 & match \\
+MOP-16 active\_\allowbreak{}area & m2 & 0.0108 & 0.0108 & 0 & match \\
+MOP-16 panel\_\allowbreak{}area & m2 & 0.0135 & 0.0135 & 0 & match \\
+MOP-16 required\_\allowbreak{}area & m2 & 0.002672799 & 0.00267281 & 0.000411 & match \\
+MOP-16 effective\_\allowbreak{}area & m2 & 0.002462985 & 0.002462995 & 0.000411 & match \\
+MOP-16 tumbling\_\allowbreak{}area & m2 & 0.00957931 & 0.009579349 & 0.000411 & match \\
+MOP-16 generation\_\allowbreak{}efficiency & 1 & 0.286196 & 0.286196 & 0 & match \\
+MOP-16 density & W/m2 & 360.5184 & 360.5184 & 1.58e-14 & match \\
+MOP-16 available\_\allowbreak{}power & W & 3.893599 & 3.893599 & 1.14e-14 & match \\
+MOP-16 source\_\allowbreak{}energy & J & 14025.59 & 14025.53 & 0.000434 & match \\
+MOP-16 fractional\_\allowbreak{}count & cell & 0.9122166 & 0.9122203 & 0.000411 & match \\
+MOP-16 required\_\allowbreak{}count & cell & 1 & 1 &  & match \\
+MOP-16 minimum\_\allowbreak{}solar\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-16 cycles & cycle & 10997.94 & 10997.94 & 1.65e-14 & match \\
+MOP-16 dod & 1 & 0.1818522 & 0.1818522 & 1.53e-14 & match \\
+MOP-16 required\_\allowbreak{}battery\_\allowbreak{}energy & J & 6062.541 & 6062.585 & 0.000731 & match \\
+MOP-16 minimum\_\allowbreak{}battery\_\allowbreak{}parallel & string & 1 & 1 &  & match \\
+MOP-16 pack\_\allowbreak{}wh & Wh & 28.08 & 28.08 & 0 & match \\
+MOP-16 pack\_\allowbreak{}ah & Ah & 2.6 & 2.6 & 0 & match \\
+MOP-16 pack\_\allowbreak{}j & J & 101088 & 101088 & 0 & match \\
+MOP-16 eol\_\allowbreak{}j & J & 80870.4 & 80870.4 & 1.8e-14 & match \\
+MOP-16 eol\_\allowbreak{}ah & Ah & 2.08 & 2.08 & 0 & match \\
+MOP-16 battery\_\allowbreak{}voltage & V & 10.8 & 10.8 & 0 & match \\
+MOP-16 battery\_\allowbreak{}min & V & 8.25 & 8.25 & 0 & match \\
+MOP-16 battery\_\allowbreak{}max & V & 12.6 & 12.6 & 1.41e-14 & match \\
+MOP-16 charge\_\allowbreak{}limit & A & 1.25 & 1.25 & 0 & match \\
+MOP-16 discharge\_\allowbreak{}limit & A & 5 & 5 & 0 & match \\
+MOP-16 solar\_\allowbreak{}power\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 solar\_\allowbreak{}count\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 battery\_\allowbreak{}energy\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 solar\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 battery\_\allowbreak{}configuration\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 area\_\allowbreak{}fit\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 active\_\allowbreak{}area\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 generation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 tracking\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 absolute\_\allowbreak{}voltage\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 source\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 battery\_\allowbreak{}receiving\_\allowbreak{}verdict & verdict & false & false &  & match \\
+MOP-16 charge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 discharge\_\allowbreak{}current\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 storage\_\allowbreak{}occupied\_\allowbreak{}volume & m3 & 0.000148 & 0.000148 & 0 & match \\
+MOP-16 battery\_\allowbreak{}installation\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 independent\_\allowbreak{}packs\_\allowbreak{}energy & Wh & 56.16 & 56.16 & 0 & match \\
+MOP-16 independent\_\allowbreak{}packs\_\allowbreak{}Ah\_\allowbreak{}bookkeeping & Ah & 5.2 & 5.2 & 0 & match \\
+MOP-16 deployed\_\allowbreak{}width & m & 0.0876 & 0.0876 & 1.58e-14 & match \\
+MOP-16 deployed\_\allowbreak{}length & m & 0.1464 & 0.1464 & 0 & match \\
+MOP-16 deployed\_\allowbreak{}footprint & m2 & 0.01282464 & 0.01282464 & 1.35e-14 & match \\
+MOP-16 deployed\_\allowbreak{}plate\_\allowbreak{}area & m2 & 0.017 & 0.017 & 0 & match \\
+MOP-16 deployed\_\allowbreak{}layout\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-16 published\_\allowbreak{}card\_\allowbreak{}energy & Wh & 37.4 & 37.44 & 0.107 & match \\
+MOP-16 historical\_\allowbreak{}2019\_\allowbreak{}energy & Wh & 95.04 & 95.04 & 1.5e-14 & match \\
+MOP-16 invalid\_\allowbreak{}solar\_\allowbreak{}series\_\allowbreak{}0 & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}battery\_\allowbreak{}parallel\_\allowbreak{}0 & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}solar\_\allowbreak{}series\_\allowbreak{}-1 & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}battery\_\allowbreak{}parallel\_\allowbreak{}-1 & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}solar\_\allowbreak{}series\_\allowbreak{}2.5 & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}battery\_\allowbreak{}parallel\_\allowbreak{}2.5 & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}solar\_\allowbreak{}series\_\allowbreak{}True & verdict & false & false &  & match \\
+MOP-16 invalid\_\allowbreak{}battery\_\allowbreak{}parallel\_\allowbreak{}True & verdict & false & false &  & match \\
+MOP-16 inconsistent\_\allowbreak{}total\_\allowbreak{}count & verdict & false & false &  & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 09-converter-rails}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-17 rail\_\allowbreak{}power\_\allowbreak{}3.3 & W & 1.65 & 1.65 & 0 & match \\
+MOP-17 terminal\_\allowbreak{}battery\_\allowbreak{}current\_\allowbreak{}3.3 & A & 0.2546296 & 0.2546296 & 2.18e-14 & match \\
+MOP-17 input\_\allowbreak{}interval\_\allowbreak{}3.3 & verdict & true & true &  & match \\
+MOP-17 output\_\allowbreak{}voltage\_\allowbreak{}3.3 & verdict & true & true &  & match \\
+MOP-17 output\_\allowbreak{}current\_\allowbreak{}3.3 & verdict & true & true &  & match \\
+MOP-17 rail\_\allowbreak{}power\_\allowbreak{}5.0 & W & 2 & 2 & 0 & match \\
+MOP-17 terminal\_\allowbreak{}battery\_\allowbreak{}current\_\allowbreak{}5.0 & A & 0.308642 & 0.308642 & 0 & match \\
+MOP-17 input\_\allowbreak{}interval\_\allowbreak{}5.0 & verdict & true & true &  & match \\
+MOP-17 output\_\allowbreak{}voltage\_\allowbreak{}5.0 & verdict & true & true &  & match \\
+MOP-17 output\_\allowbreak{}current\_\allowbreak{}5.0 & verdict & true & true &  & match \\
+MOP-17 voltage\_\allowbreak{}outside\_\allowbreak{}tolerance & verdict & false & false &  & match \\
+MOP-17 over\_\allowbreak{}output\_\allowbreak{}current & verdict & false & false &  & match \\
+MOP-17 incompatible\_\allowbreak{}converter\_\allowbreak{}input & verdict & false & false &  & match \\
+MOP-17 uncharacterized\_\allowbreak{}efficiency\_\allowbreak{}current\_\allowbreak{}unknown & A & unresolved & unresolved &  & expected unknown \\
+MOP-17 historical\_\allowbreak{}SPV1040\_\allowbreak{}rejection & verdict & false & false &  & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 10-characteristics}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-18 sample\_\allowbreak{}VI\_\allowbreak{}0 & W & 0 & 0 &  & match \\
+MOP-18 sample\_\allowbreak{}VI\_\allowbreak{}1 & W & 1.056321 & 1.056321 & 0 & match \\
+MOP-18 sample\_\allowbreak{}VI\_\allowbreak{}2 & W & 0 & 0 &  & match \\
+MOP-18 mpp\_\allowbreak{}power & W & 1.056321 & 1.056321 & 0 & match \\
+MOP-18 mpp\_\allowbreak{}voltage & V & 2.43 & 2.43 & 0 & match \\
+MOP-18 mpp\_\allowbreak{}current & A & 0.4347 & 0.4347 & 0 & match \\
+MOP-18 voc & V & 2.75 & 2.75 & 0 & match \\
+MOP-18 isc & A & 0.4518 & 0.4518 & 0 & match \\
+MOP-18 curve\_\allowbreak{}efficiency & 1 & 0.286196 & 0.286196 & 0 & match \\
+MOP-18 tracking\_\allowbreak{}limit & verdict & true & true &  & match \\
+MOP-18 absolute\_\allowbreak{}limit & verdict & true & true &  & match \\
+MOP-18 source\_\allowbreak{}limit & verdict & true & true &  & match \\
+MOP-18 purchased\_\allowbreak{}panel\_\allowbreak{}no\_\allowbreak{}internal\_\allowbreak{}count\_\allowbreak{}repeat & W & 2.112642 & 2.112642 & 0 & match \\
+MOP-18 empty\_\allowbreak{}curve\_\allowbreak{}scalar\_\allowbreak{}fallback & W & 1.056321 & 1.056321 & 0 & match \\
+MOP-18 reject\_\allowbreak{}partial &  & unresolved & unresolved &  & expected error \\
+MOP-18 reject\_\allowbreak{}duplicate\_\allowbreak{}voltage &  & unresolved & unresolved &  & expected error \\
+MOP-18 reject\_\allowbreak{}negative\_\allowbreak{}current &  & unresolved & unresolved &  & expected error \\
+MOP-18 reject\_\allowbreak{}nonfinite &  & unresolved & unresolved &  & expected error \\
+MOP-18 published\_\allowbreak{}sweep\_\allowbreak{}max\_\allowbreak{}VI & W & 1.654432 & 1.654432 & 0 & match \\
+MOP-18 published\_\allowbreak{}row2\_\allowbreak{}VI & W & 0.3059666 & 0.3059666 & 0 & match \\
+MOP-18 reject\_\allowbreak{}unaltered\_\allowbreak{}published\_\allowbreak{}partial\_\allowbreak{}sweep &  & unresolved & unresolved &  & expected error \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 11-baseline-DET}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-19 DET\_\allowbreak{}operating\_\allowbreak{}voltage & V & 7.4 & 7.4 & 0 & match \\
+MOP-19 DET\_\allowbreak{}infeasible\_\allowbreak{}current & A & unresolved & unresolved &  & expected error \\
+MOP-19 DET\_\allowbreak{}voltage\_\allowbreak{}still\_\allowbreak{}in\_\allowbreak{}controller\_\allowbreak{}window & verdict & true & true &  & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 12-baseline-ideal-MPPT}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}voltage & V & 4.86 & 4.86 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}current & A & 0.4347 & 0.4347 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}power & W & 2.112642 & 2.112642 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}efficiency & 1 & 0.286196 & 0.286196 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}mean\_\allowbreak{}source\_\allowbreak{}power & W & 1.9468 & 1.9468 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}mean\_\allowbreak{}bus\_\allowbreak{}power & W & 1.75212 & 1.75212 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}bus\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-19 MPPT\_\allowbreak{}electrical\_\allowbreak{}window & verdict & true & true &  & match \\
+MOP-19 published\_\allowbreak{}separate\_\allowbreak{}loss\_\allowbreak{}sum & W & 0.387 & 0.387 & 0 & match \\
+MOP-19 published\_\allowbreak{}separate\_\allowbreak{}net\_\allowbreak{}power & W & 1.71 & 1.713 & 0.175 & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 13-baseline-fixed-voltage}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}voltage & V & 4 & 4 & 0 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}current & A & 0.4377259 & 0.4377259 & 0 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}power & W & 1.750904 & 1.750904 & 0 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}efficiency & 1 & 0.237192 & 0.237192 & 1.17e-14 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}mean\_\allowbreak{}source\_\allowbreak{}power & W & 1.613458 & 1.613458 & 1.38e-14 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}mean\_\allowbreak{}bus\_\allowbreak{}power & W & 1.452112 & 1.452112 & 1.53e-14 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}bus\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}electrical\_\allowbreak{}window & verdict & true & true &  & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 14-unflown-4S-pair}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-19 shared\_\allowbreak{}4S\_\allowbreak{}deployed\_\allowbreak{}width & m & 0.0876 & 0.0876 & 1.58e-14 & match \\
+MOP-19 shared\_\allowbreak{}4S\_\allowbreak{}deployed\_\allowbreak{}length & m & 0.1464 & 0.1464 & 0 & match \\
+MOP-19 shared\_\allowbreak{}4S\_\allowbreak{}deployed\_\allowbreak{}footprint & m2 & 0.01282464 & 0.01282464 & 1.35e-14 & match \\
+MOP-19 shared\_\allowbreak{}4S\_\allowbreak{}deployed\_\allowbreak{}plate\_\allowbreak{}area & m2 & 0.017 & 0.017 & 0 & match \\
+MOP-19 shared\_\allowbreak{}4S\_\allowbreak{}deployed\_\allowbreak{}layout\_\allowbreak{}verdict & verdict & true & true &  & match \\
+MOP-19 DET\_\allowbreak{}operating\_\allowbreak{}voltage & V & 7.4 & 7.4 & 0 & match \\
+MOP-19 DET\_\allowbreak{}operating\_\allowbreak{}current & A & 0.4387815 & 0.4387815 & 1.27e-14 & match \\
+MOP-19 DET\_\allowbreak{}operating\_\allowbreak{}power & W & 3.246983 & 3.246983 & 1.37e-14 & match \\
+MOP-19 DET\_\allowbreak{}operating\_\allowbreak{}efficiency & 1 & 0.2199317 & 0.2199317 & 1.26e-14 & match \\
+MOP-19 DET\_\allowbreak{}mean\_\allowbreak{}source\_\allowbreak{}power & W & 2.992095 & 2.992095 & 0 & match \\
+MOP-19 DET\_\allowbreak{}mean\_\allowbreak{}bus\_\allowbreak{}power & W & 2.911227 & 2.911227 & 0 & match \\
+MOP-19 DET\_\allowbreak{}bus\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-19 DET\_\allowbreak{}electrical\_\allowbreak{}window & verdict & true & true &  & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}voltage & V & 9.72 & 9.72 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}current & A & 0.4347 & 0.4347 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}power & W & 4.225284 & 4.225284 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}operating\_\allowbreak{}efficiency & 1 & 0.286196 & 0.286196 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}mean\_\allowbreak{}source\_\allowbreak{}power & W & 3.893599 & 3.893599 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}mean\_\allowbreak{}bus\_\allowbreak{}power & W & 3.504239 & 3.504239 & 0 & match \\
+MOP-19 MPPT\_\allowbreak{}bus\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-19 MPPT\_\allowbreak{}electrical\_\allowbreak{}window & verdict & true & true &  & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}voltage & V & 8 & 8 & 0 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}current & A & 0.4377259 & 0.4377259 & 0 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}power & W & 3.501807 & 3.501807 & 0 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}operating\_\allowbreak{}efficiency & 1 & 0.237192 & 0.237192 & 1.17e-14 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}mean\_\allowbreak{}source\_\allowbreak{}power & W & 3.226916 & 3.226916 & 1.38e-14 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}mean\_\allowbreak{}bus\_\allowbreak{}power & W & 2.904224 & 2.904224 & 1.53e-14 & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}bus\_\allowbreak{}delivery & verdict & true & true &  & match \\
+MOP-19 FIXED\_\allowbreak{}VOLTAGE\_\allowbreak{}electrical\_\allowbreak{}window & verdict & true & true &  & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 15-operating-point-contract}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-19 exact & A & 0.4347 & 0.4347 & 0 & match \\
+MOP-19 interpolation & A & 0.43812 & 0.43812 & 1.27e-14 & match \\
+MOP-19 interpolation\_\allowbreak{}not\_\allowbreak{}accepted & A & unresolved & unresolved &  & expected error \\
+MOP-19 out\_\allowbreak{}of\_\allowbreak{}range & A & unresolved & unresolved &  & expected error \\
+MOP-19 invalid\_\allowbreak{}selector & V & unresolved & unresolved &  & expected error \\
+MOP-19 unknown\_\allowbreak{}selector & V & unresolved & unresolved &  & expected unknown \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 16-normal-extrema}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-20 Vmin & V & [3.0,\allowbreak{}4.0] & [3.0,\allowbreak{}4.0] &  & match \\
+MOP-20 Iminmax & A & [0.265,\allowbreak{}0.362] & [0.265,\allowbreak{}0.362] &  & match \\
+MOP-20 voltage\_\allowbreak{}normal\_\allowbreak{}no\_\allowbreak{}trip & verdict & true & true &  & match \\
+MOP-20 rail\_\allowbreak{}normal\_\allowbreak{}no\_\allowbreak{}trip & verdict & true & true &  & match \\
+MOP-20 bound\_\allowbreak{}current\_\allowbreak{}extrema & A & [0.7142857,\allowbreak{}5.0] & [0.7142857,\allowbreak{}5.0] &  & match \\
+MOP-20 conservative\_\allowbreak{}corner\_\allowbreak{}no\_\allowbreak{}trip & verdict & true & true &  & match \\
+MOP-20 independent\_\allowbreak{}PV\_\allowbreak{}corner\_\allowbreak{}minimum & A & 0.7142857 & 0.7142857 & 0 & match \\
+MOP-20 independent\_\allowbreak{}PV\_\allowbreak{}corner\_\allowbreak{}maximum & A & 5 & 5 & 0 & match \\
+MOP-20 charger\_\allowbreak{}endpoint\_\allowbreak{}per\_\allowbreak{}cell & V & 4.2 & 4.2 & 0 & match \\
+MOP-20 charger\_\allowbreak{}endpoint\_\allowbreak{}no\_\allowbreak{}trip & verdict & false & false &  & match \\
+MOP-20 published\_\allowbreak{}30W\_\allowbreak{}current\_\allowbreak{}6.0 & A & 5 & 5 & 0 & match \\
+MOP-20 published\_\allowbreak{}30W\_\allowbreak{}current\_\allowbreak{}7.2 & A & 4.17 & 4.166667 & 0.0799 & match \\
+MOP-20 published\_\allowbreak{}30W\_\allowbreak{}current\_\allowbreak{}8.4 & A & 3.57 & 3.571429 & 0.04 & match \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 17-threshold-boundaries}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-20 UV\_\allowbreak{}0.99 & verdict & false & false &  & match \\
+MOP-20 UV\_\allowbreak{}1.0 & verdict & false & false &  & match \\
+MOP-20 UV\_\allowbreak{}1.01 & verdict & true & true &  & match \\
+MOP-20 OV\_\allowbreak{}0.99 & verdict & true & true &  & match \\
+MOP-20 OV\_\allowbreak{}1.0 & verdict & false & false &  & match \\
+MOP-20 OV\_\allowbreak{}1.01 & verdict & false & false &  & match \\
+MOP-20 OC\_\allowbreak{}0.99 & verdict & true & true &  & match \\
+MOP-20 OC\_\allowbreak{}1.0 & verdict & false & false &  & match \\
+MOP-20 OC\_\allowbreak{}1.01 & verdict & false & false &  & match \\
+MOP-20 spacecraft\_\allowbreak{}battery\_\allowbreak{}bus\_\allowbreak{}OC\_\allowbreak{}0.99 & verdict & true & true &  & match \\
+MOP-20 spacecraft\_\allowbreak{}battery\_\allowbreak{}bus\_\allowbreak{}OC\_\allowbreak{}1.0 & verdict & false & false &  & match \\
+MOP-20 spacecraft\_\allowbreak{}battery\_\allowbreak{}bus\_\allowbreak{}OC\_\allowbreak{}1.01 & verdict & false & false &  & match \\
+MOP-20 unknown\_\allowbreak{}voltage\_\allowbreak{}samples & verdict & unresolved & unresolved &  & expected unknown \\
+MOP-20 empty\_\allowbreak{}voltage\_\allowbreak{}samples & verdict & unresolved & unresolved &  & expected error \\
+MOP-20 nonfinite\_\allowbreak{}voltage\_\allowbreak{}samples & verdict & unresolved & unresolved &  & expected error \\
+MOP-20 negative\_\allowbreak{}current\_\allowbreak{}magnitude\_\allowbreak{}fails & verdict & false & false &  & match \\
+MOP-20 empty\_\allowbreak{}current\_\allowbreak{}samples & verdict & unresolved & unresolved &  & expected error \\
+MOP-20 unknown\_\allowbreak{}current\_\allowbreak{}samples & verdict & unresolved & unresolved &  & expected unknown \\
+MOP-20 unknown\_\allowbreak{}threshold & verdict & unresolved & unresolved &  & expected unknown \\
+\end{longtable}\endgroup
+
+\subsection{OreSat: 18-unknown-invalid-feasibility}
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3588\linewidth} >{\raggedright\arraybackslash}p{0.0552\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth} >{\raggedright\arraybackslash}p{0.09200000000000001\linewidth} >{\raggedright\arraybackslash}p{0.138\linewidth}@{}}
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endfirsthead
+\toprule
+MOP and quantity & Unit & Expected & Actual & Error \% & Comparison \\ \midrule
+\endhead
+\bottomrule\endfoot
+MOP-16 unknown\_\allowbreak{}series\_\allowbreak{}count & cell & unresolved & unresolved &  & expected unknown \\
+MOP-15 unknown\_\allowbreak{}installation\_\allowbreak{}allocation & verdict & unresolved & unresolved &  & expected unknown \\
+MOP-14b unknown\_\allowbreak{}life\_\allowbreak{}fit & J & unresolved & unresolved &  & expected unknown \\
+MOP-14b unknown\_\allowbreak{}energy\_\allowbreak{}retention & J & unresolved & unresolved &  & expected unknown \\
+MOP-14a deliberately\_\allowbreak{}inadequate\_\allowbreak{}delivery & verdict & false & false &  & match \\
+MOP-14a unknown\_\allowbreak{}orbit & s & unresolved & unresolved &  & expected unknown \\
+MOP-14a invalid\_\allowbreak{}perigee &  & unresolved & unresolved &  & expected error \\
+MOP-14b unsupported\_\allowbreak{}cycle\_\allowbreak{}fit &  & unresolved & unresolved &  & expected error \\
+MOP-14b invalid\_\allowbreak{}retention &  & unresolved & unresolved &  & expected error \\
+MOP-14b invalid\_\allowbreak{}packing &  & unresolved & unresolved &  & expected error \\
+MOP-20 invalid\_\allowbreak{}current\_\allowbreak{}voltage\_\allowbreak{}interval &  & unresolved & unresolved &  & expected error \\
+\end{longtable}\endgroup
+
+\section{Original OreSat sweep inputs}
+
+Worksheet minicom.cap, rows 2--206. Currents are converted from mA to A. H is the saved VI product. B retains the separate raw power column. Duplicate voltages and missing endpoints are preserved. The largest sampled H occurs at row 197.
+
+\begingroup\scriptsize\setlength{\tabcolsep}{2pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.0736\linewidth} >{\raggedright\arraybackslash}p{0.2024\linewidth} >{\raggedright\arraybackslash}p{0.2024\linewidth} >{\raggedright\arraybackslash}p{0.25760000000000005\linewidth} >{\raggedright\arraybackslash}p{0.18400000000000002\linewidth}@{}}
+\toprule
+Row & V & A & Saved H (W) & Raw B \\ \midrule
+\endfirsthead
+\toprule
+Row & V & A & Saved H (W) & Raw B \\ \midrule
+\endhead
+\bottomrule\endfoot
+2 & 4.77625 & 0.06406 & 0.3059666 & 63 \\
+3 & 4.775 & 0.06552 & 0.312858 & 64 \\
+4 & 4.77125 & 0.06669 & 0.3181947 & 65 \\
+5 & 4.77125 & 0.06523 & 0.3112286 & 63 \\
+6 & 4.7725 & 0.06796 & 0.3243391 & 66 \\
+7 & 4.77 & 0.06718 & 0.3204486 & 66 \\
+8 & 4.7675 & 0.06826 & 0.3254296 & 66 \\
+9 & 4.7675 & 0.06933 & 0.3305308 & 68 \\
+10 & 4.76625 & 0.07128 & 0.3397383 & 69 \\
+11 & 4.7675 & 0.07119 & 0.3393983 & 69 \\
+12 & 4.765 & 0.07304 & 0.3480356 & 71 \\
+13 & 4.76625 & 0.07402 & 0.3527978 & 72 \\
+14 & 4.765 & 0.07548 & 0.3596622 & 73 \\
+15 & 4.76625 & 0.07617 & 0.3630453 & 74 \\
+16 & 4.76125 & 0.07822 & 0.372425 & 76 \\
+17 & 4.76125 & 0.08037 & 0.3826617 & 78 \\
+18 & 4.765 & 0.08144 & 0.3880616 & 79 \\
+19 & 4.76 & 0.08291 & 0.3946516 & 81 \\
+20 & 4.76375 & 0.08457 & 0.4028703 & 82 \\
+21 & 4.76 & 0.08632 & 0.4108832 & 84 \\
+22 & 4.76125 & 0.08886 & 0.4230847 & 86 \\
+23 & 4.7575 & 0.09013 & 0.4287935 & 88 \\
+24 & 4.76125 & 0.09082 & 0.4324167 & 88 \\
+25 & 4.75875 & 0.09257 & 0.4405175 & 90 \\
+26 & 4.75625 & 0.09619 & 0.4575037 & 94 \\
+27 & 4.75375 & 0.09707 & 0.4614465 & 94 \\
+28 & 4.7525 & 0.09755 & 0.4636064 & 95 \\
+29 & 4.7525 & 0.10087 & 0.4793847 & 98 \\
+30 & 4.75375 & 0.10244 & 0.4869741 & 99 \\
+31 & 4.75375 & 0.10312 & 0.4902067 & 100 \\
+32 & 4.74875 & 0.10507 & 0.4989512 & 102 \\
+33 & 4.74875 & 0.10585 & 0.5026552 & 103 \\
+34 & 4.7475 & 0.10771 & 0.5113532 & 104 \\
+35 & 4.74375 & 0.10937 & 0.5188239 & 106 \\
+36 & 4.75 & 0.11171 & 0.5306225 & 108 \\
+37 & 4.745 & 0.11328 & 0.5375136 & 110 \\
+38 & 4.74875 & 0.11367 & 0.5397904 & 110 \\
+39 & 4.7525 & 0.11748 & 0.5583237 & 114 \\
+40 & 4.7425 & 0.11826 & 0.5608481 & 115 \\
+41 & 4.745 & 0.11914 & 0.5653193 & 116 \\
+42 & 4.745 & 0.12236 & 0.5805982 & 119 \\
+43 & 4.74125 & 0.12304 & 0.5833634 & 119 \\
+44 & 4.745 & 0.1249 & 0.5926505 & 121 \\
+45 & 4.74125 & 0.12695 & 0.6019017 & 121 \\
+46 & 4.74125 & 0.12822 & 0.6079231 & 124 \\
+47 & 4.7375 & 0.12939 & 0.6129851 & 125 \\
+48 & 4.73875 & 0.13164 & 0.623809 & 128 \\
+49 & 4.7375 & 0.1331 & 0.6305612 & 129 \\
+50 & 4.73875 & 0.13457 & 0.6376936 & 130 \\
+51 & 4.73875 & 0.13505 & 0.6399682 & 131 \\
+52 & 4.7375 & 0.13847 & 0.6560016 & 134 \\
+53 & 4.7375 & 0.13955 & 0.6611181 & 135 \\
+54 & 4.7325 & 0.14042 & 0.6645376 & 136 \\
+55 & 4.73125 & 0.14208 & 0.672216 & 137 \\
+56 & 4.73375 & 0.14394 & 0.681376 & 139 \\
+57 & 4.7375 & 0.14541 & 0.6888799 & 141 \\
+58 & 4.72875 & 0.14687 & 0.6945115 & 142 \\
+59 & 4.72625 & 0.14882 & 0.7033605 & 144 \\
+60 & 4.72875 & 0.15068 & 0.712528 & 146 \\
+61 & 4.73 & 0.15214 & 0.7196222 & 147 \\
+62 & 4.725 & 0.15419 & 0.7285478 & 149 \\
+63 & 4.725 & 0.15576 & 0.735966 & 150 \\
+64 & 4.7275 & 0.15625 & 0.7386719 & 151 \\
+65 & 4.7275 & 0.15927 & 0.7529489 & 154 \\
+66 & 4.7225 & 0.16093 & 0.7599919 & 156 \\
+67 & 4.72125 & 0.1621 & 0.7653146 & 156 \\
+68 & 4.72125 & 0.16386 & 0.773624 & 157 \\
+69 & 4.72125 & 0.16582 & 0.7828777 & 160 \\
+70 & 4.7175 & 0.16699 & 0.7877753 & 161 \\
+71 & 4.71625 & 0.16796 & 0.7921413 & 162 \\
+72 & 4.72375 & 0.16953 & 0.8008173 & 164 \\
+73 & 4.71625 & 0.17148 & 0.8087425 & 165 \\
+74 & 4.7175 & 0.17324 & 0.8172597 & 167 \\
+75 & 4.71375 & 0.17529 & 0.8262732 & 169 \\
+76 & 4.71625 & 0.17617 & 0.8308618 & 170 \\
+77 & 4.71375 & 0.17714 & 0.8349937 & 171 \\
+78 & 4.71 & 0.18046 & 0.8499666 & 174 \\
+79 & 4.71 & 0.18203 & 0.8573613 & 175 \\
+80 & 4.70875 & 0.18271 & 0.8603357 & 176 \\
+81 & 4.71375 & 0.18398 & 0.8672357 & 177 \\
+82 & 4.7075 & 0.18613 & 0.876207 & 179 \\
+83 & 4.71125 & 0.18798 & 0.8856208 & 181 \\
+84 & 4.705 & 0.18886 & 0.8885863 & 182 \\
+85 & 4.70875 & 0.19101 & 0.8994183 & 184 \\
+86 & 4.70375 & 0.19277 & 0.9067419 & 185 \\
+87 & 4.70375 & 0.19433 & 0.9140797 & 187 \\
+88 & 4.70125 & 0.19687 & 0.9255351 & 189 \\
+89 & 4.705 & 0.19755 & 0.9294727 & 190 \\
+90 & 4.69875 & 0.19824 & 0.9314802 & 190 \\
+91 & 4.69875 & 0.20166 & 0.9475499 & 192 \\
+92 & 4.69625 & 0.20292 & 0.9529631 & 195 \\
+93 & 4.69625 & 0.204 & 0.958035 & 196 \\
+94 & 4.70125 & 0.20458 & 0.9617817 & 197 \\
+95 & 4.69375 & 0.20751 & 0.9740001 & 199 \\
+96 & 4.69375 & 0.20927 & 0.9822611 & 201 \\
+97 & 4.695 & 0.21044 & 0.9880158 & 202 \\
+98 & 4.6925 & 0.2123 & 0.9962178 & 204 \\
+99 & 4.69125 & 0.21396 & 1.00374 & 205 \\
+100 & 4.69 & 0.21572 & 1.011727 & 207 \\
+101 & 4.6875 & 0.21787 & 1.021266 & 209 \\
+102 & 4.6925 & 0.21875 & 1.026484 & 210 \\
+103 & 4.685 & 0.21982 & 1.029857 & 211 \\
+104 & 4.68625 & 0.22314 & 1.04569 & 212 \\
+105 & 4.68375 & 0.22392 & 1.048785 & 215 \\
+106 & 4.685 & 0.22558 & 1.056842 & 216 \\
+107 & 4.6825 & 0.22646 & 1.060399 & 217 \\
+108 & 4.68125 & 0.22988 & 1.076126 & 220 \\
+109 & 4.68125 & 0.23076 & 1.080245 & 221 \\
+110 & 4.67625 & 0.23173 & 1.083627 & 222 \\
+111 & 4.6725 & 0.23349 & 1.090982 & 223 \\
+112 & 4.6725 & 0.23535 & 1.099673 & 225 \\
+113 & 4.67375 & 0.2371 & 1.108146 & 227 \\
+114 & 4.6775 & 0.23886 & 1.117268 & 229 \\
+115 & 4.68 & 0.24013 & 1.123808 & 230 \\
+116 & 4.67125 & 0.24111 & 1.126285 & 230 \\
+117 & 4.6675 & 0.24208 & 1.129908 & 231 \\
+118 & 4.6675 & 0.2457 & 1.146805 & 235 \\
+119 & 4.67125 & 0.24638 & 1.150903 & 236 \\
+120 & 4.6675 & 0.24755 & 1.15544 & 236 \\
+121 & 4.665 & 0.25087 & 1.170309 & 239 \\
+122 & 4.6675 & 0.25224 & 1.17733 & 241 \\
+123 & 4.6625 & 0.25253 & 1.177421 & 241 \\
+124 & 4.665 & 0.25449 & 1.187196 & 243 \\
+125 & 4.65875 & 0.25742 & 1.199255 & 245 \\
+126 & 4.6625 & 0.25791 & 1.202505 & 246 \\
+127 & 4.65625 & 0.26035 & 1.212255 & 247 \\
+128 & 4.6625 & 0.26132 & 1.218404 & 249 \\
+129 & 4.66 & 0.2625 & 1.22325 & 250 \\
+130 & 4.65625 & 0.26279 & 1.223616 & 250 \\
+131 & 4.655 & 0.2666 & 1.241023 & 254 \\
+132 & 4.65375 & 0.26748 & 1.244785 & 255 \\
+133 & 4.65125 & 0.26816 & 1.247279 & 255 \\
+134 & 4.645 & 0.2708 & 1.257866 & 257 \\
+135 & 4.6475 & 0.27324 & 1.269883 & 260 \\
+136 & 4.6425 & 0.27343 & 1.269399 & 260 \\
+137 & 4.64125 & 0.27568 & 1.2795 & 262 \\
+138 & 4.64375 & 0.27675 & 1.285158 & 263 \\
+139 & 4.65 & 0.27822 & 1.293723 & 265 \\
+140 & 4.64 & 0.27958 & 1.297251 & 265 \\
+141 & 4.64125 & 0.28222 & 1.309854 & 268 \\
+142 & 4.635 & 0.2832 & 1.312632 & 269 \\
+143 & 4.6375 & 0.28427 & 1.318302 & 270 \\
+144 & 4.63 & 0.28818 & 1.334273 & 273 \\
+145 & 4.63 & 0.28857 & 1.336079 & 273 \\
+146 & 4.63125 & 0.29013 & 1.343665 & 275 \\
+147 & 4.62875 & 0.29296 & 1.356039 & 277 \\
+148 & 4.63 & 0.29345 & 1.358674 & 278 \\
+149 & 4.62 & 0.29453 & 1.360729 & 279 \\
+150 & 4.6275 & 0.29667 & 1.37284 & 280 \\
+151 & 4.6225 & 0.29785 & 1.376812 & 282 \\
+152 & 4.62625 & 0.29931 & 1.384683 & 283 \\
+153 & 4.61875 & 0.30087 & 1.389643 & 284 \\
+154 & 4.61875 & 0.30312 & 1.400035 & 286 \\
+155 & 4.61375 & 0.30449 & 1.404841 & 287 \\
+156 & 4.61375 & 0.30517 & 1.407978 & 288 \\
+157 & 4.60625 & 0.30839 & 1.420521 & 291 \\
+158 & 4.6075 & 0.31054 & 1.430813 & 293 \\
+159 & 4.61 & 0.31064 & 1.43205 & 293 \\
+160 & 4.6 & 0.31396 & 1.444216 & 296 \\
+161 & 4.60625 & 0.31484 & 1.450232 & 297 \\
+162 & 4.59625 & 0.31621 & 1.45338 & 297 \\
+163 & 4.605 & 0.31669 & 1.458357 & 298 \\
+164 & 4.5925 & 0.31875 & 1.463859 & 299 \\
+165 & 4.59625 & 0.32031 & 1.472225 & 301 \\
+166 & 4.59125 & 0.32158 & 1.476454 & 302 \\
+167 & 4.59125 & 0.32363 & 1.485866 & 304 \\
+168 & 4.58625 & 0.32509 & 1.490944 & 305 \\
+169 & 4.58375 & 0.32617 & 1.495082 & 306 \\
+170 & 4.5775 & 0.32958 & 1.508652 & 309 \\
+171 & 4.5775 & 0.33037 & 1.512269 & 309 \\
+172 & 4.58125 & 0.33154 & 1.518868 & 311 \\
+173 & 4.5775 & 0.3333 & 1.525681 & 311 \\
+174 & 4.57125 & 0.33525 & 1.532512 & 314 \\
+175 & 4.56125 & 0.33671 & 1.535818 & 314 \\
+176 & 4.57125 & 0.33779 & 1.544123 & 316 \\
+177 & 4.55875 & 0.33994 & 1.549701 & 317 \\
+178 & 4.56625 & 0.34121 & 1.55805 & 319 \\
+179 & 4.55 & 0.34287 & 1.560059 & 319 \\
+180 & 4.5575 & 0.3455 & 1.574616 & 322 \\
+181 & 4.54 & 0.34628 & 1.572111 & 322 \\
+182 & 4.5425 & 0.34746 & 1.578337 & 323 \\
+183 & 4.53125 & 0.35019 & 1.586798 & 325 \\
+184 & 4.54 & 0.35166 & 1.596536 & 327 \\
+185 & 4.53875 & 0.35253 & 1.600046 & 327 \\
+186 & 4.5225 & 0.35332 & 1.59789 & 327 \\
+187 & 4.5225 & 0.35654 & 1.612452 & 330 \\
+188 & 4.50875 & 0.3583 & 1.615485 & 331 \\
+189 & 4.52125 & 0.358 & 1.618607 & 331 \\
+190 & 4.4975 & 0.36113 & 1.624182 & 332 \\
+191 & 4.51125 & 0.3622 & 1.633975 & 334 \\
+192 & 4.4875 & 0.36386 & 1.632822 & 334 \\
+193 & 4.49375 & 0.3665 & 1.646959 & 337 \\
+194 & 4.465 & 0.36699 & 1.63861 & 335 \\
+195 & 4.46875 & 0.36816 & 1.645215 & 337 \\
+196 & 4.42125 & 0.37236 & 1.646297 & 338 \\
+197 & 4.435 & 0.37304 & 1.654432 & 338 \\
+198 & 4.425 & 0.37333 & 1.651985 & 338 \\
+199 & 4.37125 & 0.37451 & 1.637077 & 335 \\
+200 & 4.355 & 0.37773 & 1.645014 & 337 \\
+201 & 4.2575 & 0.37929 & 1.614827 & 330 \\
+202 & 4.3 & 0.37988 & 1.633484 & 334 \\
+203 & 4.1025 & 0.38242 & 1.568878 & 321 \\
+204 & 4.1225 & 0.38457 & 1.58539 & 324 \\
+205 & 4.01375 & 0.38583 & 1.548625 & 317 \\
+206 & 3.575 & 0.38994 & 1.394035 & 285 \\
+\end{longtable}\endgroup

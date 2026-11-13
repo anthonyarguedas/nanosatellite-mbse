@@ -1,0 +1,87 @@
+{
+  "actual_sizing_module_path": "/Users/antho/nanosatellite-mbse/framework/scripts/sizing.py",
+  "artifact_comparison": "All six final replay files byte identical",
+  "comparison_count": 877,
+  "deterministic_files_sha256": {
+    "engineering-verdicts.json": "3905952c014524c8e69bbd0b27e7e89ada3ec44cff1fcec097a1a7f4551c5b14",
+    "inputs.json": "8ad29d26e6b274ecc4d7b7734b6bc8b829c3ff3419002e248bafc4c55dbed95d",
+    "model-bindings.json": "d29aec14d9b40bca346123c876323e1cd4cbe3ed65be6219d2af56a3dc8129f4",
+    "results.csv": "8de7f916ef3d97a1df818524a7d61647de68b4f25736cae369065fb2ba9816de",
+    "results.json": "5d92ae1d7a82ee3e9070eb7ee0845d6cc45edc86eebca6cb12c2998f236eed57",
+    "summary.json": "c63c5955c4b6bf2389ab4eace07ef9fab43a8f02f9c6b2cadee66a2146c9feec"
+  },
+  "followup_checks": {
+    "BOL_cases_per_mission": 23,
+    "additional_OC_boundary_records": 9,
+    "charger_endpoint_engineering_no_trip": false,
+    "charger_endpoint_nominal_OV_V": 4.1,
+    "charger_endpoint_per_cell_V": 4.2,
+    "deployed_layout_verdicts_all_true": true
+  },
+  "framework_hash_check": "All snapshotted models/scripts hashes unchanged",
+  "independent_reference_imports": [
+    "decimal",
+    "math",
+    "functools",
+    "numpy"
+  ],
+  "numerical_function_call_count": 17958,
+  "observed_framework_calls": {
+    "framework/models/properties.py:assess": 2,
+    "framework/models/requirements.py:evaluate": 2,
+    "framework/models/requirements.py:verify": 2,
+    "framework/scripts/illumination.py:_dot": 16,
+    "framework/scripts/illumination.py:_eccentric_anomaly": 16,
+    "framework/scripts/illumination.py:_nadir_normal": 4,
+    "framework/scripts/illumination.py:_positive_integral": 8,
+    "framework/scripts/illumination.py:_unit": 4,
+    "framework/scripts/illumination.py:face_normal": 4,
+    "framework/scripts/illumination.py:orbital_projection": 4,
+    "framework/scripts/sizing.py:_bisect": 270,
+    "framework/scripts/sizing.py:_finite": 576,
+    "framework/scripts/sizing.py:_illumination_inputs": 54,
+    "framework/scripts/sizing.py:_mean_anomaly": 100,
+    "framework/scripts/sizing.py:_orbit": 128,
+    "framework/scripts/sizing.py:_polynomial": 16308,
+    "framework/scripts/sizing.py:_roots": 216,
+    "framework/scripts/sizing.py:_shadow_intervals": 54,
+    "framework/scripts/sizing.py:array_power_density": 2,
+    "framework/scripts/sizing.py:battery_energy": 2,
+    "framework/scripts/sizing.py:cell_power": 4,
+    "framework/scripts/sizing.py:depth_of_discharge": 2,
+    "framework/scripts/sizing.py:eccentric_illumination": 50,
+    "framework/scripts/sizing.py:load_energy": 20,
+    "framework/scripts/sizing.py:minimum_panel_power": 4,
+    "framework/scripts/sizing.py:mission_cycles": 2,
+    "framework/scripts/sizing.py:orbit_period": 74,
+    "framework/scripts/sizing.py:pv_characteristics": 14,
+    "framework/scripts/sizing.py:pv_efficiency": 2,
+    "framework/scripts/sizing.py:solar_operating_voltage": 4,
+    "framework/scripts/sizing.py:transfer_selection": 16
+  },
+  "profile_scope": "Bounded separate public-API probe in both missions after full deterministic replay. First whole-run profile exceeded120s and was terminated without audit outputs.",
+  "reference_has_no_framework_import": true,
+  "reviewed_snapshot_regression": null,
+  "runtime_probe": [
+    {
+      "battery_energy": 4355.622581370592,
+      "eclipse": 2121.3742611735674,
+      "generation_verdict": false,
+      "mission": "BIRDS-4",
+      "mpp": 1.0885644,
+      "period": 5553.452008434544,
+      "projection": 0.45679295889649163
+    },
+    {
+      "battery_energy": 5887.626271406313,
+      "eclipse": 2074.9568069711017,
+      "generation_verdict": false,
+      "mission": "OreSat",
+      "mpp": 1.056321,
+      "period": 5738.818569520341,
+      "projection": 0.44217777576331185
+    }
+  ],
+  "scenario_groups": 36,
+  "source_patch_policy": "No framework files or functions patched. sys.setprofile observation only."
+}
