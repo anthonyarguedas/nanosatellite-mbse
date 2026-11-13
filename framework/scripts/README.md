@@ -3,7 +3,8 @@
 `sizing.py` implements the preliminary EPS sizing and scalar array/battery configuration calculations in `final_report/design-proposal.tex`.
 `illumination.py` calculates fixed body geometry and full-orbit illumination averages.
 Both use the Python standard library.
-Public functions have required annotated inputs and return annotated NamedTuples.
+Public functions have individually named, annotated inputs and return annotated NamedTuples.
+`cell_power` accepts either its scalar MPP inputs or optional PV points. Existing scalar calls remain valid.
 They can be called directly with numbers or through the model's Property-binding interface.
 Importing the module executes no analysis.
 
@@ -78,7 +79,7 @@ Normal vectors are normalized after validation. Zero vectors, unknown faces and 
 
 - `load_energy`: period-average power times duration, in J.
 - `minimum_panel_power`: `(E_s / X_s + E_e / X_e) / T_s`, in W.
-- `cell_power`: EOL maximum power point voltage times current, in W.
+- `cell_power`: EOL maximum power point voltage times current, or sampled MPP power from optional `pv_points`, in W.
 - `cell_count`: fractional power ratio and its integer ceiling.
 - `mission_cycles`: lifetime times days per year times `86400 / T_o`.
 - `depth_of_discharge`: invert `N = a * DoD**b` for positive `a` and negative `b`.
@@ -119,6 +120,47 @@ The battery energy screen compares its BOL rating with the report's preliminary 
 It establishes no chronological reserve, charging acceptance or EOL service claim.
 
 See [the example session](../sessions/example_eps_sizing.py) for synthetic inputs and [the model guide](../models/README.md) for ownership.
+
+## Electrical extrema and protection screening
+
+- `extrema(values)`: minimum and maximum of a nonempty finite sequence on one electrical path.
+- `load_current_extrema(powers, minimum_voltage, maximum_voltage)`: independent power/voltage corners, returning `P_min / V_max` and `P_max / V_min` in A.
+
+The voltage interval is strictly positive. Powers are nonnegative and include losses at the assessed source boundary.
+The calculation combines independent extremes conservatively. It assumes no pairing or chronology between cases.
+Measured or otherwise established current cases can use `extrema` directly.
+Period-average budgets establish no peak-current bound.
+
+`Protection` and `CotsProtection` use these extrema in automatically created `no_trip` Requirements.
+Samples and COTS thresholds share the detector's actual sensing boundary and selected operating conditions.
+The UV comparison uses the highest applicable trip threshold. OV and OC use the lowest.
+Equality fails. These checks establish normal operation for an enabled, recovered device.
+They establish no fault response, interruption stress or recovery behavior.
+
+## Optional photovoltaic characteristics
+
+`cell_power(eol_voltage=..., eol_current=...)` preserves its scalar interface.
+Alternatively, pass only `pv_points=((V0, I0), (V1, I1), ...)`.
+Supplying both input forms is an error.
+Each point uses V and A for one cell or one explicitly represented purchased panel.
+
+`pv_characteristics(pv_points)` returns MPP voltage/current, maximum sampled power, open-circuit voltage and short-circuit current.
+Samples must be finite, nonnegative and strictly increasing in voltage.
+They must span `(0, Isc)` to `(Voc, 0)` and include a positive power point.
+The largest sampled `V * I` is the reported MPP. Sparse data must include the manufacturer's MPP point.
+No continuous curve, interpolation, diode fit or extrapolation is inferred.
+
+`pv_efficiency(pv_points, active_area, reference_irradiance)` returns sampled MPP power divided by incident reference power.
+Area is in m2 and irradiance in W/m2. The resulting efficiency must lie in `(0, 1]`.
+`SolarArray.cell_iv_curve` opts into this calculation for the existing generation and area checks.
+With an empty curve, those checks retain the scalar efficiency path.
+The script reads no catalog files. The caller selects a coherent product, characteristic, condition and units.
+Generation retains the existing linear irradiance scaling at constant efficiency.
+Reference voltage/current characteristics keep their selected temperature, irradiance and degradation conditions.
+There is no automatic temperature, degradation, shading or regulator operating-point correction.
+
+Run `python3 -m framework.sessions.example_eps_operating_limits` for sourced PV and no-trip examples.
+The example loads the existing catalog and exercises both scalar and optional PV inputs.
 
 ## BIRDS-4 comparison tables
 

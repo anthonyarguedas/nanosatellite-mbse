@@ -1,4 +1,4 @@
-"""Explicit session imports and required Property bindings for custom functions."""
+"""Explicit session imports and Property bindings for custom functions."""
 
 import ast
 import importlib
@@ -19,10 +19,10 @@ class Function:
         for name, parameter in self.signature.parameters.items():
             if parameter.kind not in (parameter.POSITIONAL_OR_KEYWORD, parameter.KEYWORD_ONLY):
                 raise TypeError("Function inputs must have individually bindable names.")
-            if parameter.default is not parameter.empty:
-                raise TypeError("Function inputs have no defaults.")
-            if name not in self.annotations or type(None) in get_args(self.annotations[name]):
-                raise TypeError("Every Function input needs a nonoptional annotation.")
+            if name not in self.annotations:
+                raise TypeError("Every Function input needs an annotation.")
+            if type(None) in get_args(self.annotations[name]) and parameter.default is parameter.empty:
+                raise TypeError("A nullable Function input needs an explicit default.")
         result = self.annotations.get("return")
         if not isinstance(result, type) or not issubclass(result, tuple) or not hasattr(result, "_fields"):
             raise TypeError("A Function returns an annotated NamedTuple.")
@@ -44,7 +44,7 @@ class Function:
     def __call__(self, *args, **kwargs):
         bound = self.signature.bind(*args, **kwargs)
         if any(not isinstance(prop, Property) for prop in bound.arguments.values()):
-            raise TypeError("Every Function input must be explicitly bound to a Property.")
+            raise TypeError("Every supplied Function input must be explicitly bound to a Property.")
         values = {name: prop.value for name, prop in bound.arguments.items()}
         result = self.function(**values)
         if not isinstance(result, self.output_type):

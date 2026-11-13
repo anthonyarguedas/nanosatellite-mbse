@@ -216,6 +216,8 @@ class Battery(EPSComponent):
 
 class SolarArray(EPSComponent):
     maximum_power = Property(unit="W")
+    cell_iv_curve = Property("()")
+    pv_reference_irradiance = Property(unit="W/m2")
     series_count = Property(unit="cell")
     parallel_count = Property(unit="string")
     cell_count = Property("self.series_count.value * self.parallel_count.value", "cell")
@@ -231,15 +233,25 @@ class SolarArray(EPSComponent):
     panel_area = Property("sizing.panel_area(active_area=self.active_area, packing_fraction=self.packing_fraction).square_metres", "m2")
     cell_open_circuit_voltage = Property(unit="V")
     cell_short_circuit_current = Property(unit="A")
-    open_circuit_voltage = Property("self.series_count.value * self.cell_open_circuit_voltage.value", "V")
-    short_circuit_current = Property("self.parallel_count.value * self.cell_short_circuit_current.value", "A")
+    open_circuit_voltage = Property(
+        "self.series_count.value * (sizing.pv_characteristics(pv_points=self.cell_iv_curve).open_circuit_voltage "
+        "if self.cell_iv_curve.value else self.cell_open_circuit_voltage.value)", "V")
+    short_circuit_current = Property(
+        "self.parallel_count.value * (sizing.pv_characteristics(pv_points=self.cell_iv_curve).short_circuit_current "
+        "if self.cell_iv_curve.value else self.cell_short_circuit_current.value)", "A")
     sunlight_path_efficiency = Property(unit="1")
     eclipse_path_efficiency = Property(unit="1")
     cell_eol_voltage = Property(unit="V")
     cell_eol_current = Property(unit="A")
-    eol_voltage = Property("self.series_count.value * self.cell_eol_voltage.value", "V")
-    eol_current = Property("self.parallel_count.value * self.cell_eol_current.value", "A")
-    cell_eol_power = Property("sizing.cell_power(eol_voltage=self.cell_eol_voltage, eol_current=self.cell_eol_current).watts", "W")
+    eol_voltage = Property(
+        "self.series_count.value * (sizing.pv_characteristics(pv_points=self.cell_iv_curve).mpp_voltage "
+        "if self.cell_iv_curve.value else self.cell_eol_voltage.value)", "V")
+    eol_current = Property(
+        "self.parallel_count.value * (sizing.pv_characteristics(pv_points=self.cell_iv_curve).mpp_current "
+        "if self.cell_iv_curve.value else self.cell_eol_current.value)", "A")
+    cell_eol_power = Property(
+        "sizing.cell_power(pv_points=self.cell_iv_curve).watts if self.cell_iv_curve.value else "
+        "sizing.cell_power(eol_voltage=self.cell_eol_voltage, eol_current=self.cell_eol_current).watts", "W")
     eol_power = Property("self.cell_count.value * self.cell_eol_power.value", "W")
     bol_efficiency = Property(unit="1")
     lifetime_retention = Property(unit="1")
@@ -260,9 +272,13 @@ class SolarArray(EPSComponent):
         "sun_projection_angle=self.mission.orbit.effective_sun_projection_angle, "
         "period=self.mission.orbit.period).sunlight_mean", "1")
     projected_sunlight_duration = Property("self.sunlight_projection.value * self.mission.orbit.sunlight_duration.value", "s")
-    normal_power_density = Property("self.irradiance.value * self.eol_efficiency.value", "W/m2")
+    generation_efficiency = Property(
+        "sizing.pv_efficiency(pv_points=self.cell_iv_curve, active_area=self.cell_active_area, "
+        "reference_irradiance=self.pv_reference_irradiance).fraction "
+        "if self.cell_iv_curve.value else self.eol_efficiency", "1")
+    normal_power_density = Property("self.irradiance.value * self.generation_efficiency.value", "W/m2")
     eol_power_density = Property(
-        "sizing.array_power_density(irradiance=self.irradiance, eol_efficiency=self.eol_efficiency, "
+        "sizing.array_power_density(irradiance=self.irradiance, eol_efficiency=self.generation_efficiency, "
         "inherent_retention=self.inherent_retention, assembly_efficiency=self.assembly_efficiency, "
         "sunlight_projection=self.sunlight_projection).watts_per_square_metre", "W/m2")
     available_power = Property("self.active_area.value * self.eol_power_density.value", "W")
@@ -285,6 +301,48 @@ class PowerCircuit(EPSComponent):
     maximum_current = Property(unit="A")
 
 
+class Protection(PowerCircuit):
+    """Normal operation screening at explicitly assigned sensing points."""
+
+    trip_parameters = ("undervoltage_threshold", "overvoltage_threshold", "current_limit")
+    undervoltage_threshold = Property(unit="V")  # Highest applicable UV trip threshold.
+    overvoltage_threshold = Property(unit="V")  # Lowest applicable OV trip threshold.
+    current_limit = Property(unit="A")          # Lowest applicable OC trip threshold.
+    voltage_extrema = Property("sizing.extrema(values=self.no_trip.voltages)", "V")
+    current_extrema = Property("sizing.extrema(values=self.no_trip.currents)", "A")
+
+    def create_requirements(self):
+        checks = {
+            "undervoltage_threshold": ("undervoltage", "voltage_extrema", "minimum", "0 <= target < measure"),
+            "overvoltage_threshold": ("overvoltage", "voltage_extrema", "maximum", "0 <= measure < target"),
+            "current_limit": ("overcurrent", "current_extrema", "maximum",
+                              "0 <= self.parent.context.current_extrema.value.minimum <= measure < target"),
+        }
+        if not self.trip_parameters or len(set(self.trip_parameters)) != len(self.trip_parameters):
+            raise ValueError("Declare a nonempty set of distinct protection trip parameters.")
+        conditions = []
+        for parameter in self.trip_parameters:
+            if parameter not in checks:
+                raise ValueError(f"Unknown protection trip parameter {parameter!r}.")
+            name, field, bound, comparison = checks[parameter]
+            conditions.append(VerificationCondition(
+                name, Property(f"self.parent.context.{field}.value.{bound}",
+                               "A" if field == "current_extrema" else "V"),
+                getattr(self, parameter),
+                f"math.isfinite(measure) and math.isfinite(target) and {comparison}",
+            ))
+        self.add_requirement(
+            "no_trip",
+            statement="The protection shall remain inactive for the declared normal operating samples.",
+            rationale="framework/scripts/sizing.py#extrema. Use the highest UV threshold and lowest OV/OC thresholds "
+                      "for the selected COTS configuration and conditions. Equality fails this conservative screen. "
+                      "Voltage samples refer to the detector's sensed node or individual cells. "
+                      "Current samples are magnitudes for the specified protected direction. "
+                      "This screen assumes an enabled, recovered device and establishes no fault response or recovery claim.",
+            voltages=Property(unit="V"), currents=Property(unit="A"), conditions=tuple(conditions),
+        )
+
+
 class COTS(EPSComponent):
     """Product classes fix their inherited Property definitions."""
 
@@ -304,6 +362,10 @@ class CotsRegulatorAndConverter(RegulatorAndConverter, COTS):
 
 
 class CotsPowerCircuit(PowerCircuit, COTS):
+    pass
+
+
+class CotsProtection(Protection, COTS):
     pass
 
 

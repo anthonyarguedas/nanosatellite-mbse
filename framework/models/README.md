@@ -105,10 +105,11 @@ requirement.define("energy", Property(
 ))
 ```
 
-Custom functions have required, individually named and annotated inputs.
-Defaults, variadic arguments and optional annotations are rejected.
-Each call supplies actual Property objects, without `.value`, as its arguments.
-The wrapper resolves their values and calls the function.
+Custom functions have individually named and annotated inputs.
+Inputs without defaults are required. Omitted inputs retain the Python function's declared defaults.
+A nullable input annotation requires a default. Variadic arguments are rejected.
+Each supplied argument is an actual Property object, without `.value`.
+The wrapper resolves supplied values and calls the function.
 A custom function returns its declared NamedTuple type with annotated fields.
 Annotations describe the interface. Python remains responsible for field value types.
 Ordinary `math` functions operate on values, such as `math.sqrt(self.mass.value)`.
@@ -248,7 +249,7 @@ Explicitly overriding `cell_count` preserves this consistency check.
 `eps.solar_cell_count.minimum_parallel_count` and `eps.battery_energy.minimum_parallel_count` expose comparison bounds for the entered series count. They do not change it.
 
 Array voltages scale with series count and currents with parallel count.
-`eol_voltage` and `eol_current` use the existing EOL cell maximum power point ratings.
+`eol_voltage` and `eol_current` use the existing EOL cell maximum power point ratings unless `cell_iv_curve` selects PV points.
 `open_circuit_voltage` and `short_circuit_current` use their separate cell ratings.
 Battery charge capacity scales with parallel count, energy with total cell count and voltage with series count.
 Battery voltage bounds and separate charge/discharge current limits have corresponding `cell_*` inputs.
@@ -354,6 +355,34 @@ A zero-power source fails the generation check for positive demand. Its required
 Physical losses must enter the chosen source boundary once.
 These checks establish no chronological energy balance, charging acceptance or EOL service claim.
 
+### Optional photovoltaic data
+
+`SolarArray.cell_iv_curve` defaults to the empty tuple `()` and preserves the scalar sizing path.
+Set it to ordered `(voltage_V, current_A)` points for one cell at one selected condition.
+The characteristic must include short circuit, a positive MPP point and open circuit.
+The calculation uses the largest sampled `V * I`. It performs no interpolation or extrapolation.
+A partial digitized trace without both endpoints is rejected.
+
+```python
+panel.cell_iv_curve = "((0, 0.501), (2.23, 0.484), (2.519, 0))"
+panel.pv_reference_irradiance = 1367
+```
+
+These points reproduce the catalog's AZUR 3G30 reference case at 28 C after 1e15 1 MeV electrons/cm2.
+The curve supplies the reference MPP power, operating voltage/current, open-circuit voltage and short-circuit current.
+Scalar cell electrical ratings remain unchanged and become active again when the curve is cleared.
+`generation_efficiency` uses sampled MPP power divided by `cell_active_area * pv_reference_irradiance` for this path.
+The existing area and generation checks use that efficiency with actual `irradiance`, installation losses and illumination projection.
+Without a curve, `generation_efficiency` references the existing `eol_efficiency`.
+
+Select an explicit product, curve, condition and units from the catalog before binding the points.
+Keep cell data separate from a complete purchased panel's data and avoid applying its internal counts again.
+Use applicable EOL points for an EOL assessment.
+Reference voltage/current characteristics remain at the selected curve conditions.
+Generation retains the existing constant-efficiency irradiance approximation.
+No temperature correction, tracker restriction, mismatch or shading model is introduced.
+See [the sourced operating-limits session](../sessions/example_eps_operating_limits.py) for both scalar and PV paths.
+
 ### Required bus voltage and current
 
 A state's `voltage` can be the **nominal required voltage for its declared rail**.
@@ -384,6 +413,58 @@ For MPPT, assign the applicable tracking interval and assess startup separately.
 Assign the absolute voltage and permissible source-current limits through the two solar rating Requirements' `required` Properties.
 `RegulatorAndConverter` provides separate operating input, absolute input voltage, input current and output ratings for these explicit links.
 Battery charge/discharge Requirements also have explicit `required` current inputs. They do not assume battery current equals load-rail current.
+
+## Protection and normal operating extrema
+
+`Protection` is an EPS `PowerCircuit` specialisation. `CotsProtection` fixes its product Properties on a class.
+Adding either type to a Mission creates its owned `no_trip` Requirement through `create_requirements()`.
+It can be placed directly under the EPS or as a COTS selection under its compatible PowerCircuit.
+It is an explicit selection, separate from the EPS defaults.
+
+The default checks use these selected COTS parameter bounds:
+
+| Parameter | Normal-operation condition |
+| --- | --- |
+| `undervoltage_threshold` | Minimum sensed voltage strictly above the highest applicable UV trip threshold |
+| `overvoltage_threshold` | Maximum sensed voltage strictly below the lowest applicable OV trip threshold |
+| `current_limit` | Nonnegative current magnitudes strictly below the lowest applicable OC trip threshold |
+
+```python
+from framework.models import CotsProtection, Property
+
+class SelectedEfuse(CotsProtection):
+    # TPS259531 catalog bounds, current-limit resistor 1780 ohm.
+    undervoltage_threshold = Property(2.53, "V")
+    overvoltage_threshold = Property(5.5, "V")
+    current_limit = Property(1.09, "A")
+
+protector = eps.PowerCircuit.add(SelectedEfuse("efuse"))
+protector.no_trip.voltages = "(4.75, 5.0, 5.25)"
+protector.no_trip.currents = "(0.4, 1.0)"
+print(protector.voltage_extrema.value)  # Extrema(minimum=4.75, maximum=5.25)
+print(protector.current_extrema.value)  # Extrema(minimum=0.4, maximum=1.0)
+assert protector.no_trip.verify().verified is True
+```
+
+The sampled inputs stay editable on the Requirement, including for a fixed COTS product.
+Expressions may reference load states and other Properties. Verification retains their dependency paths.
+Voltage samples must describe the detector's sensed node. Cell-level detectors need individual cell voltage bounds.
+Current samples are magnitudes in the assessed protected direction, using a threshold for that direction.
+Sense-voltage thresholds need an explicit circuit conversion to amperes before binding `current_limit`.
+Select the applicable resistor, temperature and configuration bounds when choosing catalog facts.
+
+A product class can declare `trip_parameters = ("current_limit",)` for an OC-only assessment.
+The default tuple declares all three detectors. Unset thresholds for declared detectors remain pending.
+Missing samples remain pending. Empty or nonfinite samples produce an error.
+Equality with a trip threshold fails this conservative screen.
+`load_current_extrema` in `sizing.py` can derive current bounds from explicit power cases and a positive voltage interval.
+Those powers must include losses at the same source boundary. Period-average powers establish no peak bound.
+An unpowered case should only be included if protection is expected to remain inactive in that case.
+
+This is a normal-operation screen for an enabled, recovered device.
+Delays, hysteresis, startup, temperature protection, fault interruption and recovery require separate evidence.
+Only the declared detectors and supplied operating cases are assessed.
+See [the sourced example](../sessions/example_eps_operating_limits.py) for live pass and overload cases.
 
 ## COTS and aggregation
 

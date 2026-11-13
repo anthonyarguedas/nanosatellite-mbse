@@ -2,10 +2,12 @@
 
 Keplerian orbit, spherical Earth, cylindrical shadow and a fixed Sun per orbit.
 Public angle inputs are in degrees to match Orbit's annotations.
+Electrical extrema describe supplied normal operating cases, without transients.
+Optional PV samples retain their selected temperature and degradation conditions.
 """
 
 import math
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 
 
 class OrbitalPeriod(NamedTuple):
@@ -52,6 +54,82 @@ class Efficiency(NamedTuple):
 
 class PowerDensity(NamedTuple):
     watts_per_square_metre: float
+
+
+class Extrema(NamedTuple):
+    minimum: float
+    maximum: float
+
+
+class PVCharacteristics(NamedTuple):
+    mpp_voltage: float
+    mpp_current: float
+    maximum_power: float
+    open_circuit_voltage: float
+    short_circuit_current: float
+
+
+def extrema(values: tuple) -> Extrema:
+    """Finite extrema of explicitly supplied cases on one electrical path."""
+    values = tuple(values)
+    if not values:
+        raise ValueError("Supply at least one operating value.")
+    _finite(*values)
+    return Extrema(min(values), max(values))
+
+
+def load_current_extrema(powers: tuple, minimum_voltage: float,
+                         maximum_voltage: float) -> Extrema:
+    """Independent P/V corners. Powers include losses at the assessed source."""
+    power = extrema(powers)
+    _finite(minimum_voltage, maximum_voltage)
+    if power.minimum < 0 or not 0 < minimum_voltage <= maximum_voltage:
+        raise ValueError("Require nonnegative powers and an ordered positive voltage interval.")
+    result = Extrema(power.minimum / maximum_voltage, power.maximum / minimum_voltage)
+    _finite(*result)
+    return result
+
+
+def pv_characteristics(pv_points: tuple) -> PVCharacteristics:
+    """Sampled MPP and endpoints of one complete, ordered I-V characteristic.
+
+    Points are (voltage in V, current in A). No interpolation or extrapolation
+    is performed. Sparse data must include the manufacturer's MPP point.
+    """
+    points = tuple(tuple(point) for point in pv_points)
+    if len(points) < 3 or any(len(point) != 2 for point in points):
+        raise ValueError("Supply at least three (voltage, current) PV points including MPP and both endpoints.")
+    for voltage, current in points:
+        _finite(voltage, current)
+        if voltage < 0 or current < 0:
+            raise ValueError("PV voltages and currents must be nonnegative.")
+    if any(right[0] <= left[0] for left, right in zip(points, points[1:])):
+        raise ValueError("PV voltage samples must be strictly increasing.")
+    if points[0][0] != 0 or points[0][1] <= 0 or points[-1][1] != 0:
+        raise ValueError("PV samples must span short circuit (0, Isc) to open circuit (Voc, 0).")
+    powers = tuple(voltage * current for voltage, current in points)
+    _finite(*powers)
+    index = max(range(len(points)), key=powers.__getitem__)
+    if powers[index] <= 0:
+        raise ValueError("The PV characteristic must include a positive power point.")
+    voltage, current = points[index]
+    return PVCharacteristics(voltage, current, powers[index], points[-1][0], points[0][1])
+
+
+def pv_efficiency(pv_points: tuple, active_area: float,
+                  reference_irradiance: float) -> Efficiency:
+    """Reference MPP efficiency for the selected cell or purchased panel."""
+    _finite(active_area, reference_irradiance)
+    if active_area <= 0 or reference_irradiance <= 0:
+        raise ValueError("PV active area and reference irradiance must be positive.")
+    incident_power = active_area * reference_irradiance
+    _finite(incident_power)
+    if incident_power <= 0:
+        raise ValueError("Incident PV power is below floating point range.")
+    efficiency = pv_characteristics(pv_points).maximum_power / incident_power
+    if not 0 < efficiency <= 1:
+        raise ValueError("The selected PV characteristic must give an efficiency in (0, 1].")
+    return Efficiency(efficiency)
 
 
 def _finite(*values):
@@ -222,7 +300,15 @@ def minimum_panel_power(sunlight_energy: float, eclipse_energy: float,
     return Power(power)
 
 
-def cell_power(eol_voltage: float, eol_current: float) -> Power:
+def cell_power(eol_voltage: Optional[float] = None, eol_current: Optional[float] = None,
+               pv_points: tuple = ()) -> Power:
+    """Use either scalar EOL MPP ratings or an explicitly selected I-V curve."""
+    if pv_points:
+        if eol_voltage is not None or eol_current is not None:
+            raise ValueError("Select PV points or scalar MPP ratings, rather than both.")
+        return Power(pv_characteristics(pv_points).maximum_power)
+    if eol_voltage is None or eol_current is None:
+        raise ValueError("Supply both EOL MPP ratings or a complete PV characteristic.")
     _finite(eol_voltage, eol_current)
     if eol_voltage <= 0 or eol_current <= 0:
         raise ValueError("Cell EOL maximum power point voltage and current must be positive.")
