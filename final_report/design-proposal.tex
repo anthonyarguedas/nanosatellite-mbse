@@ -10,7 +10,7 @@ The complete project codebase, including the present document, the GUI, user doc
 The present section will present a narrative overview of said codebase guided by the requirements it satisfies.
 
 \section{Global MBSE model and user interfaces}
-Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-cubesat-subsystems} show the mission structure, and the nine CubeSat subsystems in CSRM. Mission teams tailor these logical categories to their missions. Detailed, mission-tailored design then establishes physical quantities and implementation choices.
+Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-cubesat-subsystems} show the mission structure, including a parametrized orbit (FR-13) and the nine CubeSat subsystems in CSRM. Mission teams tailor these logical categories to their missions. Detailed, mission-tailored design then establishes physical quantities and implementation choices.
 
 \begingroup
 \captionsetup{font=small,skip=4pt}
@@ -62,11 +62,22 @@ The GUI makes the automatic addition of requirements visually evident, and thus 
 Said requirements are pre-assigned verification methods that are ready to execute as soon as all inputs have been provided, representing the verification activity recommendation behavior required by FR-08.
 % A picture of the GUI showing the requirements created automatically when adding a certain EPS components. note in the caption that some of the variables appear as numbers because they already have values assigned, while others appear as variable names because their values are pending. explain that adding the pending values thus becomes the next activity recommendation.
 
-Thanks to the use of generic EPS component models with parameters that correspond to COTS properties, 
+Owing to the use of generic EPS component models with parameters that correspond to COTS properties, and that those COTS properties are constrainable by the requirements assigned to the generic component, the implementation of FR-11 is simplified to a query of the COTS database for all components matching the type of a generic component (battery, solar array) for which all requirements assigned to the generic component are verified when evaluated on the COTS property values.
+% Add a figure that on the left shows the code that implements this calculation, and on the right a GUI screenshot of a generic component for which COTS have been recommended
 
-\section{Orbit Requirements and Power Budget}
+\section{L02: COTS Database}
+This database is said to estimate electrical and dynamic EPS model parameters (as per FR-10) because its information comes from datasheets and not empirical modeling.
+For the purposes of this project, a great volume of COTS property values taken from datasheets was deemed preferrable to a small volume of empirical data, given that the framework requirements cover the exploration of alternatives during early design stages and not the qualification of mature physical designs.
 
-Preliminary EPS sizing will follow El Hachimi et al. \citep[Secs.~2--3, Eqs.~(1)--(10)]{handpicked-0003}. The eclipse model will include beta angle through the circular relation of Freimann et al. \citep[Sec.~IV, Eq.~(6)]{review-1231}. Eccentric orbits will use the entry and exit mean anomaly method described by Amato \citep[Sec.~3.3.5, p.~59]{citation-4669}.
+The database contains %how many of each generic EPS type.
+The reader is referred to Appendix \ref{appendix:cots-database} for the full list of COTS with their corresponding generic EPS component type, part identifier, and mass as one representative property. The full database is available in the project repository \cite{repo} as a tab-separated values file.
+
+\section{L03: Simulation and analysis}
+The requirements assigned to this logical component (FR-12 to 20) were implemented as Python expressions or simulation scripts referenced in requirements.
+The equations and algorithms supporting the analyses are listed in this section in algebraic format for clarity, so that their variables are properties of the MBSE model elements.
+The Python script versions actually used in the framework can be read in Appendix \ref{appendix:framework-code}.
+
+Preliminary EPS sizing (FR-14) will follow El Hachimi et al. \citep[Secs.~2--3, Eqs.~(1)--(10)]{handpicked-0003}. The eclipse model will include beta angle through the circular relation of Freimann et al. \citep[Sec.~IV, Eq.~(6)]{review-1231}. Eccentric orbits will use the entry and exit mean anomaly method described by Amato \citep[Sec.~3.3.5, p.~59]{citation-4669}.
 
 The orbital model will assume Keplerian motion, a spherical Earth, a cylindrical shadow and a fixed Sun direction during each orbit. Let $a_o$ be the semimajor axis in km, $e$ the eccentricity and $\nu$ the true anomaly. With Earth radius $R_e=6378~\mathrm{km}$ and gravitational parameter $\mu=398601~\mathrm{km^3/s^2}$, the domain is $0\leq e<1$ with $a_o(1-e)>R_e$. All angles are in radians. The orbital radius $r$, mean motion $n$ and period $T_o$ are:
 \begin{align}
@@ -139,12 +150,7 @@ The preliminary cycle estimate will assume one cycle per orbit, with $N_{\mathrm
     \label{eq:battery-energy}
 \end{align}
 
-\section{Array and Battery Configuration}
-\label{section:array-battery-configuration}
-
-The engineer will select the products, connections and series/parallel counts to be assessed. The framework will check this configuration against the power budget, electrical limits and installation constraints. Boan's mission energy assessments motivate checking the selected arrangement under supplied illumination and load histories \citep[Sec.~3]{review-0289}. Each result will identify its conditions, calculated value, comparison limit and verification verdict. Missing inputs will leave the affected verdict unresolved and identify the required data. Finished panels and packs will retain their supplier ratings and internal arrangements.
-
-\subsection{Solar array configuration}
+For the fulfillment of FR-15 and FR-16, the engineer will select the products, connections and series/parallel counts to be assessed. The framework will check this configuration against the power budget, electrical limits and installation constraints \citep[Sec.~3]{review-0289}.
 
 For each array section $g$, let $N_{s,g}^{\mathrm{pv}}$ be the number of cells in series and $N_{p,g}^{\mathrm{pv}}$ the number of parallel strings. Both counts will be positive integers. For identical cells, the installed count will be checked against Equation~\eqref{eq:solar-cell-count}:
 \begin{equation}
@@ -164,7 +170,7 @@ Qureshi gives the voltage sum for cells in series \citep[Sec.~3.1.1, Eq.~(3-1)]{
     \end{aligned}
     \label{eq:pv-assembly-ratings}
 \end{equation}
-Here $V_{\mathrm{mp}}$ and $I_{\mathrm{mp}}$ describe the maximum power point, $V_{\mathrm{oc}}$ is open-circuit voltage and $I_{\mathrm{sc}}$ is short-circuit current. Voltages are in V and currents in A. Unequal illumination, shading and shared regulator inputs will require the combined current--voltage characteristic. Casado et al. provide an example with independent array sections and temperature and irradiance corrections \citep[Secs.~2.1--2.2]{review-0573}.
+Here $V_{\mathrm{mp}}$ and $I_{\mathrm{mp}}$ describe the maximum power point, $V_{\mathrm{oc}}$ is open-circuit voltage and $I_{\mathrm{sc}}$ is short-circuit current. Voltages are in V and currents in A. Unequal illumination, shading and shared regulator inputs will require the combined current--voltage characteristic \citep[Secs.~2.1--2.2]{review-0573}.
 
 For section $g$ connected to MPPT input $r$, conservative extrema over the applicable temperature, irradiance and lifetime conditions will be checked against the receiver's tracking interval, absolute voltage limit and permissible source current:
 \begin{align}
@@ -176,9 +182,9 @@ For section $g$ connected to MPPT input $r$, conservative extrema over the appli
     \qquad N_{p,g}^{\mathrm{pv}}I_{\mathrm{sc,cell},g}^{\mathrm{hi}}\leq I_{\mathrm{source,allow},r}.
     \label{eq:pv-input-ratings}
 \end{align}
-Startup and operating limits will also be checked. DET configurations will use the array characteristic at the battery or bus voltage, including blocking and wiring drops. These checks will use the selected converter's supported operating conditions \citep[Sec.~7.1]{handpicked-0003}.
+To enable FR-19, DET configurations will use the array characteristic at the battery or bus voltage, including blocking and wiring drops. These checks will use the selected converter's supported operating conditions \citep[Sec.~7.1]{handpicked-0003}.
 
-\subsection{Array area and available generation}
+For FR-14, array area calculations will implement an algorithm as follows:
 
 \begin{align}
     (\ell_x,\ell_y,\ell_z)_{\mathrm{nom}}
@@ -303,7 +309,7 @@ For the specific preliminary approximation of a tumbling CubeSat with cells on a
     \frac{2A_{\mathrm{effective,min}}}{\cos(50^\circ)f_{\mathrm{packing}}}.
     \label{eq:array-tumbling-area}
 \end{equation}
-For this geometry, the check will be $\sum_g A_{\mathrm{panel},g}\geq A_{\mathrm{tumbling,min}}$. Supplied attitude and illumination histories will support a separate assessment of each section's available power $P_{g,\mathrm{avail}}(t)$ at the attainable DET or MPPT operating point \citep[Sec.~II]{review-1231}. For $T_s>0$, generation will be checked at the same source boundary as the power budget:
+For this geometry, the check will be $\sum_g A_{\mathrm{panel},g}\geq A_{\mathrm{tumbling,min}}$. Supplied attitude and illumination histories will support a separate assessment of each section's available power $P_{g,\mathrm{avail}}(t)$ at the attainable DET or MPPT operating point for FR-19 \citep[Sec.~II]{review-1231}. For $T_s>0$, generation will be checked at the same source boundary as the power budget:
 \begin{align}
     \overline p_{g,s}
     &=G_{\mathrm{ref},g}\eta_{\mathrm{EOL},g}I_{d,g}\eta_{a,g}\overline\kappa_g,
@@ -322,9 +328,7 @@ For this geometry, the check will be $\sum_g A_{\mathrm{panel},g}\geq A_{\mathrm
 \end{align}
 The assessment will use the selected configuration's path efficiencies. Solar cell count and installed area will therefore be accompanied by an illumination-dependent generation verdict.
 
-\subsection{Battery configuration and capacity}
-
-Let $N_s^{\mathrm{bat}}$ and $N_p^{\mathrm{bat}}$ be the entered positive integer series and parallel counts. For identical cells with balanced current sharing, the initial cell-based pack estimates will be:
+For FR-15 and FR-16, let $N_s^{\mathrm{bat}}$ and $N_p^{\mathrm{bat}}$ be the entered positive integer series and parallel counts. For identical cells with balanced current sharing, the initial cell-based pack estimates will be:
 \begin{equation}
     \begin{aligned}
         N_{\mathrm{bat}}&=N_s^{\mathrm{bat}}N_p^{\mathrm{bat}},\\
@@ -342,7 +346,7 @@ Let $N_s^{\mathrm{bat}}$ and $N_p^{\mathrm{bat}}$ be the entered positive intege
     \end{aligned}
     \label{eq:battery-assembly-ratings}
 \end{equation}
-Energy $E$ will be expressed in J and charge capacity $Q$ in Ah, with $1~\mathrm{Wh}=3600~\mathrm{J}$. The BIRDS-4 3S2P pack illustrates these relations: 1.2~V, 1900~mAh cells give 3.6~V, 3800~mAh and 13.68~Wh \citep[p.~5]{shrestha2022birds4powerbudget}. Interconnects, balancing and protection can reduce the cell-based ratings. Finished packs will use their supplier's pack ratings.
+Energy $E$ will be expressed in J and charge capacity $Q$ in Ah, with $1~\mathrm{Wh}=3600~\mathrm{J}$. Interconnects, balancing and protection can reduce the cell-based ratings. Finished packs will use their supplier's pack ratings.
 
 The configured pack will be checked against Equation~\eqref{eq:battery-energy}. For the entered series count and $E_{\mathrm{cell,BOL}}>0$, the energy check can also be expressed as a lower bound on parallel strings:
 \begin{equation}
@@ -352,7 +356,7 @@ The configured pack will be checked against Equation~\eqref{eq:battery-energy}. 
     \left\lceil\frac{E_{\mathrm{Battery}}}{N_s^{\mathrm{bat}}E_{\mathrm{cell,BOL}}}\right\rceil.
     \label{eq:battery-configuration-check}
 \end{equation}
-The framework will check the pack voltage range against its connected charge and discharge paths. Charging, discharging and pulse current limits will be assessed separately at their applicable temperatures. The selected charger will be checked for chemistry, series count, charging voltage, current and termination compatibility \citep[Secs.~2.2--2.3]{review-0573}.
+The framework will check the pack voltage range against its connected charge and discharge paths. The selected charger will be checked for chemistry, series count, charging voltage, current and termination compatibility for FR-15 \citep[Secs.~2.2--2.3]{review-0573}.
 
 For supplied retention fractions $f_E$ and $f_Q$, EOL capacity will be:
 \begin{equation}
@@ -361,3 +365,8 @@ For supplied retention fractions $f_E$ and $f_Q$, EOL capacity will be:
     \label{eq:battery-retained-capacity}
 \end{equation}
 The margin $M$ will enter preliminary sizing once through Equation~\eqref{eq:battery-energy}. EOL assessments will use retained capacity at the applicable conditions. Checks over supplied load and illumination histories will also assess charge acceptance, the allowed DoD, nominal recharge and survival reserves \citep[Sec.~3]{review-0289}. The final verdict will apply to the assessed configuration and scenarios.
+
+\section{L04: Configuration Management}
+Finally, L04's assigned requirement FR-09 has an uncomplicated implementation owing to the fact that Python models and analysis scripts are plain-text files, and thus can be version controlled with Github to track changes at the parameter value level and finer.
+Each Github commit represents a retained baseline that can include rationales and authorship information, and can be synchronized across devices using public Github repositories.
+% a figure with a git diff after changing one property value and making a requirement unverified
