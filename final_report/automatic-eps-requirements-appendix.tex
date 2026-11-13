@@ -1,0 +1,62 @@
+\chapter{Automatic EPS Requirements}
+\label{appendix:automatic-eps-requirements}
+
+The requirements automatically assigned to EPS elements form part of the fourth objective's deliverable, which characterizes early EPS verification and validation.
+Table~\ref{tab:automatic-eps-requirements} associates each requirement statement with its EPS element.
+Calculated targets are shown symbolically because their numerical values depend on the mission inputs, following the equations in Chapter~\ref{ch:design-proposal}.
+The EPS owns the first 18 requirements, and each added protection component owns its normal operation requirement.
+{\small
+\setlength{\tabcolsep}{4pt}
+\setlength{\parskip}{0pt}
+\renewcommand{\arraystretch}{1.06}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.78\linewidth-2\tabcolsep\relax}@{}}
+\caption{Requirements automatically assigned to EPS elements.}\label{tab:automatic-eps-requirements}\\
+\toprule
+\textbf{EPS element} & \textbf{Requirement statement} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{EPS element} & \textbf{Requirement statement} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+% sunlight_energy
+EPS & The EPS shall deliver at least $E_s$ of energy to the loads during sunlight per orbit, where $E_s=\overline P_{L,s}T_s$ in J (Equation~\eqref{eq:sunlight-load-energy}). \\
+% eclipse_energy
+EPS & The EPS shall deliver at least $E_e$ of energy to the loads during eclipse per orbit, where $E_e=\overline P_{L,e}T_e$ in J (Equation~\eqref{eq:eclipse-load-energy}). \\
+% solar_power
+Solar array & The solar array shall provide at least $P_{\mathrm{sp}_{\min}}$ in W at end of life (Equation~\eqref{eq:minimum-panel-power}). \\
+% solar_cell_count
+Solar array & The solar array shall contain at least $\lceil N_{\mathrm{sc}}\rceil$ cells (Equation~\eqref{eq:solar-cell-count}). \\
+% battery_energy
+Battery & The battery shall have at least $E_{\mathrm{Battery}}$ in J of beginning-of-life energy (Equation~\eqref{eq:battery-energy}). \\
+% solar_configuration
+Solar array & The solar array shall contain $N_s^{\mathrm{pv}}N_p^{\mathrm{pv}}$ cells arranged with positive integer series and parallel counts (Equation~\eqref{eq:pv-integer-configuration}, for one section). \\
+% battery_configuration
+Battery & The battery shall contain $N_s^{\mathrm{bat}}N_p^{\mathrm{bat}}$ cells arranged with positive integer series and parallel counts (Equation~\eqref{eq:battery-assembly-capacity}). \\
+% solar_area
+Solar array & The array shall have at least $A_{\mathrm{active,min}}$ in m$^2$ of active area at the assessed conditions (Equation~\eqref{eq:array-incidence-area}). \\
+% solar_area_fit
+Solar array & The installed panel area shall not exceed the entered usable area $A_{\mathrm{usable}}$ in m$^2$ (Equation~\eqref{eq:array-area-fit}). \\
+% solar_generation
+Solar array & The array shall provide at least $P_{\mathrm{sp}_{\min}}$ in W as mean available source power during sunlight (Equation~\eqref{eq:array-generation-screen}). \\
+% solar_voltage
+Solar array & The array operating voltage shall remain between the explicitly assigned minimum and maximum receiving voltages in V. \\
+% battery_voltage
+Battery & The battery pack voltage shall remain between the explicitly assigned minimum and maximum receiving voltages in V. \\
+% solar_open_circuit_voltage
+Solar array & The array open-circuit voltage shall not exceed the assigned receiver's absolute voltage limit $V_{\mathrm{abs},r}$ in V (Equation~\eqref{eq:pv-input-ratings}). \\
+% solar_short_circuit_current
+Solar array & The array short-circuit current shall not exceed the assigned receiver's permissible source current $I_{\mathrm{source,allow},r}$ in A (Equation~\eqref{eq:pv-input-ratings}). \\
+% bus_current
+Bus power path & The selected bus path shall supply at least the entered required load current $I_{\mathrm{required}}$ in A (Equation~\eqref{eq:bus-output-compatibility}). \\
+% battery_charge_current
+Battery & The battery shall accept at least the entered required charging current in A. \\
+% battery_discharge_current
+Battery & The battery shall supply at least the entered required discharge current in A. \\
+% bus_voltage
+Bus power path & The selected bus path shall provide the entered required voltage $V_{\mathrm{required}}$ within the entered tolerance $\epsilon_V\geq0$ in V (Equation~\eqref{eq:bus-output-compatibility}). \\
+% no_trip
+Protection & The declared protection detectors shall remain inactive for all supplied normal operating samples under the applicable bounds in Equation~\eqref{eq:protection-no-trip}. \\
+\end{longtable}}
