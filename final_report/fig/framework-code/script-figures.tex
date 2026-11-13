@@ -1,0 +1,83 @@
+\lstdefinestyle{framework-code}{
+  language=Python,
+  basicstyle=\fontencoding{T1}\fontsize{8}{9.5}\ttfamily\selectfont,
+  keywordstyle={},
+  commentstyle={},
+  stringstyle={},
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  upquote=true,
+  nolol=true,
+  numbers=left,
+  numberstyle=\tiny\ttfamily,
+  numbersep=6pt,
+  xleftmargin=22pt,
+  tabsize=4,
+  breaklines=true,
+  breakatwhitespace=true,
+  breakindent=1em,
+  aboveskip=0pt,
+  belowskip=0pt
+}
+
+\newsavebox{\frameworkCodeBox}
+\newsavebox{\frameworkCodePage}
+\newsavebox{\frameworkCodeRemainder}
+\newlength{\frameworkCodeHeight}
+\newlength{\frameworkCodeMaxHeight}
+\newcount\frameworkCodePages
+\newif\ifframeworkCodeContinuation
+
+% Split the typeset source at line breaks and retain one figure number per file.
+\newcommand{\frameworkCodeFigure}[2]{%
+  \begingroup
+  \hypersetup{naturalnames=false}%
+  \setlength{\fboxsep}{5pt}%
+  \setlength{\fboxrule}{0.4pt}%
+  \setlength{\frameworkCodeMaxHeight}{\dimexpr\textheight-2\fboxsep-2\fboxrule-4\baselineskip\relax}%
+  \splittopskip=0pt
+  \splitmaxdepth=0pt
+  \vbadness=10000
+  \frameworkCodeContinuationfalse
+  \setbox\frameworkCodeBox=\vbox{%
+    \hsize=\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax
+    \linewidth=\hsize
+    \interlinepenalty=10000
+    \lstinputlisting[style=framework-code]{../framework/#1}%
+  }%
+  % Count legal page breaks, then balance the parts to avoid a nearly empty end.
+  \setbox\frameworkCodeRemainder=\copy\frameworkCodeBox
+  \frameworkCodePages=0
+  \loop
+    \advance\frameworkCodePages by 1
+    \setbox\frameworkCodePage=\vsplit\frameworkCodeRemainder to \frameworkCodeMaxHeight
+  \ifdim\ht\frameworkCodeRemainder>0pt
+  \repeat
+  \setlength{\frameworkCodeHeight}{\dimexpr(\ht\frameworkCodeBox+\dp\frameworkCodeBox)/\frameworkCodePages+11pt\relax}%
+  \ifdim\frameworkCodeHeight>\frameworkCodeMaxHeight
+    \setlength{\frameworkCodeHeight}{\frameworkCodeMaxHeight}%
+  \fi
+  \loop
+    \ifdim\dimexpr\ht\frameworkCodeBox+\dp\frameworkCodeBox\relax>\frameworkCodeHeight
+      \setbox\frameworkCodePage=\vsplit\frameworkCodeBox to \frameworkCodeHeight
+    \else
+      \setbox\frameworkCodePage=\box\frameworkCodeBox
+    \fi
+    \begin{figure}[p]
+      \ifframeworkCodeContinuation\ContinuedFloat\fi
+      \centering
+      \fbox{\vbox{\unvbox\frameworkCodePage}}%
+      \ifframeworkCodeContinuation
+        \caption[]{\texttt{\protect\detokenize{#1}} (continued).}
+      \else
+        \caption{\texttt{\protect\detokenize{#1}}.}
+        \label{fig:framework-code-#2}
+      \fi
+    \end{figure}
+    \clearpage
+    \frameworkCodeContinuationtrue
+  \ifdim\ht\frameworkCodeBox>0pt
+  \repeat
+  \endgroup
+}
