@@ -73,11 +73,23 @@ The database contains %how many of each generic EPS type.
 The reader is referred to Appendix \ref{appendix:cots-database} for the full list of COTS with their corresponding generic EPS component type, part identifier, and mass as one representative property. The full database is available in the project repository \cite{repo} as a tab-separated values file.
 
 \section{L03: Simulation and analysis}
-The requirements assigned to this logical component (FR-12 to 20) were implemented as Python expressions or simulation scripts referenced in requirements.
-The equations and algorithms supporting the analyses are listed in this section in algebraic format for clarity, so that their variables are properties of the MBSE model elements.
-The Python script versions actually used in the framework can be read in Appendix \ref{appendix:framework-code}.
+L03 will implement FR-12 and FR-14 to FR-20 through Python expressions and numerical analyses referenced by requirements. L01 will retain the mission inputs required by FR-13 and supply them to L03, following Table~\ref{tab:logical-responsibilities}.
+Each subsection identifies the FRs supported by its equations and algorithms. Variables will correspond to properties of MBSE model elements. Analyses will return numerical measures, comparison limits and verification results. Missing inputs will remain unknown, and invalid inputs will produce an evaluation error.
 
-Preliminary EPS sizing (FR-14) will follow El Hachimi et al. \citep[Secs.~2--3, Eqs.~(1)--(10)]{handpicked-0003}. The eclipse model will include beta angle through the circular relation of Freimann et al. \citep[Sec.~IV, Eq.~(6)]{review-1231}. Eccentric orbits will use the entry and exit mean anomaly method described by Amato \citep[Sec.~3.3.5, p.~59]{citation-4669}.
+\subsection{Mass and occupied volume (FR-12)}
+For FR-12, the EPS estimate will sum the contributions of its immediate components. An aggregate estimate can replace a component sum when its accounting boundary is declared. With component masses $m_i$ in kg and occupied-volume estimates $V_i$ in m$^3$, the totals and remaining allocations will be:
+\begin{align}
+    m_{\mathrm{EPS}}&=\sum_i m_i,
+    &V_{\mathrm{EPS}}&=\sum_i V_i,
+    \label{eq:eps-mass-volume}\\
+    \Delta m&=m_{\mathrm{alloc}}-m_{\mathrm{EPS}},
+    &\Delta V&=V_{\mathrm{alloc}}-V_{\mathrm{EPS}}.
+    \label{eq:eps-mass-volume-margins}
+\end{align}
+Each allocation check will pass when its remaining allocation is nonnegative. Each physical item will contribute once, including integrated COTS products represented under a generic component. Sources and units will accompany the supplied estimates. An unknown contribution will leave the affected total unresolved.
+
+\subsection{Orbit and eclipse durations (FR-14)}
+These calculations will supply the durations used by the FR-14 energy and sizing analyses from the orbit retained under FR-13. Preliminary sizing will follow El Hachimi et al. \citep[Secs.~2--3, Eqs.~(1)--(10)]{handpicked-0003}. The eclipse model will include beta angle through the circular relation of Freimann et al. \citep[Sec.~IV, Eq.~(6)]{review-1231}. Eccentric orbits will use the entry and exit mean anomaly method described by Amato \citep[Sec.~3.3.5, p.~59]{citation-4669}.
 
 The orbital model will assume Keplerian motion, a spherical Earth, a cylindrical shadow and a fixed Sun direction during each orbit. Let $a_o$ be the semimajor axis in km, $e$ the eccentricity and $\nu$ the true anomaly. With Earth radius $R_e=6378~\mathrm{km}$ and gravitational parameter $\mu=398601~\mathrm{km^3/s^2}$, the domain is $0\leq e<1$ with $a_o(1-e)>R_e$. All angles are in radians. The orbital radius $r$, mean motion $n$ and period $T_o$ are:
 \begin{align}
@@ -119,20 +131,26 @@ Boundary anomalies will be unwrapped in the direction of motion so that each dif
 \end{align}
 An orbit without an eclipse has $N_e=0$ and $T_e=0$, including $|\beta|=\pi/2$. The circular limit uses $e=0$, $a_o=R_e+h$ and any common angular reference for $\nu$ and $\lambda$, where $h$ is altitude. At $\beta=0$, this limit recovers El Hachimi et al.'s eclipse relation.
 
-Subsystem powers and duty cycles define the total load power $P_L(t)$. The sunlight and eclipse energies are:
+\subsection{Power budgets and preliminary sizing (FR-14)}
+For FR-14, each component state will calculate power from its voltage and current. The engineer will bind component and subsystem powers for each assessed spacecraft mode. At the declared load boundary:
+\begin{equation}
+    P_i=V_i I_i,\qquad P_L(t)=\sum_i P_i(t).
+    \label{eq:state-load-power}
+\end{equation}
+Mode allocations, duty cycles and load schedules will be explicit inputs. The analysis will use supplied mean powers $\overline P_{L,s}$ and $\overline P_{L,e}$ over the complete sunlight and eclipse intervals, including duty cycles and EPS consumption at that boundary:
 \begin{align}
-    E_s &= \int_{\mathrm{sunlight}}P_L(t)\,dt,
+    E_s &= \int_{\mathrm{sunlight}}P_L(t)\,dt=\overline P_{L,s}T_s,
     \label{eq:sunlight-load-energy} \\
-    E_e &= \int_{\mathrm{eclipse}}P_L(t)\,dt.
+    E_e &= \int_{\mathrm{eclipse}}P_L(t)\,dt=\overline P_{L,e}T_e.
     \label{eq:eclipse-load-energy}
 \end{align}
-These integrals cover one orbit and give energy in J for power in W and time in s. With corresponding energy path efficiencies $X_s$ and $X_e$, the minimum solar panel power is:
+The numerical calculation will multiply each supplied mean power by its duration. It will infer no schedule or allocation normalization. These expressions cover one orbit and give energy in J for power in W and time in s. Separate delivered-energy inputs at the same load boundary will be checked against $E_s$ and $E_e$. An absent interval will contribute zero energy. With corresponding energy path efficiencies $X_s$ and $X_e$, the minimum solar panel power for FR-14 will be:
 \begin{equation}
     P_{\mathrm{sp}_{\min}} = \frac{\frac{E_s}{X_s}+\frac{E_e}{X_e}}{T_s}.
     \label{eq:minimum-panel-power}
 \end{equation}
 
-Solar cell power at end of life (subscript EOL) uses maximum power point voltage $V_{\mathrm{mp}_{\mathrm{EOL}}}$ and current $I_{\mathrm{mp}_{\mathrm{EOL}}}$. The required cell count is $N_{\mathrm{sc}}$:
+For FR-14, solar cell power at end of life (subscript EOL) will use maximum power point voltage $V_{\mathrm{mp}_{\mathrm{EOL}}}$ and current $I_{\mathrm{mp}_{\mathrm{EOL}}}$. The fractional cell count will be $N_{\mathrm{sc}}$, and the reported minimum integer count will be $\lceil N_{\mathrm{sc}}\rceil$:
 \begin{align}
     P_{\mathrm{sc}_{\mathrm{EOL}}} &= V_{\mathrm{mp}_{\mathrm{EOL}}} I_{\mathrm{mp}_{\mathrm{EOL}}},
     \label{eq:solar-cell-eol-power} \\
@@ -140,17 +158,19 @@ Solar cell power at end of life (subscript EOL) uses maximum power point voltage
     \label{eq:solar-cell-count}
 \end{align}
 
-The preliminary cycle estimate will assume one cycle per orbit, with $N_{\mathrm{orbit/day}}=86400~\mathrm{s}/T_o$. For mission lifetime $N_{\mathrm{lifetime}}$ in years and $N_{\mathrm{day/year}}$ days per year, the required cycle count sets the depth of discharge limit $\mathrm{DoD}$. Battery energy includes degradation margin $M$:
+For FR-14, the preliminary battery cycle estimate will assume one cycle per orbit, with $N_{\mathrm{orbit/day}}=86400~\mathrm{s}/T_o$. For mission lifetime $N_{\mathrm{lifetime}}$ in years and $N_{\mathrm{day/year}}$ days per year, the required cycle count will constrain the depth of discharge $\mathrm{DoD}$. Battery energy will include degradation margin $M$:
 \begin{align}
     N_{\mathrm{cycle}} &= N_{\mathrm{lifetime}}\cdot N_{\mathrm{day/year}}\cdot N_{\mathrm{orbit/day}},
     \label{eq:battery-mission-cycles} \\
-    N_{\mathrm{cycle}} &= a\cdot \mathrm{DoD}^{b},
+    N_{\mathrm{life}}(\mathrm{DoD}) &= a\cdot \mathrm{DoD}^{b}\geq N_{\mathrm{cycle}},
     \label{eq:battery-cycle-life} \\
     E_{\mathrm{Battery}} &= \frac{E_e}{\mathrm{DoD}}(1+M).
     \label{eq:battery-energy}
 \end{align}
+The cycle fit will use supplied $a>0$, $b<0$ and a characterized interval $0<\mathrm{DoD}_{\min}\leq\mathrm{DoD}_{\max}\leq1$. The analysis will select the largest DoD within that interval satisfying Equation~\eqref{eq:battery-cycle-life}. A cycle demand exceeding the fit's capacity at $\mathrm{DoD}_{\min}$ will produce an error. BOL and EOL assessments will use data at their stated conditions, with each degradation factor applied once.
 
-For the fulfillment of FR-15 and FR-16, the engineer will select the products, connections and series/parallel counts to be assessed. The framework will check this configuration against the power budget, electrical limits and installation constraints \citep[Sec.~3]{review-0289}.
+\subsection{Array alternatives (FR-15 and FR-16)}
+For FR-15, the engineer will supply alternative cell technologies. For FR-16, the engineer will supply alternative series and parallel counts. Each alternative will have a separate mission configuration and use the same feasibility checks under common mission and load conditions. The comparison will retain raw measures, limits, verdicts and unknown values. Products, connections and counts will remain explicit selections. The framework will check each configuration against the power budget, electrical limits and installation constraints \citep[Sec.~3]{review-0289}.
 
 For each array section $g$, let $N_{s,g}^{\mathrm{pv}}$ be the number of cells in series and $N_{p,g}^{\mathrm{pv}}$ the number of parallel strings. Both counts will be positive integers. For identical cells, the installed count will be checked against Equation~\eqref{eq:solar-cell-count}:
 \begin{equation}
@@ -182,9 +202,60 @@ For section $g$ connected to MPPT input $r$, conservative extrema over the appli
     \qquad N_{p,g}^{\mathrm{pv}}I_{\mathrm{sc,cell},g}^{\mathrm{hi}}\leq I_{\mathrm{source,allow},r}.
     \label{eq:pv-input-ratings}
 \end{align}
-To enable FR-19, DET configurations will use the array characteristic at the battery or bus voltage, including blocking and wiring drops. These checks will use the selected converter's supported operating conditions \citep[Sec.~7.1]{handpicked-0003}.
+The receiving limits will be explicitly linked to the selected path. MPPT tracking intervals, absolute voltage limits and permissible source currents will remain distinct quantities. These checks will use the selected converter's supported operating conditions \citep[Sec.~7.1]{handpicked-0003}.
 
-For FR-14, array area calculations will implement an algorithm as follows:
+\subsection{Photovoltaic characteristics (FR-18)}
+For FR-18, the sizing calculation will accept an optional sampled I--V characteristic as an alternative to scalar MPP inputs. The engineer will select a coherent product, temperature, irradiance and degradation condition. For one cell, the samples $(v_k,i_k)$, $k=0,\ldots,K$, will have finite, nonnegative values and strictly increasing voltages. At least three samples will include short circuit $(0,I_{\mathrm{sc,cell}})$, a positive maximum power point and open circuit $(V_{\mathrm{oc,cell}},0)$. The calculation will form the P--V samples and extract:
+\begin{align}
+    p_k&=v_k i_k,\qquad k^*=\operatorname*{arg\,max}_k p_k,
+    \label{eq:pv-sampled-power}\\
+    (V_{\mathrm{mp,cell}},I_{\mathrm{mp,cell}},P_{\mathrm{mp,cell}})
+    &=(v_{k^*},i_{k^*},p_{k^*}),
+    \label{eq:pv-sampled-mpp}\\
+    (V_{\mathrm{oc,cell}},I_{\mathrm{sc,cell}})&=(v_K,i_0),
+    \qquad \eta_{\mathrm{PV}}=\frac{P_{\mathrm{mp,cell}}}{G_{\mathrm{ref}}A_{\mathrm{cell}}}.
+    \label{eq:pv-curve-efficiency}
+\end{align}
+Here $G_{\mathrm{ref}}>0$ is the curve's reference irradiance in W/m$^2$ and $A_{\mathrm{cell}}>0$ is active area in m$^2$, with $0<\eta_{\mathrm{PV}}\leq1$. The MPP will be the largest sampled product, so sparse data will include the manufacturer's MPP. This extraction will perform no interpolation, extrapolation or diode fitting.
+
+The curve will supply the MPP power used by the FR-14 cell-count calculation and the electrical values scaled by Equation~\eqref{eq:pv-assembly-ratings}. The assembled values will be checked against the assigned limits in Equations~\eqref{eq:mppt-voltage-compatibility}--\eqref{eq:pv-input-ratings}, supporting FR-18. Applicable EOL curves will provide EOL sizing inputs. An empty curve will preserve the scalar sizing calculation. A purchased panel represented as one item will use its panel characteristic without repeating its internal cell counts.
+
+\subsection{DET and MPPT operating points (FR-19)}
+For FR-19, each array section will reference its explicitly selected power path. DET will use the battery or bus voltage plus the blocking and wiring drop $\Delta V_g\geq0$ at the assessed current. Ideal MPPT will use the section's reference MPP voltage. Fixed input-voltage regulation will use a separately supplied setpoint:
+\begin{equation}
+    V_{\mathrm{op},g}=\begin{cases}
+        V_{\mathrm{bus}}+\Delta V_g, & \text{DET},\\
+        V_{\mathrm{mp},g}, & \text{ideal MPPT},\\
+        V_{\mathrm{set},g}, & \text{fixed input-voltage regulation}.
+    \end{cases}
+    \label{eq:solar-operating-voltage}
+\end{equation}
+The supplied cell curve will be scaled to the entered series and parallel counts. An exact sampled voltage will return its sampled current. When the engineer explicitly accepts linear interpolation between adjacent assembled samples $(V_j,I_j)$ and $(V_{j+1},I_{j+1})$, the operating current will be:
+\begin{equation}
+    I_g(V)=I_j+\frac{V-V_j}{V_{j+1}-V_j}(I_{j+1}-I_j),
+    \qquad V_j<V<V_{j+1}.
+    \label{eq:pv-operating-interpolation}
+\end{equation}
+The default will accept exact samples only. Voltages outside the supplied characteristic will produce an error. Scalar MPP inputs will suffice when the operating voltage equals the reference MPP voltage. Other operating voltages will require the selected curve. For FR-19, the operating power and the efficiency used by the area and generation calculations will be:
+\begin{align}
+    P_{\mathrm{op},g}&=V_{\mathrm{op},g}I_g(V_{\mathrm{op},g}),
+    \label{eq:solar-operating-power}\\
+    \eta_{\mathrm{op},g}&=\eta_{\mathrm{ref},g}
+    \frac{P_{\mathrm{op},g}}{P_{\mathrm{mp},g}}.
+    \label{eq:pv-operating-efficiency}
+\end{align}
+Here $\eta_{\mathrm{ref},g}$ will be the supplied or calculated EOL efficiency for scalar inputs, or $\eta_{\mathrm{PV},g}$ from Equation~\eqref{eq:pv-curve-efficiency} for curve inputs. These efficiencies will retain the constant-efficiency irradiance approximation and a fixed normalized I--V shape within each assessed case. Changing temperature, irradiance or battery voltage will require applicable curves or an externally established mean power.
+
+For the simple DET path and an MPPT converter with characterized efficiency $\eta_{\mathrm{conv}}$, the bus powers before additional consumption will be:
+\begin{equation}
+    P_{\mathrm{bus,DET}}=V_{\mathrm{bus}}I_g(V_{\mathrm{op},g}),
+    \qquad P_{\mathrm{bus,MPPT}}=\eta_{\mathrm{conv}}P_{\mathrm{op},g}.
+    \label{eq:solar-delivered-power}
+\end{equation}
+The engineer will compare DET and MPPT under common array, battery, illumination and load conditions, using their respective path losses and the electrical checks above. Delivered energy at the load boundary will remain a separate input unless established by an applicable calculation. Ideal MPP extraction will establish a reference operating point. Actual tracker startup, tracking accuracy and conversion feasibility will require the selected controller's data. Fixed-voltage regulation will establish no automatic MPP search.
+
+\subsection{Array area and illumination (FR-14)}
+For FR-14, the array area and illumination algorithm will use the following body dimensions, mounting faces and section normals. The same calculations will support the FR-15 and FR-16 comparisons:
 
 \begin{align}
     (\ell_x,\ell_y,\ell_z)_{\mathrm{nom}}
@@ -227,16 +298,17 @@ For a cell assembly with active area $A_{\mathrm{cell},g}$ per cell, active arra
 \end{equation}
 All areas are in m$^2$, with total active area $A_{\mathrm{active}}=\sum_g A_{\mathrm{active},g}$. The packing fraction $0<f_{\mathrm{packing},g}\leq1$ is the active cell area divided by panel area. The usable area will exclude mounting and access clearances. Installation verification will also require a realizable cell layout within the available dimensions. Finished panels will use their specified active area and installation envelope.
 
-Nogrady relates required power to effective area at normal incidence \citep[Sec.~4.3.4, Eqs.~(25)--(26)]{review-1009}. With reference irradiance $G_{\mathrm{ref}}>0$ in W/m$^2$, the comparison area will be:
+For FR-14, normal-incidence area will follow Nogrady's relation \citep[Sec.~4.3.4]{review-1009}. With assessed irradiance $G>0$ in W/m$^2$, the comparison area will use the selected operating efficiency from Equation~\eqref{eq:pv-operating-efficiency}:
 \begin{equation}
     \eta_{\mathrm{EOL}}=\eta_{\mathrm{BOL}}L_d f_T,
     \qquad
     A_{\mathrm{effective,min}}=
-    \frac{P_{\mathrm{sp}_{\min}}}{G_{\mathrm{ref}}\eta_{\mathrm{EOL}}}.
+    \frac{P_{\mathrm{sp}_{\min}}}{G\eta_{\mathrm{op}}}.
     \label{eq:array-effective-area}
 \end{equation}
-Here $\eta_{\mathrm{BOL}}$ is cell efficiency, $L_d$ is lifetime retention and $f_T$ is the temperature correction at the assessed condition. Efficiencies and packing fractions will be expressed as fractions. Supplied EOL data will already include their stated degradation and temperature effects. For an array assessed at normal incidence, the active area will be checked for $A_{\mathrm{active}}\geq A_{\mathrm{effective,min}}$.
+Here $\eta_{\mathrm{BOL}}$ is cell efficiency, $L_d$ is lifetime retention and $f_T$ is the temperature correction at the assessed condition. The first relation will apply when EOL efficiency is derived from BOL data. Supplied EOL efficiencies or curves will provide the reference efficiency directly. Efficiencies and packing fractions will be expressed as fractions. Supplied EOL data will already include their stated degradation and temperature effects. For an array assessed at normal incidence, the active area will be checked for $A_{\mathrm{active}}\geq A_{\mathrm{effective,min}}$.
 
+For FR-14, prescribed Sun or nadir pointing will determine each section's projected illumination. Attitude inputs retained under FR-13 will specify the pointing face and clocking angle:
 \begin{align}
     \hat{\mathbf s}^{O}(\nu)
     &=\begin{bmatrix}
@@ -287,32 +359,33 @@ Here $\eta_{\mathrm{BOL}}$ is cell efficiency, $L_d$ is lifetime retention and $
       \kappa_g(\nu(\mathcal E))(1-e\cos\mathcal E)\,d\mathcal E.
     \notag
 \end{align}
-Vasile and Alicino include inherent degradation, electrical assembly losses and incidence angle in their area calculation \citep[Sec.~II.1]{review-1542}. Let $\theta$ be the angle between the array normal and the Sun direction. At common fixed conditions with $\cos\theta>0$, their expression gives the active area bound:
+For FR-14, Vasile and Alicino include inherent degradation, electrical assembly losses and incidence angle in their area calculation \citep[Sec.~II.1]{review-1542}. With the selected operating efficiency, the sunlight-mean power density and active area bound will be:
 \begin{align}
-    \overline p_s&=G_{\mathrm{ref}}\eta_{\mathrm{EOL}}I_d\eta_a\overline\kappa,
+    \overline p_s&=G\eta_{\mathrm{op}}I_d\eta_a\overline\kappa,
     \qquad \overline p_s>0,
     \label{eq:array-mean-power-density} \\
     A_{\mathrm{active,min}}
     &=\frac{P_{\mathrm{sp}_{\min}}}{\overline p_s}
     =\frac{P_{\mathrm{sp}_{\min}}}
-      {G_{\mathrm{ref}}\eta_{\mathrm{EOL}}I_d\eta_a\overline\kappa},
+      {G\eta_{\mathrm{op}}I_d\eta_a\overline\kappa},
     \label{eq:array-incidence-area} \\
     \kappa(\nu)&\equiv\cos\theta>0
     \quad\Longrightarrow\quad\overline\kappa=\cos\theta.
     \notag
 \end{align}
+The last relation recovers the fixed-incidence expression, where $\theta$ is the angle between the array normal and the Sun direction.
 The active area will be checked for $A_{\mathrm{active}}\geq A_{\mathrm{active,min}}$ under these common conditions. The factors $I_d$ and $\eta_a$ represent inherent degradation and electrical assembly efficiency. Each loss will enter the assessment once. The path efficiencies in Equation~\eqref{eq:minimum-panel-power} will retain the same source boundary. Packing will remain a separate geometric constraint.
 
-For the specific preliminary approximation of a tumbling CubeSat with cells on all six faces, Nogrady assumes half the faces are illuminated at an average incidence angle of $50^\circ$. With uniform packing, the required total panel area becomes \citep[Sec.~4.3.4, Eq.~(27)]{review-1009}:
+For FR-14's preliminary tumbling approximation, Nogrady considers a CubeSat with cells on all six faces and assumes half the faces are illuminated at an average incidence angle of $50^\circ$. With uniform packing, the required total panel area becomes \citep[Sec.~4.3.4, Eq.~(27)]{review-1009}:
 \begin{equation}
     A_{\mathrm{tumbling,min}}\approx
     \frac{2A_{\mathrm{effective,min}}}{\cos(50^\circ)f_{\mathrm{packing}}}.
     \label{eq:array-tumbling-area}
 \end{equation}
-For this geometry, the check will be $\sum_g A_{\mathrm{panel},g}\geq A_{\mathrm{tumbling,min}}$. Supplied attitude and illumination histories will support a separate assessment of each section's available power $P_{g,\mathrm{avail}}(t)$ at the attainable DET or MPPT operating point for FR-19 \citep[Sec.~II]{review-1231}. For $T_s>0$, generation will be checked at the same source boundary as the power budget:
+For this geometry, the check will be $\sum_g A_{\mathrm{panel},g}\geq A_{\mathrm{tumbling,min}}$. For FR-14 and FR-19, each section's available source power $P_{g,\mathrm{avail}}(t)$ will use its selected operating point and the calculated sunlight-mean projection \citep[Sec.~II]{review-1231}. An external attitude and illumination analysis can instead supply an applicable mean power. With assessed irradiance $G_g$ and $T_s>0$, generation will be checked at the same source boundary as the power budget:
 \begin{align}
     \overline p_{g,s}
-    &=G_{\mathrm{ref},g}\eta_{\mathrm{EOL},g}I_{d,g}\eta_{a,g}\overline\kappa_g,
+    &=G_g\eta_{\mathrm{op},g}I_{d,g}\eta_{a,g}\overline\kappa_g,
     \label{eq:section-mean-power-density} \\
     \overline P_{g,s}&=A_{\mathrm{active},g}\overline p_{g,s},
     \label{eq:section-mean-source-power} \\
@@ -326,9 +399,10 @@ For this geometry, the check will be $\sum_g A_{\mathrm{panel},g}\geq A_{\mathrm
     \geq P_{\mathrm{sp}_{\min}}.
     \label{eq:array-generation-screen}
 \end{align}
-The assessment will use the selected configuration's path efficiencies. Solar cell count and installed area will therefore be accompanied by an illumination-dependent generation verdict.
+The assessment will use the selected configuration's path efficiencies. Solar cell count and installed area will therefore be accompanied by an illumination-dependent generation verdict. These scalar means will assume fixed irradiance, curve conditions and path settings during each assessed case. The sunlight-time projection will account for eclipse without another eclipse duty factor.
 
-For FR-15 and FR-16, let $N_s^{\mathrm{bat}}$ and $N_p^{\mathrm{bat}}$ be the entered positive integer series and parallel counts. For identical cells with balanced current sharing, the initial cell-based pack estimates will be:
+\subsection{Battery capacity and configuration (FR-14 to FR-16)}
+These equations will report battery capacity for FR-14 and provide common technology and series/parallel checks for FR-15 and FR-16. Let $N_s^{\mathrm{bat}}$ and $N_p^{\mathrm{bat}}$ be the entered positive integer series and parallel counts. For identical cells with balanced current sharing, the initial cell-based pack estimates will be:
 \begin{equation}
     \begin{aligned}
         N_{\mathrm{bat}}&=N_s^{\mathrm{bat}}N_p^{\mathrm{bat}},\\
@@ -356,7 +430,7 @@ The configured pack will be checked against Equation~\eqref{eq:battery-energy}. 
     \left\lceil\frac{E_{\mathrm{Battery}}}{N_s^{\mathrm{bat}}E_{\mathrm{cell,BOL}}}\right\rceil.
     \label{eq:battery-configuration-check}
 \end{equation}
-The framework will check the pack voltage range against its connected charge and discharge paths. The selected charger will be checked for chemistry, series count, charging voltage, current and termination compatibility for FR-15 \citep[Secs.~2.2--2.3]{review-0573}.
+The framework will check the pack voltage range against its connected charge and discharge paths. For FR-15, the engineer will supply product-specific conditions for charger chemistry, series count, charging voltage, current and termination compatibility \citep[Secs.~2.2--2.3]{review-0573}.
 
 For supplied retention fractions $f_E$ and $f_Q$, EOL capacity will be:
 \begin{equation}
@@ -364,7 +438,51 @@ For supplied retention fractions $f_E$ and $f_Q$, EOL capacity will be:
     \qquad Q_{\mathrm{pack,EOL}}=f_QQ_{\mathrm{pack,BOL}}.
     \label{eq:battery-retained-capacity}
 \end{equation}
-The margin $M$ will enter preliminary sizing once through Equation~\eqref{eq:battery-energy}. EOL assessments will use retained capacity at the applicable conditions. Checks over supplied load and illumination histories will also assess charge acceptance, the allowed DoD, nominal recharge and survival reserves \citep[Sec.~3]{review-0289}. The final verdict will apply to the assessed configuration and scenarios.
+For FR-14, the margin $M$ will enter preliminary sizing once through Equation~\eqref{eq:battery-energy}. Retained energy and charge will use their separate supplied factors. These scalar capacity and rating checks will apply to the assessed configuration and conditions.
+
+\subsection{Bus voltage and regulation choices (FR-17)}
+For FR-17, bus voltage alternatives and buck/boost choices will use the explicitly selected converter's input interval, output setting, output current rating and characterized efficiency. The source interval, including the battery bounds from Equation~\eqref{eq:battery-assembly-ratings}, will be checked against the connected converter's operating input interval:
+\begin{equation}
+    [V_{\mathrm{src}}^{\mathrm{lo}},V_{\mathrm{src}}^{\mathrm{hi}}]
+    \subseteq[V_{\mathrm{in,allow}}^{\mathrm{lo}},V_{\mathrm{in,allow}}^{\mathrm{hi}}].
+    \label{eq:converter-input-compatibility}
+\end{equation}
+For the assessed load rail and state, the nominal voltage and current checks will be:
+\begin{equation}
+    |V_{\mathrm{out}}-V_{\mathrm{required}}|\leq\epsilon_V,
+    \qquad 0\leq I_{\mathrm{required}}\leq I_{\mathrm{out,allow}}.
+    \label{eq:bus-output-compatibility}
+\end{equation}
+The accepted voltage tolerance $\epsilon_V\geq0$ will be explicit and will default to zero for an exact nominal match. Currents will be added only on the same rail at the same operating point. Battery and converter input currents will use their own source boundaries and conversion losses. The engineer will link limits to each connected path and assess each selected mode. Supported output settings, dropout and converter-specific operating limits will require explicit conditions from the selected product. These checks will establish operating-point feasibility. They will infer no converter topology or switching behavior.
+% FR-17 uses explicit rail checks and product limits. The supplied models contain no dedicated buck/boost operating-envelope calculation or topology search.
+
+\subsection{Protection and electrical extrema (FR-20)}
+For FR-20, adding a protection component will create a requirement that its declared detectors remain inactive for the supplied normal operating cases. The engineer will supply voltage samples at the detector's sensed node and nonnegative current magnitudes in the protected direction. For case index $q$, the extrema will be:
+\begin{equation}
+    (V_{\min},V_{\max})=(\min_q V_q,\max_q V_q),
+    \qquad (I_{\min},I_{\max})=(\min_q I_q,\max_q I_q).
+    \label{eq:electrical-operating-extrema}
+\end{equation}
+A power budget can supply current bounds when it establishes minimum and maximum power at that protected source boundary, including conversion losses. For nonnegative powers and $0<V_{\min}\leq V_{\max}$, the conservative independent power/voltage bounds will be:
+\begin{equation}
+    I_{\min}=\frac{P_{\min}}{V_{\max}},
+    \qquad I_{\max}=\frac{P_{\max}}{V_{\min}}.
+    \label{eq:power-budget-current-extrema}
+\end{equation}
+These bounds will assume no pairing or chronology between the power and voltage cases. An orbit-average power budget will establish energy demand. Peak-current checks will require peak power or independently established current cases.
+
+For FR-20, the COTS comparison will use the highest applicable undervoltage trip threshold $V_{\mathrm{UV,trip}}^{\mathrm{hi}}$, the lowest applicable overvoltage trip threshold $V_{\mathrm{OV,trip}}^{\mathrm{lo}}$ and the lowest applicable overcurrent trip threshold $I_{\mathrm{OC,trip}}^{\mathrm{lo}}$:
+\begin{equation}
+    \begin{aligned}
+        V_{\min}&>V_{\mathrm{UV,trip}}^{\mathrm{hi}},\\
+        V_{\max}&<V_{\mathrm{OV,trip}}^{\mathrm{lo}},\\
+        0\leq I_{\min}\leq I_{\max}&<I_{\mathrm{OC,trip}}^{\mathrm{lo}}.
+    \end{aligned}
+    \label{eq:protection-no-trip}
+\end{equation}
+Only the detectors declared for the selected product will be checked. Thresholds will be nonnegative and selected for the applicable resistor settings, temperature and configuration. Cell-level detectors will use individual cell voltages. Sense-voltage current thresholds will require an explicit conversion to amperes. Equality will fail this conservative check. Missing samples or thresholds will remain unresolved. Empty or nonfinite sample sets will produce an error.
+
+A passing result will establish that the supplied normal operating cases remain within the declared no-trip bounds for an enabled, recovered device. A failed comparison will identify a possible trip. Trip delay, hysteresis, startup, fault interruption and recovery will require separate evidence. This will define the scope of the FR-20 analysis.
 
 \section{L04: Configuration Management}
 Finally, L04's assigned requirement FR-09 has an uncomplicated implementation owing to the fact that Python models and analysis scripts are plain-text files, and thus can be version controlled with Github to track changes at the parameter value level and finer.
