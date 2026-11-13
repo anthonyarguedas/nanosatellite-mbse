@@ -108,3 +108,124 @@ Real-time clock & 5 & Hardware component & 2 \\
 
 \section{Economic Analysis}
 \label{section:economic-analysis}
+
+The analysis follows Ulrich and Eppinger's sequence of a base case, sensitivity analysis, development tradeoffs and qualitative assessment \citep[Chap.~17]{ulrich2013diseno}.
+The comparison is between using the framework and continuing the as-is workflow with two funded researchers.
+ASCEND does not sell services, so the monetary benefit considered here is the value assigned to personnel time released for other research.
+Cash expenditure is assessed separately.
+The modeled period comprises four months of development followed immediately by three mission years, following the CUBICS mission lifespan.
+All amounts are held at constant 2026 Canadian dollar values.
+
+\subsection{Base case and included costs}
+
+ASCEND is assumed to fund the author's (to be understood as author of the framework) scholarship of CA\$1500 per month for four months devoted entirely to this project.
+The resulting scholarship expense is CA\$6000.
+The author also paid CA\$27.68 per month for an OpenAI subscription during those four months to assist with extracting COTS parameters from datasheets.
+This initial subscription expense totals CA\$110.72.
+The combined direct development expenditure is:
+\begin{equation}
+    C_{\mathrm{direct}}=4(1500)+4(27.68)=6110.72.
+    \label{eq:economic-direct-cost}
+\end{equation}
+Of this CA\$6110.72, CA\$6000 is assigned to ASCEND and CA\$110.72 was paid by the author.
+
+Initial supervision and user trial participation are covered by existing funded positions.
+Their effort is excluded from the personnel allocation used here.
+The two researchers and the personnel responsible for subsequent maintenance are each valued at CA\$1500 per month for a 35~h working week, comprising seven hours from Monday to Friday.
+Using 52 weeks and 12 months per year gives the hourly funding proxy:
+\begin{equation}
+    c_h=\frac{12(1500)}{52(35)}\approx9.89\ \text{CA\$/h}.
+    \label{eq:economic-hourly-value}
+\end{equation}
+This proxy values research capacity at its stipend funding cost.
+The base case assumes that all released time is used for other productive research.
+Stipend payments remain unchanged in both workflows.
+
+\subsection{Review effort and maintenance}
+
+The effort baseline uses a comparable update delivered two days later by two participants who reported working only on that activity.
+The base case assigns two full working days of seven hours to each person and treats that instance as typical.
+This gives 28 combined hours per review cycle.
+Section~\ref{section:user-trial-results} gives complete trial times of 33~min 57.04~s and 35~min 34.56~s.
+For this estimate, each participant's complete eleven-task trial is rounded up to one hour to include instructions and preparation.
+A comparable cycle with the framework therefore takes two combined hours and releases 26 hours of personnel time.
+
+Comparable work occurred weekly during the four-month observation period.
+The forecast assumes the same frequency for the first 18 mission months, covering Phases 0 and A.
+One cycle per month is assumed for the next six months of Phase B.
+No further review cycles are credited in the third mission year.
+Weekly activity is distributed across months using $52/12$ cycles per month, with no separate reduction for holidays or breaks.
+These assumptions give 78 weekly cycles and six monthly cycles, releasing 2184 hours before maintenance.
+
+Maintenance and database expansion consume ten combined personnel hours per month during the first nine mission months.
+This effort assumes AI assistance for COTS parameter extraction.
+One subscription at CA\$27.68 per month is therefore included during those nine months.
+This initial period covers the first year's maintenance.
+One further month of ten combined hours and one subscription payment is assigned to each of mission years two and three.
+These annual activities are placed at the end of their respective years.
+Total support effort is 110 hours, and the eleven additional subscription payments total CA\$304.48.
+The resulting net released time is 2074 hours.
+
+\subsection{Net present value}
+
+A 7\% annual real discount rate is adopted from the Treasury Board of Canada Secretariat's guidance for Canadian regulatory cost-benefit analysis \citep[Sec.~6.1]{tbs2019costbenefit}.
+It serves as a Canadian reference rate for this assessment.
+The equivalent monthly rate is $i=(1.07)^{1/12}-1$.
+The valuation date is the start of the internship, and all expenditure and capacity benefits are placed at month end.
+Development comprises four payments of CA\$1527.68.
+For mission month $m$, let $H_m$ denote the released hours before maintenance, $M_m$ the maintenance hours and $A_m$ the additional subscription expense.
+The economic net present value is:
+\begin{equation}
+    V_{\mathrm{econ}}=
+    -\sum_{t=1}^{4}\frac{1527.68}{(1+i)^t}
+    +\sum_{m=1}^{36}\frac{c_h(H_m-M_m)-A_m}{(1+i)^{m+4}}.
+    \label{eq:economic-npv}
+\end{equation}
+Table~\ref{tab:economic-npv} gives the period totals using the unrounded hourly proxy and discount rate.
+The base case gives an economic net present value of approximately CA\$12614.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Economic value by period in constant 2026 Canadian dollars. Mission years follow the four-month internship. Present values use monthly discounting, and totals use unrounded values.}
+\label{tab:economic-npv}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Period} & \textbf{\shortstack{Released\\time (h)}} & \textbf{\shortstack{Maintenance\\time (h)}} & \textbf{\shortstack{Net economic\\value (CA\$)}} & \textbf{\shortstack{Present\\value (CA\$)}} \\
+\midrule
+Development & 0 & 0 & $-6110.72$ & $-6025.31$ \\
+Mission year 1 & 1352 & 90 & 12232.20 & 11522.21 \\
+Mission year 2 & 832 & 10 & 8101.99 & 7218.11 \\
+Mission year 3 & 0 & 10 & $-126.58$ & $-101.02$ \\
+\midrule
+Total & 2184 & 110 & 14096.89 & 12613.98 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The cash assessment credits no income or payroll reduction from the released time.
+The continuing stipends are common to both workflows and cancel from the incremental cash comparison.
+Development and subsequent subscription payments total CA\$6415.20, with a cash net present value of $-$CA\$6307.86.
+The positive economic result represents the assigned value of additional research capacity.
+
+\subsection{Sensitivity and interpretation}
+
+The baseline effort is recalled from one instance, and the trial times follow earlier unsuccessful trials with prepared inputs.
+There is no controlled comparison of work effort under the two workflows.
+The estimate therefore depends on the assumed transfer of that effort difference to repeated mission reviews.
+Holding other assumptions fixed, the economic net present value reaches zero at approximately 5.77 baseline hours per person and cycle, compared with the assumed 14 hours.
+A separate sensitivity retains the 14-hour baseline and varies the fraction of released time credited at the hourly proxy.
+The economic result reaches zero when approximately 36.7\% of that capacity receives its full assigned value, while all support costs remain included.
+Using the alternative 3\% social rate discussed in the Treasury Board guide gives approximately CA\$13431 \citep[Sec.~6.1]{tbs2019costbenefit}.
+
+The zero yearly cost for C3 in Table~\ref{tab:framework-candidate-scores} is interpreted as zero core software license expenditure.
+The AI subscription and personnel effort are separate support costs.
+No avoided subscription payments for C1, C2 or C4 are credited, since the comparison uses the as-is workflow.
+This valuation includes development expenditure, which is a sunk cost for subsequent support decisions \citep[Chap.~17, App.~A]{ulrich2013diseno}.
+
+The EPS case studies in Section~\ref{section:eps-case-study-results} demonstrate detection of infeasible configurations before hardware fabrication.
+No avoided hardware purchase, fabrication or paid service is monetized, and no residual value is credited at the end of the assessment.
+The additional value of reusable models, traceable evidence and student experience remains qualitative.
+CUBICS 2026 Stream~2 offers a maximum grant of CA\$350000 over up to three years \citep[Sec.~7.1]{csa2026cubics}.
+The modeled cash expenditure is approximately 1.83\% of that ceiling.
+The positive economic value supports an internal capability investment under the stated effort, utilization and support assumptions.
