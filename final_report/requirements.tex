@@ -3,10 +3,18 @@
 System Requirements Analysis defines how the to-be (desired) stakeholder capabilities can be obtained with support from the system of interest, the framework in this case.
 The requirements define what the framework must accomplish for the stakeholders constrained by acceptable ranges of measurable system variables (Measures of Performance in OOSEM), which make them verifiable.
 
-\subsection{Verifiable framework requirements}
-\label{subsection:framework-requirements}
+Table~\ref{tab:framework-requirements} gives the full list of framework requirements.
+FR-01 and FR-02 establish the base unit of engineering knowledge as a requirement with forward and reverse links and quantitative values, which are used in MBSE approaches to construct a model representation of the mission.
+FR-06 enables the capability to assess the impact of a change in a quantitative requirement, which is desired by the stakeholders in order to explore alternatives and keep requirements up to date in an agile manner.
+FR-03 establishes that whenever an analysis is executed its inputs and outputs have to be contextualized by the mission requirements.
+FR-09 establishes a controlled evolution of mission requirements and the architecture choices that depend on them, while FR-04 specifies that this evolution must be replicable without loss of information.
 
-Table~\ref{tab:framework-requirements} gives the 16 FRs. Table~\ref{tab:logical-responsibilities} allocates every FR to a primary logical component, providing the FR--component trace.
+FR-07 and FR-08 aim to lessen the workload of inexperienced engineers, who understand EPS development from technical specifications but may struggle to follow a systems engineering line of work from high-level mission requirements, with the necessary verification measures at every step.
+FR-10 and FR-11 support progress along the EPS engineering lifecycle, where early designs with ideal or assumed values must mature into evaluating the properties of real COTS.
+FR-05 states that the model of what an EPS consists of, which delimits which COTS are relevant for this framework within the inmense entirety of commercial offerings, must adhere to the CSRM Profile 1.1 specification.
+
+FR-12 to FR-20 cover fundamental analyses that are considered in the literature to be the minimum set that verifies an early EPS design and the COTS choices made for it from Phase 0 to Phase B in the NASA Reference Lifecycle. This is what the problem statement of this projects refers to as early lifecycle phases.
+They cover the component types defined by CSRM and common tradeoff analyses performed at this level of design maturity.
 
 {\small
 \setlength{\tabcolsep}{4pt}
@@ -28,33 +36,37 @@ Table~\ref{tab:framework-requirements} gives the 16 FRs. Table~\ref{tab:logical-
 \endfoot
 FR-01 & The framework shall retain each requirement with its identifier, statement, parents and children, rationale, conditions or quantities, applicable units, verification method, and resolution status, including reasons for unresolved fields. \\
 FR-02 & The framework shall retain forward and reverse links among requirements and component allocations. \\
-FR-03 & The framework shall propose next engineering activities and from the current activity and inputs. identifying unmet prerequisites. \\
-FR-04 & The framework shall recommend analysis, verification and validation methods or models on edits or requests using available inputs. \\
-FR-05 & The framework shall propose COTS EPS components from available requirements. \\
-FR-06 & The framework shall retain mission orbit, attitude, duration, environmental conditions, subsystem modes, and load schedules as inputs to EPS requirements and analysis. \\
-FR-07 & The framework shall allocate EPS requirements among components covering generation, storage, conversion, regulation, protection, distribution, and control components as per the CSRM Profile 1.1 specification. \\
-FR-08 & The framework shall calculate EPS mass and occupied volume estimates from aggregate or component data and assess margins against allocations, retaining sources, units, and unknown values. \\
-FR-09 & The framework shall calculate mode-dependent power, sunlight/eclipse energy budgets, and beginning/end-of-life array and battery sizing, reporting integer cell counts, series/parallel arrangements, array area, and battery capacity. \\
-FR-10 & The framework shall compare EPS concepts and architectures through common feasibility checks covering different choices of cell technology, reporting raw measures and unknown values. \\
-FR-11 & The framework shall compare EPS concepts and architectures through common feasibility checks covering different choices of array/battery series and parallel configurations, bus voltage, and buck/boost regulation, reporting raw measures and unknown values. \\
-FR-12 & The framework shall execute EPS analyses covering mission energy balance and survival autonomy against available electrical and component-rating limits. \\
-FR-13 & The framework shall execute EPS analyses covering photovoltaic I--V/P--V characteristics against available electrical and component-rating limits. \\
-FR-14 & The framework shall execute EPS analyses covering direct energy transfer vs. MPPT, against available electrical and component-rating limits. \\
-FR-15 & The framework shall execute EPS analyses covering overcurrent/undervoltage/overvoltage faults. \\
-FR-16 & The framework shall estimate electrical and dynamic EPS model parameters from quality-checked data. \\
-FR-17 & The framework shall identify impacts of a proposed mission, requirement, component, or model change on requirements and EPS design. \\
-FR-18 & The framework shall retain retrievable phase baselines that resolve exact requirement, mission, design, and model revisions with revision history and the authorized decisions that control them. \\
-FR-19 & The framework shall associate each analysis or software result with its requirement/expectation, method, scenario, parameters, raw outputs, and execution status. \\
-FR-20 & The framework shall provide the inputs, dependencies and instructions to reconstruct all analyses of a mission. \\
+FR-03 & The framework shall associate each analysis result with its requirement/expectation, method, scenario, parameters, raw outputs, and execution status. \\
+FR-04 & The framework shall provide the inputs, dependencies and instructions to reconstruct all analyses of a mission. \\
+FR-05 & The framework shall allocate EPS requirements among components covering generation, storage, conversion, regulation, protection, distribution, and control components as per the CSRM Profile 1.1 specification. \\
+FR-06 & The framework shall identify impacts of a proposed mission, requirement, component, or model change on requirements and EPS design. \\
+FR-07 & The framework shall recommend next engineering activities and from the current activity and inputs. identifying unmet prerequisites. \\
+FR-08 & The framework shall recommend analysis, verification and validation methods or models on edits or requests using available inputs. \\
+FR-09 & The framework shall retain retrievable mission states that resolve exact requirement, mission, design, and model revisions with revision history and the authorized decisions that control them. \\
+FR-10 & The framework shall estimate electrical and dynamic EPS model parameters from quality-checked data. \\
+FR-11 & The framework shall propose COTS EPS components from available requirements. \\
+FR-12 & The framework shall calculate EPS mass and occupied volume estimates from aggregate or component data and assess margins against allocations, retaining sources, units, and unknown values. \\
+FR-13 & The framework shall retain mission orbit, attitude, duration, environmental conditions, subsystem modes, and load schedules as inputs to EPS requirements and analysis. \\
+FR-14 & The framework shall calculate mode-dependent power, sunlight/eclipse energy budgets, and beginning/end-of-life array and battery sizing, reporting integer cell counts, array area, and battery capacity. \\
+FR-15 & The framework shall compare EPS concepts and architectures through common feasibility checks covering different choices of cell technology, reporting raw measures and unknown values. \\
+FR-16 & The framework shall compare EPS concepts and architectures through common feasibility checks covering different choices of array/battery series and parallel configurations, reporting raw measures and unknown values. \\
+FR-17 & The framework shall compare EPS concepts and architectures through common feasibility checks covering different choices of bus voltage and buck/boost regulation, reporting raw measures and unknown values. \\
+FR-18 & The framework shall execute EPS analyses covering photovoltaic I--V/P--V characteristics against available electrical and component-rating limits. \\
+FR-19 & The framework shall execute EPS analyses covering direct energy transfer vs. MPPT, against available electrical and component-rating limits. \\
+FR-20 & The framework shall execute EPS analyses covering overcurrent/undervoltage/overvoltage cases. \\
 \end{longtable}
 }
 
 \subsection{Measures of performance}
 \label{subsection:framework-mops}
 
-Table~\ref{tab:framework-mop-protocols} assigns Measures of Performance to the framework requirements \citep[Sec.~17.3.3]{friedenthal2014practical}. Two verification scenarios combine related checks.
+Table~\ref{tab:framework-mop-protocols} assigns Measures of Performance to the framework requirements \citep[Sec.~17.3.3]{friedenthal2014practical} to make them verifiable.
+Each MOP is evaluated through one of two verification scenarios.
 
-The first scenario reconstructs every power budget in the BIRDS-4 presentation \citep[pp.~5, 8--9, 13, 15]{shrestha2022birds4powerbudget} and the September 2019 OreSat budget \citep{oresat2019powerbudget}. For each nonzero reference value $r$, the framework output $x$ must satisfy $|x-r|/|r|\leq 0.01$ after unit conversion. Every output is checked separately. Zero references require zero outputs. Component counts, series/parallel arrangements, and categorical findings require exact agreement with their references. Missing outputs fail the comparison. Source inconsistencies are reported without changing the published values. Independent calculations supply reference mass, volume, feasibility and change results absent from the original budgets.
+The first scenario reconstructs every power budget in the BIRDS-4 presentation \citep[pp.~5, 8--9, 13, 15]{shrestha2022birds4powerbudget} and the September 2019 OreSat budget \citep{oresat2019powerbudget}. The publications cited in Table~\ref{tab:framework-mop-protocols} extend these cases with mass budgets, COTS selection criteria, architecture trades, measured solar characteristics and protection tests. Each MOP in this scenario is evaluated separately for BIRDS-4 and OreSat using each mission's own published conditions. Both missions must satisfy its desired range for the MOP to pass.
+
+For FR-12 to FR-20, expected numerical results and findings come directly from the cited publications. For each nonzero reference value $r$, the framework output $x$ must satisfy $|x-r|/|r|\leq 0.01$ after unit conversion. This 1\% tolerance applies to every numerical comparison in each mission separately. Results are not averaged across outputs or missions. Zero references require zero outputs. Component counts, series/parallel arrangements, and categorical findings require exact agreement with their references. Missing outputs fail the comparison. Source inconsistencies are reported without changing the published values.
+% A missing published reference for either mission leaves that mission's comparison unverified. Evidence from the other mission does not complete the MOP.
 
 The second scenario consists of two individual user trials, one with a PhD candidate from ASCEND and one with an undergraduate from the student club. Each participant completes the three GUI tasks in Table~\ref{tab:framework-mop-protocols} from prepared initial states. Each trial lasts 60~min, divided equally among the tasks. An evaluator prepares the task inputs and reference answers before the trials. Each GUI MOP measures elapsed time from task presentation until the saved changes and reported results match these references. Both participants must complete each task within 20~min. Incorrect or unfinished tasks are recorded as unsuccessful.
 
@@ -78,23 +90,41 @@ The second scenario consists of two individual user trials, one with a PhD candi
 \endhead
 \hline
 \endfoot
-\multicolumn{3}{@{}l}{\textbf{Case studies (both missions)}} \\*
-MOP-04/FR-04 & Retrieve forward and reverse links among the mission requirements and component allocations. Compare all linked requirement and component identifiers with the prepared mission references. & 100\% correct links \\
-MOP-17/FR-17 & Request COTS candidates for each EPS allocation and check every proposal against independent eligibility references. Assign the mission components and compare their requirement verification verdicts with independent checks. & 100\% correct proposals and verdicts \\
-MOP-25/FR-25 & Enter and save all reported mission and operating inputs, reopen each mission, and compare retained fields and analysis inputs with the source values. & 100\% correct inputs \\
-MOP-15/FR-15 & Allocate each mission's EPS requirements to its catalogue components across the seven FR-15 functions. Compare component identifiers, CSRM Profile 1.1 types and allocation links with the prepared references. & 100\% correct allocations \\
-MOP-13/FR-13 & Calculate EPS mass, occupied volume and allocation margins from the assigned components. Compare with independent sums using the same properties and quantities, checking sources, units, unknown values and margin findings. & $\leq 1\%$ deviation\newline 100\% correct records and findings \\
-MOP-20/FR-20 & Recalculate all published load and generation rows, mode totals, storage capacities, battery configurations, recharge times and payload pass counts using the original quantities, duty cycles and margins. Compare every output with its published value. & $\leq 1\%$ deviation\newline Exact component counts and arrangements \\
-MOP-14/FR-14 & For each mission, compare the assigned EPS with feasible and infeasible catalogue alternatives under identical mission inputs. Check raw measures, unknown properties and voltage, generation and storage feasibility against independent calculations. & $\leq 1\%$ deviation\newline 100\% correct findings \\
-MOP-16/FR-16 & Execute the BIRDS-4 cases for panel availability, eclipse and battery losses and the OreSat mode energy analyses. Compare generation, conversion losses, available load energy and energy balance findings with their budget references. & $\leq 1\%$ deviation\newline 100\% correct findings \\
-MOP-22/FR-22 & Estimate photovoltaic, battery and dynamic EPS/load parameters from quality-checked datasets generated by independent reference models for the assigned components. Compare recovered parameters and model outputs with the known references. & $\leq 1\%$ deviation per parameter and output \\
-MOP-05/FR-05 & Change a mission input, a requirement limit, a component and a model parameter separately. Compare affected requirement/design identifiers and updated budgets with independent dependency and calculation references. & $\leq 1\%$ deviation\newline 100\% correct impacts \\
-MOP-07/FR-07 & Save both mission baselines with their revision and authorized decision records, then modify inputs and allocations. Retrieve each baseline and compare requirement, mission, design and model revisions and decision histories with the saved references. & 100\% correct baseline records \\
-MOP-09/FR-09 & Inspect every budget run, including a deliberately failed run, for its linked requirement, method, scenario, parameters, available raw outputs and execution status. Compare retained records with the executed cases. & 100\% correct result records \\
-MOP-10/FR-10 & Use each mission's retained inputs, dependencies and instructions to independently reconstruct and rerun all analyses in a fresh environment. Compare every output with the saved run and the applicable published reference. & $\leq 1\%$ deviation\newline All analyses reconstructed \\
+\multicolumn{3}{@{}l}{\textbf{BIRDS-4 and OreSat case studies and catalogue inspection}} \\*
+MOP-02/FR-02 & Retrieve forward and reverse links among the mission requirements and component allocations. Compare all linked requirement and component identifiers with the prepared mission references. & 100\% correct links \\
+MOP-03/FR-03 & Inspect every budget run, including a deliberately failed run, for its linked requirement, method, scenario, parameters, available raw outputs and execution status. Compare retained records with the executed cases. & 100\% correct result records \\
+MOP-04/FR-04 & Use each mission's retained inputs, dependencies and instructions to independently reconstruct and rerun all analyses in a fresh environment. Compare every output with the saved run and the applicable published reference. & $\leq 1\%$ deviation\newline All analyses reconstructed \\
+MOP-05/FR-05 & Allocate each mission's EPS requirements to its catalogue components across the seven FR-05 functions. Compare component identifiers, CSRM Profile 1.1 types and allocation links with the prepared references. & 100\% correct allocations \\
+MOP-06/FR-06 & Change a mission input, a requirement limit, a component and a model parameter separately. Compare affected requirement/design identifiers and updated budgets with independent dependency and calculation references. & $\leq 1\%$ deviation\newline 100\% correct impacts \\
+MOP-09/FR-09 & Save both mission baselines with their revision and authorized decision records, then modify inputs and allocations. Retrieve each baseline and compare requirement, mission, design and model revisions and decision histories with the saved references. & 100\% correct baseline records \\
+% FR-10: catalogue inspection verifies sourced data, not parameter estimation or dynamic model accuracy.
+MOP-10/FR-10 & Present the COTS database, including components from both missions, as a table of part numbers, parameters, units, operating conditions and links to the manufacturer datasheets. Inspect each populated value against its cited page, table or curve. & 100\% correct, traceable values for both missions \\
+MOP-11/FR-11 & For each mission, supply the documented selection criteria without the selected part numbers. Compare recommendations with BIRDS-4's LTC3119 choice \citep[p.~1025]{kim2021birdsbus} and OreSat's Tenergy 30005-0 and MAX17205 choices \citep{greenberg2021oresat,oresatbatteryresearch,oresat2025batterydesign}. Accept the original choice or an alternative that satisfies every documented constraint and improves the stated quantitative selection measure. & $\geq 1$ candidate per selection in each mission\newline 100\% of criteria satisfied \\
+% FR-12: the OreSat budget supplies EPS subassembly masses. Its complete spacecraft mass is not an EPS mass reference.
+% Published aggregate EPS mass, occupied volume and margin references remain incomplete for both missions. BIRDS-4 has no sourced aggregate EPS mass case in the selected publications.
+% The 2016 OreSat mass budget also contains inconsistent line sums and an approximate spacecraft margin. Preserve these source discrepancies.
+MOP-12/FR-12 & For both missions, calculate EPS mass, occupied volume and margins against allocations. Compare each result with a published reference at the same component boundary, including OreSat's 252~g solar module and 416~g battery module entries \citep[Sec.~D.2]{oresat2016csli}. Check retained sources, units, unknown values and margin findings for each mission. & $\leq 1\%$ per mission\newline Exact records and findings \\
+MOP-13/FR-13 & For BIRDS-4 and OreSat, enter and save orbit, attitude, duration, environment, modes and load schedules from their published mission records \citep{jara2022birdsepsdataset,oresat2019powerbudget}. Reopen each mission and compare retained fields and analysis inputs with its own source values. & $\leq 1\%$ per mission\newline Exact categorical inputs \\
+% FR-14: the budgets verify reported energy and storage calculations. Full mission BOL/EOL array and battery sizing and installed array area lack published output references for both missions.
+MOP-14a/FR-14 & Recalculate all published load and generation rows, mode totals, storage capacities, battery configurations, recharge times and payload pass counts for both missions using their original quantities, duty cycles and margins. Compare every output separately with its mission's published value. & $\leq 1\%$ per mission\newline Exact counts and arrangements \\
+MOP-14b/FR-14 & Reproduce the BIRDS-4 worst-case budgets with 1604, 1202 and 801~mWh available at the load and the deficit against 1438~mWh nominal consumption \citep[Tables~2--4]{shrestha2022birds4powerperformance}. Reproduce OreSat's 1011~mWh standby energy surplus \citep{oresat2019powerbudget}. Compare energy quantities and balance findings separately for both missions. & $\leq 1\%$ per mission\newline Exact published findings \\
+% FR-15: the 2026 BIRDS-4 hybrid result is a proposed configuration simulated with sun tracking, not a flown BIRDS-4 configuration or its original free-rotation budget.
+% The article also mentions free rotation and gives a generic physical-parameter table from a 6U study. Resolve the applicable published inputs before claiming 1% reproduction of its BIRDS-4 result.
+MOP-15/FR-15 & Compare published cell technology alternatives for both missions. Reproduce the BIRDS-4 hybrid solar case with ten triple-junction and six monocrystalline cells and 3.023~Wh per orbit \citep[Sec.~III]{shrestha2026solarreliability}. Repeat OreSat's lithium-ion, lithium iron phosphate and lithium titanate trade \citep{oresatbatteryresearch}. Compare each mission's energies, capacities and selection findings under its published conditions, retaining unknown properties. & $\leq 1\%$ per mission\newline Exact published findings \\
+% FR-16: BIRDS-4 baseline arrangements are sourced. Published alternative arrangement cases and their feasibility findings remain needed for complete BIRDS-4 comparison coverage.
+MOP-16/FR-16 & For each mission, compare array and battery series/parallel choices with published counts, capacities and selection findings. Include BIRDS-4's two-cell solar strings and 3S2P, 3800~mAh battery \citep[Sec.~2.2, Table~5]{shrestha2021birdssafety}, OreSat's two independent 2S packs and 37.4~Wh per card \citep[p.~6]{greenberg2021oresat}, and its 74.88, 86.4 and 64.8~Wh alternatives against 80~Wh \citep{oresatbatteryresearch}. & $\leq 1\%$ per mission\newline Exact counts, arrangements and findings \\
+MOP-17/FR-17 & For each mission, compare bus voltage intervals, buck/boost functions and feasibility findings with published cases. Check BIRDS-4's 3.3 and 5~V regulated lines \citep[Sec.~2.2.3]{shrestha2021birdssafety} and OreSat's 1S, 2S and 4S bus choices and SPV1040 rejection after the change from 1S to 2S \citep{oresatbatteryresearch,oresatsolarhistory}. & $\leq 1\%$ per mission\newline Exact published findings \\
+% FR-18 compares labelled graph values and published spreadsheet outputs. Unlabelled coordinates do not receive an assumed 1% reading accuracy.
+% Empirical I--V samples support numerical reconstruction. Reusing those samples as both model inputs and prediction references does not validate a physical cell model.
+MOP-18/FR-18 & Reconstruct the BIRDS-4 Maya-2 +Z panel I--V/P--V characteristics and compare labelled voltages, powers and the 1.575~W peak with the published curves \citep[Figs.~13--14]{shrestha2021birdssafety}. Reconstruct OreSat's measured solar sweep and compare calculated power with its published spreadsheet values \citep{oresatsolarsweep}. Check each mission's labelled or tabulated values separately. & $\leq 1\%$ per mission \\
+% FR-19: no published paired DET/MPPT case was found for either mission. Both missions still need sourced numerical cases for this MOP.
+% BIRDS fixed input-voltage control and OreSat's regulated constant-voltage fallback are not DET references.
+MOP-19/FR-19 & For BIRDS-4 and OreSat separately, compare DET and MPPT using published paired cases with identical array, battery, illumination and load conditions. Compare delivered energy, operating points, conversion losses and electrical-limit findings with that mission's published results. & $\leq 1\%$ per mission\newline Exact published findings \\
+% FR-20 checks steady-state overvoltage protection, static currents, protection settings and state logic. A published BIRDS-4 undervoltage protection case is still missing, and these sources do not establish transient fault response accuracy for either mission.
+MOP-20/FR-20 & For both missions, check overcurrent, undervoltage and overvoltage cases against published outputs and protection findings. Include BIRDS-4's BCR test with input at or above 4.8~V and output near 4.2~V \citep[Sec.~3.6]{shrestha2021birdssafety} and its 2, 3 and 4~A line thresholds \citep[Sec.~6.3]{kyutech2021birdsicd}. Check OreSat's 30~W load currents and charge/discharge disable and recovery criteria \citep{oresat2025batterydesign}. & $\leq 1\%$ per mission\newline Exact published protection findings \\
 \multicolumn{3}{@{}l}{\textbf{User trials}} \\*
 MOP-01/FR-01 & Given a fully defined mission requirement, create another requirement with the FR-01 fields filled in and a simple verification condition, reopen it, and report its retained fields and condition result. & $\leq 20$~min \\
-MOP-39/FR-39 & Given complete mode allocations and load powers with eclipse duration omitted, request the next activity and identify the unmet prerequisite. Supply that duration and report the updated recommendation. & $\leq 20$~min \\
-MOP-03/FR-03 & Given an EPS requirement and its supporting inputs, request analysis, verification and validation recommendations and report the suggested methods or models. & $\leq 20$~min \\
+MOP-07/FR-07 & Given complete mode allocations and load powers with eclipse duration omitted, request the next activity and identify the unmet prerequisite. Supply that duration and report the updated recommendation. & $\leq 20$~min \\
+MOP-08/FR-08 & Given an EPS requirement and its supporting inputs, request analysis, verification and validation recommendations and report the suggested methods or models. & $\leq 20$~min \\
 \end{longtable}
 \endgroup

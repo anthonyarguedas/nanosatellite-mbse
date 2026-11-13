@@ -20,10 +20,10 @@ Following OOSEM, the framework requirements are allocated to logical components,
 \endhead
 \bottomrule
 \endfoot
-L01 MBSE Workspace & 01--07, 17, 19 & Stakeholders submit requirements and parameters. Responses use an underlying MBSE model to return validity checks of the supplied requirements and their parameters, evaluated values for computable parameters, and the updated state of the requirements and recommended next activity after a submission. L01 forwards any computation requests to L03, and links the obtained results to the parameters of the MBSE model. \\
-L02 COTS Database & 16 & L01 submits requests to link COTS parameters to the MBSE model, and receives identifiers for said parameters. L03 requests the linked parameters as reported in the MBSE model and receives their values. \\
-L03 Simulation and Analysis & 08--15 & Simulation and analysis scripts receive spacecraft MBSE models, parameters and states. They return identifiers to numerical analysis results. \\
-L04 Configuration Management & 18, 20 & Users submit change requests and receive impact findings. Users submit change history requests and receive revision histories, retrievable baselines. \\
+L01 MBSE Workspace & 01--08, 11, 13 & Stakeholders submit requirements and parameters. Responses use an underlying MBSE model to return validity checks of the supplied requirements and their parameters, evaluated values for computable parameters, and the updated state of the requirements and recommended next activity after a submission. L01 forwards any computation requests to L03, and links the obtained results to the parameters of the MBSE model. \\
+L02 COTS Database & 10 & L01 submits requests to link COTS parameters to the MBSE model, and receives identifiers for said parameters. L03 requests the linked parameters as reported in the MBSE model and receives their values. \\
+L03 Simulation and Analysis & 12, 14--20 & Simulation and analysis scripts receive spacecraft MBSE models, parameters and states. They return identifiers to numerical analysis results. \\
+L04 Configuration Management & 09 & Users submit change requests and receive impact findings. Users submit change history requests and receive revision histories, retrievable baselines. \\
 \end{longtable}
 }
 
@@ -31,7 +31,7 @@ L04 Configuration Management & 18, 20 & Users submit change requests and receive
 \centering
 \captionsetup{font=small,skip=4pt}
 \includegraphics[width=\linewidth]{fig/logical-architecture.pdf}
-\caption[Logical architecture: component cooperation and user interfaces.]{Logical architecture: component cooperation and user interfaces. Users exchange engineering inputs and responses with L01 through interface IF-01, and configuration requests, decisions and responses with L04 through IF-02. Solid arrows carry requests and analysis inputs. Dotted arrows carry identifiers, parameter values and user responses. Dash-dot arrows carry engineering records and impact findings.}
+\caption[Logical architecture.]{Logical architecture of the framework. Users exchange engineering inputs and responses with L01 through interface IF-01, and configuration requests, decisions and responses with L04 through IF-02. Solid arrows carry requests and analysis inputs. Dotted arrows carry identifiers, parameter values and user responses. Dash-dot arrows carry engineering records and impact findings.}
 \label{fig:framework-logical}
 \end{figure}
 \clearpage

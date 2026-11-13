@@ -46,10 +46,10 @@ class LogicalArchitectureTests(unittest.TestCase):
 
     def test_four_components_match_report_allocations(self):
         expected = {
-            'L01': ('MBSE Workspace', [1, 2, 3, 4, 5, 6, 7, 17, 19]),
-            'L02': ('COTS Database', [16]),
-            'L03': ('Simulation and Analysis', list(range(8, 16))),
-            'L04': ('Configuration Management', [18, 20]),
+            'L01': ('MBSE Workspace', [1, 2, 3, 4, 5, 6, 7, 8, 11, 13]),
+            'L02': ('COTS Database', [10]),
+            'L03': ('Simulation and Analysis', [12, *range(14, 21)]),
+            'L04': ('Configuration Management', [9]),
         }
         self.assertEqual({c['id']: (c['name'], [int(fr[-2:]) for fr in c['requirements']])
                           for c in self.inventory['components']}, expected)

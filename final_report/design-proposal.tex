@@ -1,39 +1,68 @@
 \chapter{Design Proposal}
 \label{ch:design-proposal}
 
-\section{Generic CubeSat Structure}
-The framework respects the structure CSRM Profile 1.1 Specification, which is the starting point for its Python CubeSat model.
-At the time of writing of this document, the CSRM profile is only available as a read-only graphical SysML v1.4 representation, and thus all model elements besides from the structure had to be reconstructed from CSRM publications and related works.
+The framework is implemented as a set of Python classes which represent the MBSE model of a CubeSat mission according to CSRM Profile 1.1, where each class models an element like a requirement, a subsystem, a component or, more specifically, an EPS component like a battery or a solar array.
+The reader is referred to Appendix \ref{appendix:framework-code} for the full set of Python files that fully describe the framework's behavior, models and analyses. 
+The code that defines how models can be utilized, for example, to add, edit, update, verify, and delete requirements, represents the deliverable of the second objective of this project, whereas the provided EPS models represent the deliverable of the third objective.
+Furthermore, Appendix \ref{appendix:automatic-eps-requirements} contains the list of all requirement statements that are automatically assigned to EPS components as the deliverable of the fourth objective.
 
-Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-eps-components} show the mission structure, the nine CubeSat subsystems and the six EPS component groups. Mission teams will tailor these logical categories to their missions. Reference part multiplicities describe the template. Detailed, mission-tailored design will establish physical quantities and implementation choices.
+The complete project codebase, including the present document, the GUI, user documentation, examples, and short explanatory videos for how to execute all framework requirements on the GUI, is available as a public Github repository \cite{repo}.
+The present section will present a narrative overview of said codebase guided by the requirements it satisfies.
+
+\section{Global MBSE model and user interfaces}
+Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-cubesat-subsystems} show the mission structure, and the nine CubeSat subsystems in CSRM. Mission teams tailor these logical categories to their missions. Detailed, mission-tailored design then establishes physical quantities and implementation choices.
 
 \begingroup
 \captionsetup{font=small,skip=4pt}
 \begin{figure}[p]
 \centering
 \includegraphics[width=0.95\linewidth]{fig/csrm-mission-structure.pdf}
-\caption[CSRM mission and segment structure.]{CSRM mission and segment structure. Nested rectangles denote composition. Brackets give part multiplicities. Light gray identifies external context and services. Orbits are modeled elements of the Space Segment. Each CubeSat has an orbit reference, with no individual spacecraft-to-orbit pairing specified in this view. Adapted from the CSRM reference model, copyright 2022 INCOSE Space Systems Working Group and OMG Space Domain Task Force, \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0} \citep{incose2025csrmmodel}.}
+\caption[CSRM mission and segment structure.]{CSRM mission and segment structure, as a graphical representation of the corresponding Python classes. Adapted from the CSRM reference model, copyright 2022 INCOSE Space Systems Working Group and OMG Space Domain Task Force, \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0} \citep{incose2025csrmmodel}.}
 \label{fig:csrm-mission-structure}
 \end{figure}
 
 \begin{figure}[p]
 \centering
 \includegraphics[width=0.95\linewidth]{fig/csrm-cubesat-subsystems.pdf}
-\caption[CSRM CubeSat subsystems.]{CSRM CubeSat subsystems. The reference architecture contains one part for each of nine subsystem categories. Power Subsystem is the EPS. Mission-specific models can omit, combine or refine categories to meet mission needs \citep{kaslow2020csrm}. The view shows logical composition. It specifies no subsystem interfaces or allocation to circuit boards. Adapted from the CSRM reference model \citep{incose2025csrmmodel}.}
+\caption[CSRM CubeSat subsystems.]{CSRM CubeSat subsystems. The reference architecture contains one part for each of nine subsystem categories. Power Subsystem is the EPS. Mission-specific models can omit, combine or refine categories to meet mission needs \citep{kaslow2020csrm}. Adapted from the CSRM reference model \citep{incose2025csrmmodel}.}
 \label{fig:csrm-cubesat-subsystems}
 \end{figure}
 
-\begin{figure}[p]
-\centering
-\includegraphics[width=0.95\linewidth]{fig/csrm-eps-components.pdf}
-\caption[CSRM EPS component groups.]{CSRM EPS component groups. The Power Subsystem contains six reference component categories, including processing and software. Batteries and Solar Arrays each denote an aggregate category. Multiplicity [1] identifies one reference part per category. Detailed design will define the numbers of cells, panels, converters and switches, together with their electrical connections. Adapted from the CSRM reference model \citep{incose2025csrmmodel}.}
-\label{fig:csrm-eps-components}
-\end{figure}
+The model classes can be imported into any Python execution environment, as shown in Figure x, yet a graphical user interface (GUI) has also been developed to ease their use for people unfamiliar with the Python programming language (Figure y).
+Besides classification, the models allow to assign engineering properties to each component, a capability that was mainly exploited for the EPS components, modeled as per FR-05.
+The properties given to each EPS component type were chosen to represent the values reported by COTS datasheets, and to serve as inputs to all required analysis.
+% x = some EPS component classes, could be a battery with some parameters, presented as a figure, plus a >>> syntax of those classes being imported and used. explain what the shown parameters are.
+% y = a screenshot of the GUI which shows the same classes. make sure both show the same parameter to draw the parallel.
 
-\section{EPS Components and Loads Generic Models}
-\label{section:eps-generic-models}
+Analyses were implemented as Python scripts that consume the parameters of EPS component classes and return values that can be mapped back to other parameters.
+The scripts follow equations and algorithms extracted from EPS literature and cited in the current chapter where applicable.
+The equations and algorithms are presented in algebraic and textual clarity.
+Their Python implementations resemble Figure x.
+% x = on the left, a fragment of code from an analysis. on the right, the algebraic way to write it.
 
-The framework will define reusable models for the six CSRM EPS component groups and for the loads they supply. These models will provide the schema for browsing COTS products and assembling candidate EPS configurations. A COTS entry will describe a particular product. One integrated EPS board can implement several CSRM groups.
+\section{L01: MBSE Workspace}
+This section describes the behavior of logical component L01: MBSE Workspace.
+For FR-01, the framework represents requirements and their associated quantities and veriication methods as Python classes.
+Inspired by the specialty systems engineering language SysML v2 \cite{}, quantities were generalized as a property containing any valid Python expression, meaning that they can include other properties, arithmetic operations, and even function calls.
+% put here an excerpt of the relevant class definitions, as a figure, which show a comple property.
+Statements combine text with numerical values for easier reading (Figure x of the GUI rendering a requirement).
+
+For FR-02 and FR-03, links between requirements, components, and analyses were modeled in their respective classes. % One sentence here on how this works. Reference a figure containing an excerpt of the classes, and a GUI screenshot on the right.
+To satisfy FR-04, all requirements have a method to evaluate the verification methods that they already have assigned, without the need to redefine verification methods and their inputs. % Reference a figure where the GUI button to run an analysis is visible, with all the input and output mappings. mention in the caption that these mappings are persistent.
+The self-evaluation method has to be called manually if interacting with the Python classes directly, whereas the GUI calls it automatically upon an edit to its inputs.
+The latter behavior allows users to immediately identify the impact of a parameter change, satisfying FR-06.
+% GUI screenshots before/after on left/right, for a parameter change. the displayed values have to change, preferrably a requirement becomes visibly unverified.
+
+The behavior to satisfy FR-07 and FR-08 is entirely deterministic, despite recommendation being a very open and subjective problem.
+Certain models, mainly subsystems and components, were given methods to automatically self-assign requirements when they are added to the mission.
+The requirements were chosen based on recurring constraints to EPS components in the literature and relevant normative documents, and can be read in full in \ref{appendix:automatic-eps-requirements}.
+% This appendix is just a table with the requirement statement and the EPS component it applies to.
+
+The GUI makes the automatic addition of requirements visually evident, and thus the next engineering activity recommendation (FR-07) becomes to fill in the parameters needed to make the requirements verifiable.
+Said requirements are pre-assigned verification methods that are ready to execute as soon as all inputs have been provided, representing the verification activity recommendation behavior required by FR-08.
+% A picture of the GUI showing the requirements created automatically when adding a certain EPS components. note in the caption that some of the variables appear as numbers because they already have values assigned, while others appear as variable names because their values are pending. explain that adding the pending values thus becomes the next activity recommendation.
+
+Thanks to the use of generic EPS component models with parameters that correspond to COTS properties, 
 
 \section{Orbit Requirements and Power Budget}
 
@@ -50,17 +79,24 @@ The orbital model will assume Keplerian motion, a spherical Earth, a cylindrical
 \end{align}
 
 The beta angle $\beta\in[-\pi/2,\pi/2]$ measures the Sun direction relative to the orbital plane. For $|\beta|<\pi/2$, let $\lambda$ be the angle from perigee to the Sun's projection onto that plane, measured in the direction of motion. Shadow boundaries will be found numerically from:
-\begin{equation}
-    r(\nu)^2\left[1-\cos^2\beta\,\cos^2(\nu-\lambda)\right]=R_e^2,
-    \qquad \cos\beta\,\cos(\nu-\lambda)<0.
+\begin{align}
+    \lambda_{\mathrm{eff}}&=\begin{cases}
+        0, & e=0\ \text{or}\ |\beta|=\pi/2,\\
+        \lambda, & \text{otherwise},
+    \end{cases}
+    \label{eq:effective-sun-projection-angle} \\
+    r(\nu)^2\left[1-\cos^2\beta\,\cos^2(\nu-\lambda_{\mathrm{eff}})\right]
+    &=R_e^2,\qquad \cos\beta\,\cos(\nu-\lambda_{\mathrm{eff}})<0.
     \label{eq:eclipse-geometry}
-\end{equation}
+\end{align}
 The inequality selects the night side. Entry and exit boundaries will be paired along arcs where the left side of the equality is less than $R_e^2$. At each boundary, the eccentric anomaly $\mathcal E$ and mean anomaly $\mathcal M$ are:
 \begin{align}
     \mathcal E(\nu) &= \operatorname{atan2}\!\left(\sqrt{1-e^2}\sin\nu,\ e+\cos\nu\right),
     \label{eq:eccentric-anomaly} \\
-    \mathcal M(\nu) &= \mathcal E(\nu)-e\sin\mathcal E(\nu).
-    \label{eq:mean-anomaly}
+    \mathcal M(\nu) &= \mathcal E(\nu)-e\sin\mathcal E(\nu),
+    \label{eq:mean-anomaly} \\
+    \frac{dt}{d\mathcal E} &= \frac{1-e\cos\mathcal E}{n}.
+    \label{eq:orbital-time-weight}
 \end{align}
 Boundary anomalies will be unwrapped in the direction of motion so that each difference $\Delta\mathcal M_j=\mathcal M(\nu_{j,\mathrm{out}})-\mathcal M(\nu_{j,\mathrm{in}})$ between entry and exit is positive. For $N_e$ eclipse intervals per orbit, the eclipse and sunlight durations (s) are:
 % Amato's Eq. (3.14) includes t_0, which cancels when exit and entry times are subtracted.
@@ -144,6 +180,37 @@ Startup and operating limits will also be checked. DET configurations will use t
 
 \subsection{Array area and available generation}
 
+\begin{align}
+    (\ell_x,\ell_y,\ell_z)_{\mathrm{nom}}
+    &=0.1~\mathrm{m}\,
+    \begin{cases}
+        (1,1,N_U), & N_U\in\{1,1.5,2,3\},\\
+        (2,1,3), & N_U=6,\\
+        (2,2,3), & N_U=12,
+    \end{cases}
+    \label{eq:nominal-body-dimensions} \\
+    \mathcal F&=\{+X,-X,+Y,-Y,+Z,-Z\},\qquad f_g\in\mathcal F,
+    \label{eq:array-mounting-face} \\
+    \hat{\mathbf n}^{B}(\pm X)&=\pm(1,0,0)^{\mathsf T},\quad
+    \hat{\mathbf n}^{B}(\pm Y)=\pm(0,1,0)^{\mathsf T},\quad
+    \hat{\mathbf n}^{B}(\pm Z)=\pm(0,0,1)^{\mathsf T},
+    \label{eq:body-face-normal} \\
+    A_{\mathrm{body},g}
+    &=\begin{cases}
+        \ell_y\ell_z, & f_g=\pm X,\\
+        \ell_x\ell_z, & f_g=\pm Y,\\
+        \ell_x\ell_y, & f_g=\pm Z,
+    \end{cases}
+    \qquad \ell_x,\ell_y,\ell_z>0,
+    \label{eq:body-face-area} \\
+    \hat{\mathbf n}^{B}_g
+    &=\frac{\mathbf d^{B}_g}{\lVert\mathbf d^{B}_g\rVert},\qquad
+    \mathbf d^{B}_g\ne\mathbf 0,
+    \label{eq:array-section-normal} \\
+    \mathbf d^{B}_g&=\hat{\mathbf n}^{B}(f_g)
+    \quad\text{(flush body mounting)}.
+    \notag
+\end{align}
 For a cell assembly with active area $A_{\mathrm{cell},g}$ per cell, active array area and required panel area will be calculated separately:
 \begin{equation}
     A_{\mathrm{active},g}=N_{s,g}^{\mathrm{pv}}N_{p,g}^{\mathrm{pv}}A_{\mathrm{cell},g},
@@ -164,13 +231,70 @@ Nogrady relates required power to effective area at normal incidence \citep[Sec.
 \end{equation}
 Here $\eta_{\mathrm{BOL}}$ is cell efficiency, $L_d$ is lifetime retention and $f_T$ is the temperature correction at the assessed condition. Efficiencies and packing fractions will be expressed as fractions. Supplied EOL data will already include their stated degradation and temperature effects. For an array assessed at normal incidence, the active area will be checked for $A_{\mathrm{active}}\geq A_{\mathrm{effective,min}}$.
 
+\begin{align}
+    \hat{\mathbf s}^{O}(\nu)
+    &=\begin{bmatrix}
+        \cos\beta\cos(\nu-\lambda_{\mathrm{eff}})\\
+        -\cos\beta\sin(\nu-\lambda_{\mathrm{eff}})\\
+        \sin\beta
+    \end{bmatrix},\qquad
+    O=(R,T,N),
+    \label{eq:orbital-sun-direction} \\
+    (R,T,N)&=(\text{radial outward},\text{along track},\text{orbit normal}),
+    \notag \\
+    \hat{\mathbf a}^{B}&=\hat{\mathbf n}^{B}(f_p),\qquad
+    f_p\in\mathcal F,
+    \label{eq:pointing-face-normal} \\
+    \hat{\mathbf b}^{B}&=\hat{\mathbf e}^{B}_{j(i)},\qquad
+    f_p=\pm i,\quad
+    (i,j(i))\in\{(X,Y),(Y,Z),(Z,X)\},
+    \notag \\
+    \hat{\mathbf c}^{B}&=\hat{\mathbf a}^{B}\times\hat{\mathbf b}^{B},\qquad
+    \phi\in\mathbb R\quad\text{(clocking angle)},
+    \label{eq:pointing-reference-basis} \\
+    \hat{\mathbf n}^{O}_g
+    &=\begin{bmatrix}
+        -1&0&0\\
+        0&\cos\phi&-\sin\phi\\
+        0&-\sin\phi&-\cos\phi
+    \end{bmatrix}
+    \begin{bmatrix}
+        \hat{\mathbf n}^{B}_g\cdot\hat{\mathbf a}^{B}\\
+        \hat{\mathbf n}^{B}_g\cdot\hat{\mathbf b}^{B}\\
+        \hat{\mathbf n}^{B}_g\cdot\hat{\mathbf c}^{B}
+    \end{bmatrix}
+    \quad\text{(nadir pointing)},
+    \label{eq:nadir-panel-normal} \\
+    \kappa_g(\nu)
+    &=\begin{cases}
+        \max\!\left(0,\hat{\mathbf n}^{B}_g\cdot\hat{\mathbf a}^{B}\right),
+        &\text{Sun pointing},\\
+        \max\!\left(0,\hat{\mathbf n}^{O}_g\cdot\hat{\mathbf s}^{O}(\nu)\right),
+        &\text{nadir pointing},
+    \end{cases}
+    \label{eq:array-projected-illumination} \\
+    \overline\kappa_g
+    &=\frac{1}{T_s}\int_{\mathrm{sunlight}}\kappa_g(\nu(t))\,dt
+    \in[0,1],
+    \label{eq:array-sunlight-projection} \\
+    &=\frac{1}{nT_s}\int_{\mathcal E(\mathrm{sunlight})}
+      \kappa_g(\nu(\mathcal E))(1-e\cos\mathcal E)\,d\mathcal E.
+    \notag
+\end{align}
 Vasile and Alicino include inherent degradation, electrical assembly losses and incidence angle in their area calculation \citep[Sec.~II.1]{review-1542}. Let $\theta$ be the angle between the array normal and the Sun direction. At common fixed conditions with $\cos\theta>0$, their expression gives the active area bound:
-\begin{equation}
-    A_{\mathrm{active,min}}=
-    \frac{P_{\mathrm{sp}_{\min}}}
-    {G_{\mathrm{ref}}\eta_{\mathrm{EOL}}I_d\eta_a\cos\theta}.
-    \label{eq:array-incidence-area}
-\end{equation}
+\begin{align}
+    \overline p_s&=G_{\mathrm{ref}}\eta_{\mathrm{EOL}}I_d\eta_a\overline\kappa,
+    \qquad \overline p_s>0,
+    \label{eq:array-mean-power-density} \\
+    A_{\mathrm{active,min}}
+    &=\frac{P_{\mathrm{sp}_{\min}}}{\overline p_s}
+    =\frac{P_{\mathrm{sp}_{\min}}}
+      {G_{\mathrm{ref}}\eta_{\mathrm{EOL}}I_d\eta_a\overline\kappa},
+    \label{eq:array-incidence-area} \\
+    \kappa(\nu)&\equiv\cos\theta>0
+    \quad\Longrightarrow\quad\overline\kappa=\cos\theta.
+    \notag
+\end{align}
 The active area will be checked for $A_{\mathrm{active}}\geq A_{\mathrm{active,min}}$ under these common conditions. The factors $I_d$ and $\eta_a$ represent inherent degradation and electrical assembly efficiency. Each loss will enter the assessment once. The path efficiencies in Equation~\eqref{eq:minimum-panel-power} will retain the same source boundary. Packing will remain a separate geometric constraint.
 
 For the specific preliminary approximation of a tumbling CubeSat with cells on all six faces, Nogrady assumes half the faces are illuminated at an average incidence angle of $50^\circ$. With uniform packing, the required total panel area becomes \citep[Sec.~4.3.4, Eq.~(27)]{review-1009}:
@@ -180,11 +304,22 @@ For the specific preliminary approximation of a tumbling CubeSat with cells on a
     \label{eq:array-tumbling-area}
 \end{equation}
 For this geometry, the check will be $\sum_g A_{\mathrm{panel},g}\geq A_{\mathrm{tumbling,min}}$. Supplied attitude and illumination histories will support a separate assessment of each section's available power $P_{g,\mathrm{avail}}(t)$ at the attainable DET or MPPT operating point \citep[Sec.~II]{review-1231}. For $T_s>0$, generation will be checked at the same source boundary as the power budget:
-\begin{equation}
-    \frac{1}{T_s}\int_{\mathrm{sunlight}}\sum_g P_{g,\mathrm{avail}}(t)\,dt
+\begin{align}
+    \overline p_{g,s}
+    &=G_{\mathrm{ref},g}\eta_{\mathrm{EOL},g}I_{d,g}\eta_{a,g}\overline\kappa_g,
+    \label{eq:section-mean-power-density} \\
+    \overline P_{g,s}&=A_{\mathrm{active},g}\overline p_{g,s},
+    \label{eq:section-mean-source-power} \\
+    \tau_{\mathrm{proj},g}&=T_s\overline\kappa_g,
+    \label{eq:section-projected-sunlight-duration} \\
+    E_{\mathrm{source},g}&=T_s\overline P_{g,s},
+    \label{eq:section-source-energy} \\
+    \sum_g\overline P_{g,s}
+    &=\frac{1}{T_s}\int_{\mathrm{sunlight}}\sum_g P_{g,\mathrm{avail}}(t)\,dt
+    =\frac{\sum_g E_{\mathrm{source},g}}{T_s}
     \geq P_{\mathrm{sp}_{\min}}.
     \label{eq:array-generation-screen}
-\end{equation}
+\end{align}
 The assessment will use the selected configuration's path efficiencies. Solar cell count and installed area will therefore be accompanied by an illumination-dependent generation verdict.
 
 \subsection{Battery configuration and capacity}
