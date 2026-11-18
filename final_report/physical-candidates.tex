@@ -5,7 +5,7 @@
 Logical components break down the required framework behavior into four building blocks.
 Table~\ref{tab:framework-physical-alternatives} gives five alternatives to implement each logical component. For each alternative, a concise description of how it implements each logical component is given.
 Valispace Requirements Manager and CATIA Stimulus were studied as dedicated MBSE alternatives at the request of the stakeholders, and are considered for all logical components given that they are integrated solutions with ample functionality.
-An analysis of Microsoft Excel, Python, MATLAB, and Github was also requested for the applicable logical components.
+An analysis of Microsoft Excel, Python, MATLAB, and GitHub was also requested for the applicable logical components.
 The rest of the alternatives were chosen from a review of the state of the art in MBSE, consistent with the focus stated in the main objective of this project.
 
 {\small
@@ -25,7 +25,7 @@ The rest of the alternatives were chosen from a review of the state of the art i
 \bottomrule
 \endfoot
 \multicolumn{3}{@{}l@{}}{\textbf{L01 MBSE Workspace}}\\*
-L01-A & Valispace Requirements Manager & Store linked requirements and computed parameters in Altium Requirements Portal. Configure the Engineering Assistant with EPS AI Skills for requirement review and verification criteria \citep{altiumengineeringassistant,altiumrequirementsportalskills}. A custom checker reads project data through the REST/Python API, evaluates the EPS activity rules and returns recommendations for user review \citep{altiumrequirementsportalapi}. \\
+L01-A & Valispace Requirements Manager & Store linked requirements and computed parameters in Altium Requirements Portal. Configure the Engineering Assistant with artificial intelligence (AI) skills for EPS requirement review and verification criteria \citep{altiumengineeringassistant,altiumrequirementsportalskills}. A custom checker uses the representational state transfer (REST) or Python application programming interface (API) to read project data, evaluate the EPS activity rules and return recommendations for user review \citep{altiumrequirementsportalapi}. \\
 L01-B & CATIA Stimulus & Simulate formalized behavioral requirements to expose inconsistencies \citep{dassaultstimulus,dassaultstimuluseducation}. Mission inputs, component records, result links, and activity guidance would have to be implemented externally. \\
 L01-C & Microsoft Excel & Represent requirements, components and parameters in linked worksheets. Use formulas for checks and custom macros for activity guidance, analysis requests and result links. \\
 L01-D & Python & Build a custom model editor with requirement and component links, input checks, activity rules and analysis calls. Python model exchange in the Nanospace studies provides a precedent \citep{luccisano2024formalization,review-0340}, but its code is unavailable. \\
@@ -46,7 +46,7 @@ L03-D & Python & Execute custom scripts for budgets, sizing, concept comparisons
 L03-E & MATLAB/Simulink & Run sizing and parameter studies in MATLAB and dynamic EPS and fault models in Simulink. A custom connector imports model parameters and returns numerical results. \\
 \midrule
 \multicolumn{3}{@{}l@{}}{\textbf{L04 Configuration Management}}\\*
-L04-A & Valispace Requirements Manager & Use requirement and parameter histories and change notifications to review revisions. Add and external archives for exact mission, design, model and analysis revisions and authorized decisions \citep{altiumrequirementsportaldocs,altiumrequirementsportalapi}. \\
+L04-A & Valispace Requirements Manager & Use requirement and parameter histories and change notifications to review revisions. Add external archives for exact mission, design, model and analysis revisions and authorized decisions \citep{altiumrequirementsportaldocs,altiumrequirementsportalapi}. \\
 L04-B & CATIA Stimulus & Treat executable requirements, simulation models and test records as controlled engineering items \citep{dassaultstimulus}. An external configuration system provides revision history, approved baselines and analysis reconstruction instructions. \\
 L04-C & GitHub & Version text models, catalogue records, scripts and analysis settings in Git repositories. Use reviewed change requests and tagged releases with baseline records, dependency versions and reconstruction instructions. \\
 L04-D & SeaLion approach & Keep model inputs and generated engineering views under Git as demonstrated by SeaLion. Extend release records with approvals, exact analysis dependencies and reconstruction instructions \citep{chiu2023sealion}. \\
@@ -56,7 +56,7 @@ L04-E & Nanospace & Maintain engineering records and dependency links in a share
 
 \section{Synthesized Candidates}
 
-Valispace Requirements Manager (C1) and CATIA Stimulus (C2) were compared as integrated solutions spanning all logical components. Other two candidates were synthesized by combining different alternatives: Version-controlled Python (C3) consists of using native Python for L01-L03, and Github for L04, while Version-controlled Excel with Python adapters (C4) uses Microsoft Excel for L01-L02, Python for L03, and Github for L04. A fifth candidate representing the as-is capabilities (C5) was introduced to serve as the baseline.
+Valispace Requirements Manager (C1) and CATIA Stimulus (C2) were compared as integrated solutions spanning all logical components. Two other candidates were synthesized by combining different alternatives: Version-controlled Python (C3) consists of using native Python for L01-L03, and GitHub for L04, while Version-controlled Excel with Python adapters (C4) uses Microsoft Excel for L01-L02, Python for L03, and GitHub for L04. A fifth candidate representing the as-is capabilities (C5) was introduced to serve as the baseline.
 
 The candidates were compared based on a set of weighted criteria, which have value zero if they match the baseline, +1 to +2 if they improve them, and -1 to -2 if they worsen them. Greater is better.
 These criteria are not Measures of Performance, as all considered candidates are assumed to be capable of attaining the target MOP values, but merely a decision-making aid informed by the stakeholder analysis.
@@ -84,19 +84,19 @@ Table~\ref{tab:framework-candidate-scores} records each score and its rationale.
 \bottomrule
 \endfoot
 \multicolumn{4}{@{}l@{}}{\textbf{C1 Valispace Requirements Manager}}\\*
-Development complexity & 20\% & -2 & Requires custom extensions to cover all requirements, and its interfaces are propietary and not well documented. \\*
+Development complexity & 20\% & -2 & Requires custom extensions to cover all requirements, and its interfaces are proprietary and not well documented. \\*
 Yearly cost & 30\% & -2 & CA\$1418 yearly. Included in Altium Develop, a professional subscription service. \\*
 Learning curve & 30\% & 0 & Includes AI assistance, but the array of controls is large. \\*
-Evidence centralization & 10\% & +1 & Depends on the degree of integration allowed by the propietary interfaces. \\*
-Extensibility & 10\% & 0 & Requires a long-term commitment to an expensive product whose usability depends on propietary interfaces. \\*
+Evidence centralization & 10\% & +1 & Depends on the degree of integration allowed by the proprietary interfaces. \\*
+Extensibility & 10\% & 0 & Requires a long-term commitment to an expensive product whose usability depends on proprietary interfaces. \\*
 \textbf{Weighted total} & \textbf{100\%} & \textbf{-0.90} & \\
 \midrule
 \multicolumn{4}{@{}l@{}}{\textbf{C2 CATIA Stimulus}}\\*
-Development complexity & 20\% & -2 & Requires custom extensions to cover all requirements, and its interfaces are propietary and not well documented. \\*
-Yearly cost & 30\% & -1 & CA\$249 via an INCOSE individual membersip, for private or academic use only. \\*
+Development complexity & 20\% & -2 & Requires custom extensions to cover all requirements, and its interfaces are proprietary and not well documented. \\*
+Yearly cost & 30\% & -1 & CA\$249 via an individual membership of the International Council on Systems Engineering (INCOSE), for private or academic use only. \\*
 Learning curve & 30\% & 0 & Includes AI assistance, but the array of controls is large. \\*
-Evidence centralization & 10\% & +1 & Depends on the degree of integration allowed by the propietary interfaces. \\*
-Extensibility & 10\% & 0 & Requires a long-term commitment to an expensive product whose usability depends on propietary interfaces. 3DXPERIENCE integration is limited for unauthorized developers. \\*
+Evidence centralization & 10\% & +1 & Depends on the degree of integration allowed by the proprietary interfaces. \\*
+Extensibility & 10\% & 0 & Requires a long-term commitment to an expensive product whose usability depends on proprietary interfaces. 3DEXPERIENCE integration is limited for unauthorized developers. \\*
 \textbf{Weighted total} & \textbf{100\%} & \textbf{-0.60} & \\
 \midrule
 \multicolumn{4}{@{}l@{}}{\textbf{C3 Version-controlled Python}}\\*
@@ -110,12 +110,12 @@ Extensibility & 10\% & +2 & Ample ecosystem of open-source libraries. \\*
 \multicolumn{4}{@{}l@{}}{\textbf{C4 Version-controlled Excel with Python adapters}}\\*
 Development complexity & 20\% & -1 & A widely-used and programmable spreadsheet software. Documentation on its use for systems engineering is scarce. \\*
 Yearly cost & 30\% & -1 & CA\$115 Yearly cost of a Microsoft 365 subscription. \\*
-Learning curve & 30\% & 0 & Excel is widely used, but macro programming is an specialist topic. \\*
-Evidence centralization & 10\% & +1 & Macros require a completely difference interface for development, usage, and configuration management.  \\*
-Extensibility & 10\% & +1 & The core spreadsheet is propietary software. The files it generates aren't easily readably for version contr \\*
+Learning curve & 30\% & 0 & Excel is widely used, but macro programming is a specialist topic. \\*
+Evidence centralization & 10\% & +1 & Macros require a completely different interface for development, usage, and configuration management.  \\*
+Extensibility & 10\% & +1 & The core spreadsheet is proprietary software. The files it generates are difficult to read for version control. \\*
 \textbf{Weighted total} & \textbf{100\%} & \textbf{-0.30} & \\
 \end{longtable}
 }
 
-According to the weighted scores, the winner concept is C3: Version-controlled Python.
+According to the weighted scores, the winning concept is C3: Version-controlled Python.
 The design of this concept is presented in detail in Chapter \ref{ch:design-proposal}, while a detailed economic analysis can be found in Section \ref{section:economic-analysis}.

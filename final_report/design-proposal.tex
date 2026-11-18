@@ -6,18 +6,18 @@ The reader is referred to Appendix \ref{appendix:framework-code} for the full se
 The code that defines how models can be utilized, for example, to add, edit, update, verify, and delete requirements, represents the deliverable of the second objective of this project, whereas the provided EPS models represent the deliverable of the third objective.
 Furthermore, Appendix \ref{appendix:automatic-eps-requirements} contains the list of all requirement statements that are automatically assigned to EPS components as the deliverable of the fourth objective.
 
-The complete project codebase, including the present document, the GUI, user documentation, examples, and short explanatory videos for how to execute all framework requirements on the GUI, is available as a public Github repository \cite{repo}.
+The complete project codebase, including the present document, the GUI, user documentation, examples, and short explanatory videos for how to execute all framework requirements on the GUI, is available as a public GitHub repository \cite{repo}.
 The present section will present a narrative overview of said codebase guided by the requirements it satisfies.
 
 \section{Global MBSE model and user interfaces}
-Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-cubesat-subsystems} show the mission structure, including a parametrized orbit (FR-13) and the nine CubeSat subsystems in CSRM. Mission teams tailor these logical categories to their missions. Detailed, mission-tailored design then establishes physical quantities and implementation choices.
+Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-cubesat-subsystems} show the mission structure, including a parametrized orbit (FR-13) and the nine CubeSat subsystems in CSRM. Mission teams tailor these logical categories to their missions. Detailed, mission-tailored design then establishes physical quantities and implementation choices. The model represents the Global Positioning System (GPS) as an external global navigation satellite system (GNSS).
 
 \begingroup
 \captionsetup{font=small,skip=4pt}
 \begin{figure}[p]
 \centering
 \includegraphics[width=0.95\linewidth]{fig/csrm-mission-structure.pdf}
-\caption[CSRM mission and segment structure.]{CSRM mission and segment structure, as a graphical representation of the corresponding Python classes. Adapted from the CSRM reference model, copyright 2022 INCOSE Space Systems Working Group and OMG Space Domain Task Force, \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0} \citep{incose2025csrmmodel}.}
+\caption[CSRM mission and segment structure.]{CSRM mission and segment structure, as a graphical representation of the corresponding Python classes. Adapted from the CSRM reference model, copyright 2022 INCOSE Space Systems Working Group and OMG Space Domain Task Force, \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International} \citep{incose2025csrmmodel}.}
 \label{fig:csrm-mission-structure}
 \end{figure}
 
@@ -62,7 +62,7 @@ Figure~\ref{fig:analysis-equation} compares a calculation with its algebraic exp
 \section{L01: MBSE Workspace}
 This section describes the behavior of logical component L01: MBSE Workspace.
 For FR-01, the framework represents requirements, quantities and verification conditions as Python classes.
-Inspired by the property expressions of SysML v2 \citep{omg2026sysml2}, a Property stores a Python expression that can reference other properties, arithmetic operations and function calls.
+Inspired by the property expressions of the Systems Modeling Language (SysML) v2 \citep{omg2026sysml2}, a Property stores a Python expression that can reference other properties, arithmetic operations and function calls.
 Figure~\ref{fig:property-expressions} shows a calculated property and the GUI rendering of a requirement statement.
 Units accompany values as annotations. The framework performs no automatic unit conversion or dimensional checking.
 
@@ -132,7 +132,7 @@ Requirements owned by the EPS or bus remain outside this component query.
 
 \section{L02: COTS Database}
 This database is said to estimate electrical and dynamic EPS model parameters (as per FR-10) because its information comes from datasheets and not empirical modeling.
-For the purposes of this project, a great volume of COTS property values taken from datasheets was deemed preferrable to a small volume of empirical data, given that the framework requirements cover the exploration of alternatives during early design stages and not the qualification of mature physical designs.
+For the purposes of this project, a great volume of COTS property values taken from datasheets was deemed preferable to a small volume of empirical data, given that the framework requirements cover the exploration of alternatives during early design stages and not the qualification of mature physical designs.
 
 The database contains commercially available products in 18 catalog categories, for which the datasheets were obtained via the Mouser Canada search engine.
 The properties of the generic EPS components were defined based on the information found in the datasheets, and datasheets that didn't provide the necessary values to execute all EPS analyses were discarded unless they are used in one of the case studies (BIRDS-4 or OreSat).
@@ -537,7 +537,7 @@ A power budget can supply current bounds when power and voltage refer to the sam
 \end{equation}
 These bounds will assume no pairing or chronology between the power and voltage cases. An orbit-average power budget will establish energy demand. Peak-current checks will require peak power or independently established current cases.
 
-For FR-20, the COTS comparison will use the highest applicable undervoltage trip threshold $V_{\mathrm{UV,trip}}^{\mathrm{hi}}$, the lowest applicable overvoltage trip threshold $V_{\mathrm{OV,trip}}^{\mathrm{lo}}$ and the lowest applicable overcurrent trip threshold $I_{\mathrm{OC,trip}}^{\mathrm{lo}}$:
+For FR-20, the COTS comparison will use the highest applicable undervoltage (UV) trip threshold $V_{\mathrm{UV,trip}}^{\mathrm{hi}}$, the lowest applicable overvoltage (OV) trip threshold $V_{\mathrm{OV,trip}}^{\mathrm{lo}}$ and the lowest applicable overcurrent (OC) trip threshold $I_{\mathrm{OC,trip}}^{\mathrm{lo}}$:
 \begin{equation}
     \begin{aligned}
         V_{\min}&>V_{\mathrm{UV,trip}}^{\mathrm{hi}},\\
