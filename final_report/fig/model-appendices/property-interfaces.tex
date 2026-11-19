@@ -1,0 +1,28 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Courier New}
+\usepackage{amsmath,graphicx}
+\input{../code-highlighting}
+\setlength{\fboxsep}{7pt}
+\setlength{\fboxrule}{0.5pt}
+\begin{document}
+\begin{minipage}{510pt}
+\fontsize{10}{12}\selectfont
+\begin{minipage}[t]{506pt}
+\vspace{0pt}\textbf{Python: explicit component interfaces}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8}{10.24}\selectfont]
+battery.series_count = 1
+battery.cell_nominal_voltage = 3.7
+converter.input_voltage = battery.nominal_voltage
+converter.output_voltage = active.on.voltage
+eps.bus_voltage.available = converter.output_voltage
+eps.bus_voltage.required = active.on.voltage
+\end{lstlisting}
+\end{minipage}\par\medskip\begin{minipage}[t]{506pt}
+\vspace{0pt}\textbf{GUI: converter input before the battery edit}\par\smallskip
+\includegraphics[width=506pt]{interface-before.png}\end{minipage}\par\medskip\begin{minipage}[t]{506pt}
+\vspace{0pt}\textbf{GUI: converter input after the battery edit}\par\smallskip
+\includegraphics[width=506pt]{interface-after.png}\end{minipage}
+\end{minipage}
+\end{document}

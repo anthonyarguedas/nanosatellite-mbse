@@ -1,0 +1,49 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Courier New}
+\usepackage{amsmath,graphicx}
+\input{../code-highlighting}
+\setlength{\fboxsep}{7pt}
+\setlength{\fboxrule}{0.5pt}
+\begin{document}
+\begin{minipage}{510pt}
+\fontsize{10}{12}\selectfont
+\begin{minipage}[t]{506pt}
+\vspace{0pt}\textbf{Create the mission and its default architecture}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8.5}{10.88}\selectfont]
+mission = Mission(lifetime=1, days_per_year=365.25)
+mission.orbit.altitude = 600
+mission.orbit.eccentricity = 0
+mission.orbit.beta_angle = 0
+bus = mission.add(CubeSatBus("BUS", units=1))
+eps = bus.EPS
+battery = eps.Battery
+converter = eps.RegulatorAndConverter
+\end{lstlisting}
+\end{minipage}\par\medskip\begin{minipage}[t]{506pt}
+\vspace{0pt}\textbf{Add, edit and verify a component requirement}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8.5}{10.88}\selectfont]
+voltage = converter.add(Requirement(
+    "output_match",
+    statement="The output shall equal {match.target}.",
+    rationale="Illustrative nominal load rail.",
+))
+voltage.add(VerificationCondition(
+    "match", converter.output_voltage, active.on.voltage,
+    "measure == target",
+))
+voltage.statement = "The load rail shall equal {match.target}."
+voltage.rationale = "Nominal mode uses the 3.3 V load rail."
+assert voltage.verify(mode=nominal).verified is True
+\end{lstlisting}
+\end{minipage}\par\medskip\begin{minipage}[t]{506pt}
+\vspace{0pt}\textbf{Delete and reattach the same requirement}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8.5}{10.88}\selectfont]
+removed = converter.remove(voltage)
+assert removed is voltage and voltage.parent is None
+converter.add(removed)
+\end{lstlisting}
+\end{minipage}
+\end{minipage}
+\end{document}

@@ -2,14 +2,15 @@
 \usepackage{fontspec}
 \setmainfont{Times New Roman}
 \setmonofont{Courier New}
-\usepackage{amsmath,graphicx,fancyvrb}
+\usepackage{amsmath,graphicx}
+\input{../code-highlighting}
 \setlength{\fboxsep}{7pt}
 \setlength{\fboxrule}{0.5pt}
 \begin{document}
 \begin{minipage}{510pt}
 \fontsize{10}{12}\selectfont
 \textbf{(a) Git comparison with the retained baseline}\par
-\begin{Verbatim}[fontsize=\fontsize{8.5}{10.88}\selectfont]
+\begin{lstlisting}[style=report-diff,basicstyle=\ttfamily\fontsize{8.5}{10.88}\selectfont]
 $ git diff -- battery-study.py
 diff --git a/battery-study.py b/battery-study.py
 index ad30670..19d3b45 100644
@@ -20,25 +21,25 @@ index ad30670..19d3b45 100644
 -battery.rated_energy = 20.35
 +battery.rated_energy = 3.0
  requirement = battery.add_requirement(
-\end{Verbatim}
+\end{lstlisting}
 \par\medskip
 \begin{minipage}[t]{250pt}
 \vspace{0pt}\textbf{(b) Baseline evaluation}\par\smallskip
-\begin{Verbatim}[fontsize=\fontsize{8.5}{10.88}\selectfont]
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8.5}{10.88}\selectfont]
 >>> battery.bol_energy.value
 73260.0
 >>> requirement.verify().verified
 True
-\end{Verbatim}
+\end{lstlisting}
 \end{minipage}\hfill
 \begin{minipage}[t]{250pt}
 \vspace{0pt}\textbf{(c) Edited evaluation}\par\smallskip
-\begin{Verbatim}[fontsize=\fontsize{8.5}{10.88}\selectfont]
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8.5}{10.88}\selectfont]
 >>> battery.bol_energy.value
 10800.0
 >>> requirement.verify().verified
 False
-\end{Verbatim}
+\end{lstlisting}
 \end{minipage}
 \end{minipage}
 \end{document}

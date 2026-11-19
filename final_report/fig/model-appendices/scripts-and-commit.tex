@@ -1,0 +1,42 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Courier New}
+\usepackage{amsmath,graphicx}
+\input{../code-highlighting}
+\setlength{\fboxsep}{7pt}
+\setlength{\fboxrule}{0.5pt}
+\begin{document}
+\begin{minipage}{510pt}
+\fontsize{10}{12}\selectfont
+\begin{minipage}[t]{506pt}
+\vspace{0pt}\textbf{Link a script, bind inputs and execute the calculation}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8.5}{10.88}\selectfont]
+mission.add_import("import framework.scripts.sizing as calc")
+voltage.define("load_power", active.on.power)
+voltage.define("duration", Property(100, "s"))
+voltage.define("energy", Property(
+    "calc.load_energy(average_power=self.load_power, "
+    "duration=self.duration).joules", "J",
+))
+energy_j = voltage.energy.value
+report = mission.verify(mode=nominal)
+\end{lstlisting}
+\end{minipage}\par\medskip\begin{minipage}[t]{506pt}
+\vspace{0pt}\textbf{Selected outputs from the synthetic mission}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8.5}{10.88}\selectfont]
+energy_j == 33.0
+voltage.verify(mode=nominal).verified is True
+protector.no_trip.verify().verified is True
+report.verified is None
+\end{lstlisting}
+\end{minipage}\par\medskip\begin{minipage}[t]{506pt}
+\vspace{0pt}\textbf{After reviewing and saving the mission as mission.py}\par\smallskip
+\begin{lstlisting}[style=report-bash,basicstyle=\ttfamily\fontsize{8.5}{10.88}\selectfont]
+git diff -- mission.py
+git add mission.py
+git commit -m "Use the 3.3 V rail for nominal operation"
+\end{lstlisting}
+\end{minipage}
+\end{minipage}
+\end{document}

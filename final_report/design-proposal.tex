@@ -2,15 +2,17 @@
 \label{ch:design-proposal}
 
 The framework is implemented as a set of Python classes which represent the MBSE model of a CubeSat mission according to CSRM Profile 1.1, where each class models an element like a requirement, a subsystem, a component or, more specifically, an EPS component like a battery or a solar array.
-The reader is referred to Appendix \ref{appendix:framework-code} for the full set of Python files that fully describe the framework's behavior, models and analyses. 
-The code that defines how models can be utilized, for example, to add, edit, update, verify, and delete requirements, represents the deliverable of the second objective of this project, whereas the provided EPS models represent the deliverable of the third objective.
-Furthermore, Appendix \ref{appendix:automatic-eps-requirements} contains the list of all requirement statements that are automatically assigned to EPS components as the deliverable of the fourth objective.
-
+The reader is referred to Appendix \ref{appendix:framework-code} for the full set of Python files that fully describe the framework's behavior, models and analyses.
 The complete project codebase, including the present document, the GUI, user documentation, examples, and short explanatory videos for how to execute all framework requirements on the GUI, is available as a public GitHub repository \cite{repo}.
-The present section will present a narrative overview of said codebase guided by the requirements it satisfies.
+
+The present section presents a narrative overview of that codebase guided by the requirements it satisfies.
+Given the size and code content of Appendix \ref{appendix:framework-code}, shorter excerpts provide an intermediate level of detail for manual reading.
+Appendix \ref{appendix:framework-workflow} presents a representative mission modeling workflow and captioned code snippets for adding, editing, updating, verifying and deleting requirements (second objective).
+Appendix \ref{appendix:eps-component-models} presents the generic EPS component classes and their parameters graphically, together with interfaces, modes, states and requirement assignment (third objective).
+Appendix \ref{appendix:automatic-eps-requirements} contains the requirement statements automatically assigned to EPS elements (fourth objective).
 
 \section{Global MBSE model and user interfaces}
-Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-cubesat-subsystems} show the mission structure, including a parametrized orbit (FR-13) and the nine CubeSat subsystems in CSRM. Mission teams tailor these logical categories to their missions. Detailed, mission-tailored design then establishes physical quantities and implementation choices. The model represents the Global Positioning System (GPS) as an external global navigation satellite system (GNSS).
+Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-eps-components} show the mission structure, including a parametrized orbit (FR-13), the nine CubeSat subsystems in CSRM, and the generic components that constitute an EPS (FR-05). Mission teams tailor these logical categories to their missions. Detailed, mission-tailored design then establishes physical quantities and implementation choices. The model represents the Global Positioning System (GPS) as an external global navigation satellite system (GNSS).
 
 \begingroup
 \captionsetup{font=small,skip=4pt}
@@ -28,9 +30,17 @@ Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-cubesat-subsystems} show
 \label{fig:csrm-cubesat-subsystems}
 \end{figure}
 
+\begin{figure}[p]
+\centering
+\includegraphics[width=0.95\linewidth]{fig/csrm-eps-components.pdf}
+\caption[CSRM generic EPS components.]{The six generic component groups of the CSRM Power Subsystem. These logical categories organize mission-specific EPS requirements and physical component choices for FR-05. Adapted from the CSRM reference model \citep{incose2025csrmmodel}.}
+\label{fig:csrm-eps-components}
+\end{figure}
+
 The model classes can be imported into a Python environment, as shown in Figure~\ref{fig:eps-python-model}.
 A graphical user interface (GUI) exposes the same models for users unfamiliar with Python (Figure~\ref{fig:eps-gui}).
 Besides classification, the models assign engineering properties to components, including the EPS component properties required by FR-05.
+The full list of properties assigned to each EPS component is represented graphically in Appendix \ref{appendix:eps-component-models}.
 These properties represent COTS datasheet quantities and provide inputs to the analyses.
 The figures use a synthetic battery allocation to demonstrate the same parameter values in both interfaces.
 
@@ -134,7 +144,7 @@ Requirements owned by the EPS or bus remain outside this component query.
 This database is said to estimate electrical and dynamic EPS model parameters (as per FR-10) because its information comes from datasheets and not empirical modeling.
 For the purposes of this project, a great volume of COTS property values taken from datasheets was deemed preferable to a small volume of empirical data, given that the framework requirements cover the exploration of alternatives during early design stages and not the qualification of mature physical designs.
 
-The database contains commercially available products in 18 catalog categories, for which the datasheets were obtained via the Mouser Canada search engine.
+The database contains commercially available products in 18 catalog categories mapping to the CSRM generic EPS component types, for which the datasheets were obtained via the Mouser Canada search engine.
 The properties of the generic EPS components were defined based on the information found in the datasheets, and datasheets that didn't provide the necessary values to execute all EPS analyses were discarded unless they are used in one of the case studies (BIRDS-4 or OreSat).
 The reader is referred to Appendix \ref{appendix:cots-database} for the full list of COTS with their corresponding generic EPS component type, part identifier, and mass as one representative property. The full database is available in the project repository \cite{repo} as tab-separated tables.
 

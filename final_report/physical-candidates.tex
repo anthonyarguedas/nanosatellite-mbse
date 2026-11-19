@@ -1,7 +1,7 @@
-\section{Synthesize Candidate Physical Architectures}
+\section{Candidate Physical Architectures}
 \label{section:synthesize-physical-architectures}
 
-\section{Logical Component Alternatives}
+\subsection{Logical Component Alternatives}
 Logical components break down the required framework behavior into four building blocks.
 Table~\ref{tab:framework-physical-alternatives} gives five alternatives to implement each logical component. For each alternative, a concise description of how it implements each logical component is given.
 Valispace Requirements Manager and CATIA Stimulus were studied as dedicated MBSE alternatives at the request of the stakeholders, and are considered for all logical components given that they are integrated solutions with ample functionality.
@@ -13,7 +13,7 @@ The rest of the alternatives were chosen from a review of the state of the art i
 \setlength{\parskip}{0pt}
 \renewcommand{\arraystretch}{1.02}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.27\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.63\linewidth-2\tabcolsep\relax}@{}}
-\caption{Five physical implementation alternatives for each logical component. Descriptions include proposed custom extensions and external tools.}\label{tab:framework-physical-alternatives}\\
+\caption{Physical implementation alternatives for each logical component with possible implementations of its behavior.}\label{tab:framework-physical-alternatives}\\
 \toprule
 \textbf{ID} & \textbf{Alternative} & \textbf{Implementation} \\
 \midrule
@@ -54,7 +54,7 @@ L04-E & Nanospace & Maintain engineering records and dependency links in a share
 \end{longtable}
 }
 
-\section{Synthesized Candidates}
+\subsection{Synthesized Candidates}
 
 Valispace Requirements Manager (C1) and CATIA Stimulus (C2) were compared as integrated solutions spanning all logical components. Two other candidates were synthesized by combining different alternatives: Version-controlled Python (C3) consists of using native Python for L01-L03, and GitHub for L04, while Version-controlled Excel with Python adapters (C4) uses Microsoft Excel for L01-L02, Python for L03, and GitHub for L04. A fifth candidate representing the as-is capabilities (C5) was introduced to serve as the baseline.
 
@@ -62,7 +62,7 @@ The candidates were compared based on a set of weighted criteria, which have val
 These criteria are not Measures of Performance, as all considered candidates are assumed to be capable of attaining the target MOP values, but merely a decision-making aid informed by the stakeholder analysis.
 The criteria were development complexity (20\%), cost per year (30\%), learning curve (30\%), evidence centralization (10\%) and extensibility (10\%).
 
-\subsection{Candidate scores and rationales}
+\subsection{Candidate comparison}
 
 Table~\ref{tab:framework-candidate-scores} records each score and its rationale. Lower development complexity, costs and learning effort count as improvements. Greater evidence centralization and extensibility also count as improvements. The weighted total for candidate $j$ is $S_j=\sum_{i=1}^{5}w_i s_{ij}$, where $s_{ij}$ is the criterion score and $w_i$ is its percentage weight expressed as a fraction. C5 has zero for every criterion and a weighted total of zero.
 
@@ -72,7 +72,7 @@ Table~\ref{tab:framework-candidate-scores} records each score and its rationale.
 \setlength{\parskip}{0pt}
 \renewcommand{\arraystretch}{1.0}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.31\linewidth}>{\centering\arraybackslash}p{\dimexpr0.10\linewidth-2\tabcolsep\relax}>{\centering\arraybackslash}p{\dimexpr0.09\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash\rule{0pt}{1.4\baselineskip}}p{\dimexpr0.50\linewidth-2\tabcolsep\relax}@{}}
-\caption{Candidate scores and rationales relative to the as-is baseline C5. Criterion scores range from $-2$ to $+2$, with higher scores preferred.}\label{tab:framework-candidate-scores}\\
+\caption{Candidate scores and rationales relative to the as-is baseline (C5). Higher is better.}\label{tab:framework-candidate-scores}\\
 \toprule
 \textbf{Criterion} & \textbf{Weight} & \textbf{Score} & \textbf{Rationale} \\
 \midrule

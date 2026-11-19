@@ -1,0 +1,43 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Courier New}
+\usepackage{amsmath,graphicx}
+\input{../code-highlighting}
+\setlength{\fboxsep}{7pt}
+\setlength{\fboxrule}{0.5pt}
+\begin{document}
+\begin{minipage}{510pt}
+\fontsize{10}{12}\selectfont
+\begin{minipage}[t]{506pt}
+\vspace{0pt}\textbf{Shared lifecycle: ModelObject.initialize()}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8.5}{10.88}\selectfont]
+def initialize(self):
+    if not self._initialized:
+        self.create_defaults()
+        self._initialized = True
+    if self.mission is not None:
+        for item in self.walk():
+            if not item._requirements_initialized:
+                item.create_requirements()
+                item._requirements_initialized = True
+    return self
+\end{lstlisting}
+\end{minipage}\par\medskip\begin{minipage}[t]{506pt}
+\vspace{0pt}\textbf{Automatic component addition: Subsystem.create\_defaults()}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8.5}{10.88}\selectfont]
+def create_defaults(self):
+    for cls in self.default_components:
+        if not any(child.name == cls.__name__ for child in self.children):
+            self.add(cls(cls.__name__))
+\end{lstlisting}
+\end{minipage}\par\medskip\begin{minipage}[t]{506pt}
+\vspace{0pt}\textbf{The EPS declares these numerical component defaults}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8.5}{10.88}\selectfont]
+EPS.default_components = (
+    Battery, SolarArray, RegulatorAndConverter, PowerCircuit,
+)
+\end{lstlisting}
+\end{minipage}
+\end{minipage}
+\end{document}

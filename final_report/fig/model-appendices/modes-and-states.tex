@@ -1,0 +1,36 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Courier New}
+\usepackage{amsmath,graphicx}
+\input{../code-highlighting}
+\setlength{\fboxsep}{7pt}
+\setlength{\fboxrule}{0.5pt}
+\begin{document}
+\begin{minipage}{510pt}
+\fontsize{10}{12}\selectfont
+\begin{minipage}[t]{246pt}
+\vspace{0pt}\textbf{Python: modes, states and allocation}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8}{10.24}\selectfont]
+nominal = bus.add(SpacecraftMode("nominal"))
+nominal.allocation.fraction = 1
+active = converter.add(ComponentMode("active"))
+active.add(ModeAllocation(
+    "nominal_share", nominal, 1,
+))
+active.on.voltage = 3.3
+active.on.current = 0.1
+active.off.voltage = 0
+active.off.current = 0
+active.add(StateAllocation(
+    "on_share", active.on, 1,
+))
+converter.power.bind(
+    nominal, "self.active.on.power.value",
+)
+\end{lstlisting}
+\end{minipage}\hfill\begin{minipage}[t]{252pt}
+\vspace{0pt}\textbf{GUI: the same mode and states}\par\smallskip
+\includegraphics[width=252pt]{modes-states.png}\end{minipage}
+\end{minipage}
+\end{document}

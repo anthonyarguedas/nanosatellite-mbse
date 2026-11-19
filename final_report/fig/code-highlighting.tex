@@ -1,0 +1,54 @@
+% Shared by the report and the standalone code figure generators.
+\usepackage{xcolor,listings}
+
+\definecolor{codeKeyword}{HTML}{174EA6}
+\definecolor{codeBuiltin}{HTML}{6F3296}
+\definecolor{codeIdentifier}{HTML}{243B53}
+\definecolor{codeString}{HTML}{9C3328}
+\definecolor{codeComment}{HTML}{396B45}
+\definecolor{codeAddition}{HTML}{246B35}
+\definecolor{codeDeletion}{HTML}{A12E2E}
+\definecolor{codeDiffHeader}{HTML}{176B7D}
+
+\lstdefinestyle{report-code}{
+  basicstyle=\ttfamily,
+  keywordstyle=\color{codeKeyword},
+  keywordstyle=[2]\color{codeBuiltin},
+  commentstyle=\color{codeComment},
+  stringstyle=\color{codeString},
+  identifierstyle=\color{codeIdentifier},
+  columns=fullflexible,
+  keepspaces=true,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  upquote=true,
+  tabsize=4,
+  numbers=none,
+  breaklines=false,
+  aboveskip=0pt,
+  belowskip=0pt,
+  nolol=true
+}
+
+\lstdefinestyle{report-python}{
+  style=report-code,
+  language=[3]Python
+}
+
+\lstdefinestyle{report-bash}{
+  style=report-code,
+  language=bash,
+  morekeywords={git}
+}
+
+\lstdefinelanguage{ReportDiff}{
+  morekeywords={diff,index,git},
+  moredelim=[l][\color{codeAddition}]{+},
+  moredelim=[l][\color{codeDeletion}]{-},
+  moredelim=[l][\color{codeDiffHeader}]{@@}
+}
+\lstdefinestyle{report-diff}{
+  style=report-code,
+  language=ReportDiff
+}

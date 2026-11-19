@@ -2,7 +2,8 @@
 \usepackage{fontspec}
 \setmainfont{Times New Roman}
 \setmonofont{Courier New}
-\usepackage{amsmath,graphicx,fancyvrb}
+\usepackage{amsmath,graphicx}
+\input{../code-highlighting}
 \setlength{\fboxsep}{7pt}
 \setlength{\fboxrule}{0.5pt}
 \begin{document}
@@ -10,18 +11,18 @@
 \fontsize{10}{12}\selectfont
 \begin{minipage}[t]{250pt}
 \vspace{0pt}\textbf{(a) Battery class (selected lines)}\par\smallskip
-\begin{Verbatim}[fontsize=\fontsize{8}{10.24}\selectfont]
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8}{10.24}\selectfont]
 class Battery(EPSComponent):
     rated_energy = Property(
         "self.cell_count.value * "
         "self.cell_rated_energy.value", "Wh")
     bol_energy = Property(
         "self.rated_energy.value * 3600", "J")
-\end{Verbatim}
+\end{lstlisting}
 \end{minipage}\hfill
 \begin{minipage}[t]{250pt}
 \vspace{0pt}\textbf{(b) Interactive Python}\par\smallskip
-\begin{Verbatim}[fontsize=\fontsize{8}{10.24}\selectfont]
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8}{10.24}\selectfont]
 >>> from framework.models import (
 ...     Mission, CubeSatBus)
 >>> mission = Mission()
@@ -32,7 +33,7 @@ class Battery(EPSComponent):
 20.35
 >>> battery.bol_energy.value
 73260.0
-\end{Verbatim}
+\end{lstlisting}
 \end{minipage}
 \end{minipage}
 \end{document}

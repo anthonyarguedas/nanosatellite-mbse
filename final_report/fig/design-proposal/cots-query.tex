@@ -2,7 +2,8 @@
 \usepackage{fontspec}
 \setmainfont{Times New Roman}
 \setmonofont{Courier New}
-\usepackage{amsmath,graphicx,fancyvrb}
+\usepackage{amsmath,graphicx}
+\input{../code-highlighting}
 \setlength{\fboxsep}{7pt}
 \setlength{\fboxrule}{0.5pt}
 \begin{document}
@@ -10,21 +11,21 @@
 \fontsize{10}{12}\selectfont
 \begin{minipage}[t]{210pt}
 \vspace{0pt}\textbf{(a) Candidate acceptance}\par\smallskip
-\begin{Verbatim}[fontsize=\fontsize{7.5}{9.6}\selectfont]
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{7.5}{9.6}\selectfont]
 reports = tuple(
     requirement.verify(mode=selected_mode)
     for requirement in owner.requirements)
 if any(report.verified is not True
        for report in reports):
     continue
-\end{Verbatim}
+\end{lstlisting}
 \medskip\textbf{Python query}\par
-\begin{Verbatim}[fontsize=\fontsize{7.5}{9.6}\selectfont]
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{7.5}{9.6}\selectfont]
 matches = battery.recommend_cots(
     cots_catalog,
     sort_by="rated_energy",
     reverse=True, limit=3)
-\end{Verbatim}
+\end{lstlisting}
 \end{minipage}\hfill
 \begin{minipage}[t]{290pt}
 \vspace{0pt}\textbf{(b) GUI recommendations}\par\smallskip

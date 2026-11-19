@@ -2,7 +2,8 @@
 \usepackage{fontspec}
 \setmainfont{Times New Roman}
 \setmonofont{Courier New}
-\usepackage{amsmath,graphicx,fancyvrb}
+\usepackage{amsmath,graphicx}
+\input{../code-highlighting}
 \setlength{\fboxsep}{7pt}
 \setlength{\fboxrule}{0.5pt}
 \begin{document}
@@ -10,12 +11,12 @@
 \fontsize{10}{12}\selectfont
 \begin{minipage}[t]{270pt}
 \vspace{0pt}\textbf{(a) Battery sizing calculation}\par\smallskip
-\begin{Verbatim}[fontsize=\fontsize{8}{10.24}\selectfont]
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8}{10.24}\selectfont]
 energy = (eclipse_energy / depth_of_discharge
           * (1 + degradation_margin))
 _finite(energy)
 return Energy(energy)
-\end{Verbatim}
+\end{lstlisting}
 \end{minipage}\hfill
 \begin{minipage}[t]{230pt}
 \vspace{0pt}\textbf{(b) Algebraic expression}\par\smallskip

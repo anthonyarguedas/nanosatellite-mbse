@@ -80,9 +80,13 @@ def escape(text):
                     "%": r"\%", "#": r"\#", "{": r"\{", "}": r"\}"}.get(c, c) for c in text)
 
 
-def verb(code, size=8):
-    return (f"\\begin{{Verbatim}}[fontsize=\\fontsize{{{size}}}{{{size * 1.28}}}\\selectfont]\n"
-            + code + "\n\\end{Verbatim}\n")
+def verb(code, size=8, language="python"):
+    """Typeset source with the report's shared, language-specific colors."""
+    if language not in ("python", "bash", "diff"):
+        raise ValueError(f"Unsupported code language: {language}")
+    return (f"\\begin{{lstlisting}}[style=report-{language},"
+            f"basicstyle=\\ttfamily\\fontsize{{{size}}}{{{size * 1.28}}}\\selectfont]\n"
+            + code + "\n\\end{lstlisting}\n")
 
 
 def panel(title, body, width):
@@ -99,7 +103,8 @@ def make_pdf(name, body, job):
 \usepackage{fontspec}
 \setmainfont{Times New Roman}
 \setmonofont{Courier New}
-\usepackage{amsmath,graphicx,fancyvrb}
+\usepackage{amsmath,graphicx}
+\input{../code-highlighting}
 \setlength{\fboxsep}{7pt}
 \setlength{\fboxrule}{0.5pt}
 \begin{document}
@@ -118,7 +123,8 @@ def make_pdf(name, body, job):
     shutil.copyfile(job / f"{name}.pdf", OUT / f"{name}.pdf")
     # Keep the exact typesetting source with the figure for independent rebuilds.
     shutil.copyfile(tex, OUT / f"{name}.tex")
-    return {"pdf_sha256": sha(OUT / f"{name}.pdf"), "source_sha256": sha(tex)}
+    return {"pdf_sha256": sha(OUT / f"{name}.pdf"), "source_sha256": sha(tex),
+            "code_highlighting_sha256": sha(FIG / "code-highlighting.tex")}
 
 
 def start_server(session, job, python):
@@ -450,7 +456,7 @@ E_{\mathrm{Battery}}=\frac{E_e}{\mathrm{DoD}}(1+M)
         assert "-battery.rated_energy = 20.35" in diff and "+battery.rated_energy = 3.0" in diff
         changed = load_study(git_file)
         assert changed.requirement.verify().verified is False
-        body = "\\textbf{(a) Git comparison with the retained baseline}\\par\n" + verb("$ git diff -- battery-study.py\n" + diff, 8.5)
+        body = "\\textbf{(a) Git comparison with the retained baseline}\\par\n" + verb("$ git diff -- battery-study.py\n" + diff, 8.5, language="diff")
         body += "\\par\\medskip\n"
         body += panel("(b) Baseline evaluation", verb(
             ">>> battery.bol_energy.value\n73260.0\n>>> requirement.verify().verified\nTrue", 8.5), 250)
