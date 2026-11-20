@@ -1,0 +1,114 @@
+\subsection{FR-11: catalogue recommendations from mission budgets}
+\label{appendix:cots-case-results}
+
+The reference calculations use the original budgets and manufacturer sheets independently of the catalogue, with 50 significant digits of decimal arithmetic.
+Every query screens one purchased cell or single-cell solar cell assembly (SCA) against its directly owned requirements.
+Installation counts remain separate.
+For load energy $E_L$ in Wh, the required cell capacity and power are
+\begin{equation*}
+C_{\mathrm{req}}=\frac{E_L}{N_{\mathrm{bat}}V_{\mathrm{budget}}d\eta_d},
+\qquad
+P_{\mathrm{req}}=\frac{E_L/\eta_c+E_D}{N_{\mathrm{PV}}fT_s}.
+\end{equation*}
+Here $N_{\mathrm{bat}}$ and $N_{\mathrm{PV}}$ count installed battery and solar cells, $d$ is DoD, $\eta_d$ is battery delivery efficiency, $\eta_c$ is conversion efficiency, $E_D$ is diode loss in Wh, $f$ is mean sunlight projection and $T_s$ is sunlight duration in hours.
+Capacity comparisons use nominal voltage as an energy estimate.
+They establish no measured Wh guarantee.
+
+\begingroup\footnotesize\setlength{\tabcolsep}{3pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}P{0.16\linewidth}P{0.39\linewidth}P{\dimexpr0.45\linewidth-4\tabcolsep\relax}@{}}
+\caption{MOP-11 budget inputs and declared assessment assumptions.}\label{tab:cots-case-inputs}\\
+\toprule
+Case & Published inputs & Assessment assumptions and boundary \\ \midrule
+\endfirsthead
+\toprule
+Case & Published inputs & Assessment assumptions and boundary \\ \midrule
+\endhead
+\bottomrule\endfoot
+BIRDS battery & $E_L=1.438$ Wh per 90 min orbit. A 3S2P battery gives $N_{\rm bat}=6$ at $V_{\rm budget}=1.2$ V/cell \citep[pp.~5, 9]{shrestha2022birds4powerbudget}. & Reserve the full orbit demand. Assume $d=0.20$ and $\eta_d=0.90$. No mission retention or cycle-life model is supplied. \\
+BIRDS solar & Five two-cell panels give $N_{\rm PV}=10$. At $\beta=30^\circ$, eclipse lasts 35 min. Diode loss is 0.240 Wh and measured BCR efficiency is 0.80 \citep[pp.~4, 8]{shrestha2022birds4powerbudget}. & $T_s=55/60$ h. Assume isotropic orientation with $f=0.25$ per cell. Use $E_L=1.438$ Wh at the BCR output boundary. The separate battery-loss case is excluded. \\
+OreSat battery & Standby uses 0.623 Wh/orbit and one Live pass uses 2.318 Wh. Four independent 2S packs give $N_{\rm bat}=8$ at 3.6 V/cell and $d=0.60$ \citep[p.~1]{oresat2019powerbudget}. & Reserve $E_L=2.941$ Wh, adding one complete standby orbit and one Live pass. Use the budget's battery-bus accounting with $\eta_d=1$. Substitute later Tenergy cells into this earlier arrangement. \\
+OreSat solar & Two illuminated modules, sunlight fraction 0.59, tumbling factor 0.71 and a 90 min orbit \citep[p.~1]{oresat2019powerbudget}. Later modules contain two XTE-SF cells each \citep[p.~5]{greenberg2021oresat}. & Replace the two Alta modules with two later two-cell modules, so $N_{\rm PV}=4$, $T_s=0.885$ h and $f=0.71$. Use $E_L=2.941$ Wh, $\eta_c=1$ and $E_D=0$. Additional conversion losses are excluded. \\
+\end{longtable}\endgroup
+
+The OreSat comparison preserves the distinction between the 2019 Alta/3300 mAh design and the later XTE-SF/Tenergy hardware.
+Independent pack energies add without an assumed branch current-sharing law.
+
+\begingroup\footnotesize\setlength{\tabcolsep}{3pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}P{0.22\linewidth}P{0.24\linewidth}P{\dimexpr0.54\linewidth-4\tabcolsep\relax}@{}}
+\caption{Source-qualified purchased-cell ratings used for MOP-11.}\label{tab:cots-case-ratings}\\
+\toprule
+Product & Selected rating & Original condition and meaning \\ \midrule
+\endfirsthead
+\toprule
+Product & Selected rating & Original condition and meaning \\ \midrule
+\endhead
+\bottomrule\endfoot
+Panasonic BK-3MCC & Minimum 1.9 Ah, nominal 1.2 V & 25$^\circ$C, 0.4 A discharge to 1.0 V after 0.2 A charging for 16 h \citep[p.~1]{cots-mission_panasonic_bk_3mcc_legacy_ds}. Nominal voltage is required to equal 1.2 V. \\
+Tenergy 30005-0 & Minimum 2.5 Ah, average working voltage 3.65 V & 25$^\circ$C, 0.2C discharge to 2.75 V \citep[p.~2]{cots-mission_tenergy_30005_0_ds}. Nominal capacity is separately 2.6 Ah. The query allows 3.5--3.7 V to retain both the 3.6 V mission and 3.65 V sheet conventions. \\
+AZUR 3G30A & $2.409\times0.5029=1.211486$ W & One single-cell SCA at BOL, AM0 WRC 1367 W/m$^2$ and 28$^\circ$C. Power is derived from typical MPP voltage and current \citep[p.~2]{cots-mission_azur_space_3g30a_review_legacy_ds}. \\
+Spectrolab XTE-SF & $2.435\times0.0179\times27=1.176836$ W & One 27 cm$^2$ cell at BOL, AM0 1353 W/m$^2$ and 28$^\circ$C. The sheet gives current density in A/cm$^2$ after conversion from mA/cm$^2$ \citep[p.~1]{cots-solar_src_spectro_xtesf}. \\
+\end{longtable}\endgroup
+
+\begingroup\footnotesize\setlength{\tabcolsep}{3pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}P{0.30\linewidth}rrrr@{}}
+\caption{MOP-11 baseline results. I is the independent requirement, F is the framework requirement and rating. All four reference parts were included.}\label{tab:cots-case-baselines}\\
+\toprule
+Case and purchased item & Required (I) & Required (F) & Rating (F) & Matches \\ \midrule
+\endfirsthead
+\toprule
+Case and purchased item & Required (I) & Required (F) & Rating (F) & Matches \\ \midrule
+\endhead
+\bottomrule\endfoot
+BIRDS BK-3MCC (Ah) & 1.109568 & 1.109568 & 1.9 & 1 \\
+OreSat Tenergy (Ah) & 0.1701968 & 0.1701968 & 2.5 & 10 \\
+BIRDS 3G30A (W) & 0.8890909 & 0.8890909 & 1.211486 & 1 \\
+OreSat XTE-SF (W) & 1.170128 & 1.170128 & 1.176836 & 3 \\
+\end{longtable}\endgroup
+
+Match counts include all automatically discovered products passing the same owned checks and selected conditions.
+The catalogue contained 147 products, including 15 Battery-compatible and 12 SolarArray-compatible products.
+A matching result establishes neither an installed arrangement nor complete mission compliance.
+
+\begingroup\footnotesize\setlength{\tabcolsep}{3pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}P{0.22\linewidth}P{0.42\linewidth}P{\dimexpr0.36\linewidth-4\tabcolsep\relax}@{}}
+\caption{MOP-11 stricter budgets, missing ratings and radiation variations. Independent and framework decisions agree in every case.}\label{tab:cots-case-controls}\\
+\toprule
+Case & Changed condition & Reference part outcome \\ \midrule
+\endfirsthead
+\toprule
+Case & Changed condition & Reference part outcome \\ \midrule
+\endhead
+\bottomrule\endfoot
+BIRDS battery & Double demand to 2.876 Wh, requiring 2.219136 Ah/cell. & 1.9 Ah is insufficient. Excluded, resolved false. \\
+OreSat battery & Require the published 24.6 Live passes per charge: $24.6\times2.318=57.0228$ Wh, or 3.299931 Ah/cell \citep[p.~2]{oresat2019powerbudget}. & 2.5 Ah is insufficient for the earlier reserve. Excluded, resolved false. \\
+BIRDS solar & Double demand to 2.876 Wh, requiring 1.673455 W/cell. & 1.211486 W is insufficient. Excluded, resolved false. \\
+OreSat solar & Add a second Live pass, giving 5.259 Wh and 2.092385 W/cell. & 1.176836 W is insufficient. Excluded, resolved false. \\
+Both batteries & Require EOL charge capacity without a supplied mission retention model. & Both required measures are unresolved. Both parts are excluded. \\
+Both solar products & Require a minimum power rating instead of power derived from typical MPP data. & Neither selected condition supplies that catalogue rating. Both checks are unresolved and both parts are excluded. \\
+BIRDS solar & Select $10^{15}$ 1 MeV electrons/cm$^2$ at the same irradiance and temperature. & $2.244\times0.4851=1.088564$ W. Included, resolved true. \\
+OreSat solar & Select the sheet's US-standard $10^{15}$ 1 MeV electrons/cm$^2$ condition. & $2.435(0.86)\times0.0179(27)(0.98)=0.9918370$ W. Excluded, resolved false. \\
+\end{longtable}\endgroup
+
+The four baseline, four stricter-budget, four missing-rating and two radiation queries produced 149 matching checks.
+Every query left the mission, catalogue records and source data unchanged.
+Radiation fluence is an assessment condition, separate from calendar lifetime.
+
+\begingroup\footnotesize\setlength{\tabcolsep}{3pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}P{0.49\linewidth}rrr@{}}
+\caption{Matching published budget arithmetic used in MOP-11.}\label{tab:cots-case-published-budgets}\\
+\toprule
+Published quantity (Wh) & Printed & Framework & Deviation (\%) \\ \midrule
+\endfirsthead
+\toprule
+Published quantity (Wh) & Printed & Framework & Deviation (\%) \\ \midrule
+\endhead
+\bottomrule\endfoot
+BIRDS energy after BCR, $(2.173-0.240)0.80$ & 1.546 & 1.5464 & 0.02587 \\
+OreSat generation, $2.600(0.59)(0.71)1.5$ & 1.634 & 1.63371 & 0.01775 \\
+OreSat standby balance, $1.634-0.623$ & 1.011 & 1.011 & 0 \\
+\end{longtable}\endgroup
+
+OreSat generation uses the printed 2.600 W total, which differs from twice the 1.33 W row label.
+BIRDS solar power uses the manufacturer's MPP pair, separate from the presentation's 2.70 V entry.
+The 3G30C-Advanced identity in the BIRDS safety paper is also separate from the budget's 3G30A.
+The comparisons above preserve these source distinctions.

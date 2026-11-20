@@ -1,13 +1,17 @@
 \section{EPS case studies}
 \label{section:eps-case-study-results}
 
-The EPS case studies verify the calculations required by FR-12 and FR-14 to FR-20 using BIRDS-4 and OreSat data.
+The EPS case studies assess COTS recommendations for FR-11 and the calculations required by FR-12 and FR-14 to FR-20 using BIRDS-4 and OreSat data.
 Mission publications supply component ratings and selected calculation results \citep{birds2021batteryverification,shrestha2022birds4powerbudget,greenberg2021oresat,oresat2025solardesign}.
 Explicit assumptions supply the remaining inputs.
 
 \subsection{Verification setup}
 
-The BIRDS electrical case uses a two-cell 3G30A solar section and a 3S2P nickel-metal hydride (NiMH) battery.
+FR-11 uses the published orbit and operating mode budgets as requirements on purchased battery cells and solar cells.
+Its source conditions and installation assumptions are stated separately in Appendix~\ref{appendix:cots-case-results}.
+The comparison of later OreSat hardware against the 2019 budget is a design comparison across documented revisions.
+
+For the other requirements, the BIRDS electrical case uses a two-cell 3G30A solar section and a 3S2P nickel-metal hydride (NiMH) battery.
 The OreSat case uses a two-cell XTE-SF section and two independent 2S1P lithium-ion (Li-ion) packs.
 Both baseline sections face the Sun.
 The comparisons also cover changes in illumination, cell technology, series and parallel arrangements, bus voltage and power-transfer method.
@@ -24,9 +28,30 @@ This provided an independent check of the framework's shadow-boundary and panel-
 
 Each nonzero numerical output had to agree with its reference within 1\%.
 Zero values, integer counts and discrete outcomes required exact agreement.
-The appendix reports maximum deviations and representative comparisons, with repeated outputs and deliberately failing cases omitted from the detailed tables.
+The appendix reports maximum deviations and representative comparisons, including the COTS rejection and missing-rating controls.
 
-\subsection{Results and discussion}
+\subsection{COTS recommendations}
+
+MOP-11 executed 14 automatic catalogue queries against independently calculated requirements from the published budgets.
+The reference part ratings were transcribed from the original manufacturer documents.
+The FR-11 reference used decimal arithmetic at 50 significant digits.
+All 149 numerical, decision, condition and preservation checks agreed with their references.
+The largest numerical difference was 0.0259\%, from the rounded BIRDS energy-after-regulator value.
+Every query preserved the mission, catalogue records and source data.
+
+The four baseline queries included the documented Panasonic BK-3MCC, Tenergy 30005-0, 3G30A and XTE-SF products under the stated conditions.
+All four stricter-budget queries excluded their reference parts.
+All four missing-rating queries left the required checks unresolved and excluded the affected parts.
+Original budget excerpts and component records appear in Figures~\ref{fig:source-birds-budget}--\ref{fig:source-solar-ratings}.
+
+The later Tenergy cell's minimum capacity of 2.5~Ah did not meet the 3.299931~Ah required to reproduce the 2019 budget's calculated 24.6-pass capability at 60\% DoD.
+This prediction defines the stricter comparison used here.
+OreSat's baseline solar acceptance had only 0.573\% power margin before any additional conversion loss.
+At the selected $10^{15}$~1~MeV electrons/cm$^2$ condition, the 3G30A still met its requirement and the XTE-SF did not.
+These outcomes support property screening under declared conditions.
+Complete mission qualification requires additional thermal, lifetime and electrical evidence.
+
+\subsection{Numerical analyses and discussion}
 
 The numerical comparisons met the 1\% criterion for every assessed requirement in both mission cases.
 Integer counts and discrete outcomes also matched their references.
@@ -57,3 +82,20 @@ The complete verification curves use three photovoltaic points, and the battery 
 The published BIRDS 1.575~W measured peak remains unreconstructed.
 OreSat's partial solar sweep supplies power-product checks but lacks the endpoints needed for a complete characteristic.
 The case studies consequently provide stronger evidence for correct calculation and comparison than for reproducing either mission's measured energy performance.
+
+\subsection{Mission evidence and traceability}
+
+Some source differences have documented explanations.
+OreSat's cell study favors a two-card Tenergy arrangement storing 74.88~Wh, below its stated 80~Wh ISS safety ceiling \citep{oresatbatteryresearch}.
+The earlier budget assumed 95.04~Wh \citep{oresat2019powerbudget}.
+Its solar history attributes the Alta-to-Spectrolab replacement to Alta's closure, and the SPV1040 replacement to the change from 1S to 2S batteries \citep{oresatsolarhistory}.
+BIRDS authors associate early power failures with panel assembly faults and report 1.202~Wh available after one panel loss against 1.438~Wh nominal demand \citep{shrestha2022birds4powerperformance,shrestha2022birds4results}.
+Later hybrid silicon and triple-junction panels on CURTIS and MicroOrbiter-1 address this reliability risk \citep{shrestha2026solarreliability}.
+
+Other links remain unexplained in the reviewed sources.
+OreSat's earlier pass prediction is not explicitly reconciled with its later battery configuration.
+The BIRDS 3G30A/3G30C-Advanced identities and the 2.70~V MPP entry versus the manufacturer's 2.409~V also remain unreconciled \citep{shrestha2022birds4powerbudget,shrestha2021birdssafety,cots-mission_azur_space_3g30a_review_legacy_ds}.
+These gaps suggest that both missions may share the evidence fragmentation problem identified at ASCEND.
+Their open source commitments make this particularly relevant: reuse requires traceable links between requirements, hardware revisions and analysis results \citep{kim2021birdstextbook,greenberg2021oresat}.
+This inference concerns the public evidence reviewed here.
+Internal records and flight compliance were outside its scope.

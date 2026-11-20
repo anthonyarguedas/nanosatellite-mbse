@@ -70,33 +70,26 @@ FR-20 & The framework shall calculate voltage and current extreme values for sup
 \label{subsection:framework-mops}
 
 Table~\ref{tab:framework-mop-protocols} assigns Measures of Performance to the framework requirements \citep[Sec.~17.3.3]{friedenthal2014practical} to make them verifiable.
-Each MOP is evaluated through one of two verification scenarios.
+Each MOP is evaluated through one of two verification scenarios, expect for FR-10 which is evaluated by inspection. The catalogue inspection for FR-10 counts distinct sourced part numbers under each CSRM hardware type, including every applicable type of a combined product.
 
-The first scenario combines catalogue inspection for FR-10 with BIRDS-4 and OreSat case studies for FR-11, FR-12 and FR-14 to FR-20.
-Catalogue inspection counts distinct sourced part numbers under each CSRM type, including every applicable type of a combined product.
+The first verification scenario leverages BIRDS-4 and OreSat case studies for FR-11, FR-12 and FR-14 to FR-20.
 The mission publications cited in Table~\ref{tab:framework-mop-protocols} supply the budget, component and configuration inputs.
 Calculations performed independently of the framework using the equations in Chapter~\ref{ch:design-proposal} complete references that the publications do not report directly.
 Each comparison records its published inputs and any supplementary assumptions.
 
-For MOP-11, the published load and operating mode energy budgets define the battery storage and solar generation requirements \citep{shrestha2022birds4powerbudget,oresat2019powerbudget}.
-The documented series and parallel counts convert these requirements to the purchased cell or assembly being queried.
-The comparison includes discharge depth, losses, illumination and assessment conditions as explicit inputs.
-The battery references include Panasonic BK-3MCC cells for BIRDS-4 and the Tenergy cell documented for OreSat \citep{birds2021batteryverification,greenberg2021oresat,cots-mission_tenergy_30005_0_ds}.
-Minimum charge capacity, nominal ratings and energy estimated from voltage times charge capacity are identified separately.
-
-Hardware revisions also remain distinct.
-The BIRDS budget identifies 3G30A solar assemblies \citep[p.~5]{shrestha2022birds4powerbudget}.
-Its safety paper identifies 3G30C-Advanced cells \citep[Sec.~2.2.1]{shrestha2021birdssafety}.
-OreSat's 2019 budget lists Alta Devices solar modules and 3300~mAh packs, while its 2021 component account describes XTE-SF cells and Tenergy 2600~mAh cells \citep{oresat2019powerbudget,greenberg2021oresat}.
-A later component checked against an earlier budget is an explicitly declared design comparison.
-An unavailable exact part rating or operating condition leaves that check unresolved.
-
 For each nonzero numerical analysis reference $r$, the framework output $x$ must satisfy $|x-r|/|r|\leq 0.01$ after any unit conversion. The 1\% tolerance applies to each value in each mission, without averaging. Zero references require zero outputs. Counts, arrangements, and comparison results require exact agreement.
 Each case study MOP is evaluated separately for BIRDS-4 and OreSat.
 
-The two missions provide published power budgets and component records for contrasting EPS architectures familiar to ASCEND.
+The two missions were chosen due to their familiarity for ASCEND researchers, and because of the contrast they provide.
+BIRDS-4 uses a compact 1U bus with shared regulated rails and power switching supervised by a dedicated reset controller \citep{shrestha2021birdssafety,kim2021birdsbus}, an architecture found in several flown missions.
+OreSat uses modular cards with local regulation and individually controlled power domains which contain two independent 2S lithium-ion packs, each with its own monitoring and protection \citep{greenberg2021oresat,oresat2025batterydesign}.
+BIRDS provides a firmware-based fault recovery through a reset controller that restarts other controllers when they stop acknowledging regular messages \citep[Sec.~4.3]{kim2021birdsbus}.
+OreSat's battery design specifies a physics-based charge and discharge control which monitors cell voltage and state of charge, with heater control also depending on temperature \citep{oresat2025batterydesign}.
+In this case, provides the more demanding case for representing modular design, distributed conversion, and redundant storage branches.
+Its physics-based fault recovery approach can itself be more robust to faults than a solution implemented at the firmware level, and its underlying laws are much more generalizable than programmed logic.
+Therefore, this verification scenario presents a contrast between BIRDS adopting a traditional nanosatellite EPS and OreSat pushing for high EPS autonomy.
 
-The second scenario verifies FR-01 to FR-09 and FR-13 through two individual user tests, one with a PhD candidate from ASCEND and one with an undergraduate from the student club.
+The second scenario verifies FR-01 to FR-09 and FR-13 through two individual user tests, one with a PhD candidate from ASCEND and one with an undergraduate from its affiliated student club.
 Each participant performs the 10 tasks in Table~\ref{tab:framework-mop-protocols} from prepared initial states.
 The tests use the graphical user interface (GUI) and a prepared Git environment for FR-09.
 Each test allocates 60~min of task time equally among the tasks, giving each task a limit of 6~min.
@@ -125,7 +118,7 @@ A task that reaches its time limit is recorded at that limit.
 \hline
 \endfoot
 \multicolumn{3}{@{}l}{\textbf{Catalogue inspection}} \\*
-MOP-10/FR-10 & Group the added COTS entries by the generic CSRM EPS component type they represent. Count distinct part numbers in each group. Report the count for every generic EPS component type, including types with no entries. & $\geq 5$ sourced COTS per generic EPS component type from CSRM \newline All entries have a link to a source datasheet\\
+MOP-10/FR-10 & Group the added COTS entries by the generic CSRM EPS hardware type they represent. Count distinct part numbers in each group, including groups with no entries. & $\geq 5$ sourced COTS per generic CSRM EPS hardware type \newline All entries have a link to a source datasheet\\
 \multicolumn{3}{@{}l}{\textbf{BIRDS-4 and OreSat case studies}} \\*
 MOP-11/FR-11 & For each mission, derive battery capacity or energy and solar power requirements from its published power budget \citep{shrestha2022birds4powerbudget,oresat2019powerbudget}. Keep the comparison at the documented cell, module or pack level, with the stated arrangement, losses, illumination, conditions and rating types. Query the built-in catalogue for Battery and SolarArray. Independently check the documented parts against the same requirements and compare their inclusion or exclusion, measures and conditions. Check rejection under a stricter budget and when a required rating is missing. Preserve the mission and catalogue during every query. & $\leq 1\%$ for matched numerical measures\newline Exact part eligibility, verdicts and unresolved states\newline Unchanged mission and catalogue\\
 MOP-12/FR-12 & For each mission, enter its documented EPS components with masses, occupied volume estimates and generic component allocations. Use BIRDS-4 component records \citep{shrestha2021birdssafety} and OreSat's 252~g solar and 416~g battery module entries \citep[Sec.~D.2]{oresat2016csli}. Compare component sums and remaining allocations with independent calculations. Check that nonnegative margins pass, and unknown contributions leave affected totals unresolved. & $\leq 1\%$ per mission\newline Exact verification results for margins and unknown contributions\\

@@ -1,9 +1,10 @@
 \chapter{EPS Case Study Evidence}\label{appendix:eps-case-studies}
 
-The results are organized by FR-12 and FR-14 to FR-20.
+The results are organized by FR-11, FR-12 and FR-14 to FR-20.
 The overview gives the greatest numerical deviation for each requirement and mission across all executed numerical comparisons.
 The detailed tables select representative quantities and identifiable published benchmarks.
-Repeated outputs, deliberately failing configurations and missing/invalid-input records are omitted.
+The COTS tables include stricter budgets and missing-rating controls.
+Repeated outputs and additional invalid-input records are omitted.
 No unexpected mismatch was observed.
 
 \section{Verification basis}
@@ -14,6 +15,8 @@ I identifies an independent calculation from the stated inputs.
 P identifies a published reference value.
 Displayed values use seven significant figures. Deviations use unrounded values.
 
+The following electrical baselines apply to FR-12 and FR-14 to FR-20.
+FR-11 uses the separate budget allocations and source conditions in Section~\ref{appendix:cots-case-results}.
 The electrical baselines are circular and Sun pointing.
 Both use $R_E=6378$ km, $\mu=398601$ km$^3$/s$^2$ and 365.25 days per year.
 Solar irradiance is 1367 W/m$^2$.
@@ -74,7 +77,7 @@ OreSat & receiver & [3.3,\allowbreak{} 0.04] & [1,\allowbreak{} 1] \\
 OreSat & payload & [5,\allowbreak{} 0.2] & [0.2,\allowbreak{} 0.1] \\
 \end{longtable}\endgroup
 
-Independent scalar references use decimal sums, products, ratios and linear interpolation.
+For FR-12 and FR-14 to FR-20, independent scalar references use decimal sums, products, ratios and linear interpolation.
 Products and ratios use 40 significant digits.
 The orbital reference solves Kepler's equation on 262144 uniform time samples and tests cylindrical Earth shadow in Cartesian coordinates.
 A 131072-sample calculation checks convergence.
@@ -97,6 +100,7 @@ Requirement & Calculation checked & BIRDS max. (\%) & OreSat max. (\%) \\ \midru
 Requirement & Calculation checked & BIRDS max. (\%) & OreSat max. (\%) \\ \midrule
 \endhead
 \bottomrule\endfoot
+FR-11 & Budget-derived COTS queries and source-qualified ratings & 0.0259 & 0.0177 \\
 FR-12 & Mass,\allowbreak{} volume and allocation margins & $<10^{-10}$ & $<10^{-10}$ \\
 FR-14 & Energy budgets and BOL/\allowbreak{}EOL sizing & 0.0259 & 0.315 \\
 FR-15 & Solar technology and battery chemistry & 0.000864 & 0.000731 \\
@@ -107,8 +111,11 @@ FR-19 & Matched DET and ideal MPPT paths & $<10^{-10}$ & 0.175 \\
 FR-20 & Normal extrema and trip comparisons & 0 & 0.0799 \\
 \end{longtable}\endgroup
 
+\input{fig/eps-case-studies/mop11-evidence}
+
 \subsection{FR-12: mass, volume and allocation margins}
 Published checks use six BIRDS cells at 27 g each and the historical OreSat battery and solar modules \citep{birds2021batteryverification,oresat2016csli}.
+Original excerpts appear in Figures~\ref{fig:source-battery-configurations} and~\ref{fig:source-oresat-mass}.
 The complete mass estimates add assumed EPS contributions.
 The values below list battery, solar array, conversion and distribution contributions, in that order.
 The OreSat mass case uses 2016 hardware, separate from its later electrical baseline.
@@ -301,6 +308,7 @@ BIRDS & Published 50 mA power label (W) (P) & 0.257 & 0.25615 \\
 OreSat & Published row 197 product (W) (P) & 1.654432 & 1.654432 \\
 \end{longtable}\endgroup
 
+Figure~\ref{fig:source-birds-curves} reproduces the original labelled curves used for these power-product checks.
 The BIRDS 1.575 W measured peak remains unreconstructed.
 The OreSat sweep lacks short/open-circuit endpoints and contains repeated voltages, so it supports power-product checks rather than a complete measured-curve benchmark.
 
@@ -359,3 +367,5 @@ OreSat & Published 30 W / 7.2 V current (A) (P) & 4.17 & 4.166667 \\
 
 Normal-case no-trip decisions and the strict comparisons at each declared threshold matched their references.
 The separate assumed OreSat charger endpoint remains 4.20 V per cell against the nominal 4.10 V trip threshold.
+
+\input{fig/eps-case-studies/source-figures}

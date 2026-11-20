@@ -74,32 +74,29 @@ Previous iterations were considered failures since the participants found the us
 Failed tests provided qualitative feedback with which to improve the GUI.
 However, a discussion of the evolution of the GUI and the user feedback is out of the scope of this document.
 
-\section{Catalog inspection}
-Table~\ref{tab:cots-catalog-counts} provides the counts of COTS components added to the L02 database, per category. Component counts satisfy MOP-10, and thus verify FR-10.
-Battery and solar array categories contain 13 and 12 products, respectively.
-The direct current (DC) converter categories, labeled DC/DC converter and regulator/converter, together contain 20 products.
-These catalog categories describe product functions.
+\section{Catalogue inspection}
+Table~\ref{tab:cots-catalog-counts} reports MOP-10 by the five generic CSRM EPS hardware types.
+The catalogue contains 147 distinct products, each with a source datasheet link.
+Combined products count once under each type they inherit.
+All five hardware types meet the minimum of five products, so MOP-10 is verified.
 
 \begin{table}[htbp]
 \centering
-\caption{COTS product counts by catalog category.}
+\caption{MOP-10 catalogue inspection by inherited CSRM hardware type. Counts overlap for combined products.}
 \label{tab:cots-catalog-counts}
 \small
-\begin{tabular}{lr@{\hspace{1.5em}}lr}
+\begin{tabular}{lrl}
 \toprule
-Category & Products & Category & Products \\
+CSRM hardware type & Distinct products & Minimum of five met? \\
 \midrule
-Battery & 13 & Solar array & 12 \\
-DC/DC converter & 17 & Regulator/converter & 3 \\
-Integrated EPS & 3 & Battery charger & 5 \\
-Battery protector & 6 & Ideal diode & 7 \\
-Load switch & 17 & Power circuit switch & 11 \\
-Current sensor & 13 & Temperature sensor & 11 \\
-Sensor & 3 & Heater & 6 \\
-Processor & 8 & Nonvolatile memory & 5 \\
-Real-time clock & 5 & Hardware component & 2 \\
+Battery & 15 & Yes \\
+SolarArray & 12 & Yes \\
+RegulatorAndConverter & 28 & Yes \\
+PowerCircuit & 78 & Yes \\
+ProcessorAndMemory & 19 & Yes \\
 \midrule
-\multicolumn{3}{l}{Total distinct products} & 147 \\
+Distinct products across all types & 147 & \\
+Products with a source datasheet link & 147 & \\
 \bottomrule
 \end{tabular}
 \end{table}
