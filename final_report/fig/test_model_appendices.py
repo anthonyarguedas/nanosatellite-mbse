@@ -150,7 +150,13 @@ class ModelAppendixTests(unittest.TestCase):
             if name in ("mission-workflow", "addition-lifecycle"):
                 arrows = root.findall('.//{*}path[@data-terminal-head="true"]')
                 self.assertTrue(arrows)
-                self.assertTrue(all(arrow.attrib["stroke-dasharray"] == "4 2.5" for arrow in arrows))
+                for arrow in arrows:
+                    if arrow.attrib.get("data-exchange") == "COTS request":
+                        self.assertNotIn("stroke-dasharray", arrow.attrib)
+                    elif arrow.attrib.get("data-exchange") == "COTS parameters":
+                        self.assertEqual(arrow.attrib["stroke-dasharray"], "1 3")
+                    else:
+                        self.assertEqual(arrow.attrib["stroke-dasharray"], "4 2.5")
         labels = " ".join(node.text or "" for node in ET.parse(OUT / "mission-workflow.svg").getroot().findall('.//{*}text'))
         for text in ("git switch", "Mission.add_import()", "Property.value", "mission.verify", "git diff", "git add", "git commit", "No", "Yes"):
             self.assertIn(text, labels)

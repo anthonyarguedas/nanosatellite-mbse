@@ -2,8 +2,10 @@
 
 Run with a Python environment containing Playwright:
   python model-appendix-figures.py --chromium /path/to/chrome-headless-shell
-Only temporary mission copies are opened in the GUI. Framework sources and the
-existing report figures are unchanged. Numerical examples are synthetic.
+Use --workflows-only to refresh the two annotated workflow diagrams without
+opening the GUI or changing the other figures. Only temporary mission copies
+are opened in the GUI. Framework sources are unchanged. Numerical examples
+are synthetic.
 """
 from __future__ import annotations
 
@@ -24,7 +26,7 @@ OUT = FIG / "model-appendices"
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(FIG))
 
-from diagram_style import Figure, INK, render_figure, require, sha
+from diagram_style import Figure, INK, LIGHT, render_figure, require, sha
 from framework.models import Battery, Component, EPS, PowerCircuit, Protection, RegulatorAndConverter, SolarArray, ProcessorAndMemory, Software
 from framework.models.elements import Subsystem
 from framework.models.objects import ModelObject
@@ -127,67 +129,171 @@ def processor_software_properties():
     return figure
 
 
-def action(figure, x, y, width, title, lines, height=80):
-    figure.rect(x, y, width, height)
-    figure.text(title, x + width / 2, y + 23, size=14, weight="bold", anchor="middle", width=width-20)
-    figure.lines(lines, x + width / 2, y + 45, size=13, leading=17, anchor="middle", width=width-20)
+COMPONENT_NAMES = {
+    "L01": "MBSE Workspace",
+    "L02": "COTS Database",
+    "L03": "Simulation and Analysis",
+    "L04": "Configuration Management",
+}
+
+
+def component_boundary(figure, component, x, y, width, height, *, label_x=None):
+    group = figure.el("g", data_component=component)
+    figure.rect(x, y, width, height, group, data_component_boundary=component)
+    figure.text(f"{component} {COMPONENT_NAMES[component]}",
+                x + 12 if label_x is None else label_x, y + 22,
+                size=14, weight="bold", parent=group)
+    return group
+
+
+def action(figure, parent, x, y, width, title, lines, requirements, *, height=84, prepares=()):
+    require(requirements, f"Missing framework requirements for {title}")
+    footer_y = y + height - 10 - (16 if prepares else 0)
+    require(y + 42 + 16 * (len(lines) - 1) <= footer_y - 16,
+            f"Action text overlaps its requirements: {title}")
+    group = figure.el("g", parent, data_step=title,
+                      data_requirements=",".join(requirements), data_prepares=",".join(prepares))
+    figure.rect(x, y, width, height, group)
+    figure.text(title, x + width / 2, y + 21, size=14, weight="bold",
+                anchor="middle", width=width - 20, parent=group)
+    figure.lines(lines, x + width / 2, y + 42, size=13, leading=16,
+                 anchor="middle", width=width - 20, parent=group)
+    figure.text(", ".join(requirements), x + width / 2, footer_y,
+                size=13, weight="bold", anchor="middle", width=width - 20,
+                parent=group, data_annotation="requirements")
+    if prepares:
+        figure.text("Prepares " + ", ".join(prepares), x + width / 2, y + height - 10,
+                    size=12, anchor="middle", width=width - 20,
+                    parent=group, data_annotation="prepares")
+    return group
 
 
 def flow():
-    figure = Figure("Representative mission modeling and Git workflow", 690, 690)
+    figure = Figure("Representative mission modeling and Git workflow", 760, 844)
     figure.text("Representative mission modeling and Git workflow", 8, 22, size=16, weight="bold")
-    action(figure, 20, 48, 300, "Open a working branch", ["git switch -c mission-study"], 64)
-    action(figure, 20, 144, 300, "Create the mission", ["Mission(): imports and default Orbit", "Supply orbit and lifetime inputs"], 82)
-    action(figure, 20, 258, 300, "Add CubeSat and subsystems", ["mission.add(CubeSatBus(...))", "Run automatic additions (next figure)"], 82)
-    action(figure, 20, 372, 300, "Tailor the mission", ["Edit properties, COTS, modes and interfaces", "Add or revise requirements and rationale"], 82)
-    action(figure, 20, 486, 300, "Link analysis scripts", ["Mission.add_import() and Property expressions", "Bind each named input and output field"], 82)
-    for start, end in ((112, 144), (226, 258), (340, 372), (454, 486)):
-        figure.arrow(f"M170 {start} V{end}", style="dashed")
-    figure.arrow("M170 568 V674 H680 V36 H515 V48", style="dashed")
-    action(figure, 365, 48, 300, "Execute analyses and verification", ["Property.value executes linked calculations", "mission.verify(mode=nominal)"], 82)
-    action(figure, 365, 162, 300, "Inspect results and rationale", ["Read values, failures, missing inputs and errors", "Check assumptions and assessment coverage"], 82)
-    figure.arrow("M515 130 V162", style="dashed")
-    figure.el("path", d="M515 278 L635 324 L515 370 L395 324 Z", fill="white", stroke=INK, stroke_width=".8")
-    figure.lines(["Satisfied with", "the assessment?"], 515, 319, leading=17,
-                 size=14, anchor="middle")
-    figure.arrow("M515 244 V278", style="dashed")
-    figure.arrow("M395 324 H341 V413 H320", style="dashed")
-    figure.text("No", 350, 313, size=13)
-    action(figure, 365, 420, 300, "Save and review mission Python", ["Save the configuration as mission.py", "git diff -- mission.py"], 82)
-    figure.arrow("M515 370 V420", style="dashed")
-    figure.text("Yes", 525, 397, size=13)
-    action(figure, 365, 544, 300, "Commit the reviewed decision", ["git add mission.py", 'git commit -m "Rationale for the EPS choice"'], 82)
-    figure.arrow("M515 502 V544", style="dashed")
+    branch = component_boundary(figure, "L04", 16, 44, 340, 112)
+    workspace = component_boundary(figure, "L01", 16, 180, 340, 500)
+    catalogue = component_boundary(figure, "L02", 404, 44, 340, 128)
+    analysis = component_boundary(figure, "L03", 404, 202, 340, 128)
+    assessment = component_boundary(figure, "L01", 404, 354, 340, 128)
+    engineer = figure.el("g", data_actor="Engineer")
+    figure.rect(404, 506, 340, 128, engineer, fill=LIGHT)
+    figure.text("Engineer review", 416, 528, size=14, weight="bold", parent=engineer)
+    configuration = component_boundary(figure, "L04", 16, 704, 728, 128, label_x=416)
+
+    action(figure, branch, 28, 76, 316, "Open a working branch",
+           ["git switch -c mission-study"], ("FR-09",), height=68)
+    action(figure, workspace, 28, 212, 316, "Create the mission",
+           ["Mission(): imports and default Orbit", "Supply orbit and lifetime inputs"], ("FR-13",))
+    action(figure, workspace, 28, 320, 316, "Add CubeSat and subsystems",
+           ["mission.add(CubeSatBus(...))", "Run automatic additions (next figure)"],
+           ("FR-01", "FR-02", "FR-05", "FR-07", "FR-08"))
+    action(figure, workspace, 28, 428, 316, "Tailor the mission",
+           ["Edit properties, modes and interfaces", "Revise requirements and rationale",
+            "Request COTS matches when needed"],
+           ("FR-01", "FR-02", "FR-06", "FR-11", "FR-13"), height=100)
+    action(figure, workspace, 28, 552, 316, "Link analysis scripts",
+           ["Mission.add_import() and Property expressions", "Bind named inputs and output fields",
+            "Retain methods and model dependencies"],
+           ("FR-02", "FR-03", "FR-04", "FR-08"), height=100)
+    action(figure, catalogue, 416, 76, 316, "Supply COTS parameters",
+           ["Select sourced component parameters", "Retain roles, conditions and units"], ("FR-10",))
+    action(figure, analysis, 416, 234, 316, "Execute selected EPS analyses",
+           ["Property.value executes linked calculations", "Use stored inputs and the selected mode"],
+           ("FR-12", "FR-14 to FR-20"))
+    action(figure, assessment, 416, 386, 316, "Verify and inspect results",
+           ["mission.verify(mode=nominal)", "Read values, failures, missing inputs and errors"],
+           ("FR-01", "FR-03", "FR-04", "FR-06", "FR-07", "FR-08"))
+    decision = figure.el("g", engineer, data_step="Review assessment coverage and assumptions",
+                         data_requirements="FR-03,FR-06", data_prepares="")
+    figure.el("path", decision, d="M574 542 L720 582 L574 622 L428 582 Z",
+              fill="white", stroke=INK, stroke_width=".8")
+    figure.lines(["Satisfied with", "the assessment?"], 574, 572,
+                 leading=16, size=14, anchor="middle", parent=decision)
+    figure.text("FR-03, FR-06", 574, 604, size=13, weight="bold", anchor="middle",
+                parent=decision, data_annotation="requirements")
+    action(figure, configuration, 28, 736, 316, "Save and review mission Python",
+           ["Save the configuration as mission.py", "git diff -- mission.py"], ("FR-04", "FR-09"))
+    action(figure, configuration, 416, 736, 316, "Commit the reviewed decision",
+           ["git add mission.py", 'git commit -m "Rationale for the EPS choice"'], ("FR-09",))
+
+    for start, end in ((144, 212), (296, 320), (404, 428), (528, 552)):
+        figure.arrow(f"M186 {start} V{end}", style="dashed")
+    figure.arrow("M28 602 H6 V34 H754 V276 H732", style="dashed")
+    figure.arrow("M574 318 V386", style="dashed")
+    figure.arrow("M574 470 V542", style="dashed")
+    figure.arrow("M428 582 H362 V510 H344", style="dashed")
+    figure.text("No", 374, 568, size=13)
+    figure.arrow("M574 622 V686 H186 V736", style="dashed")
+    figure.text("Yes", 584, 658, size=13)
+    figure.arrow("M344 778 H416", style="dashed")
+    figure.arrow("M344 462 H374 V118 H416", style="solid", data_exchange="COTS request")
+    figure.arrow("M416 144 H390 V486 H344", style="dotted", data_exchange="COTS parameters")
+    figure.text("COTS request", 370, 348, size=12, anchor="middle", transform="rotate(-90 370 348)")
+    figure.text("Parameters", 402, 348, size=12, anchor="middle", transform="rotate(-90 402 348)")
     return figure
 
 
 def initialization():
-    figure = Figure("Automatic method calls when a CubeSat is added", 690, 690)
+    figure = Figure("Automatic method calls when a CubeSat is added", 690, 772)
     figure.text("Automatic method calls when a CubeSat is added", 8, 22, size=16, weight="bold")
-    action(figure, 20, 48, 650, "ModelObject.add(child)",
-           ["Validate type, ownership, names and containment, then attach child", "Run validate_attachment() on the attached subtree"], 82)
-    action(figure, 20, 164, 650, "child.initialize()",
-           ["First addition calls create_defaults(), then create_requirements() for uninitialized owners"], 65)
-    figure.arrow("M345 130 V164", style="dashed")
-    figure.arrow("M345 229 V246 H175 V274", style="dashed")
-    action(figure, 20, 274, 310, "SpaceSegment.create_defaults()",
-           ["CubeSatBus adds its nine default subsystems", "Each self.add(subsystem) repeats add()", "EPS initialization is expanded on the right"], 100)
-    action(figure, 360, 274, 310, "Subsystem.create_defaults() on EPS",
+    workspace = component_boundary(figure, "L01", 16, 44, 658, 716)
+    action(figure, workspace, 28, 84, 634, "ModelObject.add(child)",
+           ["Validate type, ownership, names and containment, then attach child",
+            "Run validate_attachment() on the attached subtree"], ("FR-02",))
+    action(figure, workspace, 28, 200, 634, "child.initialize()",
+           ["First addition calls create_defaults()",
+            "Then create_requirements() for uninitialized owners"],
+           ("FR-01", "FR-02", "FR-07", "FR-08"))
+    figure.arrow("M345 168 V200", style="dashed")
+    figure.arrow("M345 284 V304 H179 V326", style="dashed")
+    action(figure, workspace, 28, 326, 302, "SpaceSegment.create_defaults()",
+           ["CubeSatBus adds its nine default subsystems", "Each self.add(subsystem) repeats add()",
+            "EPS initialization is expanded on the right"], ("FR-05",), height=100)
+    action(figure, workspace, 360, 326, 302, "Subsystem.create_defaults() on EPS",
            [", ".join(cls.__name__ for cls in EPS.default_components[:3]),
-            ", ".join(cls.__name__ for cls in EPS.default_components[3:]), "Each component runs initialize()"], 100)
-    figure.arrow("M330 324 H360", style="dashed")
-    action(figure, 360, 416, 310, "EPS.create_requirements()",
-           ["_sizing_requirement() and _voltage_requirement()", "add_requirement() creates 18 EPS requirements", "Requirement.add() attaches each condition"], 100)
-    figure.arrow("M515 374 V416", style="dashed")
-    action(figure, 20, 416, 310, "Complete CubeSat initialization",
-           ["Add the other default subsystems", "CubeSatBus.create_requirements()", "add_requirement(): mass_limit, volume_limit"], 100)
-    figure.arrow("M360 466 H330", style="dashed")
-    action(figure, 20, 558, 310, "Return the attached CubeSat",
-           ["mission.add(...) returns bus", "Repeated calls keep edits", "and do not recreate deleted items"], 100)
-    figure.arrow("M175 516 V558", style="dashed")
-    card(figure, 360, 558, 310, "Other additions use the same lifecycle",
-         ["ComponentMode: on and off states", "SpacecraftMode: OrbitAllocation", "Protection: no_trip requirement"], font=13, leading=17)
+            ", ".join(cls.__name__ for cls in EPS.default_components[3:]),
+            "Each component runs initialize()"], ("FR-05",), height=100)
+    figure.arrow("M330 376 H360", style="dashed")
+    action(figure, workspace, 360, 470, 302, "EPS.create_requirements()",
+           ["_sizing_requirement() and _voltage_requirement()",
+            "add_requirement(): 18 EPS-owned requirements", "Requirement.add(): stored verification conditions"],
+           ("FR-01", "FR-02", "FR-05", "FR-07", "FR-08"), height=116,
+           prepares=("FR-14", "FR-16 to FR-18"))
+    figure.arrow("M511 426 V470", style="dashed")
+    action(figure, workspace, 28, 470, 302, "Complete CubeSat initialization",
+           ["Add the other default subsystems", "CubeSatBus.create_requirements()",
+            "add_requirement(): mass_limit, volume_limit"],
+           ("FR-01", "FR-02", "FR-07", "FR-08"), height=116, prepares=("FR-12",))
+    figure.arrow("M360 528 H330", style="dashed")
+    action(figure, workspace, 28, 630, 302, "Return the attached CubeSat",
+           ["mission.add(...) returns bus", "Repeated calls keep edits",
+            "and do not recreate deleted items"], ("FR-01", "FR-02"), height=116)
+    figure.arrow("M179 586 V630", style="dashed")
+    action(figure, workspace, 360, 630, 302, "Other additions use the same lifecycle",
+           ["ComponentMode: on/off states (FR-13)", "SpacecraftMode: OrbitAllocation (FR-13)",
+            "Protection: no_trip requirement"],
+           ("FR-01", "FR-02", "FR-07", "FR-08", "FR-13"), height=116, prepares=("FR-20",))
     return figure
+
+
+def workflow_sources():
+    return {str(source.relative_to(ROOT)): sha(source) for source in (
+        Path(__file__), FIG / "diagram_style.py", FIG.parent / "requirements.tex",
+        FIG.parent / "logical.tex", FIG.parent / "framework-workflow-appendix.tex",
+        ROOT / "framework/models/eps.py")}
+
+
+def refresh_workflows():
+    """Rebuild only the workflow artifacts and retain other evidence records."""
+    path = OUT / "provenance.json"
+    manifest = json.loads(path.read_text()) if path.exists() else {}
+    manifest["workflow_sources"] = workflow_sources()
+    with tempfile.TemporaryDirectory(prefix="annotated-workflows-") as temporary:
+        for name, figure in (("mission-workflow", flow()), ("addition-lifecycle", initialization())):
+            manifest.setdefault("diagrams", {})[name] = render_figure(figure, OUT / name, Path(temporary))
+    path.write_text(json.dumps(manifest, indent=2) + "\n")
+    print("Refreshed mission-workflow and addition-lifecycle with FR annotations and logical component boundaries.")
 
 
 def check_property_coverage(figures):
@@ -334,9 +440,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--chromium")
     parser.add_argument("--python", default=sys.executable)
-    parser.add_argument("--components-only", action="store_true", help="Refresh component property figures without changing workflow or GUI panels")
+    scope = parser.add_mutually_exclusive_group()
+    scope.add_argument("--components-only", action="store_true", help="Refresh component property figures without changing workflow or GUI panels")
+    scope.add_argument("--workflows-only", action="store_true", help="Refresh annotated workflow diagrams without changing component figures or GUI panels")
     args = parser.parse_args()
     OUT.mkdir(exist_ok=True)
+    if args.workflows_only:
+        refresh_workflows()
+        return
     h = load_helpers()
     views = [overview(), component_properties(), solar_properties(), processor_software_properties()]
     inventory = check_property_coverage(views)
@@ -357,6 +468,7 @@ def main():
     views += [flow(), initialization()]
     names += ["mission-workflow", "addition-lifecycle"]
     manifest = {"basis": "Six CSRM categories with actual Python property declarations; synthetic live GUI evidence",
+                "workflow_sources": workflow_sources(),
                 "properties": inventory, "sources": {str(path.relative_to(ROOT)): sha(path) for path in (
                     Path(__file__), OUT / "mission-example.py", FIG / "diagram_style.py", FIG / "design-proposal-figures.py",
                     FIG / "code-highlighting.tex",

@@ -8,7 +8,7 @@ The synthetic example demonstrates selected passing checks while leaving other m
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.94\linewidth]{fig/model-appendices/mission-workflow.pdf}
-\caption[Representative mission modeling and Git workflow.]{A representative use of the Python models, also available through the GUI. Dashed arrows show control flow. The return path revises the mission, its inputs or its requirements before executing the stored analyses again. Satisfaction is an engineering review decision that includes assessment coverage and assumptions. The Git operations are performed by the engineer after saving the mission, and the commit message records the rationale for the accepted configuration.}
+\caption[Representative mission modeling and Git workflow.]{Outer boxes identify the logical components in Table~\ref{tab:logical-responsibilities}. FR identifiers show requirement involvement, with L03 requirements applying to the selected analyses. Dashed arrows show control flow. Solid and dotted arrows carry COTS requests and parameters. The gray box shows the engineer's review of assessment coverage and assumptions. The return path revises the mission, its inputs or its requirements. The Python models are also available through the GUI. After saving the mission, the engineer performs the Git operations and records the accepted configuration's rationale in the commit message.}
 \label{fig:mission-modeling-workflow}
 \end{figure}
 \clearpage
@@ -16,7 +16,7 @@ The synthetic example demonstrates selected passing checks while leaving other m
 \begin{figure}[p]
 \centering
 \includegraphics[width=\linewidth]{fig/model-appendices/addition-lifecycle.pdf}
-\caption[Method calls and automatic additions during mission construction.]{Expansion of the CubeSat addition in Figure~\ref{fig:mission-modeling-workflow}. Dashed arrows show the successful first-addition path through the shared add() and initialize() methods. Nested additions use the same methods. EPS initialization adds four numerical component defaults and 18 EPS-owned requirements. CubeSat initialization also creates the mass and volume requirements. The lower right box identifies the hooks used by other illustrated additions. An attachment error removes the newly attached child and newly generated requirements. Restoration can suppress initialization, and initialization flags preserve subsequent edits and deliberate deletions.}
+\caption[Method calls and automatic additions during mission construction.]{Expansion of the CubeSat addition in Figure~\ref{fig:mission-modeling-workflow}. All steps belong to L01 MBSE Workspace. FR identifiers show requirement involvement. Labels beginning with ``Prepares'' identify L03 analyses whose inputs or verification conditions are created here and evaluated later. Dashed arrows show the successful first-addition path through add() and initialize(). Nested additions use the same methods. EPS initialization adds six component defaults and 18 EPS-owned requirements. CubeSat initialization creates mass and volume requirements. The lower right box shows other addition hooks. Attachment errors remove the newly attached child and newly generated requirements. Restoration can suppress initialization, and initialization flags preserve edits and deliberate deletions.}
 \label{fig:mission-addition-lifecycle}
 \end{figure}
 \clearpage

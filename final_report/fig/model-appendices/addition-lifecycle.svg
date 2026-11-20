@@ -1,65 +1,94 @@
 <?xml version='1.0' encoding='utf-8'?>
-<svg xmlns="http://www.w3.org/2000/svg" width="690pt" height="690pt" viewBox="0 0 690 690" role="img" aria-label="Automatic method calls when a CubeSat is added">
+<svg xmlns="http://www.w3.org/2000/svg" width="690pt" height="772pt" viewBox="0 0 690 772" role="img" aria-label="Automatic method calls when a CubeSat is added">
   <title>Automatic method calls when a CubeSat is added</title>
-  <rect x="0" y="0" width="690" height="690" fill="white" stroke="none" stroke-width=".8" />
+  <rect x="0" y="0" width="690" height="772" fill="white" stroke="none" stroke-width=".8" />
   <defs>
     <marker id="arrow" viewBox="0 0 12 9" refX="12" refY="4.5" markerWidth="12" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto" overflow="visible">
       <path d="M0 0 L12 4.5 L0 9 Z" fill="#111111" />
     </marker>
   </defs>
   <text x="8" y="22" font-family="Times New Roman, Times, serif" font-size="16" font-weight="bold" text-anchor="start" fill="#111111">Automatic method calls when a CubeSat is added</text>
-  <rect x="20" y="48" width="650" height="82" fill="white" stroke="#111111" stroke-width=".8" />
-  <text x="345.0" y="71" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">ModelObject.add(child)</text>
-  <text x="345.0" y="93" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Validate type, ownership, names and containment, then attach child</text>
-  <text x="345.0" y="110" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Run validate_attachment() on the attached subtree</text>
-  <rect x="20" y="164" width="650" height="65" fill="white" stroke="#111111" stroke-width=".8" />
-  <text x="345.0" y="187" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">child.initialize()</text>
-  <text x="345.0" y="209" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">First addition calls create_defaults(), then create_requirements() for uninitialized owners</text>
-  <path d="M345 130 V164" fill="none" stroke="#111111" stroke-width="1.2" data-end-marker="url(#arrow)" data-terminal-head="true" stroke-linecap="round" stroke-dasharray="4 2.5" id="arrow-1" />
-  <path d="M345 229 V246 H175 V274" fill="none" stroke="#111111" stroke-width="1.2" data-end-marker="url(#arrow)" data-terminal-head="true" stroke-linecap="round" stroke-dasharray="4 2.5" id="arrow-2" />
-  <rect x="20" y="274" width="310" height="100" fill="white" stroke="#111111" stroke-width=".8" />
-  <text x="175.0" y="297" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">SpaceSegment.create_defaults()</text>
-  <text x="175.0" y="319" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">CubeSatBus adds its nine default subsystems</text>
-  <text x="175.0" y="336" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Each self.add(subsystem) repeats add()</text>
-  <text x="175.0" y="353" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">EPS initialization is expanded on the right</text>
-  <rect x="360" y="274" width="310" height="100" fill="white" stroke="#111111" stroke-width=".8" />
-  <text x="515.0" y="297" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">Subsystem.create_defaults() on EPS</text>
-  <text x="515.0" y="319" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">self.add() for Battery, SolarArray,</text>
-  <text x="515.0" y="336" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">RegulatorAndConverter and PowerCircuit</text>
-  <text x="515.0" y="353" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Each component runs initialize()</text>
-  <path d="M330 324 H360" fill="none" stroke="#111111" stroke-width="1.2" data-end-marker="url(#arrow)" data-terminal-head="true" stroke-linecap="round" stroke-dasharray="4 2.5" id="arrow-3" />
-  <rect x="360" y="416" width="310" height="100" fill="white" stroke="#111111" stroke-width=".8" />
-  <text x="515.0" y="439" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">EPS.create_requirements()</text>
-  <text x="515.0" y="461" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">_sizing_requirement() and _voltage_requirement()</text>
-  <text x="515.0" y="478" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">add_requirement() creates 18 EPS requirements</text>
-  <text x="515.0" y="495" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Requirement.add() attaches each condition</text>
-  <path d="M515 374 V416" fill="none" stroke="#111111" stroke-width="1.2" data-end-marker="url(#arrow)" data-terminal-head="true" stroke-linecap="round" stroke-dasharray="4 2.5" id="arrow-4" />
-  <rect x="20" y="416" width="310" height="100" fill="white" stroke="#111111" stroke-width=".8" />
-  <text x="175.0" y="439" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">Complete CubeSat initialization</text>
-  <text x="175.0" y="461" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Add the other default subsystems</text>
-  <text x="175.0" y="478" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">CubeSatBus.create_requirements()</text>
-  <text x="175.0" y="495" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">add_requirement(): mass_limit, volume_limit</text>
-  <path d="M360 466 H330" fill="none" stroke="#111111" stroke-width="1.2" data-end-marker="url(#arrow)" data-terminal-head="true" stroke-linecap="round" stroke-dasharray="4 2.5" id="arrow-5" />
-  <rect x="20" y="558" width="310" height="100" fill="white" stroke="#111111" stroke-width=".8" />
-  <text x="175.0" y="581" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">Return the attached CubeSat</text>
-  <text x="175.0" y="603" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">mission.add(...) returns bus</text>
-  <text x="175.0" y="620" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Repeated calls keep edits</text>
-  <text x="175.0" y="637" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">and do not recreate deleted items</text>
-  <path d="M175 516 V558" fill="none" stroke="#111111" stroke-width="1.2" data-end-marker="url(#arrow)" data-terminal-head="true" stroke-linecap="round" stroke-dasharray="4 2.5" id="arrow-6" />
-  <g data-card="Other additions use the same lifecycle">
-    <rect x="360" y="558" width="310" height="89" fill="white" stroke="#111111" stroke-width=".8" />
-    <text x="370" y="579" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="start" fill="#111111">Other additions use the same lifecycle</text>
-    <path d="M360 589 H670" stroke="#111111" stroke-width=".6" />
-    <text x="370" y="608" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="start" fill="#111111">ComponentMode: on and off states</text>
-    <text x="370" y="625" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="start" fill="#111111">SpacecraftMode: OrbitAllocation</text>
-    <text x="370" y="642" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="start" fill="#111111">Protection: no_trip requirement</text>
+  <g data-component="L01">
+    <rect x="16" y="44" width="658" height="716" fill="white" stroke="#111111" stroke-width=".8" data-component-boundary="L01" />
+    <text x="28" y="66" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="start" fill="#111111">L01 MBSE Workspace</text>
+    <g data-step="ModelObject.add(child)" data-requirements="FR-02" data-prepares="">
+      <rect x="28" y="84" width="634" height="84" fill="white" stroke="#111111" stroke-width=".8" />
+      <text x="345.0" y="105" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">ModelObject.add(child)</text>
+      <text x="345.0" y="126" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Validate type, ownership, names and containment, then attach child</text>
+      <text x="345.0" y="142" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Run validate_attachment() on the attached subtree</text>
+      <text x="345.0" y="158" font-family="Times New Roman, Times, serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#111111" data-annotation="requirements">FR-02</text>
+    </g>
+    <g data-step="child.initialize()" data-requirements="FR-01,FR-02,FR-07,FR-08" data-prepares="">
+      <rect x="28" y="200" width="634" height="84" fill="white" stroke="#111111" stroke-width=".8" />
+      <text x="345.0" y="221" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">child.initialize()</text>
+      <text x="345.0" y="242" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">First addition calls create_defaults()</text>
+      <text x="345.0" y="258" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Then create_requirements() for uninitialized owners</text>
+      <text x="345.0" y="274" font-family="Times New Roman, Times, serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#111111" data-annotation="requirements">FR-01, FR-02, FR-07, FR-08</text>
+    </g>
+    <g data-step="SpaceSegment.create_defaults()" data-requirements="FR-05" data-prepares="">
+      <rect x="28" y="326" width="302" height="100" fill="white" stroke="#111111" stroke-width=".8" />
+      <text x="179.0" y="347" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">SpaceSegment.create_defaults()</text>
+      <text x="179.0" y="368" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">CubeSatBus adds its nine default subsystems</text>
+      <text x="179.0" y="384" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Each self.add(subsystem) repeats add()</text>
+      <text x="179.0" y="400" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">EPS initialization is expanded on the right</text>
+      <text x="179.0" y="416" font-family="Times New Roman, Times, serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#111111" data-annotation="requirements">FR-05</text>
+    </g>
+    <g data-step="Subsystem.create_defaults() on EPS" data-requirements="FR-05" data-prepares="">
+      <rect x="360" y="326" width="302" height="100" fill="white" stroke="#111111" stroke-width=".8" />
+      <text x="511.0" y="347" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">Subsystem.create_defaults() on EPS</text>
+      <text x="511.0" y="368" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Battery, SolarArray, RegulatorAndConverter</text>
+      <text x="511.0" y="384" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">PowerCircuit, ProcessorAndMemory, Software</text>
+      <text x="511.0" y="400" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Each component runs initialize()</text>
+      <text x="511.0" y="416" font-family="Times New Roman, Times, serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#111111" data-annotation="requirements">FR-05</text>
+    </g>
+    <g data-step="EPS.create_requirements()" data-requirements="FR-01,FR-02,FR-05,FR-07,FR-08" data-prepares="FR-14,FR-16 to FR-18">
+      <rect x="360" y="470" width="302" height="116" fill="white" stroke="#111111" stroke-width=".8" />
+      <text x="511.0" y="491" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">EPS.create_requirements()</text>
+      <text x="511.0" y="512" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">_sizing_requirement() and _voltage_requirement()</text>
+      <text x="511.0" y="528" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">add_requirement(): 18 EPS-owned requirements</text>
+      <text x="511.0" y="544" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Requirement.add(): stored verification conditions</text>
+      <text x="511.0" y="560" font-family="Times New Roman, Times, serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#111111" data-annotation="requirements">FR-01, FR-02, FR-05, FR-07, FR-08</text>
+      <text x="511.0" y="576" font-family="Times New Roman, Times, serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#111111" data-annotation="prepares">Prepares FR-14, FR-16 to FR-18</text>
+    </g>
+    <g data-step="Complete CubeSat initialization" data-requirements="FR-01,FR-02,FR-07,FR-08" data-prepares="FR-12">
+      <rect x="28" y="470" width="302" height="116" fill="white" stroke="#111111" stroke-width=".8" />
+      <text x="179.0" y="491" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">Complete CubeSat initialization</text>
+      <text x="179.0" y="512" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Add the other default subsystems</text>
+      <text x="179.0" y="528" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">CubeSatBus.create_requirements()</text>
+      <text x="179.0" y="544" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">add_requirement(): mass_limit, volume_limit</text>
+      <text x="179.0" y="560" font-family="Times New Roman, Times, serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#111111" data-annotation="requirements">FR-01, FR-02, FR-07, FR-08</text>
+      <text x="179.0" y="576" font-family="Times New Roman, Times, serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#111111" data-annotation="prepares">Prepares FR-12</text>
+    </g>
+    <g data-step="Return the attached CubeSat" data-requirements="FR-01,FR-02" data-prepares="">
+      <rect x="28" y="630" width="302" height="116" fill="white" stroke="#111111" stroke-width=".8" />
+      <text x="179.0" y="651" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">Return the attached CubeSat</text>
+      <text x="179.0" y="672" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">mission.add(...) returns bus</text>
+      <text x="179.0" y="688" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Repeated calls keep edits</text>
+      <text x="179.0" y="704" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">and do not recreate deleted items</text>
+      <text x="179.0" y="736" font-family="Times New Roman, Times, serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#111111" data-annotation="requirements">FR-01, FR-02</text>
+    </g>
+    <g data-step="Other additions use the same lifecycle" data-requirements="FR-01,FR-02,FR-07,FR-08,FR-13" data-prepares="FR-20">
+      <rect x="360" y="630" width="302" height="116" fill="white" stroke="#111111" stroke-width=".8" />
+      <text x="511.0" y="651" font-family="Times New Roman, Times, serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#111111">Other additions use the same lifecycle</text>
+      <text x="511.0" y="672" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">ComponentMode: on/off states (FR-13)</text>
+      <text x="511.0" y="688" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">SpacecraftMode: OrbitAllocation (FR-13)</text>
+      <text x="511.0" y="704" font-family="Times New Roman, Times, serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#111111">Protection: no_trip requirement</text>
+      <text x="511.0" y="720" font-family="Times New Roman, Times, serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#111111" data-annotation="requirements">FR-01, FR-02, FR-07, FR-08, FR-13</text>
+      <text x="511.0" y="736" font-family="Times New Roman, Times, serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#111111" data-annotation="prepares">Prepares FR-20</text>
+    </g>
   </g>
+  <path d="M345 168 V200" fill="none" stroke="#111111" stroke-width="1.2" data-end-marker="url(#arrow)" data-terminal-head="true" stroke-linecap="round" stroke-dasharray="4 2.5" id="arrow-1" />
+  <path d="M345 284 V304 H179 V326" fill="none" stroke="#111111" stroke-width="1.2" data-end-marker="url(#arrow)" data-terminal-head="true" stroke-linecap="round" stroke-dasharray="4 2.5" id="arrow-2" />
+  <path d="M330 376 H360" fill="none" stroke="#111111" stroke-width="1.2" data-end-marker="url(#arrow)" data-terminal-head="true" stroke-linecap="round" stroke-dasharray="4 2.5" id="arrow-3" />
+  <path d="M511 426 V470" fill="none" stroke="#111111" stroke-width="1.2" data-end-marker="url(#arrow)" data-terminal-head="true" stroke-linecap="round" stroke-dasharray="4 2.5" id="arrow-4" />
+  <path d="M360 528 H330" fill="none" stroke="#111111" stroke-width="1.2" data-end-marker="url(#arrow)" data-terminal-head="true" stroke-linecap="round" stroke-dasharray="4 2.5" id="arrow-5" />
+  <path d="M179 586 V630" fill="none" stroke="#111111" stroke-width="1.2" data-end-marker="url(#arrow)" data-terminal-head="true" stroke-linecap="round" stroke-dasharray="4 2.5" id="arrow-6" />
   <g data-layer="arrowheads" pointer-events="none">
-    <path d="M345 163 V164" fill="none" stroke="#111111" stroke-width="1.2" marker-end="url(#arrow)" data-arrow-source="arrow-1" />
-    <path d="M175 273 V274" fill="none" stroke="#111111" stroke-width="1.2" marker-end="url(#arrow)" data-arrow-source="arrow-2" />
-    <path d="M359 324 H360" fill="none" stroke="#111111" stroke-width="1.2" marker-end="url(#arrow)" data-arrow-source="arrow-3" />
-    <path d="M515 415 V416" fill="none" stroke="#111111" stroke-width="1.2" marker-end="url(#arrow)" data-arrow-source="arrow-4" />
-    <path d="M331 466 H330" fill="none" stroke="#111111" stroke-width="1.2" marker-end="url(#arrow)" data-arrow-source="arrow-5" />
-    <path d="M175 557 V558" fill="none" stroke="#111111" stroke-width="1.2" marker-end="url(#arrow)" data-arrow-source="arrow-6" />
+    <path d="M345 199 V200" fill="none" stroke="#111111" stroke-width="1.2" marker-end="url(#arrow)" data-arrow-source="arrow-1" />
+    <path d="M179 325 V326" fill="none" stroke="#111111" stroke-width="1.2" marker-end="url(#arrow)" data-arrow-source="arrow-2" />
+    <path d="M359 376 H360" fill="none" stroke="#111111" stroke-width="1.2" marker-end="url(#arrow)" data-arrow-source="arrow-3" />
+    <path d="M511 469 V470" fill="none" stroke="#111111" stroke-width="1.2" marker-end="url(#arrow)" data-arrow-source="arrow-4" />
+    <path d="M331 528 H330" fill="none" stroke="#111111" stroke-width="1.2" marker-end="url(#arrow)" data-arrow-source="arrow-5" />
+    <path d="M179 629 V630" fill="none" stroke="#111111" stroke-width="1.2" marker-end="url(#arrow)" data-arrow-source="arrow-6" />
   </g>
 </svg>
