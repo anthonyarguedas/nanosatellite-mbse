@@ -16,7 +16,7 @@ Interfaces are modeled as component properties that depend on the properties of 
 Each component can be assigned operation modes annotated per state with voltage, current and a power expression equal to their product (Figure~\ref{fig:eps-modes-states}).
 Each component type is given a set of properties from which requirements and constraints can be formulated (Figures~\ref{fig:eps-component-properties}--\ref{fig:processor-software-properties}).
 Furthermore, the generic component types are assigned certain generic requirements upon being added to the mission model, as per Table~\ref{tab:automatic-eps-requirements}.
-100\% of these requirements arelinked to an architecture element, and thus the third objective of this project is fulfilled.
+100\% of these requirements are linked to an architecture element, and thus the third objective of this project is fulfilled.
 
 Table~\ref{tab:automatic-eps-verification} documents the verification methods, pass/fail criteria, and required evidence for 100\% of the automatically assigned EPS requirements.
 This maintains traceability from requirement to verification means to result and fulfills the fourth objective of this project.
@@ -26,12 +26,23 @@ The acceptance and performance metrics used for evaluation are reported.
 As explained in Subsection~\ref{subsection:framework-mops}, the missions contrast a traditional nanosatellite EPS with an EPS designed for high autonomy.
 This fulfills the fifth and final objective of this project, as well as the third.
 
-The results suggested that the outputs of the analyses bundled with the framework were accurate with respect to the original BIRDS-4 and OreSat values calculated using the same inputs. This implies that the parametric requirements modeled by the framework don't just link quantities but represent real EPS engineering knowledge.
-Cross-checking published power budgets with hardware documentation during the BIRDS-4 and OreSat case studies revealed unexplained discrepancies, suggesting possible evidence fragmentation despite the missions' open source commitments.
-User tests then motivated the conclusion that, for controlled individual tasks, stakeholders can now manage parametric requirements, assess the impact of a requirement change, and reproduce analyses much faster than before by leveraging the framework.
+The BIRDS-4 and OreSat numerical comparisons met the 1\% acceptance tolerance for every assessed requirement, with a maximum deviation of 0.331\% from published values (Section~\ref{section:eps-case-study-results}).
+Integer counts and discrete outcomes matched exactly.
 
-Continued adoption and improvement of the framework therefore appears to be a feasible way to mitigate the core problem of evidence fragmentation that motivated this project, and in turn produces positive economic value.
-This in turn strengthens the systems engineering capabilities at ASCEND as they look forward to applying to the next cohort of the CUBICS initiative.
+The framework's COTS component database contains 147 distinct products with source datasheet links and exceeds the minimum of five products in each of the five generic CSRM EPS hardware types (Table~\ref{tab:cots-catalog-counts}).
+The COTS recommendation tests agreed with independent references, including rejection of parts under stricter budgets and exclusion of parts with missing required ratings.
+Cross-checking published power budgets with hardware documentation revealed unexplained discrepancies in BIRDS-4 and OreSat, suggesting evidence fragmentation in the public sources reviewed.
+This reinforces the need to maintain traceable links between requirements, hardware revisions and analysis results, including in open source missions.
+
+The user tests covered requirement management, retrieval and reproduction of analyses, change impact assessment and saving mission inputs in a prepared mission environment (Section~\ref{section:user-trial-results}).
+After practice and GUI improvements, the PhD student and club member completed all assigned tasks correctly in 32~min 37.44~s and 34~min 14.84~s, respectively.
+Both totals were within the 60~min allocation matching their weekly meeting, and every task met the 6~min limit.
+These results support reviewing requirement changes and updated EPS evidence within one weekly meeting.
+Quantifying improvement over the previous workflow requires a controlled comparison.
+
+The base economic case projects 2084 net released personnel hours during mission operations and an economic net present value of approximately CA\$12661 at a 7\% annual real discount rate (Section~\ref{section:economic-analysis}).
+The cash net present value is $-$CA\$6285.77.
+These results support continued adoption at ASCEND under those assumptions and development of its systems engineering capability for the next CUBICS cohort.
 
 Future work should expand the COTS database with as many components and parameters as possible and useful, covering subsystems other than EPS.
 In particular, time-dependent properties would enable analyses much more detailed than those currently implemented using only time-independent parameters.
