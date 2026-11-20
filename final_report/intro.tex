@@ -10,7 +10,7 @@
 \label{chp:intro}
 
 A student club at the École de technologie supérieure (ÉTS) in Montréal reused a legacy battery pack in the CubeSat-format payloads it built for rocketry competitions. The original sizing calculations had been lost.
-The students verified payload power requirements only after fabrication: they connected all loads and repeated mission operations until the stored energy was depleted.
+The students verified payload power requirements only after fabrication, for which they connected all loads and repeated mission operations until the stored energy was depleted.
 They reported battery runtimes several times longer than the one operating cycle required by the competition rules and considered the pack oversized. The test established that the payload could complete a cycle, but the basis for choosing that battery capacity was still missing.
 
 Researchers at ASCEND, a research group at ÉTS led by Dr. Jesús González Llorente, reported a related problem. Their nanosatellite electrical power system (EPS) design had been in progress for nine months.
@@ -35,7 +35,7 @@ To develop an MBSE framework for early justification of nanosatellite EPS throug
 
 Following Buruso et al.~\cite{buruso2026modelbased}, an MBSE framework integrates methods, modeling languages, and tools across the relevant lifecycle phases.
 This project used the Object-Oriented Systems Engineering Method (OOSEM) to derive framework requirements from stakeholder needs, define measures of performance (MOPs), and compare candidate architectures.
-The loss of the battery sizing calculations motivated requirement FR-04 in Table~\ref{tab:framework-requirements}: ``The framework shall provide the inputs, dependencies and instructions to reconstruct all analyses of a mission.''
+For example, the loss of the battery sizing calculations motivated requirement FR-04 in Table~\ref{tab:framework-requirements}: ``The framework shall provide the inputs, dependencies and instructions to reconstruct all analyses of a mission.''
 The delay in assessing design changes motivated FR-06: ``The framework shall identify impacts of a proposed mission, requirement, component, or model change on requirements and EPS design.''
 
 The secondary objectives of this project are: (1) to characterize the needs, requirements, interfaces and technical criteria of nanosatellite EPS; (2) to define the operational flow of modeling, analysis, and evidence management of the MBSE framework; (3) to model a generic EPS architecture with functions, logical and physical components, interfaces, modes and states, and requirements; (4) to characterize early EPS verification and validation within the EPS framework; (5) to evaluate the framework on two contrasting EPS case studies.
@@ -50,8 +50,8 @@ Framework verification combined catalogue inspection, two mission case studies, 
 The BIRDS-4 and OreSat case studies used published power budgets and component data to check commercial off-the-shelf (COTS) recommendations and EPS calculations against published values and independently calculated references.
 Every numerical comparison in both case studies met the 1\% acceptance tolerance (Section~\ref{section:eps-case-study-results}). The largest deviations were 0.331\% for BIRDS-4 and 0.315\% for OreSat, both in comparisons with published solar power values.
 
-The one-hour weekly meeting provided the time budget for the user tests. A doctoral candidate from ASCEND and a student club undergraduate each performed the ten tasks in Table~\ref{tab:framework-mop-protocols}. After practice, both completed every task correctly in less than 6~min per task. Their total times were approximately 33 and 34~min, respectively.
+The user tests were allocated a time budget of 60 minutes inspired by the observed one-hour weekly meetings at ASCEND. A doctoral candidate from ASCEND and a student club undergraduate each performed the ten tasks in Table~\ref{tab:framework-mop-protocols}. After practice, both completed every task correctly in less than 6~min per task. Their total times were approximately 33 and 34~min, respectively.
 
-Chapter~\ref{ch:marco} presents the systems engineering background and the guidance applicable to the proposed mission. Chapter~\ref{ch:solucion} traces stakeholder needs to framework requirements and compares candidate architectures. Chapter~\ref{ch:design-proposal} describes the selected architecture and its EPS analyses. Chapter~\ref{ch:results} reports the verification results and economic analysis. Chapter~\ref{ch:conclusions} assesses the project objectives and discusses future work.
+The remainder of this document is organized as follows: Chapter~\ref{ch:marco} presents the systems engineering background plus normative and academic sources that inform the proposed framework. Chapter~\ref{ch:solucion} traces stakeholder needs to framework requirements and compares candidate architectures. Chapter~\ref{ch:design-proposal} describes the selected architecture and how it implements EPS analyses. Chapter~\ref{ch:results} reports the verification results and economic analysis. Chapter~\ref{ch:conclusions} assesses the project objectives, reflects on verification results, and discusses future work.
 
 The project's main engineering contribution is a publicly available Python framework \cite{repo} that keeps EPS requirements, component choices, and supporting calculations in one model and uses Git to retain their revisions.
