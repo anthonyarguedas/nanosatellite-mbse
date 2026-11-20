@@ -4,9 +4,9 @@
 \subsection{Logical Component Alternatives}
 Logical components break down the required framework behavior into four building blocks.
 Table~\ref{tab:framework-physical-alternatives} gives five alternatives to implement each logical component. For each alternative, a concise description of how it implements each logical component is given.
-Valispace Requirements Manager and CATIA Stimulus were studied as dedicated MBSE alternatives at the request of the stakeholders, and are considered for all logical components given that they are integrated solutions with ample functionality.
-An analysis of Microsoft Excel, Python, MATLAB, and GitHub was also requested for the applicable logical components.
-The rest of the alternatives were chosen from a review of the state of the art in MBSE, consistent with the focus stated in the main objective of this project.
+Valispace Requirements Manager and Computer-Aided Three-Dimensional Interactive Application (CATIA) Stimulus were studied as dedicated MBSE alternatives at the request of the stakeholders, and are considered for all logical components given that they are integrated solutions with ample functionality.
+An analysis of Microsoft Excel, Python, the matrix laboratory (MATLAB) environment, and GitHub was also requested for the applicable logical components.
+The Concurrent Model-based Engineering Tool (COMET) and the remaining alternatives were chosen from a review of the state of the art in MBSE, consistent with the main objective of this project.
 
 {\small
 \setlength{\tabcolsep}{4pt}
@@ -25,7 +25,7 @@ The rest of the alternatives were chosen from a review of the state of the art i
 \bottomrule
 \endfoot
 \multicolumn{3}{@{}l@{}}{\textbf{L01 MBSE Workspace}}\\*
-L01-A & Valispace Requirements Manager & Represent the mission, CubeSat and subsystems as linked blocks, requirements and computed parameters in Altium Requirements Portal \citep{altiumrequirementsportaldocs}. Tailor properties, modes, interfaces, requirements and verification conditions with custom mappings as needed. A custom representational state transfer (REST) or Python application programming interface (API) connector binds L03 analysis inputs and outputs, refreshes requirement checks and displays numerical results for review \citep{altiumrequirementsportalapi}. Add EPS selection and activity rules alongside Engineering Assistant artificial intelligence (AI) skills \citep{altiumengineeringassistant,altiumrequirementsportalskills}. \\
+L01-A & Valispace Requirements Manager & Represent the mission, CubeSat and subsystems as linked blocks, requirements and computed parameters in Altium Requirements Portal \citep{altiumrequirementsportaldocs}. Tailor properties, modes, interfaces, requirements and verification conditions with custom mappings as needed. A custom representational state transfer (REST) or Python API connector binds L03 analysis inputs and outputs, refreshes requirement checks and displays numerical results for review \citep{altiumrequirementsportalapi}. Add EPS selection and activity rules alongside Engineering Assistant artificial intelligence (AI) skills \citep{altiumengineeringassistant,altiumrequirementsportalskills}. \\
 L01-B & CATIA Stimulus & Use an external editor to define the mission, CubeSat and subsystem hierarchy, and tailor properties, modes, interfaces and requirements. A custom connector binds selected L03 analyses and their inputs and outputs to this model. Stimulus checks formalized behavioral requirements and displays violations and traces \citep{dassaultstimulus,dassaultstimuluseducation}. The external editor links numerical results to verification conditions for inspection and adds EPS component selection and activity guidance. \\
 L01-C & Microsoft Excel & Create linked worksheets for the mission, CubeSat, subsystems and EPS components. Tailor properties, modes, interfaces and requirements through structured tables. Custom macros bind selected L03 scripts to input and output cells, request analyses and retain result links. Formulas evaluate verification conditions, and result sheets expose measures and failed or unresolved checks for review. Add macros for EPS component selection and activity guidance. \\
 L01-D & Python & Use a custom editor to create mission, CubeSat, subsystem and EPS component instances from Python classes. Tailor properties, modes, interfaces and requirements, and bind selected L03 functions to model inputs and result properties. Evaluate verification conditions and display measures, failures and unresolved inputs for review and revision. Add input checks, EPS component selection and activity rules. Nanospace provides a model exchange precedent \citep{luccisano2024formalization,review-0340}, although its code is unavailable. \\
@@ -59,10 +59,10 @@ L04-E & Nanospace & Extend Nanospace's shared engineering database and dependenc
 Valispace Requirements Manager (C1) and CATIA Stimulus (C2) were compared as integrated solutions spanning all logical components. Two other candidates were synthesized by combining different alternatives: Version-controlled Python (C3) consists of using native Python for L01-L03, and GitHub for L04, while Version-controlled Excel with Python adapters (C4) uses Microsoft Excel for L01-L02, Python for L03, and GitHub for L04. A fifth candidate representing the as-is capabilities (C5) was introduced to serve as the baseline.
 
 The candidates were compared based on a set of weighted criteria, which have value zero if they match the baseline, +1 to +2 if they improve them, and -1 to -2 if they worsen them. Greater is better.
-These criteria are not Measures of Performance, as all considered candidates are assumed to be capable of attaining the target MOP values, but merely a decision-making aid informed by the stakeholder analysis.
+These criteria support candidate selection based on the stakeholder analysis. All considered candidates are assumed capable of attaining the target MOP values.
 The criteria were development complexity (20\%), cost per year (30\%), learning curve (30\%), evidence centralization (10\%) and extensibility (10\%).
 
-\subsection{Candidate comparison}
+\subsection{Candidate Comparison}
 
 Table~\ref{tab:framework-candidate-scores} records each score and its rationale. Lower development complexity, costs and learning effort count as improvements. Greater evidence centralization and extensibility also count as improvements. The weighted total for candidate $j$ is $S_j=\sum_{i=1}^{5}w_i s_{ij}$, where $s_{ij}$ is the criterion score and $w_i$ is its percentage weight expressed as a fraction. C5 has zero for every criterion and a weighted total of zero.
 
@@ -100,7 +100,7 @@ Extensibility & 10\% & 0 & Requires a long-term commitment to an expensive produ
 \textbf{Weighted total} & \textbf{100\%} & \textbf{-0.60} & \\
 \midrule
 \multicolumn{4}{@{}l@{}}{\textbf{C3 Version-controlled Python}}\\*
-Development complexity & 20\% & -1 & A widely-used object-oriented programming language. Several publications provide reference patterns, even if code is unavailable. \\*
+Development complexity & 20\% & -1 & A widely used object-oriented programming language. Several publications provide reference patterns, even if code is unavailable. \\*
 Yearly cost & 30\% & 0 & No cost to develop, operate, and maintain. \\*
 Learning curve & 30\% & 0 & Only the included requirements are developed. Python files can be read and edited by AI agents to provide assistance. Custom assistance can be tailored to user tests. \\*
 Evidence centralization & 10\% & +2 & Covers all requirements natively. Includes database management, object-oriented modeling via classes, numerical analysis, and version control with online uploads and authorship traceability. \\*
@@ -108,8 +108,8 @@ Extensibility & 10\% & +2 & Ample ecosystem of open-source libraries. \\*
 \textbf{Weighted total} & \textbf{100\%} & \textbf{+0.20} & \\
 \midrule
 \multicolumn{4}{@{}l@{}}{\textbf{C4 Version-controlled Excel with Python adapters}}\\*
-Development complexity & 20\% & -1 & A widely-used and programmable spreadsheet software. Documentation on its use for systems engineering is scarce. \\*
-Yearly cost & 30\% & -1 & CA\$115 Yearly cost of a Microsoft 365 subscription. \\*
+Development complexity & 20\% & -1 & A widely used and programmable spreadsheet software. Documentation on its use for systems engineering is scarce. \\*
+Yearly cost & 30\% & -1 & CA\$115 yearly for a Microsoft 365 subscription. \\*
 Learning curve & 30\% & 0 & Excel is widely used, but macro programming is a specialist topic. \\*
 Evidence centralization & 10\% & +1 & Macros require a completely different interface for development, usage, and configuration management.  \\*
 Extensibility & 10\% & +1 & The core spreadsheet is proprietary software. The files it generates are difficult to read for version control. \\*

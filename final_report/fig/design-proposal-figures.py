@@ -325,7 +325,7 @@ def main():
 
         body = "\\textbf{(a) Rated energy entered in Wh}\\par\\smallskip\n"
         body += image("battery-rated-energy.png", 510)
-        body += "\\par\\medskip\\textbf{(b) Beginning-of-life energy calculated in J}\\par\\smallskip\n"
+        body += "\\par\\medskip\\textbf{(b) BOL energy calculated in J}\\par\\smallskip\n"
         body += image("battery-bol-energy.png", 510)
         manifest["panels"]["eps-gui"] = make_pdf("eps-gui", body, job)
 

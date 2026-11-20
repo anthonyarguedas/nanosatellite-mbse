@@ -7,7 +7,7 @@ The COTS tables include stricter budgets and missing-rating controls.
 Repeated outputs and additional invalid-input records are omitted.
 No unexpected mismatch was observed.
 
-\section{Verification basis}
+\section{Verification Basis}
 \label{appendix:eps-case-basis}
 Each nonzero numerical output uses a 1\% relative comparison limit.
 Zero values, integer counts, records and discrete outcomes require exact agreement.
@@ -47,7 +47,7 @@ Lifetime (year) & 1 & 2 \\
 Solar arrangement & 2S1P 3G30A & 2S1P XTE-SF \\
 BOL cell MPP (V,\allowbreak{} A) & [2.409,\allowbreak{} 0.5029] & [2.43,\allowbreak{} 0.483] \\
 EOL cell MPP (V,\allowbreak{} A) & [2.244,\allowbreak{} 0.4851] & [2.43,\allowbreak{} 0.4347] \\
-EOL cell Voc,\allowbreak{} Isc (V,\allowbreak{} A) & [2.512,\allowbreak{} 0.5013] & [2.75,\allowbreak{} 0.4518] \\
+EOL cell $V_{\mathrm{oc}}$,\allowbreak{} $I_{\mathrm{sc}}$ (V,\allowbreak{} A) & [2.512,\allowbreak{} 0.5013] & [2.75,\allowbreak{} 0.4518] \\
 Cell active area (m$^2$) & 0.003018 & 0.0027 \\
 Battery arrangement & 3S2P NiMH & Two independent 2S1P Li-ion packs \\
 Cell nominal voltage (V) & 1.2 & 3.6 \\
@@ -55,7 +55,7 @@ Cell capacity (Ah) & 1.9 & 2.6 \\
 Cell nominal energy (Wh) & 2.28 & 9.36 \\
 \end{longtable}\endgroup
 
-The BIRDS power levels approximate the measured entries for the on-board computer (OBC), EPS and front access board (FAB) group, the ultra high frequency (UHF) receiver and the continuous wave (CW) transmitter \citep[p.~9]{shrestha2022birds4powerbudget}.
+The BIRDS power levels approximate the measured entries for the on-board computer (OBC), EPS and front access board (FAB) group, the ultrahigh frequency (UHF) receiver and the continuous wave (CW) transmitter \citep[p.~9]{shrestha2022birds4powerbudget}.
 The voltage/current representation and the separate sunlight/eclipse duty fractions are assumed.
 OreSat's 2019 power budget provides component loads and operating-mode energy budgets \citep{oresat2019powerbudget}.
 The simplified OreSat profile below uses assumed voltage/current pairs and phase-specific duty fractions.
@@ -86,7 +86,7 @@ A 131072-sample calculation checks convergence.
 Comparisons with published values use each source's component grouping and conditions.
 Ambiguous entries and inconsistent published budget arithmetic are excluded.
 
-\section{Results by requirement}
+\section{Results by Requirement}
 \label{appendix:eps-case-requirements}
 All numerical maxima below meet the 1\% criterion.
 Integer counts, source/unit records and discrete outcomes also agree with their references.
@@ -116,7 +116,7 @@ FR-20 & Normal extrema and trip comparisons & 0 & 0.0799 \\
 
 \input{fig/eps-case-studies/mop11-evidence}
 
-\subsection{FR-12: mass, volume and allocation margins}
+\subsection{FR-12: Mass, Volume and Allocation Margins}
 Published checks use six BIRDS cells at 27 g each and the historical OreSat battery and solar modules \citep{birds2021batteryverification,oresat2016csli}.
 Original excerpts appear in Figures~\ref{fig:source-battery-configurations} and~\ref{fig:source-oresat-mass}.
 The complete mass estimates add assumed EPS contributions.
@@ -163,7 +163,7 @@ BIRDS & Mass margin (g) (I) & 50 & 50 \\
 OreSat & Mass margin (g) (I) & 72 & 72 \\
 \end{longtable}\endgroup
 
-\subsection{FR-14: energy budgets and BOL/EOL sizing}
+\subsection{FR-14: Energy Budgets and BOL/EOL Sizing}
 MOP-14a covers power and orbital energy accounting. MOP-14b covers sizing and generation.
 References use $P=VI$, duty-weighted phase power, $E=\overline P T$ and
 $P_{req}=(E_s/0.85+E_e/0.75)/T_s$.
@@ -210,7 +210,7 @@ The OreSat published BOL module comparison uses its stated cell ratings \citep{o
 Doubling the reference grid changes eclipse duration by at most 0.00205\% and leaves integer sizing bounds unchanged.
 
 
-\subsection{FR-15: solar technology and battery chemistry}
+\subsection{FR-15: Solar Technology and Battery Chemistry}
 The silicon alternative is a 4S10P IXOLAR section with 4.46 V and 5.4 mA per cell at the selected EOL MPP \citep{shrestha2026solarreliability}.
 Its EOL current retention of 0.9 is assumed.
 The BIRDS battery alternative is 1S2P Tenergy Li-ion, using 3.6 V and 2.6 Ah per cell.
@@ -235,7 +235,7 @@ BIRDS & Alternative pack energy (Wh) (I) & 18.72 & 18.72 \\
 OreSat & Alternative pack energy (Wh) (I) & 14.52 & 14.52 \\
 \end{longtable}\endgroup
 
-\subsection{FR-16: series and parallel arrangements}
+\subsection{FR-16: Series and Parallel Arrangements}
 The array variation uses 4S1P in both cases.
 BIRDS storage changes to 2S1P, while each OreSat branch changes to 3S1P.
 References scale series voltage and energy, and parallel charge capacity and current ratings.
@@ -270,7 +270,7 @@ The last row concerns the baseline card's two independent 2S1P packs \citep[p.~6
 Stored energies add. Current limits remain per branch without an assumed sharing law.
 
 
-\subsection{FR-17: bus rails and converter compatibility}
+\subsection{FR-17: Bus Rails and Converter Compatibility}
 The selected rails are 3.3 V at 0.5 A and 5 V at 0.4 A.
 Terminal battery current is $I_{bat}=P_{rail}/(0.9V_{bat})$ at nominal pack voltage.
 BIRDS uses TPS63020-Q1 for 3.3 V and LTC3119 for 5 V, with assumed complete-circuit efficiency 0.9 and 1 A output limit.
@@ -296,7 +296,7 @@ BIRDS & Battery current, 5 V rail (A) (I) & 0.617284 & 0.617284 \\
 OreSat & Battery current, 5 V rail (A) (I) & 0.308642 & 0.308642 \\
 \end{longtable}\endgroup
 
-\subsection{FR-18: PV characteristics and sampled MPP}
+\subsection{FR-18: PV Characteristics and Sampled MPP}
 The verification curves have short-circuit, MPP and open-circuit anchors from the baseline input table.
 The reference calculates each $VI$ product and selects the largest sampled value.
 Published checks use the BIRDS 5.123 V, 50 mA point \citep[Figs.~13--14]{shrestha2021birdssafety} and OreSat's 4.435 V, 0.37304 A row \citep{oresatsolarsweep}.
@@ -304,7 +304,7 @@ Published checks use the BIRDS 5.123 V, 50 mA point \citep[Figs.~13--14]{shresth
 
 \begingroup\footnotesize\setlength{\tabcolsep}{3pt}\setlength{\parskip}{0pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.10920\linewidth} >{\raggedright\arraybackslash}p{0.36400\linewidth} >{\raggedright\arraybackslash}p{0.21840\linewidth} >{\raggedright\arraybackslash}p{0.21840\linewidth}@{}}
-\caption{FR-18 photovoltaic power and sampled MPP comparisons.}\label{tab:eps-case-pv-power}\\
+\caption{FR-18 PV power and sampled MPP comparisons.}\label{tab:eps-case-pv-power}\\
 \toprule
 Case & Quantity and reference basis & Reference & Framework \\ \midrule
 \endfirsthead
@@ -323,7 +323,7 @@ The BIRDS 1.575 W measured peak remains unreconstructed.
 The OreSat sweep lacks short/open-circuit endpoints and contains repeated voltages, so it supports power-product checks rather than a complete measured-curve benchmark.
 
 
-\subsection{FR-19: matched DET and ideal MPPT paths}
+\subsection{FR-19: Matched DET and Ideal MPPT Paths}
 The BIRDS pair uses the baseline 2S1P section and 3.6 V battery bus.
 The OreSat pair uses an explicitly unflown 4S1P section and the same 7.2 V battery bus.
 Four series cells provide a DET operating point at that bus voltage.
@@ -351,7 +351,7 @@ OreSat & MPPT mean bus power (W) (I) & 3.504239 & 3.504239 \\
 OreSat & Separate published net power (W) (P) & 1.71 & 1.713 \\
 \end{longtable}\endgroup
 
-\subsection{FR-20: normal extrema and protection comparisons}
+\subsection{FR-20: Normal Extrema and Protection Comparisons}
 The BIRDS voltage samples are 3.9, 4.0 and 4.2 V at pack terminals, with assumed UV/OV thresholds of 3.5/4.8 V.
 OreSat uses 3.0, 3.6 and 4.0 V cell samples against nominal 2.50/4.10 V thresholds \citep{oresat2025batterydesign}.
 Separate current bounds use $I_{min}=P_{min}/V_{max}$ and $I_{max}=P_{max}/V_{min}$.

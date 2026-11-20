@@ -1,4 +1,4 @@
-\subsection{FR-11: catalogue recommendations from mission budgets}
+\subsection{FR-11: Catalogue Recommendations from Mission Budgets}
 \label{appendix:cots-case-results}
 
 The reference calculations use the original budgets and manufacturer sheets independently of the catalogue, with 50 significant digits of decimal arithmetic.
@@ -24,7 +24,7 @@ Case & Published inputs & Assessment assumptions and boundary \\ \midrule
 \endhead
 \bottomrule\endfoot
 BIRDS battery & $E_L=1.438$ Wh per 90 min orbit. A 3S2P battery gives $N_{\rm bat}=6$ at $V_{\rm budget}=1.2$ V/cell \citep[pp.~5, 9]{shrestha2022birds4powerbudget}. & Reserve the full orbit demand. Assume $d=0.20$ and $\eta_d=0.90$. No mission retention or cycle-life model is supplied. \\
-BIRDS solar & Five two-cell panels give $N_{\rm PV}=10$. At $\beta=30^\circ$, eclipse lasts 35 min. Diode loss is 0.240 Wh and measured BCR efficiency is 0.80 \citep[pp.~4, 8]{shrestha2022birds4powerbudget}. & $T_s=55/60$ h. Assume isotropic orientation with $f=0.25$ per cell. Use $E_L=1.438$ Wh at the BCR output boundary. The separate battery-loss case is excluded. \\
+BIRDS solar & Five two-cell panels give $N_{\rm PV}=10$. At $\beta=30^\circ$, eclipse lasts 35 min. Diode loss is 0.240 Wh and measured battery charge regulator (BCR) efficiency is 0.80 \citep[pp.~4, 8]{shrestha2022birds4powerbudget}. & $T_s=55/60$ h. Assume isotropic orientation with $f=0.25$ per cell. Use $E_L=1.438$ Wh at the BCR output boundary. The separate battery-loss case is excluded. \\
 OreSat battery & Standby uses 0.623 Wh/orbit and one Live pass uses 2.318 Wh. Four independent 2S packs give $N_{\rm bat}=8$ at 3.6 V/cell and $d=0.60$ \citep[p.~1]{oresat2019powerbudget}. & Reserve $E_L=2.941$ Wh, adding one complete standby orbit and one Live pass. Use the budget's battery-bus accounting with $\eta_d=1$. Substitute later Tenergy cells into this earlier arrangement. \\
 OreSat solar & Two illuminated modules, sunlight fraction 0.59, tumbling factor 0.71 and a 90 min orbit \citep[p.~1]{oresat2019powerbudget}. Later modules contain two XTE-SF cells each \citep[p.~5]{greenberg2021oresat}. & Replace the two Alta modules with two later two-cell modules, so $N_{\rm PV}=4$, $T_s=0.885$ h and $f=0.71$. Use $E_L=2.941$ Wh, $\eta_c=1$ and $E_D=0$. Additional conversion losses are excluded. \\
 \end{longtable}\endgroup
@@ -44,7 +44,7 @@ Product & Selected rating & Original condition and meaning \\ \midrule
 \bottomrule\endfoot
 Panasonic BK-3MCC & Minimum 1.9 Ah, nominal 1.2 V & 25$^\circ$C, 0.4 A discharge to 1.0 V after 0.2 A charging for 16 h \citep[p.~1]{cots-mission_panasonic_bk_3mcc_legacy_ds}. Nominal voltage is required to equal 1.2 V. \\
 Tenergy 30005-0 & Minimum 2.5 Ah, average working voltage 3.65 V & 25$^\circ$C, 0.2C discharge to 2.75 V \citep[p.~2]{cots-mission_tenergy_30005_0_ds}. Nominal capacity is separately 2.6 Ah. The query allows 3.5--3.7 V to retain both the 3.6 V mission and 3.65 V sheet conventions. \\
-AZUR 3G30A & $2.409\times0.5029=1.211486$ W & One single-cell SCA at BOL, AM0 WRC 1367 W/m$^2$ and 28$^\circ$C. Power is derived from typical MPP voltage and current \citep[p.~2]{cots-mission_azur_space_3g30a_review_legacy_ds}. \\
+AZUR 3G30A & $2.409\times0.5029=1.211486$ W & One single-cell SCA at BOL, air mass zero (AM0), World Radiation Center (WRC) spectrum at 1367 W/m$^2$ and 28$^\circ$C. Power is derived from typical MPP voltage and current \citep[p.~2]{cots-mission_azur_space_3g30a_review_legacy_ds}. \\
 Spectrolab XTE-SF & $2.435\times0.0179\times27=1.176836$ W & One 27 cm$^2$ cell at BOL, AM0 1353 W/m$^2$ and 28$^\circ$C. The sheet gives current density in A/cm$^2$ after conversion from mA/cm$^2$ \citep[p.~1]{cots-solar_src_spectro_xtesf}. \\
 \end{longtable}\endgroup
 
@@ -84,7 +84,7 @@ OreSat solar & Add a second Live pass, giving 5.259 Wh and 2.092385 W/cell. & 1.
 Both batteries & Require EOL charge capacity without a supplied mission retention model. & Both required measures are unresolved. Both parts are excluded. \\
 Both solar products & Require a minimum power rating instead of power derived from typical MPP data. & Neither selected condition supplies that catalogue rating. Both checks are unresolved and both parts are excluded. \\
 BIRDS solar & Select $10^{15}$ 1 MeV electrons/cm$^2$ at the same irradiance and temperature. & $2.244\times0.4851=1.088564$ W. Included, resolved true. \\
-OreSat solar & Select the sheet's US-standard $10^{15}$ 1 MeV electrons/cm$^2$ condition. & $2.435(0.86)\times0.0179(27)(0.98)=0.9918370$ W. Excluded, resolved false. \\
+OreSat solar & Select the sheet's United States standard $10^{15}$ 1 MeV electrons/cm$^2$ condition. & $2.435(0.86)\times0.0179(27)(0.98)=0.9918370$ W. Excluded, resolved false. \\
 \end{longtable}\endgroup
 
 The four baseline, four stricter-budget, four missing-rating and two radiation queries produced 149 matching checks.

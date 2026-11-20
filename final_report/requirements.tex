@@ -1,19 +1,19 @@
 \section{System Requirements Analysis}
 \label{section:analyze-system-requirements}
-System Requirements Analysis defines the set of to-be (desired) stakeholder capabilities to be obtained with support from the system of interest, the framework in this case.
-The requirements define what the framework must accomplish for the stakeholders within acceptable ranges of measurable system variables, called measures of performance (MOPs) in OOSEM.
+System requirements analysis defines the set of to-be (desired) stakeholder capabilities to be obtained with support from the system of interest, the framework in this case.
+The requirements define what the framework must accomplish for the stakeholders within acceptable ranges of measurable system variables, called MOPs in OOSEM.
 These ranges make the requirements verifiable.
 
 Table~\ref{tab:framework-requirements} gives the full list of framework requirements (FRs), each of which is assigned an identifier (ID) to be traceable down to the verification evidence that demonstrates its fulfillment.
-Each requirement and measure of performance is also traced up to the as-is capabilities, stakeholder concerns, and literature references that justify it in Table~\ref{tab:eps-characterization-traceability}, which represents the deliverable for the first objective of this project.
+Each requirement and MOP is also traced up to the as-is capabilities, stakeholder concerns, and literature references that justify it in Table~\ref{tab:eps-characterization-traceability} in Appendix~\ref{appendix:eps-characterization}, which represents the deliverable for the first objective of this project.
 
 Overall, the requirements tackle the core problem that motivates this work by covering from needs, requirements, and architecture decisions to analytical evidence in a single framework, which reduces fragmentation.
 Furthermore, analysis reproducibility and the detection of design inconsistencies with respect to defined verification criteria are directly considered in the requirements.
 
 The requirements cover Buruso et al.'s five phases of MBSE: requirements management, model development, simulation and analysis, configuration management, and collaboration and communication.
-They cover NASA lifecycle phases 0 to C, excluding software and hardware fabrication for the latter.
+They cover NASA lifecycle phases from Pre-Phase A through Phase C, excluding software and hardware fabrication.
 The stakeholders were made explicitly aware of and agreed to this scope.
-They also agreed that the set of requirements and measures of performance fully represent their needs and expectations for the implementation of the framework, informed by the normative and academic literature references presented in Chapter~\ref{ch:marco}.
+They also agreed that the set of requirements and MOPs fully represents their needs and expectations for the implementation of the framework, informed by the normative and academic literature references presented in Chapter~\ref{ch:marco}.
 
 FR-01 and FR-02 establish the base unit of engineering knowledge as a requirement with forward and reverse links and quantitative values, which are used in MBSE approaches to construct a model representation of the mission.
 FR-06 enables the capability to assess the impact of a change in a quantitative requirement, which is desired by the stakeholders in order to explore alternatives and keep requirements up to date in an agile manner.
@@ -24,7 +24,7 @@ FR-07 and FR-08 aim to lessen the workload of inexperienced engineers, who under
 FR-10 and FR-11 support progress along the EPS engineering lifecycle, where early designs with ideal or assumed values must mature into evaluating the properties of real COTS.
 FR-05 states that the model of what an EPS consists of, which delimits which COTS are relevant for this framework within the immense entirety of commercial offerings, must adhere to the CSRM Profile 1.1 specification.
 
-FR-12 to FR-20 cover fundamental analyses that are considered in the literature to be the minimum set that verifies an early EPS design and the COTS choices made for it from Phase 0 to Phase B in the NASA Reference Lifecycle. This is what the problem statement of this project refers to as early lifecycle phases.
+FR-12 to FR-20 cover fundamental analyses that are considered in the literature to be the minimum set that verifies an early EPS design and the COTS choices made for it from Pre-Phase A through Phase B in the NASA reference lifecycle. This is what the problem statement of this project refers to as early lifecycle phases.
 They cover the component types defined by CSRM and common tradeoff analyses performed at this level of design maturity.
 
 {\small
@@ -58,21 +58,21 @@ FR-10 & The framework shall estimate electrical and dynamic EPS model parameters
 FR-11 & The framework shall recommend COTS EPS components from available requirements, for CSRM categories Battery, Regulators and Converters, Solar Arrays, and Power Circuits and Switches. \\
 FR-12 & The framework shall calculate EPS mass and occupied volume estimates from aggregate or component data and assess margins against allocations, recording sources, units and missing values. \\
 FR-13 & The framework shall store mission orbit, attitude, duration, environmental conditions, subsystem modes, and load schedules as inputs to EPS requirements and analysis. \\
-FR-14 & The framework shall calculate state and mode powers, sunlight and eclipse energy budgets, and array and battery sizing at supplied beginning and end of life conditions, reporting integer cell counts, array area, and battery capacity. \\
+FR-14 & The framework shall calculate state and mode powers, sunlight and eclipse energy budgets, and array and battery sizing at supplied beginning of life (BOL) and EOL conditions, reporting integer cell counts, array area, and battery capacity. \\
 FR-15 & The framework shall compare supplied solar and battery cell technologies through applicable power, capacity, electrical, installation and charger compatibility checks, recording the compared values, limits, results and missing values. \\
 FR-16 & The framework shall compare supplied array and battery series and parallel configurations through common power, capacity, electrical and array installation checks, recording the compared values, limits, results and missing values. \\
 FR-17 & The framework shall compare supplied bus voltage and buck/boost converter alternatives against input voltage intervals, output voltage tolerances and output current limits, recording the compared values and missing values. \\
-FR-18 & The framework shall calculate sampled photovoltaic (PV) power--voltage (P--V) characteristics and maximum power points from supplied I--V samples and check assembled array ratings against electrical and component limits. \\
+FR-18 & The framework shall calculate sampled photovoltaic (PV) power--voltage (P--V) characteristics and MPPs from supplied I--V samples and check assembled array ratings against electrical and component limits. \\
 FR-19 & The framework shall compare operating points and bus powers for supplied direct energy transfer (DET) and maximum power point tracking (MPPT) paths under common array, battery, illumination and load conditions against linked electrical limits. \\
 FR-20 & The framework shall calculate voltage and current extreme values for supplied normal operating cases and compare them with declared undervoltage, overvoltage and overcurrent trip thresholds. \\
 \end{longtable}
 }
 
-\subsection{Measures of performance}
+\subsection{Measures of Performance}
 \label{subsection:framework-mops}
 
-Table~\ref{tab:framework-mop-protocols} assigns Measures of Performance to the framework requirements \citep[Sec.~17.3.3]{friedenthal2014practical} to make them verifiable.
-Each MOP is evaluated through one of two verification scenarios, expect for FR-10 which is evaluated by inspection. The catalogue inspection for FR-10 counts distinct sourced part numbers under each CSRM hardware type, including every applicable type of a combined product.
+Table~\ref{tab:framework-mop-protocols} assigns MOPs to the framework requirements \citep[Sec.~17.3.3]{friedenthal2014practical} to make them verifiable.
+Each MOP is evaluated through one of two verification scenarios, except for FR-10 which is evaluated by inspection. The catalogue inspection for FR-10 counts distinct sourced part numbers under each CSRM hardware type, including every applicable type of a combined product.
 
 The first verification scenario leverages BIRDS-4 and OreSat case studies for FR-11, FR-12 and FR-14 to FR-20.
 The mission publications cited in Table~\ref{tab:framework-mop-protocols} supply the budget, component and configuration inputs.
@@ -84,10 +84,10 @@ Each case study MOP is evaluated separately for BIRDS-4 and OreSat.
 
 The two missions were chosen due to their familiarity for ASCEND researchers, and because of the contrast they provide.
 BIRDS-4 uses a compact 1U bus with shared regulated rails and power switching supervised by a dedicated reset controller \citep{shrestha2021birdssafety,kim2021birdsbus}, an architecture found in several flown missions.
-OreSat uses modular cards with local regulation and individually controlled power domains which contain two independent 2S lithium-ion packs, each with its own monitoring and protection \citep{greenberg2021oresat,oresat2025batterydesign}.
+OreSat uses modular cards with local regulation and individually controlled power domains which contain two independent 2S lithium-ion (Li-ion) packs, each with its own monitoring and protection \citep{greenberg2021oresat,oresat2025batterydesign}.
 BIRDS provides a firmware-based fault recovery through a reset controller that restarts other controllers when they stop acknowledging regular messages \citep[Sec.~4.3]{kim2021birdsbus}.
 OreSat's battery design specifies a physics-based charge and discharge control which monitors cell voltage and state of charge, with heater control also depending on temperature \citep{oresat2025batterydesign}.
-In this case, provides the more demanding case for representing modular design, distributed conversion, and redundant storage branches.
+OreSat provides the more demanding case for representing modular design, distributed conversion, and redundant storage branches.
 Its physics-based fault recovery approach can itself be more robust to faults than a solution implemented at the firmware level, and its underlying laws are much more generalizable than programmed logic.
 Therefore, this verification scenario presents a contrast between BIRDS adopting a traditional nanosatellite EPS and OreSat pushing for high EPS autonomy.
 
@@ -95,7 +95,7 @@ The second scenario verifies FR-01 to FR-09 and FR-13 through two individual use
 Each participant performs the 10 tasks in Table~\ref{tab:framework-mop-protocols} from prepared initial states.
 The tests use the graphical user interface (GUI) and a prepared Git environment for FR-09.
 Each test allocates 60~min of task time equally among the tasks, giving each task a limit of 6~min.
-The fixed task inputs define the expected results in Table~\ref{tab:user-trial-expected-results}.
+The fixed task inputs define the expected results in Table~\ref{tab:user-trial-expected-results} in Appendix~\ref{appendix:user-trials}.
 A task fails if its submitted results differ from these expectations.
 Each user test MOP also records the two elapsed times from task presentation to participant submission.
 Both times must be below 6~min and are evaluated separately, without averaging.
@@ -127,7 +127,7 @@ MOP-10/FR-10 & Group the added COTS entries by the generic CSRM EPS hardware typ
 MOP-11/FR-11 & For each mission, derive battery capacity or energy and solar power requirements from its published power budget \citep{shrestha2022birds4powerbudget,oresat2019powerbudget}. Keep the comparison at the documented cell, module or pack level, with the stated arrangement, losses, illumination, conditions and rating types. Query the built-in catalogue for Battery and SolarArray. Independently check the documented parts against the same requirements and compare their inclusion or exclusion, measures and conditions. Check rejection under a stricter budget and when a required rating is missing. Preserve the mission and catalogue during every query. & $\leq 1\%$ for matched numerical measures\newline Exact part eligibility, verdicts and unresolved states\newline Unchanged mission and catalogue\\
 MOP-12/FR-12 & For each mission, enter its documented EPS components with masses, occupied volume estimates and generic component allocations. Use BIRDS-4 component records \citep{shrestha2021birdssafety} and OreSat's 252~g solar and 416~g battery module entries \citep[Sec.~D.2]{oresat2016csli}. Compare component sums and remaining allocations with independent calculations. Check that nonnegative margins pass, and unknown contributions leave affected totals unresolved. & $\leq 1\%$ per mission\newline Exact verification results for margins and unknown contributions\\
 MOP-14a/FR-14 & For each mission, compare state and mode powers, orbital period, sunlight/eclipse durations, interval load energies and minimum panel power with independent calculations from its published inputs and stated model assumptions. Compare matching published load and generation rows separately. Check supplied energy against demand. Use external mean generation for BIRDS-4's free rotation. Exercise circular and eccentric orbits and cases without eclipse as explicit variations. & $\leq 1\%$ per mission\newline Exact verdicts \\
-MOP-14b/FR-14 & Calculate each mission's array and battery sizing at stated beginning of life (BOL) and EOL conditions using complete component data and declared supplementary inputs. Compare fractional and integer cell counts, cycle demand, selected depth of discharge (DoD), required battery energy, pack energy and charge capacity, EOL capacity and array areas with independent calculations. Check packing, installation area, projected illumination, source generation and power and energy verdicts for the entered configuration. Apply each degradation or loss factor once. & $\leq 1\%$ per mission\newline Exact counts and verdicts \\
+MOP-14b/FR-14 & Calculate each mission's array and battery sizing at stated BOL and EOL conditions using complete component data and declared supplementary inputs. Compare fractional and integer cell counts, cycle demand, selected depth of discharge (DoD), required battery energy, pack energy and charge capacity, EOL capacity and array areas with independent calculations. Check packing, installation area, projected illumination, source generation and power and energy verdicts for the entered configuration. Apply each degradation or loss factor once. & $\leq 1\%$ per mission\newline Exact counts and verdicts \\
 MOP-15/FR-15 & For each mission, enter at least two solar cell technologies and two battery chemistries as separate configurations under common mission, load and illumination conditions. Use BIRDS-4's proposed hybrid study \citep[Sec.~III]{shrestha2026solarreliability} and OreSat's solar and battery studies \citep{oresat2025solardesign,oresatbatteryresearch} to define alternatives. Compare power, area, capacity, electrical and charger compatibility measures and verdicts with independent references. Record the selections and any missing property values. & $\leq 1\%$ per mission\newline Exact verdicts and unknowns \\
 MOP-16/FR-16 & Enter each mission's published array and battery arrangements and at least one supplied alternative for each. Include BIRDS-4's two-cell solar strings and 3S2P, 3800~mAh battery \citep[Sec.~2.2, Table~5]{shrestha2021birdssafety} and OreSat's two independent 2S packs, 37.4~Wh per card \citep[p.~6]{greenberg2021oresat}. Compare counts, array ratings and area, pack energy, charge capacity, voltage and current ratings and feasibility verdicts with independent calculations. Keep independent packs and their circuit connections distinct. & $\leq 1\%$ per mission\newline Exact counts, arrangements and verdicts \\
 MOP-17/FR-17 & For each mission, connect explicit converter products to supplied source intervals and load rails. Include BIRDS-4's 3.3 and 5~V rails \citep[Sec.~2.2.3]{shrestha2021birdssafety} and OreSat's bus voltage alternatives and SPV1040 rejection after its 1S to 2S change \citep{oresatbatteryresearch,oresatsolarhistory}. Compare input interval containment, nominal output voltage tolerance, output current limits and terminal currents including characterized losses with independent references. Check supplied product conditions and missing values. & $\leq 1\%$ per mission\newline Exact verdicts and unknowns \\

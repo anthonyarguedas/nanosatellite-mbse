@@ -160,7 +160,7 @@ def main():
 
     # The appendix workflow's caption is a declared source of its provenance.
     path = APPENDIX / "provenance.json"
-    provenance = json.loads(path.read_text())
+    provenance = json.loads(path.read_text()) if path.exists() else {}
     provenance["workflow_sources"] = APP.workflow_sources()
     path.write_text(json.dumps(provenance, indent=2) + "\n")
     print("Built the workflow summary and both Battery source/property figures.")
