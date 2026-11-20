@@ -61,6 +61,46 @@ Load rail & Instrument mass 0.01~kg and volume 0.00001~m$^3$. Active on state 5~
 13 & Start from a blank mission input sheet with the bus, instrument, modes and allocation rows already created. Enter lifetime 2~years, 365.25~days/year, altitude 600~km, eccentricity 0, beta angle $0^\circ$, Sun pointing on $+Z$, and irradiance 1000~W/m$^2$. Set nominal orbital fraction and the instrument's nominal mode share to 1, and on/off state shares to 0.2/0.8. Set the on state to 5~V and 1~A and the off state to 0~V and 0~A. Reopen and submit saved inputs. A prepared requirement statement displays their bindings without inferring chronology or averaging. \\
 \end{longtable}}
 
+\section{Expected results}
+
+Table~\ref{tab:user-trial-expected-results} gives the expected results from the fixed task inputs and the equations in Chapter~\ref{ch:design-proposal}.
+Numerical outputs are rounded for presentation.
+A task failed if its submission differed from the expected results.
+All 20 submissions in the reported final test set matched these results, so no task failed this criterion.
+An expected analysis Error or requirement Fail is a correct task outcome.
+
+{\small
+\setlength{\tabcolsep}{4pt}
+\setlength{\parskip}{0pt}
+\renewcommand{\arraystretch}{1.06}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.90\linewidth-2\tabcolsep\relax}@{}}
+\caption{Expected results per user test task.}\label{tab:user-trial-expected-results}\\
+\toprule
+\textbf{MOP} & \textbf{Expected results} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{MOP} & \textbf{Expected results} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+01 & MR\_CHILD is saved at mission level with parent MR\_BASE, no children, method Analysis, status Resolved and unresolved field reason None. Its statement limits battery mass to 0.12~kg, and its rationale reserves 0.48~kg for the other EPS components. The maximum condition compares battery mass 0.1~kg with target 0.12~kg using $\leq$ and returns Pass. \\
+02 & MR\_PARENT has forward links to MR\_ARRAY and MR\_BATTERY, allocated respectively to \texttt{mission.BUS.EPS.SolarArray} and \texttt{mission.BUS.EPS.Battery}. Both children identify MR\_PARENT as their parent. The identifiers and other links remain unchanged. \\
+03 & analysis\_complete returns 10~J and Pass from 2~W and 5~s. analysis\_failed returns Error and no numerical output from division of 2~W by 0~s. Both views expose MR\_ENERGY, the supplied multiplication or division method, the synthetic nominal scenario and the corresponding input bindings. The views show current evaluations and provide no separate execution history. \\
+04 & The reopened mission reproduces sunlight\_energy at 17946.03~J and solar\_power at 9.094233~W through the stored bindings. The displayed eclipse\_energy target is 6635.55~J. All three checks return Pass. \\
+05 & The seven saved allocations assign generation to SolarArray, storage to Battery, conversion and regulation to RegulatorAndConverter, and protection, distribution and control to PowerCircuit. Each requirement statement displays its assigned component identifier. All seven conditions return Pass. \\
+06 & \textit{Baseline:} Sunlight and eclipse targets are 17946.03 and 6635.55~J. Minimum solar power is 9.094233~W, requiring 9 cells. Required BOL battery energy is 43316.67~J, with 73260~J available from 2 cells. The array has 24 cells, active area 0.0828~m$^2$, panel area 0.092~m$^2$ and mean available power 24.84~W. Required active area is 0.030314110~m$^2$, and usable area is 0.1~m$^2$. All displayed checks return Pass. \\
+06 & \textit{Lifetime 1~year:} Cycle demand is 5439.97, selected DoD is 0.367649 and required BOL battery energy is 21658.34~J. Other sizing targets retain their baseline values. All displayed checks return Pass. \\
+06 & \textit{Eclipse load 4~W:} Required eclipse energy is 8847.40~J, so the 8000~J delivered energy check returns Fail. Required solar power is 10.042311~W, with fractional count 9.702716 and minimum count 10 cells. Required BOL battery energy is 57755.56~J, and required active array area is 0.033474369~m$^2$. The other displayed checks return Pass. \\
+06 & \textit{Battery 1S3P:} The battery contains 3 cells, with BOL energy 109890~J (30.525~Wh) and capacity 8.25~Ah. EOL energy is 87912~J and capacity is 6.6~Ah. Required BOL energy remains 43316.67~J. Other sizing targets retain their baseline values. All displayed checks return Pass. \\
+06 & \textit{Earth radius 6371~km:} Orbital period is 5792.330054~s, with sunlight 3584.220273~s and eclipse 2208.109780~s. Sunlight and eclipse targets are 17921.10 and 6624.33~J. Required solar power is 9.093373~W, minimum count is 9 cells, required BOL battery energy is 43308.57~J and required active array area is 0.030311244~m$^2$. Array and battery counts return to 24 and 2. All displayed checks return Pass. \\
+07 & The omitted quantity is EOL cell current. Entering 0.45~A gives cell power 1.035~W and resolves solar\_cell\_count to a minimum of 9 cells, with 24 available. Its minimum condition returns Pass. \\
+08 & The \texttt{sizing.cell\_count} calculation maps required power to \texttt{solar\_power.required} (9.094233~W) and EOL cell power to \texttt{SolarArray.cell\_eol\_power} (1.035~W). Its fractional and required outputs are 8.786699 and 9 cells. The minimum condition compares 24 available cells with 9 required cells using $\geq$ and returns Pass. The expressions and inputs remain unchanged. \\
+09 & Git status identifies the edited mission, and the diff shows altitude changing from 600 to 650~km. Retrieving and reopening the baseline restores 600~km and revision labels R0, M0, D0 and A0. The history retains author Trial Operator and the supplied coordinator approval rationale for the 600~km baseline. \\
+13 & The reopened input sheet retains lifetime 2~years, 365.25~days/year, altitude 600~km, eccentricity 0, beta angle $0^\circ$, Sun pointing on $+Z$ and irradiance 1000~W/m$^2$. Nominal orbital fraction and instrument nominal mode share are 1. On/off shares are 0.2/0.8, with on state 5~V and 1~A and off state 0~V and 0~A. The summary displays these saved bindings without inferring chronology or averaging. \\
+\end{longtable}}
+
 \section{Submitted states and elapsed times}
 
 Table~\ref{tab:user-trial-all-submissions} gives the shared initial state, the student club member's submitted state and both participants' times for each task.

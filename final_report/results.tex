@@ -21,8 +21,8 @@ Task time runs from presentation of the task to submission.
 Submission is when the participant declares verbally that they have completed the task, after which a screenshot is taken.
 Only the screenshots from the student club member are presented in this document, since the deterministic analyses of the framework produced the same outputs under equal inputs for both participants.
 
-Each MOP compares its two elapsed times with the limit separately, without averaging or any metric about the correctness of the results.
-Table~\ref{tab:user-trial-first-task} shows the first task, and Appendix~\ref{appendix:user-trials} gives the prepared inputs and the complete table of user test results.
+Each MOP requires submissions to match the expected results from the fixed inputs and compares its two elapsed times with the limit separately, without averaging.
+Table~\ref{tab:user-trial-first-task} shows the first task, and Appendix~\ref{appendix:user-trials} gives the prepared inputs, expected results and complete table of user test results.
 
 % Keep the evidence layout shared so the first row and its appendix copy agree.
 \newlength{\UserTrialBodyWidth}
@@ -56,6 +56,7 @@ Table~\ref{tab:user-trial-first-task} shows the first task, and Appendix~\ref{ap
 \end{sidewaystable}
 
 
+All 20 submissions in the reported final test set matched the expected results, so no task failed this criterion.
 Both times for each of the ten reported user test MOPs are below the limit.
 Their sums are 32~min 37.44~s for the PhD role and 34~min 14.84~s for the club role.
 Individual times range from 88.20 to 318.16~s.
@@ -70,9 +71,13 @@ The framework stores the relationships between requirements, design inputs and s
 The Git commands run in the terminal provide the configuration control required for FR-09, including inspection of changes and retrieval of an authorized baseline.
 
 The user tests were repeated with the same participants, and the reported results come from the last set of tests.
-Previous iterations were considered failures since the participants found the user interface so unclear that the entirety of the allocated time was spent in explanations of usage.
-Failed tests provided qualitative feedback with which to improve the GUI.
-However, a discussion of the evolution of the GUI and the user feedback is out of the scope of this document.
+Earlier attempts were halted because results did not match the expected outputs.
+Participants also found the GUI so unclear that explanations of its use consumed the entire allocated time.
+These attempts provided qualitative feedback for GUI improvements.
+Repeated practice and GUI improvements can explain why the final set had no such failures.
+Repetition is considered valid because the framework is expected to have a learning curve.
+The reported times therefore characterize performance after practice.
+A discussion of the GUI's evolution and detailed user feedback is outside the scope of this document.
 
 \section{Catalogue inspection}
 Table~\ref{tab:cots-catalog-counts} reports MOP-10 by the five generic CSRM EPS hardware types.
@@ -115,19 +120,19 @@ All amounts are held at constant 2026 Canadian dollar values.
 
 \subsection{Base case and included costs}
 
-ASCEND is assumed to fund the author's (to be understood as author of the framework) scholarship of CA\$1500 per month for four months devoted entirely to this project.
+ASCEND is assumed to provide a scholarship of CA\$1500 per month for four months devoted entirely to framework development.
 The resulting scholarship expense is CA\$6000.
-The author also paid CA\$27.68 per month for an OpenAI subscription during those four months to assist with extracting COTS parameters from datasheets.
+An OpenAI subscription at CA\$27.68 per month supported GUI development and COTS parameter extraction from datasheets during the same four months.
 This initial subscription expense totals CA\$110.72.
-The combined direct development expenditure is:
+The combined direct development cash expenditure is:
 \begin{equation}
     C_{\mathrm{direct}}=4(1500)+4(27.68)=6110.72.
     \label{eq:economic-direct-cost}
 \end{equation}
-Of this CA\$6110.72, CA\$6000 is assigned to ASCEND and CA\$110.72 was paid by the author.
+Of this CA\$6110.72, CA\$6000 is assigned to ASCEND and CA\$110.72 was paid from personal funds.
 
 Initial supervision and user test participation are covered by existing funded positions.
-Their effort is excluded from the personnel allocation used here.
+Initial supervision is excluded from the effort valuation.
 The two researchers and the personnel responsible for subsequent maintenance are each valued at CA\$1500 per month for a 35~h working week, comprising seven hours from Monday to Friday.
 Using 52 weeks and 12 months per year gives the hourly funding proxy:
 \begin{equation}
@@ -135,6 +140,18 @@ Using 52 weeks and 12 months per year gives the hourly funding proxy:
     \label{eq:economic-hourly-value}
 \end{equation}
 This proxy values research capacity at its stipend funding cost.
+Three user tests failed because participants found the GUI unclear.
+These tests consumed 3~h of combined participant time.
+One participant also had two tests halted after 11 and 23~min because results did not match expectations.
+The other participant had one test halted after 3~min for the same reason.
+The final successful tests are assigned two combined hours to include instructions and preparation.
+Total test participation is 5~h 37~min, with an economic cost of:
+\begin{equation}
+    C_{\mathrm{test}}=c_h\left(3+\frac{11+23+3}{60}+2\right)\approx55.55.
+    \label{eq:economic-test-cost}
+\end{equation}
+This funded effort is included as an opportunity cost at the end of development month four.
+Total economic development costs are CA\$6166.27, with no additional cash payments for test participation.
 The base case assumes that all released time is used for other productive research.
 Stipend payments remain unchanged in both workflows.
 
@@ -158,10 +175,10 @@ Maintenance and database expansion consume ten combined personnel hours per mont
 This effort assumes AI assistance for COTS parameter extraction.
 One subscription at CA\$27.68 per month is therefore included during those nine months.
 This initial period covers the first year's maintenance.
-One further month of ten combined hours and one subscription payment is assigned to each of mission years two and three.
-These annual activities are placed at the end of their respective years.
-Total support effort is 110 hours, and the eleven additional subscription payments total CA\$304.48.
-The resulting net released time is 2074 hours.
+One further month of ten combined hours and one subscription payment is assigned to the end of mission year two.
+Mission year three has no maintenance or subscription costs.
+Total support effort is 100 hours, and the ten additional subscription payments total CA\$276.80.
+Net released time during mission operations is 2084 hours.
 
 \subsection{Net present value}
 
@@ -169,17 +186,19 @@ A 7\% annual real discount rate is adopted from the Treasury Board of Canada Sec
 It serves as a Canadian reference rate for this assessment.
 The equivalent monthly rate is $i=(1.07)^{1/12}-1$.
 The valuation date is the start of the internship, and all expenditure and capacity benefits are placed at month end.
-Development comprises four payments of CA\$1527.68.
+Development comprises four cash payments of CA\$1527.68 and the test participation cost $C_{\mathrm{test}}$ valued at the end of month four.
 For mission month $m$, let $H_m$ denote the released hours before maintenance, $M_m$ the maintenance hours and $A_m$ the additional subscription expense.
 The economic net present value is:
 \begin{equation}
-    V_{\mathrm{econ}}=
-    -\sum_{t=1}^{4}\frac{1527.68}{(1+i)^t}
-    +\sum_{m=1}^{36}\frac{c_h(H_m-M_m)-A_m}{(1+i)^{m+4}}.
+    \begin{aligned}
+        V_{\mathrm{econ}}={}&-\sum_{t=1}^{4}\frac{1527.68}{(1+i)^t}
+        -\frac{C_{\mathrm{test}}}{(1+i)^4}\\
+        &+\sum_{m=1}^{36}\frac{c_h(H_m-M_m)-A_m}{(1+i)^{m+4}}.
+    \end{aligned}
     \label{eq:economic-npv}
 \end{equation}
 Table~\ref{tab:economic-npv} gives the period totals using the unrounded hourly proxy and discount rate.
-The base case gives an economic net present value of approximately CA\$12614.
+The base case gives an economic net present value of approximately CA\$12661.
 
 \begin{table}[htbp]
 \centering
@@ -190,19 +209,19 @@ The base case gives an economic net present value of approximately CA\$12614.
 \toprule
 \textbf{Period} & \textbf{\shortstack{Released\\time (h)}} & \textbf{\shortstack{Maintenance\\time (h)}} & \textbf{\shortstack{Net economic\\value (CA\$)}} & \textbf{\shortstack{Present\\value (CA\$)}} \\
 \midrule
-Development & 0 & 0 & $-6110.72$ & $-6025.31$ \\
+Development & 0 & 0 & $-6166.27$ & $-6079.62$ \\
 Mission year 1 & 1352 & 90 & 12232.20 & 11522.21 \\
 Mission year 2 & 832 & 10 & 8101.99 & 7218.11 \\
-Mission year 3 & 0 & 10 & $-126.58$ & $-101.02$ \\
+Mission year 3 & 0 & 0 & 0.00 & 0.00 \\
 \midrule
-Total & 2184 & 110 & 14096.89 & 12613.98 \\
+Total & 2184 & 100 & 14167.92 & 12660.69 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 The cash assessment credits no income or payroll reduction from the released time.
 The continuing stipends are common to both workflows and cancel from the incremental cash comparison.
-Development and subsequent subscription payments total CA\$6415.20, with a cash net present value of $-$CA\$6307.86.
+Development and subsequent subscription payments total CA\$6387.52, with a cash net present value of $-$CA\$6285.77.
 The positive economic result represents the assigned value of additional research capacity.
 
 \subsection{Sensitivity and interpretation}
@@ -210,12 +229,12 @@ The positive economic result represents the assigned value of additional researc
 The baseline effort is recalled from one instance, and the task times were measured after earlier unsuccessful user tests with prepared inputs.
 There is no controlled comparison of work effort under the two workflows.
 The estimate therefore depends on the assumed transfer of that effort difference to repeated mission reviews.
-Holding other assumptions fixed, the economic net present value reaches zero at approximately 5.77 baseline hours per person and cycle, compared with the assumed 14 hours.
+Holding other assumptions fixed, the economic net present value reaches zero at approximately 5.74 baseline hours per person and cycle, compared with the assumed 14 hours.
 A separate sensitivity calculation uses the same 14-hour baseline and varies the fraction of released time credited at the hourly proxy.
-The economic result reaches zero when approximately 36.7\% of that capacity receives its full assigned value, while all support costs remain included.
-Using the alternative 3\% social rate discussed in the Treasury Board guide gives approximately CA\$13431 \citep[Sec.~6.1]{tbs2019costbenefit}.
+The economic result reaches zero when approximately 36.5\% of that capacity receives its full assigned value, while all development and support costs remain included.
+Using the alternative 3\% social rate discussed in the Treasury Board guide gives approximately CA\$13491 \citep[Sec.~6.1]{tbs2019costbenefit}.
 
-The zero yearly cost for C3 in Table~\ref{tab:framework-candidate-scores} is interpreted as zero core software license expenditure.
+The zero yearly cost for C3 in Table~\ref{tab:framework-candidate-scores} is interpreted as zero software license expenditure.
 The AI subscription and personnel effort are separate support costs.
 No avoided subscription payments for C1, C2 or C4 are credited, since the comparison uses the as-is workflow.
 This valuation includes development expenditure, which is a sunk cost for subsequent support decisions \citep[Chap.~17, App.~A]{ulrich2013diseno}.

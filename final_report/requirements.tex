@@ -93,8 +93,10 @@ The second scenario verifies FR-01 to FR-09 and FR-13 through two individual use
 Each participant performs the 10 tasks in Table~\ref{tab:framework-mop-protocols} from prepared initial states.
 The tests use the graphical user interface (GUI) and a prepared Git environment for FR-09.
 Each test allocates 60~min of task time equally among the tasks, giving each task a limit of 6~min.
-Each user test MOP consists only of the two elapsed times from task presentation to participant submission.
-Both times must be below 6~min and are evaluated separately, without averaging or a correctness score.
+The fixed task inputs define the expected results in Table~\ref{tab:user-trial-expected-results}.
+A task fails if its submitted results differ from these expectations.
+Each user test MOP also records the two elapsed times from task presentation to participant submission.
+Both times must be below 6~min and are evaluated separately, without averaging.
 A task that reaches its time limit is recorded at that limit.
 
 \begingroup
@@ -131,15 +133,15 @@ MOP-18/FR-18 & Compare available labelled BIRDS-4 Maya-2 power products \citep[F
 MOP-19/FR-19 & Using the mission curves from MOP-18, define paired DET and ideal MPPT verification configurations for each mission under common array, battery, illumination and load conditions. Independently calculate operating voltage and current, source power, operating efficiency and bus power with the specified drops and converter efficiency. Compare these measures and linked electrical limit verdicts. Test exact samples, explicitly enabled interpolation and out-of-range errors. Treat fixed input-voltage regulation as a separate case. & $\leq 1\%$ per mission\newline Exact verdicts and errors \\
 MOP-20/FR-20 & Use each mission's normal voltage and current cases and selected detector thresholds, including BIRDS-4's 2, 3 and 4~A line thresholds \citep[Sec.~6.3]{kyutech2021birdsicd} and OreSat's 30~W load current cases and hardware protection settings \citep{oresat2025batterydesign}. Compare extrema, current bounds from powers and voltages at the same terminals, and strict no-trip verdicts with independent references. Exercise values below, at and above each declared threshold. Check detector selection, cell voltage sensing, units, unknowns and invalid samples. & $\leq 1\%$ per mission\newline Exact verdicts and statuses \\
 \multicolumn{3}{@{}l}{\textbf{User tests}} \\*
-MOP-01/FR-01 & Given a fully defined mission requirement, create another requirement with the FR-01 fields and a simple verification condition and submit its saved fields and condition result. & Both times $<6$~min \\
-MOP-02/FR-02 & Given prepared requirement links and component allocations, retrieve forward and reverse links and submit the associated requirement and component identifiers. & Both times $<6$~min \\
-MOP-03/FR-03 & Given a completed analysis and a deliberately failed run, open their result records and submit the linked requirement, method, scenario, parameters, available outputs and execution status. & Both times $<6$~min \\
-MOP-04/FR-04 & Given saved mission inputs, dependencies and instructions in a prepared environment, reconstruct the mission and rerun its assigned analyses using the stored input and output bindings. Submit the rerun results. & Both times $<6$~min \\
-MOP-05/FR-05 & Given a prepared EPS and requirements for the FR-05 component categories, allocate each requirement to a component and submit the allocation view. & Both times $<6$~min \\
-MOP-06/FR-06 & Apply supplied mission, requirement, component and model parameter edits separately, and submit the updated requirements and EPS results after each edit. & Both times $<6$~min \\
-MOP-07/FR-07 & Given an EPS component with an omitted input, use its automatically assigned requirements to identify the next quantity to supply, enter the provided value and submit the updated requirement view. & Both times $<6$~min \\
-MOP-08/FR-08 & Given an EPS component and supporting inputs, inspect its automatically assigned requirements and submit the assigned analysis and verification methods or models and their input mappings. & Both times $<6$~min \\
-MOP-09/FR-09 & Given a prepared mission repository, save a baseline with its author and authorized decision rationale, change one input, retrieve the baseline and submit its requirement, mission, design and model revisions and decision history. & Both times $<6$~min \\
-MOP-13/FR-13 & Given a mission input sheet, enter and save orbit, attitude, duration, environmental conditions, modes and load schedules, reopen the mission and submit its saved inputs. & Both times $<6$~min \\
+MOP-01/FR-01 & Given a fully defined mission requirement, create another requirement with the FR-01 fields and a simple verification condition and submit its saved fields and condition result. & Matches expected results\newline Both times $<6$~min \\
+MOP-02/FR-02 & Given prepared requirement links and component allocations, retrieve forward and reverse links and submit the associated requirement and component identifiers. & Matches expected results\newline Both times $<6$~min \\
+MOP-03/FR-03 & Given a completed analysis and a deliberately failed run, open their result records and submit the linked requirement, method, scenario, parameters, available outputs and execution status. & Matches expected results\newline Both times $<6$~min \\
+MOP-04/FR-04 & Given saved mission inputs, dependencies and instructions in a prepared environment, reconstruct the mission and rerun its assigned analyses using the stored input and output bindings. Submit the rerun results. & Matches expected results\newline Both times $<6$~min \\
+MOP-05/FR-05 & Given a prepared EPS and requirements for the FR-05 component categories, allocate each requirement to a component and submit the allocation view. & Matches expected results\newline Both times $<6$~min \\
+MOP-06/FR-06 & Apply supplied mission, requirement, component and model parameter edits separately, and submit the updated requirements and EPS results after each edit. & Matches expected results\newline Both times $<6$~min \\
+MOP-07/FR-07 & Given an EPS component with an omitted input, use its automatically assigned requirements to identify the next quantity to supply, enter the provided value and submit the updated requirement view. & Matches expected results\newline Both times $<6$~min \\
+MOP-08/FR-08 & Given an EPS component and supporting inputs, inspect its automatically assigned requirements and submit the assigned analysis and verification methods or models and their input mappings. & Matches expected results\newline Both times $<6$~min \\
+MOP-09/FR-09 & Given a prepared mission repository, save a baseline with its author and authorized decision rationale, change one input, retrieve the baseline and submit its requirement, mission, design and model revisions and decision history. & Matches expected results\newline Both times $<6$~min \\
+MOP-13/FR-13 & Given a mission input sheet, enter and save orbit, attitude, duration, environmental conditions, modes and load schedules, reopen the mission and submit its saved inputs. & Matches expected results\newline Both times $<6$~min \\
 \end{longtable}
 \endgroup
