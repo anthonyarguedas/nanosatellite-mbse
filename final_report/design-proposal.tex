@@ -7,19 +7,23 @@ The complete project codebase, including the present document, the GUI, user doc
 
 The present section presents a narrative overview of that codebase guided by the requirements it satisfies.
 Given the size and code content of Appendix \ref{appendix:framework-code}, shorter excerpts provide an intermediate level of detail for manual reading.
-Appendix \ref{appendix:framework-workflow} presents a representative mission modeling workflow and captioned code snippets for adding, editing, updating, verifying and deleting requirements (second objective).
+Appendix \ref{appendix:framework-workflow} presents the mission modeling and tailoring workflow and captioned code snippets for adding, editing, updating, verifying and deleting requirements (second objective).
 Appendix \ref{appendix:eps-component-models} presents the generic EPS component classes and their parameters graphically, together with interfaces, modes, states and requirement assignment (third objective).
 Appendix \ref{appendix:automatic-eps-requirements} contains the requirement statements automatically assigned to EPS elements (fourth objective).
 
-\section{Global MBSE model and user interfaces}
-Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-eps-components} show the mission structure, including a parametrized orbit (FR-13), the nine CubeSat subsystems in CSRM, and the generic components that constitute an EPS (FR-05). Mission teams tailor these logical categories to their missions. Detailed, mission-tailored design then establishes physical quantities and implementation choices. The model represents the Global Positioning System (GPS) as an external global navigation satellite system (GNSS).
+\section{Global MBSE model, user interfaces, and workflow}
+Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-eps-components} show the mission structure model, including a parametrized orbit (FR-13), the nine CubeSat subsystems in CSRM, and the generic components that constitute an EPS (FR-05).
+Mission teams tailor these logical categories to their missions following the workflow summarized in Figure~\ref{fig:mission-workflow-summary}.
+The engineer creates a working branch, defines the mission and adds the CubeSat and its subsystems.
+Tailoring assigns properties, modes, interfaces and requirements, with COTS parameters requested as needed.
+Linked analyses supply verification measures, and the engineer reviews the results before revising the model or saving and committing the accepted configuration.
 
 \begingroup
 \captionsetup{font=small,skip=4pt}
 \begin{figure}[p]
 \centering
 \includegraphics[width=0.95\linewidth]{fig/csrm-mission-structure.pdf}
-\caption[CSRM mission and segment structure.]{CSRM mission and segment structure, as a graphical representation of the corresponding Python classes. Adapted from the CSRM reference model, copyright 2022 INCOSE Space Systems Working Group and OMG Space Domain Task Force, \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International} \citep{incose2025csrmmodel}.}
+\caption[CSRM mission and segment structure.]{CSRM mission and segment structure, as a graphical representation of the corresponding Python classes. The model represents the Global Positioning System (GPS) as an external global navigation satellite system (GNSS). Adapted from the CSRM reference model, copyright 2022 INCOSE Space Systems Working Group and OMG Space Domain Task Force, \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International} \citep{incose2025csrmmodel}.}
 \label{fig:csrm-mission-structure}
 \end{figure}
 
@@ -37,12 +41,27 @@ Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-eps-components} show the
 \label{fig:csrm-eps-components}
 \end{figure}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\linewidth]{fig/design-proposal/mission-workflow-summary.pdf}
+\caption[Mission modeling and tailoring workflow.]{Summary of the mission modeling and tailoring workflow. Dashed arrows show control flow. Solid and dotted arrows carry COTS requests and parameters. The gray box identifies the engineer's review. Appendix~\ref{appendix:framework-workflow}, Figure~\ref{fig:mission-modeling-workflow}, gives the full version with Python method calls and logical component and requirement involvement.}
+\label{fig:mission-workflow-summary}
+\end{figure}
+
 The model classes can be imported into a Python environment, as shown in Figure~\ref{fig:eps-python-model}.
 A graphical user interface (GUI) exposes the same models for users unfamiliar with Python (Figure~\ref{fig:eps-gui}).
 Besides classification, the models assign engineering properties to components, including the EPS component properties required by FR-05.
+Figure~\ref{fig:battery-property-excerpt} shows five Battery properties beside their Python declarations.
 The full list of properties assigned to each EPS component is represented graphically in Appendix \ref{appendix:eps-component-models}.
 These properties represent COTS datasheet quantities and provide inputs to the analyses.
-The figures use a synthetic battery allocation to demonstrate the same parameter values in both interfaces.
+Figures~\ref{fig:eps-python-model} and~\ref{fig:eps-gui} use a synthetic battery allocation to demonstrate the same parameter values in both interfaces.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig/design-proposal/battery-property-excerpt.pdf}
+\caption[Selected Battery properties in Python and graphical form.]{Five Battery property declarations in Python (left) and their graphical representation (right), extracted from Figure~\ref{fig:eps-component-properties}. Brackets show unit annotations. An asterisk marks a default expression. The cell count multiplies series and parallel counts, and rated energy multiplies cell count by cell energy. Figure~\ref{fig:battery-property-definitions} in Appendix~\ref{appendix:eps-component-models} gives the complete Battery source and property view.}
+\label{fig:battery-property-excerpt}
+\end{figure}
 
 \begin{figure}[htbp]
 \centering
@@ -75,8 +94,9 @@ This section describes the behavior of logical component L01: MBSE Workspace.
 For FR-01, the framework represents requirements, quantities and verification conditions as Python classes.
 Inspired by the property expressions of the Systems Modeling Language (SysML) v2 \citep{omg2026sysml2}, a Property stores a Python expression that can reference other properties, arithmetic operations and function calls.
 Figure~\ref{fig:property-expressions} shows a calculated property and the GUI rendering of a requirement statement.
-Property arithmetic uses unit annotations without automatic conversion or dimensional analysis.
-The catalogue separately checks its facts against the declared component properties, as described in Section~\ref{section:cots-database}.
+
+Property arithmetic, at its core, uses unit annotations without automatic conversion or dimensional analysis. However, the default properties assigned to components by the framework all have populated unit annotations, which, if respected, will produce dimensionally correct results for all default verifications methods and other calculations. Figure \label{fig:battery-property-excerpt} shows the unit annotations for the generic EPS component representing a battery.
+The assignment of a COTS component as an implementation of a generic EPS component does check for the equality of property names and their associated unit annotations between both classes as described in Section~\ref{section:cots-database}, yet this operation falls outside the scope of property arithmetic.
 
 \begin{figure}[htbp]
 \centering
@@ -115,8 +135,8 @@ This feedback exposes the impact of a parameter change for FR-06, as illustrated
 
 The behavior to satisfy FR-07 and FR-08 is entirely deterministic, despite recommendation being a very open and subjective problem.
 Certain models, mainly subsystems and components, were given methods to automatically self-assign requirements when they are added to the mission.
-The requirements were chosen based on recurring constraints to EPS components in the literature and relevant normative documents, and can be read in full in \ref{appendix:automatic-eps-requirements}.
-% This appendix is just a table with the requirement statement and the EPS component it applies to.
+The requirements were chosen based on recurring constraints to EPS components in the literature and relevant normative documents.
+Table~\ref{tab:automatic-eps-requirements} in Appendix~\ref{appendix:automatic-eps-requirements} lists each requirement statement and its EPS element.
 
 The GUI displays automatically created requirements and their unresolved inputs (Figure~\ref{fig:automatic-requirements}).
 For FR-07, these inputs identify the next engineering activity: supply the quantities needed to evaluate the requirement.
@@ -256,7 +276,6 @@ The inequality selects the night side. Entry and exit boundaries will be paired 
     \label{eq:orbital-time-weight}
 \end{align}
 Boundary anomalies will be unwrapped in the direction of motion so that each difference $\Delta\mathcal M_j=\mathcal M(\nu_{j,\mathrm{out}})-\mathcal M(\nu_{j,\mathrm{in}})$ between entry and exit is positive. For $N_e$ eclipse intervals per orbit, the eclipse and sunlight durations (s) are:
-% Amato's Eq. (3.14) includes t_0, which cancels when exit and entry times are subtracted.
 \begin{align}
     T_e &= \frac{1}{n}\sum_{j=1}^{N_e}\Delta\mathcal M_j,
     \label{eq:eclipse-period} \\
@@ -588,7 +607,6 @@ For the assessed load rail and state, the nominal voltage and current checks wil
     \label{eq:bus-output-compatibility}
 \end{equation}
 The accepted voltage tolerance $\epsilon_V\geq0$ will be explicit and will default to zero for an exact nominal match. Currents will be added only on the same rail at the same operating point. Battery and converter input currents will be calculated at their respective terminals, including applicable conversion losses. The engineer will link limits to each connected path and assess each selected mode. Supported output settings, dropout and converter-specific operating limits will require explicit conditions from the selected product. These checks will establish operating-point feasibility. They will infer no converter topology or switching behavior.
-% FR-17 uses explicit rail checks and product limits. The supplied models contain no dedicated buck/boost operating-envelope calculation or topology search.
 
 \subsection{Protection and electrical extrema (FR-20)}
 For FR-20, adding a protection component will create a requirement that its declared detectors remain inactive for the supplied normal operating cases. The engineer will supply voltage samples at the detector's sensed node and nonnegative current magnitudes in the protected direction. For case index $q$, the extrema will be:

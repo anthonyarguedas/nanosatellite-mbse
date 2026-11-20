@@ -1,0 +1,84 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Courier New}
+\usepackage{amsmath,graphicx}
+\input{../code-highlighting}
+\setlength{\fboxsep}{7pt}
+\setlength{\fboxrule}{0.5pt}
+\begin{document}
+\begin{minipage}{510pt}
+\fontsize{10}{12}\selectfont
+\begin{minipage}[t]{310pt}
+\vspace{0pt}\textbf{Python property declarations}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8}{9.4}\selectfont]
+class Component(ModelObject):
+    cost = Property(unit="currency")
+    mass = Property(unit="kg")
+    volume = Property(unit="m3")
+    power = Property(unit="W")
+
+class Battery(EPSComponent):
+    series_count = Property(unit="cell")
+    parallel_count = Property(unit="string")
+    cell_count = Property(
+        "self.series_count.value * self.parallel_count.value",
+        "cell")
+    cell_rated_capacity = Property(unit="Ah")
+    cell_rated_energy = Property(unit="Wh")
+    cell_nominal_voltage = Property(unit="V")
+    cell_minimum_voltage = Property(unit="V")
+    cell_maximum_voltage = Property(unit="V")
+    cell_maximum_charge_current = Property(unit="A")
+    cell_maximum_discharge_current = Property(unit="A")
+    cell_bol_energy = Property(
+        "self.cell_rated_energy.value * 3600", "J")
+    rated_capacity = Property(
+        "self.parallel_count.value * "
+        "self.cell_rated_capacity.value",
+        "Ah")
+    rated_energy = Property(
+        "self.cell_count.value * self.cell_rated_energy.value",
+        "Wh")
+    nominal_voltage = Property(
+        "self.series_count.value * "
+        "self.cell_nominal_voltage.value",
+        "V")
+    minimum_voltage = Property(
+        "self.series_count.value * "
+        "self.cell_minimum_voltage.value",
+        "V")
+    maximum_voltage = Property(
+        "self.series_count.value * "
+        "self.cell_maximum_voltage.value",
+        "V")
+    maximum_charge_current = Property(
+        "self.parallel_count.value * "
+        "self.cell_maximum_charge_current.value",
+        "A")
+    maximum_discharge_current = Property(
+        "self.parallel_count.value * "
+        "self.cell_maximum_discharge_current.value",
+        "A")
+    cycle_coefficient = Property(unit="cycle")
+    cycle_exponent = Property(unit="1")
+    fit_dod_min = Property(unit="1")
+    fit_dod_max = Property(unit="1")
+    degradation_margin = Property(unit="1")
+    energy_retention = Property(unit="1")
+    capacity_retention = Property(unit="1")
+    bol_energy = Property("self.rated_energy.value * 3600", "J")
+    eol_energy = Property(
+        "sizing.retained_value(initial=self.bol_energy, "
+        "retention=self.energy_retention).retained",
+        "J")
+    eol_capacity = Property(
+        "sizing.retained_value(initial=self.rated_capacity, "
+        "retention=self.capacity_retention).retained",
+        "Ah")
+\end{lstlisting}
+\end{minipage}\hfill\begin{minipage}[t]{186pt}
+\vspace{0pt}\textbf{Graphical representation}\par\smallskip
+\includegraphics[width=186pt]{battery-property-definitions-diagram.pdf}\end{minipage}
+\end{minipage}
+\end{document}

@@ -1,0 +1,30 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Courier New}
+\usepackage{amsmath,graphicx}
+\input{../code-highlighting}
+\setlength{\fboxsep}{7pt}
+\setlength{\fboxrule}{0.5pt}
+\begin{document}
+\begin{minipage}{510pt}
+\fontsize{10}{12}\selectfont
+\begin{minipage}[t]{310pt}
+\vspace{0pt}\textbf{Python property declarations}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8}{9.4}\selectfont]
+class Battery(EPSComponent):
+    series_count = Property(unit="cell")
+    parallel_count = Property(unit="string")
+    cell_count = Property(
+        "self.series_count.value * self.parallel_count.value",
+        "cell")
+    cell_rated_energy = Property(unit="Wh")
+    rated_energy = Property(
+        "self.cell_count.value * self.cell_rated_energy.value",
+        "Wh")
+\end{lstlisting}
+\end{minipage}\hfill\begin{minipage}[t]{186pt}
+\vspace{0pt}\textbf{Graphical representation}\par\smallskip
+\includegraphics[width=186pt]{battery-property-excerpt-diagram.pdf}\end{minipage}
+\end{minipage}
+\end{document}
