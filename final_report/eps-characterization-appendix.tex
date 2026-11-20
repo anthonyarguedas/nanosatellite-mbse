@@ -1,0 +1,114 @@
+\chapter{EPS Characterization Traceability}
+\label{appendix:eps-characterization}
+
+Table~\ref{tab:eps-characterization-traceability} provides the traceability from each framework requirement and measure of performance to the as-is observations, stakeholder concerns, and literature references that justify it.
+As-is observation and concerns are not given identifiers for brevity.
+100\% of table rows are traced to their justification and classified as requirements or MOPs, thus fulfilling the first objective of this project.
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\setlength{\parskip}{0pt}
+\setlength{\LTpre}{0.4\baselineskip}
+\setlength{\LTpost}{0.4\baselineskip}
+\renewcommand{\arraystretch}{1.06}
+\setlength{\ReportTableBodyWidth}{\dimexpr\linewidth-4\tabcolsep\relax}
+\begin{longtable}{@{}P{0.13\ReportTableBodyWidth}P{0.45\ReportTableBodyWidth}P{0.42\ReportTableBodyWidth}@{}}
+\caption{EPS characterization traceability matrix.}\label{tab:eps-characterization-traceability}\\
+\toprule
+\textbf{ID} & \textbf{Statement} & \textbf{Justifying sources} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Statement} & \textbf{Justifying sources} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\multicolumn{3}{@{}l@{}}{\textbf{Requirements}} \\*
+\midrule
+FR-01 & The framework shall store each requirement with its identifier, statement, parents and children, rationale, conditions or quantities, applicable units, verification method, and resolution status, including reasons for unresolved fields. & As-is requirement lists are incomplete and cause redesigns. Concerns about maintaining verifiable requirements motivate explicit quantities and verification fields. CSRM relates requirement definitions to verification activities and outcomes \citep[Secs.~6.3--6.4]{omg2025csrm}. \\
+\addlinespace[3pt]
+FR-02 & The framework shall store forward and reverse links among requirements and component allocations. & As-is traceability from requirements to design is established manually after each change. CSRM relates requirements to the architecture elements that satisfy them \citep[Secs.~6.3--6.4]{omg2025csrm}. \\
+\addlinespace[3pt]
+FR-03 & The framework shall associate each analysis result with its requirement/expectation, method, scenario, parameters, raw outputs, and execution status. & Concerns about communicating verification evidence and keeping it consistent with requirements motivate contextualized result records. CSRM links requirements, verification activities and their recorded outcomes \citep[Secs.~6.3--6.4]{omg2025csrm}. \\
+\addlinespace[3pt]
+FR-04 & The framework shall provide the inputs, dependencies and instructions to reconstruct all analyses of a mission. & As-is battery sizing calculations have been lost. Concerns about repeating verification after requirement changes motivate retaining the inputs and methods needed to reproduce analyses. \\
+\addlinespace[3pt]
+FR-05 & The framework shall allocate EPS requirements among EPS components covering the categories listed in the CSRM Profile 1.1 specification. & CSRM Profile 1.1 and its reference model provide the common EPS component categories and requirement relationships used to organize allocations \citep{omg2025csrm,incose2025csrmmodel}. \\
+\addlinespace[3pt]
+FR-06 & The framework shall identify impacts of a proposed mission, requirement, component, or model change on requirements and EPS design. & As-is change impact assessment waits for the next weekly meeting. Strobbe et al. propagate EPS parameter changes to identify violated requirement constraints \citep[Secs.~III--IV]{review-0764}. \\
+\addlinespace[3pt]
+FR-07 & The framework shall recommend next engineering activities from the current activity and inputs, identifying unmet prerequisites. & As-is students have practical engineering experience and follow no systems engineering method. El Hachimi et al. organize EPS development from mission definition and sizing through design and verification \citep[Secs.~2--5]{handpicked-0003}. \\
+\addlinespace[3pt]
+FR-08 & The framework shall recommend analysis, verification and validation methods or models on edits or requests using available inputs. & Concerns about defining verification activities and repeating verification motivate method guidance. NASA recognizes modeling and simulation as verification by analysis and relates method selection to project constraints and accepted risk \citep[Sec.~5.3.1.2]{nasa2016systems}. \\
+\addlinespace[3pt]
+FR-09 & The framework shall save mission versions with their exact requirement, mission, design and model revisions, revision history and authorized decisions for later retrieval. & Concerns about tracing design decisions and maintaining consistency across requirements, models and verification evidence motivate retrievable baselines. Buruso et al. identify configuration management as an MBSE activity \citep{buruso2026modelbased}. \\
+\addlinespace[3pt]
+FR-10 & The framework shall estimate electrical and dynamic EPS model parameters from quality-checked data. & Ceglarek and Bertrand derive catalogue parameters from manufacturer datasheets and address inconsistent data \citep[Sec.~3]{review-0257}. Casado et al. characterize electrical models using component properties and measured responses \citep[Sec.~2]{review-0573}. \\
+\addlinespace[3pt]
+FR-11 & The framework shall recommend COTS EPS components from available requirements, for CSRM categories Battery, Regulators and Converters, Solar Arrays, and Power Circuits and Switches. & Concerns about updating component requirements and redesign effort motivate early component screening. Jbara accepts or rejects candidate component selections against numerical limits \citep[Secs.~4--5]{review-0270}. \\
+\addlinespace[3pt]
+FR-12 & The framework shall calculate EPS mass and occupied volume estimates from aggregate or component data and assess margins against allocations, recording sources, units and missing values. & As-is student capabilities include mass verification by analysis before fabrication. Luccisano et al. distinguish aggregate and detailed component budgets \citep[Secs.~3.1--3.2]{luccisano2024formalization}. Wijaya et al. compare mass and dimensional results with mission requirements \citep[Sec.~5.2]{review-0055}. \\
+\addlinespace[3pt]
+FR-13 & The framework shall store mission orbit, attitude, duration, environmental conditions, subsystem modes, and load schedules as inputs to EPS requirements and analysis. & Boan derives power profiles and illumination from mission orbit, attitude and operating modes \citep[Sec.~2]{review-0289}. El Hachimi et al. use mission lifetime and environmental conditions in EPS sizing \citep[Secs.~2--3]{handpicked-0003}. \\
+\addlinespace[3pt]
+FR-14 & The framework shall calculate state and mode powers, sunlight and eclipse energy budgets, and array and battery sizing at supplied beginning and end of life conditions, reporting integer cell counts, array area, and battery capacity. & As-is power verification occurs after fabrication and suggests an oversized battery. El Hachimi et al. derive solar and battery sizing from sunlight and eclipse energy needs, cell ratings and battery cycle demand \citep[Secs.~3 and~6.2]{handpicked-0003}. \\
+\addlinespace[3pt]
+FR-15 & The framework shall compare supplied solar and battery cell technologies through applicable power, capacity, electrical, installation and charger compatibility checks, recording the compared values, limits, results and missing values. & Boan compares solar and battery technologies under common mission constraints \citep[Secs.~3--4]{review-0289}. Casado et al. model battery characteristics and charge regulation \citep[Secs.~2.2--2.3]{review-0573}. \\
+\addlinespace[3pt]
+FR-16 & The framework shall compare supplied array and battery series and parallel configurations through common power, capacity, electrical and array installation checks, recording the compared values, limits, results and missing values. & Boan adjusts solar and battery series and parallel counts to obtain energy balance, including a battery configuration trade to reduce occupied volume \citep[Secs.~3--4]{review-0289}. \\
+\addlinespace[3pt]
+FR-17 & The framework shall compare supplied bus voltage and buck/boost converter alternatives against input voltage intervals, output voltage tolerances and output current limits, recording the compared values and missing values. & El Hachimi et al. relate bus regulation and buck/boost choices to subsystem voltage needs and converter compatibility \citep[Secs.~4 and~7.1]{handpicked-0003}. Boan includes bus voltage and regulator alternatives in preliminary trade studies \citep[Sec.~4]{review-0289}. \\
+\addlinespace[3pt]
+FR-18 & The framework shall calculate sampled photovoltaic (PV) power--voltage (P--V) characteristics and maximum power points from supplied I--V samples and check assembled array ratings against electrical and component limits. & Casado et al. model solar I--V characteristics at stated irradiance and temperature conditions \citep[Sec.~2.1]{review-0573}. El Hachimi et al. select conversion hardware for the connected array voltage and power conditions \citep[Sec.~7.1]{handpicked-0003}. \\
+\addlinespace[3pt]
+FR-19 & The framework shall compare operating points and bus powers for supplied direct energy transfer (DET) and maximum power point tracking (MPPT) paths under common array, battery, illumination and load conditions against linked electrical limits. & Boan compares DET and MPPT alternatives using a common mission scenario \citep[Sec.~3]{review-0289}. El Hachimi et al. discuss power conditioning choices and their conversion losses \citep[Sec.~4]{handpicked-0003}. \\
+\addlinespace[3pt]
+FR-20 & The framework shall calculate voltage and current extreme values for supplied normal operating cases and compare them with declared undervoltage, overvoltage and overcurrent trip thresholds. & Concerns about detecting design inconsistencies before fabrication motivate normal operating limit checks. El Hachimi et al. define battery and output protection through voltage and current thresholds \citep[Secs.~7.4--7.5]{handpicked-0003}. \\
+\addlinespace[6pt]
+\multicolumn{3}{@{}l@{}}{\textbf{Measures of performance}} \\*
+\midrule
+MOP-01 & Create and save a requirement with the FR-01 fields and a verification condition, matching the expected results in $<6$~min per participant. & As-is competition requirements use measurable numerical targets, while ASCEND requirement lists remain incomplete. Concerns about maintaining verifiable requirements justify checking saved fields and the verification result. \\
+\addlinespace[3pt]
+MOP-02 & Retrieve the expected forward and reverse requirement links and component identifiers in $<6$~min per participant. & As-is requirement-to-design traceability is rebuilt manually after changes. Concerns about tracing design decisions justify checking retrieval in both directions. \\
+\addlinespace[3pt]
+MOP-03 & Inspect completed and failed analyses and retrieve the expected requirement, method, scenario, parameters, available outputs and execution status in $<6$~min per participant. & Concerns about communicating verification evidence justify checking its context and execution status. CSRM associates verification activities with recorded outcomes \citep[Sec.~6.4]{omg2025csrm}. \\
+\addlinespace[3pt]
+MOP-04 & Reconstruct the prepared mission and rerun its assigned analyses through saved input and output bindings, matching the expected results in $<6$~min per participant. & As-is battery calculations have been lost. Concerns about repeating verification after changes justify demonstrating that saved inputs and methods reproduce the expected results. \\
+\addlinespace[3pt]
+MOP-05 & Allocate requirements to the FR-05 component categories and submit the expected allocation view in $<6$~min per participant. & CSRM supplies the component categories and requirement allocation relationships \citep{omg2025csrm,incose2025csrmmodel}. Concerns about tracing design decisions justify checking the saved allocations. \\
+\addlinespace[3pt]
+MOP-06 & Apply the supplied mission, requirement, component and model edits separately and retrieve the expected requirements and EPS results in $<6$~min per participant. & As-is change impact assessment waits for a weekly meeting because traceability is established manually. Concerns about repeated verification justify checking the results of each edit type. \\
+\addlinespace[3pt]
+MOP-07 & Identify an omitted input from automatically assigned EPS requirements, supply its value and submit the expected updated view in $<6$~min per participant. & As-is students follow no systems engineering method and researchers have limited practical design time. El Hachimi et al.'s workflow links successive EPS activities to their required inputs \citep[Secs.~2--4]{handpicked-0003}. \\
+\addlinespace[3pt]
+MOP-08 & Retrieve the expected assigned analysis and verification methods or models and their input mappings in $<6$~min per participant. & Concerns about defining and repeating verification activities justify checking access to assigned methods and inputs. NASA supports verification by analysis using models \citep[Sec.~5.3.1.2]{nasa2016systems}. \\
+\addlinespace[3pt]
+MOP-09 & Save an authored baseline with authorized decision rationale, change an input and retrieve the expected requirement, mission, design and model revisions and decision history in $<6$~min per participant. & Concerns about tracing design decisions and maintaining consistent revisions justify baseline retrieval. Buruso et al. include configuration management among the activities supported by MBSE \citep{buruso2026modelbased}. \\
+\addlinespace[3pt]
+MOP-10 & Catalogue coverage of at least five distinct sourced COTS part numbers per generic CSRM EPS hardware type, with a datasheet link for every entry and combined products counted under every applicable type. & CSRM provides the EPS hardware classification \citep{omg2025csrm,incose2025csrmmodel}. Ceglarek and Bertrand use manufacturer datasheets to build a component catalogue with controlled parameter meanings and units \citep[Sec.~3]{review-0257}. \\
+\addlinespace[3pt]
+MOP-11 & For BIRDS-4 and OreSat, match budget-derived battery and solar query measures within 1\%, match part eligibility, verdicts and unresolved states exactly, and preserve mission and catalogue records. & The published BIRDS-4 and OreSat power budgets supply generation, storage and consumption inputs for the component queries \citep{shrestha2022birds4powerbudget,oresat2019powerbudget}. Concerns about component requirement changes justify stricter-budget and missing-rating checks. \\
+\addlinespace[3pt]
+MOP-12 & For each mission, match independent EPS mass, occupied volume and allocation margin calculations within 1\%, with exact verification results for margins and unknown contributions. & BIRDS-4 component records provide physical component data \citep{shrestha2021birdssafety}. OreSat's launch initiative application gives solar and battery module masses \citep[Sec.~D.2]{oresat2016csli}. Volume estimates and supplementary allocations are declared verification inputs. \\
+\addlinespace[3pt]
+MOP-13 & Enter, save and reopen the expected orbit, attitude, duration, environmental conditions, subsystem modes and load schedules in $<6$~min per participant. & Boan uses mission scenarios, illumination and mode-based power profiles as EPS analysis inputs \citep[Sec.~2]{review-0289}. Concerns about updating subsystem power requirements justify checking that these inputs remain available after saving. \\
+\addlinespace[3pt]
+MOP-14a & For each mission, match reference state and mode powers, orbital and sunlight/eclipse durations, interval energies and minimum panel power within 1\%, with exact energy verdicts. & Published mission power budgets provide load and generation references \citep{shrestha2022birds4powerbudget,oresat2019powerbudget}. El Hachimi et al. provide preliminary sizing relations, and Freimann et al. account for beta angle in eclipse duration \citep{handpicked-0003,review-1231}. \\
+\addlinespace[3pt]
+MOP-14b & For each mission, match BOL and EOL array and battery sizing measures within 1\%, including cycle demand, DoD, capacity and area, with exact integer counts and verification verdicts. & El Hachimi et al. relate cell counts and battery energy to mission energy and cycle demands \citep[Secs.~3 and~6.2]{handpicked-0003}. BIRDS-4 and OreSat records provide cell and battery arrangements for the sizing cases \citep{shrestha2021birdssafety,greenberg2021oresat}. \\
+\addlinespace[3pt]
+MOP-15 & For each mission, compare at least two solar technologies and two battery chemistries under common conditions, matching numerical references within 1\% and verdicts and unknowns exactly. & The BIRDS hybrid solar study supplies contrasting cell technologies \citep[Sec.~III]{shrestha2026solarreliability}. OreSat's solar design and battery research document technology alternatives and their electrical and installation constraints \citep{oresat2025solardesign,oresatbatteryresearch}. \\
+\addlinespace[3pt]
+MOP-16 & For each mission, compare its published array and battery arrangements with at least one alternative each, matching numerical references within 1\% and counts, arrangements and verdicts exactly. & BIRDS-4 documents two-cell solar strings and a 3S2P battery \citep[Sec.~2.2, Table~5]{shrestha2021birdssafety}. OreSat documents two independent 2S packs \citep[p.~6]{greenberg2021oresat}, providing a contrasting storage arrangement. \\
+\addlinespace[3pt]
+MOP-17 & For each mission, match converter input compatibility, nominal output tolerance, current limits and terminal current calculations within 1\%, with exact verdicts and unknowns. & BIRDS-4 supplies 3.3 and 5~V load rails \citep[Sec.~2.2.3]{shrestha2021birdssafety}. OreSat's battery study and solar revision history document bus voltage alternatives and SPV1040 rejection after the 1S to 2S change \citep{oresatbatteryresearch,oresatsolarhistory}. \\
+\addlinespace[3pt]
+MOP-18 & For each mission, match published PV power products, sampled MPP, efficiency and scaled array ratings within 1\%, with exact electrical verdicts and curve statuses. & BIRDS-4 Maya-2 plots provide labelled power products \citep[Figs.~13--14]{shrestha2021birdssafety}. OreSat ground tests provide tabulated voltage, current and power samples \citep{oresatsolarsweep}. Complete verification curves supplement the published samples explicitly. \\
+\addlinespace[3pt]
+MOP-19 & For each mission, compare paired DET and ideal MPPT operating points and bus powers under common conditions, matching numerical references within 1\% and electrical verdicts and errors exactly. & Boan compares DET and MPPT alternatives \citep[Sec.~3]{review-0289}. Published mission solar and battery records ground the constructed comparison cases \citep{shrestha2021birdssafety,greenberg2021oresat,oresatsolarsweep}. \\
+\addlinespace[3pt]
+MOP-20 & For each mission, match normal voltage and current extrema and derived current bounds within 1\%, with exact no-trip verdicts and statuses below, at and above declared protection thresholds. & The BIRDS interface document provides 2, 3 and 4~A line thresholds \citep[Sec.~6.3]{kyutech2021birdsicd}. OreSat's battery design notes provide load current cases and hardware protection settings \citep{oresat2025batterydesign}. \\
+\end{longtable}
+\endgroup
