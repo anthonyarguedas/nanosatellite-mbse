@@ -20,10 +20,12 @@ battery.mass.expression = "sum(c.mass.value for c in self.cots if isinstance(c, 
 eps.SolarArray.mass = 0.03
 eps.RegulatorAndConverter.mass = 0.02
 eps.PowerCircuit.mass = 0.01
+eps.ProcessorAndMemory.mass = 0  # No processor hardware in this synthetic case.
 battery.volume.expression = "sum(c.volume.value for c in self.cots if isinstance(c, models.Battery))"
 eps.SolarArray.volume = 0.00015
 eps.RegulatorAndConverter.volume = 0.00005
 eps.PowerCircuit.volume = 0.00002
+eps.ProcessorAndMemory.volume = 0
 
 requirement = bus.mass_limit
 requirement.maximum_per_u = 0.25

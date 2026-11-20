@@ -42,9 +42,9 @@ class GroundSegment(DomainElement):
 class Subsystem(ModelObject):
     default_components = ()
     cost = Property("sum(child.cost.value for child in self.components)", "currency")
-    mass = Property("sum(child.mass.value for child in self.components)", "kg")
-    volume = Property("sum(child.volume.value for child in self.components)", "m3")
-    power = Property("sum(child.power.value for child in self.components)", "W")
+    mass = Property("sum(child.mass.value for child in self.components if 'mass' in child.properties)", "kg")
+    volume = Property("sum(child.volume.value for child in self.components if 'volume' in child.properties)", "m3")
+    power = Property("sum(child.power.value for child in self.components if 'power' in child.properties)", "W")
 
     @property
     def components(self):
@@ -92,11 +92,11 @@ class Component(ModelObject):
     def cots(self):
         return tuple(child for child in self.children if isinstance(child, Component) and child.fixed_properties)
 
-    def recommend_cots(self, candidates, *, sort_by=None, reverse=False, limit=None, mode=None):
-        """Query compatible products against this component's owned requirements."""
+    def recommend_cots(self, candidates=None, **options):
+        """Query the built-in catalog, or explicit alternatives, against owned requirements."""
         from .recommendations import recommend_cots
 
-        return recommend_cots(self, candidates, sort_by=sort_by, reverse=reverse, limit=limit, mode=mode)
+        return recommend_cots(self, candidates, **options)
 
     def accepts(self, child):
         if isinstance(child, (ComponentMode, Requirement)):

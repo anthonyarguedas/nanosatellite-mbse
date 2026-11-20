@@ -1,6 +1,10 @@
 """Browser presentation of public model objects and native evaluation reports."""
 
+from numbers import Real
+from urllib.parse import urlsplit
+
 from framework import models
+from framework.cots import load_catalog
 from .edits import allowed_types
 
 MODES = (models.SpacecraftMode, models.ComponentMode, models.ComponentState)
@@ -61,21 +65,95 @@ def detail(item, report, mode):
     return result
 
 
-def recommendations(component, catalog, *, sort_by=None, reverse=False, limit=None, mode=None):
-    matches = models.recommend_cots(component, catalog, sort_by=sort_by, reverse=reverse, limit=limit, mode=mode)
-    compatible = tuple(item for item in dict.fromkeys(catalog) if component.accepts(item))
+def catalog_url(value):
+    parsed = urlsplit(value)
+    return value if parsed.scheme in ("http", "https") and parsed.netloc else ""
+
+
+def catalog_fact(fact, catalog):
     return {
-        "catalogSize": len(catalog), "compatibleCount": len(compatible), "requirements": len(component.requirements),
-        "sortProperties": sorted({name for item in compatible for name in item.properties}),
-        "results": [{
-            "name": match.candidate.name, "className": type(match.candidate).__name__,
+        "parameter": fact.parameter or fact.model_property, "value": display(fact.value), "unit": fact.unit,
+        "valueKind": fact.value_kind, "conditionId": fact.condition_id, "elementId": fact.element_id,
+        "sourceId": fact.source_id, "sourceUrl": catalog_url(catalog.sources[fact.source_id]["url"]),
+        "sourceLocator": fact.source_locator, "note": fact.note,
+    }
+
+
+def catalog_condition(condition_id, catalog):
+    if not condition_id:
+        return None
+    return {
+        "id": condition_id,
+        "fields": [{"name": key, "value": value} for key, value in catalog.conditions[condition_id].items()
+                   if key != "condition_id" and value],
+        "parameters": [{**row, "sourceUrl": catalog_url(catalog.sources[row["source_id"]]["url"])}
+                       for row in catalog.condition_parameters.get(condition_id, ())],
+    }
+
+
+def catalog_options(component, candidates, catalog):
+    kinds, conditions, numeric, categorical = {}, set(), set(), set()
+    properties = dict(component.properties)
+    for candidate in candidates:
+        properties.update(candidate.properties)
+        element = catalog.elements.get((candidate.product_id, candidate.catalog_element), {})
+        elements = {"self", candidate.catalog_element, element.get("parent_element_id")}
+        roles = {cls.__name__ for cls in candidate.catalog_role.__mro__}
+        aliases = getattr(candidate.catalog_product.model_class, "catalog_parameters", {})
+        for fact in candidate.catalog_product.facts:
+            if fact.value is None or fact.element_id not in elements or fact.model_class and fact.model_class not in roles:
+                continue
+            if fact.condition_id:
+                conditions.add(fact.condition_id)
+            name = fact.model_property or fact.parameter
+            names = {name} | {key for key, parameter in aliases.items() if not fact.model_class and parameter == name}
+            for name in names & candidate.properties.keys():
+                kinds.setdefault(name, set()).add(fact.value_kind)
+                (numeric if isinstance(fact.value, Real) and not isinstance(fact.value, bool) else categorical).add(name)
+    return {
+        "sortProperties": sorted(name for name, prop in properties.items() if "__" not in name
+                                 and name not in ("voltage_extrema", "current_extrema")
+                                 and name not in categorical - numeric
+                                 and (name in numeric or str(prop.unit) not in ("", "1"))),
+        "valueKinds": {name: sorted(values) for name, values in sorted(kinds.items())},
+        "conditions": [{"id": key, "label": ", ".join(f"{name}: {value}" for name, value in catalog.conditions[key].items()
+                                                     if name != "condition_id" and value)} for key in sorted(conditions)],
+    }
+
+
+def recommendations(component, *, sort_by=None, reverse=False, limit=None, mode=None,
+                    condition_id="", element_id=None, value_kinds=None):
+    matches = models.recommend_cots(component, sort_by=sort_by, reverse=reverse, limit=limit, mode=mode,
+                                   condition_id=condition_id, element_id=element_id, value_kinds=value_kinds)
+    catalog = load_catalog()
+    available = tuple(catalog.candidates(component))
+    compatible = tuple(item for item in available if element_id is None or item.catalog_element == element_id)
+    results = []
+    for match in matches:
+        candidate, product = match.candidate, match.candidate.catalog_product
+        results.append({
+            "name": candidate.name, "className": product.model_class.__name__,
+            "productId": product.product_id, "manufacturer": product.manufacturer, "partNumber": product.part_number,
+            "productUrl": catalog_url(product.product_url), "datasheetUrl": catalog_url(product.datasheet_url),
+            "role": candidate.catalog_role.__name__, "elementId": candidate.catalog_element,
+            "csrmTypes": [cls.__name__ for cls in models.EPS.default_components if isinstance(candidate, cls)],
+            "conditionId": candidate.catalog_condition,
             "sortValue": display(match.sort_value) if sort_by is not None else "",
-            "sortUnit": str(match.candidate.properties[sort_by].unit) if sort_by is not None else "",
+            "sortUnit": str(candidate.properties[sort_by].unit) if sort_by is not None else "",
+            "bindings": [{"property": binding.property_name, "facts": [catalog_fact(fact, catalog) for fact in binding.facts]}
+                         for binding in candidate.catalog_bindings if "__" not in binding.property_name and binding.facts],
+            "unsetProperties": sorted(name for name, prop in candidate.properties.items() if "__" not in name and prop.expression is None),
             "checks": [{"requirement": entry.requirement.name, "condition": entry.condition.name,
                         "measure": display(entry.measure), "measureUnit": str(entry.condition.measure.unit),
                         "target": display(entry.target), "targetUnit": str(entry.condition.target.unit),
                         "predicate": entry.condition.expression} for entry in match.report.results],
-        } for match in matches],
+        })
+    return {
+        "catalogSize": len(catalog), "compatibleCount": len(compatible),
+        "compatibleProducts": len({item.product_id for item in compatible}), "requirements": len(component.requirements),
+        "channels": sorted({item.catalog_element for item in available}),
+        "selectedCondition": catalog_condition(condition_id, catalog),
+        **catalog_options(component, compatible, catalog), "results": results,
     }
 
 

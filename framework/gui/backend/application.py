@@ -29,7 +29,6 @@ class Handle:
     assignment: str
     module: object
     session: str
-    catalog: tuple
 
     @property
     def revision(self):
@@ -76,8 +75,7 @@ class Application:
         if not path.exists() and session == "current":
             repository.save(path, "from framework.models import Mission\n\nmission = Mission()\n")
         mission, source, assignment, module = repository.load(path)
-        catalog = tuple(getattr(module, "cots_catalog", ()))
-        handle = Handle(mission, path, source, assignment, module, session, catalog)
+        handle = Handle(mission, path, source, assignment, module, session)
         token = secrets.token_urlsafe(24)
         self.handles[token] = handle
         while len(self.handles) > 32:
@@ -133,8 +131,10 @@ class Application:
             component = handle.mission.get(data["path"])
             mode = handle.mission.get(data["mode"]) if data.get("mode") else None
             with repository.source_directory(Path(handle.module.__file__).parent):
-                return recommendations(component, handle.catalog, sort_by=data.get("sortBy"),
-                                       reverse=data.get("reverse", False), limit=data.get("limit"), mode=mode)
+                return recommendations(component, sort_by=data.get("sortBy"),
+                                       reverse=data.get("reverse", False), limit=data.get("limit"), mode=mode,
+                                       condition_id=data.get("conditionId") or "",
+                                       element_id=data.get("elementId") or None, value_kinds=data.get("valueKinds"))
         if operation in ("command", "preview"):
             with repository.source_directory(Path(handle.module.__file__).parent):
                 mission = deepcopy(handle.mission, {id(item): item for item in handle.mission.imports.values()})

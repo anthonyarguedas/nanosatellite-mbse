@@ -184,11 +184,20 @@ class EPS(Subsystem):
     def power_consumers(self):
         # Storage and generation are excluded from this default demand boundary.
         # A specialised EPS can choose a different boundary, including losses.
-        return tuple(child for child in self.components if not isinstance(child, (Battery, SolarArray)))
+        return tuple(child for child in self.components
+                     if 'power' in child.properties and not isinstance(child, (Battery, SolarArray)))
 
 
 class EPSComponent(Component):
     subsystem_type = EPS
+
+    def accepts(self, child):
+        types = tuple(cls for cls in (*EPS.default_components, Protection) if isinstance(self, cls))
+        types += tuple(cls for cls in type(self).__mro__ if cls.__dict__.get("catalog_type") is cls)
+        return super().accepts(child) or (
+            bool(types) and isinstance(child, EPSComponent) and child.fixed_properties
+            and all(isinstance(child, cls) for cls in types)
+        )
 
 
 class SolarPowerPath(EPSComponent):
@@ -375,6 +384,23 @@ class Protection(PowerCircuit):
         )
 
 
+class ProcessorAndMemory(EPSComponent):
+    supply_voltage_min = Property(unit="V")
+    supply_voltage_max = Property(unit="V")
+    clock_frequency_max = Property(unit="Hz")
+    interface_frequency_max = Property(unit="Hz")
+    program_memory_bytes = Property(unit="byte")
+    flash_memory_bytes = Property(unit="byte")
+    ram_bytes = Property(unit="byte")
+    capacity_bits = Property(unit="bit")
+
+
+class Software(EPSComponent):
+    """Logical software, with cost accounted independently of its host hardware."""
+
+    mass = volume = power = None
+
+
 class COTS(EPSComponent):
     """Product classes fix their inherited Property definitions."""
 
@@ -401,4 +427,12 @@ class CotsProtection(Protection, COTS):
     pass
 
 
-EPS.default_components = (Battery, SolarArray, RegulatorAndConverter, PowerCircuit)
+class CotsProcessorAndMemory(ProcessorAndMemory, COTS):
+    pass
+
+
+class CotsSoftware(Software, COTS):
+    pass
+
+
+EPS.default_components = (Battery, SolarArray, RegulatorAndConverter, PowerCircuit, ProcessorAndMemory, Software)

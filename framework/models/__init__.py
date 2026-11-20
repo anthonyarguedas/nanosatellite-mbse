@@ -8,7 +8,8 @@ from .stakeholders import Stakeholder, RegulatoryAgency, MissionStakeholder, Lau
 from .elements import DomainElement, SpaceSegment, GroundSegment, Subsystem, Component, Orbit
 from .modes import SpacecraftMode, ComponentMode, ComponentState, TimeAllocation, OrbitAllocation, ModeAllocation, StateAllocation
 from .eps import EPS, EPSComponent, SolarPowerPath, TransferMethod, Battery, SolarArray, RegulatorAndConverter, PowerCircuit, Protection, COTS
-from .eps import CotsBattery, CotsSolarArray, CotsRegulatorAndConverter, CotsPowerCircuit, CotsProtection
+from .eps import ProcessorAndMemory, Software
+from .eps import CotsBattery, CotsSolarArray, CotsRegulatorAndConverter, CotsPowerCircuit, CotsProtection, CotsProcessorAndMemory, CotsSoftware
 from .spacecraft import CubeSatBus, GroundStation, CommandAndDataHandling, Communication
 from .spacecraft import AttitudeDeterminationAndControl, GuidanceNavigationAndControl, StructuresAndMechanisms, Thermal, Propulsion, Payload
 from .requirements import Requirement, VerificationCondition, ConditionResult, VerificationReport, InstanceVerification, VerificationFailure
@@ -22,7 +23,8 @@ __all__ = [
     "DomainElement", "SpaceSegment", "GroundSegment", "Subsystem", "Component", "Orbit",
     "SpacecraftMode", "ComponentMode", "ComponentState", "TimeAllocation", "OrbitAllocation", "ModeAllocation", "StateAllocation",
     "EPS", "EPSComponent", "SolarPowerPath", "TransferMethod", "Battery", "SolarArray", "RegulatorAndConverter", "PowerCircuit", "Protection", "COTS",
-    "CotsBattery", "CotsSolarArray", "CotsRegulatorAndConverter", "CotsPowerCircuit", "CotsProtection",
+    "ProcessorAndMemory", "Software",
+    "CotsBattery", "CotsSolarArray", "CotsRegulatorAndConverter", "CotsPowerCircuit", "CotsProtection", "CotsProcessorAndMemory", "CotsSoftware",
     "CubeSatBus", "GroundStation", "CommandAndDataHandling", "Communication",
     "AttitudeDeterminationAndControl", "GuidanceNavigationAndControl", "StructuresAndMechanisms", "Thermal", "Propulsion", "Payload",
     "Requirement", "VerificationCondition", "ConditionResult", "VerificationReport", "InstanceVerification", "VerificationFailure",

@@ -58,13 +58,29 @@
     <header class="dialog-heading"><h2 id="recommendations-title">Recommend COTS</h2><button type="button" data-close aria-label="Close recommendations">×</button></header>
     <p id="recommendations-context" class="hint"></p>
     <p id="recommendations-scope" class="recommendations-scope"></p>
-    <form id="recommendations-form" class="recommendation-controls">
-      <div><label for="recommendations-sort">Sort by numeric property</label><select id="recommendations-sort"><option value="">Catalog order (unsorted)</option></select></div>
-      <div><label for="recommendations-order">Order</label><select id="recommendations-order" disabled><option value="ascending">Lowest first</option><option value="descending">Highest first</option></select></div>
-      <div><label for="recommendations-limit">Maximum results</label><input id="recommendations-limit" type="number" min="0" step="1" value="5" placeholder="All"></div>
-      <button id="recommendations-query" type="submit" class="primary">Find matches</button>
+    <form id="recommendations-form">
+      <fieldset id="recommendations-controls">
+        <div class="recommendation-controls">
+          <div><label for="recommendations-sort">Sort by numeric property</label><select id="recommendations-sort"><option value="">Catalog order (unsorted)</option></select></div>
+          <div><label for="recommendations-order">Order</label><select id="recommendations-order" disabled><option value="ascending">Lowest first</option><option value="descending">Highest first</option></select></div>
+          <div><label for="recommendations-limit">Maximum results</label><input id="recommendations-limit" type="number" min="0" step="1" value="5" placeholder="All"></div>
+          <button id="recommendations-query" type="submit" class="primary">Find matches</button>
+        </div>
+        <div class="recommendation-filters">
+          <div><label for="recommendations-channel">Product channel</label><select id="recommendations-channel"><option value="">All compatible channels</option></select></div>
+          <div><label for="recommendations-condition">Catalog condition</label><input id="recommendations-condition" list="recommendations-conditions" placeholder="Default fact selection" autocomplete="off"><datalist id="recommendations-conditions"></datalist></div>
+        </div>
+        <p class="hint">Default: facts without a condition ID and purchased product counts. Missing or conflicting facts stay unset.</p>
+        <details class="recommendation-kind-settings">
+          <summary>Fact value meanings</summary>
+          <p class="hint">Choose a value meaning for each property you want to override. Other properties keep their catalog defaults. Supported transfer methods require an explicit selection.</p>
+          <div class="recommendation-kind-add"><div><label for="recommendations-property">Property</label><select id="recommendations-property"></select></div><button id="recommendations-add-kind" type="button">Add override</button></div>
+          <div id="recommendations-value-kinds"></div>
+        </details>
+      </fieldset>
     </form>
-    <p class="hint">Leave the maximum blank for all results. Sorting requires a finite numeric value.</p>
+    <p class="hint">Blank maximum shows all matches.</p>
+    <div id="recommendations-case"></div>
     <p id="recommendations-summary" role="status" aria-live="polite"></p>
     <p id="recommendations-error" class="error-text" role="alert"></p>
     <div id="recommendations-results"></div>

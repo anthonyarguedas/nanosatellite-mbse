@@ -6,6 +6,7 @@ import math
 from numbers import Real
 
 from .elements import Component
+from .eps import EPS
 from .properties import EvaluationStatus
 from .requirements import VerificationReport
 
@@ -17,9 +18,11 @@ class CotsRecommendation:
     sort_value: object = None
 
 
-def recommend_cots(component, candidates, *, sort_by=None, reverse=False, limit=None, mode=None):
-    """Substitute candidate Property definitions in an isolated Mission.
+def recommend_cots(component, candidates=None, *, sort_by=None, reverse=False, limit=None, mode=None,
+                   condition_id="", element_id=None, value_kinds=None):
+    """Query the built-in catalog in an isolated Mission.
 
+    Explicit alternatives can override automatic catalog discovery.
     Candidates are detached, fixed Component instances. Only the generic
     component's direct requirements are checked. Every owned requirement must
     have conditions and pass. With no requirements, the query is unconstrained.
@@ -37,6 +40,13 @@ def recommend_cots(component, candidates, *, sort_by=None, reverse=False, limit=
         raise ValueError("The evaluation mode must belong to this Mission.")
     if limit is not None and (type(limit) is not int or limit < 0):
         raise ValueError("The recommendation limit must be a nonnegative integer or None.")
+    if candidates is None:
+        from framework.cots import load_catalog
+
+        candidates = load_catalog().candidates(component, condition_id=condition_id,
+                                               element_id=element_id, value_kinds=value_kinds)
+    elif condition_id or element_id is not None or value_kinds:
+        raise ValueError("Catalog selectors apply to automatically discovered candidates.")
     candidates = tuple(dict.fromkeys(candidates))
     if any(not isinstance(item, Component) or not item.fixed_properties for item in candidates):
         raise TypeError("Supply fixed COTS Component instances.")
@@ -51,11 +61,18 @@ def recommend_cots(component, candidates, *, sort_by=None, reverse=False, limit=
     for candidate in candidates:
         if not component.accepts(candidate):
             continue
+        role = getattr(candidate, "catalog_role", None)
+        if isinstance(role, type) and any(isinstance(component, cls) for cls in EPS.default_components):
+            if any(issubclass(role, cls) and not isinstance(component, cls) for cls in EPS.default_components):
+                continue
         memo = {id(imported): imported for imported in mission.imports.values()}
         trial, product = deepcopy((mission, candidate), memo)
         owner, selected_mode = memo[id(component)], memo.get(id(mode))
         for installed in owner.cots:
             owner.remove(installed)
+        for name in ("catalog_product", "catalog_role", "catalog_element", "catalog_condition", "catalog_bindings"):
+            if hasattr(product, name):
+                setattr(owner, name, getattr(product, name))
         for name, prop in product.properties.items():
             definition = prop.copy(None, name)
             if name in owner.properties:

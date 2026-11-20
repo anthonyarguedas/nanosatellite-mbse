@@ -12,6 +12,7 @@ requires-python = ">=3.8"
 packages = [
     "framework",
     "framework.models",
+    "framework.cots",
     "framework.scripts",
     "framework.gui",
     "framework.gui.backend",
@@ -19,5 +20,6 @@ packages = [
 package-dir = {framework = "."}
 
 [tool.setuptools.package-data]
-framework = ["cots/*.tsv", "sessions/*.py"]
+framework = ["sessions/*.py"]
+"framework.cots" = ["*.tsv"]
 "framework.gui" = ["*.mjs", "package.json", "public/*.html", "public/*.js", "public/*.css", "server/*.mjs"]

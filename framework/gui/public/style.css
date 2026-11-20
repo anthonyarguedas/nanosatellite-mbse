@@ -155,14 +155,31 @@ dialog p { margin-top: 8px; }
 dialog footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
 #recommendations-dialog { width: min(820px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); overflow-y: auto; }
 .recommendations-scope { font-size: 12px; line-height: 1.6; margin: 12px 0 4px; }
+#recommendations-controls { border: 0; margin: 0; padding: 0; min-width: 0; }
 .recommendation-controls { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto; align-items: end; gap: 12px; }
 .recommendation-controls label { font-size: 11px; }
-.recommendation-controls button { min-height: 37px; }
+.recommendation-controls button, .recommendation-kind-add button { min-height: 37px; }
+.recommendation-filters { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 12px; }
+.recommendation-kind-settings { margin-top: 16px; }
+.recommendation-kind-settings > summary, .recommendation-case > summary { cursor: pointer; color: var(--green); font-size: 12px; overflow-wrap: anywhere; }
+.recommendation-kind-add { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 12px; margin-bottom: 12px; }
+.recommendation-kind-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; align-items: center; gap: 10px; margin-top: 8px; }
+.recommendation-kind-row label { margin: 0; overflow-wrap: anywhere; }
+.recommendation-kind-row button { font-size: 20px; padding: 4px 10px; }
+.recommendation-case { margin: 16px 0; padding: 12px; background: #f0f4ed; border: 1px solid var(--line); border-radius: 5px; overflow-wrap: anywhere; }
+.recommendation-context, .recommendation-case dl { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; margin: 12px 0; }
+.recommendation-context > div:last-child { grid-column: 1 / -1; }
+.recommendation-context dt, .recommendation-case dt { color: #778377; font-size: 10px; }
+.recommendation-context dd, .recommendation-case dd { margin: 3px 0 0; font-size: 11px; overflow-wrap: anywhere; }
+.recommendation-case .table-frame { margin-top: 12px; }
+.recommendation-case table { min-width: 640px; }
+.recommendation-case .cell-text { font-size: 11px; }
 #recommendations-summary { margin: 22px 0 12px; font-size: 12px; font-weight: 500; }
 #recommendations-error:empty { display: none; }
 #recommendations-results { margin: 12px 0 20px; }
 .recommendation-card { padding: 14px 16px; margin-top: 10px; background: #f8faf6; border: 1px solid #d9e2d5; border-radius: 6px; }
-.recommendation-card > header { display: flex; align-items: center; gap: 14px; }
+.recommendation-card > header { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+.recommendation-identity { flex: 1; min-width: 150px; overflow-wrap: anywhere; }
 .recommendation-card h3 { font-size: 14px; }
 .recommendation-rank { display: grid; place-items: center; flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: #e5ede1; color: var(--green); font-size: 11px; }
 .recommendation-card .result { margin-left: auto; }
@@ -170,9 +187,17 @@ dialog footer { display: flex; gap: 10px; justify-content: flex-end; margin-top:
 .recommendation-card details { margin-top: 12px; }
 .recommendation-card summary { cursor: pointer; color: var(--green); font-size: 11px; }
 .recommendation-card .table-frame { margin-top: 12px; border-radius: 4px; }
-.recommendation-card table { min-width: 540px; }
+.recommendation-card table { min-width: 640px; }
 .recommendation-card th, .recommendation-card td { font-size: 11px; }
-@media (max-width: 650px) { .recommendation-controls { grid-template-columns: 1fr 1fr; } .recommendation-value { min-width: 0; } }
+.recommendation-card a, .recommendation-case a { color: var(--green); overflow-wrap: anywhere; }
+.recommendation-links, .recommendation-unset { font-size: 11px; line-height: 1.7; overflow-wrap: anywhere; }
+@media (max-width: 650px) {
+  .recommendation-controls { grid-template-columns: 1fr 1fr; }
+  .recommendation-filters { grid-template-columns: minmax(0, 1fr); }
+  .recommendation-kind-row label { grid-column: 1 / -1; }
+  .recommendation-kind-row select { grid-column: 1 / 3; }
+  .recommendation-value { min-width: 0; }
+}
 @media (hover: none) { .row-delete { opacity: 1; } }
 @media (max-width: 1100px) { #storage { display: none; } .workspace { grid-template-columns: minmax(320px, 1fr) minmax(0, 1.5fr); padding: 24px 20px 90px; gap: 24px; } }
 @media (max-width: 900px) {

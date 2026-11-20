@@ -25,7 +25,11 @@ class ModelObject:
         self._requirements_initialized = False
         definitions = {}
         for cls in reversed(type(self).__mro__):
-            definitions.update({key: value for key, value in vars(cls).items() if isinstance(value, Property)})
+            for key, value in vars(cls).items():
+                if isinstance(value, Property):
+                    definitions[key] = value
+                elif key in definitions:
+                    del definitions[key]
         self._properties = {
             key: value.copy(self, key, frozen=self.fixed_properties)
             for key, value in definitions.items()
