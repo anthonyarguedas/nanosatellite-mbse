@@ -7,8 +7,8 @@ Explicit assumptions supply the remaining inputs.
 
 \subsection{Verification Setup}
 
-FR-11 uses the published orbit and operating mode budgets as requirements on purchased battery cells and solar cells.
-Its source conditions and installation assumptions are stated separately in Appendix~\ref{appendix:cots-case-results}.
+For FR-11, mission power budgets supply the battery and solar cell requirements. Board schematics supply the requirements for the selected regulators and power switches \citep{birds4obchardware,oresatc3v5hardware}.
+Appendix~\ref{appendix:cots-case-results} gives the source conditions and installation assumptions.
 The comparison of later OreSat hardware against the 2019 budget is a design comparison across documented revisions.
 
 For the other requirements, the BIRDS electrical case uses a two-cell 3G30A solar section and a 3S2P nickel-metal hydride (NiMH) battery.
@@ -32,17 +32,9 @@ The appendix reports maximum deviations and representative comparisons, includin
 
 \subsection{COTS Recommendations}
 
-MOP-11 executed 14 automatic catalogue queries against independently calculated requirements from the published budgets.
-The reference part ratings were transcribed from the original manufacturer documents.
-The FR-11 reference used decimal arithmetic at 50 significant digits.
-All 149 numerical, decision, condition and preservation checks agreed with their references.
-The largest numerical difference was 0.0259\%, from the rounded BIRDS energy-after-regulator value.
-Every query preserved the mission, catalogue records and source data.
+MOP-11 ran 26 automatic catalogue queries across the four FR-11 categories. Each of the eight baseline queries included its documented part. The eight stricter limits excluded their reference parts on a failed check. The eight missing-rating controls also excluded the parts, with the required check unresolved. Two further queries varied solar radiation exposure. Every query preserved the mission and catalogue. The largest numerical difference was 0.0259\%, from the rounded BIRDS energy-after-regulator value.
 
-The four baseline queries included the documented Panasonic BK-3MCC, Tenergy 30005-0, 3G30A and XTE-SF products under the stated conditions.
-All four stricter-budget queries excluded their reference parts.
-All four missing-rating queries left the required checks unresolved and excluded the affected parts.
-Original budget excerpts and component records appear in Figures~\ref{fig:source-birds-budget}--\ref{fig:source-solar-ratings}.
+The rail measures and decisions agreed with independent checks against the manufacturer datasheets. For OreSat's 3.3~V supply, the catalogue included the fixed 3.3~V regulator and rejected the 5~V variant. For the card supply, it included the switch that retries after thermal shutdown and rejected the latching variant used on the radio branch. Table~\ref{tab:cots-case-rails} gives the regulator and switch results for both missions. Figures~\ref{fig:source-birds-budget}--\ref{fig:source-solar-ratings} give the original cell and budget evidence.
 
 The later Tenergy cell's minimum capacity of 2.5~Ah did not meet the 3.299931~Ah required to reproduce the 2019 budget's calculated 24.6-pass capability at 60\% DoD.
 This prediction defines the stricter comparison used here.
@@ -90,6 +82,8 @@ The earlier budget assumed 95.04~Wh \citep{oresat2019powerbudget}.
 Its solar history attributes the Alta-to-Spectrolab replacement to Alta's closure, and the SPV1040 replacement to the change from 1S to 2S batteries \citep{oresatsolarhistory}.
 BIRDS authors associate early power failures with panel assembly faults and report 1.202~Wh available after one panel loss against 1.438~Wh nominal demand \citep{shrestha2022birds4powerperformance,shrestha2022birds4results}.
 Later hybrid silicon and triple-junction panels on CURTIS and MicroOrbiter-1 address this reliability risk \citep{shrestha2026solarreliability}.
+
+The OreSat C3 schematic labels the card switch's current limit as 302~mA. The resistor in the design notes reproduces that label, but the resistor in the schematic and parts list gives 312.2~mA by the manufacturer's equation \citep{oresatc3v5hardware,cots-mission_ti_tps259620ddat_ds}. Both settings are within the recommended switch's programmable range. Its selection therefore does not resolve the installed current limit.
 
 Other links remain unexplained in the reviewed sources.
 OreSat's earlier pass prediction is not explicitly reconciled with its later battery configuration.

@@ -16,7 +16,7 @@ P identifies a published reference value.
 Displayed values use seven significant figures. Deviations use unrounded values.
 
 The following electrical baselines apply to FR-12 and FR-14 to FR-20.
-FR-11 uses the separate budget allocations and source conditions in Section~\ref{appendix:cots-case-results}.
+FR-11 uses the cell budgets, rail requirements and source conditions in Section~\ref{appendix:cots-case-results}.
 The electrical baselines are circular and Sun pointing.
 Both use $R_E=6378$ km, $\mu=398601$ km$^3$/s$^2$ and 365.25 days per year.
 Solar irradiance is 1367 W/m$^2$.
@@ -103,7 +103,7 @@ Requirement & Calculation checked & BIRDS max. (\%) & OreSat max. (\%) \\ \midru
 Requirement & Calculation checked & BIRDS max. (\%) & OreSat max. (\%) \\ \midrule
 \endhead
 \bottomrule\endfoot
-FR-11 & Budget-derived COTS queries and source-qualified ratings & 0.0259 & 0.0177 \\
+FR-11 & Cell and rail COTS queries against sourced ratings & 0.0259 & 0.0177 \\
 FR-12 & Mass,\allowbreak{} volume and allocation margins & $<10^{-10}$ & $<10^{-10}$ \\
 FR-14 & Energy budgets and BOL/\allowbreak{}EOL sizing & 0.0259 & 0.315 \\
 FR-15 & Solar technology and battery chemistry & 0.000864 & 0.000731 \\
@@ -120,7 +120,7 @@ FR-20 & Normal extrema and trip comparisons & 0 & 0.0799 \\
 Published checks use six BIRDS cells at 27 g each and the historical OreSat battery and solar modules \citep{birds2021batteryverification,oresat2016csli}.
 Original excerpts appear in Figures~\ref{fig:source-battery-configurations} and~\ref{fig:source-oresat-mass}.
 The complete mass estimates add assumed EPS contributions.
-The values below list battery, solar array, conversion and distribution contributions, in that order.
+The values below list battery, solar array, conversion and distribution contributions, in that order. These four groups define the assessment boundary. Both mission models omit a separate EPS processor and memory component. Retaining it with unspecified mass, volume or power leaves the corresponding totals unresolved.
 The OreSat mass case uses 2016 hardware, separate from its later electrical baseline.
 
 
@@ -273,7 +273,7 @@ Stored energies add. Current limits remain per branch without an assumed sharing
 \subsection{FR-17: Bus Rails and Converter Compatibility}
 The selected rails are 3.3 V at 0.5 A and 5 V at 0.4 A.
 Terminal battery current is $I_{bat}=P_{rail}/(0.9V_{bat})$ at nominal pack voltage.
-BIRDS uses TPS63020-Q1 for 3.3 V and LTC3119 for 5 V, with assumed complete-circuit efficiency 0.9 and 1 A output limit.
+The BIRDS comparison assigns TPS63020-Q1 to 3.3 V and LTC3119 to 5 V, with assumed complete-circuit efficiency 0.9 and a 1 A output limit. The latter is a comparison case: the board parts list identifies TPS61235P on the 5 V rail, while the mission used LTC3119 for battery charge regulation \citep{birds4obchardware,shrestha2021birdssafety}.
 Their entered input intervals are 1.8--5.5 V and 2.5--18 V.
 OreSat uses TPS62111/12 with a 3.1--17 V input interval, 1.5 A output limit and assumed efficiency 0.9 \citep{oresat2021opddesign}.
 Voltage tolerance is an assumed 0.05 V.

@@ -1,9 +1,7 @@
-\subsection{FR-11: Catalogue Recommendations from Mission Budgets}
+\subsection{FR-11: Cell, Regulator and Power Switch Recommendations}
 \label{appendix:cots-case-results}
 
-The reference calculations use the original budgets and manufacturer sheets independently of the catalogue, with 50 significant digits of decimal arithmetic.
-Every query screens one purchased cell or single-cell solar cell assembly (SCA) against its directly owned requirements.
-Installation counts remain separate.
+The cell queries screen a purchased battery cell or single-cell solar cell assembly (SCA). The references use the original budgets and manufacturer sheets independently of the catalogue, with 50 significant digits of decimal arithmetic. Installation counts remain separate.
 For load energy $E_L$ in Wh, the required cell capacity and power are
 \begin{equation*}
 C_{\mathrm{req}}=\frac{E_L}{N_{\mathrm{bat}}V_{\mathrm{budget}}d\eta_d},
@@ -50,7 +48,7 @@ Spectrolab XTE-SF & $2.435\times0.0179\times27=1.176836$ W & One 27 cm$^2$ cell 
 
 \begingroup\footnotesize\setlength{\tabcolsep}{3pt}\setlength{\parskip}{0pt}
 \begin{longtable}{@{}P{0.30\linewidth}rrrr@{}}
-\caption{MOP-11 baseline results. I is the independent requirement, F is the framework requirement and rating. All four reference parts were included.}\label{tab:cots-case-baselines}\\
+\caption{MOP-11 cell baseline results. I is the independent requirement, F is the framework requirement and rating. All four reference cells were included.}\label{tab:cots-case-baselines}\\
 \toprule
 Case and purchased item & Required (I) & Required (F) & Rating (F) & Matches \\ \midrule
 \endfirsthead
@@ -87,7 +85,7 @@ BIRDS solar & Select $10^{15}$ 1 MeV electrons/cm$^2$ at the same irradiance and
 OreSat solar & Select the sheet's United States standard $10^{15}$ 1 MeV electrons/cm$^2$ condition. & $2.435(0.86)\times0.0179(27)(0.98)=0.9918370$ W. Excluded, resolved false. \\
 \end{longtable}\endgroup
 
-The four baseline, four stricter-budget, four missing-rating and two radiation queries produced 149 matching checks.
+The 14 cell queries (four baseline, four stricter budgets, four missing ratings and two radiation cases) produced 149 matching checks.
 Every query left the mission, catalogue records and source data unchanged.
 Radiation fluence is an assessment condition, separate from calendar lifetime.
 
@@ -109,4 +107,21 @@ OreSat standby balance, $1.634-0.623$ & 1.011 & 1.011 & 0 \\
 OreSat generation uses the printed 2.600 W total, which differs from twice the 1.33 W row label.
 BIRDS solar power uses the manufacturer's MPP pair, separate from the presentation's 2.70 V entry.
 The 3G30C-Advanced identity in the BIRDS safety paper is also separate from the budget's 3G30A.
-The comparisons above preserve these source distinctions.
+
+\begingroup\footnotesize\setlength{\tabcolsep}{3pt}\setlength{\parskip}{0pt}
+\begin{longtable}{@{}P{0.16\linewidth}P{0.46\linewidth}P{\dimexpr0.38\linewidth-4\tabcolsep\relax}@{}}
+\caption[MOP-11 regulator and power switch results.]{MOP-11 rail queries from the BIRDS-4 and OreSat C3 v5.0 schematics and parts lists \citep{birds4obchardware,oresatc3v5hardware}. In each row the baseline included the reference part. The stricter limit excluded it on a false comparison. Requiring the missing rating excluded it on an unresolved comparison.}\label{tab:cots-case-rails}\\
+\toprule
+Rail and part & Baseline requirement and observed measure & Stricter limit and missing-rating control \\ \midrule
+\endfirsthead
+\toprule
+Rail and part & Baseline requirement and observed measure & Stricter limit and missing-rating control \\ \midrule
+\endhead
+\bottomrule\endfoot
+BIRDS 3.3 V, TPS63020-Q1 & The 2.7--4.2 V screen uses the pack minimum and the raw line maximum \citep[Secs.~6.3--6.4]{kyutech2021birdsicd}. The buck-boost converter covers 1.8--5.5~V input. Its adjustable 1.2--5.5~V output range includes 3.3~V from $-40$ to $125\,^{\circ}$C junction temperature \citep[pp.~4--5]{cots-mission_ti_tps63020qdsjtq1_ds}. & Raise the required input ceiling to 6 V. Separately require a guaranteed 2 A output throughout the baseline interval. \\
+OreSat 3.3 V, TPS62111 & The 6.0--8.4 V bus lies inside the 3.1--17 V operating range. U5 supplies fixed 3.3 V. The 5 V variant at U26 (TPS62112) was excluded \citep[pp.~4--5]{cots-mission_ti_tps62111rsat_ds}. & Raise the required input ceiling to 18 V. Separately require a guaranteed 0.5 A output throughout the baseline interval. \\
+BIRDS 5 V, LTC4361-2 & The line requires a nominal 2 A trip and automatic retry \citep[Secs.~6.3, 8.4]{kyutech2021birdsicd}. U8 supports retry and normal operation at 2.5--5.5~V. At 5 V, enabled and $25\,^{\circ}$C, the typical sense threshold gives $50~\mathrm{mV}/25~\mathrm{m}\Omega=2$ A for shunt R15 \citep[pp.~1, 3, 8]{cots-mission_adi_ltc4361idc_2_trmpbf_ds}. & Limit the nominal trip to 1.5 A with R15 unchanged. Separately require a 2 A continuous rating for the switched path. The controller alone does not rate its external transistor. \\
+OreSat card supply, TPS259621 & U4 must support a nominal 0.302 A setting and retry after thermal shutdown. Its 0.125--2~A range covers the setting, and R6 lies in its 453--7869~$\Omega$ programming range. U27 (TPS259620) meets both limits but latches off and was excluded \citep[pp.~1, 3, 5]{cots-mission_ti_tps259620ddat_ds}. & Raise the required setting to 2.1 A. Separately require a tabulated minimum of 0.302 A at the specified $3.00~\mathrm{k}\Omega$ resistor. No such rating is tabulated \citep[p.~6]{cots-mission_ti_tps259620ddat_ds}. \\
+\end{longtable}\endgroup
+
+All 12 rail queries preserved the mission and catalogue. The reported ratings and decisions matched the independent references. The switch screen checks whether 302~mA is programmable. For OreSat R6, the design notes specify $3.1~\mathrm{k}\Omega$, while the schematic value and parts list specify $3.00~\mathrm{k}\Omega$ \citep{oresatc3v5hardware}. With $R$ in ohms, the datasheet gives $I_{\rm lim}=903/R+0.0112$ in amperes \citep[Eq.~5]{cots-mission_ti_tps259620ddat_ds}. The two values give 302.49 and 312.20~mA, respectively. The latter differs from the 302~mA schematic annotation by 3.38\%. This comparison uses different resistor inputs and is separate from the same-input MOP tolerance.
