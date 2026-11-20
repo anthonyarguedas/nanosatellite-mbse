@@ -5,12 +5,27 @@ Table~\ref{tab:eps-characterization-traceability} provides the traceability from
 As-is observation and concerns are not given identifiers for brevity.
 100\% of table rows are traced to their justification and classified as requirements or MOPs, thus fulfilling the first objective of this project.
 
-The second objective, to define the operational flow of modeling, analysis, and evidence management of the MBSE framework, was delivered as the Python code that constitutes the framework's models and analyses (presented in full in Appendix \ref{appendix:framework-code}), which is plain text, and can be version-controlled.
+The workflow in Figure~\ref{fig:mission-modeling-workflow} illustrates the second objective through modeling, analysis, and evidence management phases, each presenting activities, inputs, outputs, tools, interfaces, and mechanisms for traceability and reproducibility.
+100\% of workflow phases, grouped by the logical components containing them, have documented alternatives in Table~\ref{tab:framework-physical-alternatives}.
+The alternatives are synthesized into candidates and compared via selection criteria in Table~\ref{tab:framework-candidate-scores}, where C3 (Version-controlled Python) is justified as the winning candidate.
+Thus, the second objective of this project is fulfilled.
 
-The third objective's deliverable can also be found in Appendix \ref{appendix:framework-code}, corresponding to the CSRM model classes.
-For the fourth objective, the characterization of early EPS verification and validation within the EPS framework was achieved by the automatic assignment of parametric requirements to generic EPS components, for which the list of requirements is given in Appendix \ref{appendix:automatic-eps-requirements}.
+The EPS model implemented in the framework is generic by virtue of adopting CSRM logical components (Figure~\ref{fig:eps-property-structure}), which represent technology-independent component types that mission teams refine into physical designs \citep{kaslow2019csrm}.
+For these EPS categories, CSRM allows ``function'' and ``logical component'' to be interchangeable concepts.
+Interfaces are modeled as component properties that depend on the properties of other EPS components (Figure~\ref{fig:eps-property-interfaces}).
+Each component can be assigned operation modes annotated per state with voltage, current and a power expression equal to their product (Figure~\ref{fig:eps-modes-states}).
+Each component type is given a set of properties from which requirements and constraints can be formulated (Figures~\ref{fig:eps-component-properties}--\ref{fig:processor-software-properties}).
+Furthermore, the generic component types are assigned certain generic requirements upon being added to the mission model, as per Table~\ref{tab:automatic-eps-requirements}.
+100\% of these requirements arelinked to an architecture element, and thus the third objective of this project is fulfilled.
 
-Finally, the two case studies of the BIRDS-4 and OreSat CubeSat missions discussed in Chapter \ref{ch:results} delivered the fifth objective.
+Table~\ref{tab:automatic-eps-verification} documents the verification methods, pass/fail criteria, and required evidence for 100\% of the automatically assigned EPS requirements.
+This maintains traceability from requirement to verification means to result and fulfills the fourth objective of this project.
+
+The BIRDS-4 and OreSat case studies in Chapter~\ref{ch:results} were completed using the same framework core, with traceable and reproducible evidence and without post hoc modifications to the framework.
+The acceptance and performance metrics used for evaluation are reported.
+As explained in Subsection~\ref{subsection:framework-mops}, the missions contrast a traditional nanosatellite EPS with an EPS designed for high autonomy.
+This fulfills the fifth and final objective of this project, as well as the third.
+
 The results suggested that the outputs of the analyses bundled with the framework were accurate with respect to the original BIRDS-4 and OreSat values calculated using the same inputs. This implies that the parametric requirements modeled by the framework don't just link quantities but represent real EPS engineering knowledge.
 Cross-checking published power budgets with hardware documentation during the BIRDS-4 and OreSat case studies revealed unexplained discrepancies, suggesting possible evidence fragmentation despite the missions' open source commitments.
 User tests then motivated the conclusion that, for controlled individual tasks, stakeholders can now manage parametric requirements, assess the impact of a requirement change, and reproduce analyses much faster than before by leveraging the framework.

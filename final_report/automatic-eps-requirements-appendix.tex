@@ -2,9 +2,11 @@
 \label{appendix:automatic-eps-requirements}
 
 The requirements automatically assigned to EPS elements form part of the fourth objective's deliverable, which characterizes early EPS verification and validation.
-Table~\ref{tab:automatic-eps-requirements} associates each requirement statement with its EPS element.
+Table~\ref{tab:automatic-eps-requirements} associates each requirement statement with its EPS element, which also represents evidence for the fulfillment of the third objective.
 Calculated targets are shown symbolically because their numerical values depend on the mission inputs, following the equations in Chapter~\ref{ch:design-proposal}.
-The EPS owns the first 18 requirements, and each added protection component owns its normal operation requirement.
+
+Table~\ref{tab:automatic-eps-verification} provides the verification methods, pass/fail criteria, and required evidence for every automatic requirement. 100\% of requirements listed report a verification means, pass/fail criteria, and associated evidence, thus maintaining traceability from requirement to verification means to result and satisfying the fourth objective of this project.
+
 {\small
 \setlength{\tabcolsep}{4pt}
 \setlength{\parskip}{0pt}
@@ -60,3 +62,93 @@ Bus power path & The selected bus path shall provide the entered required voltag
 % no_trip
 Protection & The declared protection detectors shall remain inactive for all supplied normal operating samples under the applicable bounds in Equation~\eqref{eq:protection-no-trip}. \\
 \end{longtable}}
+
+\clearpage
+Rows in Table~\ref{tab:automatic-eps-verification} follow the requirement order in Table~\ref{tab:automatic-eps-requirements} and use the default property bindings.
+Subscript $\mathrm{avail}$ denotes supplied available energy or current capacity, and $[V_r^{\mathrm{lo}},V_r^{\mathrm{hi}}]$ denotes assigned receiving voltage limits.
+Calculated inputs retain the dependencies given in Chapter~\ref{ch:design-proposal}.
+All numerical measures and targets must be finite.
+Cell and string counts must be native integers.
+For minimum checks with a zero target, available evidence is unused except for the integer solar cell count.
+A requirement passes when all its predicates are true.
+Missing inputs remain unresolved, and calculation errors retain an error status.
+
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\setlength{\parskip}{0pt}
+\setlength{\LTpre}{0.4\baselineskip}
+\setlength{\LTpost}{0.4\baselineskip}
+\setlength{\LTcapwidth}{\linewidth}
+\renewcommand{\arraystretch}{1.08}
+\setlength{\ReportTableBodyWidth}{\dimexpr\linewidth-6\tabcolsep\relax}
+\begin{longtable}{@{}P{0.18\ReportTableBodyWidth}P{0.21\ReportTableBodyWidth}P{0.29\ReportTableBodyWidth}P{0.32\ReportTableBodyWidth}@{}}
+\caption{Early verification matrix for requirements automatically assigned to EPS elements. Required evidence is shown as symbols for mission inputs. Verification methods are classified as comparison predicates with or without script outputs, noting the filenames of the scripts involved. The pass/fail criteria is given as the target of the comparison predicate. The mechanism for result management is common to all requirements, even those added manually to the framework, as has already been explained by Figures~\ref{fig:requirement-links}--\ref{fig:parameter-impact}.}\label{tab:automatic-eps-verification}\\
+\toprule
+\textbf{Requirement} & \textbf{Verification method} & \textbf{Pass criterion} & \textbf{Required evidence} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Requirement} & \textbf{Verification method} & \textbf{Pass criterion} & \textbf{Required evidence} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+% sunlight_energy
+Sunlight energy & Predicate with script outputs: \texttt{sizing.py}. & $0\leq E_s\leq E_{\mathrm{avail},s}$ \newline Equation~\eqref{eq:sunlight-load-energy}. & $E_{\mathrm{avail},s}$, $\overline P_{L,s}$, $T_s$. \\
+\addlinespace[4pt]
+% eclipse_energy
+Eclipse energy & Predicate with script outputs: \texttt{sizing.py}. & $0\leq E_e\leq E_{\mathrm{avail},e}$ \newline Equation~\eqref{eq:eclipse-load-energy}. & $E_{\mathrm{avail},e}$, $\overline P_{L,e}$, $T_e$. \\
+\addlinespace[4pt]
+% solar_power
+Solar EOL power & Predicate with script outputs: \texttt{sizing.py}. & $0\leq P_{\mathrm{sp}_{\min}}\leq P_{\mathrm{array,EOL}}$ \newline Equation~\eqref{eq:minimum-panel-power}. & $E_s$, $E_e$, $X_s$, $X_e$, $T_s$, $N_{\mathrm{pv}}$, and cell $V_{\mathrm{mp,EOL}}$, $I_{\mathrm{mp,EOL}}$ or $\{(v_k,i_k)\}$. \\
+\addlinespace[4pt]
+% solar_cell_count
+Solar cell count & Predicate with script outputs: \texttt{sizing.py}. & $0\leq\lceil N_{\mathrm{sc}}\rceil\leq N_{\mathrm{pv}}$ \newline $N_{\mathrm{pv}}\in\mathbb Z$. \newline Equation~\eqref{eq:solar-cell-count}. & $N_{\mathrm{pv}}$, $P_{\mathrm{sp}_{\min}}$, and cell $V_{\mathrm{mp,EOL}}$, $I_{\mathrm{mp,EOL}}$ or $\{(v_k,i_k)\}$. \\
+\addlinespace[4pt]
+% battery_energy
+Battery BOL energy & Predicate with script outputs: \texttt{sizing.py}. & $0\leq E_{\mathrm{Battery}}\leq E_{\mathrm{pack,BOL}}$ \newline Equations~\eqref{eq:battery-mission-cycles}--\eqref{eq:battery-energy}. & $E_{\mathrm{pack,BOL}}$, $E_e$, $N_{\mathrm{lifetime}}$, $N_{\mathrm{day/year}}$, $T_o$, $a$, $b$, $\mathrm{DoD}_{\min}$, $\mathrm{DoD}_{\max}$, $M$. \\
+\addlinespace[4pt]
+% solar_configuration
+Array configuration & Predicates without script outputs. & $N_s^{\mathrm{pv}},N_p^{\mathrm{pv}}\in\mathbb Z_{\geq1}$ \newline $N_{\mathrm{pv}}=N_s^{\mathrm{pv}}N_p^{\mathrm{pv}}$. \newline Equation~\eqref{eq:pv-integer-configuration}. & $N_s^{\mathrm{pv}}$, $N_p^{\mathrm{pv}}$, $N_{\mathrm{pv}}$. \\
+\addlinespace[4pt]
+% battery_configuration
+Battery configuration & Predicates without script outputs. & $N_s^{\mathrm{bat}},N_p^{\mathrm{bat}}\in\mathbb Z_{\geq1}$ \newline $N_{\mathrm{bat}}=N_s^{\mathrm{bat}}N_p^{\mathrm{bat}}$. \newline Equation~\eqref{eq:battery-assembly-capacity}. & $N_s^{\mathrm{bat}}$, $N_p^{\mathrm{bat}}$, $N_{\mathrm{bat}}$. \\
+\addlinespace[4pt]
+% solar_area
+Active array area & Predicate with script outputs: \texttt{sizing.py} and \texttt{illumination.py}. & $0\leq A_{\mathrm{active,min}}\leq A_{\mathrm{active}}$ \newline Equation~\eqref{eq:array-incidence-area}. & $A_{\mathrm{active}}$, $P_{\mathrm{sp}_{\min}}$, $G$, $\eta_{\mathrm{op}}$, $I_d$, $\eta_a$, $\overline\kappa$. \\
+\addlinespace[4pt]
+% solar_area_fit
+Array installation area & Predicate with script outputs: \texttt{sizing.py}. & $0\leq A_{\mathrm{panel}}\leq A_{\mathrm{usable}}$ \newline Equation~\eqref{eq:array-area-fit}. & $A_{\mathrm{active}}$, $f_{\mathrm{packing}}$, $A_{\mathrm{usable}}$. \\
+\addlinespace[4pt]
+% solar_generation
+Mean solar generation & Predicate with script outputs: \texttt{sizing.py} and \texttt{illumination.py}. & $0\leq P_{\mathrm{sp}_{\min}}\leq\overline P_{\mathrm{source},s}$ \newline Equation~\eqref{eq:array-generation-screen}. & $P_{\mathrm{sp}_{\min}}$, $A_{\mathrm{active}}$, $G$, $\eta_{\mathrm{op}}$, $I_d$, $\eta_a$, $\overline\kappa$. \\
+\addlinespace[4pt]
+% solar_voltage
+Array operating voltage & Predicate with script outputs: \texttt{sizing.py}. & $0\leq V_r^{\mathrm{lo}}\leq V_{\mathrm{op}}$ \newline $V_{\mathrm{op}}\leq V_r^{\mathrm{hi}}$. \newline Equation~\eqref{eq:solar-operating-voltage}. & $V_r^{\mathrm{lo}}$, $V_r^{\mathrm{hi}}$, the selected path, and applicable $V_{\mathrm{bus}}$, $\Delta V$, $V_{\mathrm{set}}$, $N_s^{\mathrm{pv}}$, $V_{\mathrm{mp,cell}}$ or $\{(v_k,i_k)\}$. \\
+\addlinespace[4pt]
+% battery_voltage
+Battery voltage interval & Predicate without script outputs. & $0\leq V_r^{\mathrm{lo}}\leq V_{\mathrm{pack}}^{\mathrm{lo}}$ \newline $V_{\mathrm{pack}}^{\mathrm{lo}}\leq V_{\mathrm{pack}}^{\mathrm{hi}}\leq V_r^{\mathrm{hi}}$. \newline Equation~\eqref{eq:battery-assembly-ratings}. & $N_s^{\mathrm{bat}}$, $V_{\mathrm{cell}}^{\mathrm{lo}}$, $V_{\mathrm{cell}}^{\mathrm{hi}}$, $V_r^{\mathrm{lo}}$, $V_r^{\mathrm{hi}}$. \\
+\addlinespace[4pt]
+% solar_open_circuit_voltage
+Array open-circuit voltage & Predicate without script outputs for scalar ratings, with \texttt{sizing.py} outputs for I--V samples. & $0\leq V_{\mathrm{oc}}\leq V_{\mathrm{abs},r}$ \newline Equation~\eqref{eq:pv-input-ratings}. & $N_s^{\mathrm{pv}}$, $V_{\mathrm{abs},r}$, and cell $V_{\mathrm{oc,cell}}$ or $\{(v_k,i_k)\}$. \\
+\addlinespace[4pt]
+% solar_short_circuit_current
+Array short-circuit current & Predicate without script outputs for scalar ratings, with \texttt{sizing.py} outputs for I--V samples. & $0\leq I_{\mathrm{sc}}\leq I_{\mathrm{source,allow},r}$ \newline Equation~\eqref{eq:pv-input-ratings}. & $N_p^{\mathrm{pv}}$, $I_{\mathrm{source,allow},r}$, and cell $I_{\mathrm{sc,cell}}$ or $\{(v_k,i_k)\}$. \\
+\addlinespace[4pt]
+% bus_current
+Bus current capacity & Predicate without script outputs. & $0\leq I_{\mathrm{required}}\leq I_{\mathrm{avail}}$ \newline Equation~\eqref{eq:bus-output-compatibility}. & $I_{\mathrm{avail}}$, $I_{\mathrm{required}}$ at the selected load rail. \\
+\addlinespace[4pt]
+% battery_charge_current
+Battery charge current & Predicate without script outputs. & $0\leq I_{\mathrm{req}}^{\mathrm{charge}}\leq I_{\mathrm{allow}}^{\mathrm{charge}}$ \newline Equation~\eqref{eq:battery-assembly-ratings}. & $N_p^{\mathrm{bat}}$, $I_{\mathrm{cell,allow}}^{\mathrm{charge}}$, $I_{\mathrm{req}}^{\mathrm{charge}}$. \\
+\addlinespace[4pt]
+% battery_discharge_current
+Battery discharge current & Predicate without script outputs. & $0\leq I_{\mathrm{req}}^{\mathrm{discharge}}\leq I_{\mathrm{allow}}^{\mathrm{discharge}}$ \newline Equation~\eqref{eq:battery-assembly-ratings}. & $N_p^{\mathrm{bat}}$, $I_{\mathrm{cell,allow}}^{\mathrm{discharge}}$, $I_{\mathrm{req}}^{\mathrm{discharge}}$. \\
+\addlinespace[4pt]
+% bus_voltage
+Bus voltage match & Predicate without script outputs. & $|V_{\mathrm{out}}-V_{\mathrm{required}}|\leq\epsilon_V$ \newline $V_{\mathrm{out}},V_{\mathrm{required}},\epsilon_V\geq0$. \newline Equation~\eqref{eq:bus-output-compatibility}. & $V_{\mathrm{out}}$, $V_{\mathrm{required}}$, $\epsilon_V$ at the selected load rail. \\
+\addlinespace[4pt]
+% no_trip
+Protection remains inactive & Predicates with script outputs: \texttt{sizing.py}. & $0\leq V_{\mathrm{UV,trip}}^{\mathrm{hi}}<V_{\min}$ \newline $0\leq V_{\max}<V_{\mathrm{OV,trip}}^{\mathrm{lo}}$ \newline $0\leq I_{\min}\leq I_{\max}$ \newline $I_{\max}<I_{\mathrm{OC,trip}}^{\mathrm{lo}}$. \newline Equation~\eqref{eq:protection-no-trip}. & $\{V_q\}$, $\{I_q\}$, $V_{\mathrm{UV,trip}}^{\mathrm{hi}}$, $V_{\mathrm{OV,trip}}^{\mathrm{lo}}$, $I_{\mathrm{OC,trip}}^{\mathrm{lo}}$ for the declared detectors and their sensing points. \\
+\end{longtable}
+\endgroup

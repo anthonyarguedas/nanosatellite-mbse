@@ -1,12 +1,17 @@
 \chapter{EPS Component and COTS Models}
 \label{appendix:eps-component-models}
 
-The CSRM logical components represent generic component types that mission teams refine into physical designs \citep{kaslow2019csrm}.
-For these EPS categories, this appendix uses ``function'' and ``logical component'' interchangeably.
-Interfaces are modeled as component properties that depend on the properties of other EPS components.
-The figures present CSRM component properties, modes, states and requirement assignment for the third objective.
-Table~\ref{tab:derived-cots-models} lists the derived COTS classes and their binding rules.
-All numerical examples are illustrative allocations.
+The EPS model implemented in the framework is generic by virtue of adopting CSRM logical components (Figure~\ref{fig:eps-property-structure}), which represent technology-independent component types that mission teams refine into physical designs \citep{kaslow2019csrm}.
+For these EPS categories, CSRM allows ``function'' and ``logical component'' to be interchangeable concepts.
+Interfaces are modeled as component properties that depend on the properties of other EPS components (Figure~\ref{fig:eps-property-interfaces}).
+Each component can be assigned operation modes annotated per state with voltage, current and a power expression equal to their product (Figure~\ref{fig:eps-modes-states}).
+Each component type is given a set of properties from which requirements and constraints can be formulated (Figures~\ref{fig:eps-component-properties}--\ref{fig:processor-software-properties}).
+
+Furthermore, the generic component types are assigned certain generic requirements upon being added to the mission model, as per Table~\ref{tab:automatic-eps-requirements}.
+100\% of these requirements arelinked to an architecture element, and thus the third objective of this project is fulfilled.
+
+To represent integrated EPS solutions that cover more than one CSRM component type, which were encountered in component choices for the case studies,
+Table~\ref{tab:derived-cots-models} lists further COTS classes derived by class inheritance and their binding rules.
 
 \begin{figure}[htbp]
 \centering
@@ -103,7 +108,7 @@ Purchased product class & Assigned catalogue class and \texttt{COTS} & Binds the
 \begin{figure}[p]
 \centering
 \includegraphics[width=\linewidth]{fig/model-appendices/property-interfaces.pdf}
-\caption[Interfaces expressed as dependent component properties.]{The converter input voltage references the battery nominal voltage, and the converter output and EPS load requirement reference the selected load state. The two live GUI rows show the converter's unchanged input expression before and after changing the battery cell nominal voltage from 3.7~V to 3.8~V. Its evaluated input voltage changes through the stored dependency. These explicit links describe the chosen electrical interface and establish no automatic wiring or circuit synthesis.}
+\caption[Interfaces expressed as dependent component properties.]{The converter input voltage references the battery nominal voltage, and the converter output and EPS load requirement reference the selected load state. The two live GUI rows show the converter's unchanged input expression before and after changing the battery cell nominal voltage from 3.7~V to 3.8~V. Its evaluated input voltage changes through the stored dependency. These explicit links describe the chosen electrical interface.}
 \label{fig:eps-property-interfaces}
 \end{figure}
 \clearpage

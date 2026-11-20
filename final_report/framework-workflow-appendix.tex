@@ -1,9 +1,10 @@
-\chapter{Mission Modeling Workflow and Selected Code}
+\chapter{Mission Workflow and Selected Code}
 \label{appendix:framework-workflow}
 
-This representative workflow illustrates the second objective through mission construction, requirement management, linked analyses and verification.
-The engineer iterates until satisfied with the assessment, saves the mission as a Python file and commits it with the decision rationale as the Git commit message.
-The synthetic example demonstrates selected passing checks while leaving other mission requirements unresolved.
+The workflow in Figure~\ref{fig:mission-modeling-workflow} illustrates the second objective through modeling, analysis, and evidence management phases, each presenting activities, inputs, outputs, tools, interfaces, and mechanisms for traceability and reproducibility.
+100\% of workflow phases, grouped by the logical components containing them, have documented alternatives in Table~\ref{tab:framework-physical-alternatives}.
+The alternatives are synthesized into candidates and compared via selection criteria in Table~\ref{tab:framework-candidate-scores}, where C3 (Version-controlled Python) is justified as the winning candidate.
+Thus, the second objective of this project is fulfilled.
 
 \begin{figure}[!htbp]
 \centering
@@ -39,7 +40,7 @@ The synthetic example demonstrates selected passing checks while leaving other m
 \begin{figure}[p]
 \centering
 \includegraphics[width=\linewidth]{fig/model-appendices/scripts-and-commit.pdf}
-\caption[Linking analyses, executing verification and recording rationale.]{An explicit import makes a calculation available to property expressions. Named Property inputs bind 0.33~W and 100~s to the load energy function, and the selected output evaluates to 33~J when energy.value is read. mission.verify() executes the stored verification conditions and their dependencies in the selected mode. The two illustrated requirements pass, while the complete mission result remains unresolved because other inputs are unset. After reviewing and saving the configuration, the engineer stages its Python file and commits it with a rationale message. The Git commands are illustrative and were not executed to create this report.}
+\caption[Linking analyses, executing verification and recording rationale.]{An explicit import makes a calculation available to property expressions. Named Property inputs bind 0.33~W and 100~s to the load energy function, and the selected output evaluates to 33~J when energy.value is read. mission.verify() executes the stored verification conditions and their dependencies in the selected mode. The two illustrated requirements pass, while the complete mission result remains unresolved because other inputs are unset. After reviewing and saving the configuration, the engineer stages its Python file and commits it with a rationale message. The Git commands are illustrative.}
 \label{fig:mission-scripts-commit}
 \end{figure}
 \clearpage

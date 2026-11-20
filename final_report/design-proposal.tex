@@ -7,9 +7,9 @@ The complete project codebase, including the present document, the GUI, user doc
 
 The present section presents a narrative overview of that codebase guided by the requirements it satisfies.
 Given the size and code content of Appendix \ref{appendix:framework-code}, shorter excerpts provide an intermediate level of detail for manual reading.
-Appendix \ref{appendix:framework-workflow} presents the mission modeling and tailoring workflow and captioned code snippets for adding, editing, updating, verifying and deleting requirements (second objective).
-Appendix \ref{appendix:eps-component-models} presents the generic EPS component classes and their parameters graphically, together with interfaces, modes, states and requirement assignment (third objective).
-Appendix \ref{appendix:automatic-eps-requirements} contains the requirement statements automatically assigned to EPS elements (fourth objective).
+Appendix \ref{appendix:framework-workflow} presents the modeling, analysis, and evidence management workflow of the framework with captioned code snippets (which is the deliverable of the second objective of this project).
+Appendix \ref{appendix:eps-component-models} presents the generic EPS component classes and their parameters graphically, together with interfaces, modes, states and constraints (third objective).
+Appendix \ref{appendix:automatic-eps-requirements} contains the requirement statements automatically assigned to EPS elements and their verification methods, pass/fail criteria, required evidence, and mechanisms for result management (fourth objective).
 
 \section{Global MBSE model, user interfaces, and workflow}
 Figures~\ref{fig:csrm-mission-structure}--\ref{fig:csrm-eps-components} show the mission structure model, including a parametrized orbit (FR-13), the nine CubeSat subsystems in CSRM, and the generic components that constitute an EPS (FR-05).
@@ -95,7 +95,7 @@ For FR-01, the framework represents requirements, quantities and verification co
 Inspired by the property expressions of the Systems Modeling Language (SysML) v2 \citep{omg2026sysml2}, a Property stores a Python expression that can reference other properties, arithmetic operations and function calls.
 Figure~\ref{fig:property-expressions} shows a calculated property and the GUI rendering of a requirement statement.
 
-Property arithmetic, at its core, uses unit annotations without automatic conversion or dimensional analysis. However, the default properties assigned to components by the framework all have populated unit annotations, which, if respected, will produce dimensionally correct results for all default verifications methods and other calculations. Figure \label{fig:battery-property-excerpt} shows the unit annotations for the generic EPS component representing a battery.
+Property arithmetic, at its core, uses unit annotations without automatic conversion or dimensional analysis. However, the default properties assigned to components by the framework all have populated unit annotations, which, if respected, will produce dimensionally correct results for all default verifications methods and other calculations. Figure \ref{fig:battery-property-excerpt} shows the unit annotations for the generic EPS component representing a battery.
 The assignment of a COTS component as an implementation of a generic EPS component does check for the equality of property names and their associated unit annotations between both classes as described in Section~\ref{section:cots-database}, yet this operation falls outside the scope of property arithmetic.
 
 \begin{figure}[htbp]
@@ -145,7 +145,7 @@ The requirements already contain verification conditions, which become evaluable
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{fig/design-proposal/automatic-requirements.png}
-\caption[Automatically created EPS requirements.]{The first five of 18 requirements created when the EPS is added to the mission. Known inputs produce numerical targets for sunlight energy, eclipse energy, solar power and cell count. The battery energy statement retains its variable placeholder because mission lifetime and cycle fit inputs are unset. Supplying these quantities is the next engineering activity. The two energy delivery checks also require evidence of available energy, so a numerical target alone does not establish a passing result.}
+\caption[Automatically created EPS requirements.]{The first five of 18 requirements created when the EPS is added to the mission. Known inputs produce numerical targets for sunlight energy, eclipse energy, solar power and cell count. The battery energy statement retains its variable placeholder because mission lifetime and cycle fit inputs are unset. Supplying these quantities is the next engineering activity. The two energy delivery checks also require evidence of available energy.}
 \label{fig:automatic-requirements}
 \end{figure}
 
@@ -606,7 +606,7 @@ For the assessed load rail and state, the nominal voltage and current checks wil
     \qquad 0\leq I_{\mathrm{required}}\leq I_{\mathrm{out,allow}}.
     \label{eq:bus-output-compatibility}
 \end{equation}
-The accepted voltage tolerance $\epsilon_V\geq0$ will be explicit and will default to zero for an exact nominal match. Currents will be added only on the same rail at the same operating point. Battery and converter input currents will be calculated at their respective terminals, including applicable conversion losses. The engineer will link limits to each connected path and assess each selected mode. Supported output settings, dropout and converter-specific operating limits will require explicit conditions from the selected product. These checks will establish operating-point feasibility. They will infer no converter topology or switching behavior.
+The accepted voltage tolerance $\epsilon_V\geq0$ will be explicit and will default to zero for an exact nominal match. Currents will be added only on the same rail at the same operating point. Battery and converter input currents will be calculated at their respective terminals, including applicable conversion losses. The engineer will link limits to each connected path and assess each selected mode. Supported output settings, dropout and converter-specific operating limits will require explicit conditions from the selected product. These checks will establish operating-point feasibility.
 
 \subsection{Protection and electrical extrema (FR-20)}
 For FR-20, adding a protection component will create a requirement that its declared detectors remain inactive for the supplied normal operating cases. The engineer will supply voltage samples at the detector's sensed node and nonnegative current magnitudes in the protected direction. For case index $q$, the extrema will be:
