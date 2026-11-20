@@ -4,16 +4,16 @@
 This section reports the verification evidence for the framework requirements.
 The results of the two case studies represent the deliverable of the fifth objective of this project.
 
-\section{User trials}
+\section{User tests}
 \label{section:user-trial-results}
 
-The user trials assess the time required to maintain requirements, retrieve supporting evidence, assess changes and evaluate supplied alternatives through the framework.
-The protocol in Table~\ref{tab:framework-mop-protocols} assigns eleven tasks to each participant, with a limit of $60/11$~min per task and a total allocation of 60~min.
+The user tests assess the time required to maintain requirements, retrieve supporting evidence, assess changes and save mission inputs through the framework.
+The protocol in Table~\ref{tab:framework-mop-protocols} assigns ten tasks to each participant, with a limit of 6~min per task and a total allocation of 60~min.
 Each task uses the same prepared initial state for both participants.
 The mission conditions and numerical allocations are purely illustrative.
 They provide controlled starting points for measuring the effort required to perform only the assigned engineering activities, not an entire mission definition.
 
-The trials use the GUI and a prepared mission environment.
+The tests use the GUI and a prepared mission environment.
 For FR-09, participants are also given access to a terminal.
 Before that task, they are instructed to use \texttt{git status --short} to view repository status and \texttt{git diff} to inspect changes, and practice both commands on the prepared baseline.
 Preparation and this briefing occur before timing begins.
@@ -22,7 +22,7 @@ Submission is when the participant declares verbally that they have completed th
 Only the screenshots from the student club member are presented in this document, since the deterministic analyses of the framework produced the same outputs under equal inputs for both participants.
 
 Each MOP compares its two elapsed times with the limit separately, without averaging or any metric about the correctness of the results.
-Table~\ref{tab:user-trial-first-task} shows the first task, and Appendix~\ref{appendix:user-trials} gives the prepared inputs and the complete table of user trial results.
+Table~\ref{tab:user-trial-first-task} shows the first task, and Appendix~\ref{appendix:user-trials} gives the prepared inputs and the complete table of user test results.
 
 % Keep the evidence layout shared so the first row and its appendix copy agree.
 \newlength{\UserTrialBodyWidth}
@@ -44,11 +44,11 @@ Table~\ref{tab:user-trial-first-task} shows the first task, and Appendix~\ref{ap
 \textbf{MOP-#1}\newline FR-#1\newline #2 &
 \UserTrialImage{fig/user-trials/mop#1-initial.png} &
 \UserTrialImage{fig/user-trials/mop#1-club.png} & #3 & #4 & #5 \\[5pt]}
-\newcommand{\UserTrialFirstRow}{\UserTrialRow{01}{Create and retain a requirement}{226.88}{243.76}{Yes}}
+\newcommand{\UserTrialFirstRow}{\UserTrialRow{01}{Create and save a requirement}{226.88}{243.76}{Yes}}
 
 \begin{sidewaystable}[p]
 \centering
-\caption[First user trial task.]{First user trial task. Screenshots show the shared initial state and the student club member's submission. Times are in seconds.}
+\caption[First user test task.]{First user test task. Screenshots show the shared initial state and the student club member's submission. Times are in seconds.}
 \label{tab:user-trial-first-task}
 \begin{UserTrialEvidence}
 \UserTrialFirstRow
@@ -56,22 +56,22 @@ Table~\ref{tab:user-trial-first-task} shows the first task, and Appendix~\ref{ap
 \end{sidewaystable}
 
 
-Both times for each of the eleven user trial MOPs are below the limit.
-The sums of the eleven times are 33~min 57.04~s for the PhD role and 35~min 34.56~s for the club role.
-Individual times range from 79.60 to 318.16~s.
-The longest time, for MOP-06 in the club role, is 9.11~s below the per-task limit.
+Both times for each of the ten reported user test MOPs are below the limit.
+Their sums are 32~min 37.44~s for the PhD role and 34~min 14.84~s for the club role.
+Individual times range from 88.20 to 318.16~s.
+The longest time, for MOP-06 in the club role, is 41.84~s below the per-task limit.
 
 The 60~min allocation reflects the duration of the stakeholders' weekly meeting.
-Verification of all eleven user trial MOPs by both stakeholders would suggest that they can assess the impact of requirement changes and evaluate supplied alternatives within that meeting.
-This is considerably faster than what was observed during stakeholder analysis, when stakeholders would have to wait until the next weekly meeting to see the results of tasks comparable to those considered in the user trials.
+Verification of all ten user test MOPs by both stakeholders would suggest that they can assess the impact of requirement changes and review updated EPS results within that meeting.
+This is considerably faster than what was observed during stakeholder analysis, when stakeholders would have to wait until the next weekly meeting to see the results of tasks comparable to those considered in the user tests.
 
 Furthermore, the fact that a single engineering tool was used across requirements, analyses and component comparisons mitigates the core problem of evidence fragmentation.
-The framework retains the relationships between requirements, design inputs and supporting results in one model, which reduces the effort needed to reconstruct those relationships during a review and supports evaluating alternatives on a common basis.
+The framework stores the relationships between requirements, design inputs and supporting results in one model, which reduces the effort needed to reconstruct those relationships during a review and supports evaluating alternatives on a common basis.
 The Git commands run in the terminal provide the configuration control required for FR-09, including inspection of changes and retrieval of an authorized baseline.
 
-It must be noted that the user trials were attempted multiple times with the same participants, and the presented results represent the last iteration.
+The user tests were repeated with the same participants, and the reported results come from the last set of tests.
 Previous iterations were considered failures since the participants found the user interface so unclear that the entirety of the allocated time was spent in explanations of usage.
-Failed trials provided qualitative feedback with which to improve the GUI.
+Failed tests provided qualitative feedback with which to improve the GUI.
 However, a discussion of the evolution of the GUI and the user feedback is out of the scope of this document.
 
 \section{Catalog inspection}
@@ -129,7 +129,7 @@ The combined direct development expenditure is:
 \end{equation}
 Of this CA\$6110.72, CA\$6000 is assigned to ASCEND and CA\$110.72 was paid by the author.
 
-Initial supervision and user trial participation are covered by existing funded positions.
+Initial supervision and user test participation are covered by existing funded positions.
 Their effort is excluded from the personnel allocation used here.
 The two researchers and the personnel responsible for subsequent maintenance are each valued at CA\$1500 per month for a 35~h working week, comprising seven hours from Monday to Friday.
 Using 52 weeks and 12 months per year gives the hourly funding proxy:
@@ -146,8 +146,8 @@ Stipend payments remain unchanged in both workflows.
 The effort baseline uses a comparable update delivered two days later by two participants who reported working only on that activity.
 The base case assigns two full working days of seven hours to each person and treats that instance as typical.
 This gives 28 combined hours per review cycle.
-Section~\ref{section:user-trial-results} gives complete trial times of 33~min 57.04~s and 35~min 34.56~s.
-For this estimate, each participant's complete eleven-task trial is rounded up to one hour to include instructions and preparation.
+Section~\ref{section:user-trial-results} gives times of 32~min 37.44~s and 34~min 14.84~s for the ten reported tasks.
+For this estimate, each participant's reported task time is rounded up to one hour to include instructions and preparation.
 A comparable cycle with the framework therefore takes two combined hours and releases 26 hours of personnel time.
 
 Comparable work occurred weekly during the four-month observation period.
@@ -210,11 +210,11 @@ The positive economic result represents the assigned value of additional researc
 
 \subsection{Sensitivity and interpretation}
 
-The baseline effort is recalled from one instance, and the trial times follow earlier unsuccessful trials with prepared inputs.
+The baseline effort is recalled from one instance, and the task times were measured after earlier unsuccessful user tests with prepared inputs.
 There is no controlled comparison of work effort under the two workflows.
 The estimate therefore depends on the assumed transfer of that effort difference to repeated mission reviews.
 Holding other assumptions fixed, the economic net present value reaches zero at approximately 5.77 baseline hours per person and cycle, compared with the assumed 14 hours.
-A separate sensitivity retains the 14-hour baseline and varies the fraction of released time credited at the hourly proxy.
+A separate sensitivity calculation uses the same 14-hour baseline and varies the fraction of released time credited at the hourly proxy.
 The economic result reaches zero when approximately 36.7\% of that capacity receives its full assigned value, while all support costs remain included.
 Using the alternative 3\% social rate discussed in the Treasury Board guide gives approximately CA\$13431 \citep[Sec.~6.1]{tbs2019costbenefit}.
 

@@ -1,16 +1,17 @@
-\chapter{Generic EPS Component Models}
+\chapter{EPS Component and COTS Models}
 \label{appendix:eps-component-models}
 
 The CSRM logical components represent generic component types that mission teams refine into physical designs \citep{kaslow2019csrm}.
 For these EPS categories, this appendix uses ``function'' and ``logical component'' interchangeably.
 Interfaces are modeled as component properties that depend on the properties of other EPS components.
-The figures present the complete declared component properties, modes, states and requirement assignment for the third objective.
+The figures present CSRM component properties, modes, states and requirement assignment for the third objective.
+Table~\ref{tab:derived-cots-models} lists the derived COTS classes and their binding rules.
 All numerical examples are illustrative allocations.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{fig/model-appendices/eps-property-structure.pdf}
-\caption[CSRM EPS categories and their Python classes.]{A property-oriented variant of Figure~\ref{fig:csrm-eps-components}. The six group names follow the CSRM reference model \citep{incose2025csrmmodel}. The numerical EPS model defines four default component classes and a Protection specialization. Processor and Memory, and Software, remain reference categories with no dedicated class or additional declared properties. Figures~\ref{fig:eps-component-properties}--\ref{fig:solar-array-properties} list the complete property definitions of the numerical classes.}
+\caption[CSRM EPS categories and their Python classes.]{A property-oriented variant of Figure~\ref{fig:csrm-eps-components}. The six group names follow the CSRM reference model \citep{incose2025csrmmodel}. Each group has a corresponding default Python component class, and Protection specializes PowerCircuit. Figures~\ref{fig:eps-component-properties}--\ref{fig:processor-software-properties} list their declared properties. Software retains cost and has no mass, volume or power properties.}
 \label{fig:eps-property-structure}
 \end{figure}
 \clearpage
@@ -18,7 +19,7 @@ All numerical examples are illustrative allocations.
 \begin{figure}[p]
 \centering
 \includegraphics[width=\linewidth]{fig/model-appendices/eps-component-properties.pdf}
-\caption[Battery, conversion and power circuit properties.]{Complete declared properties for Battery, RegulatorAndConverter, PowerCircuit and Protection. All inherit the four Component properties. RegulatorAndConverter and PowerCircuit also inherit SolarPowerPath properties, and Protection inherits PowerCircuit. Brackets retain the model's unit annotations, with 1 denoting a dimensionless value. An asterisk marks a supplied default expression. Other properties start unset. Units are annotations and receive no automatic conversion or dimensional checking.}
+\caption[Battery, conversion and power circuit properties.]{Complete declared properties for Battery, RegulatorAndConverter, PowerCircuit and Protection. These hardware classes inherit the four Component properties. RegulatorAndConverter and PowerCircuit also inherit SolarPowerPath properties, and Protection inherits PowerCircuit. Brackets retain the model's unit annotations, with 1 denoting a dimensionless value. An asterisk marks a supplied default expression. Other properties start unset. Property arithmetic uses the annotations without automatic conversion or dimensional analysis.}
 \label{fig:eps-component-properties}
 \end{figure}
 \clearpage
@@ -29,6 +30,51 @@ All numerical examples are illustrative allocations.
 \caption[Complete solar array properties.]{The complete SolarArray property list, split across two columns for readability. The Component properties are inherited. Brackets and asterisks follow Figure~\ref{fig:eps-component-properties}. ``No unit'' denotes a property without a unit annotation, such as the selected power path reference or a collection of photovoltaic points. The default expressions retain explicit dependencies on orbit, attitude, installation geometry and the selected electrical path.}
 \label{fig:solar-array-properties}
 \end{figure}
+\clearpage
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth]{fig/model-appendices/processor-software-properties.pdf}
+\caption[Processor, memory and software properties.]{ProcessorAndMemory adds supply voltage limits, maximum clock and interface frequencies, program and flash sizes, random access memory size, and storage capacity in bits to the hardware Component properties. Software retains only cost. Its explicit removal of mass, volume and power declarations excludes it from physical totals. Units follow the property declarations, with byte and bit kept distinct.}
+\label{fig:processor-software-properties}
+\end{figure}
+\clearpage
+
+\section{Derived COTS classes}
+Product parameters and features supplement the inherited CSRM properties under the role and channel rules in Section~\ref{section:cots-database}.
+
+\begingroup
+\fontsize{9}{10.5}\selectfont
+\setlength{\tabcolsep}{4pt}
+\setlength{\parskip}{0pt}
+\renewcommand{\arraystretch}{1.0}
+\setlength{\ReportTableBodyWidth}{\dimexpr\linewidth-4\tabcolsep\relax}
+\begin{longtable}{@{}P{0.30\ReportTableBodyWidth}P{0.27\ReportTableBodyWidth}P{0.43\ReportTableBodyWidth}@{}}
+\caption{Derived COTS models, direct inheritance and property resolution.}\label{tab:derived-cots-models}\\
+\toprule
+\textbf{Class or classes} & \textbf{Direct base classes} & \textbf{Additional properties or binding rule} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Class or classes} & \textbf{Direct base classes} & \textbf{Additional properties or binding rule} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{COTS} & \texttt{EPSComponent} & No new quantities. Fixes each product instance's Property expressions, units and mode bindings. \\
+\texttt{CotsBattery}, \texttt{CotsSolarArray}, \texttt{CotsRegulatorAndConverter}, \texttt{CotsPowerCircuit}, \texttt{CotsProtection}, \texttt{CotsProcessorAndMemory}, \texttt{CotsSoftware} & Corresponding EPS class and \texttt{COTS} & No new quantities. Each class combines its named component type with fixed product definitions. CotsSoftware retains Software's omission of mass, volume and power. \\
+\texttt{DCDCConverter}, \texttt{LinearRegulator}, \texttt{BatteryCharger} & \texttt{RegulatorAndConverter} & No new declared quantities or conflicting base declarations. Inherited conversion properties are retained. \\
+\texttt{BatteryProtector} & \texttt{Protection} & No new quantities. Product definitions retain supported voltage and current trip parameters from sourced protection flags. \\
+\texttt{LoadSwitch}, \texttt{IdealDiode} & \texttt{PowerCircuit} & No new quantities. Explicit source mappings bind \texttt{maximum\_voltage} to \texttt{input\_voltage\_max} and \texttt{maximum\_current} to \texttt{maximum\_output\_current}. \\
+\texttt{ProtectedLoadSwitch} & \texttt{LoadSwitch}, \texttt{Protection} & No new quantities. The shared PowerCircuit ancestor is inherited once. Threshold bindings preserve the supported detector parameters. \\
+\texttt{PowerSwitch}, \texttt{ResettableFuse}, \texttt{Diode}, \texttt{Sensor}, \texttt{Heater} & \texttt{PowerCircuit} & No new declared quantities. Product facts retain their distinct stress, hold current, trip current, sensing and heater meanings. \\
+\texttt{CurrentSensor}, \texttt{TemperatureSensor} & \texttt{Sensor} & No new declared quantities or conflicting base declarations. Product parameters describe the selected sensing device. \\
+\texttt{Processor}, \texttt{NonvolatileMemory}, \texttt{RealTimeClock}, \texttt{Watchdog} & \texttt{ProcessorAndMemory} & No new declared quantities. Sourced product parameters supplement the inherited processor and memory fields. \\
+\texttt{IntegratedEPS} & \texttt{RegulatorAndConverter}, \texttt{PowerCircuit} & No new quantities. The shared SolarPowerPath definitions follow method resolution order. Source mappings follow LoadSwitch, and each channel retains its own limits. This type includes no battery. \\
+\texttt{BatteryIntegratedEPS} & \texttt{Battery}, \texttt{IntegratedEPS} & Redefines \texttt{maximum\_voltage} [V] without a default value. The selected role and internal element supply its meaning, with unrelated bindings retained separately. \\
+Purchased product class & Assigned catalogue class and \texttt{COTS} & Binds the selected facts to fixed Properties. Qualified names preserve element, native class and property. Missing or conflicting literal bindings remain unset, while inherited calculations can use resolved inputs. \\
+\end{longtable}
+\endgroup
 \clearpage
 
 \begin{figure}[p]

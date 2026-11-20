@@ -9,7 +9,7 @@ from pathlib import Path
 import unittest
 import xml.etree.ElementTree as ET
 
-from diagram_style import LIGHT, SerifMetrics, validate_arrowheads, validate_style
+from diagram_style import LIGHT, SerifMetrics, run, validate_arrowheads, validate_style
 
 FIG = Path(__file__).resolve().parent
 
@@ -47,10 +47,17 @@ class CSRMStructureTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Changed native structure: Power Subsystem'):
             self.module.inventory(changed)
 
+    def test_display_labels_omit_cardinality_annotations(self):
+        for figure in self.figures:
+            with self.subTest(figure=figure.root.attrib['aria-label']):
+                for label in figure.root.findall('.//{*}text'):
+                    self.assertTrue(label.text.strip())
+                    self.assertNotRegex(label.text, r'\[\d+(?:\.\.(?:\d+|\*))?\]')
+
     def test_reference_is_distinct_from_composite_part(self):
         root = self.figures[0].root
         reference = root.find('.//{*}text[@data-reference="Orbit"]')
-        self.assertEqual(reference.text, 'ref Orbit : CubeSat Orbit [1]')
+        self.assertEqual(reference.text, 'ref Orbit : CubeSat Orbit')
         self.assertEqual(len(root.findall('.//{*}g[@data-owner="Space Segment"]')), 2)
         cube_sat = root.find('.//{*}g[@data-type="CubeSat"]')
         self.assertIsNotNone(cube_sat.find('./{*}text[@data-reference="Orbit"]'))
@@ -74,6 +81,16 @@ class CSRMStructureTests(unittest.TestCase):
         self.assertEqual({group.attrib['data-type'] for group in external},
                          {'External Environment', 'External Constraints', 'Ground Station Services',
                           'Transport, Launch, and Deploy Services', 'GNSS'})
+
+    def test_published_pdf_labels_omit_cardinality_annotations(self):
+        names = ('csrm-mission-structure', 'csrm-cubesat-subsystems', 'csrm-eps-components')
+        for name, figure in zip(names, self.figures):
+            with self.subTest(name=name):
+                text = run(['pdftotext', str(FIG / (name + '.pdf')), '-'])
+                self.assertNotRegex(text, r'\[\d+(?:\.\.(?:\d+|\*))?\]')
+                text = ' '.join(text.split())
+                for label in figure.root.findall('.//{*}text'):
+                    self.assertIn(label.text, text)
 
     def test_published_figures_use_shared_style_and_no_exchange_arrows(self):
         for name in ('csrm-mission-structure', 'csrm-cubesat-subsystems', 'csrm-eps-components'):

@@ -9,9 +9,17 @@
 \begin{document}
 \begin{minipage}{510pt}
 \fontsize{10}{12}\selectfont
-\begin{minipage}[t]{210pt}
-\vspace{0pt}\textbf{(a) Candidate acceptance}\par\smallskip
-\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{7.5}{9.6}\selectfont]
+\begin{minipage}[t]{240pt}
+\vspace{0pt}\textbf{(a) Automatic catalogue query}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8}{10.24}\selectfont]
+matches = battery.recommend_cots(
+    sort_by="rated_energy",
+    reverse=True, limit=3)
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}[t]{260pt}
+\vspace{0pt}\textbf{(b) Every owned requirement must pass}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8}{10.24}\selectfont]
 reports = tuple(
     requirement.verify(mode=selected_mode)
     for requirement in owner.requirements)
@@ -19,17 +27,10 @@ if any(report.verified is not True
        for report in reports):
     continue
 \end{lstlisting}
-\medskip\textbf{Python query}\par
-\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{7.5}{9.6}\selectfont]
-matches = battery.recommend_cots(
-    cots_catalog,
-    sort_by="rated_energy",
-    reverse=True, limit=3)
-\end{lstlisting}
-\end{minipage}\hfill
-\begin{minipage}[t]{290pt}
-\vspace{0pt}\textbf{(b) GUI recommendations}\par\smallskip
-\includegraphics[width=290pt]{cots-matches.png}\end{minipage}\par\medskip\textbf{(c) Expanded verification for P45B}\par\smallskip
+\end{minipage}\par\medskip\textbf{(c) Highest three rated energies (cropped GUI headers)}\par\smallskip
+\includegraphics[width=510pt]{cots-match-1.png}\par\smallskip
+\includegraphics[width=510pt]{cots-match-2.png}\par\smallskip
+\includegraphics[width=510pt]{cots-match-3.png}\par\medskip\textbf{(d) Expanded verification for M65A}\par\smallskip
 \includegraphics[width=510pt]{cots-checks.png}
 \end{minipage}
 \end{document}

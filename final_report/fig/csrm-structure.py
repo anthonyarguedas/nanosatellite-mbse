@@ -61,23 +61,23 @@ EXPECTED = {
     ],
 }
 SUBSYSTEM_LABELS = [
-    ['Mission Payload', 'Subsystem [1]'],
-    ['Command and Data', 'Handling Subsystem [1]'],
-    ['Communication', 'Subsystem [1]'],
-    ['Attitude Determination', 'and Control Subsystem', '[1]'],
-    ['Guidance Navigation', 'and Control Subsystem', '[1]'],
-    ['Structures and Mechanisms', 'Subsystem [1]'],
-    ['Power Subsystem [1]'],
-    ['Propulsion Subsystem [1]'],
-    ['Thermal Subsystem [1]'],
+    ['Mission Payload', 'Subsystem'],
+    ['Command and Data', 'Handling Subsystem'],
+    ['Communication', 'Subsystem'],
+    ['Attitude Determination', 'and Control Subsystem'],
+    ['Guidance Navigation', 'and Control Subsystem'],
+    ['Structures and Mechanisms', 'Subsystem'],
+    ['Power Subsystem'],
+    ['Propulsion Subsystem'],
+    ['Thermal Subsystem'],
 ]
 EPS_LABELS = [
-    ['Batteries [1]'],
-    ['Regulators and', 'Converters [1]'],
-    ['Solar Arrays [1]'],
-    ['Power Circuits and', 'Switches [1]'],
-    ['Processor and Memory', '[1]'],
-    ['Software [1]'],
+    ['Batteries'],
+    ['Regulators and', 'Converters'],
+    ['Solar Arrays'],
+    ['Power Circuits and', 'Switches'],
+    ['Processor and Memory'],
+    ['Software'],
 ]
 
 
@@ -149,30 +149,30 @@ def mission_view(metrics=None):
     figure.text('CSRM: mission and segment structure', 8, 22, size=14, weight='bold')
     domain = enclosure(figure, 8, 44, 674, 368, 'CubeSat Domain',
                        data_definition='CubeSat Domain')
-    block(figure, 22, 76, 315, 48, ['External Environment [1]'],
+    block(figure, 22, 76, 315, 48, ['External Environment'],
           'CubeSat Domain', 'External Environment', domain, external=True)
-    block(figure, 350, 76, 315, 48, ['External Constraints [1]'],
+    block(figure, 350, 76, 315, 48, ['External Constraints'],
           'CubeSat Domain', 'External Constraints', domain, external=True)
-    mission = enclosure(figure, 22, 136, 644, 262, 'CubeSat Mission Enterprise [1]', domain,
+    mission = enclosure(figure, 22, 136, 644, 262, 'CubeSat Mission Enterprise', domain,
                         **part_attributes('CubeSat Domain', 'CubeSat Mission'))
-    space = enclosure(figure, 38, 176, 367, 122, 'Space Segment [1]', mission,
+    space = enclosure(figure, 38, 176, 367, 122, 'Space Segment', mission,
                       **part_attributes('CubeSat Mission', 'Space Segment'))
     cube_sat = figure.el('g', space, **part_attributes('Space Segment', 'CubeSat'))
     figure.rect(50, 216, 176, 65, cube_sat)
-    figure.text('CubeSat [1..*]', 138, 238, size=FONT, weight='bold',
+    figure.text('CubeSat', 138, 238, size=FONT, weight='bold',
                 anchor='middle', width=156, parent=cube_sat)
     figure.el('path', cube_sat, d='M50 248 H226', fill='none', stroke='#111111', stroke_width='.8')
-    figure.text('ref Orbit : CubeSat Orbit [1]', 138, 268, size=11,
+    figure.text('ref Orbit : CubeSat Orbit', 138, 268, size=11,
                 anchor='middle', width=156, parent=cube_sat, data_reference='Orbit')
-    block(figure, 249, 216, 142, 65, ['CubeSat Orbit', '[1..*]'],
+    block(figure, 249, 216, 142, 65, ['CubeSat Orbit'],
           'Space Segment', 'CubeSat Orbit', space)
-    block(figure, 425, 216, 225, 65, ['Ground Segment [1]'],
+    block(figure, 425, 216, 225, 65, ['Ground Segment'],
           'CubeSat Mission', 'Ground Segment', mission)
-    block(figure, 38, 326, 180, 56, ['Ground Station', 'Services [1]'],
+    block(figure, 38, 326, 180, 56, ['Ground Station', 'Services'],
           'CubeSat Mission', 'Ground Station Services', mission, external=True)
-    block(figure, 240, 326, 230, 56, ['Transport, Launch,', 'and Deploy Services [1]'],
+    block(figure, 240, 326, 230, 56, ['Transport, Launch,', 'and Deploy Services'],
           'CubeSat Mission', 'Transport, Launch, and Deploy Services', mission, external=True)
-    block(figure, 492, 326, 158, 56, ['GPS : GNSS [1]'],
+    block(figure, 492, 326, 158, 56, ['GPS : GNSS'],
           'CubeSat Mission', 'GNSS', mission, external=True)
     return figure
 

@@ -70,11 +70,13 @@ Figure~\ref{fig:analysis-equation} compares a calculation with its algebraic exp
 \end{figure}
 
 \section{L01: MBSE Workspace}
+\label{section:mbse-workspace}
 This section describes the behavior of logical component L01: MBSE Workspace.
 For FR-01, the framework represents requirements, quantities and verification conditions as Python classes.
 Inspired by the property expressions of the Systems Modeling Language (SysML) v2 \citep{omg2026sysml2}, a Property stores a Python expression that can reference other properties, arithmetic operations and function calls.
 Figure~\ref{fig:property-expressions} shows a calculated property and the GUI rendering of a requirement statement.
-Units accompany values as annotations. The framework performs no automatic unit conversion or dimensional checking.
+Property arithmetic uses unit annotations without automatic conversion or dimensional analysis.
+The catalogue separately checks its facts against the declared component properties, as described in Section~\ref{section:cots-database}.
 
 \begin{figure}[htbp]
 \centering
@@ -127,26 +129,82 @@ The requirements already contain verification conditions, which become evaluable
 \label{fig:automatic-requirements}
 \end{figure}
 
-For FR-11, the framework evaluates an explicitly supplied set of compatible COTS alternatives against the generic component's directly owned requirements (Figure~\ref{fig:cots-query}).
-Each trial substitutes the candidate's property definitions into a copy of the mission and retains the candidate only when every owned requirement passes.
-Unknown inputs, evaluation errors and failed conditions exclude the candidate.
-The engineer selects applicable datasheet facts and conditions before defining the COTS alternatives.
-Requirements owned by the EPS or bus remain outside this component query.
+For FR-11, the workspace discovers compatible products automatically from the COTS catalogue presented in Section~\ref{section:cots-database}.
+Python class inheritance establishes compatibility with the queried CSRM component.
+The catalogue supplies fixed product definitions for the selected role and internal channel.
+The engineer can select a source condition and a value meaning for each property, such as minimum energy or nominal voltage.
+These selections use the property and conflict rules illustrated in Figure~\ref{fig:cots-inheritance}.
+
+Each trial substitutes the candidate's Property definitions where those of the generic component are referenced.
+An unset product rating replaces a generic value with the same name, which prevents an assumed rating from filling a product data gap.
+Expressions evaluate in the copied mission and the selected mode.
+Existing COTS children are omitted from the trial, and the live mission remains unchanged.
+
+Every directly owned requirement must contain verification conditions and pass all of them.
+A failed condition, an unresolved measure or target, or an evaluation error excludes the candidate.
+With no owned requirements, the result is explicitly labelled unconstrained.
+
+Results retain part numbers, roles, channels, selected facts, source conditions and verification measures.
+An optional numeric Property ranks matches in ascending or descending order, with a specified maximum result count.
+Sorting excludes unavailable, Boolean, nonnumeric and nonfinite values.
+The GUI exposes the channel, condition and value meaning selections alongside the passing checks and source references (Figure~\ref{fig:cots-query}).
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{fig/design-proposal/cots-query.pdf}
-\caption[COTS filtering in Python and the GUI.]{The implementation rejects a candidate when any directly owned requirement is unverified. The GUI applies the same query to five sourced Molicel cells, requiring at least 11~Wh of rated energy, at most 0.075~kg of mass and a nominal voltage of 3.6~V. P45B, P42A and M35A pass and are ranked by decreasing rated energy. The cropped GUI results show these matches on the right and the expanded P45B measures, targets and predicates below.}
+\caption[Automatic COTS recommendations in Python and the GUI.]{The query discovers compatible products from the full catalogue and applies three illustrative requirements: at least 11~Wh of minimum rated energy, at most 0.075~kg of maximum mass and a nominal voltage of 3.6~V. Molicel M65A, P50B, P45B, P42A and M35A pass. The Python call and GUI show the highest three energy ratings, M65A, P50B and P45B. The expanded M65A checks retain the measures, limits and predicates.}
 \label{fig:cots-query}
 \end{figure}
 
 \section{L02: COTS Database}
-This database is said to estimate electrical and dynamic EPS model parameters (as per FR-10) because its information comes from datasheets and not empirical modeling.
-For the purposes of this project, a great volume of COTS property values taken from datasheets was deemed preferable to a small volume of empirical data, given that the framework requirements cover the exploration of alternatives during early design stages and not the qualification of mature physical designs.
+\label{section:cots-database}
+For FR-10, the catalogue supplies electrical and dynamic model parameters from manufacturer datasheets and identified mission records.
+These are conditioned inputs for early design comparisons.
+Their value meanings and applicability remain part of the evidence.
+The catalogue contains 147 distinct products, identified by manufacturer and part number.
+Appendix~\ref{appendix:cots-database} gives the sourced product list.
 
-The database contains commercially available products in 18 catalog categories mapping to the CSRM generic EPS component types, for which the datasheets were obtained via the Mouser Canada search engine.
-The properties of the generic EPS components were defined based on the information found in the datasheets, and datasheets that didn't provide the necessary values to execute all EPS analyses were discarded unless they are used in one of the case studies (BIRDS-4 or OreSat).
-The reader is referred to Appendix \ref{appendix:cots-database} for the full list of COTS with their corresponding generic EPS component type, part identifier, and mass as one representative property. The full database is available in the project repository \cite{repo} as tab-separated tables.
+Each product is assigned to a Python class derived from the CSRM component set.
+For example, a DC/DC converter specializes RegulatorAndConverter, while IntegratedEPS combines RegulatorAndConverter and PowerCircuit.
+BatteryIntegratedEPS also inherits Battery for products with included storage.
+The purchased product definition inherits its assigned class and COTS, which fixes its Property expressions, units and mode bindings on each instance.
+This permits the workspace query to recognize every applicable CSRM role of a combined product.
+A physical unit is attached once and referenced from its other roles.
+Appendix~\ref{appendix:eps-component-models} lists the derived classes and their inheritance.
+
+Each fact retains the product, internal element, property mapping, value, unit, value meaning, condition and source location.
+Minimum, nominal, typical, maximum, absolute maximum and derived values remain distinct.
+Missing intrinsic data and installation inputs supplied by the engineer remain identifiable.
+Invalid references, scalar types or unit annotations cause a catalogue validation error.
+The binding rules then resolve inherited and sourced properties as follows:
+\begin{enumerate}
+\item Python's method resolution order combines inherited declarations, with explicit subclass definitions taking precedence.
+BatteryIntegratedEPS explicitly redefines the shared \texttt{maximum\_voltage} property without a default value, so its battery and power circuit meanings require a selected role and element.
+\item Sourced quantities remain separated by internal element, native class and property name.
+For example, \texttt{battery\_\_Battery\_\_maximum\_voltage} retains the value for the battery.
+A more specific compatible class takes precedence over its ancestor.
+Unresolved conflicts between unrelated class bindings leave the short property name unset.
+Declared parameter mappings, such as \texttt{maximum\_current} to \texttt{maximum\_output\_current}, supply exact correspondences.
+\item A requested condition takes priority over facts without a condition identifier.
+Each property then uses its declared value meaning policy or an explicit override.
+The default uses minimum rated energy and maximum mass, and keeps absolute stress limits separate from operating limits.
+Contradictory facts with the same selected meaning remain unset.
+An inherited expression can still calculate a quantity from its resolved inputs.
+\item Channel limits remain local to their elements.
+A child output channel can use its parent rail's output voltage, while its current limit remains separate from the rail's total current.
+Mass, volume and cost refer to the purchased product as a whole.
+A solar transfer capability and a programmable application example do not automatically select the installed control method or voltage setting.
+\end{enumerate}
+
+Figure~\ref{fig:cots-inheritance} couples these rules to actual catalogue values.
+The workspace in Section~\ref{section:mbse-workspace} evaluates the resulting properties against the engineer's requirements without changing the catalogue or installing a product.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig/design-proposal/cots-inheritance.pdf}
+\caption[Inherited COTS classes and conditioned catalogue values.]{Selected class declarations combine the CSRM battery, conversion and power circuit properties. The concrete IMEPS2 selection uses the Battery role and internal battery element. Its 45~Wh rating is selected explicitly as nominal. The 16~V operating maximum remains distinct from the 16.8~V absolute maximum. The 5~V output record uses factory defaults, and the 3~A record applies to one output channel. Values are excerpted from the IMEPS2 datasheet, revision 2.0 \citep[pp.~4, 8]{cots-enrichment_imeps2_20261110}. Class declarations and the query are wrapped for readability.}
+\label{fig:cots-inheritance}
+\end{figure}
 
 \section{L03: Simulation and analysis}
 L03 will implement FR-12 and FR-14 to FR-20 through Python expressions and numerical analyses referenced by requirements. L01 will retain the mission inputs required by FR-13 and supply them to L03, following Table~\ref{tab:logical-responsibilities}.

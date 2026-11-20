@@ -25,7 +25,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(FIG))
 
 from diagram_style import Figure, INK, render_figure, require, sha
-from framework.models import Battery, Component, PowerCircuit, Protection, RegulatorAndConverter, SolarArray
+from framework.models import Battery, Component, EPS, PowerCircuit, Protection, RegulatorAndConverter, SolarArray, ProcessorAndMemory, Software
 from framework.models.elements import Subsystem
 from framework.models.objects import ModelObject
 
@@ -76,8 +76,8 @@ def overview():
         ("Regulators and Converters", ["RegulatorAndConverter", "Property detail: next figure"]),
         ("Solar Arrays", ["SolarArray", "Separate full property view"]),
         ("Power Circuits and Switches", ["PowerCircuit", "Protection specialization"]),
-        ("Processor and Memory", ["CSRM reference category", "No dedicated Python class"]),
-        ("Software", ["CSRM reference category", "No dedicated Python class"]),
+        ("Processor and Memory", ["ProcessorAndMemory", "Additional property view"]),
+        ("Software", ["Software", "Cost only"]),
     ]
     for index, (title, lines) in enumerate(rows):
         card(figure, 20 + (index % 3) * 220, 84 + (index // 3) * 118,
@@ -89,7 +89,7 @@ def component_properties():
     figure = Figure("Battery, conversion and power circuit properties", 690, 660)
     figure.text("Battery, conversion and power circuit properties", 8, 22, size=16, weight="bold")
     common = declarations(Component)
-    card(figure, 8, 40, 674, "Component (inherited by all numerical EPS classes)",
+    card(figure, 8, 40, 674, "Component (inherited by hardware EPS classes)",
          ["    ".join(prop_lines(Component))], font=13)
     card(figure, 8, 124, 330, "Battery", prop_lines(Battery, common), font=13, leading=15)
     path = ("transfer_method", "selected_transfer_method", "bus_voltage", "voltage_drop", "input_voltage_setpoint")
@@ -112,6 +112,18 @@ def solar_properties():
     split = (len(lines) + 1) // 2
     card(figure, 8, 124, 330, "SolarArray (1 of 2)", lines[:split], font=13, leading=16)
     card(figure, 352, 124, 330, "SolarArray (2 of 2)", lines[split:], font=13, leading=16)
+    return figure
+
+
+def processor_software_properties():
+    figure = Figure("Processor, memory and software properties", 690, 350)
+    figure.text("Processor, memory and software properties", 8, 22, size=16, weight="bold")
+    card(figure, 8, 40, 674, "Component (hardware properties)",
+         ["    ".join(prop_lines(Component))], font=13)
+    card(figure, 8, 124, 410, "ProcessorAndMemory", prop_lines(ProcessorAndMemory, declarations(Component)),
+         font=13, leading=19)
+    card(figure, 438, 124, 244, "Software", prop_lines(Software), font=13, leading=19)
+    require(set(declarations(Software)) == {"cost"}, "Software must omit hardware properties")
     return figure
 
 
@@ -161,7 +173,8 @@ def initialization():
     action(figure, 20, 274, 310, "SpaceSegment.create_defaults()",
            ["CubeSatBus adds its nine default subsystems", "Each self.add(subsystem) repeats add()", "EPS initialization is expanded on the right"], 100)
     action(figure, 360, 274, 310, "Subsystem.create_defaults() on EPS",
-           ["self.add() for Battery, SolarArray,", "RegulatorAndConverter and PowerCircuit", "Each component runs initialize()"], 100)
+           [", ".join(cls.__name__ for cls in EPS.default_components[:3]),
+            ", ".join(cls.__name__ for cls in EPS.default_components[3:]), "Each component runs initialize()"], 100)
     figure.arrow("M330 324 H360", style="dashed")
     action(figure, 360, 416, 310, "EPS.create_requirements()",
            ["_sizing_requirement() and _voltage_requirement()", "add_requirement() creates 18 EPS requirements", "Requirement.add() attaches each condition"], 100)
@@ -170,7 +183,7 @@ def initialization():
            ["Add the other default subsystems", "CubeSatBus.create_requirements()", "add_requirement(): mass_limit, volume_limit"], 100)
     figure.arrow("M360 466 H330", style="dashed")
     action(figure, 20, 558, 310, "Return the attached CubeSat",
-           ["mission.add(...) returns bus", "Edits and deliberate deletions are retained", "by initialization flags on repeated calls"], 100)
+           ["mission.add(...) returns bus", "Repeated calls keep edits", "and do not recreate deleted items"], 100)
     figure.arrow("M175 516 V558", style="dashed")
     card(figure, 360, 558, 310, "Other additions use the same lifecycle",
          ["ComponentMode: on and off states", "SpacecraftMode: OrbitAllocation", "Protection: no_trip requirement"], font=13, leading=17)
@@ -180,12 +193,12 @@ def initialization():
 def check_property_coverage(figures):
     labels = [node.text for figure in figures for node in figure.root.findall(".//{*}text")]
     common = declarations(Component)
-    for cls in (Battery, SolarArray, RegulatorAndConverter, PowerCircuit, Protection):
+    for cls in (Battery, SolarArray, RegulatorAndConverter, PowerCircuit, Protection, ProcessorAndMemory, Software):
         for name, data in declarations(cls).items():
             require(any(text.startswith(name + " [") for text in labels)
                     or name in common, f"Missing {cls.__name__}.{name}")
     return {cls.__name__: declarations(cls) for cls in
-            (Component, Battery, SolarArray, RegulatorAndConverter, PowerCircuit, Protection)}
+            (Component, Battery, SolarArray, RegulatorAndConverter, PowerCircuit, Protection, ProcessorAndMemory, Software)}
 
 
 def screenshots(helpers, job, args):
@@ -286,7 +299,8 @@ def code_panels(h, job):
 
     body = h.panel("Shared lifecycle: ModelObject.initialize()", h.verb(textwrap.dedent(inspect.getsource(ModelObject.initialize)).strip(), 8.5), 506)
     body += r"\par\medskip" + h.panel("Automatic component addition: Subsystem.create_defaults()", h.verb(textwrap.dedent(inspect.getsource(Subsystem.create_defaults)).strip(), 8.5), 506)
-    body += r"\par\medskip" + h.panel("The EPS declares these numerical component defaults", h.verb("EPS.default_components = (\n    Battery, SolarArray, RegulatorAndConverter, PowerCircuit,\n)", 8.5), 506)
+    defaults = "EPS.default_components = (\n" + "".join(f"    {cls.__name__},\n" for cls in EPS.default_components) + ")"
+    body += r"\par\medskip" + h.panel("The EPS declares these component defaults", h.verb(defaults, 8.5), 506)
     outputs["initialization-code"] = h.make_pdf("initialization-code", body, job)
 
     body = h.panel("Link a script, bind inputs and execute the calculation", h.verb(excerpt("scripts"), 8.5), 506)
@@ -320,12 +334,26 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--chromium")
     parser.add_argument("--python", default=sys.executable)
+    parser.add_argument("--components-only", action="store_true", help="Refresh component property figures without changing workflow or GUI panels")
     args = parser.parse_args()
     OUT.mkdir(exist_ok=True)
     h = load_helpers()
-    views = [overview(), component_properties(), solar_properties()]
+    views = [overview(), component_properties(), solar_properties(), processor_software_properties()]
     inventory = check_property_coverage(views)
-    names = ["eps-property-structure", "eps-component-properties", "solar-array-properties"]
+    names = ["eps-property-structure", "eps-component-properties", "solar-array-properties", "processor-software-properties"]
+    if args.components_only:
+        path = OUT / "provenance.json"
+        manifest = json.loads(path.read_text()) if path.exists() else {}
+        manifest["properties"] = inventory
+        manifest["component_sources"] = {str(path.relative_to(ROOT)): sha(path) for path in (
+            Path(__file__), FIG / "diagram_style.py", ROOT / "framework/models/eps.py",
+            ROOT / "framework/models/elements.py", ROOT / "framework/models/objects.py")}
+        with tempfile.TemporaryDirectory(prefix="eps-component-properties-") as temporary:
+            rendered = {name: render_figure(view, OUT / name, Path(temporary)) for name, view in zip(names, views)}
+        manifest.setdefault("diagrams", {}).update(rendered)
+        path.write_text(json.dumps(manifest, indent=2) + "\n")
+        print(json.dumps({"component_figures": names, "property_lists": list(inventory)}, indent=2))
+        return
     views += [flow(), initialization()]
     names += ["mission-workflow", "addition-lifecycle"]
     manifest = {"basis": "Six CSRM categories with actual Python property declarations; synthetic live GUI evidence",

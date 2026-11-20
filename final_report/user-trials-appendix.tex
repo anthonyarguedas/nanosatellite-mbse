@@ -1,4 +1,4 @@
-\chapter{User Trial Evidence}
+\chapter{User Test Evidence}
 \label{appendix:user-trials}
 
 The prepared mission conditions and numerical allocations are purely illustrative, as their only purpose is to provide common starting points for the timed tasks.
@@ -10,7 +10,7 @@ Changes for each task relative to this shared set are given in Table~\ref{tab:us
 \setlength{\parskip}{0pt}
 \renewcommand{\arraystretch}{1.06}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.80\linewidth-2\tabcolsep\relax}@{}}
-\caption{Illustrative inputs shared by the user trial tasks. Inputs are grouped in this table for clarity.}\label{tab:user-trial-initial-inputs}\\
+\caption{Illustrative inputs shared by the user test tasks. Inputs are grouped in this table for clarity.}\label{tab:user-trial-initial-inputs}\\
 \toprule
 \textbf{Group} & \textbf{Prepared values} \\
 \midrule
@@ -49,36 +49,17 @@ Load rail & Instrument mass 0.01~kg and volume 0.00001~m$^3$. Active on state 5~
 \endhead
 \bottomrule
 \endfoot
-01 & Given the mission requirement (MR) named MR\_BASE, which limits EPS mass to 0.6~kg, create MR\_CHILD at mission level. Its parent is MR\_BASE and its child list is empty. Limit battery mass to 0.12~kg through a condition named maximum, with measure linked to battery mass and predicate measure $\leq$ target. Retain the rationale ``Reserve 0.48~kg for the other EPS components,'' verification method Analysis, resolution status Resolved and unresolved field reason None. The identifier is the requirement name. Parent and child identifiers, method and resolution information use explicit requirement parameters. Save and reopen the requirement, then submit its fields and condition result. \\
+01 & Given the mission requirement (MR) named MR\_BASE, which limits EPS mass to 0.6~kg, create MR\_CHILD at mission level. Its parent is MR\_BASE and its child list is empty. Limit battery mass to 0.12~kg through a condition named maximum, with measure linked to battery mass and predicate measure $\leq$ target. Enter the rationale ``Reserve 0.48~kg for the other EPS components,'' verification method Analysis, resolution status Resolved and unresolved field reason None. The identifier is the requirement name. Parent and child identifiers, method and resolution information use explicit requirement parameters. Save and reopen the requirement, then submit its fields and condition result. \\
 02 & Retrieve MR\_PARENT's forward links to MR\_ARRAY and MR\_BATTERY, their allocations to SolarArray and Battery, and each child's reverse link to MR\_PARENT. The prepared links use parent, child and component identifier parameters. Submit the associated identifiers without changing them. \\
-03 & Inspect analysis\_complete, with 2~W multiplied by 5~s, and analysis\_failed, which deliberately divides 2~W by zero seconds. Both retain a link to MR\_ENERGY, a method description, a synthetic nominal scenario and their input bindings. Submit the available result views and execution states. Report any limitation in retrieving retained execution records. \\
-04 & Reload the retained sizing mission through Reopen and rerun sunlight\_energy and solar\_power through their stored bindings. Submit the rerun results. The prepared environment supplies the framework dependency. \\
-05 & Fill seven prepared allocation parameters. Assign generation to SolarArray, storage to Battery, conversion and regulation to RegulatorAndConverter, and protection, distribution and control to PowerCircuit. Save each assignment and submit the mission requirement table. The retained component identifier appears in each requirement statement. \\
+03 & Inspect analysis\_complete, with 2~W multiplied by 5~s, and analysis\_failed, which deliberately divides 2~W by zero seconds. Both include a link to MR\_ENERGY, a method description, a synthetic nominal scenario and their input bindings. Submit the available result views and execution states. Report any limitation in retrieving stored execution records. \\
+04 & Reload the saved sizing mission through Reopen and rerun sunlight\_energy and solar\_power through their stored bindings. Submit the rerun results. The prepared environment supplies the framework dependency. \\
+05 & Fill seven prepared allocation parameters. Assign generation to SolarArray, storage to Battery, conversion and regulation to RegulatorAndConverter, and protection, distribution and control to PowerCircuit. Save each assignment and submit the mission requirement table. The saved component identifier appears in each requirement statement. \\
 06 & Apply four separate baseline variations. Change lifetime from 2 to 1~year, eclipse mean load from 3 to 4~W, battery parallel count from 2 to 3, and Earth radius from 6378 to 6371~km. Restore each preceding edit before the next variation. Capture intermediate EPS result views for each variation and submit the final variation's result view. \\
 07 & The array's EOL cell current is omitted. Identify the missing quantity through the generated solar\_cell\_count requirement, supply 0.45~A, save and submit the updated requirement. \\
 08 & Inspect the generated solar\_cell\_count requirement. Submit its required count calculation, required power and cell power mappings, and minimum verification condition. Preserve the expressions and inputs. \\
-09 & Use the GUI and terminal in the prepared mission repository to save an authored baseline with the decision rationale ``Approved by trial coordinator for this synthetic demonstration, retain the 600~km baseline.'' Use author Trial Operator. Change altitude from 600 to 650~km in the GUI, inspect Git status and the diff using the briefed commands, retrieve the baseline through Git and reopen it. Submit the retained requirement, mission, design and model revision identifiers R0, M0, D0 and A0 and the decision history. These are illustrative revision labels. \\
-11 & Query the battery alternatives in Table~\ref{tab:user-trial-battery-alternatives}. The generic battery's direct requirements demand minimum rated energy 11~Wh, maximum mass 0.075~kg and nominal voltage 3.6~V. Find all matches and sort by rated energy, highest first. Submit the part numbers and leave the live battery unassigned. \\
-13 & Start from a blank mission input sheet with the bus, instrument, modes and allocation rows already created. Enter lifetime 2~years, 365.25~days/year, altitude 600~km, eccentricity 0, beta angle $0^\circ$, Sun pointing on $+Z$, and irradiance 1000~W/m$^2$. Set nominal orbital fraction and the instrument's nominal mode share to 1, and on/off state shares to 0.2/0.8. Set the on state to 5~V and 1~A and the off state to 0~V and 0~A. Reopen and submit retained inputs. A prepared requirement statement displays their bindings without inferring chronology or averaging. \\
+09 & Use the GUI and terminal in the prepared mission repository to save an authored baseline with the decision rationale ``Approved by trial coordinator for this synthetic demonstration, retain the 600~km baseline.'' Use author Trial Operator. Change altitude from 600 to 650~km in the GUI, inspect Git status and the diff using the briefed commands, retrieve the baseline through Git and reopen it. Submit the recorded requirement, mission, design and model revision identifiers R0, M0, D0 and A0 and the decision history. These are illustrative revision labels. \\
+13 & Start from a blank mission input sheet with the bus, instrument, modes and allocation rows already created. Enter lifetime 2~years, 365.25~days/year, altitude 600~km, eccentricity 0, beta angle $0^\circ$, Sun pointing on $+Z$, and irradiance 1000~W/m$^2$. Set nominal orbital fraction and the instrument's nominal mode share to 1, and on/off state shares to 0.2/0.8. Set the on state to 5~V and 1~A and the off state to 0~V and 0~A. Reopen and submit saved inputs. A prepared requirement statement displays their bindings without inferring chronology or averaging. \\
 \end{longtable}}
-
-\begin{table}[htbp]
-\centering
-\small
-\caption{Catalogue values used for MOP-11. The supplied energy values are minimum ratings and the masses are maximum ratings. Every candidate has nominal voltage 3.6~V. The inclusion of a candidate that is unsuitable due to the absence of an energy value is deliberate.}
-\label{tab:user-trial-battery-alternatives}
-\begin{tabular}{@{}lrr@{}}
-\toprule
-\textbf{Molicel part number} & \textbf{Energy (Wh)} & \textbf{Mass (kg)} \\
-\midrule
-\href{https://www.molicel.com/wp-content/uploads/INR18650M30A-V2-80088.pdf}{INR-18650-M30A} & 10.4 & 0.048 \\
-\href{https://www.molicel.com/wp-content/uploads/INR18650M35A_1.4_Product-Data-Sheet-of-INR-18650-M35A-80096.pdf}{INR-18650-M35A} & 11.9 & 0.048 \\
-\href{https://www.molicel.com/wp-content/uploads/INR21700P42A_1.7_Product-Data-Sheet-of-INR-21700-P42A-80092.pdf}{INR-21700-P42A} & 14.7 & 0.070 \\
-\href{https://www.molicel.com/wp-content/uploads/INR21700P45B_1.4_Product-Data-Sheet-of-INR-21700-P45B-80109.pdf}{INR-21700-P45B} & 15.5 & 0.070 \\
-\href{https://www.molicel.com/wp-content/uploads/INR18650P26A_1.4_Product-Data-Sheet-of-INR-18650-P26A-80087.pdf}{INR-18650-P26A} & Unknown & 0.050 \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 \section{Submitted states and elapsed times}
 
@@ -88,7 +69,7 @@ Table~\ref{tab:user-trial-all-submissions} gives the shared initial state, the s
 \renewcommand{\UserTrialImageMaxHeight}{170pt}
 \begin{sidewaystable}[p]
 \centering
-\caption[User trial submissions.]{User trial submissions. Screenshots show the shared initial states and the student club member's submissions. Times are in seconds.}
+\caption[User test submissions.]{User test submissions. Screenshots show the shared initial states and the student club member's submissions. Times are in seconds.}
 \label{tab:user-trial-all-submissions}
 \begin{UserTrialEvidence}
 \UserTrialFirstRow
@@ -101,7 +82,7 @@ Table~\ref{tab:user-trial-all-submissions} gives the shared initial state, the s
 \begin{sidewaystable}[p]
 \ContinuedFloat
 \centering
-\caption[]{User trial submissions (continued). Times are in seconds.}
+\caption[]{User test submissions (continued). Times are in seconds.}
 \begin{UserTrialEvidence}
 \UserTrialRow{03}{Inspect analysis results and errors}{112.28}{88.20}{Yes}
 \midrule
@@ -113,7 +94,7 @@ Table~\ref{tab:user-trial-all-submissions} gives the shared initial state, the s
 \begin{sidewaystable}[p]
 \ContinuedFloat
 \centering
-\caption[]{User trial submissions (continued). Times are in seconds.}
+\caption[]{User test submissions (continued). Times are in seconds.}
 \begin{UserTrialEvidence}
 \UserTrialRow{05}{Allocate seven EPS functions}{317.20}{264.48}{Yes}
 \midrule
@@ -129,7 +110,7 @@ MOP-06 shows the final Earth radius variation. Its intermediate submissions appe
 \begin{sidewaystable}[p]
 \ContinuedFloat
 \centering
-\caption[]{User trial submissions (continued). Times are in seconds.}
+\caption[]{User test submissions (continued). Times are in seconds.}
 \begin{UserTrialEvidence}
 \UserTrialRow{08}{Inspect assigned methods and mappings}{136.48}{151.28}{Yes}
 \end{UserTrialEvidence}
@@ -139,16 +120,14 @@ MOP-06 shows the final Earth radius variation. Its intermediate submissions appe
 \begin{sidewaystable}[p]
 \ContinuedFloat
 \centering
-\caption[]{User trial submissions (continued). Times are in seconds.}
+\caption[]{User test submissions (continued). Times are in seconds.}
 \begin{UserTrialEvidence}
 \UserTrialRow{09}{Save and retrieve a baseline}{198.96}{290.52}{Yes}
-\midrule
-\UserTrialRow{11}{Query compatible COTS}{79.60}{79.72}{Yes}
 \midrule
 \UserTrialRow{13}{Enter and reopen mission inputs}{250.72}{281.76}{Yes}
 \end{UserTrialEvidence}
 \par\smallskip\footnotesize
-MOP-09 uses both the GUI and terminal. MOP-11 shows component query results, and MOP-13 shows retained mission inputs.
+MOP-09 uses both the GUI and terminal. MOP-13 shows saved mission inputs.
 \end{sidewaystable}
 \clearpage
 \endgroup
@@ -158,7 +137,7 @@ MOP-09 uses both the GUI and terminal. MOP-11 shows component query results, and
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.90\linewidth,height=0.76\textheight,keepaspectratio]{fig/user-trials/mop01-club.png}
-\caption[Enlarged requirement submission from MOP-01.]{Enlarged MOP-01 submission by the student club member, showing retained requirement fields and the verification condition status.}
+\caption[Enlarged requirement submission from MOP-01.]{Enlarged MOP-01 submission by the student club member, showing saved requirement fields and the verification condition status.}
 \label{fig:user-trial-requirement-detail}
 \end{figure}
 \clearpage

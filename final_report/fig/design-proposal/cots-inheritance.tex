@@ -1,0 +1,51 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Courier New}
+\usepackage{amsmath,graphicx}
+\input{../code-highlighting}
+\setlength{\fboxsep}{7pt}
+\setlength{\fboxrule}{0.5pt}
+\begin{document}
+\begin{minipage}{510pt}
+\fontsize{10}{12}\selectfont
+\begin{minipage}[t]{245pt}
+\vspace{0pt}\textbf{(a) Selected inherited definitions}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{7.7}{9.856}\selectfont]
+class IntegratedEPS(
+    RegulatorAndConverter, PowerCircuit
+):
+    catalog_parameters = (
+        LoadSwitch.catalog_parameters)
+
+class BatteryIntegratedEPS(
+    Battery, IntegratedEPS
+):
+    maximum_voltage = Property(unit="V")
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}[t]{255pt}
+\vspace{0pt}\textbf{(b) Catalogue values for IMEPS2}\par\smallskip
+{\fontsize{8}{10}\selectfont\setlength{\tabcolsep}{3pt}\begin{tabular}{@{}p{54pt}p{109pt}p{75pt}@{}}\textbf{Element} & \textbf{Property} & \textbf{Rating} \\ \hline
+\texttt{battery} & \texttt{rated\_energy} & 45~Wh\newline nominal \\
+\texttt{battery} & \texttt{maximum\_voltage} & 16~V\newline maximum \\
+\texttt{battery} & \texttt{maximum\_voltage} & 16.8~V\newline absolute maximum \\
+\texttt{vd1\_5v} & \texttt{output\_voltage} & 5~V\newline nominal \\
+\texttt{vd1\_5v\_ch1} & \texttt{maximum\_output\_current} & 3~A\newline maximum \\
+\end{tabular}}\end{minipage}\par\medskip
+\begin{minipage}[t]{506pt}
+\vspace{0pt}\textbf{(c) Concrete product and explicit fact selection}\par\smallskip
+\begin{lstlisting}[style=report-python,basicstyle=\ttfamily\fontsize{8}{10.24}\selectfont]
+from framework.cots import get_product
+from framework.models import Battery
+
+pack = get_product(
+    "isispace_imeps2_base_4s1p",
+    model_class=Battery, element_id="battery",
+    value_kinds={"rated_energy": "nominal"})
+print(pack.rated_energy.value, pack.maximum_voltage.value)
+# 45.0 16.0
+\end{lstlisting}
+\end{minipage}
+\end{minipage}
+\end{document}

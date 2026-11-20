@@ -34,15 +34,27 @@
       "pixel_scale": 2
     },
     "cots-matches": {
-      "sha256": "8f01a700769fe5d6a70c57d1a7b268776ff19cdf994f61078d0e5d3c2f7a51d3",
+      "sha256": "e60a04d28d6555c6509e776d106bc4c06ef93804cea2061d7ee6c010c5499664",
       "pixel_scale": 2
     },
     "cots-checks": {
-      "sha256": "bab9bc3f44ac1bab210db34f7f49985be070c06a55eaa654ad481068a3130222",
+      "sha256": "5b3c4f580241e472387751524d8feaa6e7ca52f038a54534192d55b55b5cab2d",
       "pixel_scale": 2
     },
     "cots-recommendations": {
-      "sha256": "a523d1013763a087d536d3279394e6f8f8d628e7dc8e256becdcd0f314064bdd",
+      "sha256": "36a3778f7b9c86c36c41e216307f02def2ea73a62f3935f23fda71189d267689",
+      "pixel_scale": 2
+    },
+    "cots-match-1": {
+      "sha256": "587c040d7f80ec9edfa3e03adcfa0cb7e19b0bec658f6e5c5d1bcccd4106dac2",
+      "pixel_scale": 2
+    },
+    "cots-match-2": {
+      "sha256": "f7eadc742d44f4883734793ed1cbd41703f4405ddabe5430f529675a6b1a96e9",
+      "pixel_scale": 2
+    },
+    "cots-match-3": {
+      "sha256": "e652b19790ab7299a18a3f67696556d9296833ddbe3390dec3c877dbd533ee7e",
       "pixel_scale": 2
     }
   },
@@ -78,13 +90,18 @@
       "code_highlighting_sha256": "98e3755f87e260849e79d0cfba9b4561e8744321045b55b6ac9dfe99b66ce4b9"
     },
     "cots-query": {
-      "pdf_sha256": "69871e63c92c2146caa83dacddf7e8170e30564d85dcee5ed96e40c4bfb0244c",
-      "source_sha256": "05f0c2064eb1fb8bd105cacfa875dbcbf70bf30c79c54e2ef2f14807286cd459",
+      "pdf_sha256": "ad577c1b9c0ac1395c1121b95e5b1ec9cbb38651dfb600ad19cb9d7f507d4055",
+      "source_sha256": "08705e4a8e0e6a270cda88230a553f5ebe97d72da6fcf1ea4a68363516488a8b",
       "code_highlighting_sha256": "98e3755f87e260849e79d0cfba9b4561e8744321045b55b6ac9dfe99b66ce4b9"
     },
     "configuration-diff": {
-      "pdf_sha256": "65666d48f3a8022a94e250c3a01c4312321cdbd0e88fe6a0944642ccb4306e00",
-      "source_sha256": "fa025805534db1312d5d23aa4408176492c328d8742e39acf0703207146c5366",
+      "pdf_sha256": "03ac8c575c413f6f886dfc3f76f1213eaf2804d9bb288963bc3f06aca12f4a76",
+      "source_sha256": "a26627515e1bf48f3a128554011404a066ebb72dc640a2b369b26df5c8bf460e",
+      "code_highlighting_sha256": "98e3755f87e260849e79d0cfba9b4561e8744321045b55b6ac9dfe99b66ce4b9"
+    },
+    "cots-inheritance": {
+      "pdf_sha256": "1223ceeb2c366a6ee6e7915ba7ce9a74d4fc31d00b01e78a74071bea6084361b",
+      "source_sha256": "133c1ace1d1239437b527d6bf6d29b01f8e15b850a7c672c7fcaee7d7b4c0b64",
       "code_highlighting_sha256": "98e3755f87e260849e79d0cfba9b4561e8744321045b55b6ac9dfe99b66ce4b9"
     }
   },
@@ -97,11 +114,22 @@
     "saved_verified": false,
     "automatic_eps_requirements": 18,
     "recommended_products": [
-      "P45B",
-      "P42A",
-      "M35A"
+      "INR-21700-M65A",
+      "INR-21700-P50B",
+      "INR-21700-P45B",
+      "INR-21700-P42A",
+      "INR-18650-M35A"
     ],
-    "git_diff_changes_one_property": true
+    "git_diff_changes_one_property": true,
+    "catalog_products": 147,
+    "compatible_battery_products": 15,
+    "displayed_products": [
+      "INR-21700-M65A",
+      "INR-21700-P50B",
+      "INR-21700-P45B"
+    ],
+    "candidate_list_required": false,
+    "temporary_session_unchanged": true
   },
   "demo_sha256": "034c361ca2bc4b539ac3b84a1cdbd45d22568596f68bf8e9b04e945f69cbaee8",
   "framework_sources": {
@@ -116,26 +144,50 @@
   "browser": "156.0.8078.4",
   "catalog": {
     "total": 147,
-    "counts": {
-      "EPSModel::BatteryProtector": 6,
-      "EPSModel::RealTimeClock": 5,
-      "EPSModel::IdealDiode": 7,
-      "EPSModel::LoadSwitch": 17,
-      "EPSModel::SolarArray": 12,
-      "EPSModel::NonvolatileMemory": 5,
-      "EPSModel::Battery": 13,
-      "EPSModel::IntegratedEPS": 3,
-      "EPSModel::Processor": 8,
-      "EPSModel::Heater": 6,
-      "EPSModel::BatteryCharger": 5,
-      "EPSModel::CurrentSensor": 13,
-      "EPSModel::TemperatureSensor": 11,
-      "EPSModel::DCDCConverter": 17,
-      "EPSModel::Sensor": 3,
-      "EPSModel::RegulatorConverter": 3,
-      "EPSModel::PowerCircuitSwitch": 11,
-      "EPSModel::HardwareComponent": 2
+    "counts_csrm": {
+      "Battery": 15,
+      "SolarArray": 12,
+      "RegulatorAndConverter": 28,
+      "PowerCircuit": 78,
+      "ProcessorAndMemory": 19,
+      "Software": 0
     },
-    "products_sha256": "045b06c749515d0df53daa104091b055f858224b9583254e12100032eec7f30c"
+    "products_sha256": "4f2e02a6296e4f873d8b3df2794d213757a4df526494e77f0d69a604e66abcaf"
+  },
+  "cots_sources": {
+    "final_report/fig/cots-recommender-figures.py": "e342b6a3e3b8e12a1368909a848bb9ab0dee2bd3d7b039c1477c1041ed708348",
+    "final_report/fig/design-proposal-figures.py": "c851184a6c89c27787cefca23fe94da0fcbd820d99dbb6b1e7b9bd612bfac847",
+    "final_report/fig/code-highlighting.tex": "98e3755f87e260849e79d0cfba9b4561e8744321045b55b6ac9dfe99b66ce4b9",
+    "framework/cots/__init__.py": "4954cb3f5ea42a0e9a1641252bf292347c591fb06b3c4d053b46ff86eb28737a",
+    "framework/cots/types.py": "aa8e71abcff5b1ecabd3b46ef4d1a85dc15a8b03169ba3a1617167943892b421",
+    "framework/cots/catalog.py": "dfbf684a0ce57224518508200aa3666f930a0a934d2a1a0148f849cb2886241e",
+    "framework/models/eps.py": "65abb72373c82ee954bbac5b2e20474c99cb24251139b9206cbd66937af97c90",
+    "framework/models/elements.py": "eedf245ba0244e471ef236fd2bb8efe97c5b72f509e71e0e2ac1a18dc7ad7595",
+    "framework/models/objects.py": "1ebaf04d0b9fb24869dd88861d364edfafe7d65b9806a27c0e43a5b3ecd297a3",
+    "framework/models/properties.py": "dc23ef03924deba9ac15f6d5acd272619077a8aecbe2867a9312207c304a4009",
+    "framework/models/recommendations.py": "b1d8d25a6ff8a595beaab8061743c216099d932e8699cf20b07037767cf31a3d",
+    "framework/models/requirements.py": "b3fbb49a107bb4975e2343d8b3a12e6bb575302c90e2061ef49a96938bd55393",
+    "framework/gui/backend/application.py": "87f6418fc33f0c2fc84da14105d4cc8cc3f1386e395bdfd9cbba8c65fcf8ebc3",
+    "framework/gui/backend/views.py": "598c3fdd7b1aae4cfad19169a5d2b03eea76220d9f9c8be939118db1b72f3e04",
+    "framework/gui/public/index.html": "a010ab435d07913ab4f5a6e721e18c9514affb0e438615ffbe8d04a0954dc927",
+    "framework/gui/public/recommendations.js": "d159cd51795267b8ac547eda7e954964930fcbd3d12389aa223f859553730900",
+    "framework/gui/public/style.css": "53d515eea64dcd113bc8e737eadffd43146f95b61948c98c630b8f57c6b716e0",
+    "framework/sessions/example_cots_recommendations.py": "942ad2b8792e65b9b7e9e0d1c3df2be131a2ac902d1d4b82bc2578f0494d5c38",
+    "framework/cots/condition-parameters.tsv": "30db450dbe7781f59c530e5d59d14151c0bcc7bad1c98df03d5843e93939b416",
+    "framework/cots/conditions.tsv": "87672590deb265d8486a40a419c654111f1b2257c813af40daa5543ac18c25d2",
+    "framework/cots/configuration-review.tsv": "3f302a5c03875c0d106f31907b7865c03e017b1c7a4b9b9930ffc366cbc71698",
+    "framework/cots/curves.tsv": "b419d1c6c4cf090da9756e78395ea896c03a58b92b39ea62730ff6ddddbe0aee",
+    "framework/cots/definitions.tsv": "9bc4359867f550da5ab92c6ba7fbce6e67e09187f6a7b455ed20bf41715dfc35",
+    "framework/cots/elements.tsv": "e8d6953b3e1941635273feb36b332dd900297996cedc6d197cc128e9f3afcf01",
+    "framework/cots/features.tsv": "b587dd7cce1a7dfdb4b87829a4a94524978669b9e427a97951264ae3c64a2948",
+    "framework/cots/kicad-fields.tsv": "fa8eef5a6a1c3e803454ada63aba43ec178a71f4b9455898b3f23ce6bf99287c",
+    "framework/cots/kicad-target.tsv": "7c916fd44e175751e039280138c07c92b2408d7f00f6f22a5bf125ecfb9c2a0d",
+    "framework/cots/kicad-tools.tsv": "d05ba6b01f2fc4452a592e9c7b512dca6c672250a53239f558b024d84ce5445f",
+    "framework/cots/model-inputs.tsv": "ad47a8ee55dd3e73cfc97b3920b75d9cbfa5b0124bf7bb1bfa836bb307622834",
+    "framework/cots/parameters.tsv": "bb3c455100ad4d819167106414e3f3a132f098fe47233a5c5448c2dfb88049c6",
+    "framework/cots/pins.tsv": "34a12d3d26b149d2ad3ac8c122cd8938d1ced425c883841915a773d9db1bfcd0",
+    "framework/cots/products.tsv": "4f2e02a6296e4f873d8b3df2794d213757a4df526494e77f0d69a604e66abcaf",
+    "framework/cots/resources.tsv": "c2bd42d8137136c1a13e681193bd82003c3ac37ff947e854f464c5c81e1aea3d",
+    "framework/cots/sources.tsv": "a1b586c1310bc20bd5e8c6fb137c755d15f3d48322dd63dd622a33fbfa4df71d"
   }
 }

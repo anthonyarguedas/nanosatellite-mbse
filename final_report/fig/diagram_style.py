@@ -319,7 +319,8 @@ def render_figure(figure, base, job):
     bbox = job / (base.name+'-bounds.html')
     run(['pdftotext', '-bbox', str(pdf), str(bbox)])
     words = ET.parse(bbox).getroot().findall('.//{*}word')
-    require(len(words) > 20, 'Missing searchable diagram labels')
+    require(len(words) >= len(figure.root.findall('.//{*}text')),
+            'Missing searchable diagram labels')
     for word in words:
         require(0 <= float(word.attrib['xMin']) <= float(word.attrib['xMax']) <= figure.width
                 and 0 <= float(word.attrib['yMin']) <= float(word.attrib['yMax']) <= figure.height,

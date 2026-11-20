@@ -37,7 +37,6 @@ OUT = FIG / "design-proposal"
 sys.path.insert(0, str(ROOT))
 
 from framework.models import Battery, Property, Requirement, VerificationCondition
-from framework.models.recommendations import recommend_cots
 from framework.scripts import sizing
 
 
@@ -186,10 +185,12 @@ def main():
     parser.add_argument("--python", default="python3", help="Python interpreter for the GUI backend")
     args = parser.parse_args()
     OUT.mkdir(exist_ok=True)
+    cots_build = load_study(FIG / "cots-recommender-figures.py")
     manifest = {"description": "Live, unmodified GUI captures and source excerpts for the design proposal",
                 "screenshots": {}, "panels": {}, "checks": {}}
     demo_source = (FIG / "design-proposal-demo.py").read_text()
     manifest["demo_sha256"] = sha(FIG / "design-proposal-demo.py")
+    manifest["cots_sources"] = cots_build.source_hashes(sys.modules[__name__])
     manifest["framework_sources"] = {str(path.relative_to(ROOT)): sha(path) for path in (
         ROOT / "framework/models/eps.py", ROOT / "framework/models/properties.py",
         ROOT / "framework/models/requirements.py", ROOT / "framework/models/recommendations.py",
@@ -282,30 +283,10 @@ def main():
                 manifest["checks"]["automatic_eps_requirements"] = rows.count()
                 automatic.close()
 
-                # The sourced COTS study stays separate from the synthetic pack.
-                cots_file = job / "cots-study.py"
-                cots_file.write_text("from framework.sessions.example_cots_recommendations import mission, cots_catalog\n")
-                process, log, cots_url = start_server(cots_file, job, args.python)
-                processes.append((process, log))
-                cots = open_page(browser, cots_url, "mission.BUS.EPS.Battery", width=700, height=1120)
-                cots.get_by_role("button", name="Recommend COTS", exact=True).click()
-                cots.locator("#recommendations-dialog[open]").wait_for()
-                cots.locator("#recommendations-sort").select_option("rated_energy")
-                cots.locator("#recommendations-order").select_option("descending")
-                cots.locator("#recommendations-limit").fill("3")
-                cots.get_by_role("button", name="Find matches", exact=True).click()
-                cots.wait_for_function("""() => document.querySelector('.recommendation-card h3')?.textContent === 'P45B'""")
-                assert cots.locator(".recommendation-card h3").all_inner_texts() == ["P45B", "P42A", "M35A"]
-                manifest["screenshots"]["cots-matches"] = capture(
-                    cots, "cots-matches", cots.locator("#recommendations-results"))
-                # The results retain native measures, targets and predicates.
-                cots.locator(".recommendation-card summary").first.click()
-                manifest["screenshots"]["cots-checks"] = capture(
-                    cots, "cots-checks", cots.locator(".recommendation-card .table-frame").first)
-                manifest["screenshots"]["cots-recommendations"] = capture(
-                    cots, "cots-recommendations", cots.locator("#recommendations-dialog"))
-                manifest["checks"]["recommended_products"] = ["P45B", "P42A", "M35A"]
-                cots.close()
+                # The full catalogue query stays separate from the synthetic pack.
+                images, checks = cots_build.capture_cots(sys.modules[__name__], browser, job, args)
+                manifest["screenshots"].update(images)
+                manifest["checks"].update(checks)
                 browser.close()
         finally:
             for process, log in reversed(processes):
@@ -416,30 +397,8 @@ E_{\mathrm{Battery}}=\frac{E_e}{\mathrm{DoD}}(1+M)
         body += "\\hfill\n" + panel("(b) After: 3.0 Wh, Fail", image("requirement-after.png", 250), 250)
         manifest["panels"]["parameter-impact"] = make_pdf("parameter-impact", body, job)
 
-        query_source = inspect.getsource(recommend_cots)
-        query_lines = query_source.splitlines()
-        policy_start = next(i for i, line in enumerate(query_lines) if line.strip().startswith("reports = tuple"))
-        policy_end = policy_start + 3
-        policy = textwrap.dedent("\n".join(query_lines[policy_start:policy_end]))
-        assert "report.verified is not True" in policy
-        policy = policy.replace(
-            "reports = tuple(requirement.verify(mode=selected_mode) for requirement in owner.requirements)",
-            "reports = tuple(\n    requirement.verify(mode=selected_mode)\n    for requirement in owner.requirements)")
-        policy = policy.replace(
-            "if any(report.verified is not True for report in reports):",
-            "if any(report.verified is not True\n       for report in reports):")
-        call = snippet('''
-            matches = battery.recommend_cots(
-                cots_catalog,
-                sort_by="rated_energy",
-                reverse=True, limit=3)
-        ''')
-        body = panel("(a) Candidate acceptance", verb(policy, 7.5)
-                     + "\\medskip\\textbf{Python query}\\par\n" + verb(call, 7.5), 210)
-        body += "\\hfill\n" + panel("(b) GUI recommendations", image("cots-matches.png", 290), 290)
-        body += "\\par\\medskip\\textbf{(c) Expanded verification for P45B}\\par\\smallskip\n"
-        body += image("cots-checks.png", 510)
-        manifest["panels"]["cots-query"] = make_pdf("cots-query", body, job)
+        manifest["panels"]["cots-query"] = cots_build.query_panel(sys.modules[__name__], job)
+        manifest["panels"]["cots-inheritance"] = cots_build.inheritance_panel(sys.modules[__name__], job)
 
         # Produce a real Git diff in an isolated repository. No user branch,
         # index, identity or working file is touched.
@@ -456,7 +415,7 @@ E_{\mathrm{Battery}}=\frac{E_e}{\mathrm{DoD}}(1+M)
         assert "-battery.rated_energy = 20.35" in diff and "+battery.rated_energy = 3.0" in diff
         changed = load_study(git_file)
         assert changed.requirement.verify().verified is False
-        body = "\\textbf{(a) Git comparison with the retained baseline}\\par\n" + verb("$ git diff -- battery-study.py\n" + diff, 8.5, language="diff")
+        body = "\\textbf{(a) Git comparison with the saved baseline}\\par\n" + verb("$ git diff -- battery-study.py\n" + diff, 8.5, language="diff")
         body += "\\par\\medskip\n"
         body += panel("(b) Baseline evaluation", verb(
             ">>> battery.bol_energy.value\n73260.0\n>>> requirement.verify().verified\nTrue", 8.5), 250)

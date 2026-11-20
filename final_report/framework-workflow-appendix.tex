@@ -3,12 +3,12 @@
 
 This representative workflow illustrates the second objective through mission construction, requirement management, linked analyses and verification.
 The engineer iterates until satisfied with the assessment, saves the mission as a Python file and commits it with the decision rationale as the Git commit message.
-The synthetic example demonstrates selected passing checks while retaining unresolved mission requirements.
+The synthetic example demonstrates selected passing checks while leaving other mission requirements unresolved.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.94\linewidth]{fig/model-appendices/mission-workflow.pdf}
-\caption[Representative mission modeling and Git workflow.]{A representative use of the Python models, also exposed through the GUI. Dashed arrows show control flow. The return path revises the mission, its inputs or its requirements before executing the stored analyses again. Satisfaction is an engineering review decision that includes assessment coverage and assumptions. The Git operations are performed by the engineer after saving the mission, and the commit message records the rationale for the accepted configuration.}
+\caption[Representative mission modeling and Git workflow.]{A representative use of the Python models, also available through the GUI. Dashed arrows show control flow. The return path revises the mission, its inputs or its requirements before executing the stored analyses again. Satisfaction is an engineering review decision that includes assessment coverage and assumptions. The Git operations are performed by the engineer after saving the mission, and the commit message records the rationale for the accepted configuration.}
 \label{fig:mission-modeling-workflow}
 \end{figure}
 \clearpage
@@ -31,7 +31,7 @@ The synthetic example demonstrates selected passing checks while retaining unres
 \begin{figure}[p]
 \centering
 \includegraphics[width=\linewidth]{fig/model-appendices/mission-and-requirements.pdf}
-\caption[Mission construction and requirement operations.]{Selected executable Python calls construct a mission and add an owned converter requirement with a verification condition. The mode, state and interface definitions are shown in Figures~\ref{fig:eps-modes-states} and~\ref{fig:eps-property-interfaces}. Updating its statement and rationale retains the condition's links to the converter output and load state. verify() evaluates the stored condition for the selected nominal mode. remove() detaches the requirement and excludes it from mission verification, and add() can reattach the same object. These calls illustrate adding, editing, updating, verifying and deleting requirements without reproducing the full source appendix.}
+\caption[Mission construction and requirement operations.]{Selected executable Python calls construct a mission and add an owned converter requirement with a verification condition. The mode, state and interface definitions are shown in Figures~\ref{fig:eps-modes-states} and~\ref{fig:eps-property-interfaces}. Updating its statement and rationale leaves the condition's links to the converter output and load state unchanged. verify() evaluates the stored condition for the selected nominal mode. remove() detaches the requirement and excludes it from mission verification, and add() can reattach the same object. These calls illustrate adding, editing, updating, verifying and deleting requirements without reproducing the full source appendix.}
 \label{fig:mission-requirement-operations}
 \end{figure}
 \clearpage
